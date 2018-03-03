@@ -17,11 +17,10 @@ import Home from 'views/Home';
 import People from 'views/People';
 import NotFound from 'views/NotFound';
 import StatsPage from 'views/StatsPage';
+import ProfilePage from 'views/Profile';
 import RegisterUser from 'views/RegisterUser';
 
 class App extends Component {
-
-    
 
     render() {
         return (
@@ -35,8 +34,14 @@ class App extends Component {
 
                 <Switch>
                     <Route exact path={ routeCodes.HOME } component={ Home } />
+                    <Route path={ routeCodes.PEOPLE } component={ People }  />
+                    
                     <Route path={ routeCodes.DASHBOARD } component={ Dashboard } />
                     <Route path={ routeCodes.STATSPAGE } component={ StatsPage }  />
+                    
+                    <Route path={ routeCodes.PROFILE } component={ ProfilePage }  />
+
+                    
                     <Route path={ routeCodes.FITNESSBODY } component={ FitnessBody } />
                     <Route path={ routeCodes.EXERCISE } component={ Exercise } />
                     <Route path={ routeCodes.NUTRITION } component={ Nutrition } />
@@ -45,7 +50,6 @@ class App extends Component {
 
                     <Route path={ routeCodes.GOALS } component={ Goals } />
                     <Route path='*' component={ NotFound } />
-                    <Route path={ routeCodes.PEOPLE } component={ People }  />
                 </Switch>
             </div>            
         );

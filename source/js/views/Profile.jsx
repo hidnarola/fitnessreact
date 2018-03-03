@@ -4,22 +4,21 @@ import { Route, Switch } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-import Strength from 'components/Stats/Strength';
-import Cardio from 'components/Stats/Cardio';
-import NutritionStats from 'components/Stats/NutritionStats';
-import BodyStats from 'components/Stats/BodyStats';
+import ProfileFithub from 'components/Profile/ProfileFithub';
+import ProfileFriends from 'components/Profile/ProfileFriends';
+import ProfilePhotos from 'components/Profile/ProfilePhotos';
+
 
 import { routeCodes } from 'constants/routes';
 
-export default class StatsPage extends Component {
-    
+export default class Profile extends Component {    
  
     render() {        
 
         return (
             <div className='stat-page'>
-                <section className="body-wrap starts-body">
-                    <div className="body-head d-flex justify-content-start">
+                <section className="body-wrap">
+                    <div className="body-head d-flex">
                         <div className="body-head-l">
                             <h2>Cecilia Brown</h2>
                             <div className="body-head-l-btm">
@@ -28,47 +27,46 @@ export default class StatsPage extends Component {
                                     activeClassName='pink-btn'
                                     className='white-btn'
                                     exact
-                                    to={ routeCodes.STATSTRENGTH }
+                                    to={ routeCodes.PROFILEFITHUB }
                                 >
-                                    Strength
+                                    Fithub
+                                </NavLink>
+                                
+                                <NavLink
+                                    activeClassName='pink-btn'
+                                    className='white-btn'
+                                    exact
+                                    to={ routeCodes.PROFILEPHOTOS }
+                                >
+                                    Photos
                                 </NavLink>
 
                                 <NavLink
                                     activeClassName='pink-btn'
                                     className='white-btn'
                                     exact
-                                    to={ routeCodes.STATSCARDIO }
+                                    to={ routeCodes.PROFILEFRIENDS }
                                 >
-                                    Cardio
+                                    Friends
                                 </NavLink>
-
-                                <NavLink
-                                    activeClassName='pink-btn'
-                                    className='white-btn'
-                                    exact
-                                    to={ routeCodes.STATSNUTRITION }
-                                >
-                                    Nutrition
-                                </NavLink>
-
-                                <NavLink
-                                    activeClassName='pink-btn'
-                                    className='white-btn'
-                                    exact
-                                    to={ routeCodes.STATSBODY }
-                                >
-                                    Bodys
-                                </NavLink>                                
                             </div>
+                        </div>
+                        <div className="body-head-r add-friend">
+                            <a href="" className="add-friend-btn active">Add Friend
+                                <i className="icon-person_add"></i>
+                            </a>
+                            <a href="" className="green-blue-btn active">Friend
+                                <i className="icon-check"></i>
+                            </a>
                         </div>
                     </div>
 
                     <Switch>
-                        <Route exact path={ routeCodes.STATSTRENGTH } component={ Strength } />
-                        <Route exact path={ routeCodes.STATSCARDIO } component={ Cardio } />
-                        <Route exact path={ routeCodes.STATSNUTRITION } component={ NutritionStats } />
-                        <Route exact path={ routeCodes.STATSBODY } component={ BodyStats } />
+                        <Route exact path={ routeCodes.PROFILEFITHUB } component={ ProfileFithub } />
+                        <Route exact path={ routeCodes.PROFILEFRIENDS } component={ ProfileFriends } />                        
+                        <Route exact path={ routeCodes.PROFILEPHOTOS } component={ ProfilePhotos } />                        
                     </Switch>
+
                 </section>
             </div>
         );

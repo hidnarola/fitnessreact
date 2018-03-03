@@ -9,7 +9,6 @@ import { Provider } from 'react-redux';
 
 import configureStore from 'config/store';
 import App from 'views/App';
-import ScrollToTop from 'components/global/ScrollToTop';
 
 // Load CSS
 import 'index.css';
@@ -22,7 +21,7 @@ const renderMethod = process.env.HYDRATE ? ReactDOM.hydrate : ReactDOM.render;
 renderMethod(
     <AppContainer>
         <Provider store={ store }>
-            <BrowserRouter onUpdate={() => window.scrollTo(0, 0)}>
+            <BrowserRouter>
                 <App />                
             </BrowserRouter>
         </Provider>

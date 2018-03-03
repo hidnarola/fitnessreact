@@ -1,5 +1,13 @@
 import React, { Component } from 'react';
 
+import { NavLink } from 'react-router-dom';
+import { routeCodes } from 'constants/routes';
+
+import FaSearch from 'react-icons/lib/fa/search';
+import FaNoti from 'react-icons/lib/md/notifications-none';
+import FaMenu from 'react-icons/lib/md/menu';
+import FaMail from 'react-icons/lib/md/markunread';
+
 export default class FitnessHeader extends Component {
     render() {
         return (
@@ -13,30 +21,37 @@ export default class FitnessHeader extends Component {
                     <div className="search">
                         <form>
                             <button type="submit">
-                                <i className="icon-search"></i>
+                                <FaSearch size={24}/>
                             </button>
                             <input type="search" name="" placeholder="Search" />
                         </form>
                     </div>
                     <div className="header-r d-flex">
                         <div className="header-user">
-                            <a href="javascript:void(0)">
+
+                            <NavLink
+                                activeClassName='active'
+                                className='Menu-link'
+                                exact
+                                to={ routeCodes.PROFILE }
+                            >
                                 <span></span>Cecilia
-                            </a>
+                            </NavLink>
+
                         </div>
                         <div className="header-alert">
-                            <a href="javascript:void(0)">
-                                <i className="icon-notifications_none"></i>
+                            <a >
+                                <FaNoti size={24}/>
                             </a>
                         </div>
                         <div className="header-email">
-                            <a href="javascript:void(0)">
-                                <i className="icon-mail_outline"></i>
+                            <a >
+                                <FaMail/>
                             </a>
                         </div>
                         <div className="header-nav">
-                            <a href="javascript:void(0)">
-                                <i className="icon-menu"></i>
+                            <a >
+                                <FaMenu size={24}/>
                             </a>
                         </div>
                     </div>

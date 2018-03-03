@@ -15,6 +15,14 @@ export const routeCodes = {
     STATSNUTRITION:`${publicPath}stats/nutrition`,
     STATSBODY:`${publicPath}stats/body`,
 
+    // Profile All Pages
+
+    PROFILE:`${publicPath}profile`,
+    PROFILEFITHUB:`${publicPath}profile/fithub`,
+    PROFILEPHOTOS:`${publicPath}profile/photos`,
+    PROFILEFRIENDS:`${publicPath}profile/friends`,
+
+
     FITNESSBODY:`${ publicPath }fitnessBody`,
     EXERCISE:`${ publicPath }exercise`,
     NUTRITION:`${ publicPath }nutrition`,
