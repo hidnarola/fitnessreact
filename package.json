@@ -64,6 +64,7 @@
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",
+    "classnames": "^2.2.5",
     "express": "^4.16.2",
     "immutable": "^3.8.2",
     "isomorphic-fetch": "^2.2.1",

@@ -11,6 +11,9 @@ import BodyStats from 'components/Stats/BodyStats';
 
 import { routeCodes } from 'constants/routes';
 
+import FitnessHeader from 'components/global/FitnessHeader';
+import FitnessNav from 'components/global/FitnessNav';
+
 export default class StatsPage extends Component {
     
  
@@ -18,6 +21,8 @@ export default class StatsPage extends Component {
 
         return (
             <div className='stat-page'>
+                <FitnessHeader/>
+                <FitnessNav/>
                 <section className="body-wrap starts-body">
                     <div className="body-head d-flex justify-content-start">
                         <div className="body-head-l">

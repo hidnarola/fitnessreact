@@ -1,5 +1,8 @@
 import React,{ Component } from 'react';
 
+import FitnessHeader from '../global/FitnessHeader';
+import FitnessNav from '../global/FitnessNav';
+
 export default class Dashboard extends Component{
 
     componentDidMount() {
@@ -9,6 +12,8 @@ export default class Dashboard extends Component{
     render(){
         return(
             <div className="fitness-dashboard">
+                <FitnessHeader/>
+                <FitnessNav/>
                 <section className="body-wrap">
                     <div className="body-head space-btm-45 d-flex justify-content-start">
                         <div className="body-head-l">

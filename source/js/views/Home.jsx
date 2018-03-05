@@ -6,6 +6,9 @@ import CircleSvg from 'svg/circle.svg';
 import SquareSvg from 'svg/square.svg';
 import TriangleSvg from 'svg/triangle.svg';
 
+import FitnessHeader from 'components/global/FitnessHeader';
+import FitnessNav from 'components/global/FitnessNav';
+
 import bookImg from 'img/book2.jpg';
 
 @connect(state => ({
@@ -32,6 +35,9 @@ export default class Home extends Component {
 
         return (
             <div className='Home'>
+                <FitnessHeader/>
+                <FitnessNav/>
+
                 <h1>Marvin</h1>
                 <p>
                     Boilerplate for kicking off React/Redux applications.

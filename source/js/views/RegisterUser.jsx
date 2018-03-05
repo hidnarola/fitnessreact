@@ -12,8 +12,6 @@ export default class RegisterUser extends Component {
     render() {        
         return (
             <div className='register-user'>
-                <h1>Registration User</h1>
-
                 <ContactForm onSubmit={showResults} />
                 <Values form="wizard" />
             </div>

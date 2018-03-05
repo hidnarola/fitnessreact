@@ -8,15 +8,22 @@ import ProfileFithub from 'components/Profile/ProfileFithub';
 import ProfileFriends from 'components/Profile/ProfileFriends';
 import ProfilePhotos from 'components/Profile/ProfilePhotos';
 
+import FitnessHeader from 'components/global/FitnessHeader';
+import FitnessNav from 'components/global/FitnessNav';
 
 import { routeCodes } from 'constants/routes';
 
 export default class Profile extends Component {    
- 
+    
+    
+    
+
     render() {        
 
         return (
             <div className='stat-page'>
+                <FitnessHeader/>
+                <FitnessNav/>
                 <section className="body-wrap">
                     <div className="body-head d-flex">
                         <div className="body-head-l">

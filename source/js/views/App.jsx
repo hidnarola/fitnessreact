@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link, Redirect, Switch, withRouter } from "react-router-dom"; 
 import { hot } from 'react-hot-loader';
 import { routeCodes } from 'constants/routes';
-import Menu from 'components/global/Menu';
+import ScrollToTop from 'components/global/ScrollToTop';
 import FitnessHeader from 'components/global/FitnessHeader';
 import FitnessNav from 'components/global/FitnessNav';
 import Dashboard from 'components/Dashboard/Dashboard';
@@ -20,37 +20,86 @@ import StatsPage from 'views/StatsPage';
 import ProfilePage from 'views/Profile';
 import RegisterUser from 'views/RegisterUser';
 
+const fakeAuth = {
+    isAuthenticated: false,
+    authenticate(cb) {
+      this.isAuthenticated = true;
+      setTimeout(cb, 100); // fake async
+    },
+    signout(cb) {
+      this.isAuthenticated = false;
+      setTimeout(cb, 100);
+    }
+};
+
+const AuthButton = withRouter(
+    ({ history }) =>
+        fakeAuth.isAuthenticated ? (
+            <p>
+            Welcome!{" "}
+            <button
+                onClick={() => {
+                fakeAuth.signout(() => history.push("/"));
+                }}
+            >
+                Sign out
+            </button>
+            </p>
+        ) : (
+            <p>You are not logged in.</p>
+        )
+);
+
+const PrivateRoute = ({ component: Component, ...rest }) => (
+    <Route
+      {...rest}
+        render={props =>
+            fakeAuth.isAuthenticated ? (
+                <Component {...props} />
+                    ) : (
+                <Redirect
+                    to={{
+                    pathname: "/login",
+                    state: { from: props.location }
+                    }}
+                />
+            )
+        }
+    />
+);
+
+const Public = () => <h3>Public</h3>;
+const Protected = () => <h3>Protected</h3>;
+  
+
 class App extends Component {
 
     render() {
         return (
             <div>
+                <Router>
+                    <div>
+                        <ScrollToTop>                            
+                            <Route exact path={ routeCodes.HOME } component={ Home } />
+                            <Route path={ routeCodes.PEOPLE } component={ People }  />
+                            
+                            <Route path={ routeCodes.DASHBOARD } component={ Dashboard } />
+                            <Route path={ routeCodes.STATSPAGE } component={ StatsPage }  />
+                            
+                            <Route path={ routeCodes.PROFILE } component={ ProfilePage }  />
 
-                <FitnessHeader/>
+                            
+                            <Route path={ routeCodes.FITNESSBODY } component={ FitnessBody } />
+                            <Route path={ routeCodes.EXERCISE } component={ Exercise } />
+                            <Route path={ routeCodes.NUTRITION } component={ Nutrition } />
 
-                <FitnessNav/>
+                            <Route path={ routeCodes.REGISTERUSER } component={ RegisterUser } />                    
 
-                {/* <Menu /> */}
-
-                <Switch>
-                    <Route exact path={ routeCodes.HOME } component={ Home } />
-                    <Route path={ routeCodes.PEOPLE } component={ People }  />
-                    
-                    <Route path={ routeCodes.DASHBOARD } component={ Dashboard } />
-                    <Route path={ routeCodes.STATSPAGE } component={ StatsPage }  />
-                    
-                    <Route path={ routeCodes.PROFILE } component={ ProfilePage }  />
-
-                    
-                    <Route path={ routeCodes.FITNESSBODY } component={ FitnessBody } />
-                    <Route path={ routeCodes.EXERCISE } component={ Exercise } />
-                    <Route path={ routeCodes.NUTRITION } component={ Nutrition } />
-
-                    <Route path={ routeCodes.REGISTERUSER } component={ RegisterUser } />                    
-
-                    <Route path={ routeCodes.GOALS } component={ Goals } />
-                    <Route path='*' component={ NotFound } />
-                </Switch>
+                            <Route path={ routeCodes.GOALS } component={ Goals } />
+                            {/* <Route path='*' component={ NotFound } /> */}
+                        </ScrollToTop>
+                    </div>
+                </Router>                
             </div>            
         );
     }

@@ -1,10 +1,15 @@
 import React,{ Component } from 'react';
 
+import FitnessHeader from '../global/FitnessHeader';
+import FitnessNav from '../global/FitnessNav';
+
 export default class Exercise extends Component{
 
     render(){
         return(
             <div className="fitness-exercise">
+                <FitnessHeader/>
+                <FitnessNav/>
                 <section className="body-wrap">
                     <div className="body-head d-flex justify-content-start">
                         <div className="body-head-l">
