@@ -1,9 +1,11 @@
-@import "base/vars";
+/* @import "base/vars";
 @import "base/reset";
-@import "base/app";
+@import "base/app"; */
 
-@import "fitnessCss/style.css";
-@import "fitnessCss/bootstrap.min";
 @import "fitnessCss/bootstrap-select.min";
+@import "fitnessCss/bootstrap.min";
+@import "fitnessCss/style.css";
+@import "fitnessCss/custom.css";
 /* @import "fitnessCss/icomoon-style"; */
-@import "fitnessCss/jquery.mCustomScrollbar.min";
+/* @import "fitnessCss/jquery.mCustomScrollbar.min"; */
+@import "fitnessCss/progressbar.css";

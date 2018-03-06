@@ -5,7 +5,6 @@ import { routeCodes } from 'constants/routes';
 import ScrollToTop from 'components/global/ScrollToTop';
 import FitnessHeader from 'components/global/FitnessHeader';
 import FitnessNav from 'components/global/FitnessNav';
-import Dashboard from 'components/Dashboard/Dashboard';
 import Stats from 'components/Stats/Stats';
 
 import FitnessBody from 'components/Body/FitnessBody';
@@ -17,6 +16,7 @@ import Home from 'views/Home';
 import People from 'views/People';
 import NotFound from 'views/NotFound';
 import StatsPage from 'views/StatsPage';
+import Dashboard from 'views/Dashboard';
 import ProfilePage from 'views/Profile';
 import RegisterUser from 'views/RegisterUser';
 

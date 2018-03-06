@@ -4,7 +4,7 @@ import WizardFormFirstPage from './WizardFormFirstPage';
 import WizardFormSecondPage from './WizardFormSecondPage';
 import WizardFormThirdPage from './WizardFormThirdPage';
 import WizardFormFourthPage from './WizardFormFourthPage';
-import cx from 'classNames';
+import cx from 'classnames';
 
 class WizardForm extends Component {
     
@@ -31,10 +31,10 @@ class WizardForm extends Component {
         const { page } = this.state;
 
         return (            
-            <div class="step-wrap">
-                <div class="step-box">
-                    <div class="step-box-l">
-                        <div class="step-bullet">
+            <div className="step-wrap">
+                <div className="step-box">
+                    <div className="step-box-l">
+                        <div className="step-bullet">
                             <ul>
                                 <li className={cx({'active':(this.state.page == 1) ? true:false})} >
                                     <a href=""></a>
@@ -60,7 +60,7 @@ class WizardForm extends Component {
                             </ul>
                             <h6>Step 0{this.state.page}\08</h6>
                         </div>
-                        <div class="what-difference">
+                        <div className="what-difference">
                             <h3>What difference
                                 <br/>does the goal make?</h3>
                             <p>Your workouts and meal plan will

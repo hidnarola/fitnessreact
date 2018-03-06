@@ -13,12 +13,11 @@ import FitnessNav from 'components/global/FitnessNav';
 
 import { routeCodes } from 'constants/routes';
 
-export default class Profile extends Component {    
-    
-    
+export default class Profile extends Component {
+
     
 
-    render() {        
+    render() {
 
         return (
             <div className='stat-page'>
