@@ -3,7 +3,14 @@ export const publicPath = '/';
 export const routeCodes = {
     HOME: publicPath,
     PEOPLE: `${ publicPath }people`,
+
+    // Dashboard Routes
     DASHBOARD:`${ publicPath }dashboard`,
+    
+    WORKOUTWARMUP:`${ publicPath }dashboard`,
+    WORKOUT:`${ publicPath }dashboard`,
+    WORKOUTCOOLDOWN:`${ publicPath }dashboard`,
+
     
     // Registration Routes
     REGISTERUSER:`${ publicPath }registration`,
@@ -16,12 +23,16 @@ export const routeCodes = {
     STATSBODY:`${publicPath}stats/body`,
 
     // Profile All Pages
-
     PROFILE:`${publicPath}profile`,
     PROFILEFITHUB:`${publicPath}profile/fithub`,
     PROFILEPHOTOS:`${publicPath}profile/photos`,
     PROFILEFRIENDS:`${publicPath}profile/friends`,
 
+    // Badges Pages
+    BADGES:`${publicPath}badges`,
+    BADGESTRACKING:`${publicPath}badges/tracking`,
+    BADGESINCOMPLETE:`${publicPath}badges/incomplete`,
+    BADGESCOMPLETE:`${publicPath}badges/complete`,
 
     FITNESSBODY:`${ publicPath }fitnessBody`,
     EXERCISE:`${ publicPath }exercise`,

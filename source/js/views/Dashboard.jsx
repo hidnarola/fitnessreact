@@ -24,7 +24,7 @@ export default class Dashboard extends Component{
         
     }
 
-    render(){
+    render(){        
         return(
             <div className="fitness-dashboard">
                 <FitnessHeader/>

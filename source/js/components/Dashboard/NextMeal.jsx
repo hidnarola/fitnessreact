@@ -1,4 +1,5 @@
 import React,{Component} from 'react';
+import BreakfastImg from 'img/dashboard/breakfashimage.jpg';
 
 export default class NextMeal extends Component {
     render(){
@@ -11,7 +12,9 @@ export default class NextMeal extends Component {
                     </div>
                 </div>
                 <div className="whitebox-body next-meal">
-                    <div className="nextmeal-img"></div>
+                    <div className="nextmeal-img">
+                        
+                    </div>
                     <div className="meal-breakfast">
                         <small>Breakfast</small>
                         <h4>Boiled eggs & avocado on rye toast</h4>

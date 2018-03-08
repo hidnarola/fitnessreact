@@ -1,4 +1,18 @@
 import React,{Component} from 'react';
+import { Route, Switch } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
+
+import TodaysWarmUp from './TodaysWarmUp';
+import TodaysWorkOutSchedule from './TodaysWorkOutSchedule';
+import TodaysCoolDown from './TodaysCoolDown';
+
+import { routeCodes } from 'constants/routes';
+
+import WorkoutImg from 'img/dashboard/img-01.jpg';
+
+import {Tabs,Tab} from 'react-bootstrap';
+ 
+
 
 export default class TodaysWorkout extends Component{
 
@@ -8,46 +22,22 @@ export default class TodaysWorkout extends Component{
                 <div className="whitebox-head d-flex">
                     <h3 className="title-h3">Today's Workout</h3>
                     <div className="whitebox-head-r">
-                        <a href="" className="icon-print"></a>
-                        <a href="" className="icon-settings"></a>
+                        <a className="icon-print"></a>
+                        <a className="icon-settings"></a>
                     </div>
-                </div>
-                <div className="today-link d-flex">
-                    <a href="">Warm Up</a>
-                    <a href="">Workout</a>
-                    <a href="">Cool Down</a>
-                </div>
-                <div className="whitebox-body today-box">
-                    <ul>
-                        <li>
-                            <div className="today-box-inr">
-                                <span>
-                                    <img src="images/img-01.jpg" alt="" />
-                                </span>
-                                <h4>Bench Press</h4>
-                                <h5>25kg for 6 sets of 6 reps</h5>
-                            </div>
-                        </li>
-                        <li>
-                            <div className="today-box-inr">
-                                <span>
-                                    <img src="images/img-01.jpg" alt="" />
-                                </span>
-                                <h4>Bent Over Row</h4>
-                                <h5>10kg for 5 sets of 12 reps</h5>
-                            </div>
-                        </li>
-                        <li>
-                            <div className="today-box-inr">
-                                <span>
-                                    <img src="images/img-01.jpg" alt="" />
-                                </span>
-                                <h4>Shoulder Press</h4>
-                                <h5>10kg for 5 sets of 12 reps</h5>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
+                </div>                
+                <Tabs defaultActiveKey={1} id="uncontrolled-tab-example" className="tab_cstm">
+                    <Tab eventKey={1} title="Warm Up">
+                        <TodaysWarmUp/>
+                    </Tab>
+                    <Tab eventKey={2} title="Workout">
+                        <TodaysWorkOutSchedule/>
+                    </Tab>
+                    <Tab eventKey={3} title="Cool Down" >
+                        <TodaysCoolDown/>
+                    </Tab>
+                </Tabs>                              
+                
             </div>
         );
     }

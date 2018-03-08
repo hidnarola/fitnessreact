@@ -6,6 +6,5 @@
 @import "fitnessCss/bootstrap.min";
 @import "fitnessCss/style.css";
 @import "fitnessCss/custom.css";
-/* @import "fitnessCss/icomoon-style"; */
-/* @import "fitnessCss/jquery.mCustomScrollbar.min"; */
+@import "fitnessCss/icomoon-style";
 @import "fitnessCss/progressbar.css";

@@ -15,7 +15,7 @@ export default class GoalProgress extends Component{
                     <CircularProgressbar 
                             percentage={60} 
                             strokeWidth={5} 
-                            textForPercentage={ (pct) => ` ${pct}%` }
+                            textForPercentage={ (pct) => `${pct}%` }
                             />
                 </div>
             </div>

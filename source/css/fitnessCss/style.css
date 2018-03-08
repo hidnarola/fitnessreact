@@ -165,11 +165,11 @@ h3.title-h3{padding:0;margin:0;display:block; color:#232B41; font-size:20px; fon
 .navigation ul>li>a>i{display:block;margin:0 auto 5px;width:24px;font-size:24px;}
 .navigation ul>li>a>span{display:block;margin:0;color:#fff;transition:ease-in-out .5s;}
 .navigation ul>li>a:hover{text-decoration:none;transition:ease-in-out .5s;}
-.navigation ul>li>a:after{content:'';width:6px;height:100%;border-radius:0 10px 10px 0;position:absolute;top:0;left:-10px;transition:ease-in-out .5s;}
+.navigation ul>li>a:after{content:'';width:6px;height:100%;border-radius:0 10px 10px 0;position:absolute;top:0;left:0px;transition:ease-in-out .5s;}
 .navigation ul>li>a:hover:after,
 .navigation ul>li.active>a:after{ background: linear-gradient(123.28deg, #46E9C5 0%, #3FFBFC 100%);}
 .navigation .mCSB_inside>.mCSB_container {padding:0 20px 0 10px;margin:0;}
-
+.navigation ul>li>a.active:After {background: linear-gradient(123.28deg, #46E9C5 0%, #3FFBFC 100%);}
 .navigation .mCSB_scrollTools_vertical.mCSB_scrollTools_onDrag_expand .mCSB_dragger.mCSB_dragger_onDrag_expanded .mCSB_dragger_bar, 
 .navigation .mCSB_scrollTools_vertical.mCSB_scrollTools_onDrag_expand .mCSB_draggerContainer:hover .mCSB_dragger .mCSB_dragger_bar {width:2px;}
 
@@ -192,10 +192,10 @@ h3.title-h3{padding:0;margin:0;display:block; color:#232B41; font-size:20px; fon
 .body-head-r a:lst-child{margin-bottom:0;}
 .body-head-r a i{float:right;line-height:46px;width:24px;font-size:20px;overflow:hidden;}
 
-.pink-btn{border-radius:25px; background:linear-gradient(148.66deg, #FF3366 0%, #FF339A 100%);	box-shadow:0 2px 4px 0 rgba(0,0,0,0.1);line-height:50px; color: #FFFFFF;	font-family: "GT Walsheim Pro";	font-size: 14px;	font-weight: 700;}
+.pink-btn{border-radius:25px; background:linear-gradient(148.66deg, #FF3366 0%, #FF339A 100%);	box-shadow:0 2px 4px 0 rgba(0,0,0,0.1);line-height:50px; color: #FFFFFF;	font-family: gt_walsheim_proregular;	font-size: 14px;	font-weight: 700;}
 .pink-btn:hover{opacity:.6;}
 
-.white-btn{ border-radius:25px; background-color:#fff; box-shadow:0 2px 4px 0 rgba(0,0,0,0.1); color:#1A2032;	font-family:"GT Walsheim Pro";	font-size:14px; font-weight:700;line-height:50px;background:#fff;}
+.white-btn{ border-radius:25px; background-color:#fff; box-shadow:0 2px 4px 0 rgba(0,0,0,0.1); color:#1A2032;	font-family:gt_walsheim_proregular;	font-size:14px; font-weight:700;line-height:50px;background:#fff;}
 .white-btn:hover{opacity:.6}
 
 .green-blue-btn{border-radius:25px; color:#fff; font-family:"GT Walsheim Pro";	font-size:14px; font-weight:700;line-height:46px; background:linear-gradient(123.28deg, #46E9C5 0%, #3FFBFC 100%);box-shadow:0 2px 4px 0 rgba(0,0,0,0.1);border:2px solid transparent;}

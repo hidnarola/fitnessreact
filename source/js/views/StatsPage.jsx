@@ -16,7 +16,6 @@ import FitnessNav from 'components/global/FitnessNav';
 
 export default class StatsPage extends Component {
     
- 
     render() {        
 
         return (

@@ -19,7 +19,7 @@ const data = [
 class SimpleAreaChart extends Component{
 	render () {
         return (
-            <AreaChart width={500} height={400} data={data}
+            <AreaChart width={450} height={400} data={data}
                     margin={{top: 10, right: 30, left: 0, bottom: 0}}>
                 <XAxis dataKey="name"/>
                 <YAxis/>

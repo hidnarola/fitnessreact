@@ -8,7 +8,6 @@ import FitnessNav from 'components/global/FitnessNav';
 import Stats from 'components/Stats/Stats';
 
 import FitnessBody from 'components/Body/FitnessBody';
-import Exercise from 'components/Exercise/Exercise';
 import Nutrition from 'components/Nutrition/Nutrition';
 import Goals from 'components/Goals/Goals';
 
@@ -16,6 +15,8 @@ import Home from 'views/Home';
 import People from 'views/People';
 import NotFound from 'views/NotFound';
 import StatsPage from 'views/StatsPage';
+import Badges from 'views/Badges';
+import Exercise from 'views/Exercise';
 import Dashboard from 'views/Dashboard';
 import ProfilePage from 'views/Profile';
 import RegisterUser from 'views/RegisterUser';
@@ -81,8 +82,8 @@ class App extends Component {
                     <div>
                         <ScrollToTop>                            
                             <Route exact path={ routeCodes.HOME } component={ Home } />
-                            <Route path={ routeCodes.PEOPLE } component={ People }  />
-                            
+                            <Route path={ routeCodes.PEOPLE } component={ People }  />                            
+
                             <Route path={ routeCodes.DASHBOARD } component={ Dashboard } />
                             <Route path={ routeCodes.STATSPAGE } component={ StatsPage }  />
                             
@@ -93,9 +94,14 @@ class App extends Component {
                             <Route path={ routeCodes.EXERCISE } component={ Exercise } />
                             <Route path={ routeCodes.NUTRITION } component={ Nutrition } />
 
-                            <Route path={ routeCodes.REGISTERUSER } component={ RegisterUser } />                    
+                            <Route path={ routeCodes.REGISTERUSER } component={ RegisterUser } />
+
+                            <Route path={ routeCodes.BADGES } component={Badges}/>                            
+                            
 
                             <Route path={ routeCodes.GOALS } component={ Goals } />
+
+
                             {/* <Route path='*' component={ NotFound } /> */}
                         </ScrollToTop>
                     </div>
