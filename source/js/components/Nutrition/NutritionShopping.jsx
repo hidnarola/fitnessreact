@@ -2,12 +2,12 @@ import React,{ Component } from 'react';
 import FitnessHeader from '../global/FitnessHeader';
 import FitnessNav from '../global/FitnessNav';
 
-export default class Nutrition extends Component{
+export default class NutritionShopping extends Component{
 
     render(){
         return(
             <div className="fitness-nutrition">
-                  <FitnessHeader/>
+                <FitnessHeader/>
                 <FitnessNav/>
                 <section className="body-wrap">
                     <div className="body-head d-flex justify-content-start">

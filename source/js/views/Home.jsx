@@ -14,7 +14,7 @@ import bookImg from 'img/book2.jpg';
 @connect(state => ({
     counter: state.app.get('counter'),
 }))
-export default class Home extends Component {
+class Home extends Component {
     
     static propTypes = {
         counter: PropTypes.number,
@@ -88,3 +88,9 @@ export default class Home extends Component {
         );
     }
 }
+
+const mapStateToProps = (state) => ({
+    counter: state.app.get('counter')
+})
+
+export default connect(mapStateToProps)(Home)

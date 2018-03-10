@@ -35,8 +35,21 @@ export const routeCodes = {
     BADGESCOMPLETE:`${publicPath}badges/complete`,
 
     FITNESSBODY:`${ publicPath }fitnessBody`,
+
+    //Exercise Pages
     EXERCISE:`${ publicPath }exercise`,
+    EXERCISESETTING:`${ publicPath }exercise/setting`,
+    EXERCISEEQP:`${ publicPath }exercise/equipment`,
+    EXERCISEFITNESS:`${ publicPath }exercise/fitness`,
+
+    // Nutrition Routes
     NUTRITION:`${ publicPath }nutrition`,
+    NUTRITIONSHOP:`${ publicPath }nutrition/shoppinglist`,
+    NUTRITIONMEAL:`${ publicPath }nutrition/nutritionmeal`,
+
+    //Calendar Routes
+    CALENDAR:`${ publicPath }calendar`,
+
     GOALS:`${ publicPath }goals`
 
 

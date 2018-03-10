@@ -24,7 +24,7 @@ export default class FitnessNav extends Component {
                                 exact
                                 to={ routeCodes.DASHBOARD }
                             >
-                                <FaDashboard size={24}/>
+                                <i className="icon-dashboard"></i>
                                 <span>Dashboard</span>
                             </NavLink>
                         </li>
@@ -35,8 +35,8 @@ export default class FitnessNav extends Component {
                                 exact
                                 to={ routeCodes.STATSPAGE }
                             >
-                                <FaPie size={24} />
-                                 <span>Stats</span> 
+                                <i className="icon-pie_chart"></i>
+                                <span>Stats</span> 
                             </NavLink>
                         </li>
 
@@ -47,7 +47,7 @@ export default class FitnessNav extends Component {
                                 exact
                                 to={ routeCodes.FITNESSBODY }
                             >
-                                <FaUser size={24} />
+                                <i className="icon-person"></i>
                                  <span>Body</span> 
                             </NavLink>
                         </li>
@@ -60,7 +60,7 @@ export default class FitnessNav extends Component {
                                 exact
                                 to={ routeCodes.EXERCISE }
                             >
-                                <FaFitness size={24} />
+                                <i className="icon-fitness_center"></i>
                                 <span>Exercise</span>
                             </NavLink>
                         </li>
@@ -70,17 +70,22 @@ export default class FitnessNav extends Component {
                                 activeClassName='active'
                                 className='Menu-link'
                                 exact
-                                to={ routeCodes.NUTRITION }
+                                to={ routeCodes.NUTRITIONMEAL }
                             >
                                 <FaNutrition size={24} />
                                 <span>Nutrition</span>
                             </NavLink>
                         </li>
-                        <li>
-                            <a >
-                                <FaCalendar size={24} />
+                        <li>                            
+                            <NavLink
+                                activeClassName='active'
+                                className='Menu-link'
+                                exact
+                                to={ routeCodes.CALENDAR }
+                            >
+                                <i className="icon-insert_invitation"></i>
                                 <span>Calendar</span>
-                            </a>
+                            </NavLink>
                         </li>
                         <li>
                             <NavLink

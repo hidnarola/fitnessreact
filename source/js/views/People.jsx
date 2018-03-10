@@ -2,14 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getPeople } from 'actions/people';
+ 
 
-@connect(state => ({
-    error: state.people.get('error'),
-    loading: state.people.get('loading'),
-    people: state.people.get('people'),
-}))
-
-export default class People extends Component {
+class People extends Component {
     
     static propTypes = {
         error: PropTypes.string,
@@ -68,3 +63,11 @@ export default class People extends Component {
         );
     }
 }
+
+const mapStateToProps = state => ({
+    error: state.people.get('error'),
+    loading: state.people.get('loading'),
+    people: state.people.get('people')
+})
+
+export default connect(mapStateToProps)(People);
