@@ -16,13 +16,14 @@ const data = [
       {name: 'Dec', weight: 986},
 ];
 
+
 class SimpleAreaChart extends Component{
     render () {
         return (
             <ResponsiveContainer>
                 <AreaChart data={data}
                       margin={{top: 0, right: 0, left: 0, bottom: 0}}>
-                  <Area type='monotone' dataKey='weight' stroke='#ffffff' fill='#40F8F4' />
+                  <Area type='monotone' dataKey='weight' stroke='#ffffff' fill='#F2F2F2' />
                 </AreaChart>
             </ResponsiveContainer>
         );
@@ -30,21 +31,36 @@ class SimpleAreaChart extends Component{
 }
 
 
-export default class BodyFatLoss extends Component{
+
+function Contents (props){
+  var info = props;
+
+  return(
+    <div className="graph-box">
+                
+                <div class="graph-box-content">
+                    <h3 className="title-h3">{info.title}</h3>
+                    <h5>{info.quantity}</h5>
+                    <h6>{info.unit}</h6>
+                </div>
+                <div className="graph-box-background">
+                  <ResponsiveContainer>
+                      <AreaChart data={data}
+                            margin={{top: 0, right: 0, left: 0, bottom: 0}}>
+                        <Area type='monotone' dataKey='weight' stroke='#ffffff' fill='#F2F2F2' />
+                      </AreaChart>
+                  </ResponsiveContainer>
+                </div>
+            </div>
+  )
+}
+export default class ProgressGraph extends Component{
 
     render(){
         return(
-            <div className="graph-box">
-                
-                <div class="graph-box-content">
-                    <h3 className="title-h3">Weight Lifted</h3>
-                    <h5>986</h5>
-                    <h6>Kilograms</h6>
-                </div>
-                <div className="graph-box-background">
-                    <SimpleAreaChart/>
-                </div>
-            </div>
+          Contents(this.props)
+            
         );
     }
 }
+

@@ -14,21 +14,13 @@ export default class Strength extends Component{
                                 <h1>STRENGTH</h1>
                                 <ul className="d-flex">
                                     <li>
-                                        <ProgressGraph/>
+                                        <ProgressGraph title="Weight Lifted" quantity="984" unit="Kilograms" max={50} min={10}/>
                                     </li>
                                     <li>
-                                        <div className="fatchanges-box">
-                                            <h3 className="title-h3">Total Time Running</h3>
-                                            <h5>13</h5>
-                                            <h6>Hours</h6>
-                                        </div>
+                                        <ProgressGraph title="Workouts Completed" quantity="58" unit="Workouts"/>
                                     </li>
                                     <li>
-                                        <div className="fatchanges-box">
-                                            <h3 className="title-h3">Total elevation</h3>
-                                            <h5>5.4</h5>
-                                            <h6>kilometers</h6>
-                                        </div>
+                                        <ProgressGraph title="Total Weight Lifted" quantity="59.9" unit="Tonnes"/>
                                     </li>
                                 </ul>
                             </div>
@@ -95,25 +87,13 @@ export default class Strength extends Component{
                             <div className="fat-changes">
                                 <ul className="d-flex">
                                     <li>
-                                        <div className="fatchanges-box">
-                                            <h3 className="title-h3">Peak heart rate </h3>
-                                            <h5>180</h5>
-                                            <h6>BPM</h6>
-                                        </div>
+                                        <ProgressGraph title="Total Reps" quantity="10K" unit="Reps"/>
                                     </li>
                                     <li>
-                                        <div className="fatchanges-box">
-                                            <h3 className="title-h3">distance cycled</h3>
-                                            <h5>854</h5>
-                                            <h6>kilometers</h6>
-                                        </div>
+                                        <ProgressGraph title="Total Sets" quantity="1010" unit="Sets"/>
                                     </li>
                                     <li>
-                                        <div className="fatchanges-box">
-                                            <h3 className="title-h3">Total steps</h3>
-                                            <h5>180k</h5>
-                                            <h6>steps</h6>
-                                        </div>
+                                        <ProgressGraph title="Total Time" quantity="112" unit="Hours"/>
                                     </li>
                                 </ul>
                             </div>
