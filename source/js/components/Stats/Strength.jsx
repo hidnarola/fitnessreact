@@ -1,4 +1,5 @@
 import React,{ Component } from 'react';
+import ProgressGraph from 'components/Stats/ProgressGraph';
 
 
 export default class Strength extends Component{
@@ -13,11 +14,7 @@ export default class Strength extends Component{
                                 <h1>STRENGTH</h1>
                                 <ul className="d-flex">
                                     <li>
-                                        <div className="fatchanges-box">
-                                            <h3 className="title-h3">Total Distance Run</h3>
-                                            <h5>500</h5>
-                                            <h6>kilometers</h6>
-                                        </div>
+                                        <ProgressGraph/>
                                     </li>
                                     <li>
                                         <div className="fatchanges-box">
