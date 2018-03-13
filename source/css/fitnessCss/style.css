@@ -294,6 +294,12 @@ color:#1A2032; font-size: 10px; font-weight:500; line-height:26px;	text-align:ce
 .fatchanges-box h3{margin:0 0 35px;padding:0;}
 .fatchanges-box h5{color:#232B41; font-size:48px; font-weight:bold; line-height:68px; display:block;margin:0;padding:0;}
 .fatchanges-box h6{color:#1A2032; font-size: 20px; font-weight:900; line-height:28px; display:block;margin:0 0 14px;padding:0;text-transform:uppercase;}
+.graph-box{background:#fff;border-radius:5px;   box-shadow: 0 2px 4px 0 rgba(0,0,0,0.1); height:100%; position: relative; padding:30px; display:flex; justify-content: center;}
+.graph-box-background{position:absolute;bottom:0;left:0;height:60%;width:100%;}
+.graph-box-content{z-index:10;}
+.graph-box h3{margin:0 0 35px;padding:0;}
+.graph-box h5{color:#232B41; font-size:48px; font-weight:bold; line-height:68px; display:block;margin:0;padding:0;}
+.graph-box h6{color:#1A2032; font-size: 20px; font-weight:900; line-height:28px; display:block;margin:0 0 14px;padding:0;text-transform:uppercase;}
 .body-fat:after,
 .bodyfat-head:after,
 .bodyfat-body:after{content:'';clear:both;display:block;}
