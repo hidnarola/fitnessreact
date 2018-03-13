@@ -1,9 +1,8 @@
 import { Map } from 'immutable';
 
 import {
-    GET_PEOPLE_START_NEW,
-    GET_PEOPLE_ERROR_NEW,
-    GET_PEOPLE_SUCCESS_NEW
+    GET_PEOPLE_START_NEW, GET_PEOPLE_ERROR_NEW, GET_PEOPLE_SUCCESS_NEW,
+    GET_DASHBOARD_START,GET_DASHBOARD_ERROR,GET_DASHBOARD_SUCCESS
 } from '../actions/dashboard';
 
 const initialState = Map({
@@ -31,6 +30,28 @@ const actionsMap = {
         return state.merge(Map({
             loading: false,
             people:action.data
+        }));
+    },
+    
+    //-------------------------------------------------------------
+
+    [GET_DASHBOARD_START]: (state) => {
+        return state.merge(Map({
+            loading: true,
+            error: null,
+            dashboardData: null,
+        }));
+    },
+    [GET_DASHBOARD_ERROR]: (state,action) => {
+        return state.merge(Map({
+            loading: false,
+            error: action.error.message,
+        }));
+    },
+    [GET_DASHBOARD_SUCCESS]: (state,action) => {
+        return state.merge(Map({
+            loading: false,
+            dashboardData:action.data
         }));
     },
 };

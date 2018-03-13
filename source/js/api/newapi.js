@@ -33,11 +33,11 @@ const fetchResource = (path, userOptions = {},apiURL='https://swapi.co/api') => 
     // Define default headers
     const defaultHeaders = {
         'Content-Type': 'application/json',
-        Accept: 'application/json',
+         Accept: 'application/json'        
     };
 
     const options = {
-        // Merge options
+        // Merge options        
         ...defaultOptions,
         ...userOptions,
         // Merge headers
@@ -113,7 +113,12 @@ function getPosts(){
     return fetchResource('posts',{},'https://jsonplaceholder.typicode.com');
 }
 
+function getAPI(){
+    return fetchResource('',{},'http://localhost:3000/new_data');
+}
+
 export default {
     getPeople,
-    getPosts  
+    getPosts,
+    getAPI
 };

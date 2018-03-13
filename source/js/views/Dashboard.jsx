@@ -18,7 +18,6 @@ import { connect } from 'react-redux';
 // import { getPeopleNew } from 'actions/people';
 import { getPeopleNew2 } from 'actions/dashboard';
 
-
 class ModalPopUp extends Component {
     constructor(props, context) {
         super(props, context);
@@ -116,33 +115,11 @@ class Dashboard extends Component{
         } = this.props;
 
         if (!people) {
-            dispatch({
-                type: 'GET_PEOPLE_START_NEW',
-            });
+            dispatch(getPeopleNew2());
         }
-    }
-        
-    renderPeople() {
-        const {
-            people,
-        } = this.props;
-
-        return people.results.map(person => {
-            return (
-                <div key={ person.url } className='People-person'>
-                    <h3>{ person.name }</h3>
-                    <div>Height: { person.height }</div>
-                    <div>Mass: { person.mass }</div>
-                    <div>Eye color: { person.eye_color }</div>
-                    <div>Hair color: { person.hair_color }</div>
-                    <div>Birth year: { person.birth_year }</div>
-                </div>
-            );
-        });
-    }
+    }   
 
     render(){
-
 
         const {
             loading,
@@ -153,11 +130,7 @@ class Dashboard extends Component{
         return(
             <div className="fitness-dashboard">
                 <FitnessHeader/>
-                <FitnessNav/>
-                
-                <div className='People-list'>
-                    {/* { people && this.renderPeople() } */}
-                </div>
+                <FitnessNav/>                
 
                 <section className="body-wrap">
                     <div className="body-head space-btm-45 d-flex justify-content-start">

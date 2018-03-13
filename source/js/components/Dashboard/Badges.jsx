@@ -36,7 +36,7 @@ export default class Badges extends Component{
                         <p>Lift a total of 1000Kg overall.</p>
                         <h6>500/1000Kg</h6>
                         <span>
-                            <img src="images/achievment-graph.png" alt="" />
+                            {/* <img src="images/achievment-graph.png" alt="" /> */}
                         </span>
                     </div>
                 </div>

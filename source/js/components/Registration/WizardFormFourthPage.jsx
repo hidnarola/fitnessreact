@@ -41,13 +41,13 @@ const WizardFormFourthPage = props => {
                                 <div className="input-wrap radiobox">
                                     <div className="radiobox-inr">
                                         <input id="male" type="radio" name="gender" value="male"/>
-                                        <label for="male">
+                                        <label hmtlFor="male">
                                                 
                                         </label>
                                     </div>
                                     <div className="radiobox-inr">
                                         <input id="female" type="radio" name="gender" value="female"/>
-                                        <label for="female">
+                                        <label hmtlFor="female">
                                                 
                                         </label>
                                     </div>

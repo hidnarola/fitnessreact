@@ -96,7 +96,7 @@ export default class ProfileFithub extends Component{
                                             <p>Lift a total of 1000Kg overall.</p>
                                             <h6>500/1000Kg</h6>
                                             <span>
-                                                <img src="images/achievment-graph.png" alt=""/>
+                                                {/* <img src="images/achievment-graph.png" alt=""/> */}
                                             </span>
                                         </div>
                                     </div>
@@ -131,7 +131,7 @@ export default class ProfileFithub extends Component{
                                         <div className="post-type">
                                             <div className="posttype-head d-flex justify-content-start">
                                                 <span>
-                                                    <img src="images/download.jpg" alt=""/>
+                                                    {/* <img src="images/download.jpg" alt=""/> */}
                                                 </span>
                                                 <h4 className="vertical-middle-c">
                                                     <big>Clifford Webster </big>
@@ -157,7 +157,7 @@ export default class ProfileFithub extends Component{
                                         <div className="post-type">
                                             <div className="posttype-head d-flex justify-content-start">
                                                 <span>
-                                                    <img src="images/download.jpg" alt=""/>
+                                                    {/* <img src="images/download.jpg" alt=""/> */}
                                                 </span>
                                                 <h4 className="vertical-middle-c">
                                                     <big>Clifford Webster </big>
@@ -183,7 +183,7 @@ export default class ProfileFithub extends Component{
                                             </div>
                                             <div className="post-comment d-flex">
                                                 <span>
-                                                    <img src="images/download.jpg" alt=""/>
+                                                    {/* <img src="images/download.jpg" alt=""/> */}
                                                 </span>
                                                 <div className="post-comment-r">
                                                     <h4>
@@ -203,7 +203,7 @@ export default class ProfileFithub extends Component{
                                         <div className="post-type">
                                             <div className="posttype-head d-flex justify-content-start">
                                                 <span>
-                                                    <img src="images/download.jpg" alt=""/>
+                                                    {/* <img src="images/download.jpg" alt=""/> */}
                                                 </span>
                                                 <h4 className="vertical-middle-c">
                                                     <big>Clifford Webster </big>

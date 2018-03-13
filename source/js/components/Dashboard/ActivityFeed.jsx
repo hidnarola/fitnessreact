@@ -17,7 +17,7 @@ export default class ActivityFeed extends Component{
                             <div className="activity-li">
                                 <div className="activity-li-head">
                                     <span>
-                                        <img src="images/download.jpg" alt="" />
+                                        {/* <img src="images/download.jpg" alt="" /> */}
                                     </span>
                                     <h3>Jane Jackson</h3>
                                 </div>
@@ -38,12 +38,12 @@ export default class ActivityFeed extends Component{
                             <div className="activity-li">
                                 <div className="activity-li-head">
                                     <span>
-                                        <img src="images/download.jpg" alt="" />
+                                        {/* <img src="images/download.jpg" alt="" /> */}
                                     </span>
                                     <h3>Jane Jackson</h3>
                                 </div>
                                 <div className="activity-li-img">
-                                    <img src="images/01.jpg" alt="" />
+                                    {/* <img src="images/01.jpg" alt="" /> */}
                                 </div>
                                 <div className="activity-li-onlytext">
                                     <p>Out cyling with
@@ -59,7 +59,7 @@ export default class ActivityFeed extends Component{
                             <div className="activity-li">
                                 <div className="activity-li-head">
                                     <span>
-                                        <img src="images/download.jpg" alt="" />
+                                        {/* <img src="images/download.jpg" alt="" /> */}
                                     </span>
                                     <h3>Jane Jackson</h3>
                                 </div>
@@ -76,7 +76,7 @@ export default class ActivityFeed extends Component{
                             <div className="activity-li">
                                 <div className="activity-li-head">
                                     <span>
-                                        <img src="images/download.jpg" alt="" />
+                                        {/* <img src="images/download.jpg" alt="" /> */}
                                     </span>
                                     <h3>Jane Jackson</h3>
                                 </div>
@@ -96,7 +96,7 @@ export default class ActivityFeed extends Component{
                             <div className="activity-li">
                                 <div className="activity-li-head">
                                     <span>
-                                        <img src="images/download.jpg" alt="" />
+                                        {/* <img src="images/download.jpg" alt="" /> */}
                                     </span>
                                     <h3>Jane Jackson</h3>
                                 </div>
@@ -113,7 +113,7 @@ export default class ActivityFeed extends Component{
                             <div className="activity-li">
                                 <div className="activity-li-head">
                                     <span>
-                                        <img src="images/download.jpg" alt="" />
+                                        {/* <img src="images/download.jpg" alt="" /> */}
                                     </span>
                                     <h3>Jane Jackson</h3>
                                 </div>

@@ -42,7 +42,7 @@ export default class Calendar extends Component{
                                         <small>Completed</small>
                                         <div className="material-switch">
                                             <input id="someSwitchOptionDefault" name="someSwitchOption001" type="checkbox" />
-                                            <label for="someSwitchOptionDefault" className="label-default"></label>
+                                            <label htmlFor="someSwitchOptionDefault" className="label-default"></label>
                                         </div>
                                     </div>
                                 </div>

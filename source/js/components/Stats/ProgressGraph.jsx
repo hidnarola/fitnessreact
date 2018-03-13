@@ -33,26 +33,25 @@ class SimpleAreaChart extends Component{
 
 
 function Contents (props){
-  var info = props;
+    var info = props;
 
-  return(
-    <div className="graph-box">
-                
-                <div class="graph-box-content">
-                    <h3 className="title-h3">{info.title}</h3>
-                    <h5>{info.quantity}</h5>
-                    <h6>{info.unit}</h6>
-                </div>
-                <div className="graph-box-background">
-                  <ResponsiveContainer>
-                      <AreaChart data={data}
-                            margin={{top: 0, right: 0, left: 0, bottom: 0}}>
-                        <Area type='monotone' dataKey='weight' stroke='#ffffff' fill='#F2F2F2' />
-                      </AreaChart>
-                  </ResponsiveContainer>
-                </div>
+    return(
+        <div className="graph-box">                
+            <div className="graph-box-content">
+                <h3 className="title-h3">{info.title}</h3>
+                <h5>{info.quantity}</h5>
+                <h6>{info.unit}</h6>
             </div>
-  )
+            <div className="graph-box-background">
+                <ResponsiveContainer>
+                    <AreaChart data={data}
+                        margin={{top: 0, right: 0, left: 0, bottom: 0}}>
+                    <Area type='monotone' dataKey='weight' stroke='#ffffff' fill='#F2F2F2' />
+                    </AreaChart>
+                </ResponsiveContainer>
+            </div>
+        </div>
+    )
 }
 export default class ProgressGraph extends Component{
 
