@@ -28,6 +28,9 @@ export const routeCodes = {
     PROFILEPHOTOS:`${publicPath}profile/photos`,
     PROFILEFRIENDS:`${publicPath}profile/friends`,
 
+    // Recipe Routes
+    RECEIP:`${publicPath}receip`,
+
     // Badges Pages
     BADGES:`${publicPath}badges`,
     BADGESTRACKING:`${publicPath}badges/tracking`,

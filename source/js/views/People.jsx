@@ -1,18 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getPeople } from 'actions/people';
+import { getPeopleNew,getPosts } from 'actions/people';
  
-
 class People extends Component {
     
-    static propTypes = {
-        error: PropTypes.string,
-        loading: PropTypes.bool,
-        people: PropTypes.object,
-        // from react-redux connect
-        dispatch: PropTypes.func,
-    }
+    // static propTypes = {
+    //     error: PropTypes.string,
+    //     loading: PropTypes.bool,
+    //     people: PropTypes.object,
+    //     // from react-redux connect
+    //     dispatch: PropTypes.func,
+    // }
 
     componentWillMount() {
         const {
@@ -21,7 +20,7 @@ class People extends Component {
         } = this.props;
 
         if (!people) {
-            dispatch(getPeople());
+            dispatch(getPeopleNew());
         }
     }
 
@@ -57,7 +56,9 @@ class People extends Component {
                 { loading && <div>Loading people...</div> }
                 { error && error.toString() }
                 <div className='People-list'>
-                    { people && this.renderPeople() }
+                    <pre>
+                        {people && JSON.stringify(people,null,2)} 
+                    </pre>
                 </div>
             </div>
         );

@@ -14,6 +14,7 @@ import FitnessBody from 'components/Body/FitnessBody';
 import NutritionShopping from 'components/Nutrition/NutritionShopping';
 import NutritionMeal from 'components/Nutrition/NutritionMeal';
 import Goals from 'components/Goals/Goals';
+import Receip from '../components/Receip/Receip';
 import Calendar from 'components/Calendar/Calendar';
 
 import Home from 'views/Home';
@@ -49,13 +50,16 @@ class App extends Component {
                             <Route path={ routeCodes.NUTRITIONSHOP } component={ NutritionShopping } />
 
                             <Route path={ routeCodes.CALENDAR } component={Calendar} />
+                            <Route path={ routeCodes.BADGES } component={Badges}/>                            
+                            <Route path={ routeCodes.GOALS } component={ Goals } />
+                            
+                            <Route path={ routeCodes.RECEIP } component={ Receip } />
+
 
                             <Route path={ routeCodes.REGISTERUSER } component={ RegisterUser } />
 
-                            <Route path={ routeCodes.BADGES } component={Badges}/>                            
                             
 
-                            <Route path={ routeCodes.GOALS } component={ Goals } />
 
 
                             {/* <Route path='*' component={ NotFound } /> */}

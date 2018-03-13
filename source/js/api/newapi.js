@@ -26,7 +26,7 @@ function ApiError(message, data, status) {
 }
 
 // API wrapper function
-const fetchResource = (path, userOptions = {}) => {
+const fetchResource = (path, userOptions = {},apiURL='https://swapi.co/api') => {
     // Define default options
     const defaultOptions = {};
 
@@ -44,11 +44,11 @@ const fetchResource = (path, userOptions = {}) => {
         headers: {
             ...defaultHeaders,
             ...userOptions.headers,
-        }
+        }        
     };
 
     // Build Url
-    const url = `${ API_URL }/${ path }`;
+    const url = `${ apiURL }/${ path }`;
 
     // Detect is we are uploading a file
     const isFile = typeof window !== 'undefined' && options.body instanceof File;
@@ -109,6 +109,11 @@ function getPeople() {
     return fetchResource('people/');
 }
 
+function getPosts(){
+    return fetchResource('posts',{},'https://jsonplaceholder.typicode.com');
+}
+
 export default {
-    getPeople    
+    getPeople,
+    getPosts  
 };
