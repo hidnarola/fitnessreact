@@ -4,12 +4,14 @@ import app from 'reducers/app';
 import people from 'reducers/people';
 import dashboardnew from 'reducers/dashboard';
 import nutrition from 'reducers/nutrition';
+import exerciseFitness from 'reducers/exercise/fitness'
 
 export default combineReducers({
-    app,    
+    app,
     people,
-    dashboardnew,    
-    nutrition,    
+    dashboardnew,
+    nutrition,
+    exerciseFitness,
     // ...your other reducers here
     // you have to pass formReducer under 'form' key,
     // for custom keys look up the docs for 'getFormState'

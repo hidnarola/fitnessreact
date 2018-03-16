@@ -153,6 +153,41 @@ router.get('/nutrition_meal', function (req, res, next) {
     });
 });
 
+router.get('/exercise/fitness', function (req, res, next) {
+    res.json({
+        strength: {
+            upperBody: [
+                {title: "Bench Press", imageUrl: "/assets/img/exercise/fitness/img-13.jpg"},
+                {title: "Suppoted Row", imageUrl: "/assets/img/exercise/fitness/img-13.jpg"},
+                {title: "Suppoted Row", imageUrl: "/assets/img/exercise/fitness/img-13.jpg"},
+            ],
+            lowerBody: [
+                {title: "Push Ups", imageUrl: "/assets/img/exercise/fitness/img-13.jpg"},
+            ]
+        },
+        flexibility: {
+            upperBody: [
+                {title: "Push Ups", imageUrl: "/assets/img/exercise/fitness/img-13.jpg"},
+                {title: "Suppoted Row", imageUrl: "/assets/img/exercise/fitness/img-13.jpg"},
+                {title: "Suppoted Row", imageUrl: "/assets/img/exercise/fitness/img-13.jpg"},
+            ],
+            lowerBody: [
+                {title: "Suppoted Row", imageUrl: "/assets/img/exercise/fitness/img-13.jpg"},
+            ],
+        },
+        posture: {
+            upperBody: [
+                {title: "Push Ups", imageUrl: "/assets/img/exercise/fitness/img-13.jpg"},
+                {title: "Suppoted Row", imageUrl: "/assets/img/exercise/fitness/img-13.jpg"},
+                {title: "Suppoted Row", imageUrl: "/assets/img/exercise/fitness/img-13.jpg"},
+            ],
+            lowerBody: [
+                {title: "Suppoted Row", imageUrl: "/assets/img/exercise/fitness/img-13.jpg"},
+            ],
+        }
+    });
+});
+
 router.post('/post_name', function (req, res, next) {
     console.log(req.body);
 

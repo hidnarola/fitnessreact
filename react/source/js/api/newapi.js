@@ -121,9 +121,14 @@ function getNutritutionData() {
     return fetchResource('', {}, 'http://localhost:3000/nutrition_meal');
 }
 
+function getExerciseFitnessData() {
+    return fetchResource('', {}, 'http://localhost:3000/exercise/fitness');
+}
+
 export default {
     getPeople,
     getPosts,
     getAPI,
-    getNutritutionData
+    getNutritutionData,
+    getExerciseFitnessData
 };
