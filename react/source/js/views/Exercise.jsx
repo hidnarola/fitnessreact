@@ -14,31 +14,31 @@ import { routeCodes } from 'constants/routes';
 import FitnessHeader from 'components/global/FitnessHeader';
 import FitnessNav from 'components/global/FitnessNav';
 
-function logUpdate(){
+function logUpdate() {
     console.log('Over here');
 }
 
 export default class Exercise extends Component {
 
-    
-    render() {        
+
+    render() {
 
         return (
             <div className='stat-page'>
-                <FitnessHeader/>
-                <FitnessNav/>
+                <FitnessHeader />
+                <FitnessNav />
                 <section className="body-wrap">
                     <div className="body-head d-flex justify-content-start">
                         <div className="body-head-l">
                             <h2>Shopping List</h2>
                             <div className="body-head-l-btm space-btm-20">
-                                
+
 
                                 <NavLink
                                     activeClassName='pink-btn'
                                     className='white-btn'
                                     exact
-                                    to={ routeCodes.EXERCISEFITNESS }
+                                    to={routeCodes.EXERCISEFITNESS}
                                 >
                                     Fitness test
                                 </NavLink>
@@ -47,7 +47,7 @@ export default class Exercise extends Component {
                                     activeClassName='pink-btn'
                                     className='white-btn'
                                     exact
-                                    to={ routeCodes.EXERCISEEQP }
+                                    to={routeCodes.EXERCISEEQP}
                                 >
                                     Equipment
                                 </NavLink>
@@ -56,7 +56,7 @@ export default class Exercise extends Component {
                                     activeClassName='pink-btn'
                                     className='white-btn'
                                     exact
-                                    to={ routeCodes.EXERCISESETTING }
+                                    to={routeCodes.EXERCISESETTING}
                                 >
                                     Preferences
                                 </NavLink>
@@ -68,22 +68,21 @@ export default class Exercise extends Component {
                                 also allow us to identify opportunities for rapid improvement.</p>
                         </div>
                         <div className="body-head-r">
-                            <a  className="white-btn">Reset
+                            <a className="white-btn">Reset
                                 <i className="icon-print"></i>
                             </a>
-                            <a  className="green-blue-btn">Update
+                            <a className="green-blue-btn">Update
                                 <i className="icon-control_point"></i>
                             </a>
                         </div>
                     </div>
-                </section>
-                
-                <Switch>
-                    <Route onChange={logUpdate} exact path={ routeCodes.EXERCISEFITNESS } component={ Fitness } />                    
-                    <Route onChange={logUpdate} exact path={ routeCodes.EXERCISEEQP } component={ Equipment } />
-                    <Route onChange={logUpdate} exact path={ routeCodes.EXERCISESETTING } component={ Setting } />
-                </Switch>
 
+                    <Switch>
+                        <Route onChange={logUpdate} exact path={routeCodes.EXERCISEFITNESS} component={Fitness} />
+                        <Route onChange={logUpdate} exact path={routeCodes.EXERCISEEQP} component={Equipment} />
+                        <Route onChange={logUpdate} exact path={routeCodes.EXERCISESETTING} component={Setting} />
+                    </Switch>
+                </section>
             </div>
         );
     }
