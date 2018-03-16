@@ -1,23 +1,29 @@
-import React,{Component} from 'react';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { routeCodes } from 'constants/routes';
 import FitnessHeader from '../global/FitnessHeader';
 import FitnessNav from '../global/FitnessNav';
+import TodaysMeal from './TodaysMeal';
+import { getNutritionData } from '../../actions/nutrition';
 
-export default class NutritionMeal extends Component{
+class NutritionMeal extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
-
     }
 
-    
+    componentWillMount() {
+        const { dispatch } = this.props;
+        dispatch(getNutritionData());
+    }
 
-    render(){
-        return(
+    render() {
+        const { todaysMeal } = this.props;
+        return (
             <div className="fitness-nutrition">
-                <FitnessHeader/>
-                <FitnessNav/>
+                <FitnessHeader />
+                <FitnessNav />
                 <section className="body-wrap">
                     <div className="body-head d-flex justify-content-start">
                         <div className="body-head-l">
@@ -26,18 +32,18 @@ export default class NutritionMeal extends Component{
                                 to provide the best meal plans make sure you rate recipies you like. You can further fine tune the meals
                                 selected for you by changing your nutrition settings. </p>
                         </div>
-                        <div className="body-head-r ml-auto">                            
+                        <div className="body-head-r ml-auto">
 
                             <NavLink
                                 activeClassName='active'
                                 className='pink-btn'
                                 exact
-                                to={ routeCodes.NUTRITIONSHOP }
+                                to={routeCodes.NUTRITIONSHOP}
                             >
                                 <span>Shopping List</span>
                                 <i className="icon-shopping_cart"></i>
                             </NavLink>
-                            
+
                             <a href="" className="white-btn">Nutrition Settings
                                 <i className="icon-settings"></i>
                             </a>
@@ -45,238 +51,7 @@ export default class NutritionMeal extends Component{
                     </div>
                     <div className="body-content d-flex row justify-content-start">
                         <div className="col-md-8">
-                            <div className="white-box">
-                                <div className="whitebox-head d-flex profile-head">
-                                    <h3 className="title-h3 size-14">Today's Meals</h3>
-                                    <div className="whitebox-head-r">
-                                        <a href="" className="green-blue">Add meal
-                                            <i className="icon-control_point"></i>
-                                        </a>
-                                    </div>
-                                </div>
-
-                                <div className="whitebox-body">
-                                    <div className="meal-wrap d-flex">
-                                        <div className="meal-img">
-                                            <img src="images/img-07.jpg" alt="" />
-                                        </div>
-                                        <div className="meal-name">
-                                            <small>Breakfast</small>
-                                            <h5>Bulletproof butter coffee with cream</h5>
-                                        </div>
-                                        <div className="meal-info">
-                                            <small>Cals</small>
-                                            <big>400</big>
-                                        </div>
-                                        <div className="meal-info">
-                                            <small>Protein</small>
-                                            <big>26g</big>
-                                        </div>
-                                        <div className="meal-info">
-                                            <small>Fat</small>
-                                            <big>23g</big>
-                                        </div>
-                                        <div className="meal-info">
-                                            <small>Carbs</small>
-                                            <big>6g</big>
-                                        </div>
-                                        <div className="meal-info">
-                                            <a href="">
-                                                <i className="icon-more_horiz"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-
-                                    <div className="meal-wrap d-flex">
-                                        <div className="meal-img">
-                                            <img src="images/img-07.jpg" alt="" />
-                                        </div>
-                                        <div className="meal-name">
-                                            <small>Breakfast</small>
-                                            <h5>Bulletproof butter coffee with cream</h5>
-                                        </div>
-                                        <div className="meal-info">
-                                            <small>Cals</small>
-                                            <big>400</big>
-                                        </div>
-                                        <div className="meal-info">
-                                            <small>Protein</small>
-                                            <big>26g</big>
-                                        </div>
-                                        <div className="meal-info">
-                                            <small>Fat</small>
-                                            <big>23g</big>
-                                        </div>
-                                        <div className="meal-info">
-                                            <small>Carbs</small>
-                                            <big>6g</big>
-                                        </div>
-                                        <div className="meal-info">
-                                            <a href="">
-                                                <i className="icon-more_horiz"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-
-                                    <div className="meal-wrap d-flex">
-                                        <div className="meal-img">
-                                            <img src="images/img-07.jpg" alt="" />
-                                        </div>
-                                        <div className="meal-name">
-                                            <small>Breakfast</small>
-                                            <h5>Bulletproof butter coffee with cream</h5>
-                                        </div>
-                                        <div className="meal-info">
-                                            <small>Cals</small>
-                                            <big>400</big>
-                                        </div>
-                                        <div className="meal-info">
-                                            <small>Protein</small>
-                                            <big>26g</big>
-                                        </div>
-                                        <div className="meal-info">
-                                            <small>Fat</small>
-                                            <big>23g</big>
-                                        </div>
-                                        <div className="meal-info">
-                                            <small>Carbs</small>
-                                            <big>6g</big>
-                                        </div>
-                                        <div className="meal-info">
-                                            <a href="">
-                                                <i className="icon-more_horiz"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-
-                                    <div className="meal-wrap d-flex">
-                                        <div className="meal-img">
-                                            <img src="images/img-07.jpg" alt="" />
-                                        </div>
-                                        <div className="meal-name">
-                                            <small>Breakfast</small>
-                                            <h5>Bulletproof butter coffee with cream</h5>
-                                        </div>
-                                        <div className="meal-info">
-                                            <small>Cals</small>
-                                            <big>400</big>
-                                        </div>
-                                        <div className="meal-info">
-                                            <small>Protein</small>
-                                            <big>26g</big>
-                                        </div>
-                                        <div className="meal-info">
-                                            <small>Fat</small>
-                                            <big>23g</big>
-                                        </div>
-                                        <div className="meal-info">
-                                            <small>Carbs</small>
-                                            <big>6g</big>
-                                        </div>
-                                        <div className="meal-info">
-                                            <a href="">
-                                                <i className="icon-more_horiz"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-
-                                    <div className="meal-wrap d-flex">
-                                        <div className="meal-img">
-                                            <img src="images/img-07.jpg" alt="" />
-                                        </div>
-                                        <div className="meal-name">
-                                            <small>Breakfast</small>
-                                            <h5>Bulletproof butter coffee with cream</h5>
-                                        </div>
-                                        <div className="meal-info">
-                                            <small>Cals</small>
-                                            <big>400</big>
-                                        </div>
-                                        <div className="meal-info">
-                                            <small>Protein</small>
-                                            <big>26g</big>
-                                        </div>
-                                        <div className="meal-info">
-                                            <small>Fat</small>
-                                            <big>23g</big>
-                                        </div>
-                                        <div className="meal-info">
-                                            <small>Carbs</small>
-                                            <big>6g</big>
-                                        </div>
-                                        <div className="meal-info">
-                                            <a href="">
-                                                <i className="icon-more_horiz"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-
-                                    <div className="meal-wrap d-flex">
-                                        <div className="meal-img">
-                                            <img src="images/img-07.jpg" alt="" />
-                                        </div>
-                                        <div className="meal-name">
-                                            <small>Breakfast</small>
-                                            <h5>Bulletproof butter coffee with cream</h5>
-                                        </div>
-                                        <div className="meal-info">
-                                            <small>Cals</small>
-                                            <big>400</big>
-                                        </div>
-                                        <div className="meal-info">
-                                            <small>Protein</small>
-                                            <big>26g</big>
-                                        </div>
-                                        <div className="meal-info">
-                                            <small>Fat</small>
-                                            <big>23g</big>
-                                        </div>
-                                        <div className="meal-info">
-                                            <small>Carbs</small>
-                                            <big>6g</big>
-                                        </div>
-                                        <div className="meal-info">
-                                            <a href="">
-                                                <i className="icon-more_horiz"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-
-                                    <div className="meal-wrap d-flex">
-                                        <div className="meal-img">
-                                            <img src="images/img-07.jpg" alt="" />
-                                        </div>
-                                        <div className="meal-name">
-                                            <small>Breakfast</small>
-                                            <h5>Bulletproof butter coffee with cream</h5>
-                                        </div>
-                                        <div className="meal-info">
-                                            <small>Cals</small>
-                                            <big>400</big>
-                                        </div>
-                                        <div className="meal-info">
-                                            <small>Protein</small>
-                                            <big>26g</big>
-                                        </div>
-                                        <div className="meal-info">
-                                            <small>Fat</small>
-                                            <big>23g</big>
-                                        </div>
-                                        <div className="meal-info">
-                                            <small>Carbs</small>
-                                            <big>6g</big>
-                                        </div>
-                                        <div className="meal-info">
-                                            <a href="">
-                                                <i className="icon-more_horiz"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-
-
-                                </div>
-
-                            </div>
+                            <TodaysMeal todaysMeal={todaysMeal} />
                         </div>
                         <div className="col-md-4">
                             <div className="recipe-nutrition white-box">
@@ -325,7 +100,7 @@ export default class NutritionMeal extends Component{
                                         </ul>
                                     </div>
                                     <div className="nutrition-chart">
-                                        <img src="images/nutrition-chart.jpg" alt=""/>
+                                        <img src="images/nutrition-chart.jpg" alt="" />
                                     </div>
                                 </div>
                             </div>
@@ -336,3 +111,15 @@ export default class NutritionMeal extends Component{
         );
     }
 }
+
+const mapStateToProps = (state) => {
+    const { nutrition } = state;
+    return {
+        loading: nutrition.get('loading'),
+        error: nutrition.get('error'),
+        todaysMeal: nutrition.get('todaysMeal'),
+        mealPlanStatus: nutrition.get('mealPlanStatus'),
+    }
+}
+
+export default connect(mapStateToProps)(NutritionMeal);

@@ -20,20 +20,20 @@ function ApiError(message, data, status) {
         message,
         status,
         toString: () => {
-            return `${ this.message }\nResponse:\n${ isObject ? JSON.stringify(this.response, null, 2) : this.response }`;
+            return `${this.message}\nResponse:\n${isObject ? JSON.stringify(this.response, null, 2) : this.response}`;
         },
     };
 }
 
 // API wrapper function
-const fetchResource = (path, userOptions = {},apiURL='https://swapi.co/api') => {
+const fetchResource = (path, userOptions = {}, apiURL = 'https://swapi.co/api') => {
     // Define default options
     const defaultOptions = {};
 
     // Define default headers
     const defaultHeaders = {
         'Content-Type': 'application/json',
-         Accept: 'application/json'        
+        Accept: 'application/json'
     };
 
     const options = {
@@ -44,11 +44,11 @@ const fetchResource = (path, userOptions = {},apiURL='https://swapi.co/api') => 
         headers: {
             ...defaultHeaders,
             ...userOptions.headers,
-        }        
+        }
     };
 
     // Build Url
-    const url = `${ apiURL }/${ path }`;
+    const url = `${apiURL}/${path}`;
 
     // Detect is we are uploading a file
     const isFile = typeof window !== 'undefined' && options.body instanceof File;
@@ -98,7 +98,7 @@ const fetchResource = (path, userOptions = {},apiURL='https://swapi.co/api') => 
             // Throw custom API error
             // If response exists it means HTTP error occured
             if (response) {
-                throw ApiError(`Request failed with status ${ response.status }.`, error, response.status);
+                throw ApiError(`Request failed with status ${response.status}.`, error, response.status);
             } else {
                 throw ApiError(error.toString(), null, 'REQUEST_FAILED');
             }
@@ -109,16 +109,21 @@ function getPeople() {
     return fetchResource('people/');
 }
 
-function getPosts(){
-    return fetchResource('posts',{},'https://jsonplaceholder.typicode.com');
+function getPosts() {
+    return fetchResource('posts', {}, 'https://jsonplaceholder.typicode.com');
 }
 
-function getAPI(){
-    return fetchResource('',{},'http://localhost:3000/new_data');    
+function getAPI() {
+    return fetchResource('', {}, 'http://localhost:3000/new_data');
+}
+
+function getNutritutionData() {
+    return fetchResource('', {}, 'http://localhost:3000/nutrition_meal');
 }
 
 export default {
     getPeople,
     getPosts,
-    getAPI
+    getAPI,
+    getNutritutionData
 };
