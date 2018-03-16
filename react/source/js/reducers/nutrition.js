@@ -6,6 +6,7 @@ const initialState = Map({
     error: null,
     todaysMeal: null,
     mealPlanStatus: null,
+    mealPlanNutritionChart: null,
 });
 
 const actionMap = {
@@ -14,7 +15,8 @@ const actionMap = {
             loading: true,
             error: null,
             todaysMeal: null,
-            mealPlanStatus: null
+            mealPlanStatus: null,
+            mealPlanNutritionChart: null,
         }));
     },
     [GET_NUTRITION_SUCCESS]: (state, action) => {
@@ -22,7 +24,8 @@ const actionMap = {
             loading: false,
             error: null,
             todaysMeal: action.data.todaysMeal,
-            mealPlanStatus: action.data.mealPlanStatus
+            mealPlanStatus: action.data.mealPlanStatus,
+            mealPlanNutritionChart: action.data.mealPlanNutritionChart,
         }));
     },
     [GET_NUTRITION_ERROR]: (state, action) => {
@@ -30,7 +33,8 @@ const actionMap = {
             loading: false,
             error: action.error.message,
             todaysMeal: null,
-            mealPlanStatus: null
+            mealPlanStatus: null,
+            mealPlanNutritionChart: null,
         }));
     }
 };

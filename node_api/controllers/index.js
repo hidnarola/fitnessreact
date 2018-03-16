@@ -148,7 +148,8 @@ router.get('/nutrition_meal', function (req, res, next) {
             {title: "Total Fat", value: "40", units: "g"},
             {title: "Total Carbs", value: "80", units: "g"},
             {title: "Total Time", value: "80 min", units: ""}
-        ]
+        ],
+        mealPlanNutritionChart: "/assets/img/nutrition/nutrition-chart.jpg"
     });
 });
 

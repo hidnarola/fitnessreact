@@ -4,8 +4,9 @@ import { NavLink } from 'react-router-dom';
 import { routeCodes } from 'constants/routes';
 import FitnessHeader from '../global/FitnessHeader';
 import FitnessNav from '../global/FitnessNav';
-import TodaysMeal from './TodaysMeal';
 import { getNutritionData } from '../../actions/nutrition';
+import TodaysMeal from './TodaysMeal';
+import MealPlanStats from './MealPlanStats';
 
 class NutritionMeal extends Component {
 
@@ -19,7 +20,7 @@ class NutritionMeal extends Component {
     }
 
     render() {
-        const { todaysMeal } = this.props;
+        const { todaysMeal, mealPlanStatus, mealPlanNutritionChart } = this.props;
         return (
             <div className="fitness-nutrition">
                 <FitnessHeader />
@@ -51,59 +52,10 @@ class NutritionMeal extends Component {
                     </div>
                     <div className="body-content d-flex row justify-content-start">
                         <div className="col-md-8">
-                            <TodaysMeal todaysMeal={todaysMeal} />
+                            <TodaysMeal />
                         </div>
                         <div className="col-md-4">
-                            <div className="recipe-nutrition white-box">
-                                <div className="whitebox-head meal-paln">
-                                    <h3 className="title-h3 size-14">Meal Plan Stats</h3>
-                                </div>
-                                <div className="whitebox-body">
-                                    <div className="dtl-div">
-                                        <ul className="common-ul">
-                                            <li>
-                                                <div className="grey-white">
-                                                    <h4>Total Calories</h4>
-                                                    <h5>2510</h5>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div className="grey-white">
-                                                    <h4>Total Protein</h4>
-                                                    <h5>36
-                                                        <sub>g</sub>
-                                                    </h5>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div className="grey-white">
-                                                    <h4>Total Fat</h4>
-                                                    <h5>40
-                                                        <sub>g</sub>
-                                                    </h5>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div className="grey-white">
-                                                    <h4>Total Carbs</h4>
-                                                    <h5>80
-                                                        <sub>g</sub>
-                                                    </h5>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div className="grey-white">
-                                                    <h4>Total Time</h4>
-                                                    <h5>80 min</h5>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div className="nutrition-chart">
-                                        <img src="images/nutrition-chart.jpg" alt="" />
-                                    </div>
-                                </div>
-                            </div>
+                            <MealPlanStats />
                         </div>
                     </div>
                 </section>
@@ -112,14 +64,4 @@ class NutritionMeal extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    const { nutrition } = state;
-    return {
-        loading: nutrition.get('loading'),
-        error: nutrition.get('error'),
-        todaysMeal: nutrition.get('todaysMeal'),
-        mealPlanStatus: nutrition.get('mealPlanStatus'),
-    }
-}
-
-export default connect(mapStateToProps)(NutritionMeal);
+export default connect()(NutritionMeal);

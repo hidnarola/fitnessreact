@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+
 import TodaysMealBlock from './TodaysMealBlock';
 
 class TodaysMeal extends Component {
@@ -37,4 +39,13 @@ class TodaysMeal extends Component {
     }
 }
 
-export default TodaysMeal;
+const mapStateToProps = (state) => {
+    const { nutrition } = state;
+    return {
+        loading: nutrition.get('loading'),
+        error: nutrition.get('error'),
+        todaysMeal: nutrition.get('todaysMeal'),
+    }
+}
+
+export default connect(mapStateToProps)(TodaysMeal);
