@@ -29,9 +29,11 @@ class MealPlanStats extends Component {
                             </ul>
                         }
                     </div>
-                    <div className="nutrition-chart">
-                        <img src={mealPlanNutritionChart} alt="" />
-                    </div>
+                    {mealPlanNutritionChart &&
+                        <div className="nutrition-chart">
+                            <img src={mealPlanNutritionChart} alt="" />
+                        </div>
+                    }
                 </div>
             </div>
         );
