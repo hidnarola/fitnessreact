@@ -21,7 +21,6 @@ export default class FitnessNav extends Component {
                             <NavLink
                                 activeClassName='active'
                                 className='Menu-link'
-                                exact
                                 to={ routeCodes.DASHBOARD }
                             >
                                 <i className="icon-dashboard"></i>
@@ -32,7 +31,6 @@ export default class FitnessNav extends Component {
                             <NavLink
                                 activeClassName='active'
                                 className='Menu-link'
-                                exact
                                 to={ routeCodes.STATSPAGE }
                             >
                                 <i className="icon-pie_chart"></i>
@@ -44,7 +42,6 @@ export default class FitnessNav extends Component {
                             <NavLink
                                 activeClassName='active'
                                 className='Menu-link'
-                                exact
                                 to={ routeCodes.FITNESSBODY }
                             >
                                 <i className="icon-person"></i>
@@ -57,7 +54,6 @@ export default class FitnessNav extends Component {
                            <NavLink
                                 activeClassName='active'
                                 className='Menu-link'
-                                exact
                                 to={ routeCodes.EXERCISE }
                             >
                                 <i className="icon-fitness_center"></i>
@@ -69,7 +65,6 @@ export default class FitnessNav extends Component {
                            <NavLink
                                 activeClassName='active'
                                 className='Menu-link'
-                                exact
                                 to={ routeCodes.NUTRITIONMEAL }
                             >
                                 <FaNutrition size={24} />
@@ -80,7 +75,6 @@ export default class FitnessNav extends Component {
                             <NavLink
                                 activeClassName='active'
                                 className='Menu-link'
-                                exact
                                 to={ routeCodes.CALENDAR }
                             >
                                 <i className="icon-insert_invitation"></i>
@@ -91,7 +85,6 @@ export default class FitnessNav extends Component {
                             <NavLink
                                 activeClassName='active'
                                 className='Menu-link'
-                                exact
                                 to={ routeCodes.GOALS }
                             >
                                 <FaGoal size={24} />
@@ -103,7 +96,6 @@ export default class FitnessNav extends Component {
                             <NavLink
                                 activeClassName='active'
                                 className='Menu-link'
-                                exact
                                 to={ routeCodes.HOME }
                             >
                                 <i className="icon-dashboard"></i>
@@ -115,7 +107,6 @@ export default class FitnessNav extends Component {
                             <NavLink
                                 activeClassName='active'
                                 className='Menu-link'
-                                exact
                                 to={ routeCodes.PEOPLE }
                             >
                                 <i className="icon-person"></i>

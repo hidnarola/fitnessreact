@@ -20,7 +20,6 @@ class NutritionMeal extends Component {
     }
 
     render() {
-        const { todaysMeal, mealPlanStatus, mealPlanNutritionChart } = this.props;
         return (
             <div className="fitness-nutrition">
                 <FitnessHeader />

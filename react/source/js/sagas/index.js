@@ -4,6 +4,7 @@ import peopleSagas from 'sagas/people';
 import dashboardSagas from 'sagas/dashboard';
 import nutritionSagas from 'sagas/nutrition';
 import exerciseFitness from 'sagas/exercise/fitness'
+import exerciseEquipments from 'sagas/exercise/equipments'
 
 export default function* rootSaga() {
   yield all([
@@ -11,5 +12,6 @@ export default function* rootSaga() {
     ...dashboardSagas,
     ...nutritionSagas,
     ...exerciseFitness,
+    ...exerciseEquipments,
   ]);
 }

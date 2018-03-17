@@ -125,10 +125,15 @@ function getExerciseFitnessData() {
     return fetchResource('', {}, 'http://localhost:3000/exercise/fitness');
 }
 
+function getExerciseEquipmentsData() {
+    return fetchResource('', {}, 'http://localhost:3000/exercise/equipments');
+}
+
 export default {
     getPeople,
     getPosts,
     getAPI,
     getNutritutionData,
-    getExerciseFitnessData
+    getExerciseFitnessData,
+    getExerciseEquipmentsData,
 };

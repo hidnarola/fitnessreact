@@ -1,204 +1,71 @@
-import React,{Component} from 'react';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { getExerciseEquipments } from '../../actions/exercise/equipments';
+import EquipmentsContentItem from './EquipmentsContentItem';
 
-export default class Equipment extends Component{
+class Equipment extends Component {
+    constructor(props) {
+        super(props);
+    }
 
-    render(){
-        return(
+    componentWillMount() {
+        const { dispatch, equipments } = this.props;
+        dispatch(getExerciseEquipments());
+    }
 
+    render() {
+        const { equipments } = this.props;
+        return (
             <div className="body-content d-flex row justify-content-start profilephoto-content">
-                <div className="col-md-4">
-                    <div className="white-box space-btm-20">
-                        <div className="whitebox-head">
-                            <h3 className="title-h3 size-14">Cardio Machine</h3>
-                        </div>
-                        <div className="whitebox-body">
-                            <div className="machine-box active">
-                                <span>
-                                    <img src="images/machine-01.jpg" alt=""/>
-                                </span>
-                                <h4>Treadmill</h4>
-                                <h6>
-                                    <i className="icon-check"></i>
-                                </h6>
-                            </div>
-                            <div className="machine-box active">
-                                <span>
-                                    <img src="images/machine-01.jpg" alt=""/>
-                                </span>
-                                <h4>Stair Mill</h4>
-                                <h6>
-                                    <i className="icon-check"></i>
-                                </h6>
-                            </div>
-                            <div className="machine-box">
-                                <span>
-                                    <img src="images/machine-01.jpg" alt=""/>
-                                </span>
-                                <h4>Rowing Machine</h4>
-                                <h6>
-                                    <i className="icon-check"></i>
-                                </h6>
-                            </div>
-                            <div className="machine-box active">
-                                <span>
-                                    <img src="images/machine-01.jpg" alt=""/>
-                                </span>
-                                <h4>Airdyne</h4>
-                                <h6>
-                                    <i className="icon-check"></i>
-                                </h6>
-                            </div>
-                            <div className="machine-box ">
-                                <span>
-                                    <img src="images/machine-01.jpg" alt=""/>
-                                </span>
-                                <h4>Spine Bike</h4>
-                                <h6>
-                                    <i className="icon-check"></i>
-                                </h6>
-                            </div>
-                            <div className="machine-box active">
-                                <span>
-                                    <img src="images/machine-01.jpg" alt=""/>
-                                </span>
-                                <h4>Jacob's Ladder</h4>
-                                <h6>
-                                    <i className="icon-check"></i>
-                                </h6>
+                {!equipments &&
+                    <div className="col-md-12">
+                        <div className="white-box space-btm-20">
+                            <div className="whitebox-body">
+                                <span>No equipments found.</span>
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <div className="col-md-4">
-                    <div className="white-box space-btm-20">
-                        <div className="whitebox-head">
-                            <h3 className="title-h3 size-14">Strength Machine</h3>
-                        </div>
-                        <div className="whitebox-body">
-                            <div className="machine-box active">
-                                <span>
-                                    <img src="images/machine-01.jpg" alt=""/>
-                                </span>
-                                <h4>Crunches</h4>
-                                <h6>
-                                    <i className="icon-check"></i>
-                                </h6>
-                            </div>
-                            <div className="machine-box">
-                                <span>
-                                    <img src="images/machine-01.jpg" alt=""/>
-                                </span>
-                                <h4>Chest Press</h4>
-                                <h6>
-                                    <i className="icon-check"></i>
-                                </h6>
-                            </div>
-                            <div className="machine-box active">
-                                <span>
-                                    <img src="images/machine-01.jpg" alt=""/>
-                                </span>
-                                <h4>Shoulder Press</h4>
-                                <h6>
-                                    <i className="icon-check"></i>
-                                </h6>
-                            </div>
-                            <div className="machine-box ">
-                                <span>
-                                    <img src="images/machine-01.jpg" alt=""/>
-                                </span>
-                                <h4>Hamstring Curl</h4>
-                                <h6>
-                                    <i className="icon-check"></i>
-                                </h6>
-                            </div>
-                            <div className="machine-box active">
-                                <span>
-                                    <img src="images/machine-01.jpg" alt=""/>
-                                </span>
-                                <h4>Leg Extensions</h4>
-                                <h6>
-                                    <i className="icon-check"></i>
-                                </h6>
-                            </div>
-                            <div className="machine-box active">
-                                <span>
-                                    <img src="images/machine-01.jpg" alt=""/>
-                                </span>
-                                <h4>Leg Press</h4>
-                                <h6>
-                                    <i className="icon-check"></i>
-                                </h6>
+                }
+                {equipments && equipments.length <= 0 &&
+                    <div className="col-md-12">
+                        <div className="white-box space-btm-20">
+                            <div className="whitebox-body">
+                                <span>No equipments found.</span>
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <div className="col-md-4">
-                    <div className="white-box space-btm-20">
-                        <div className="whitebox-head">
-                            <h3 className="title-h3 size-14">Free Equipment</h3>
-                        </div>
-                        <div className="whitebox-body">
-                            <div className="machine-box active">
-                                <span>
-                                    <img src="images/machine-01.jpg" alt=""/>
-                                </span>
-                                <h4>Dumbbells</h4>
-                                <h6>
-                                    <i className="icon-check"></i>
-                                </h6>
-                            </div>
-                            <div className="machine-box active">
-                                <span>
-                                    <img src="images/machine-01.jpg" alt=""/>
-                                </span>
-                                <h4>Barbell</h4>
-                                <h6>
-                                    <i className="icon-check"></i>
-                                </h6>
-                            </div>
-                            <div className="machine-box">
-                                <span>
-                                    <img src="images/machine-01.jpg" alt=""/>
-                                </span>
-                                <h4>Bench</h4>
-                                <h6>
-                                    <i className="icon-check"></i>
-                                </h6>
-                            </div>
-                            <div className="machine-box active">
-                                <span>
-                                    <img src="images/machine-01.jpg" alt=""/>
-                                </span>
-                                <h4>Kettlebell</h4>
-                                <h6>
-                                    <i className="icon-check"></i>
-                                </h6>
-                            </div>
-                            <div className="machine-box ">
-                                <span>
-                                    <img src="images/machine-01.jpg" alt=""/>
-                                </span>
-                                <h4>Resistance Band</h4>
-                                <h6>
-                                    <i className="icon-check"></i>
-                                </h6>
-                            </div>
-                            <div className="machine-box active">
-                                <span>
-                                    <img src="images/machine-01.jpg" alt=""/>
-                                </span>
-                                <h4>Swiss Ball</h4>
-                                <h6>
-                                    <i className="icon-check"></i>
-                                </h6>
+                }
+                {equipments && equipments.length > 0 &&
+                    equipments.map((equipment, index) => (
+                        <div className="col-md-4" key={index}>
+                            <div className="white-box space-btm-20">
+                                <div className="whitebox-head">
+                                    <h3 className="title-h3 size-14">{equipment.title}</h3>
+                                </div>
+                                <div className="whitebox-body">
+                                    {equipment.items && equipment.items.length > 0 &&
+                                        equipment.items.map((equip, i) => (
+                                            <EquipmentsContentItem data={equip} key={i} />
+                                        ))
+                                    }
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
+                    ))
+                }
             </div>
 
         );
     }
 }
+
+const mapStateToProps = (state) => {
+    const { exerciseEquipments } = state;
+    return {
+        loading: exerciseEquipments.get('loading'),
+        error: exerciseEquipments.get('error'),
+        equipments: exerciseEquipments.get('equipments'),
+    }
+}
+
+export default connect(mapStateToProps)(Equipment);

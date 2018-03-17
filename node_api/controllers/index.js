@@ -188,6 +188,118 @@ router.get('/exercise/fitness', function (req, res, next) {
     });
 });
 
+router.get('/exercise/equipments', function (req, res, next) {
+    res.json({
+        equipments: [
+            {
+                title: "CARDIO MACHINE",
+                items: [
+                    {
+                        title: "Treadmill",
+                        isActive: true,
+                        imageUrl: "/assets/img/exercise/equipments/machine-01.jpg",
+                    },
+                    {
+                        title: "Stair Mill",
+                        isActive: true,
+                        imageUrl: "/assets/img/exercise/equipments/machine-01.jpg",
+                    },
+                    {
+                        title: "Rowing Machine",
+                        isActive: false,
+                        imageUrl: "/assets/img/exercise/equipments/machine-01.jpg",
+                    },
+                    {
+                        title: "Airdyne",
+                        isActive: true,
+                        imageUrl: "/assets/img/exercise/equipments/machine-01.jpg",
+                    },
+                    {
+                        title: "Spine Bike",
+                        isActive: false,
+                        imageUrl: "/assets/img/exercise/equipments/machine-01.jpg",
+                    },
+                    {
+                        title: "Jacob's Ladder",
+                        isActive: true,
+                        imageUrl: "/assets/img/exercise/equipments/machine-01.jpg",
+                    },
+                ]
+            },
+            {
+                title: "STRENGTH MACHINE",
+                items: [
+                    {
+                        title: "Crunches",
+                        isActive: true,
+                        imageUrl: "/assets/img/exercise/equipments/machine-01.jpg",
+                    },
+                    {
+                        title: "Chest Press",
+                        isActive: false,
+                        imageUrl: "/assets/img/exercise/equipments/machine-01.jpg",
+                    },
+                    {
+                        title: "Shoulder Press",
+                        isActive: true,
+                        imageUrl: "/assets/img/exercise/equipments/machine-01.jpg",
+                    },
+                    {
+                        title: "Hamstring Curl",
+                        isActive: false,
+                        imageUrl: "/assets/img/exercise/equipments/machine-01.jpg",
+                    },
+                    {
+                        title: "Leg Extensions",
+                        isActive: true,
+                        imageUrl: "/assets/img/exercise/equipments/machine-01.jpg",
+                    },
+                    {
+                        title: "Leg Press",
+                        isActive: true,
+                        imageUrl: "/assets/img/exercise/equipments/machine-01.jpg",
+                    },
+                ]
+            },
+            {
+                title: "FREE EQUIPMENT",
+                items: [
+                    {
+                        title: "Dumbbells",
+                        isActive: true,
+                        imageUrl: "/assets/img/exercise/equipments/machine-01.jpg",
+                    },
+                    {
+                        title: "Barbell",
+                        isActive: true,
+                        imageUrl: "/assets/img/exercise/equipments/machine-01.jpg",
+                    },
+                    {
+                        title: "Bench",
+                        isActive: false,
+                        imageUrl: "/assets/img/exercise/equipments/machine-01.jpg",
+                    },
+                    {
+                        title: "Kettlebell",
+                        isActive: true,
+                        imageUrl: "/assets/img/exercise/equipments/machine-01.jpg",
+                    },
+                    {
+                        title: "Resistance Band",
+                        isActive: false,
+                        imageUrl: "/assets/img/exercise/equipments/machine-01.jpg",
+                    },
+                    {
+                        title: "Swiss Ball",
+                        isActive: true,
+                        imageUrl: "/assets/img/exercise/equipments/machine-01.jpg",
+                    },
+                ]
+            },
+        ]
+    });
+});
+
 router.post('/post_name', function (req, res, next) {
     console.log(req.body);
 
