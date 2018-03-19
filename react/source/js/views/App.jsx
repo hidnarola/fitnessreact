@@ -35,15 +35,14 @@ class App extends Component {
                 <Router>
                     <div>
                         <ScrollToTop>                            
-                            <Route exact path={ routeCodes.HOME } component={ Home } />
+                            <Route path="/" component={ Home } />
                             <Route path={ routeCodes.PEOPLE } component={ People }  />                            
                             <Route path={ routeCodes.DASHBOARD } component={ Dashboard } />
 
                             <Route path={ routeCodes.STATSPAGE } component={ StatsPage }  />
                             
                             <Route path={ routeCodes.PROFILE } component={ ProfilePage }  />
-
-                            
+                                                                                    
                             <Route path={ routeCodes.FITNESSBODY } component={ FitnessBody } />
                             <Route path={ routeCodes.EXERCISE } component={ Exercise } />
                             <Route path={ routeCodes.NUTRITIONMEAL } component={ NutritionMeal } />
@@ -57,10 +56,6 @@ class App extends Component {
 
 
                             <Route path={ routeCodes.REGISTERUSER } component={ RegisterUser } />
-
-                            
-
-
 
                             {/* <Route path='*' component={ NotFound } /> */}
                         </ScrollToTop>
