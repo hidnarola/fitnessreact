@@ -96,6 +96,7 @@ export default class FitnessNav extends Component {
                             <NavLink
                                 activeClassName='active'
                                 className='Menu-link'
+                                exact
                                 to={ routeCodes.HOME }
                             >
                                 <i className="icon-dashboard"></i>

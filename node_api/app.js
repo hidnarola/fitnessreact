@@ -8,11 +8,13 @@ var cluster = require('cluster');
 var numCPUs = require('os').cpus().length;
 var auth = require('./middlewares/auth');
 var socket = require('./socket/socketServer');
+var expressValidator = require('express-validator');
 
 /* config files */
 var config = require('./config');
 
 var app = express();
+var dbConnect = require('./database/mongoDbConnection');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -26,6 +28,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/upload', express.static(path.join(__dirname, 'upload')));
+app.use(expressValidator());
 
 app.use(function (req, res, next) {
 
