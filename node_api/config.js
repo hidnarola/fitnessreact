@@ -1,6 +1,6 @@
 module.exports = {
     "node_port": 3000,
-    "database": "mongodb://127.0.0.1:27017/gleekr",
+    "database": "mongodb://127.0.0.1:27017/fitness",
 //    "database": "gleekr",
     "OK_STATUS": 200,
     "BAD_REQUEST": 400,
@@ -9,5 +9,6 @@ module.exports = {
     "MEDIA_ERROR_STATUS": 415,
     "VALIDATION_FAILURE_STATUS": 417,
     "DATABASE_ERROR_STATUS": 422,
-    "INTERNAL_SERVER_ERROR": 500
+    "INTERNAL_SERVER_ERROR": 500,
+    "ACCESS_TOKEN_SECRET_KEY": 'fitness',
 };

@@ -4,6 +4,10 @@ var router = express.Router();
 var users = require('./users');
 router.use('/user', users);
 
+var userModel = require('../models/users');
+var config = require('../config');
+var jwt = require('jsonwebtoken');
+
 /* GET home page. */
 router.get('/', function (req, res, next) {
     res.render('index', {title: 'Express'});
@@ -298,6 +302,78 @@ router.get('/exercise/equipments', function (req, res, next) {
             },
         ]
     });
+});
+
+router.post('/new_user', function (req, res, next) {
+    var schema = {
+        email: {
+            notEmpty: true,
+            errorMessage: "Email is required"
+        },
+        password: {
+            notEmpty: true,
+            errorMessage: "Password is required"
+        }
+    };
+    req.checkBody(schema);
+    var errors = req.validationErrors();
+    if (!errors) {
+        var userObj = new userModel(req.body);
+        userObj.save(function (err, data) {
+            if (err) {
+                res.status(config.BAD_REQUEST).json({status: 0, error: err});
+            } else {
+                res.status(config.OK_STATUS).json({status: 1, userInfo: data});
+            }
+        });
+    } else {
+        res.status(config.BAD_REQUEST).json({
+            message: "Validation Error",
+            error: errors
+        });
+    }
+});
+
+router.post('/login', function (req, res, next) {
+    var schema = {
+        username: {
+            notEmpty: true,
+            errorMessage: "Username is required"
+        },
+        password: {
+            notEmpty: true,
+            errorMessage: "Password is required"
+        }
+    };
+    req.checkBody(schema);
+    var errors = req.validationErrors();
+    if (!errors) {
+        try {
+            var data = userModel.findOne(req.body, function (err, data) {
+                if (err) {
+
+                } else {
+                    var userJson = {id: data.id};
+                    var token = jwt.sign(userJson, config.ACCESS_TOKEN_SECRET_KEY, {
+                        expiresIn: 60 * 60 * 24 // expires in 24 hours
+                    });
+                    res.status(config.OK_STATUS).json({status: 1, user: data, token: token});
+                }
+            });
+            if (data) {
+            } else {
+                res.status(config.BAD_REQUEST).json({status: 0, message: "Invalid Login"});
+            }
+        } catch (err) {
+            res.status(config.BAD_REQUEST).json({status: 0, error: err});
+        }
+
+    } else {
+        res.status(config.BAD_REQUEST).json({
+            message: "Validation Error",
+            error: errors
+        });
+    }
 });
 
 router.post('/post_name', function (req, res, next) {

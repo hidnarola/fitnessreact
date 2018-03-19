@@ -26,6 +26,7 @@ import Exercise from 'views/Exercise';
 import Dashboard from 'views/Dashboard';
 import ProfilePage from 'views/Profile';
 import RegisterUser from 'views/RegisterUser';
+import ExerciseSettings from 'views/ExerciseSettings';
 
 class App extends Component {    
     
@@ -44,7 +45,12 @@ class App extends Component {
                             <Route path={ routeCodes.PROFILE } component={ ProfilePage }  />
                                                                                     
                             <Route path={ routeCodes.FITNESSBODY } component={ FitnessBody } />
-                            <Route path={ routeCodes.EXERCISE } component={ Exercise } />
+
+                            <Route exact path={ routeCodes.EXERCISE } component={ Exercise } />
+                            <Route path={ routeCodes.EXERCISEFITNESS } component={ ExerciseSettings } />
+                            <Route path={ routeCodes.EXERCISEEQP } component={ ExerciseSettings } />
+                            <Route path={ routeCodes.EXERCISEPREFERENCE } component={ ExerciseSettings } />
+
                             <Route path={ routeCodes.NUTRITIONMEAL } component={ NutritionMeal } />
                             <Route path={ routeCodes.NUTRITIONSHOP } component={ NutritionShopping } />
 

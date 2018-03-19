@@ -41,7 +41,7 @@ export const routeCodes = {
 
     //Exercise Pages
     EXERCISE:`${ publicPath }exercise`,
-    EXERCISESETTING:`${ publicPath }exercise/setting`,
+    EXERCISEPREFERENCE:`${ publicPath }exercise/preference`,
     EXERCISEEQP:`${ publicPath }exercise/equipment`,
     EXERCISEFITNESS:`${ publicPath }exercise/fitness`,
 
