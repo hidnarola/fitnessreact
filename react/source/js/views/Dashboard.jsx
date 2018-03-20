@@ -164,7 +164,7 @@ class Dashboard extends Component{
                             
                             <BodyFatLoss/>
 
-                            <WeeksCalories/>
+                            <WeeksCalories/>                            
 
                         </div>
                         <div className="col-md-4">
