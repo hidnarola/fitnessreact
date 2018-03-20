@@ -36,7 +36,7 @@ class App extends Component {
                 <Router>
                     <div>
                         <ScrollToTop>                            
-                            <Route path="/" component={ Home } />
+                            <Route exact path="/" component={ Home } />
                             <Route path={ routeCodes.PEOPLE } component={ People }  />                            
                             <Route path={ routeCodes.DASHBOARD } component={ Dashboard } />
 
