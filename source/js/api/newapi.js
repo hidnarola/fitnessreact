@@ -105,6 +105,9 @@ const fetchResource = (path, userOptions = {}, apiURL = 'https://swapi.co/api') 
         });
 };
 
+const apiUrl = 'http://192.168.1.186:3300';
+// const apiUrl = 'http://localhost:3000';
+
 function getPeople() {
     return fetchResource('people/');
 }
@@ -114,19 +117,27 @@ function getPosts() {
 }
 
 function getAPI() {
-    return fetchResource('', {}, 'http://localhost:3000/new_data');
+    return fetchResource('', {}, apiUrl + '/new_data');
 }
 
 function getNutritutionData() {
-    return fetchResource('', {}, 'http://localhost:3000/nutrition_meal');
+    return fetchResource('', {}, apiUrl + '/nutrition_meal');
 }
 
 function getExerciseFitnessData() {
-    return fetchResource('', {}, 'http://localhost:3000/exercise/fitness');
+    return fetchResource('', {}, apiUrl + '/exercise/fitness');
 }
 
 function getExerciseEquipmentsData() {
-    return fetchResource('', {}, 'http://localhost:3000/exercise/equipments');
+    return fetchResource('', {}, apiUrl + '/exercise/equipments');
+}
+
+function getFriendsData() {
+    return fetchResource('', {}, apiUrl + '/friends');
+}
+
+function getProfilePhotosData() {
+    return fetchResource('', {}, apiUrl + '/profile/photos');
 }
 
 export default {
@@ -136,4 +147,6 @@ export default {
     getNutritutionData,
     getExerciseFitnessData,
     getExerciseEquipmentsData,
+    getFriendsData,
+    getProfilePhotosData
 };
