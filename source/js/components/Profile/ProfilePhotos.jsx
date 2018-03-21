@@ -1,9 +1,20 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { getProfilePhotosData } from '../../actions/profilePhotos';
+import ProfilePhotoBlock from './ProfilePhotoBlock';
 
+class ProfilePhotos extends Component {
+    constructor(props) {
+        super(props);
+    }
 
-export default class ProfilePhotos extends Component {
+    componentWillMount() {
+        const { dispatch } = this.props;
+        dispatch(getProfilePhotosData());
+    }
 
     render() {
+        const { galleryPhotos, progressPhotos } = this.props;
         return (
             <div className="profilePhotosComponentWrapper">
                 <div className="white-box space-btm-20">
@@ -17,68 +28,21 @@ export default class ProfilePhotos extends Component {
                         </div>
                     </div>
                     <div className="whitebox-body profile-body">
-                        <ul className="d-flex profile-list-ul">
-                            <li>
-                                <div className="profile-list">
-                                    <span>
-                                        <a href="">
-                                            <img src="images/img-02.jpg" alt="" />
-                                        </a>
-                                    </span>
-                                    <h4>
-                                        <a href="">Current</a>
-                                    </h4>
-                                </div>
-                            </li>
-                            <li>
-                                <div className="profile-list">
-                                    <span>
-                                        <a href="">
-                                            <img src="images/img-06.jpg" alt="" />
-                                        </a>
-                                    </span>
-                                    <h4>
-                                        <a href="">Current</a>
-                                    </h4>
-                                </div>
-                            </li>
-                            <li>
-                                <div className="profile-list">
-                                    <span>
-                                        <a href="">
-                                            <img src="images/img-04.jpg" alt="" />
-                                        </a>
-                                    </span>
-                                    <h4>
-                                        <a href="">Current</a>
-                                    </h4>
-                                </div>
-                            </li>
-                            <li>
-                                <div className="profile-list">
-                                    <span>
-                                        <a href="">
-                                            <img src="images/img-05.jpg" alt="" />
-                                        </a>
-                                    </span>
-                                    <h4>
-                                        <a href="">Current</a>
-                                    </h4>
-                                </div>
-                            </li>
-                            <li>
-                                <div className="profile-list">
-                                    <span>
-                                        <a href="">
-                                            <img src="images/img-06.jpg" alt="" />
-                                        </a>
-                                    </span>
-                                    <h4>
-                                        <a href="">Current</a>
-                                    </h4>
-                                </div>
-                            </li>
-                        </ul>
+                        {!progressPhotos &&
+                            <span>No progress image</span>
+                        }
+                        {progressPhotos && progressPhotos.length <= 0 &&
+                            <span>No progress image</span>
+                        }
+                        {progressPhotos && progressPhotos.length > 0 &&
+                            <ul className="d-flex profile-list-ul">
+                                {progressPhotos.map((photo, index) => (
+                                    <li key={index}>
+                                        <ProfilePhotoBlock image={photo.image} caption={photo.logDate} />
+                                    </li>
+                                ))}
+                            </ul>
+                        }
                     </div>
                 </div>
 
@@ -93,146 +57,36 @@ export default class ProfilePhotos extends Component {
                         </div>
                     </div>
                     <div className="whitebox-body profile-body">
-                        <ul className="d-flex profile-list-ul">
-                            <li>
-                                <div className="profile-list">
-                                    <span>
-                                        <a href="">
-                                            <img src="images/img-02.jpg" alt="" />
-                                        </a>
-                                    </span>
-                                </div>
-                            </li>
-                            <li>
-                                <div className="profile-list">
-                                    <span>
-                                        <a href="">
-                                            <img src="images/img-03.jpg" alt="" />
-                                        </a>
-                                    </span>
-                                </div>
-                            </li>
-                            <li>
-                                <div className="profile-list">
-                                    <span>
-                                        <a href="">
-                                            <img src="images/img-04.jpg" alt="" />
-                                        </a>
-                                    </span>
-                                </div>
-                            </li>
-                            <li>
-                                <div className="profile-list">
-                                    <span>
-                                        <a href="">
-                                            <img src="images/img-05.jpg" alt="" />
-                                        </a>
-                                    </span>
-                                </div>
-                            </li>
-                            <li>
-                                <div className="profile-list">
-                                    <span>
-                                        <a href="">
-                                            <img src="images/img-06.jpg" alt="" />
-                                        </a>
-                                    </span>
-                                </div>
-                            </li>
-                            <li>
-                                <div className="profile-list">
-                                    <span>
-                                        <a href="">
-                                            <img src="images/img-07.jpg" alt="" />
-                                        </a>
-                                    </span>
-                                </div>
-                            </li>
-                            <li>
-                                <div className="profile-list">
-                                    <span>
-                                        <a href="">
-                                            <img src="images/img-08.jpg" alt="" />
-                                        </a>
-                                    </span>
-                                </div>
-                            </li>
-                            <li>
-                                <div className="profile-list">
-                                    <span>
-                                        <a href="">
-                                            <img src="images/img-09.jpg" alt="" />
-                                        </a>
-                                    </span>
-                                </div>
-                            </li>
-                            <li>
-                                <div className="profile-list">
-                                    <span>
-                                        <a href="">
-                                            <img src="images/img-10.jpg" alt="" />
-                                        </a>
-                                    </span>
-                                </div>
-                            </li>
-                            <li>
-                                <div className="profile-list">
-                                    <span>
-                                        <a href="">
-                                            <img src="images/img-11.jpg" alt="" />
-                                        </a>
-                                    </span>
-                                </div>
-                            </li>
-                            <li>
-                                <div className="profile-list">
-                                    <span>
-                                        <a href="">
-                                            <img src="images/img-12.jpg" alt="" />
-                                        </a>
-                                    </span>
-                                </div>
-                            </li>
-                            <li>
-                                <div className="profile-list">
-                                    <span>
-                                        <a href="">
-                                            <img src="images/img-13.jpg" alt="" />
-                                        </a>
-                                    </span>
-                                </div>
-                            </li>
-                            <li>
-                                <div className="profile-list">
-                                    <span>
-                                        <a href="">
-                                            <img src="images/img-14.jpg" alt="" />
-                                        </a>
-                                    </span>
-                                </div>
-                            </li>
-                            <li>
-                                <div className="profile-list">
-                                    <span>
-                                        <a href="">
-                                            <img src="images/img-02.jpg" alt="" />
-                                        </a>
-                                    </span>
-                                </div>
-                            </li>
-                            <li>
-                                <div className="profile-list">
-                                    <span>
-                                        <a href="">
-                                            <img src="images/img-03.jpg" alt="" />
-                                        </a>
-                                    </span>
-                                </div>
-                            </li>
-                        </ul>
+                        {!galleryPhotos &&
+                            <span>No progress image</span>
+                        }
+                        {galleryPhotos && galleryPhotos.length <= 0 &&
+                            <span>No progress image</span>
+                        }
+                        {galleryPhotos && galleryPhotos.length > 0 &&
+                            <ul className="d-flex profile-list-ul">
+                                {galleryPhotos.map((photo, index) => (
+                                    <li key={index}>
+                                        <ProfilePhotoBlock image={photo.image} caption={photo.logDate} />
+                                    </li>
+                                ))}
+                            </ul>
+                        }
                     </div>
                 </div>
             </div>
         );
     }
 }
+
+const mapStateToProps = (state) => {
+    const { profilePhotos } = state;
+    return {
+        loading: profilePhotos.get('loading'),
+        error: profilePhotos.get('error'),
+        progressPhotos: profilePhotos.get('progressPhotos'),
+        galleryPhotos: profilePhotos.get('galleryPhotos'),
+    }
+}
+
+export default connect(mapStateToProps)(ProfilePhotos);
