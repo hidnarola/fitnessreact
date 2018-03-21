@@ -129,6 +129,10 @@ function getExerciseEquipmentsData() {
     return fetchResource('', {}, 'http://localhost:3000/exercise/equipments');
 }
 
+function getFriendsData() {
+    return fetchResource('', {}, 'http://localhost:3000/friends');
+}
+
 export default {
     getPeople,
     getPosts,
@@ -136,4 +140,5 @@ export default {
     getNutritutionData,
     getExerciseFitnessData,
     getExerciseEquipmentsData,
+    getFriendsData,
 };

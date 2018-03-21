@@ -1,8 +1,20 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { getFriendsData } from '../../actions/friends';
+import ProfileFriendBlock from './ProfileFriendBlock';
 
+class ProfileFriends extends Component {
+    constructor(props) {
+        super(props);
+    }
 
-export default class ProfileFriends extends Component {
+    componentWillMount() {
+        const { dispatch } = this.props;
+        dispatch(getFriendsData());
+    }
+
     render() {
+        const { friends } = this.props;
         return (
             <div className="white-box space-btm-20">
                 <div className="whitebox-head d-flex">
@@ -10,225 +22,37 @@ export default class ProfileFriends extends Component {
                 </div>
                 <div className="whitebox-body profile-body">
                     <div className="row d-flex">
-                        <div className="col-md-6">
-                            <div className="friend-box vertical-middle-r">
-                                <div className="friend-box-img">
-                                    <a href="">
-                                        <img src="images/img-02.jpg" alt="" />
-                                    </a>
-                                </div>
-                                <div className="friend-box-info">
-                                    <h5 className="vertical-middle-c">Theresa Wells
-                                                    <small>356 Friends</small>
-                                    </h5>
-                                </div>
-                                <div className="friend-box-status">
-                                    <h6 className="vertical-middle-c">
-                                        <i className="icon-check_circle"></i> Friends</h6>
-                                </div>
+                        {!friends &&
+                            <div className="col-md-12">
+                                No friends found
                             </div>
-                        </div>
-                        <div className="col-md-6">
-                            <div className="friend-box vertical-middle-r">
-                                <div className="friend-box-img">
-                                    <a href="">
-                                        <img src="images/img-02.jpg" alt="" />
-                                    </a>
-                                </div>
-                                <div className="friend-box-info">
-                                    <h5 className="vertical-middle-c">Theresa Wells
-                                                    <small>356 Friends</small>
-                                    </h5>
-                                </div>
-                                <div className="friend-box-status">
-                                    <h6 className="vertical-middle-c">
-                                        <i className="icon-check_circle"></i> Friends</h6>
-                                </div>
+                        }
+                        {friends && friends.length <= 0 &&
+                            <div className="col-md-12">
+                                No friends found
                             </div>
-                        </div>
-                        <div className="col-md-6">
-                            <div className="friend-box vertical-middle-r">
-                                <div className="friend-box-img">
-                                    <a href="">
-                                        <img src="images/img-02.jpg" alt="" />
-                                    </a>
+                        }
+                        {friends && friends.length > 0 &&
+                            friends.map((friend, index) => (
+                                <div className="col-md-6" key={index}>
+                                    <ProfileFriendBlock friend={friend} />
                                 </div>
-                                <div className="friend-box-info">
-                                    <h5 className="vertical-middle-c">Theresa Wells
-                                                    <small>356 Friends</small>
-                                    </h5>
-                                </div>
-                                <div className="friend-box-status">
-                                    <h6 className="vertical-middle-c">
-                                        <i className="icon-check_circle"></i> Friends</h6>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-md-6">
-                            <div className="friend-box vertical-middle-r">
-                                <div className="friend-box-img">
-                                    <a href="">
-                                        <img src="images/img-02.jpg" alt="" />
-                                    </a>
-                                </div>
-                                <div className="friend-box-info">
-                                    <h5 className="vertical-middle-c">Theresa Wells
-                                                    <small>356 Friends</small>
-                                    </h5>
-                                </div>
-                                <div className="friend-box-status">
-                                    <h6 className="vertical-middle-c">
-                                        <i className="icon-check_circle"></i> Friends</h6>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-md-6">
-                            <div className="friend-box vertical-middle-r">
-                                <div className="friend-box-img">
-                                    <a href="">
-                                        <img src="images/img-02.jpg" alt="" />
-                                    </a>
-                                </div>
-                                <div className="friend-box-info">
-                                    <h5 className="vertical-middle-c">Theresa Wells
-                                                    <small>356 Friends</small>
-                                    </h5>
-                                </div>
-                                <div className="friend-box-status">
-                                    <h6 className="vertical-middle-c">
-                                        <i className="icon-check_circle"></i> Friends</h6>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-md-6">
-                            <div className="friend-box vertical-middle-r">
-                                <div className="friend-box-img">
-                                    <a href="">
-                                        <img src="images/img-02.jpg" alt="" />
-                                    </a>
-                                </div>
-                                <div className="friend-box-info">
-                                    <h5 className="vertical-middle-c">Theresa Wells
-                                                    <small>356 Friends</small>
-                                    </h5>
-                                </div>
-                                <div className="friend-box-status">
-                                    <h6 className="vertical-middle-c">
-                                        <i className="icon-check_circle"></i> Friends</h6>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-md-6">
-                            <div className="friend-box vertical-middle-r">
-                                <div className="friend-box-img">
-                                    <a href="">
-                                        <img src="images/img-02.jpg" alt="" />
-                                    </a>
-                                </div>
-                                <div className="friend-box-info">
-                                    <h5 className="vertical-middle-c">Theresa Wells
-                                                    <small>356 Friends</small>
-                                    </h5>
-                                </div>
-                                <div className="friend-box-status">
-                                    <h6 className="vertical-middle-c">
-                                        <i className="icon-check_circle"></i> Friends</h6>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-md-6">
-                            <div className="friend-box vertical-middle-r">
-                                <div className="friend-box-img">
-                                    <a href="">
-                                        <img src="images/img-02.jpg" alt="" />
-                                    </a>
-                                </div>
-                                <div className="friend-box-info">
-                                    <h5 className="vertical-middle-c">Theresa Wells
-                                                    <small>356 Friends</small>
-                                    </h5>
-                                </div>
-                                <div className="friend-box-status">
-                                    <h6 className="vertical-middle-c">
-                                        <i className="icon-check_circle"></i> Friends</h6>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-md-6">
-                            <div className="friend-box vertical-middle-r">
-                                <div className="friend-box-img">
-                                    <a href="">
-                                        <img src="images/img-02.jpg" alt="" />
-                                    </a>
-                                </div>
-                                <div className="friend-box-info">
-                                    <h5 className="vertical-middle-c">Theresa Wells
-                                                    <small>356 Friends</small>
-                                    </h5>
-                                </div>
-                                <div className="friend-box-status">
-                                    <h6 className="vertical-middle-c">
-                                        <i className="icon-check_circle"></i> Friends</h6>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-md-6">
-                            <div className="friend-box vertical-middle-r">
-                                <div className="friend-box-img">
-                                    <a href="">
-                                        <img src="images/img-02.jpg" alt="" />
-                                    </a>
-                                </div>
-                                <div className="friend-box-info">
-                                    <h5 className="vertical-middle-c">Theresa Wells
-                                                    <small>356 Friends</small>
-                                    </h5>
-                                </div>
-                                <div className="friend-box-status">
-                                    <h6 className="vertical-middle-c">
-                                        <i className="icon-check_circle"></i> Friends</h6>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-md-6">
-                            <div className="friend-box vertical-middle-r">
-                                <div className="friend-box-img">
-                                    <a href="">
-                                        <img src="images/img-02.jpg" alt="" />
-                                    </a>
-                                </div>
-                                <div className="friend-box-info">
-                                    <h5 className="vertical-middle-c">Theresa Wells
-                                                    <small>356 Friends</small>
-                                    </h5>
-                                </div>
-                                <div className="friend-box-status">
-                                    <h6 className="vertical-middle-c">
-                                        <i className="icon-check_circle"></i> Friends</h6>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-md-6">
-                            <div className="friend-box vertical-middle-r">
-                                <div className="friend-box-img">
-                                    <a href="">
-                                        <img src="images/img-02.jpg" alt="" />
-                                    </a>
-                                </div>
-                                <div className="friend-box-info">
-                                    <h5 className="vertical-middle-c">Theresa Wells
-                                                    <small>356 Friends</small>
-                                    </h5>
-                                </div>
-                                <div className="friend-box-status">
-                                    <h6 className="vertical-middle-c">
-                                        <i className="icon-check_circle"></i> Friends</h6>
-                                </div>
-                            </div>
-                        </div>
+                            ))
+                        }
                     </div>
                 </div>
             </div>
         );
     }
 }
+
+const mapStateToProps = (state) => {
+    const { friends } = state;
+    return {
+        loading: friends.get('loading'),
+        error: friends.get('error'),
+        friends: friends.get('friends'),
+    }
+}
+
+export default connect(mapStateToProps)(ProfileFriends)
