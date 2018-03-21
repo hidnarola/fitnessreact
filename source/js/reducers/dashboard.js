@@ -7,7 +7,16 @@ import {
 const initialState = Map({
     loading: false,
     error: null,
-    allWidgets:null,
+    allWidgets:{
+        todayWorkOut: true,
+        nextMeal: true,
+        activity: true,
+        goalProgress: true,
+        bodyFat: true,
+        badges: true,
+        weeksCalories: true,
+        activityFeed: true
+    },
     todayWorkOut:null,
     nextMeal:null,
     goalProgress:null,
