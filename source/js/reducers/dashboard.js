@@ -1,7 +1,7 @@
 import { Map } from 'immutable';
 
 import {
-    GET_DASHBOARD_START,GET_DASHBOARD_ERROR,GET_DASHBOARD_SUCCESS
+    GET_DASHBOARD_START,GET_DASHBOARD_ERROR,GET_DASHBOARD_SUCCESS,SET_WIDGETS
 } from '../actions/dashboard';
 
 const initialState = Map({
@@ -53,6 +53,12 @@ const actionsMap = {
             weeksCalories:action.data.weeksCalories
         }));
     },
+    [SET_WIDGETS]: (state,action) =>{
+        return state.merge(Map({
+            allWidgets:action.data,
+        }));
+    }
+    
 };
 
 export default function reducer(state = initialState, action = {}) {
