@@ -1,6 +1,7 @@
 // Simple API wrapper
 
-const API_URL = 'https://swapi.co/api';
+// const API_URL = 'https://swapi.co/api';
+const API_URL = 'http://192.168.1.186:3300';
 
 // Custom API error to throw
 function ApiError(message, data, status) {
@@ -26,7 +27,7 @@ function ApiError(message, data, status) {
 }
 
 // API wrapper function
-const fetchResource = (path, userOptions = {}) => {
+export const fetchResource = (path, userOptions = {}) => {
     // Define default options
     const defaultOptions = {};
 
@@ -104,6 +105,8 @@ const fetchResource = (path, userOptions = {}) => {
             }
         });
 };
+
+
 
 function getPeople() {
     return fetchResource('people/');

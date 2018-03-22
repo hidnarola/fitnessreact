@@ -8,6 +8,7 @@ import exerciseFitness from 'reducers/exercise/fitness'
 import exerciseEquipments from 'reducers/exercise/equipments'
 import friends from 'reducers/friends';
 import profilePhotos from 'reducers/profilePhotos';
+import login from 'reducers/login';
 
 export default combineReducers({
     app,
@@ -18,6 +19,7 @@ export default combineReducers({
     exerciseEquipments,
     friends,
     profilePhotos,
+    login,
     // ...your other reducers here
     // you have to pass formReducer under 'form' key,
     // for custom keys look up the docs for 'getFormState'

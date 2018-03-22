@@ -1091,3 +1091,36 @@ flex-direction:row; display:-webkit-box; display:-webkit-flex; display:-ms-flex;
 .radiobox-inr + .radiobox-inr {margin-left:20px;}
 .radiobox-inr svg{ height:50px; width:46px; margin:0 auto; fill:#46E9C5; z-index:10; position:relative; }
 .input-wrap.radiobox input[type=radio]:checked + label svg{fill:#fff;}
+
+.what-difference p a {background: transparent;color: #000 ;width: auto;height: auto;margin: 0;display: inline-block;padding: 0;border: 0 !important;font-weight: bold !important;}
+.custom_check [type="checkbox"]:not(:checked),
+.custom_check [type="checkbox"]:checked {position: absolute;left: -9999px;}
+.custom_check [type="checkbox"]:not(:checked) + label, .custom_check [type="checkbox"]:checked + label {position: relative;padding-left: 30px;cursor: pointer;width: 100%;height: 22px;}
+.custom_check [type="checkbox"]:not(:checked) + label:before,
+.custom_check [type="checkbox"]:checked + label:before {content: '';position: absolute;left: 0;top: 0;width: 22px;height: 22px;border: 2px solid #eee;background: #fff;border-radius: 0;box-shadow: none;}
+.custom_check [type="checkbox"]:not(:checked) + label:after,
+.custom_check [type="checkbox"]:checked + label:after {content: '';position: absolute;top: 4px;left: 4px;line-height: 0.8;transition: all .2s;width: 14px;height: 14px;background: linear-gradient(123.28deg, #46E9C5 0%, #3FFBFC 100%);}
+.custom_check [type="checkbox"]:not(:checked) + label:after {opacity: 0;transform: scale(0);}
+.custom_check [type="checkbox"]:checked + label:after {opacity: 1;transform: scale(1);}
+.personal-dtl ul li.checl_login .input-wrap .form-group.reset_link {display: flex;width: 60%;}
+.custom_check [type="checkbox"]:checked + label:after {opacity: 1;transform: scale(1);}
+.personal-dtl ul li.checl_login .input-wrap .custom_check {display: flex;width: 40%;}
+.personal-dtl ul li.checl_login .input-wrap .form-group.reset_link {display: flex;width: 60%;}
+.personal-dtl ul li.checl_login .input-wrap {display: flex;}
+.personal-dtl ul li.checl_login .input-wrap .form-group.reset_link span {width: 100%;display: block;text-align: right;}
+.step-wrap-login .stepbox-head h2 {font-size: 40px;}
+.step-wrap-login .stepbox-m {height: auto;padding-left: 0;width: 100%;}
+.step-wrap-login .stepbox-head {padding: 0 30px 30px 0px;}
+.step-wrap-login .step-box-r {width: 100%;}
+.step-wrap-login .step-box-l {width: 35%;}
+.step-wrap-login .step-box {width: 800px;height: 400px;}
+.step-wrap.step-wrap-login {align-items: center;justify-content: center;}
+
+.stepbox-b{text-align:right; height:80px; display:-webkit-box; display:-webkit-flex; display:-ms-flex; display:flex; margin-left:auto; padding:30px 0 0;}
+.stepbox-b button{padding:12px; margin-left:auto; text-align:center; display:-webkit-box; display:-webkit-flex; display:-ms-flex; display:flex; border: 0px;}
+.stepbox-b button span{font-size:14px;	font-weight:900; line-height:26px; text-align:center; vertical-align:top;}
+.stepbox-b button.back-btn{ color:#FC1454;margin:0 10px 0 0; min-width:60px; justify-content:center;}
+.stepbox-b button.continues-btn{background:linear-gradient(123.28deg, #46E9C5 0%, #3FFBFC 100%); border-radius:100px; width:270px; color:#fff; justify-content:center;}
+.stepbox-b button i{vertical-align:top;}
+
+.width-100-per{width: 100% !important}

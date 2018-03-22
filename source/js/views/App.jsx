@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Link, Redirect, Switch, withRouter } from "react-router-dom"; 
+import { BrowserRouter as Router, Route, Link, Redirect, Switch, withRouter } from "react-router-dom";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getPeople } from 'actions/people';
@@ -27,47 +27,71 @@ import Dashboard from 'views/Dashboard';
 import ProfilePage from 'views/Profile';
 import RegisterUser from 'views/RegisterUser';
 import ExerciseSettings from 'views/ExerciseSettings';
+import Login from './Login';
+import { PrivateRoute } from '../components/global/PrivateRoute';
 
-class App extends Component {    
-    
+class App extends Component {
+
     render() {
         return (
-            <div>
+            <div className="appWrapper">
                 <Router>
-                    <div>
-                        <ScrollToTop>                            
-                            <Route exact path="/" component={ Home } />
-                            <Route path={ routeCodes.PEOPLE } component={ People }  />                            
-                            <Route path={ routeCodes.DASHBOARD } component={ Dashboard } />
+                    <ScrollToTop>
+                        <Route exact path="/" component={Login} />
+                        <PrivateRoute path={routeCodes.PEOPLE} component={People} />
+                        <PrivateRoute path={routeCodes.DASHBOARD} component={Dashboard} />
 
-                            <Route path={ routeCodes.STATSPAGE } component={ StatsPage }  />
-                            
-                            <Route path={ routeCodes.PROFILE } component={ ProfilePage }  />
-                                                                                    
-                            <Route path={ routeCodes.FITNESSBODY } component={ FitnessBody } />
+                        <PrivateRoute path={routeCodes.STATSPAGE} component={StatsPage} />
 
-                            <Route exact path={ routeCodes.EXERCISE } component={ Exercise } />
-                            <Route path={ routeCodes.EXERCISEFITNESS } component={ ExerciseSettings } />
-                            <Route path={ routeCodes.EXERCISEEQP } component={ ExerciseSettings } />
-                            <Route path={ routeCodes.EXERCISEPREFERENCE } component={ ExerciseSettings } />
+                        <PrivateRoute path={routeCodes.PROFILE} component={ProfilePage} />
 
-                            <Route path={ routeCodes.NUTRITIONMEAL } component={ NutritionMeal } />
-                            <Route path={ routeCodes.NUTRITIONSHOP } component={ NutritionShopping } />
+                        <PrivateRoute path={routeCodes.FITNESSBODY} component={FitnessBody} />
 
-                            <Route path={ routeCodes.CALENDAR } component={Calendar} />
-                            <Route path={ routeCodes.BADGES } component={Badges}/>                            
-                            <Route path={ routeCodes.GOALS } component={ Goals } />
-                            
-                            <Route path={ routeCodes.RECEIP } component={ Receip } />
+                        <PrivateRoute exact path={routeCodes.EXERCISE} component={Exercise} />
+                        <PrivateRoute path={routeCodes.EXERCISEFITNESS} component={ExerciseSettings} />
+                        <PrivateRoute path={routeCodes.EXERCISEEQP} component={ExerciseSettings} />
+                        <PrivateRoute path={routeCodes.EXERCISEPREFERENCE} component={ExerciseSettings} />
 
+                        <PrivateRoute path={routeCodes.NUTRITIONMEAL} component={NutritionMeal} />
+                        <PrivateRoute path={routeCodes.NUTRITIONSHOP} component={NutritionShopping} />
 
-                            <Route path={ routeCodes.REGISTERUSER } component={ RegisterUser } />
+                        <PrivateRoute path={routeCodes.CALENDAR} component={Calendar} />
+                        <PrivateRoute path={routeCodes.BADGES} component={Badges} />
+                        <PrivateRoute path={routeCodes.GOALS} component={Goals} />
 
-                            {/* <Route path='*' component={ NotFound } /> */}
-                        </ScrollToTop>
-                    </div>
-                </Router>                
-            </div>            
+                        <PrivateRoute path={routeCodes.RECEIP} component={Receip} />
+
+                        <Route path={routeCodes.REGISTERUSER} component={RegisterUser} />
+
+                        {/* <Route path={routeCodes.PEOPLE} component={People} /> */}
+                        {/* <Route path={routeCodes.DASHBOARD} component={Dashboard} /> */}
+
+                        {/* <Route path={routeCodes.STATSPAGE} component={StatsPage} /> */}
+
+                        {/* <Route path={routeCodes.PROFILE} component={ProfilePage} /> */}
+
+                        {/* <Route path={routeCodes.FITNESSBODY} component={FitnessBody} /> */}
+
+                        {/* <Route exact path={routeCodes.EXERCISE} component={Exercise} /> */}
+                        {/* <Route path={routeCodes.EXERCISEFITNESS} component={ExerciseSettings} /> */}
+                        {/* <Route path={routeCodes.EXERCISEEQP} component={ExerciseSettings} /> */}
+                        {/* <Route path={routeCodes.EXERCISEPREFERENCE} component={ExerciseSettings} /> */}
+
+                        {/* <Route path={routeCodes.NUTRITIONMEAL} component={NutritionMeal} /> */}
+                        {/* <Route path={routeCodes.NUTRITIONSHOP} component={NutritionShopping} /> */}
+
+                        {/* <Route path={routeCodes.CALENDAR} component={Calendar} /> */}
+                        {/* <Route path={routeCodes.BADGES} component={Badges} /> */}
+                        {/* <Route path={routeCodes.GOALS} component={Goals} /> */}
+
+                        {/* <Route path={routeCodes.RECEIP} component={Receip} /> */}
+
+                        {/* <Route path={routeCodes.REGISTERUSER} component={RegisterUser} /> */}
+
+                        {/* <Route path='*' component={NotFound} /> */}
+                    </ScrollToTop>
+                </Router>
+            </div>
         );
     }
 }
