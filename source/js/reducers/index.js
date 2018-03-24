@@ -9,6 +9,8 @@ import exerciseEquipments from 'reducers/exercise/equipments'
 import friends from 'reducers/friends';
 import profilePhotos from 'reducers/profilePhotos';
 import login from 'reducers/login';
+import pageLoader from 'reducers/pageLoader';
+import adminNutritions from 'reducers/admin/nutritions'
 
 export default combineReducers({
     app,
@@ -20,6 +22,8 @@ export default combineReducers({
     friends,
     profilePhotos,
     login,
+    pageLoader,
+    adminNutritions,
     // ...your other reducers here
     // you have to pass formReducer under 'form' key,
     // for custom keys look up the docs for 'getFormState'
