@@ -1,12 +1,20 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
 import { Modal, Button } from 'react-bootstrap';
 
 class NutritionsSaveForm extends Component {
-    componentDidMount() {
-        const { initialize, nutritionData } = this.props;
-        initialize(nutritionData);
-    }
+    // componentDidMount() {
+    //     const { initialize, nutritionData } = this.props;
+    //     console.log('sbbbb', nutritionData);
+    //     initialize(nutritionData);
+    // }
+
+    // componentWillUpdate(){
+    //     const { initialize, nutritionData } = this.props;
+    //     initialize(nutritionData);
+    // }
+
     render() {
         const { title, showModal, handleShowModal, handleSubmit, nutritionData } = this.props;
         return (
@@ -59,6 +67,8 @@ class NutritionsSaveForm extends Component {
     }
 }
 
-export default reduxForm({
+NutritionsSaveForm = reduxForm({
     form: 'nutritionSave'
 })(NutritionsSaveForm);
+
+export default NutritionsSaveForm;
