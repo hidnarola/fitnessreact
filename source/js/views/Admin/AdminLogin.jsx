@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { NavLink } from 'react-router-dom';
-import LoginForm from '../components/Login/LoginForm';
-import { login } from '../actions/login';
-import { routeCodes } from 'constants/routes';
-import { showPageLoader, hidePageLoader } from '../actions/pageLoader';
-import { USER_ROLE } from '../constants/consts';
-import { isLogin, checkLogin } from '../helpers/loginHelper';
+import { login } from 'actions/login';
+import { showPageLoader, hidePageLoader } from 'actions/pageLoader';
+import AdminLoginForm from '../../components/Admin/Login/AdminLoginForm';
+import { adminRouteCodes } from '../../constants/adminRoutes';
+import { ADMIN_ROLE } from '../../constants/consts';
+import { checkLogin, isLogin } from '../../helpers/loginHelper';
 
 
-class Login extends Component {
+class AdminLogin extends Component {
     constructor(props) {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -24,7 +23,7 @@ class Login extends Component {
         let loginData = {
             email: data.email,
             password: data.password,
-            userRole: USER_ROLE,
+            userRole: ADMIN_ROLE,
         }
         dispatch(showPageLoader());
         dispatch(login(loginData));
@@ -40,7 +39,7 @@ class Login extends Component {
     componentWillUpdate() {
         var token = localStorage.getItem('token');
         if (token) {
-            this.props.history.push(routeCodes.DASHBOARD);
+            this.props.history.push(adminRouteCodes.DASHBOARD);
         }
     }
 
@@ -49,16 +48,7 @@ class Login extends Component {
         return (
             <div className="step-wrap step-wrap-login login-wrapper">
                 <div className="step-box">
-                    <div className="step-box-l">
-                        <div className="what-difference">
-                            <h3>Create Your Account</h3>
-                            <p>Come join the fitness community! Lets set up your Account. Already have one? <a href="#">Sign in here</a> </p>
-                            <NavLink to={routeCodes.REGISTERUSER}>Register</NavLink>
-                        </div>
-                    </div>
-
-                    <LoginForm onSubmit={this.handleSubmit} loginError={error} loading={loading} />
-
+                    <AdminLoginForm onSubmit={this.handleSubmit} loginError={error} loading={loading} />
                 </div >
             </div >
         );
@@ -76,4 +66,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps)(Login);
+export default connect(mapStateToProps)(AdminLogin);

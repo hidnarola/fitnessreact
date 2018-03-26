@@ -1124,3 +1124,4 @@ flex-direction:row; display:-webkit-box; display:-webkit-flex; display:-ms-flex;
 .stepbox-b button i{vertical-align:top;}
 
 .width-100-per{width: 100% !important}
+.mb-20{margin-bottom: 20px !important;}

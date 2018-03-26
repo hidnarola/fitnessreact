@@ -29,9 +29,13 @@ const actionMap = {
         }));
     },
     [LOGIN_ERROR]: (state, action) => {
+        let error = 'Server Error';
+        if (action.error && action.error.response) {
+            error = action.error.response.message;
+        }
         return state.merge(Map({
             loading: false,
-            error: action.error.response.message,
+            error: error,
             user: null,
             token: null,
             refreshToken: null

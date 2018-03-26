@@ -1,17 +1,17 @@
 import React from 'react';
 import { Field, reduxForm } from 'redux-form';
-import { required, email } from '../../formValidation/validationRules';
+import { required, email } from 'formValidation/validationRules';
 
-const LoginForm = (props) => {
+const AdminLoginForm = (props) => {
     const { error, loading } = props;
     return (
-        <form method="POST" onSubmit={props.handleSubmit} className="width-100-per">
+        <form method="POST" onSubmit={props.handleSubmit} className="admin-login width-100-per">
             <div className="step-box-r">
                 <div className="stepbox-head">
-                    <h2>Login Details</h2>
+                    <h2>Admin Login</h2>
                 </div>
                 {error &&
-                    <div className="login-error-wrapper">
+                    <div className="admin-login-error-wrapper">
                         <span>{error}</span>
                     </div>
                 }
@@ -36,20 +36,6 @@ const LoginForm = (props) => {
                                 component={loginFields}
                                 validate={[required]}
                             />
-                        </li>
-                        <li className="checl_login">
-                            <div className="form-div">
-                                <label></label>
-                                <div className="input-wrap">
-                                    <div className="custom_check">
-                                        <input type="checkbox" id="test1" />
-                                        <label htmlFor="test1">Remember Me</label>
-                                    </div>
-                                    <div className="form-group reset_link">
-                                        <span><a href="">Forgot Password ?</a></span>
-                                    </div>
-                                </div>
-                            </div>
                         </li>
                     </ul>
                 </div>
@@ -79,5 +65,5 @@ const loginFields = (props) => {
 }
 
 export default reduxForm({
-    form: 'loginForm'
-})(LoginForm);
+    form: 'adminLoginForm'
+})(AdminLoginForm);

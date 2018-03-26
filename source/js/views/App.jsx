@@ -28,7 +28,18 @@ import ProfilePage from 'views/Profile';
 import RegisterUser from 'views/RegisterUser';
 import ExerciseSettings from 'views/ExerciseSettings';
 import Login from './Login';
-import { PrivateRoute } from '../components/global/PrivateRoute';
+import AdminLogin from './Admin/AdminLogin';
+import { adminRouteCodes, adminRootRoute } from '../constants/adminRoutes';
+import AdminDashboard from './Admin/Dashboard';
+import PrivateRoute from '../helpers/PrivateRoute';
+import AdminPrivateRoute from '../helpers/AdminPrivateRoute';
+import Users from './Admin/Users';
+import Recipes from './Admin/Recipes';
+import Exercises from './Admin/Exercises';
+import Options from './Admin/Options';
+import Budges from './Admin/Budges';
+import Coupons from './Admin/Coupons';
+import Nutritions from './Admin/Nutritions';
 
 class App extends Component {
 
@@ -38,6 +49,8 @@ class App extends Component {
                 <Router>
                     <ScrollToTop>
                         <Route exact path="/" component={Login} />
+                        <Route path={routeCodes.REGISTERUSER} component={RegisterUser} />
+
                         <PrivateRoute path={routeCodes.PEOPLE} component={People} />
                         <PrivateRoute path={routeCodes.DASHBOARD} component={Dashboard} />
 
@@ -61,7 +74,25 @@ class App extends Component {
 
                         <PrivateRoute path={routeCodes.RECEIP} component={Receip} />
 
-                        <Route path={routeCodes.REGISTERUSER} component={RegisterUser} />
+                        {/* Admin Routes */}
+
+                        <Route exact path={adminRootRoute} component={AdminLogin} />
+
+                        <AdminPrivateRoute path={adminRouteCodes.DASHBOARD} component={AdminDashboard} />
+
+                        <AdminPrivateRoute path={adminRouteCodes.USERS} component={Users} />
+
+                        <AdminPrivateRoute path={adminRouteCodes.NUTRITIONS} component={Nutritions} />
+
+                        <AdminPrivateRoute path={adminRouteCodes.RECIPES} component={Recipes} />
+
+                        <AdminPrivateRoute path={adminRouteCodes.EXERCISE} component={Exercises} />
+
+                        <AdminPrivateRoute path={adminRouteCodes.OPTIONS} component={Options} />
+
+                        <AdminPrivateRoute path={adminRouteCodes.BUDGES} component={Budges} />
+
+                        <AdminPrivateRoute path={adminRouteCodes.COUPONS} component={Coupons} />
 
                         {/* <Route path={routeCodes.PEOPLE} component={People} /> */}
                         {/* <Route path={routeCodes.DASHBOARD} component={Dashboard} /> */}
