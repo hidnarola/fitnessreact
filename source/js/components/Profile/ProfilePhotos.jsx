@@ -4,6 +4,7 @@ import { getProfilePhotosData } from '../../actions/profilePhotos';
 import ProfilePhotoBlock from './ProfilePhotoBlock';
 
 class ProfilePhotos extends Component {
+    
     constructor(props) {
         super(props);
     }
