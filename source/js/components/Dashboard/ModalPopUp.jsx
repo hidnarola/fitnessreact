@@ -8,6 +8,7 @@ import { Field, reduxForm } from 'redux-form';
 import { setWidgets } from '../../actions/dashboard';
 
 class ModalPopUp extends Component {
+    
     constructor(props, context) {
         super(props, context);  
         // this.props.func(this, 1234);

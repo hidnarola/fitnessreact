@@ -253,7 +253,7 @@ export default class Calendar extends Component{
 
                         <div className="col-md-4">
                             <div className="white-box space-btm-30 text-c">
-                                <CalendarNew/>
+                                <CalendarNew onClickDay={(value) => console.log(value)} />
                             </div>
                             <div className="white-box space-btm-30">
                                 <div className="whitebox-head">

@@ -63,7 +63,7 @@ export const fetchResource = (path, userOptions = {}) => {
     // Variable which will be used for storing response
     let response = null;
 
-    return fetch(url, options)
+    return fetch(url, options)        
         .then(responseObject => {
             // Saving response for later use in lower scopes
             response = responseObject;
