@@ -9,6 +9,7 @@ import friends from 'sagas/friends';
 import profilePhotos from 'sagas/profilePhotos';
 import login from 'sagas/login'
 import adminNutritionSagas from 'sagas/admin/nutritions';
+import adminEquipmentSagas from 'sagas/admin/equipments';
 
 export default function* rootSaga() {
   yield all([
@@ -21,5 +22,6 @@ export default function* rootSaga() {
     ...profilePhotos,
     ...login,
     ...adminNutritionSagas,
+    ...adminEquipmentSagas,
   ]);
 }

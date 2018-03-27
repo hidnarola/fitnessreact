@@ -40,6 +40,7 @@ import Options from './Admin/Options';
 import Budges from './Admin/Budges';
 import Coupons from './Admin/Coupons';
 import Nutritions from './Admin/Nutritions';
+import Equipments from './Admin/Equipments';
 
 class App extends Component {
 
@@ -87,6 +88,8 @@ class App extends Component {
                         <AdminPrivateRoute path={adminRouteCodes.RECIPES} component={Recipes} />
 
                         <AdminPrivateRoute path={adminRouteCodes.EXERCISE} component={Exercises} />
+
+                        <AdminPrivateRoute path={adminRouteCodes.EQUIPMENTS} component={Equipments} />
 
                         <AdminPrivateRoute path={adminRouteCodes.OPTIONS} component={Options} />
 

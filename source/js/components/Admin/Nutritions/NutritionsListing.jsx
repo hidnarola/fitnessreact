@@ -7,6 +7,7 @@ import { nutritionAddRequest, nutritionListRequest, nutritionDeleteRequest, nutr
 import { showPageLoader, hidePageLoader } from '../../../actions/pageLoader';
 import { FaPencil, FaTrash } from 'react-icons/lib/fa'
 import DeleteConfirmation from './DeleteConfirmation';
+import dateFormat from 'dateformat';
 
 const initialState = {
     id: null,
@@ -126,7 +127,14 @@ class NutritionsListing extends Component {
                                             columns={[
                                                 {
                                                     Header: "Created Date",
-                                                    accessor: "createdAt"
+                                                    accessor: "createdAt",
+                                                    Cell: (row) => {
+                                                        return (
+                                                            <div>
+                                                                {dateFormat(row.value, 'mm/dd/yyyy')}
+                                                            </div>
+                                                        );
+                                                    }
                                                 },
                                                 {
                                                     Header: "Name",
@@ -152,6 +160,12 @@ class NutritionsListing extends Component {
                                             defaultPageSize={10}
                                             className="-striped -highlight"
                                         />
+                                    }
+                                    {!nutritions &&
+                                        <span>No records found</span>
+                                    }
+                                    {nutritions && nutritions.length <= 0 &&
+                                        <span>No records found</span>
                                     }
                                 </div>
                             </div>

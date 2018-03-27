@@ -1,0 +1,65 @@
+import { fetchResource, fetchResourceFormDataFile } from '..';
+import { extraHeaders } from '../../helpers/funs';
+
+const requestUrl = 'admin/equipment';
+
+function getEquipments() {
+    let headers = extraHeaders();
+    var options = {
+        method: 'GET',
+        headers: headers,
+    }
+
+    return fetchResource(requestUrl, options);
+}
+
+function getEquipment(_id) {
+    let headers = extraHeaders();
+    var options = {
+        method: 'GET',
+        headers: headers,
+    }
+
+    return fetchResource(requestUrl + '/' + _id, options);
+}
+
+function addEquipment(equipmentData) {
+    console.log('sdsdsdfds--------------- ', equipmentData)
+    let headers = extraHeaders();
+    var options = {
+        method: 'POST',
+        body: equipmentData,
+        headers: headers,
+    }
+
+    return fetchResourceFormDataFile(requestUrl, options);
+}
+
+function updateEquipment(_id, equipmentData) {
+    let headers = extraHeaders();
+    var options = {
+        method: 'PUT',
+        body: equipmentData,
+        headers: headers,
+    }
+
+    return fetchResource(requestUrl + '/' + _id, options);
+}
+
+function deleteEquipment(_id) {
+    let headers = extraHeaders();
+    var options = {
+        method: 'DELETE',
+        headers: headers,
+    }
+
+    return fetchResource((requestUrl + '/' + _id), options);
+}
+
+export default {
+    getEquipments,
+    getEquipment,
+    addEquipment,
+    updateEquipment,
+    deleteEquipment
+}
