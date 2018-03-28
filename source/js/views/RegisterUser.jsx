@@ -12,7 +12,7 @@ export default class RegisterUser extends Component {
     render() {        
         return (
             <div className='register-user'>
-                <ContactForm onSubmit={showResults} />
+                <ContactForm onSubmit={ShowResults} />
                 <Values form="wizard" />
             </div>
         );
