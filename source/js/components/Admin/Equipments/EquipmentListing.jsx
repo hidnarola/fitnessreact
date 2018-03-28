@@ -2,22 +2,61 @@ import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { showPageLoader } from '../../../actions/pageLoader';
-import { equipmentListRequest } from '../../../actions/admin/equipments';
+import { equipmentListRequest, equipmentDeleteRequest } from '../../../actions/admin/equipments';
 import { adminRouteCodes } from '../../../constants/adminRoutes';
+import ReactTable from 'react-table';
+import dateFormat from 'dateFormat';
+import { FaPencil, FaTrash } from 'react-icons/lib/fa'
+import { SERVER_BASE_URL } from '../../../constants/consts';
+import DeleteConfirmation from '../Common/DeleteConfirmation';
 
 class EquipmentListing extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            selectedId: null,
+            showDeleteModal: false,
+            deleteActionInit: false
+        }
     }
 
-    componentWillMount() {
+    updateList = () => {
         const { dispatch } = this.props;
         dispatch(showPageLoader());
         dispatch(equipmentListRequest());
     }
 
+    confirmDelete = (_id) => {
+        this.setState({
+            selectedId: _id,
+            showDeleteModal: true
+        });
+    }
+
+    handleDelete = () => {
+        const { selectedId } = this.state;
+        const { dispatch } = this.props;
+        dispatch(showPageLoader());
+        this.setState({
+            deleteActionInit: true
+        });
+        dispatch(equipmentDeleteRequest(selectedId));
+    }
+
+    closeDeleteModal = () => {
+        this.setState({
+            selectedId: null,
+            showDeleteModal: false
+        });
+    }
+
+    componentWillMount() {
+        this.updateList();
+    }
+
     render() {
         const { equipments } = this.props;
+        const { showDeleteModal } = this.state;
         return (
             <div className="equipment-listing-wrapper">
                 <div className="body-head space-btm-45 d-flex justify-content-start">
@@ -57,8 +96,30 @@ class EquipmentListing extends Component {
                                                     accessor: "name"
                                                 },
                                                 {
-                                                    Header: "Description",
-                                                    accessor: "description"
+                                                    Header: "Image",
+                                                    accessor: "image",
+                                                    Cell: (row) => {
+                                                        return (
+                                                            <div className="table-listing-image-view-wrapper">
+                                                                <span>
+                                                                    <img src={SERVER_BASE_URL + row.value} alt="image" />
+                                                                </span>
+                                                            </div>
+                                                        );
+                                                    }
+                                                },
+                                                {
+                                                    Header: "Status",
+                                                    accessor: "status",
+                                                    Cell: (row) => {
+                                                        return (
+                                                            <div className="table-listing-status-view-wrapper">
+                                                                <span>
+                                                                    {row.value ? 'Active' : 'Inactive'}
+                                                                </span>
+                                                            </div>
+                                                        );
+                                                    }
                                                 },
                                                 {
                                                     Header: "Actions",
@@ -88,8 +149,27 @@ class EquipmentListing extends Component {
                         </div>
                     </div>
                 </div>
+
+                <DeleteConfirmation
+                    show={showDeleteModal}
+                    handleClose={this.closeDeleteModal}
+                    handleYes={this.handleDelete}
+                />
             </div >
         );
+    }
+
+    componentDidUpdate() {
+        const { loading } = this.props;
+        const { deleteActionInit } = this.state;
+        if (deleteActionInit && !loading) {
+            this.setState({
+                selectedId: null,
+                showDeleteModal: false,
+                deleteActionInit: false
+            });
+            this.updateList();
+        }
     }
 }
 
@@ -102,4 +182,4 @@ const mapStateToPros = (state) => {
     };
 }
 
-export default connect()(EquipmentListing);
+export default connect(mapStateToPros)(EquipmentListing);

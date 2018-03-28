@@ -4,43 +4,49 @@ import EquipmentForm from './EquipmentForm';
 import { showPageLoader, hidePageLoader } from '../../../actions/pageLoader';
 import { equipmentAddRequest } from '../../../actions/admin/equipments';
 import { adminRouteCodes } from '../../../constants/adminRoutes';
+import { equipmentCategoryListRequest } from '../../../actions/admin/equipmentCategories';
 
 class EquipmentSave extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            saveReqInit: false,
-        }
+            saveActionInit: false
+        };
     }
 
     handleSubmit = (data) => {
+        const { dispatch } = this.props;
+
         var formData = new FormData();
-        // for (var key in data) {
-        //     formData.append(key, data[key]);
-        // }
         formData.append('name', data.name);
         formData.append('category_id', data.equipmentCategory.value);
         formData.append('description', data.description);
         if (data.image) {
-            formData.append('equipment_img', data.image[0], data.image[0].name);
+            formData.append('equipment_img', data.image[0]);
         }
         formData.append('status', data.status.value);
-        const { dispatch } = this.props;
-        // let equipmentData = {
-        //     name: data.name,
-        //     description: data.description,
-        //     status: data.status.value,
-        //     category_id: data.equipmentCategory.value,
-        //     equipment_img: '',
-        // }
-        // this.setState({
-        //     saveReqInit: true
-        // });
+        this.setState({
+            saveActionInit: true
+        });
         dispatch(showPageLoader());
         dispatch(equipmentAddRequest(formData));
     }
 
+    componentWillMount() {
+        const { dispatch } = this.props;
+        dispatch(showPageLoader());
+        dispatch(equipmentCategoryListRequest());
+    }
+
     render() {
+        const { equipmentCategories } = this.props;
+        let equipmentCats = [{ value: '', label: 'Select category' }];
+        if (equipmentCategories) {
+            for (let index = 0; index < equipmentCategories.length; index++) {
+                const element = equipmentCategories[index];
+                equipmentCats.push({ value: element._id, label: element.name });
+            }
+        }
         return (
             <div className="equipment-save-wrapper">
                 <div className="body-head space-btm-45 d-flex justify-content-start">
@@ -57,7 +63,10 @@ class EquipmentSave extends Component {
                             </div>
                             <div className="row d-flex whitebox-body">
                                 <div className="col-md-12">
-                                    <EquipmentForm onSubmit={this.handleSubmit} />
+                                    <EquipmentForm
+                                        onSubmit={this.handleSubmit}
+                                        equipmentCats={equipmentCats}
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -68,11 +77,11 @@ class EquipmentSave extends Component {
     }
 
     componentDidUpdate() {
-        const { dispatch, history, loading } = this.props;
-        const saveReqInit = this.state;
-        if (saveReqInit && !loading) {
+        const { loading, history, dispatch } = this.props;
+        const { saveActionInit } = this.state;
+        if (saveActionInit && !loading) {
             this.setState({
-                saveReqInit: false
+                saveActionInit: false
             });
             dispatch(hidePageLoader());
             history.push(adminRouteCodes.EQUIPMENTS);
@@ -81,11 +90,12 @@ class EquipmentSave extends Component {
 }
 
 const mapStateToProps = (state) => {
-    const { adminEquipments } = state;
+    const { adminEquipments, adminEquipmentCategories } = state;
     return {
         loading: adminEquipments.get('loading'),
         error: adminEquipments.get('error'),
+        equipmentCategories: adminEquipmentCategories.get('equipmentCategories'),
     }
 }
 
-export default connect()(EquipmentSave);
+export default connect(mapStateToProps)(EquipmentSave);

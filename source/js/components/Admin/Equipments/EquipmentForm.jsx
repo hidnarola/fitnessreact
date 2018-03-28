@@ -4,10 +4,24 @@ import { NavLink } from 'react-router-dom';
 import Select from 'react-select';
 import { adminRouteCodes } from '../../../constants/adminRoutes';
 import Dropzone from 'react-dropzone'
+import { required } from '../../../formValidation/validationRules';
+
+const initialFormValues = {
+    name: '',
+    description: '',
+    image: '',
+    status: { value: true, label: 'Active' },
+    equipmentCategory: { value: '', label: 'Select category' },
+}
 
 class EquipmentForm extends Component {
+    componentWillMount() {
+        const { initialize } = this.props;
+        initialize(Object.assign({}, initialFormValues));
+    }
+
     render() {
-        const { handleSubmit } = this.props;
+        const { handleSubmit, equipmentCats } = this.props;
         return (
             <div className="equipment-form-wrapper">
                 <form onSubmit={handleSubmit} method="POST">
@@ -20,6 +34,7 @@ class EquipmentForm extends Component {
                                 type="text"
                                 placeholder="Name"
                                 className="form-control"
+                                validate={required}
                             />
                         </div>
                         <div className="col-md-12 mb-20">
@@ -29,6 +44,7 @@ class EquipmentForm extends Component {
                                 component="textarea"
                                 placeholder="Description"
                                 className="form-control"
+                                validate={required}
                             />
                         </div>
                         <div className="col-md-12 mb-20">
@@ -44,10 +60,11 @@ class EquipmentForm extends Component {
                                 name="status"
                                 component={MySelect}
                                 options={[
-                                    { value: '1', label: 'Active' },
-                                    { value: '0', label: 'Inactive' },
+                                    { value: true, label: 'Active' },
+                                    { value: false, label: 'Inactive' },
                                 ]}
-                                initialValue='1'
+                                initialValue={true}
+                                validate={required}
                             />
                         </div>
                         <div className="col-md-12 mb-20">
@@ -55,10 +72,10 @@ class EquipmentForm extends Component {
                             <Field
                                 name="equipmentCategory"
                                 component={MySelect}
-                                options={[
-                                    { value: '1', label: 'Active' },
-                                    { value: '0', label: 'Inactive' },
-                                ]}
+                                options={equipmentCats}
+                                placeholder="Select category"
+                                initialValue=''
+                                validate={required}
                             />
                         </div>
                         <div className="col-md-12 mb-20">
@@ -75,13 +92,20 @@ class EquipmentForm extends Component {
 }
 
 const MySelect = (props) => {
-    const { input, options, removeSelected, initialValue } = props;
+    const { input, options, removeSelected, initialValue, placeholder } = props;
+    let val = '';
+    if (input.value && Object.keys(input.value).length > 0) {
+        val = input.value;
+    } else if (initialValue) {
+        val = initialValue;
+    }
     return (
         <div className="select">
             <Select
                 {...input}
-                value={input.value || initialValue || ''}
+                value={val}
                 options={options}
+                placeholder={placeholder}
                 onChange={(value) => input.onChange(value)}
                 onBlur={() => input.onBlur({ ...input.value })}
                 multi={false}
@@ -97,8 +121,16 @@ const MyDropzone = (props) => {
         <div>
             <Dropzone
                 {...input}
+                accept="image/jpeg, image/png, image/jpg, image/gif"
                 onDrop={(filesToUpload, e) => input.onChange(filesToUpload)}
-            ></Dropzone>
+                multiple={false}
+            >
+                <div className="dropzone-image-preview-wrapper">
+                    {input.value &&
+                        <img src={input.value[0].preview} />
+                    }
+                </div>
+            </Dropzone>
         </div>
     );
 }

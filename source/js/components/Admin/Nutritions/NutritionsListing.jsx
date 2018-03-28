@@ -6,8 +6,8 @@ import NutritionsSaveForm from './NutritionsSaveForm';
 import { nutritionAddRequest, nutritionListRequest, nutritionDeleteRequest, nutritionSelectOneRequest, nutritionUpdateRequest } from '../../../actions/admin/nutritions';
 import { showPageLoader, hidePageLoader } from '../../../actions/pageLoader';
 import { FaPencil, FaTrash } from 'react-icons/lib/fa'
-import DeleteConfirmation from './DeleteConfirmation';
 import dateFormat from 'dateformat';
+import DeleteConfirmation from '../Common/DeleteConfirmation';
 
 const initialState = {
     id: null,
@@ -181,9 +181,9 @@ class NutritionsListing extends Component {
                 />
 
                 <DeleteConfirmation
-                    showDeleteModal={showDeleteModal}
-                    closeDeleteModal={this.closeDeleteModal}
-                    handleDelete={this.handleDelete}
+                    show={showDeleteModal}
+                    handleClose={this.closeDeleteModal}
+                    handleYes={this.handleDelete}
                 />
 
             </div>
