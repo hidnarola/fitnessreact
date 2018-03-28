@@ -5,7 +5,7 @@ import { showPageLoader } from '../../../actions/pageLoader';
 import { equipmentListRequest, equipmentDeleteRequest } from '../../../actions/admin/equipments';
 import { adminRouteCodes } from '../../../constants/adminRoutes';
 import ReactTable from 'react-table';
-import dateFormat from 'dateFormat';
+import dateFormat from 'dateformat';
 import { FaPencil, FaTrash } from 'react-icons/lib/fa'
 import { SERVER_BASE_URL } from '../../../constants/consts';
 import DeleteConfirmation from '../Common/DeleteConfirmation';
