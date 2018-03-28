@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import EquipmentForm from './EquipmentForm';
 import { showPageLoader, hidePageLoader } from '../../../actions/pageLoader';
-import { equipmentAddRequest } from '../../../actions/admin/equipments';
+import { equipmentAddRequest, equipmentUpdateRequest } from '../../../actions/admin/equipments';
 import { adminRouteCodes } from '../../../constants/adminRoutes';
 import { equipmentCategoryListRequest } from '../../../actions/admin/equipmentCategories';
 
@@ -15,7 +15,7 @@ class EquipmentSave extends Component {
     }
 
     handleSubmit = (data) => {
-        const { dispatch } = this.props;
+        const { dispatch, match } = this.props;
 
         var formData = new FormData();
         formData.append('name', data.name);
@@ -25,11 +25,16 @@ class EquipmentSave extends Component {
             formData.append('equipment_img', data.image[0]);
         }
         formData.append('status', data.status.value);
+
         this.setState({
             saveActionInit: true
         });
         dispatch(showPageLoader());
-        dispatch(equipmentAddRequest(formData));
+        if (typeof match.params.id !== 'undefined') {
+            dispatch(equipmentUpdateRequest(match.params.id, formData));
+        } else {
+            dispatch(equipmentAddRequest(formData));
+        }
     }
 
     componentWillMount() {

@@ -124,6 +124,22 @@ export const postFormData = (path, data, headers) => {
     });
 };
 
+export const putFormData = (path, data, headers) => {
+    // Build Url
+    const url = `${API_URL}${path}`;
+
+    return axios({
+        method: 'PUT',
+        url: url,
+        data: data,
+        headers: headers
+    }).then(function (res) {
+        return res;
+    }).catch(function (err) {
+        return err.toString();
+    });
+};
+
 function getPeople() {
     return fetchResource('people/');
 }

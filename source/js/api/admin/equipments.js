@@ -1,4 +1,4 @@
-import { fetchResource, postFormData } from '..';
+import { fetchResource, postFormData, putFormData } from '..';
 import { extraHeaders } from '../../helpers/funs';
 
 const requestUrl = 'admin/equipment';
@@ -30,13 +30,7 @@ function addEquipment(equipmentData) {
 
 function updateEquipment(_id, equipmentData) {
     let headers = extraHeaders();
-    var options = {
-        method: 'PUT',
-        body: equipmentData,
-        headers: headers,
-    }
-
-    return fetchResource(requestUrl + '/' + _id, options);
+    return putFormData(requestUrl + '/' + _id, equipmentData, headers);
 }
 
 function deleteEquipment(_id) {

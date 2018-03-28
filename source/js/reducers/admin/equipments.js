@@ -30,6 +30,7 @@ const actionMap = {
             loading: true,
             error: null,
             equipments: null,
+            equipment: null,
         }));
     },
     [EQUIPMENTS_LIST_SUCCESS]: (state, action) => {
@@ -37,6 +38,7 @@ const actionMap = {
             loading: false,
             error: null,
             equipments: action.data.equipments,
+            equipment: null,
         }));
     },
     [EQUIPMENTS_LIST_ERROR]: (state, action) => {
@@ -48,12 +50,14 @@ const actionMap = {
             loading: false,
             error: error,
             equipments: null,
+            equipment: null,
         }));
     },
     [EQUIPMENTS_SELECT_ONE_REQUEST]: (state, action) => {
         return state.merge(Map({
             loading: true,
             error: null,
+            equipments: null,
             equipment: null,
         }));
     },
@@ -61,6 +65,7 @@ const actionMap = {
         return state.merge(Map({
             loading: false,
             error: null,
+            equipments: null,
             equipment: action.data.equipment,
         }));
     },
@@ -72,6 +77,7 @@ const actionMap = {
         return state.merge(Map({
             loading: false,
             error: error,
+            equipments: null,
             equipment: null,
         }));
     },
@@ -79,6 +85,7 @@ const actionMap = {
         return state.merge(Map({
             loading: true,
             error: null,
+            equipments: null,
             equipment: null
         }));
     },
@@ -86,6 +93,7 @@ const actionMap = {
         return state.merge(Map({
             loading: false,
             error: null,
+            equipments: null,
             equipment: action.data.equipment
         }));
     },
@@ -97,6 +105,7 @@ const actionMap = {
         return state.merge(Map({
             loading: false,
             error: error,
+            equipments: null,
             equipment: null
         }));
     },
@@ -104,6 +113,7 @@ const actionMap = {
         return state.merge(Map({
             loading: true,
             error: null,
+            equipments: null,
             equipment: null
         }));
     },
@@ -111,6 +121,7 @@ const actionMap = {
         return state.merge(Map({
             loading: false,
             error: null,
+            equipments: null,
             equipment: action.data.equipment
         }));
     },
@@ -122,19 +133,24 @@ const actionMap = {
         return state.merge(Map({
             loading: false,
             error: error,
+            equipments: null,
             equipment: null
         }));
     },
     [EQUIPMENTS_DELETE_REQUEST]: (state, action) => {
         return state.merge(Map({
             loading: true,
-            error: null
+            error: null,
+            equipments: null,
+            equipment: null
         }));
     },
     [EQUIPMENTS_DELETE_SUCCESS]: (state, action) => {
         return state.merge(Map({
             loading: false,
-            error: null
+            error: null,
+            equipments: null,
+            equipment: null
         }));
     },
     [EQUIPMENTS_DELETE_ERROR]: (state, action) => {
@@ -145,6 +161,8 @@ const actionMap = {
         return state.merge(Map({
             loading: false,
             error: error,
+            equipments: null,
+            equipment: null
         }));
     },
 };

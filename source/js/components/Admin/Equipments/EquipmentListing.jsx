@@ -2,13 +2,15 @@ import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { showPageLoader } from '../../../actions/pageLoader';
-import { equipmentListRequest, equipmentDeleteRequest } from '../../../actions/admin/equipments';
+import { equipmentListRequest, equipmentDeleteRequest, equipmentSelectOneRequest } from '../../../actions/admin/equipments';
 import { adminRouteCodes } from '../../../constants/adminRoutes';
 import ReactTable from 'react-table';
 import dateFormat from 'dateformat';
 import { FaPencil, FaTrash } from 'react-icons/lib/fa'
 import { SERVER_BASE_URL } from '../../../constants/consts';
 import DeleteConfirmation from '../Common/DeleteConfirmation';
+import _ from 'lodash';
+import { equipmentCategoryListRequest } from '../../../actions/admin/equipmentCategories';
 
 class EquipmentListing extends Component {
     constructor(props) {
@@ -16,7 +18,7 @@ class EquipmentListing extends Component {
         this.state = {
             selectedId: null,
             showDeleteModal: false,
-            deleteActionInit: false
+            deleteActionInit: false,
         }
     }
 
@@ -51,11 +53,14 @@ class EquipmentListing extends Component {
     }
 
     componentWillMount() {
+        const { dispatch } = this.props;
+        dispatch(showPageLoader());
+        dispatch(equipmentCategoryListRequest());
         this.updateList();
     }
 
     render() {
-        const { equipments } = this.props;
+        const { equipments, equipmentCategories } = this.props;
         const { showDeleteModal } = this.state;
         return (
             <div className="equipment-listing-wrapper">
@@ -81,6 +86,19 @@ class EquipmentListing extends Component {
                                             data={equipments}
                                             columns={[
                                                 {
+                                                    Header: "Image",
+                                                    accessor: "image",
+                                                    Cell: (row) => {
+                                                        return (
+                                                            <div className="table-listing-image-view-wrapper">
+                                                                <span>
+                                                                    <img src={SERVER_BASE_URL + row.value} alt="image" />
+                                                                </span>
+                                                            </div>
+                                                        );
+                                                    }
+                                                },
+                                                {
                                                     Header: "Created Date",
                                                     accessor: "createdAt",
                                                     Cell: (row) => {
@@ -96,14 +114,13 @@ class EquipmentListing extends Component {
                                                     accessor: "name"
                                                 },
                                                 {
-                                                    Header: "Image",
-                                                    accessor: "image",
+                                                    Header: "Category",
+                                                    accessor: "category_id",
                                                     Cell: (row) => {
+                                                        let cat = _.find(equipmentCategories, (o) => { return o._id === row.value })
                                                         return (
-                                                            <div className="table-listing-image-view-wrapper">
-                                                                <span>
-                                                                    <img src={SERVER_BASE_URL + row.value} alt="image" />
-                                                                </span>
+                                                            <div>
+                                                                {cat.name}
                                                             </div>
                                                         );
                                                     }
@@ -127,7 +144,7 @@ class EquipmentListing extends Component {
                                                     Cell: (row) => {
                                                         return (
                                                             <div className="actions-wrapper">
-                                                                <a href="javascript:void(0)" onClick={() => this.getDataToUpdate(row.value)}><FaPencil /></a>
+                                                                <NavLink to={`${adminRouteCodes.EQUIPMENTS_SAVE}/${row.value}`}><FaPencil /></NavLink>
                                                                 <a href="javascript:void(0)" onClick={() => this.confirmDelete(row.value)}><FaTrash /></a>
                                                             </div>
                                                         );
@@ -174,11 +191,13 @@ class EquipmentListing extends Component {
 }
 
 const mapStateToPros = (state) => {
-    const { adminEquipments } = state;
+    const { adminEquipments, adminEquipmentCategories } = state;
     return {
         loading: adminEquipments.get('loading'),
         error: adminEquipments.get('error'),
         equipments: adminEquipments.get('equipments'),
+        equipment: adminEquipments.get('equipment'),
+        equipmentCategories: adminEquipmentCategories.get('equipmentCategories'),
     };
 }
 

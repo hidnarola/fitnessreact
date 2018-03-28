@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
-import { NavLink } from 'react-router-dom';
+import { NavLink, withRouter } from 'react-router-dom';
 import Select from 'react-select';
 import { adminRouteCodes } from '../../../constants/adminRoutes';
 import Dropzone from 'react-dropzone'
 import { required } from '../../../formValidation/validationRules';
+import { showPageLoader, hidePageLoader } from '../../../actions/pageLoader';
+import { equipmentSelectOneRequest } from '../../../actions/admin/equipments';
+import _ from 'lodash';
+import { SERVER_BASE_URL } from '../../../constants/consts';
 
 const initialFormValues = {
     name: '',
@@ -14,14 +19,33 @@ const initialFormValues = {
     equipmentCategory: { value: '', label: 'Select category' },
 }
 
+const statusOptions = [
+    { value: true, label: 'Active' },
+    { value: false, label: 'Inactive' },
+]
+
 class EquipmentForm extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            selectDataInit: false,
+        }
+    }
     componentWillMount() {
-        const { initialize } = this.props;
-        initialize(Object.assign({}, initialFormValues));
+        const { initialize, match, dispatch } = this.props;
+        if (typeof match.params.id !== 'undefined') {
+            this.setState({
+                selectDataInit: true,
+            });
+            dispatch(showPageLoader());
+            dispatch(equipmentSelectOneRequest(match.params.id));
+        } else {
+            initialize(Object.assign({}, initialFormValues));
+        }
     }
 
     render() {
-        const { handleSubmit, equipmentCats } = this.props;
+        const { handleSubmit, equipmentCats, equipment } = this.props;
         return (
             <div className="equipment-form-wrapper">
                 <form onSubmit={handleSubmit} method="POST">
@@ -53,16 +77,18 @@ class EquipmentForm extends Component {
                                 name="image"
                                 component={MyDropzone}
                             />
+                            {equipment &&
+                                <div className="image-preview-wrapper">
+                                    <img src={SERVER_BASE_URL + equipment.image} />
+                                </div>
+                            }
                         </div>
                         <div className="col-md-12 mb-20">
                             <label htmlFor="">Status</label>
                             <Field
                                 name="status"
                                 component={MySelect}
-                                options={[
-                                    { value: true, label: 'Active' },
-                                    { value: false, label: 'Inactive' },
-                                ]}
+                                options={statusOptions}
                                 initialValue={true}
                                 validate={required}
                             />
@@ -88,6 +114,26 @@ class EquipmentForm extends Component {
                 </form>
             </div>
         );
+    }
+
+    componentDidUpdate() {
+        const { initialize, dispatch, loading, equipment, equipmentCats } = this.props;
+        const { selectDataInit } = this.state;
+        if (selectDataInit && !loading) {
+            this.setState({
+                selectDataInit: false,
+            });
+            dispatch(hidePageLoader());
+            let equipData = {
+                name: equipment.name,
+                description: equipment.description,
+                image: '',
+                savedImage: equipment.image,
+                status: _.find(statusOptions, (o) => (o.value === equipment.status)),
+                equipmentCategory: _.find(equipmentCats, (o) => (o.value === equipment.category_id)),
+            }
+            initialize(equipData);
+        }
     }
 }
 
@@ -134,6 +180,18 @@ const MyDropzone = (props) => {
         </div>
     );
 }
+
+const mapStateToProps = (state) => {
+    const { adminEquipments } = state;
+    return {
+        loading: adminEquipments.get('loading'),
+        error: adminEquipments.get('error'),
+        equipment: adminEquipments.get('equipment'),
+    }
+}
+
+EquipmentForm = withRouter(EquipmentForm);
+EquipmentForm = connect(mapStateToProps)(EquipmentForm);
 
 export default reduxForm({
     form: 'equipmentSaveForm',

@@ -15,7 +15,7 @@ class Equipments extends Component {
                 <section className="body-wrap">
                     <Switch>
                         <Route exact path={adminRouteCodes.EQUIPMENTS} component={EquipmentListing} />
-                        <Route exact path={adminRouteCodes.EQUIPMENTS_SAVE} component={EquipmentSave} />
+                        <Route path={`${adminRouteCodes.EQUIPMENTS_SAVE}/:id?`} component={EquipmentSave} />
                     </Switch>
                 </section>
             </div>
