@@ -46,7 +46,6 @@ function postAdminEquipmentData() {
         try {
             const equipmentData = action.equipmentData;
             const data = yield call(() => api.addEquipment(equipmentData));
-            console.log('sb-=-------------------------', data);
             yield put(equipmentAddSuccess(data));
         } catch (error) {
             yield put(equipmentAddError(error));

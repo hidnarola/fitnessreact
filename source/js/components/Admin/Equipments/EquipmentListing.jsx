@@ -118,9 +118,10 @@ class EquipmentListing extends Component {
                                                     accessor: "category_id",
                                                     Cell: (row) => {
                                                         let cat = _.find(equipmentCategories, (o) => { return o._id === row.value })
+                                                        let catName = (cat && cat.name) ? cat.name : '-----';
                                                         return (
                                                             <div>
-                                                                {cat.name}
+                                                                {catName}
                                                             </div>
                                                         );
                                                     }
