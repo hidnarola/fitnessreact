@@ -4,6 +4,7 @@ import AdminHeader from 'components/Admin/Template/AdminHeader';
 import AdminNav from 'components/Admin/Template/AdminNav';
 import { adminRouteCodes } from '../../constants/adminRoutes';
 import ExerciseListing from '../../components/Admin/Exercises/ExerciseListing';
+import ExerciseSave from '../../components/Admin/Exercises/ExerciseSave';
 
 class Exercises extends Component {
     render() {
@@ -14,6 +15,7 @@ class Exercises extends Component {
                 <section className="body-wrap">
                     <Switch>
                         <Route exact path={adminRouteCodes.EXERCISE} component={ExerciseListing} />
+                        <Route exact path={`${adminRouteCodes.EXERCISE_SAVE}/:id?`} component={ExerciseSave} />
                     </Switch>
                 </section>
             </div>
