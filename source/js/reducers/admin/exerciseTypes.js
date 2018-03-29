@@ -37,7 +37,7 @@ const actionMap = {
         return state.merge(Map({
             loading: false,
             error: null,
-            exerciseTypes: action.data.exerciseTypes,
+            exerciseTypes: action.data.exercise_types,
             exerciseType: null,
         }));
     },
@@ -66,7 +66,7 @@ const actionMap = {
             loading: false,
             error: null,
             exerciseTypes: null,
-            exerciseType: action.data.exerciseType,
+            exerciseType: action.data.exercise_type,
         }));
     },
     [EXERCISE_TYPES_SELECT_ONE_ERROR]: (state, action) => {
@@ -94,7 +94,7 @@ const actionMap = {
             loading: false,
             error: null,
             exerciseTypes: null,
-            exerciseType: action.data.exerciseType
+            exerciseType: action.data.exercise_type
         }));
     },
     [EXERCISE_TYPES_ADD_ERROR]: (state, action) => {
@@ -122,7 +122,7 @@ const actionMap = {
             loading: false,
             error: null,
             exerciseTypes: null,
-            exerciseType: action.data.exerciseType
+            exerciseType: action.data.exercise_type
         }));
     },
     [EXERCISE_TYPES_UPDATE_ERROR]: (state, action) => {

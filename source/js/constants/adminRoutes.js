@@ -11,6 +11,7 @@ export const adminRouteCodes = {
     RECIPES_SAVE: `${adminRootRoute}/recipes/save`,
 
     EXERCISE: `${adminRootRoute}/exercise`,
+    EXERCISE_SAVE: `${adminRootRoute}/exercise/save`,
 
     EQUIPMENTS: `${adminRootRoute}/equipments`,
     EQUIPMENTS_SAVE: `${adminRootRoute}/equipments/save`,
