@@ -13,6 +13,7 @@ import adminEquipmentSagas from 'sagas/admin/equipments';
 import adminEquipmentCategorySagas from 'sagas/admin/equipmentCategories';
 import adminExerciseSagas from 'sagas/admin/exercises';
 import adminBodyPartSagas from 'sagas/admin/bodyParts';
+import adminExerciseTypeSagas from 'sagas/admin/exerciseTypes';
 
 export default function* rootSaga() {
   yield all([
@@ -29,5 +30,6 @@ export default function* rootSaga() {
     ...adminEquipmentCategorySagas,
     ...adminExerciseSagas,
     ...adminBodyPartSagas,
+    ...adminExerciseTypeSagas,
   ]);
 }
