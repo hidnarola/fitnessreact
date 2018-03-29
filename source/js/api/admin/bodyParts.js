@@ -1,7 +1,7 @@
 import { fetchResource, postFormData, putFormData } from '..';
 import { extraHeaders } from '../../helpers/funs';
 
-const requestUrl = 'admin/exercise';
+const requestUrl = 'admin/bodypart';
 
 function getBodyParts() {
     let headers = extraHeaders();

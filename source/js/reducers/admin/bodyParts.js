@@ -37,7 +37,7 @@ const actionMap = {
         return state.merge(Map({
             loading: false,
             error: null,
-            bodyParts: action.data.bodyParts,
+            bodyParts: action.data.bodyparts,
             bodyPart: null,
         }));
     },
@@ -66,7 +66,7 @@ const actionMap = {
             loading: false,
             error: null,
             bodyParts: null,
-            bodyPart: action.data.bodyPart,
+            bodyPart: action.data.bodypart,
         }));
     },
     [BODY_PARTS_SELECT_ONE_ERROR]: (state, action) => {
@@ -94,7 +94,7 @@ const actionMap = {
             loading: false,
             error: null,
             bodyParts: null,
-            bodyPart: action.data.bodyPart
+            bodyPart: action.data.bodypart
         }));
     },
     [BODY_PARTS_ADD_ERROR]: (state, action) => {
@@ -122,7 +122,7 @@ const actionMap = {
             loading: false,
             error: null,
             bodyParts: null,
-            bodyPart: action.data.bodyPart
+            bodyPart: action.data.bodypart
         }));
     },
     [BODY_PARTS_UPDATE_ERROR]: (state, action) => {

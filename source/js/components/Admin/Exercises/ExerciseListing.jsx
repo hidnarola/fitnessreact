@@ -7,14 +7,20 @@ import dateFormat from 'dateformat';
 import { adminRouteCodes } from '../../../constants/adminRoutes';
 import { FaPencil, FaTrash } from 'react-icons/lib/fa';
 import ReactTable from 'react-table';
+import { bodyPartListRequest } from '../../../actions/admin/bodyParts';
+import _ from 'lodash';
 
 class ExerciseListing extends Component {
+    constructor(props) {
+        super(props);
+    }
+
     componentWillMount() {
         this.updateList();
     }
 
     render() {
-        const { exericses } = this.props;
+        const { exericses, bodyParts } = this.props;
         return (
             <div className="exercise-listing-wrapper">
                 <div className="body-head space-btm-45 d-flex justify-content-start">
@@ -51,14 +57,61 @@ class ExerciseListing extends Component {
                                                 {
                                                     Header: "Main Muscle",
                                                     accessor: "mainMuscleGroup",
+                                                    Cell: (row) => {
+                                                        let mainMuscle = _.find(bodyParts, (o) => {
+                                                            if (o._id === row.value) {
+                                                                return o
+                                                            }
+                                                            return '-----';
+                                                        });
+                                                        return (
+                                                            <div className="main-muscle-group-wrapper">
+                                                                {mainMuscle.bodypart}
+                                                            </div>
+                                                        );
+                                                    }
                                                 },
                                                 {
                                                     Header: "Other Muscle",
                                                     accessor: "otherMuscleGroup",
+                                                    Cell: (row) => {
+                                                        let otherMuscles = [];
+                                                        row.value.map((val, i) => {
+                                                            const _id = val;
+                                                            const musObj = _.find(bodyParts, ['_id', _id]);
+                                                            otherMuscles.push(musObj);
+                                                        });
+                                                        return (
+                                                            <div>
+                                                                {otherMuscles &&
+                                                                    otherMuscles.map((m, i) => (m.bodypart)).join(',')
+                                                                }
+                                                                {otherMuscles && otherMuscles.length <= 0 && <span>-----</span>}
+                                                                {!otherMuscles && <span>-----</span>}
+                                                            </div>
+                                                        );
+                                                    }
                                                 },
                                                 {
                                                     Header: "Detailed Muscle",
                                                     accessor: "detailedMuscleGroup",
+                                                    Cell: (row) => {
+                                                        let otherMuscles = [];
+                                                        row.value.map((val, i) => {
+                                                            const _id = val;
+                                                            const musObj = _.find(bodyParts, ['_id', _id]);
+                                                            otherMuscles.push(musObj);
+                                                        });
+                                                        return (
+                                                            <div>
+                                                                {otherMuscles &&
+                                                                    otherMuscles.map((m, i) => (m.bodypart)).join(',')
+                                                                }
+                                                                {otherMuscles && otherMuscles.length <= 0 && <span>-----</span>}
+                                                                {!otherMuscles && <span>-----</span>}
+                                                            </div>
+                                                        );
+                                                    }
                                                 },
                                                 {
                                                     Header: "Mechanics",
@@ -108,17 +161,21 @@ class ExerciseListing extends Component {
     updateList = () => {
         const { dispatch } = this.props;
         dispatch(showPageLoader());
+        dispatch(bodyPartListRequest());
         dispatch(exerciseListRequest());
     }
     // ----END funs -----
 }
 
 const mapStateToProps = (state) => {
-    const { adminExercises } = state;
+    const { adminExercises, adminBodyParts } = state;
     return {
         loading: adminExercises.get('loading'),
         error: adminExercises.get('error'),
         exericses: adminExercises.get('exercises'),
+        bodyPartsLoading: adminBodyParts.get('loading'),
+        bodyPartsError: adminBodyParts.get('error'),
+        bodyParts: adminBodyParts.get('bodyParts'),
     }
 }
 
