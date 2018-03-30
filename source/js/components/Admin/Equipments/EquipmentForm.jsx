@@ -58,7 +58,6 @@ class EquipmentForm extends Component {
                                 type="text"
                                 placeholder="Name"
                                 className="form-control"
-                                validate={required}
                             />
                         </div>
                         <div className="col-md-12 mb-20">
@@ -68,7 +67,6 @@ class EquipmentForm extends Component {
                                 component="textarea"
                                 placeholder="Description"
                                 className="form-control"
-                                validate={required}
                             />
                         </div>
                         <div className="col-md-12 mb-20">
@@ -90,7 +88,6 @@ class EquipmentForm extends Component {
                                 component={MySelect}
                                 options={statusOptions}
                                 initialValue={true}
-                                validate={required}
                             />
                         </div>
                         <div className="col-md-12 mb-20">
@@ -101,7 +98,6 @@ class EquipmentForm extends Component {
                                 options={equipmentCats}
                                 placeholder="Select category"
                                 initialValue=''
-                                validate={required}
                             />
                         </div>
                         <div className="col-md-12 mb-20">

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { showPageLoader } from '../../../actions/pageLoader';
-import { exerciseListRequest } from '../../../actions/admin/exercises';
+import { exerciseListRequest, exerciseDeleteRequest } from '../../../actions/admin/exercises';
 import dateFormat from 'dateformat';
 import { adminRouteCodes } from '../../../constants/adminRoutes';
 import { FaPencil, FaTrash } from 'react-icons/lib/fa';
@@ -11,10 +11,16 @@ import { bodyPartListRequest } from '../../../actions/admin/bodyParts';
 import _ from 'lodash';
 import { exerciseTypeListRequest } from '../../../actions/admin/exerciseTypes';
 import { EXERCISE_MECHANICS_COMPOUND, EXERCISE_MECHANICS_ISOLATION, EXERCISE_DIFFICULTY_BEGINNER, EXERCISE_DIFFICULTY_INTERMEDIATE, EXERCISE_DIFFICULTY_EXPERT, exerciseMechanicsObj, exerciseDifficultyLevelObj } from '../../../constants/consts';
+import DeleteConfirmation from '../Common/DeleteConfirmation';
 
 class ExerciseListing extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            selectedId: null,
+            showDeleteModal: false,
+            deleteActionInit: false
+        }
     }
 
     componentWillMount() {
@@ -23,6 +29,7 @@ class ExerciseListing extends Component {
 
     render() {
         const { exericses, bodyParts, exerciseTypes } = this.props;
+        const { showDeleteModal } = this.state;
         return (
             <div className="exercise-listing-wrapper">
                 <div className="body-head space-btm-45 d-flex justify-content-start">
@@ -63,59 +70,66 @@ class ExerciseListing extends Component {
                                                     Header: "Main Muscle",
                                                     accessor: "mainMuscleGroup",
                                                     Cell: (row) => {
-                                                        let mainMuscle = _.find(bodyParts, (o) => {
-                                                            if (o._id === row.value) {
-                                                                return o
-                                                            }
-                                                            return '-----';
-                                                        });
-                                                        return (
-                                                            <div className="main-muscle-group-wrapper">
-                                                                {mainMuscle.bodypart}
-                                                            </div>
-                                                        );
+                                                        if (bodyParts) {
+                                                            let mainMuscle = _.find(bodyParts, (o) => {
+                                                                if (o._id === row.value) {
+                                                                    return o
+                                                                }
+                                                                return '-----';
+                                                            });
+                                                            return (
+                                                                <div className="main-muscle-group-wrapper">
+                                                                    {mainMuscle.bodypart}
+                                                                </div>
+                                                            );
+                                                        }
                                                     }
                                                 },
                                                 {
                                                     Header: "Other Muscle",
                                                     accessor: "otherMuscleGroup",
                                                     Cell: (row) => {
-                                                        let otherMuscles = [];
-                                                        row.value.map((val, i) => {
-                                                            const _id = val;
-                                                            const musObj = _.find(bodyParts, ['_id', _id]);
-                                                            otherMuscles.push(musObj);
-                                                        });
-                                                        return (
-                                                            <div>
-                                                                {otherMuscles &&
-                                                                    otherMuscles.map((m, i) => (m.bodypart)).join(',')
-                                                                }
-                                                                {otherMuscles && otherMuscles.length <= 0 && <span>-----</span>}
-                                                                {!otherMuscles && <span>-----</span>}
-                                                            </div>
-                                                        );
+                                                        if (bodyParts) {
+                                                            let otherMuscles = [];
+                                                            row.value.map((val, i) => {
+                                                                const _id = val;
+                                                                const musObj = _.find(bodyParts, ['_id', _id]);
+                                                                otherMuscles.push(musObj);
+                                                            });
+                                                            return (
+                                                                <div>
+                                                                    {otherMuscles &&
+                                                                        otherMuscles.map((m, i) => (m.bodypart)).join(',')
+                                                                    }
+                                                                    {otherMuscles && otherMuscles.length <= 0 && <span>-----</span>}
+                                                                    {!otherMuscles && <span>-----</span>}
+                                                                </div>
+                                                            );
+                                                        }
                                                     }
                                                 },
                                                 {
                                                     Header: "Detailed Muscle",
                                                     accessor: "detailedMuscleGroup",
                                                     Cell: (row) => {
-                                                        let otherMuscles = [];
-                                                        row.value.map((val, i) => {
-                                                            const _id = val;
-                                                            const musObj = _.find(bodyParts, ['_id', _id]);
-                                                            otherMuscles.push(musObj);
-                                                        });
-                                                        return (
-                                                            <div>
-                                                                {otherMuscles &&
-                                                                    otherMuscles.map((m, i) => (m.bodypart)).join(',')
-                                                                }
-                                                                {otherMuscles && otherMuscles.length <= 0 && <span>-----</span>}
-                                                                {!otherMuscles && <span>-----</span>}
-                                                            </div>
-                                                        );
+                                                        if (bodyParts) {
+
+                                                            let otherMuscles = [];
+                                                            row.value.map((val, i) => {
+                                                                const _id = val;
+                                                                const musObj = _.find(bodyParts, ['_id', _id]);
+                                                                otherMuscles.push(musObj);
+                                                            });
+                                                            return (
+                                                                <div>
+                                                                    {otherMuscles &&
+                                                                        otherMuscles.map((m, i) => (m.bodypart)).join(',')
+                                                                    }
+                                                                    {otherMuscles && otherMuscles.length <= 0 && <span>-----</span>}
+                                                                    {!otherMuscles && <span>-----</span>}
+                                                                </div>
+                                                            );
+                                                        }
                                                     }
                                                 },
                                                 {
@@ -171,7 +185,7 @@ class ExerciseListing extends Component {
                                                         return (
                                                             <div className="actions-wrapper">
                                                                 <NavLink to={`${adminRouteCodes.EXERCISE}/${row.value}`}><FaPencil /></NavLink>
-                                                                <a href="javascript:void(0)"><FaTrash /></a>
+                                                                <a href="javascript:void(0)" onClick={() => this.confirmDelete(row.value)}><FaTrash /></a>
                                                             </div>
                                                         );
                                                     }
@@ -192,8 +206,27 @@ class ExerciseListing extends Component {
                         </div>
                     </div>
                 </div>
-            </div >
+
+                <DeleteConfirmation
+                    show={showDeleteModal}
+                    handleClose={this.closeDeleteModal}
+                    handleYes={this.handleDelete}
+                />
+            </div>
         );
+    }
+
+    componentDidUpdate() {
+        const { loading } = this.props;
+        const { deleteActionInit } = this.state;
+        if (deleteActionInit && !loading) {
+            this.setState({
+                selectedId: null,
+                showDeleteModal: false,
+                deleteActionInit: false
+            });
+            this.updateList();
+        }
     }
 
     // ----Start funs -----
@@ -203,6 +236,30 @@ class ExerciseListing extends Component {
         dispatch(bodyPartListRequest());
         dispatch(exerciseTypeListRequest());
         dispatch(exerciseListRequest());
+    }
+
+    confirmDelete = (_id) => {
+        this.setState({
+            selectedId: _id,
+            showDeleteModal: true
+        });
+    }
+
+    closeDeleteModal = () => {
+        this.setState({
+            selectedId: null,
+            showDeleteModal: false
+        });
+    }
+
+    handleDelete = () => {
+        const { selectedId } = this.state;
+        const { dispatch } = this.props;
+        dispatch(showPageLoader());
+        this.setState({
+            deleteActionInit: true
+        });
+        dispatch(exerciseDeleteRequest(selectedId));
     }
     // ----END funs -----
 }

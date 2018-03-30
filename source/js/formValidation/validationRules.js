@@ -1,5 +1,20 @@
+import _ from 'lodash';
 export const required = (value) => {
-    if (typeof value !== 'undefined' && !value.trim()) {
+    if (!value) {
+        return "Field is required";
+    }
+    return undefined;
+}
+
+export const requiredReactSelect = (value) => {
+    if (!value || !value.value) {
+        return "Field is required";
+    }
+    return undefined;
+}
+
+export const requiredReactSelectMulti = (value) => {
+    if (!value || !_.isArray(value) || _.isEmpty(value)) {
         return "Field is required";
     }
     return undefined;
