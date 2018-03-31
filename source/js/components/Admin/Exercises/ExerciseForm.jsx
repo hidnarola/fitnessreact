@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { showPageLoader, hidePageLoader } from '../../../actions/pageLoader';
 import { bodyPartListRequest } from '../../../actions/admin/bodyParts';
@@ -30,6 +30,8 @@ import {
 } from '../../../constants/consts';
 import ExerciseSteps from './ExerciseSteps';
 import { adminRouteCodes } from '../../../constants/adminRoutes';
+import { exerciseSelectOneRequest } from '../../../actions/admin/exercises';
+import _ from 'lodash';
 
 const maxLength15 = maxLength(15);
 const minLength2 = minLength(2);
@@ -47,12 +49,13 @@ class ExerciseForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            initPageDataLoad: false
+            initPageDataLoad: false,
+            selectDataInit: false
         };
     }
 
     componentWillMount() {
-        const { dispatch } = this.props;
+        const { dispatch, match } = this.props;
         this.setState({
             initPageDataLoad: true
         });
@@ -60,10 +63,16 @@ class ExerciseForm extends Component {
         dispatch(bodyPartListRequest());
         dispatch(exerciseTypeListRequest());
         dispatch(equipmentListRequest());
+        if (typeof match.params.id !== 'undefined') {
+            this.setState({
+                selectDataInit: true
+            });
+            dispatch(exerciseSelectOneRequest(match.params.id))
+        }
     }
 
     render() {
-        const { bodyParts, equipments, exerciseTypes, handleSubmit } = this.props;
+        const { bodyParts, equipments, exerciseTypes, handleSubmit, exercise } = this.props;
         const bodyPartsOptions = prepareDropdownOptionsData(bodyParts, '_id', 'bodypart');
         const equipmentsOptions = prepareDropdownOptionsData(equipments, '_id', 'name');
         const exerciseTypesOptions = prepareDropdownOptionsData(exerciseTypes, '_id', 'name');
@@ -172,6 +181,14 @@ class ExerciseForm extends Component {
                                 component={FileField_Dropzone}
                                 multiple={true}
                             />
+                            {exercise &&
+                                <div className="image-preview-wrapper">
+                                    {exercise.images.map((img, index) => (
+                                        <img src={SERVER_BASE_URL + img} key={index} />
+                                    ))
+                                    }
+                                </div>
+                            }
                             <FieldArray
                                 name="steps"
                                 component={ExerciseSteps}
@@ -190,13 +207,72 @@ class ExerciseForm extends Component {
     }
 
     componentDidUpdate() {
-        const { initPageDataLoad } = this.state;
-        const { bodyPartsLoading, equipmentsLoading, exerciseTypesLoading, dispatch } = this.props;
-        if (initPageDataLoad && !bodyPartsLoading && !equipmentsLoading && !exerciseTypesLoading) {
-            this.setState({
-                initPageDataLoad: false
-            });
-            dispatch(hidePageLoader());
+        const { initPageDataLoad, selectDataInit } = this.state;
+        const {
+            bodyPartsLoading,
+            equipmentsLoading,
+            exerciseTypesLoading,
+            loading,
+            dispatch,
+            match,
+            initialize,
+            exercise,
+            bodyParts,
+            equipments,
+            exerciseTypes
+        } = this.props;
+        if (typeof match.params.id !== 'undefined') {
+            if (selectDataInit && initPageDataLoad && !bodyPartsLoading && !equipmentsLoading && !exerciseTypesLoading && !loading) {
+                const bodyPartsOptions = prepareDropdownOptionsData(bodyParts, '_id', 'bodypart');
+                const equipmentsOptions = prepareDropdownOptionsData(equipments, '_id', 'name');
+                const exerciseTypesOptions = prepareDropdownOptionsData(exerciseTypes, '_id', 'name');
+                this.setState({
+                    selectDataInit: false,
+                    initPageDataLoad: false,
+                });
+                dispatch(hidePageLoader());
+                let otherMuscle = _.map(exercise.otherMuscleGroup, (id) => {
+                    return _.find(bodyPartsOptions, (o) => {
+                        return (o.value === id);
+                    })
+                });
+                let detailedMuscle = _.map(exercise.detailedMuscleGroup, (id) => {
+                    return _.find(bodyPartsOptions, (o) => {
+                        return (o.value === id);
+                    })
+                });
+                let equips = _.map(exercise.equipments, (id) => {
+                    return _.find(equipmentsOptions, (o) => {
+                        return (o.value === id);
+                    })
+                });
+                let steps = _.map(exercise.steps, (name) => {
+                    return {
+                        name
+                    }
+                });
+                let exerciseData = {
+                    name: exercise.name,
+                    description: exercise.description,
+                    main_muscle: _.find(bodyPartsOptions, (o) => { return (o.value === exercise.mainMuscleGroup) }),
+                    other_muscle: otherMuscle,
+                    detailed_muscle: detailedMuscle,
+                    type: _.find(exerciseTypesOptions, (o) => { return (o.value === exercise.type) }),
+                    mechanics: _.find(mechanicsOptions, (o) => { return (o.value === exercise.mechanics) }),
+                    equipments: equips,
+                    difficulty_level: _.find(difficultyLevelOptions, (o) => { return (o.value === exercise.difficltyLevel) }),
+                    steps: steps,
+                };
+                initialize(exerciseData);
+            }
+        } else {
+            if (initPageDataLoad && !bodyPartsLoading && !equipmentsLoading && !exerciseTypesLoading) {
+                this.setState({
+                    selectDataInit: false,
+                    initPageDataLoad: false,
+                });
+                dispatch(hidePageLoader());
+            }
         }
     }
 }
@@ -207,19 +283,24 @@ ExerciseForm = reduxForm({
 })(ExerciseForm)
 
 const mapStateToProps = (state) => {
-    const { adminBodyParts, adminEquipments, adminExerciseTypes } = state;
+    const { adminBodyParts, adminEquipments, adminExerciseTypes, adminExercises } = state;
     return {
+        loading: adminExercises.get('loading'),
         bodyPartsLoading: adminBodyParts.get('loading'),
         equipmentsLoading: adminEquipments.get('loading'),
         exerciseTypesLoading: adminExerciseTypes.get('loading'),
+        error: adminExercises.get('error'),
         bodyPartsError: adminBodyParts.get('error'),
         equipmentsError: adminEquipments.get('error'),
         exerciseTypesError: adminExerciseTypes.get('error'),
+        exercise: adminExercises.get('exercise'),
         bodyParts: adminBodyParts.get('bodyParts'),
         equipments: adminEquipments.get('equipments'),
         exerciseTypes: adminExerciseTypes.get('exerciseTypes'),
     };
 }
+
+ExerciseForm = withRouter(ExerciseForm);
 
 export default connect(
     mapStateToProps,

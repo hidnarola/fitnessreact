@@ -184,7 +184,7 @@ class ExerciseListing extends Component {
                                                     Cell: (row) => {
                                                         return (
                                                             <div className="actions-wrapper">
-                                                                <NavLink to={`${adminRouteCodes.EXERCISE}/${row.value}`}><FaPencil /></NavLink>
+                                                                <NavLink to={`${adminRouteCodes.EXERCISE_SAVE}/${row.value}`}><FaPencil /></NavLink>
                                                                 <a href="javascript:void(0)" onClick={() => this.confirmDelete(row.value)}><FaTrash /></a>
                                                             </div>
                                                         );

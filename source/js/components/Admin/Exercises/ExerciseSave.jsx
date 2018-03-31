@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import ExerciseForm from './ExerciseForm';
 import _ from 'lodash';
 import { showPageLoader, hidePageLoader } from '../../../actions/pageLoader';
-import { exerciseAddRequest } from '../../../actions/admin/exercises';
+import { exerciseAddRequest, exerciseUpdateRequest } from '../../../actions/admin/exercises';
 import { adminRouteCodes } from '../../../constants/adminRoutes';
 
 class ExerciseSave extends Component {
@@ -15,7 +15,7 @@ class ExerciseSave extends Component {
     }
 
     handleSubmit = (data) => {
-        const { dispatch } = this.props;
+        const { dispatch, match } = this.props;
         let exerciseData = {
             name: data.name,
             description: data.description,
@@ -29,7 +29,7 @@ class ExerciseSave extends Component {
             steps: JSON.stringify(_.map(data.steps, 'name')),
             images: data.images,
         }
-        
+
         var formData = new FormData();
         formData.append('name', exerciseData.name);
         formData.append('description', exerciseData.description);
@@ -48,7 +48,11 @@ class ExerciseSave extends Component {
             saveActionInit: true
         });
         dispatch(showPageLoader());
-        dispatch(exerciseAddRequest(formData))
+        if (typeof match.params.id !== 'undefined') {
+            dispatch(exerciseUpdateRequest(match.params.id, formData))
+        } else {
+            dispatch(exerciseAddRequest(formData))
+        }
     }
     render() {
         return (
