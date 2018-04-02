@@ -14,7 +14,10 @@ import {
     EXERCISES_SELECT_ONE_REQUEST,
     exerciseUpdateSuccess,
     exerciseUpdateError,
-    EXERCISES_UPDATE_REQUEST
+    EXERCISES_UPDATE_REQUEST,
+    exerciseFilterSuccess,
+    exerciseFilterError,
+    EXERCISES_FILTER_REQUEST
 } from "../../actions/admin/exercises";
 import api from 'api/admin/exercises';
 
@@ -78,12 +81,25 @@ function deleteAdminExerciseData() {
     }
 }
 
+function filterAdminExerciseData() {
+    return function* (action) {
+        try {
+            const filterData = action.filterData;
+            const data = yield call(() => api.filterExercise(filterData));
+            yield put(exerciseFilterSuccess(data));
+        } catch (error) {
+            yield put(exerciseFilterError(error));
+        }
+    }
+}
+
 export function* watchAdminExercises() {
     yield takeLatest(EXERCISES_LIST_REQUEST, getAdminExercisesData());
     yield takeLatest(EXERCISES_SELECT_ONE_REQUEST, getAdminExerciseData());
     yield takeLatest(EXERCISES_ADD_REQUEST, postAdminExerciseData());
     yield takeLatest(EXERCISES_UPDATE_REQUEST, putAdminExerciseData());
     yield takeLatest(EXERCISES_DELETE_REQUEST, deleteAdminExerciseData());
+    yield takeLatest(EXERCISES_FILTER_REQUEST, filterAdminExerciseData());
 }
 
 export default [

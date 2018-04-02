@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { showPageLoader } from '../../../actions/pageLoader';
-import { exerciseListRequest, exerciseDeleteRequest, exerciseFilterRequest } from '../../../actions/admin/exercises';
+import { exerciseListRequest, exerciseDeleteRequest } from '../../../actions/admin/exercises';
 import dateFormat from 'dateformat';
 import { adminRouteCodes } from '../../../constants/adminRoutes';
 import { FaPencil, FaTrash } from 'react-icons/lib/fa';
@@ -12,7 +12,6 @@ import _ from 'lodash';
 import { exerciseTypeListRequest } from '../../../actions/admin/exerciseTypes';
 import { EXERCISE_MECHANICS_COMPOUND, EXERCISE_MECHANICS_ISOLATION, EXERCISE_DIFFICULTY_BEGINNER, EXERCISE_DIFFICULTY_INTERMEDIATE, EXERCISE_DIFFICULTY_EXPERT, exerciseMechanicsObj, exerciseDifficultyLevelObj } from '../../../constants/consts';
 import DeleteConfirmation from '../Common/DeleteConfirmation';
-import DTable from '../Common/DTable';
 
 class ExerciseListing extends Component {
     constructor(props) {
@@ -20,8 +19,7 @@ class ExerciseListing extends Component {
         this.state = {
             selectedId: null,
             showDeleteModal: false,
-            deleteActionInit: false,
-            filterData: {},
+            deleteActionInit: false
         }
     }
 
@@ -29,14 +27,8 @@ class ExerciseListing extends Component {
         this.updateList();
     }
 
-    filterData = (filterData) => {
-        this.setState({ filterData: filterData }, () => {
-            this.updateList();
-        });
-    }
-
     render() {
-        const { exericses, bodyParts, exerciseTypes, filteredExercises } = this.props;
+        const { exericses, bodyParts, exerciseTypes } = this.props;
         const { showDeleteModal } = this.state;
         return (
             <div className="exercise-listing-wrapper">
@@ -57,13 +49,12 @@ class ExerciseListing extends Component {
                             </div>
                             <div className="row d-flex whitebox-body">
                                 <div className="col-md-12">
-                                    <DTable
-                                        data={filteredExercises}
+                                    <ReactTable
+                                        data={exericses}
                                         columns={[
                                             {
                                                 Header: "Created Date",
                                                 accessor: "createdAt",
-                                                id: "createdAt",
                                                 Cell: (row) => {
                                                     return (
                                                         <div>{dateFormat(row.value, 'mm/dd/yyyy')}</div>
@@ -72,13 +63,11 @@ class ExerciseListing extends Component {
                                             },
                                             {
                                                 Header: "Name",
-                                                accessor: "name",
-                                                id: "name",
+                                                accessor: "name"
                                             },
                                             {
                                                 Header: "Main Muscle",
                                                 accessor: "mainMuscleGroup",
-                                                id: "mainMuscleGroup",
                                                 Cell: (row) => {
                                                     if (bodyParts) {
                                                         let mainMuscle = _.find(bodyParts, (o) => {
@@ -98,7 +87,6 @@ class ExerciseListing extends Component {
                                             {
                                                 Header: "Other Muscle",
                                                 accessor: "otherMuscleGroup",
-                                                id: "otherMuscleGroup",
                                                 Cell: (row) => {
                                                     if (bodyParts) {
                                                         let otherMuscles = [];
@@ -122,7 +110,6 @@ class ExerciseListing extends Component {
                                             {
                                                 Header: "Detailed Muscle",
                                                 accessor: "detailedMuscleGroup",
-                                                id: "detailedMuscleGroup",
                                                 Cell: (row) => {
                                                     if (bodyParts) {
 
@@ -147,7 +134,6 @@ class ExerciseListing extends Component {
                                             {
                                                 Header: "Mechanics",
                                                 accessor: "mechanics",
-                                                id: "mechanics",
                                                 Cell: (row) => {
                                                     let mech = '-----';
                                                     if (_.has(exerciseMechanicsObj, row.value)) {
@@ -163,7 +149,6 @@ class ExerciseListing extends Component {
                                             {
                                                 Header: "Difficlty Level",
                                                 accessor: "difficltyLevel",
-                                                id: "difficltyLevel",
                                                 Cell: (row) => {
                                                     let difficultyLevel = '-----';
                                                     if (_.has(exerciseDifficultyLevelObj, row.value)) {
@@ -179,7 +164,6 @@ class ExerciseListing extends Component {
                                             {
                                                 Header: "Type",
                                                 accessor: "type",
-                                                id: "type",
                                                 Cell: (row) => {
                                                     let type = '-----';
                                                     let typeObj = _.find(exerciseTypes, ['_id', row.value]);
@@ -196,7 +180,6 @@ class ExerciseListing extends Component {
                                             {
                                                 Header: "Actions",
                                                 accessor: "_id",
-                                                id: "_id",
                                                 filterable: false,
                                                 sortable: false,
                                                 Cell: (row) => {
@@ -209,7 +192,9 @@ class ExerciseListing extends Component {
                                                 }
                                             },
                                         ]}
-                                        filterDTable={this.filterData}
+                                        defaultPageSize={10}
+                                        filterable
+                                        className="-striped -highlight"
                                     />
                                 </div>
                             </div>
@@ -242,12 +227,10 @@ class ExerciseListing extends Component {
     // ----Start funs -----
     updateList = () => {
         const { dispatch } = this.props;
-        const { filterData } = this.state;
-        console.log(this.state);
         dispatch(showPageLoader());
         dispatch(bodyPartListRequest());
         dispatch(exerciseTypeListRequest());
-        dispatch(exerciseFilterRequest(filterData));
+        dispatch(exerciseListRequest());
     }
 
     confirmDelete = (_id) => {
@@ -282,8 +265,6 @@ const mapStateToProps = (state) => {
         loading: adminExercises.get('loading'),
         error: adminExercises.get('error'),
         exericses: adminExercises.get('exercises'),
-        filteredExercises: adminExercises.get('filteredExercises'),
-        filteredTotalPages: adminExercises.get('filteredTotalPages'),
         bodyPartsLoading: adminBodyParts.get('loading'),
         bodyPartsError: adminBodyParts.get('error'),
         bodyParts: adminBodyParts.get('bodyParts'),

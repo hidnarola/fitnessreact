@@ -10,7 +10,7 @@ class ExerciseSave extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            saveActionInit: false
+            saveActionInit: false,
         }
     }
 
@@ -28,6 +28,7 @@ class ExerciseSave extends Component {
             difficltyLevel: _.get(data.difficulty_level, 'value'),
             steps: JSON.stringify(_.map(data.steps, 'name')),
             images: data.images,
+            deletedImages: data.deleted_images
         }
 
         var formData = new FormData();
@@ -42,8 +43,11 @@ class ExerciseSave extends Component {
         formData.append('difficltyLevel', exerciseData.difficltyLevel);
         formData.append('steps', exerciseData.steps);
         if (exerciseData.images) {
-            formData.append('images', exerciseData.images);
+            _.forEach(exerciseData.images, (file) => {
+                formData.append('images', file);
+            });
         }
+        formData.append('delete_images', exerciseData.deletedImages);
         this.setState({
             saveActionInit: true
         });
@@ -54,6 +58,7 @@ class ExerciseSave extends Component {
             dispatch(exerciseAddRequest(formData))
         }
     }
+
     render() {
         return (
             <div className="exercise-save-wrapper">

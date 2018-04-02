@@ -43,10 +43,16 @@ function deleteExercise(_id) {
     return fetchResource((requestUrl + '/' + _id), options);
 }
 
+function filterExercise(filterData) {
+    let headers = extraHeaders();
+    return postFormData(requestUrl + '/filter', filterData, headers);
+}
+
 export default {
     getExercises,
     getExercise,
     addExercise,
     updateExercise,
-    deleteExercise
+    deleteExercise,
+    filterExercise
 }

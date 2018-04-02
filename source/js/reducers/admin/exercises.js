@@ -14,14 +14,19 @@ import {
     EXERCISES_SELECT_ONE_ERROR,
     EXERCISES_UPDATE_REQUEST,
     EXERCISES_UPDATE_SUCCESS,
-    EXERCISES_UPDATE_ERROR
+    EXERCISES_UPDATE_ERROR,
+    EXERCISES_FILTER_REQUEST,
+    EXERCISES_FILTER_SUCCESS,
+    EXERCISES_FILTER_ERROR
 } from "../../actions/admin/exercises";
 
 const initialState = Map({
     loading: false,
     error: null,
     exercise: null,
-    exercises: null,
+    exercises: [],
+    filteredExercises: [],
+    filteredTotalPages: 0,
 });
 
 const actionMap = {
@@ -29,8 +34,10 @@ const actionMap = {
         return state.merge(Map({
             loading: true,
             error: null,
-            exercises: null,
+            exercises: [],
             exercise: null,
+            filteredExercises: [],
+            filteredTotalPages: 0,
         }));
     },
     [EXERCISES_LIST_SUCCESS]: (state, action) => {
@@ -39,6 +46,8 @@ const actionMap = {
             error: null,
             exercises: action.data.exercises,
             exercise: null,
+            filteredExercises: [],
+            filteredTotalPages: 0,
         }));
     },
     [EXERCISES_LIST_ERROR]: (state, action) => {
@@ -49,24 +58,64 @@ const actionMap = {
         return state.merge(Map({
             loading: false,
             error: error,
-            exercises: null,
+            exercises: [],
             exercise: null,
+            filteredExercises: [],
+            filteredTotalPages: 0,
+        }));
+    },
+    [EXERCISES_FILTER_REQUEST]: (state, action) => {
+        return state.merge(Map({
+            loading: true,
+            error: null,
+            exercises: [],
+            exercise: null,
+            filteredExercises: [],
+            filteredTotalPages: 0,
+        }));
+    },
+    [EXERCISES_FILTER_SUCCESS]: (state, action) => {
+        return state.merge(Map({
+            loading: false,
+            error: null,
+            exercises: [],
+            exercise: null,
+            filteredExercises: action.data.filtered_exercises,
+            filteredTotalPages: action.data.filtered_total_pages,
+        }));
+    },
+    [EXERCISES_FILTER_ERROR]: (state, action) => {
+        let error = 'Server error';
+        if (action.error && action.error.response) {
+            error = action.error.response.message;
+        }
+        return state.merge(Map({
+            loading: false,
+            error: error,
+            exercises: [],
+            exercise: null,
+            filteredExercises: [],
+            filteredTotalPages: 0,
         }));
     },
     [EXERCISES_SELECT_ONE_REQUEST]: (state, action) => {
         return state.merge(Map({
             loading: true,
             error: null,
-            exercises: null,
+            exercises: [],
             exercise: null,
+            filteredExercises: [],
+            filteredTotalPages: 0,
         }));
     },
     [EXERCISES_SELECT_ONE_SUCCESS]: (state, action) => {
         return state.merge(Map({
             loading: false,
             error: null,
-            exercises: null,
+            exercises: [],
             exercise: action.data.exercise,
+            filteredExercises: [],
+            filteredTotalPages: 0,
         }));
     },
     [EXERCISES_SELECT_ONE_ERROR]: (state, action) => {
@@ -77,24 +126,30 @@ const actionMap = {
         return state.merge(Map({
             loading: false,
             error: error,
-            exercises: null,
+            exercises: [],
             exercise: null,
+            filteredExercises: [],
+            filteredTotalPages: 0,
         }));
     },
     [EXERCISES_ADD_REQUEST]: (state, action) => {
         return state.merge(Map({
             loading: true,
             error: null,
-            exercises: null,
-            exercise: null
+            exercises: [],
+            exercise: null,
+            filteredExercises: [],
+            filteredTotalPages: 0,
         }));
     },
     [EXERCISES_ADD_SUCCESS]: (state, action) => {
         return state.merge(Map({
             loading: false,
             error: null,
-            exercises: null,
-            exercise: action.data.exercise
+            exercises: [],
+            exercise: action.data.exercise,
+            filteredExercises: [],
+            filteredTotalPages: 0,
         }));
     },
     [EXERCISES_ADD_ERROR]: (state, action) => {
@@ -105,24 +160,30 @@ const actionMap = {
         return state.merge(Map({
             loading: false,
             error: error,
-            exercises: null,
-            exercise: null
+            exercises: [],
+            exercise: null,
+            filteredExercises: [],
+            filteredTotalPages: 0,
         }));
     },
     [EXERCISES_UPDATE_REQUEST]: (state, action) => {
         return state.merge(Map({
             loading: true,
             error: null,
-            exercises: null,
-            exercise: null
+            exercises: [],
+            exercise: null,
+            filteredExercises: [],
+            filteredTotalPages: 0,
         }));
     },
     [EXERCISES_UPDATE_SUCCESS]: (state, action) => {
         return state.merge(Map({
             loading: false,
             error: null,
-            exercises: null,
-            exercise: action.data.exercise
+            exercises: [],
+            exercise: action.data.exercise,
+            filteredExercises: [],
+            filteredTotalPages: 0,
         }));
     },
     [EXERCISES_UPDATE_ERROR]: (state, action) => {
@@ -133,24 +194,30 @@ const actionMap = {
         return state.merge(Map({
             loading: false,
             error: error,
-            exercises: null,
-            exercise: null
+            exercises: [],
+            exercise: null,
+            filteredExercises: [],
+            filteredTotalPages: 0,
         }));
     },
     [EXERCISES_DELETE_REQUEST]: (state, action) => {
         return state.merge(Map({
             loading: true,
             error: null,
-            exercises: null,
-            exercise: null
+            exercises: [],
+            exercise: null,
+            filteredExercises: [],
+            filteredTotalPages: 0,
         }));
     },
     [EXERCISES_DELETE_SUCCESS]: (state, action) => {
         return state.merge(Map({
             loading: false,
             error: null,
-            exercises: null,
-            exercise: null
+            exercises: [],
+            exercise: null,
+            filteredExercises: [],
+            filteredTotalPages: 0,
         }));
     },
     [EXERCISES_DELETE_ERROR]: (state, action) => {
@@ -161,8 +228,10 @@ const actionMap = {
         return state.merge(Map({
             loading: false,
             error: error,
-            exercises: null,
-            exercise: null
+            exercises: [],
+            exercise: null,
+            filteredExercises: [],
+            filteredTotalPages: 0,
         }));
     },
 };

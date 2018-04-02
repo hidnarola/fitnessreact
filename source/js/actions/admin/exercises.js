@@ -2,6 +2,10 @@ export const EXERCISES_LIST_REQUEST = 'EXERCISES_LIST_REQUEST';
 export const EXERCISES_LIST_SUCCESS = 'EXERCISES_LIST_SUCCESS';
 export const EXERCISES_LIST_ERROR = 'EXERCISES_LIST_ERROR';
 
+export const EXERCISES_FILTER_REQUEST = 'EXERCISES_FILTER_REQUEST';
+export const EXERCISES_FILTER_SUCCESS = 'EXERCISES_FILTER_SUCCESS';
+export const EXERCISES_FILTER_ERROR = 'EXERCISES_FILTER_ERROR';
+
 export const EXERCISES_SELECT_ONE_REQUEST = 'EXERCISES_SELECT_ONE_REQUEST';
 export const EXERCISES_SELECT_ONE_SUCCESS = 'EXERCISES_SELECT_ONE_SUCCESS';
 export const EXERCISES_SELECT_ONE_ERROR = 'EXERCISES_SELECT_ONE_ERROR';
@@ -34,6 +38,27 @@ export function exerciseListSuccess(data) {
 export function exerciseListError(error) {
     return {
         type: EXERCISES_LIST_ERROR,
+        error
+    }
+}
+
+export function exerciseFilterRequest(filterData) {
+    return {
+        type: EXERCISES_FILTER_REQUEST,
+        filterData
+    }
+}
+
+export function exerciseFilterSuccess(data) {
+    return {
+        type: EXERCISES_FILTER_SUCCESS,
+        data
+    }
+}
+
+export function exerciseFilterError(error) {
+    return {
+        type: EXERCISES_FILTER_ERROR,
         error
     }
 }

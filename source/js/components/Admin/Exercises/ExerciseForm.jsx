@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { FaTrash } from 'react-icons/lib/fa';
 import { showPageLoader, hidePageLoader } from '../../../actions/pageLoader';
 import { bodyPartListRequest } from '../../../actions/admin/bodyParts';
 import { exerciseTypeListRequest } from '../../../actions/admin/exerciseTypes';
@@ -26,12 +27,14 @@ import {
     EXERCISE_MECHANICS_COMPOUND,
     EXERCISE_DIFFICULTY_BEGINNER,
     EXERCISE_DIFFICULTY_INTERMEDIATE,
-    EXERCISE_DIFFICULTY_EXPERT
+    EXERCISE_DIFFICULTY_EXPERT,
+    SERVER_BASE_URL
 } from '../../../constants/consts';
 import ExerciseSteps from './ExerciseSteps';
 import { adminRouteCodes } from '../../../constants/adminRoutes';
 import { exerciseSelectOneRequest } from '../../../actions/admin/exercises';
 import _ from 'lodash';
+import DeleteConfirmation from '../Common/DeleteConfirmation';
 
 const maxLength15 = maxLength(15);
 const minLength2 = minLength(2);
@@ -50,7 +53,11 @@ class ExerciseForm extends Component {
         super(props);
         this.state = {
             initPageDataLoad: false,
-            selectDataInit: false
+            selectDataInit: false,
+            showDeleteImageModel: false,
+            selectedImageToDelete: null,
+            deletedImages: [],
+            exerciseImages: [],
         };
     }
 
@@ -72,7 +79,8 @@ class ExerciseForm extends Component {
     }
 
     render() {
-        const { bodyParts, equipments, exerciseTypes, handleSubmit, exercise } = this.props;
+        const { bodyParts, equipments, exerciseTypes, handleSubmit } = this.props;
+        const { exerciseImages, showDeleteImageModel } = this.state;
         const bodyPartsOptions = prepareDropdownOptionsData(bodyParts, '_id', 'bodypart');
         const equipmentsOptions = prepareDropdownOptionsData(equipments, '_id', 'name');
         const exerciseTypesOptions = prepareDropdownOptionsData(exerciseTypes, '_id', 'name');
@@ -181,11 +189,22 @@ class ExerciseForm extends Component {
                                 component={FileField_Dropzone}
                                 multiple={true}
                             />
-                            {exercise &&
-                                <div className="image-preview-wrapper">
-                                    {exercise.images.map((img, index) => (
-                                        <img src={SERVER_BASE_URL + img} key={index} />
-                                    ))
+                            <Field
+                                name="deleted_images"
+                                component='hidden'
+                            />
+                            {exerciseImages &&
+                                <div className="images-preview-wrapper">
+                                    {exerciseImages.map((img, index) => {
+                                        return (
+                                            <div className="image-preview-wrapper" key={index}>
+                                                <div className="col-md-12">
+                                                    <img src={SERVER_BASE_URL + img} />
+                                                    <a href="javascript:void(0)" onClick={() => this.handleDeleteImageModel(true, img)}><FaTrash /></a>
+                                                </div>
+                                            </div>
+                                        )
+                                    })
                                     }
                                 </div>
                             }
@@ -202,12 +221,18 @@ class ExerciseForm extends Component {
                         </div>
                     </div>
                 </form>
+
+                <DeleteConfirmation
+                    show={showDeleteImageModel}
+                    handleClose={() => this.handleDeleteImageModel(false)}
+                    handleYes={this.handleDeleteImage}
+                />
             </div>
         );
     }
 
     componentDidUpdate() {
-        const { initPageDataLoad, selectDataInit } = this.state;
+        const { initPageDataLoad, selectDataInit, deletedImages } = this.state;
         const {
             bodyPartsLoading,
             equipmentsLoading,
@@ -262,8 +287,13 @@ class ExerciseForm extends Component {
                     equipments: equips,
                     difficulty_level: _.find(difficultyLevelOptions, (o) => { return (o.value === exercise.difficltyLevel) }),
                     steps: steps,
+                    deleted_images: deletedImages
                 };
                 initialize(exerciseData);
+                let exerciseImages = exercise.images;
+                this.setState({
+                    exerciseImages: exerciseImages
+                });
             }
         } else {
             if (initPageDataLoad && !bodyPartsLoading && !equipmentsLoading && !exerciseTypesLoading) {
@@ -275,6 +305,39 @@ class ExerciseForm extends Component {
             }
         }
     }
+
+    // ----Start Methods----
+    handleDeleteImageModel = (show, imageUrl = null) => {
+        let state = {}
+        if (show) {
+            state = {
+                showDeleteImageModel: true,
+                selectedImageToDelete: imageUrl,
+            }
+        } else {
+            state = {
+                showDeleteImageModel: false,
+                selectedImageToDelete: null,
+            }
+        }
+        this.setState(state);
+    }
+
+    handleDeleteImage = () => {
+        let { deletedImages, selectedImageToDelete, exerciseImages } = this.state;
+        const { change } = this.props;
+        _.remove(exerciseImages, (img) => {
+            return img === selectedImageToDelete;
+        });
+        deletedImages.push(selectedImageToDelete);
+        this.setState({
+            deletedImages: deletedImages,
+            exerciseImages: exerciseImages,
+        });
+        change('deleted_images', JSON.stringify(deletedImages));
+        this.handleDeleteImageModel(false);
+    }
+    // ----End Methods----
 }
 
 ExerciseForm = reduxForm({
