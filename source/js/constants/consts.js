@@ -7,7 +7,8 @@ export const USER_ROLE = 'fitassist-user';
 export const ADMIN_ROLE = 'firassist-admin'
 
 // export const SERVER_BASE_URL = 'http://192.168.1.186:3300/'
-export const SERVER_BASE_URL = 'http://localhost:3300/'
+// export const SERVER_BASE_URL = 'http://localhost:3300/'
+export const SERVER_BASE_URL = 'http://167.99.90.169:3300/'
 
 export const EXERCISE_MECHANICS_COMPOUND = 'compound';
 export const EXERCISE_MECHANICS_ISOLATION = 'isolation';
