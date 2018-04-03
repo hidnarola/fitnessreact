@@ -44,15 +44,15 @@ class DTable extends Component {
     }
 
     render() {
-        const { data, columns } = this.props;
+        const { data, columns, loading, pages } = this.props;
         return (
             <div className="d-table-main-wrapper">
                 <ReactTable
                     manual
                     data={data}
                     columns={columns}
-                    // pages={pages}
-                    // loading={loading}
+                    pages={pages}
+                    loading={loading}
                     onFetchData={this.fetchData}
                     filterable
                     defaultPageSize={10}

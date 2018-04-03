@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { showPageLoader } from '../../../actions/pageLoader';
-import { exerciseListRequest, exerciseDeleteRequest } from '../../../actions/admin/exercises';
+import { exerciseDeleteRequest, exerciseFilterRequest } from '../../../actions/admin/exercises';
 import dateFormat from 'dateformat';
 import { adminRouteCodes } from '../../../constants/adminRoutes';
 import { FaPencil, FaTrash } from 'react-icons/lib/fa';
@@ -12,6 +12,7 @@ import _ from 'lodash';
 import { exerciseTypeListRequest } from '../../../actions/admin/exerciseTypes';
 import { EXERCISE_MECHANICS_COMPOUND, EXERCISE_MECHANICS_ISOLATION, EXERCISE_DIFFICULTY_BEGINNER, EXERCISE_DIFFICULTY_INTERMEDIATE, EXERCISE_DIFFICULTY_EXPERT, exerciseMechanicsObj, exerciseDifficultyLevelObj } from '../../../constants/consts';
 import DeleteConfirmation from '../Common/DeleteConfirmation';
+import DTable from '../Common/DTable';
 
 class ExerciseListing extends Component {
     constructor(props) {
@@ -19,7 +20,8 @@ class ExerciseListing extends Component {
         this.state = {
             selectedId: null,
             showDeleteModal: false,
-            deleteActionInit: false
+            deleteActionInit: false,
+            // filterData: {},
         }
     }
 
@@ -27,8 +29,15 @@ class ExerciseListing extends Component {
         this.updateList();
     }
 
+    filterData = (filterData) => {
+        const { dispatch } = this.props;
+        // this.setState({ filterData: filterData }, () => {
+        // });
+        dispatch(exerciseFilterRequest(filterData));
+    }
+
     render() {
-        const { exericses, bodyParts, exerciseTypes } = this.props;
+        const { bodyParts, exerciseTypes, filteredExercises, filteredTotalPages, loading } = this.props;
         const { showDeleteModal } = this.state;
         return (
             <div className="exercise-listing-wrapper">
@@ -49,12 +58,15 @@ class ExerciseListing extends Component {
                             </div>
                             <div className="row d-flex whitebox-body">
                                 <div className="col-md-12">
-                                    <ReactTable
-                                        data={exericses}
+                                    <DTable
+                                        data={filteredExercises}
                                         columns={[
                                             {
                                                 Header: "Created Date",
                                                 accessor: "createdAt",
+                                                id: "createdAt",
+                                                filterable: false,
+                                                sortable: false,
                                                 Cell: (row) => {
                                                     return (
                                                         <div>{dateFormat(row.value, 'mm/dd/yyyy')}</div>
@@ -63,11 +75,15 @@ class ExerciseListing extends Component {
                                             },
                                             {
                                                 Header: "Name",
-                                                accessor: "name"
+                                                accessor: "name",
+                                                id: "name",
                                             },
                                             {
                                                 Header: "Main Muscle",
                                                 accessor: "mainMuscleGroup",
+                                                id: "mainMuscleGroup",
+                                                filterable: false,
+                                                sortable: false,
                                                 Cell: (row) => {
                                                     if (bodyParts) {
                                                         let mainMuscle = _.find(bodyParts, (o) => {
@@ -87,6 +103,9 @@ class ExerciseListing extends Component {
                                             {
                                                 Header: "Other Muscle",
                                                 accessor: "otherMuscleGroup",
+                                                id: "otherMuscleGroup",
+                                                filterable: false,
+                                                sortable: false,
                                                 Cell: (row) => {
                                                     if (bodyParts) {
                                                         let otherMuscles = [];
@@ -110,6 +129,9 @@ class ExerciseListing extends Component {
                                             {
                                                 Header: "Detailed Muscle",
                                                 accessor: "detailedMuscleGroup",
+                                                id: "detailedMuscleGroup",
+                                                filterable: false,
+                                                sortable: false,
                                                 Cell: (row) => {
                                                     if (bodyParts) {
 
@@ -134,6 +156,7 @@ class ExerciseListing extends Component {
                                             {
                                                 Header: "Mechanics",
                                                 accessor: "mechanics",
+                                                id: "mechanics",
                                                 Cell: (row) => {
                                                     let mech = '-----';
                                                     if (_.has(exerciseMechanicsObj, row.value)) {
@@ -149,6 +172,7 @@ class ExerciseListing extends Component {
                                             {
                                                 Header: "Difficlty Level",
                                                 accessor: "difficltyLevel",
+                                                id: "difficltyLevel",
                                                 Cell: (row) => {
                                                     let difficultyLevel = '-----';
                                                     if (_.has(exerciseDifficultyLevelObj, row.value)) {
@@ -164,6 +188,9 @@ class ExerciseListing extends Component {
                                             {
                                                 Header: "Type",
                                                 accessor: "type",
+                                                filterable: false,
+                                                sortable: false,
+                                                id: "type",
                                                 Cell: (row) => {
                                                     let type = '-----';
                                                     let typeObj = _.find(exerciseTypes, ['_id', row.value]);
@@ -180,6 +207,7 @@ class ExerciseListing extends Component {
                                             {
                                                 Header: "Actions",
                                                 accessor: "_id",
+                                                id: "_id",
                                                 filterable: false,
                                                 sortable: false,
                                                 Cell: (row) => {
@@ -192,9 +220,9 @@ class ExerciseListing extends Component {
                                                 }
                                             },
                                         ]}
-                                        defaultPageSize={10}
-                                        filterable
-                                        className="-striped -highlight"
+                                        loading={loading}
+                                        pages={filteredTotalPages}
+                                        filterDTable={this.filterData}
                                     />
                                 </div>
                             </div>
@@ -227,10 +255,11 @@ class ExerciseListing extends Component {
     // ----Start funs -----
     updateList = () => {
         const { dispatch } = this.props;
+        // const { filterData } = this.state;
         dispatch(showPageLoader());
         dispatch(bodyPartListRequest());
         dispatch(exerciseTypeListRequest());
-        dispatch(exerciseListRequest());
+        // dispatch(exerciseFilterRequest(filterData));
     }
 
     confirmDelete = (_id) => {
@@ -265,6 +294,8 @@ const mapStateToProps = (state) => {
         loading: adminExercises.get('loading'),
         error: adminExercises.get('error'),
         exericses: adminExercises.get('exercises'),
+        filteredExercises: adminExercises.get('filteredExercises'),
+        filteredTotalPages: adminExercises.get('filteredTotalPages'),
         bodyPartsLoading: adminBodyParts.get('loading'),
         bodyPartsError: adminBodyParts.get('error'),
         bodyParts: adminBodyParts.get('bodyParts'),
