@@ -3,6 +3,16 @@ import ReactTable from 'react-table';
 import _ from 'lodash';
 
 class DTable extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            loading: false,
+            data: [],
+            pages: 0,
+            columns: [],
+        }
+    }
+
     fetchData = (state, instance) => {
         const { pageSize, page, filtered, sorted, columns } = state;
         const { filterDTable } = this.props;
@@ -44,7 +54,7 @@ class DTable extends Component {
     }
 
     render() {
-        const { data, columns, loading, pages } = this.props;
+        const { data, columns, loading, pages } = this.state;
         return (
             <div className="d-table-main-wrapper">
                 <ReactTable
@@ -60,6 +70,18 @@ class DTable extends Component {
                 />
             </div>
         );
+    }
+
+    componentDidUpdate() {
+        const { serverloading, data, pages, columns } = this.props;
+        if (!serverloading && loading) {
+            this.setState({
+                loading: false,
+                data: data,
+                pages: pages,
+                columns: columns,
+            });
+        }
     }
 }
 
