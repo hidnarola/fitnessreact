@@ -7,6 +7,9 @@ export const adminRouteCodes = {
     USERS: `${adminRootRoute}/users`,
     NUTRITIONS: `${adminRootRoute}/nutritions`,
 
+    INGREDIENTS: `${adminRootRoute}/ingredients`,
+    INGREDIENTS_SAVE: `${adminRootRoute}/ingredients/save`,
+
     RECIPES: `${adminRootRoute}/recipes`,
     RECIPES_SAVE: `${adminRootRoute}/recipes/save`,
 
