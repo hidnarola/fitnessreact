@@ -206,6 +206,7 @@ class ExerciseListing extends Component {
                                                 Header: "Mechanics",
                                                 accessor: "mechanics",
                                                 id: "mechanics",
+                                                filterEqual: true,
                                                 Cell: (row) => {
                                                     let mech = '-----';
                                                     if (_.has(exerciseMechanicsObj, row.value)) {
@@ -237,6 +238,7 @@ class ExerciseListing extends Component {
                                                 Header: "Difficlty Level",
                                                 accessor: "difficltyLevel",
                                                 id: "difficltyLevel",
+                                                filterEqual: true,
                                                 Cell: (row) => {
                                                     let difficultyLevel = '-----';
                                                     if (_.has(exerciseDifficultyLevelObj, row.value)) {

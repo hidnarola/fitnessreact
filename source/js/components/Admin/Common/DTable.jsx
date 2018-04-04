@@ -9,11 +9,11 @@ class DTable extends Component {
             loading: false,
             data: [],
             pages: 0,
-            columns: [],
         }
     }
 
     fetchData = (state, instance) => {
+        this.setState({ loading: true });
         const { pageSize, page, filtered, sorted, columns } = state;
         const { filterDTable } = this.props;
         let columnFilter = [];
@@ -54,32 +54,43 @@ class DTable extends Component {
     }
 
     render() {
-        const { data, columns, loading, pages } = this.state;
+        const { data, loading, pages } = this.state;
+        const {
+            columns,
+            defaultPageSize,
+            showPaginationTop,
+            showPaginationBottom,
+            noDataText,
+            className
+        } = this.props;
         return (
             <div className="d-table-main-wrapper">
                 <ReactTable
                     manual
                     data={data}
+                    noDataText={(noDataText) ? noDataText : "No records found..."}
                     columns={columns}
                     pages={pages}
                     loading={loading}
                     onFetchData={this.fetchData}
                     filterable
-                    defaultPageSize={10}
-                    className="-striped -highlight"
+                    defaultPageSize={(defaultPageSize) ? defaultPageSize : 10}
+                    className={(className) ? className : "-striped -highlight"}
+                    showPaginationTop={(showPaginationTop) ? showPaginationTop : true}
+                    showPaginationBottom={(showPaginationBottom) ? showPaginationBottom : true}
                 />
             </div>
         );
     }
 
     componentDidUpdate() {
-        const { serverloading, data, pages, columns } = this.props;
+        const { serverloading, data, pages } = this.props;
+        const { loading } = this.state;
         if (!serverloading && loading) {
             this.setState({
                 loading: false,
                 data: data,
                 pages: pages,
-                columns: columns,
             });
         }
     }
