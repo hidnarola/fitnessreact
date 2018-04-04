@@ -16,6 +16,7 @@ import adminEquipmentCategories from 'reducers/admin/equipmentCategories'
 import adminExercises from 'reducers/admin/exercises'
 import adminBodyParts from 'reducers/admin/bodyParts'
 import adminExerciseTypes from 'reducers/admin/exerciseTypes'
+import adminUsers from 'reducers/admin/users'
 
 export default combineReducers({
     app,
@@ -34,6 +35,7 @@ export default combineReducers({
     adminExercises,
     adminBodyParts,
     adminExerciseTypes,
+    adminUsers,
     // ...your other reducers here
     // you have to pass formReducer under 'form' key,
     // for custom keys look up the docs for 'getFormState'
