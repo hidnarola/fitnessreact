@@ -16,6 +16,7 @@ import adminBodyPartSagas from 'sagas/admin/bodyParts';
 import adminExerciseTypeSagas from 'sagas/admin/exerciseTypes';
 import adminUserSagas from 'sagas/admin/users';
 import adminRecipeSagas from 'sagas/admin/recipes';
+import adminIngredientSagas from 'sagas/admin/ingredients';
 
 export default function* rootSaga() {
   yield all([
@@ -35,5 +36,6 @@ export default function* rootSaga() {
     ...adminExerciseTypeSagas,
     ...adminUserSagas,
     ...adminRecipeSagas,
+    ...adminIngredientSagas,
   ]);
 }
