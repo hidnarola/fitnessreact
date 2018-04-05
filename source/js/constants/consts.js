@@ -6,16 +6,16 @@ export const LOCALSTORAGE_ROLE_KEY = 'role';
 export const USER_ROLE = 'fitassist-user';
 export const ADMIN_ROLE = 'firassist-admin'
 
-let baseUrl = 'http://no_base_url_set:3300/';
-if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
-    // dev code
-    baseUrl = 'http://localhost:3300/'
-} else {
-    // production code
-    baseUrl = 'http://167.99.90.169:3300/'
-}
+// let baseUrl = 'http://no_base_url_set:3300/';
+// if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+//     // dev code
+//     baseUrl = 'http://localhost:3300/'
+// } else {
+//     // production code
+//     baseUrl = 'http://167.99.90.169:3300/'
+// }
 
-export const SERVER_BASE_URL = baseUrl;
+export const SERVER_BASE_URL = 'http://167.99.90.169:3300/';
 
 export const EXERCISE_MECHANICS_COMPOUND = 'compound';
 export const EXERCISE_MECHANICS_ISOLATION = 'isolation';
