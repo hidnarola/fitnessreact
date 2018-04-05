@@ -44,3 +44,16 @@ export const USER_STATUS_INACTIVE = 0;
 
 export const USER_STATUS_ACTIVE_STR = 'Active';
 export const USER_STATUS_INACTIVE_STR = 'Inactive';
+
+export const RECIPE_DIFFICULTY_EASY = 'easy';
+export const RECIPE_DIFFICULTY_MEDIUM = 'medium';
+export const RECIPE_DIFFICULTY_HARD = 'hard';
+
+export const RECIPE_TYPE_VEGETARIAN = 'vegetarian';
+export const RECIPE_TYPE_VEGAN = 'vegan';
+export const RECIPE_TYPE_DAIRY_FREE = 'dairy-free';
+export const RECIPE_TYPE_KOSHER = 'kosher';
+export const RECIPE_TYPE_ISLAM = 'islam';
+export const RECIPE_TYPE_COELIAC = 'coeliac';
+export const RECIPE_TYPE_PALEO = 'paleo';
+export const RECIPE_TYPE_PASCATERIAN = 'pescaterian';
