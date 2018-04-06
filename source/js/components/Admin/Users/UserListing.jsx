@@ -160,7 +160,7 @@ class UserListing extends Component {
                                                 id: 'status',
                                                 Header: 'Status',
                                                 accessor: 'status',
-                                                filterEqual: true,
+                                                filterDigit: true,
                                                 Cell: (row) => {
                                                     let dataObj = _.find(userStatusOptions, (o) => {
                                                         return (o.value === row.value);

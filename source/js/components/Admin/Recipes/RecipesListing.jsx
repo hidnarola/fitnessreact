@@ -22,6 +22,7 @@ import { recipeFilterRequest, recipeDeleteRequest } from '../../../actions/admin
 import { capitalizeFirstLetter } from '../../../helpers/funs';
 import DeleteConfirmation from '../Common/DeleteConfirmation';
 import { showPageLoader } from '../../../actions/pageLoader';
+import { ingredientListRequest } from '../../../actions/admin/ingredients';
 
 const difficultyOptions = [
     { value: '', label: 'All' },
@@ -52,13 +53,19 @@ class RecipesListing extends Component {
         }
     }
 
+    componentDidMount() {
+        const { dispatch } = this.props;
+        dispatch(ingredientListRequest());
+    }
+
+
     filterDTable = (filterData) => {
         const { dispatch } = this.props;
         dispatch(recipeFilterRequest(filterData));
     }
 
     render() {
-        const { filteredRecipes, filteredTotalPages, loading } = this.props;
+        const { filteredRecipes, filteredTotalPages, loading, ingredients } = this.props;
         const { showDeleteModal } = this.state;
         return (
             <div className="recipes-listing-wrapper">
@@ -107,11 +114,32 @@ class RecipesListing extends Component {
                                                 accessor: 'ingredientsIncluded',
                                                 filterable: false,
                                                 sortable: false,
+                                                Cell: (row) => {
+                                                    let ingreds = [];
+                                                    _.forEach(row.value, (_id) => {
+                                                        const obj = _.find(ingredients, (ing) => {
+                                                            return ing._id === _id;
+                                                        });
+                                                        if (obj) {
+                                                            ingreds.push(obj);
+                                                        }
+                                                    });
+                                                    return (
+                                                        <div className="list-ingredients-wrapper">
+                                                            {ingreds &&
+                                                                ingreds.map((m, i) => (m.name)).join(',')
+                                                            }
+                                                            {ingreds && ingreds.length <= 0 && <span>-----</span>}
+                                                            {!ingreds && <span>-----</span>}
+                                                        </div>
+                                                    );
+                                                }
                                             },
                                             {
                                                 id: 'preparationTime',
                                                 Header: 'Preparation Time',
                                                 accessor: 'preparationTime',
+                                                filterDigit: true,
                                                 Cell: (row) => {
                                                     return (
                                                         <div className="list-preparation-time-wrapper">
@@ -124,6 +152,7 @@ class RecipesListing extends Component {
                                                 id: 'cookTime',
                                                 Header: 'Cook Time',
                                                 accessor: 'cookTime',
+                                                filterDigit: true,
                                                 Cell: (row) => {
                                                     return (
                                                         <div className="list-cook-time-wrapper">
@@ -279,12 +308,13 @@ class RecipesListing extends Component {
 }
 
 const mapStateToProps = (state) => {
-    const { adminRecipes } = state;
+    const { adminRecipes, adminIngredients } = state;
     return {
         loading: adminRecipes.get('loading'),
         error: adminRecipes.get('error'),
         filteredRecipes: adminRecipes.get('filteredRecipes'),
         filteredTotalPages: adminRecipes.get('filteredTotalPages'),
+        ingredients: adminIngredients.get('ingredients'),
     }
 }
 

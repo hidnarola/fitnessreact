@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import Select from 'react-select';
 import Dropzone from 'react-dropzone';
 import _ from 'lodash';
-import { Editor } from 'react-draft-wysiwyg';
 import StarRatingComponent from 'react-star-rating-component';
 
 export const InputField = (props) => {
@@ -124,35 +123,6 @@ export const FileField_Dropzone = (props) => {
                     {input.value && images}
                 </div>
             </Dropzone>
-            {meta.touched &&
-                ((meta.error && <span className={errorClass}>{meta.error}</span>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))
-            }
-        </div>
-    );
-}
-
-export const DraftHtmlEditor = (props) => {
-    const {
-        label,
-        input,
-        meta,
-        wrapperClass,
-        editorWrapperClass,
-        editorClass,
-        toolbarClass,
-        className,
-        labelClass,
-        errorClass
-    } = props;
-    return (
-        <div className={wrapperClass}>
-            <label htmlFor={input.name} className={labelClass}>{label}</label>
-            <Editor
-                {...input}
-                wrapperClassName={editorWrapperClass}
-                editorClassName={editorClass}
-                toolbarClassName={toolbarClass}
-            />
             {meta.touched &&
                 ((meta.error && <span className={errorClass}>{meta.error}</span>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))
             }

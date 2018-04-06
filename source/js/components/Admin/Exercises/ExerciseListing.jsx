@@ -48,7 +48,6 @@ class ExerciseListing extends Component {
         const { pageSize, page, filtered, sorted, columns } = state;
         const { dispatch } = this.props;
         let columnFilter = [];
-        let columnFilterEqual = [];
         let columnSort = [];
         _.forEach(columns, (column) => {
             if (typeof column.id !== 'undefined') {
@@ -58,10 +57,11 @@ class ExerciseListing extends Component {
                     });
                     if (typeof filterObj !== 'undefined') {
                         if (column.filterEqual) {
-                            columnFilterEqual.push(filterObj);
+                            filterObj['isEqualFlag'] = true;
                         } else {
-                            columnFilter.push(filterObj);
+                            filterObj['isEqualFlag'] = false;
                         }
+                        columnFilter.push(filterObj);
                     }
                 }
             }
@@ -77,7 +77,6 @@ class ExerciseListing extends Component {
             pageSize,
             page,
             columnFilter,
-            columnFilterEqual,
             columnSort,
         }
 

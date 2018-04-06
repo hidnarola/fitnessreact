@@ -15,7 +15,7 @@ class Recipes extends Component {
                 <section className="body-wrap">
                     <Switch>
                         <Route exact path={adminRouteCodes.RECIPES} component={RecipesListing} />
-                        <Route exact path={adminRouteCodes.RECIPES_SAVE} component={RecipesSave} />
+                        <Route path={`${adminRouteCodes.RECIPES_SAVE}/:id?`} component={RecipesSave} />
                     </Switch>
                 </section>
             </div>

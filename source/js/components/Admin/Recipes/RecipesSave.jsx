@@ -4,8 +4,6 @@ import _ from 'lodash';
 import { showPageLoader, hidePageLoader } from '../../../actions/pageLoader';
 import { adminRouteCodes } from '../../../constants/adminRoutes';
 import RecipesForm from './RecipesForm';
-// import { convertToRaw } from 'draft-js';
-import draftToHtml from 'draftjs-to-html';
 import { recipeUpdateRequest, recipeAddRequest } from '../../../actions/admin/recipes';
 
 class RecipesSave extends Component {
@@ -28,8 +26,8 @@ class RecipesSave extends Component {
             name: data.name,
             description: data.description,
             recipe_img: data.recipe_img,
-            method: draftToHtml(data.method),
-            ingredients: draftToHtml(data.ingredients),
+            method: data.method,
+            ingredients: data.ingredients,
             ingredientsIncluded: JSON.stringify(_.map(data.ingredients_included, 'value')),
             preparationTime: data.preparation_time,
             cookTime: data.cook_time,

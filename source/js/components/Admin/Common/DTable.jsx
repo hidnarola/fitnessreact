@@ -17,7 +17,6 @@ class DTable extends Component {
         const { pageSize, page, filtered, sorted, columns } = state;
         const { filterDTable } = this.props;
         let columnFilter = [];
-        let columnFilterEqual = [];
         let columnSort = [];
         _.forEach(columns, (column) => {
             if (typeof column.id !== 'undefined') {
@@ -27,10 +26,11 @@ class DTable extends Component {
                     });
                     if (typeof filterObj !== 'undefined') {
                         if (column.filterEqual) {
-                            columnFilterEqual.push(filterObj);
-                        } else {
-                            columnFilter.push(filterObj);
+                            filterObj['isEqualFlag'] = true;
+                        } else if (column.filterDigit) {
+                            filterObj['isDigitFlag'] = true;
                         }
+                        columnFilter.push(filterObj);
                     }
                 }
             }
@@ -46,7 +46,6 @@ class DTable extends Component {
             pageSize,
             page,
             columnFilter,
-            columnFilterEqual,
             columnSort,
         }
 

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { showPageLoader, hidePageLoader } from '../../../actions/pageLoader';
 import { reduxForm, Field, FieldArray } from 'redux-form';
 import _ from 'lodash';
-import { InputField, TextAreaField, FileField_Dropzone, SelectField_ReactSelectMulti, SelectField_ReactSelect, DraftHtmlEditor, StarRating } from '../../../helpers/FormControlHelper';
+import { InputField, TextAreaField, FileField_Dropzone, SelectField_ReactSelectMulti, SelectField_ReactSelect, StarRating } from '../../../helpers/FormControlHelper';
 import { required, requiredReactSelectMulti, requiredReactSelect } from '../../../formValidation/validationRules';
 import {
     SERVER_BASE_URL,
@@ -25,6 +25,7 @@ import { capitalizeFirstLetter, prepareDropdownOptionsData } from '../../../help
 import { ingredientListRequest } from '../../../actions/admin/ingredients';
 import RecipesNutritions from './RecipesNutritions';
 import { nutritionListRequest } from '../../../actions/admin/nutritions';
+import { recipeSelectOneRequest } from '../../../actions/admin/recipes';
 
 const difficultyLevelOptions = [
     { value: RECIPE_DIFFICULTY_EASY, label: capitalizeFirstLetter(RECIPE_DIFFICULTY_EASY) },
@@ -48,20 +49,27 @@ class RecipesForm extends Component {
         super(props);
         this.state = {
             initPageDataLoad: false,
-            starRating: 0
+            starRating: 0,
+            selectDataInit: false,
         };
     }
 
     componentWillMount() {
-        const { dispatch } = this.props;
+        const { dispatch, match } = this.props;
         this.setState({ initPageDataLoad: true });
         dispatch(showPageLoader());
         dispatch(ingredientListRequest());
         dispatch(nutritionListRequest());
+        if (typeof match.params.id !== 'undefined') {
+            this.setState({
+                selectDataInit: true
+            });
+            dispatch(recipeSelectOneRequest(match.params.id))
+        }
     }
 
     render() {
-        const { handleSubmit, ingredients, nutritions } = this.props;
+        const { handleSubmit, ingredients, nutritions, recipe } = this.props;
         const { starRating } = this.state;
         const ingredientsOptions = prepareDropdownOptionsData(ingredients, '_id', 'name');
         return (
@@ -99,16 +107,19 @@ class RecipesForm extends Component {
                                 component={FileField_Dropzone}
                                 multiple={false}
                             />
+                            {recipe &&
+                                <div className="image-preview-wrapper">
+                                    <img src={SERVER_BASE_URL + recipe.image} />
+                                </div>
+                            }
                             <Field
                                 name="method"
                                 className="form-control"
                                 label="Method"
                                 labelClass="control-label"
                                 wrapperClass="form-group"
-                                component={DraftHtmlEditor}
-                                editorWrapperClass=""
-                                editorClass=""
-                                toolbarClass=""
+                                placeholder="Method"
+                                component={TextAreaField}
                             />
                             <Field
                                 name="ingredients"
@@ -116,10 +127,8 @@ class RecipesForm extends Component {
                                 label="Ingredients"
                                 labelClass="control-label"
                                 wrapperClass="form-group"
-                                component={DraftHtmlEditor}
-                                editorWrapperClass=""
-                                editorClass=""
-                                toolbarClass=""
+                                placeholder="Ingredients"
+                                component={TextAreaField}
                             />
                             <Field
                                 name="ingredients_included"
@@ -209,11 +218,58 @@ class RecipesForm extends Component {
     }
 
     componentDidUpdate() {
-        const { initPageDataLoad } = this.state;
-        const { ingredientsLoading, nutritionsLoading, dispatch } = this.props;
-        if (initPageDataLoad && !ingredientsLoading && !nutritionsLoading) {
-            this.setState({ initPageDataLoad: false });
-            dispatch(hidePageLoader());
+        const { initPageDataLoad, selectDataInit } = this.state;
+        const { ingredientsLoading,
+            nutritionsLoading,
+            dispatch,
+            match,
+            recipe,
+            loading,
+            ingredients,
+            initialize,
+            nutritions
+        } = this.props;
+        if (typeof match.params.id !== 'undefined') {
+            if (selectDataInit && initPageDataLoad && !ingredientsLoading && !nutritionsLoading && !loading) {
+                const ingredientsOptions = prepareDropdownOptionsData(ingredients, '_id', 'name');
+                const nutritionsOptions = prepareDropdownOptionsData(nutritions, '_id', 'name');
+                this.setState({
+                    selectDataInit: false,
+                    initPageDataLoad: false,
+                });
+                dispatch(hidePageLoader());
+                let ingrsInclu = _.map(recipe.ingredientsIncluded, (id) => {
+                    return _.find(ingredientsOptions, (o) => {
+                        return (o.value === id);
+                    })
+                });
+                let nutries = _.map(recipe.nutritions, (obj) => {
+                    return {
+                        _id: _.find(nutritionsOptions, (o) => { return (o.value === obj.nutrition) }),
+                        _units: obj.units
+                    }
+                });
+                let recipeData = {
+                    name: recipe.name,
+                    description: recipe.description,
+                    method: recipe.method,
+                    ingredients: recipe.ingredients,
+                    ingredients_included: ingrsInclu,
+                    preparation_time: recipe.preparationTime,
+                    cook_time: recipe.cookTime,
+                    difficulty_level: _.find(difficultyLevelOptions, (o) => { return (o.value === recipe.difficultyLevel) }),
+                    rating: recipe.rating,
+                    recipe_type: _.find(recipeTypeOptions, (o) => { return (o.value === recipe.recipeType) }),
+                    nutritions: nutries,
+                };
+                initialize(recipeData);
+                this.setState({ starRating: recipe.rating });
+            }
+        } else {
+            if (initPageDataLoad && !ingredientsLoading && !nutritionsLoading) {
+                this.setState({ initPageDataLoad: false });
+                dispatch(hidePageLoader());
+            }
         }
     }
 
