@@ -129,20 +129,18 @@ class ExerciseListing extends Component {
                                             {
                                                 Header: "Main Muscle",
                                                 accessor: "mainMuscleGroup",
-                                                id: "mainMuscleGroup",
-                                                filterable: false,
-                                                sortable: false,
+                                                id: "mainMuscle.bodypart",
                                                 Cell: (row) => {
                                                     if (bodyParts) {
-                                                        let mainMuscle = _.find(bodyParts, (o) => {
+                                                        let mainMuscle = '-----';
+                                                        _.forEach(bodyParts, (o) => {
                                                             if (o._id === row.value) {
-                                                                return o
+                                                                mainMuscle = o.bodypart;
                                                             }
-                                                            return '-----';
-                                                        });
+                                                        })
                                                         return (
                                                             <div className="main-muscle-group-wrapper">
-                                                                {mainMuscle.bodypart}
+                                                                {mainMuscle}
                                                             </div>
                                                         );
                                                     }
@@ -293,8 +291,8 @@ class ExerciseListing extends Component {
                                                 Cell: (row) => {
                                                     return (
                                                         <div className="actions-wrapper">
-                                                            <NavLink to={`${adminRouteCodes.EXERCISE_SAVE}/${row.value}`}><FaPencil /></NavLink>
-                                                            <a href="javascript:void(0)" onClick={() => this.confirmDelete(row.value)}><FaTrash /></a>
+                                                            <NavLink to={`${adminRouteCodes.EXERCISE_SAVE}/${row.value}`} className="btn btn-primary"><FaPencil /></NavLink>
+                                                            <a href="javascript:void(0)" onClick={() => this.confirmDelete(row.value)} className="btn btn-danger"><FaTrash /></a>
                                                         </div>
                                                     );
                                                 }
@@ -332,6 +330,7 @@ class ExerciseListing extends Component {
                 deleteActionInit: false
             });
             this.updateList();
+            window.location.reload();
         }
         if (requestFilterInit && !loading) {
             this.setState({

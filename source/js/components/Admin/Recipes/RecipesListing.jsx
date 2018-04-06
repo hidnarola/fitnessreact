@@ -198,32 +198,26 @@ class RecipesListing extends Component {
                                                 id: 'recipeType',
                                                 Header: 'Recipe Type',
                                                 accessor: 'recipeType',
-                                                filterEqual: true,
+                                                filterable: false,
+                                                sortable: false,
                                                 Cell: (row) => {
-                                                    let dataObj = _.find(recipeTypeOptions, (o) => {
-                                                        return (o.value === row.value);
+                                                    let recTypes = [];
+                                                    _.forEach(row.value, (_id) => {
+                                                        const obj = _.find(recipeTypeOptions, (rec) => {
+                                                            return rec.value === _id;
+                                                        });
+                                                        if (obj) {
+                                                            recTypes.push(obj);
+                                                        }
                                                     });
                                                     return (
-                                                        <div className="list-gender-wrapper">
-                                                            {dataObj && dataObj.value &&
-                                                                <span>{dataObj.label}</span>
+                                                        <div className="list-ingredients-wrapper">
+                                                            {recTypes &&
+                                                                recTypes.map((m, i) => (m.label)).join(',')
                                                             }
+                                                            {recTypes && recTypes.length <= 0 && <span>-----</span>}
+                                                            {!recTypes && <span>-----</span>}
                                                         </div>
-                                                    );
-                                                },
-                                                Filter: ({ filter, onChange }) => {
-                                                    return (
-                                                        <select
-                                                            onChange={event => onChange(event.target.value)}
-                                                            className="width-100-per"
-                                                            value={filter ? filter.value : "all"}
-                                                        >
-                                                            {recipeTypeOptions && recipeTypeOptions.length > 0 &&
-                                                                recipeTypeOptions.map((obj, index) => (
-                                                                    <option key={index} value={obj.value}>{obj.label}</option>
-                                                                ))
-                                                            }
-                                                        </select>
                                                     );
                                                 }
                                             },

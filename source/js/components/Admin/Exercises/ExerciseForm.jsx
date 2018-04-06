@@ -200,7 +200,7 @@ class ExerciseForm extends Component {
                                             <div className="image-preview-wrapper" key={index}>
                                                 <div className="col-md-12">
                                                     <img src={SERVER_BASE_URL + img} />
-                                                    <a href="javascript:void(0)" onClick={() => this.handleDeleteImageModel(true, img)}><FaTrash /></a>
+                                                    <a href="javascript:void(0)" onClick={() => this.handleDeleteImageModel(true, img)} className="btn btn-danger"><FaTrash /></a>
                                                 </div>
                                             </div>
                                         )

@@ -145,8 +145,8 @@ class EquipmentListing extends Component {
                                                     Cell: (row) => {
                                                         return (
                                                             <div className="actions-wrapper">
-                                                                <NavLink to={`${adminRouteCodes.EQUIPMENTS_SAVE}/${row.value}`}><FaPencil /></NavLink>
-                                                                <a href="javascript:void(0)" onClick={() => this.confirmDelete(row.value)}><FaTrash /></a>
+                                                                <NavLink to={`${adminRouteCodes.EQUIPMENTS_SAVE}/${row.value}`} className="btn btn-primary"><FaPencil /></NavLink>
+                                                                <a href="javascript:void(0)" onClick={() => this.confirmDelete(row.value)} className="btn btn-danger"><FaTrash /></a>
                                                             </div>
                                                         );
                                                     }

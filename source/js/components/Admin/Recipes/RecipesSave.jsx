@@ -33,7 +33,7 @@ class RecipesSave extends Component {
             cookTime: data.cook_time,
             difficultyLevel: data.difficulty_level.value,
             rating: data.rating,
-            recipeType: data.recipe_type.value,
+            recipeType: JSON.stringify(_.map(data.recipe_type, 'value')),
             nutritions: JSON.stringify(nutrs),
         }
 

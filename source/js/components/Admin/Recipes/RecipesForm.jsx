@@ -193,11 +193,10 @@ class RecipesForm extends Component {
                                 labelClass="control-label"
                                 wrapperClass="form-group"
                                 placeholder="Recipe Type"
-                                component={SelectField_ReactSelect}
+                                component={SelectField_ReactSelectMulti}
                                 options={recipeTypeOptions}
-                                validate={[requiredReactSelect]}
+                                validate={[requiredReactSelectMulti]}
                             />
-
                             <FieldArray
                                 name="nutritions"
                                 component={RecipesNutritions}
@@ -243,6 +242,11 @@ class RecipesForm extends Component {
                         return (o.value === id);
                     })
                 });
+                let recipeTypes = _.map(recipe.recipeType, (id) => {
+                    return _.find(recipeTypeOptions, (o) => {
+                        return (o.value === id);
+                    })
+                });
                 let nutries = _.map(recipe.nutritions, (obj) => {
                     return {
                         _id: _.find(nutritionsOptions, (o) => { return (o.value === obj.nutrition) }),
@@ -259,7 +263,7 @@ class RecipesForm extends Component {
                     cook_time: recipe.cookTime,
                     difficulty_level: _.find(difficultyLevelOptions, (o) => { return (o.value === recipe.difficultyLevel) }),
                     rating: recipe.rating,
-                    recipe_type: _.find(recipeTypeOptions, (o) => { return (o.value === recipe.recipeType) }),
+                    recipe_type: recipeTypes,
                     nutritions: nutries,
                 };
                 initialize(recipeData);
