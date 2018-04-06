@@ -6,6 +6,7 @@ import { adminRouteCodes } from '../../../constants/adminRoutes';
 import RecipesForm from './RecipesForm';
 // import { convertToRaw } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
+import { recipeUpdateRequest, recipeAddRequest } from '../../../actions/admin/recipes';
 
 class RecipesSave extends Component {
     constructor(props) {
@@ -16,8 +17,12 @@ class RecipesSave extends Component {
     }
 
     handleSubmit = (data) => {
-        console.log(data);
-        return;
+        let nutrs = [];
+        if (data.nutritions) {
+            _.forEach(data.nutritions, (obj) => {
+                nutrs.push({ nutrition: obj._id.value, units: obj._units });
+            });
+        }
         const { dispatch, match } = this.props;
         let recipeData = {
             name: data.name,
@@ -25,40 +30,38 @@ class RecipesSave extends Component {
             recipe_img: data.recipe_img,
             method: draftToHtml(data.method),
             ingredients: draftToHtml(data.ingredients),
-            ingredientsIncluded: JSON.stringify(data.ingredients_included),
+            ingredientsIncluded: JSON.stringify(_.map(data.ingredients_included, 'value')),
             preparationTime: data.preparation_time,
             cookTime: data.cook_time,
-            difficultyLevel: data.difficulty_level,
+            difficultyLevel: data.difficulty_level.value,
             rating: data.rating,
-            recipeType: data.recipe_type,
-            nutritions: JSON.stringify(data.ingredients_included),
+            recipeType: data.recipe_type.value,
+            nutritions: JSON.stringify(nutrs),
         }
 
         var formData = new FormData();
-        formData.append('name', exerciseData.name);
-        formData.append('description', exerciseData.description);
-        formData.append('mainMuscleGroup', exerciseData.mainMuscleGroup);
-        formData.append('otherMuscleGroup', exerciseData.otherMuscleGroup);
-        formData.append('detailedMuscleGroup', exerciseData.detailedMuscleGroup);
-        formData.append('type', exerciseData.type);
-        formData.append('mechanics', exerciseData.mechanics);
-        formData.append('equipments', exerciseData.equipments);
-        formData.append('difficltyLevel', exerciseData.difficltyLevel);
-        formData.append('steps', exerciseData.steps);
-        if (exerciseData.images) {
-            _.forEach(exerciseData.images, (file) => {
-                formData.append('images', file);
-            });
+        formData.append('name', recipeData.name);
+        formData.append('description', recipeData.description);
+        formData.append('method', recipeData.method);
+        formData.append('ingredients', recipeData.ingredients);
+        formData.append('ingredientsIncluded', recipeData.ingredientsIncluded);
+        formData.append('preparationTime', recipeData.preparationTime);
+        formData.append('cookTime', recipeData.cookTime);
+        formData.append('difficultyLevel', recipeData.difficultyLevel);
+        formData.append('rating', recipeData.rating);
+        formData.append('recipeType', recipeData.recipeType);
+        formData.append('nutritions', recipeData.nutritions);
+        if (recipeData.recipe_img) {
+            formData.append('recipe_img', recipeData.recipe_img[0]);
         }
-        formData.append('delete_images', exerciseData.deletedImages);
         this.setState({
             saveActionInit: true
         });
         dispatch(showPageLoader());
         if (typeof match.params.id !== 'undefined') {
-            dispatch(exerciseUpdateRequest(match.params.id, formData))
+            dispatch(recipeUpdateRequest(match.params.id, formData))
         } else {
-            dispatch(exerciseAddRequest(formData))
+            dispatch(recipeAddRequest(formData))
         }
     }
 

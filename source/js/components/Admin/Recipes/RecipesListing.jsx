@@ -112,11 +112,25 @@ class RecipesListing extends Component {
                                                 id: 'preparationTime',
                                                 Header: 'Preparation Time',
                                                 accessor: 'preparationTime',
+                                                Cell: (row) => {
+                                                    return (
+                                                        <div className="list-preparation-time-wrapper">
+                                                            {`${row.value} mins`}
+                                                        </div>
+                                                    );
+                                                },
                                             },
                                             {
                                                 id: 'cookTime',
                                                 Header: 'Cook Time',
                                                 accessor: 'cookTime',
+                                                Cell: (row) => {
+                                                    return (
+                                                        <div className="list-cook-time-wrapper">
+                                                            {`${row.value} mins`}
+                                                        </div>
+                                                    );
+                                                },
                                             },
                                             {
                                                 id: 'difficultyLevel',
@@ -155,6 +169,7 @@ class RecipesListing extends Component {
                                                 id: 'recipeType',
                                                 Header: 'Recipe Type',
                                                 accessor: 'recipeType',
+                                                filterEqual: true,
                                                 Cell: (row) => {
                                                     let dataObj = _.find(recipeTypeOptions, (o) => {
                                                         return (o.value === row.value);
@@ -202,6 +217,12 @@ class RecipesListing extends Component {
                                         pages={filteredTotalPages}
                                         serverloading={loading}
                                         filterDTable={this.filterDTable}
+                                        defaultSorted={[
+                                            {
+                                                id: "name",
+                                                desc: true
+                                            }
+                                        ]}
                                     />
                                 </div>
                             </div>

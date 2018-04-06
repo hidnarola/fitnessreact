@@ -92,6 +92,12 @@ class IngredientsListing extends Component {
                                         pages={filteredTotalPages}
                                         serverloading={loading}
                                         filterDTable={this.filterDTable}
+                                        defaultSorted={[
+                                            {
+                                                id: "name",
+                                                desc: true
+                                            }
+                                        ]}
                                     />
                                 </div>
                             </div>

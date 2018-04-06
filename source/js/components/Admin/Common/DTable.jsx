@@ -61,7 +61,8 @@ class DTable extends Component {
             showPaginationTop,
             showPaginationBottom,
             noDataText,
-            className
+            className,
+            defaultSorted
         } = this.props;
         return (
             <div className="d-table-main-wrapper">
@@ -78,6 +79,7 @@ class DTable extends Component {
                     className={(className) ? className : "-striped -highlight"}
                     showPaginationTop={(showPaginationTop) ? showPaginationTop : true}
                     showPaginationBottom={(showPaginationBottom) ? showPaginationBottom : true}
+                    defaultSorted={defaultSorted}
                 />
             </div>
         );

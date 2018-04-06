@@ -62,6 +62,7 @@ class RecipesForm extends Component {
 
     render() {
         const { handleSubmit, ingredients, nutritions } = this.props;
+        const { starRating } = this.state;
         const ingredientsOptions = prepareDropdownOptionsData(ingredients, '_id', 'name');
         return (
             <div className="exercise-form-data">
@@ -172,6 +173,7 @@ class RecipesForm extends Component {
                                 wrapperClass="form-group"
                                 component={StarRating}
                                 starCount={5}
+                                starRating={starRating}
                                 onStarClick={this.changeRate}
                                 errorClass=""
                                 warningClass=""
@@ -217,6 +219,7 @@ class RecipesForm extends Component {
 
     changeRate = (name, value) => {
         this.props.change(name, value);
+        this.setState({ starRating: value });
     }
 
 }
