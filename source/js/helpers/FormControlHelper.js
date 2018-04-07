@@ -38,6 +38,37 @@ export const TextAreaField = (props) => {
     );
 }
 
+export const CheckboxField = (props) => {
+    const {
+        label,
+        input,
+        meta,
+        wrapperClass,
+        className,
+        labelClass,
+        placeholder,
+        errorClass,
+        checked,
+        handleClick
+    } = props;
+    return (
+        <div className={wrapperClass}>
+            <label htmlFor={input.name} className={labelClass}>{label}</label>
+            <input
+                {...input}
+                type="checkbox"
+                className={className}
+                placeholder={placeholder}
+                checked={checked}
+                onClick={(e) => handleClick(e.target.checked)}
+            />
+            {meta.touched &&
+                ((meta.error && <span className={errorClass}>{meta.error}</span>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))
+            }
+        </div>
+    );
+}
+
 export const SelectField_ReactSelect = (props) => {
     const { label, input, meta, wrapperClass, className, labelClass, placeholder, errorClass, initialValue, options } = props;
     let val = '';

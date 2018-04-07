@@ -18,6 +18,11 @@ class IngredientsSave extends Component {
         var formData = new FormData();
         formData.append('name', data.name);
         formData.append('description', data.description);
+        let allowInShopList = true;
+        if (typeof data.allow_in_shop_list !== 'undefined') {
+            allowInShopList = data.allow_in_shop_list;
+        }
+        formData.append('allowInShopList', allowInShopList);
         if (data.ingredient_img) {
             formData.append('ingredient_img', data.ingredient_img[0]);
         }
