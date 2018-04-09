@@ -4,7 +4,10 @@ export const adminRouteCodes = {
     LOGIN: adminRootRoute,
     DASHBOARD: `${adminRootRoute}/dashboard`,
     PROFILE: `${adminRootRoute}/profile`,
+
     USERS: `${adminRootRoute}/users`,
+    USERS_SAVE: `${adminRootRoute}/users/save`,
+
     NUTRITIONS: `${adminRootRoute}/nutritions`,
 
     INGREDIENTS: `${adminRootRoute}/ingredients`,

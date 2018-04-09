@@ -3,17 +3,56 @@ import Select from 'react-select';
 import Dropzone from 'react-dropzone';
 import _ from 'lodash';
 import StarRatingComponent from 'react-star-rating-component';
+import DatePicker from 'react-datepicker';
 
 export const InputField = (props) => {
-    const { label, input, meta, wrapperClass, className, labelClass, placeholder, errorClass } = props;
+    const { label, input, meta, wrapperClass, className, labelClass, placeholder, errorClass, type } = props;
     return (
         <div className={wrapperClass}>
             <label htmlFor={input.name} className={labelClass}>{label}</label>
             <input
                 {...input}
+                type={type ? type : 'text'}
                 className={className}
                 placeholder={placeholder}
             />
+            {meta.touched &&
+                ((meta.error && <span className={errorClass}>{meta.error}</span>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))
+            }
+        </div>
+    );
+}
+
+export const RadioFields = (props) => {
+    const {
+        label,
+        input,
+        meta,
+        wrapperClass,
+        className,
+        labelClass,
+        errorClass,
+        type,
+        radioList,
+    } = props;
+    return (
+        <div className={wrapperClass}>
+            <label htmlFor={input.name} className={labelClass}>{label}</label>
+            {
+                radioList.map((obj, index) => {
+                    return (
+                        <div key={index}>
+                            <input
+                                {...input}
+                                type="radio"
+                                checked={(index === 0)}
+                                value={obj.value}
+                                className={className}
+                            /> <span>{obj.label}</span>
+                        </div>
+                    );
+                })
+            }
             {meta.touched &&
                 ((meta.error && <span className={errorClass}>{meta.error}</span>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))
             }
@@ -182,6 +221,37 @@ export const StarRating = (props) => {
                 value={parseInt(starRating)}
                 onStarClick={(value) => (onStarClick(input.name, value))}
                 initialRate={starRating}
+            />
+            {meta.touched &&
+                ((meta.error && <span className={errorClass}>{meta.error}</span>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))
+            }
+        </div>
+    );
+}
+
+export const DateField = (props) => {
+    const {
+        label,
+        input,
+        meta,
+        wrapperClass,
+        className,
+        labelClass,
+        placeholder,
+        errorClass,
+        selectedDate,
+        handleChange,
+        dateFormat,
+    } = props;
+    return (
+        <div className={wrapperClass}>
+            <label htmlFor={input.name} className={labelClass}>{label}</label>
+            <DatePicker
+                selected={selectedDate}
+                onChange={handleChange}
+                dateFormat={dateFormat ? dateFormat : "MM/DD/YYYY"}
+                className={className}
+                placeholderText={placeholder}
             />
             {meta.touched &&
                 ((meta.error && <span className={errorClass}>{meta.error}</span>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))

@@ -48,3 +48,10 @@ export const RECIPE_TYPE_ISLAM = 'islam';
 export const RECIPE_TYPE_COELIAC = 'coeliac';
 export const RECIPE_TYPE_PALEO = 'paleo';
 export const RECIPE_TYPE_PASCATERIAN = 'pescaterian';
+
+export const GOAL_GAIN_MUSCLE = 'gain_muscle';
+export const GOAL_GAIN_FLEXIBILITY = 'gain_flexibility';
+export const GOAL_LOSE_FAT = 'lose_fat';
+export const GOAL_GAIN_STRENGTH = 'gain_strength';
+export const GOAL_GAIN_POWER = 'gain_power';
+export const GOAL_INCREASE_ENDURANCE = 'increase_endurance';

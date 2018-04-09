@@ -84,8 +84,8 @@ class ExerciseListing extends Component {
     }
 
     render() {
-        const { bodyParts, exerciseTypes } = this.props;
-        const { showDeleteModal, requestFilterInit, filterData, pages } = this.state;
+        const { bodyParts, exerciseTypes, filteredExercises } = this.props;
+        const { showDeleteModal, requestFilterInit, pages } = this.state;
         return (
             <div className="exercise-listing-wrapper">
                 <div className="body-head space-btm-45 d-flex justify-content-start">
@@ -107,7 +107,7 @@ class ExerciseListing extends Component {
                                 <div className="col-md-12">
                                     <ReactTable
                                         manual
-                                        data={filterData}
+                                        data={filteredExercises}
                                         columns={[
                                             {
                                                 Header: "Created Date",
@@ -149,9 +149,7 @@ class ExerciseListing extends Component {
                                             {
                                                 Header: "Other Muscle",
                                                 accessor: "otherMuscleGroup",
-                                                id: "otherMuscleGroup",
-                                                filterable: false,
-                                                sortable: false,
+                                                id: "otherMuscle.bodypart",
                                                 Cell: (row) => {
                                                     if (bodyParts) {
                                                         let otherMuscles = [];
@@ -175,12 +173,9 @@ class ExerciseListing extends Component {
                                             {
                                                 Header: "Detailed Muscle",
                                                 accessor: "detailedMuscleGroup",
-                                                id: "detailedMuscleGroup",
-                                                filterable: false,
-                                                sortable: false,
+                                                id: "detailedMuscle.bodypart",
                                                 Cell: (row) => {
                                                     if (bodyParts) {
-
                                                         let otherMuscles = [];
                                                         row.value.map((val, i) => {
                                                             const _id = val;
@@ -266,12 +261,10 @@ class ExerciseListing extends Component {
                                             {
                                                 Header: "Type",
                                                 accessor: "type",
-                                                filterable: false,
-                                                sortable: false,
-                                                id: "type",
+                                                id: "type.name",
                                                 Cell: (row) => {
                                                     let type = '-----';
-                                                    let typeObj = _.find(exerciseTypes, ['_id', row.value]);
+                                                    let typeObj = _.find(exerciseTypes, ['_id', row.value._id]);
                                                     if (typeObj && typeObj.name) {
                                                         type = typeObj.name;
                                                     }

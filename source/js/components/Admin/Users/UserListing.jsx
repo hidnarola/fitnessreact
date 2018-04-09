@@ -198,7 +198,7 @@ class UserListing extends Component {
                                                 Cell: (row) => {
                                                     return (
                                                         <div className="actions-wrapper">
-                                                            <NavLink className="btn btn-primary" to={`${adminRouteCodes.EXERCISE_SAVE}/${row.value}`}><FaPencil /></NavLink>
+                                                            <NavLink className="btn btn-primary" to={`${adminRouteCodes.USERS_SAVE}/${row.value}`}><FaPencil /></NavLink>
                                                             <a className="btn btn-danger" href="javascript:void(0)" onClick={() => this.confirmDelete(row.value)}><FaTrash /></a>
                                                         </div>
                                                     );

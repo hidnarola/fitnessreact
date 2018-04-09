@@ -5,6 +5,7 @@ import AdminHeader from 'components/Admin/Template/AdminHeader';
 import AdminNav from 'components/Admin/Template/AdminNav';
 import { adminRouteCodes } from '../../constants/adminRoutes';
 import UserListing from '../../components/Admin/Users/UserListing';
+import UserSave from '../../components/Admin/Users/UserSave';
 
 class Users extends Component {
     render() {
@@ -15,6 +16,7 @@ class Users extends Component {
                 <section className="body-wrap">
                     <Switch>
                         <Route exact path={adminRouteCodes.USERS} component={UserListing} />
+                        <Route path={`${adminRouteCodes.USERS_SAVE}/:id?`} component={UserSave} />
                     </Switch>
                 </section>
             </div>
