@@ -1,57 +1,57 @@
 @font-face {
     font-family:'gt_walsheim_proregular';    
-    src: url('/assets/fonts/gt-walsheim-pro-thin-webfont.woff2') format('woff2'),
-         url('/assets/fonts/gt-walsheim-pro-thin-webfont.woff') format('woff');
+    src: url('../assets/fonts/gt-walsheim-pro-thin-webfont.woff2') format('woff2'),
+         url('../assets/fonts/gt-walsheim-pro-thin-webfont.woff') format('woff');
     font-weight: 300;
     font-style: normal;
 }
 
 @font-face {
     font-family:'gt_walsheim_proregular';
-    src: url('/assets/fonts/gt-walsheim-pro-ultra-light-webfont.woff2') format('woff2'),
-         url('/assets/fonts/gt-walsheim-pro-ultra-light-webfont.woff') format('woff');
+    src: url('../assets/fonts/gt-walsheim-pro-ultra-light-webfont.woff2') format('woff2'),
+         url('../assets/fonts/gt-walsheim-pro-ultra-light-webfont.woff') format('woff');
     font-weight: 200;
     font-style: normal;
 }
 @font-face {
     font-family:'gt_walsheim_proregular';
-    src: url('/assets/fonts/gt-walsheim-pro-light-webfont.woff2') format('woff2'),
-         url('/assets/fonts/gt-walsheim-pro-light-webfont.woff') format('woff');
+    src: url('../assets/fonts/gt-walsheim-pro-light-webfont.woff2') format('woff2'),
+         url('../assets/fonts/gt-walsheim-pro-light-webfont.woff') format('woff');
     font-weight:300;
     font-style: normal;
 }
 @font-face {
     font-family: 'gt_walsheim_proregular';
-    src: url('/assets/fonts/gt-walsheim-pro-regular-webfont.woff2') format('woff2'),
-         url('/assets/fonts/gt-walsheim-pro-regular-webfont.woff') format('woff');
+    src: url('../assets/fonts/gt-walsheim-pro-regular-webfont.woff2') format('woff2'),
+         url('../assets/fonts/gt-walsheim-pro-regular-webfont.woff') format('woff');
     font-weight: 400;
     font-style: normal;
 }
 @font-face {
     font-family: 'gt_walsheim_proregular';
-    src: url('/assets/fonts/gt-walsheim-pro-medium-webfont.woff2') format('woff2'),
-         url('/assets/fonts/gt-walsheim-pro-medium-webfont.woff') format('woff');
+    src: url('../assets/fonts/gt-walsheim-pro-medium-webfont.woff2') format('woff2'),
+         url('../assets/fonts/gt-walsheim-pro-medium-webfont.woff') format('woff');
     font-weight: 500;
     font-style: normal;
 }
 @font-face {
     font-family: 'gt_walsheim_proregular';
-    src: url('/assets/fonts/gt-walsheim-pro-bold-webfont.woff2') format('woff2'),
-         url('/assets/fonts/gt-walsheim-pro-bold-webfont.woff') format('woff');
+    src: url('../assets/fonts/gt-walsheim-pro-bold-webfont.woff2') format('woff2'),
+         url('../assets/fonts/gt-walsheim-pro-bold-webfont.woff') format('woff');
     font-weight:700;
     font-style: normal;
 }
 @font-face {
     font-family: 'gt_walsheim_proregular';
-    src: url('/assets/fonts/gt-walsheim-pro-ultra-bold-webfont.woff2') format('woff2'),
-         url('/assets/fonts/gt-walsheim-pro-ultra-bold-webfont.woff') format('woff');
+    src: url('../assets/fonts/gt-walsheim-pro-ultra-bold-webfont.woff2') format('woff2'),
+         url('../assets/fonts/gt-walsheim-pro-ultra-bold-webfont.woff') format('woff');
     font-weight:800;
     font-style: normal;
 }
 @font-face {
     font-family: 'gt_walsheim_proregular';
-    src: url('/assets/fonts/gt-walsheim-pro-black-webfont.woff2') format('woff2'),
-         url('/assets/fonts/gt-walsheim-pro-black-webfont.woff') format('woff');
+    src: url('../assets/fonts/gt-walsheim-pro-black-webfont.woff2') format('woff2'),
+         url('../assets/fonts/gt-walsheim-pro-black-webfont.woff') format('woff');
     font-weight:900;
     font-style: normal;
 }
