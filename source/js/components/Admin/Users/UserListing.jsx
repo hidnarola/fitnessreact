@@ -18,6 +18,8 @@ import { capitalizeFirstLetter } from '../../../helpers/funs';
 import { adminRouteCodes } from '../../../constants/adminRoutes';
 import DeleteConfirmation from '../Common/DeleteConfirmation';
 import { showPageLoader } from '../../../actions/pageLoader';
+import moment from 'moment';
+import noProfileImg from 'img/common/no-profile-img.png'
 
 const genderOptions = [
     { value: '', label: 'All' },
@@ -77,7 +79,14 @@ class UserListing extends Component {
                                                 Cell: (row) => {
                                                     return (
                                                         <div className="avatar-wrapper">
-                                                            <img src={SERVER_BASE_URL + row.value} alt="Avatar" className="avatar" />
+                                                            <img
+                                                                src={SERVER_BASE_URL + row.value}
+                                                                alt="Avatar"
+                                                                className="avatar"
+                                                                onError={(e) => {
+                                                                    e.target.src = noProfileImg
+                                                                }}
+                                                            />
                                                         </div>
                                                     );
                                                 }
@@ -91,6 +100,11 @@ class UserListing extends Component {
                                                 id: 'lastName',
                                                 Header: 'Last Name',
                                                 accessor: 'lastName',
+                                            },
+                                            {
+                                                id: 'username',
+                                                Header: 'Username',
+                                                accessor: 'username',
                                             },
                                             {
                                                 id: 'email',
@@ -141,6 +155,15 @@ class UserListing extends Component {
                                                 accessor: 'dateOfBirth',
                                                 filterable: false,
                                                 sortable: false,
+                                                Cell: (row) => {
+                                                    return (
+                                                        <div className="list-dob-wrapper">
+                                                            <span>
+                                                                {row.value && moment(row.value).format('MM/DD/YYYY')}
+                                                            </span>
+                                                        </div>
+                                                    );
+                                                }
                                             },
                                             {
                                                 id: 'goal',
@@ -166,7 +189,7 @@ class UserListing extends Component {
                                                         return (o.value === row.value);
                                                     });
                                                     return (
-                                                        <div className="list-gender-wrapper">
+                                                        <div className="list-status-wrapper">
                                                             {dataObj &&
                                                                 <span>{dataObj.label}</span>
                                                             }

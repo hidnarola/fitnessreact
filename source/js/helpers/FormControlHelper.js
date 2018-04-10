@@ -34,6 +34,8 @@ export const RadioFields = (props) => {
         errorClass,
         type,
         radioList,
+        checked,
+        handleChange
     } = props;
     return (
         <div className={wrapperClass}>
@@ -45,9 +47,10 @@ export const RadioFields = (props) => {
                             <input
                                 {...input}
                                 type="radio"
-                                checked={(index === 0)}
+                                checked={(obj.value === checked)}
                                 value={obj.value}
                                 className={className}
+                                onChange={(e) => handleChange(e.target.value)}
                             /> <span>{obj.label}</span>
                         </div>
                     );

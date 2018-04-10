@@ -128,17 +128,60 @@ export const putFormData = (path, data, headers) => {
     // Build Url
     const url = `${API_URL}${path}`;
 
+    let response = null;
     return axios({
         method: 'PUT',
         url: url,
         data: data,
         headers: headers
     }).then(function (res) {
-        return res;
-    }).catch(function (err) {
-        return err.toString();
+        response = res;
+        // HTTP unauthorized
+        if (response.status === 401) {
+            // Handle unauthorized requests
+            // Maybe redirect to login page?
+        }
+
+        // Check for error HTTP error codes
+        if (response.status < 200 || response.status >= 300) {
+            // Get response as text
+            return response.text();
+        }
+
+        // Get response as json
+        return response.json();
+    }).catch(function (error) {
+        // Throw custom API error
+        // If response exists it means HTTP error occured
+        if (response) {
+            throw ApiError(`Request failed with status ${response.status}.`, error, response.status);
+        } else if (error.response.status && error.response.status === 417) {
+            throw {
+                status: error.response.status,
+                error: error.response.data.message,
+                response: error.response,
+            }
+        } else {
+            throw ApiError(error.toString(), null, 'REQUEST_FAILED');
+        }
     });
 };
+
+// export const putFormData = (path, data, headers) => {
+//     // Build Url
+//     const url = `${API_URL}${path}`;
+
+//     return axios({
+//         method: 'PUT',
+//         url: url,
+//         data: data,
+//         headers: headers
+//     }).then(function (res) {
+//         return res;
+//     }).catch(function (err) {
+//         return err.toString();
+//     });
+// };
 
 function getPeople() {
     return fetchResource('people/');

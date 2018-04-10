@@ -30,18 +30,21 @@ import {
     USER_STATUS_ACTIVE,
     USER_STATUS_INACTIVE,
     USER_STATUS_ACTIVE_STR,
-    USER_STATUS_INACTIVE_STR
+    USER_STATUS_INACTIVE_STR,
+    GENDER_MALE,
+    GENDER_FEMALE,
+    GENDER_TRANSGENDER
 } from '../../../constants/consts';
-import { showPageLoader } from '../../../actions/pageLoader';
 import { userSelectOneRequest } from '../../../actions/admin/users';
+import { showPageLoader } from '../../../actions/pageLoader';
 
 const goalOptions = [
-    { value: GOAL_GAIN_MUSCLE, label: capitalizeFirstLetter(GOAL_GAIN_MUSCLE) },
-    { value: GOAL_GAIN_FLEXIBILITY, label: capitalizeFirstLetter(GOAL_GAIN_FLEXIBILITY) },
-    { value: GOAL_LOSE_FAT, label: capitalizeFirstLetter(GOAL_LOSE_FAT) },
-    { value: GOAL_GAIN_STRENGTH, label: capitalizeFirstLetter(GOAL_GAIN_STRENGTH) },
-    { value: GOAL_GAIN_POWER, label: capitalizeFirstLetter(GOAL_GAIN_POWER) },
-    { value: GOAL_INCREASE_ENDURANCE, label: capitalizeFirstLetter(GOAL_INCREASE_ENDURANCE) },
+    { value: GOAL_GAIN_MUSCLE, label: capitalizeFirstLetter(GOAL_GAIN_MUSCLE).replace('_', ' ') },
+    { value: GOAL_GAIN_FLEXIBILITY, label: capitalizeFirstLetter(GOAL_GAIN_FLEXIBILITY).replace('_', ' ') },
+    { value: GOAL_LOSE_FAT, label: capitalizeFirstLetter(GOAL_LOSE_FAT).replace('_', ' ') },
+    { value: GOAL_GAIN_STRENGTH, label: capitalizeFirstLetter(GOAL_GAIN_STRENGTH).replace('_', ' ') },
+    { value: GOAL_GAIN_POWER, label: capitalizeFirstLetter(GOAL_GAIN_POWER).replace('_', ' ') },
+    { value: GOAL_INCREASE_ENDURANCE, label: capitalizeFirstLetter(GOAL_INCREASE_ENDURANCE).replace('_', ' ') },
 ];
 
 const userStatusOptions = [
@@ -54,6 +57,7 @@ class UserForm extends Component {
         super(props);
         this.state = {
             dob: null,
+            gender: GENDER_MALE,
             initSelectPageData: false,
         }
     }
@@ -133,7 +137,6 @@ class UserForm extends Component {
                                 component={InputField}
                                 errorClass=""
                                 warningClass=""
-                                validate={[required]}
                             />
                             <Field
                                 name="gender"
@@ -143,10 +146,12 @@ class UserForm extends Component {
                                 wrapperClass="form-group"
                                 component={RadioFields}
                                 radioList={[
-                                    { label: 'Male', value: 'male' },
-                                    { label: 'Female', value: 'female' },
-                                    { label: 'Transgender', value: 'transgender' },
+                                    { label: capitalizeFirstLetter(GENDER_MALE), value: GENDER_MALE },
+                                    { label: capitalizeFirstLetter(GENDER_FEMALE), value: GENDER_FEMALE },
+                                    { label: capitalizeFirstLetter(GENDER_TRANSGENDER), value: GENDER_TRANSGENDER },
                                 ]}
+                                checked={this.state.gender}
+                                handleChange={this.genderChange}
                                 errorClass=""
                                 warningClass=""
                                 validate={[required]}
@@ -164,7 +169,6 @@ class UserForm extends Component {
                                 dateFormat="MM/DD/YYYY"
                                 errorClass=""
                                 warningClass=""
-                                validate={[required]}
                             />
                             <Field
                                 name="goal"
@@ -246,14 +250,21 @@ class UserForm extends Component {
             initialize(userData);
             this.setState({
                 initSelectPageData: false,
-                dob: dob
+                dob: dob,
+                gender: user.gender,
             });
         }
     }
 
 
     handleChangeDob = (date) => {
+        this.props.change('dob', date);
         this.setState({ dob: date });
+    }
+
+    genderChange = (gender) => {
+        this.props.change('gender', gender);
+        this.setState({ gender: gender });
     }
 }
 

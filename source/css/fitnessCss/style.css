@@ -1138,3 +1138,5 @@ flex-direction:row; display:-webkit-box; display:-webkit-flex; display:-ms-flex;
 .clear-both{clear: both;}
 
 .avatar {vertical-align: middle;width: 50px;height: 50px;border-radius: 50%;}
+
+.btn{margin-right: 5px;}

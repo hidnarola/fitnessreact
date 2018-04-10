@@ -150,10 +150,7 @@ const actionMap = {
         }));
     },
     [USERS_UPDATE_ERROR]: (state, action) => {
-        let error = 'Server error';
-        if (action.error && action.error.response) {
-            error = action.error.response.message;
-        }
+        let { error } = action.error;
         return state.merge(Map({
             loading: false,
             error: error,
