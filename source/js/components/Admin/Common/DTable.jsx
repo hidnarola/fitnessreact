@@ -30,6 +30,10 @@ class DTable extends Component {
                         } else if (column.filterDigit) {
                             filterObj['isDigitFlag'] = true;
                         }
+
+                        if (column.convertBoolean) {
+                            filterObj.value = (filterObj.value == 'true');
+                        }
                         columnFilter.push(filterObj);
                     }
                 }
@@ -85,9 +89,9 @@ class DTable extends Component {
     }
 
     componentDidUpdate() {
-        const { serverloading, data, pages } = this.props;
+        const { serverloading, data, pages, manualReload } = this.props;
         const { loading } = this.state;
-        if (!serverloading && loading) {
+        if ((!serverloading && loading) || (!serverloading && manualReload)) {
             this.setState({
                 loading: false,
                 data: data,

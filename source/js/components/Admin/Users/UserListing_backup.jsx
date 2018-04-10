@@ -46,24 +46,17 @@ class UserListing extends Component {
             selectedId: null,
             showDeleteModal: false,
             deleteActionInit: false,
-            dtFilter: {},
-            dtManualForceReload: false,
         }
     }
 
-    dispatchUsersFilter = (filterData) => {
+    filterDTable = (filterData) => {
         const { dispatch } = this.props;
         dispatch(userFilterRequest(filterData));
     }
 
-    filterDTable = (filterData) => {
-        this.setState({ dtFilter: filterData });
-        this.dispatchUsersFilter(filterData);
-    }
-
     render() {
-        const { loading, filteredUsers, filteredTotalPages } = this.props;
-        const { showDeleteModal, dtManualForceReload } = this.state;
+        const { filteredUsers, loading, filteredTotalPages } = this.props;
+        const { showDeleteModal } = this.state;
         return (
             <div className="user-listing-wrapper">
                 <div className="body-head space-btm-45 d-flex justify-content-start">
@@ -278,7 +271,6 @@ class UserListing extends Component {
                                         pages={filteredTotalPages}
                                         serverloading={loading}
                                         filterDTable={this.filterDTable}
-                                        manualReload={dtManualForceReload}
                                     />
                                 </div>
                             </div>
@@ -296,21 +288,14 @@ class UserListing extends Component {
 
     componentDidUpdate() {
         const { loading, history } = this.props;
-        const { deleteActionInit, dtFilter, dtManualForceReload } = this.state;
+        const { deleteActionInit } = this.state;
         if (deleteActionInit && !loading) {
             this.setState({
                 selectedId: null,
                 showDeleteModal: false,
-                deleteActionInit: false,
-                // dtManualForceReload: false,
+                deleteActionInit: false
             });
-            this.dispatchUsersFilter(dtFilter);
-            // history.push(adminRouteCodes.USERS);
-        }
-        if (dtManualForceReload && !loading) {
-            this.setState({
-                dtManualForceReload: false,
-            });
+            history.push(adminRouteCodes.USERS);
         }
     }
 
@@ -334,8 +319,7 @@ class UserListing extends Component {
         const { dispatch } = this.props;
         dispatch(showPageLoader());
         this.setState({
-            deleteActionInit: true,
-            dtManualForceReload: true,
+            deleteActionInit: true
         });
         dispatch(userDeleteRequest(selectedId));
     }
