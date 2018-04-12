@@ -10,7 +10,9 @@ import {
     TextAreaField,
     SelectField_ReactSelect,
     RadioFields,
-    DateField
+    DateField,
+    FileField_Dropzone_Single,
+    EditorField
 } from '../../../helpers/FormControlHelper';
 import {
     requiredReactSelectMulti,
@@ -59,6 +61,8 @@ class UserForm extends Component {
             dob: null,
             gender: GENDER_MALE,
             initSelectPageData: false,
+            existingProfilePics: [],
+            aboutMe: '',
         }
     }
 
@@ -73,6 +77,7 @@ class UserForm extends Component {
 
     render() {
         const { handleSubmit } = this.props;
+        const { existingProfilePics, aboutMe } = this.state;
         return (
             <div className="exercise-form-data">
                 <form onSubmit={handleSubmit}>
@@ -183,20 +188,24 @@ class UserForm extends Component {
                             <Field
                                 name="user_img"
                                 label="Profile Image"
-                                labelClass="control-label"
+                                labelClass="control-label display_block"
+                                mainWrapperClass="image-form-main-wrapper"
                                 wrapperClass="form-group"
                                 placeholder="Profile Image"
-                                component={FileField_Dropzone}
+                                component={FileField_Dropzone_Single}
                                 multiple={false}
+                                existingImages={existingProfilePics}
                             />
                             <Field
                                 name="about_me"
-                                className="form-control"
+                                value={aboutMe}
+                                handleChange={this.handleChangeTextEditor}
+                                className="editor-min-height-200"
                                 label="About Me"
                                 labelClass="control-label"
                                 wrapperClass="form-group"
                                 placeholder="About Me"
-                                component={TextAreaField}
+                                component={EditorField}
                             />
                             <Field
                                 name="status"
@@ -208,8 +217,8 @@ class UserForm extends Component {
                                 options={userStatusOptions}
                                 validate={[requiredReactSelect]}
                             />
-                            <div className="col-md-12 mb-20 clear-both">
-                                <div className="stepbox-b">
+                            <div className="col-md-12 mb-20 clear-both text-center">
+                                <div className="stepbox-b stepbox-b-center">
                                     <NavLink to={adminRouteCodes.USERS} className="continues-btn">Back</NavLink>
                                     <button type="submit" className="continues-btn"><span>Save</span></button>
                                 </div>
@@ -252,6 +261,8 @@ class UserForm extends Component {
                 initSelectPageData: false,
                 dob: dob,
                 gender: user.gender,
+                existingProfilePics: user.avatar,
+                aboutMe: user.aboutMe,
             });
         }
     }
@@ -265,6 +276,11 @@ class UserForm extends Component {
     genderChange = (gender) => {
         this.props.change('gender', gender);
         this.setState({ gender: gender });
+    }
+
+    handleChangeTextEditor = (editorText) => {
+        this.props.change('about_me', editorText);
+        this.setState({ aboutMe: editorText });
     }
 }
 

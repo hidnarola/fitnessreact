@@ -37,7 +37,7 @@ export const routeCodes = {
     BADGESINCOMPLETE:`${publicPath}badges/incomplete`,
     BADGESCOMPLETE:`${publicPath}badges/complete`,
 
-    FITNESSBODY:`${ publicPath }fitnessBody`,
+    BODY:`${ publicPath }body`,
 
     //Exercise Pages
     EXERCISE:`${ publicPath }exercise`,

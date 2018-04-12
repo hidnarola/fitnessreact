@@ -1,14 +1,15 @@
-import React,{ Component } from 'react';
-import FitnessHeader from '../global/FitnessHeader';
-import FitnessNav from '../global/FitnessNav';
+import React, { Component } from 'react';
+import FitnessHeader from '../components/global/FitnessHeader';
+import FitnessNav from '../components/global/FitnessNav';
+import bodyGraph from 'img/site/body-graph.png';
 
-export default class FitnessBody extends Component{
+export default class Body extends Component {
 
-    render(){
-        return(
+    render() {
+        return (
             <div className="fitness-body">
-                <FitnessHeader/>
-                <FitnessNav/>
+                <FitnessHeader />
+                <FitnessNav />
                 <section className="body-wrap">
                     <div className="body-head d-flex justify-content-start">
                         <div className="body-head-l">
@@ -88,7 +89,8 @@ export default class FitnessBody extends Component{
                                 </div>
                                 <div className="col-md-4">
                                     <div className="whitebody-graph">
-                                        <img src="images/body-graph.png" alt="" />
+                                        {/* <img src="images/body-graph.png" alt="" /> */}
+                                        <img src={bodyGraph} alt="" />
                                     </div>
                                 </div>
                                 <div className="col-md-4">

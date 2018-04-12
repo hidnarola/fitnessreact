@@ -35,6 +35,7 @@ class UserSave extends Component {
                 aboutMe: data.about_me,
                 status: data.status.value,
             }
+            console.log(userData);
             var formData = new FormData();
             formData.append('first_name', userData.firstName);
             formData.append('last_name', userData.lastName);
@@ -92,7 +93,6 @@ class UserSave extends Component {
     componentDidUpdate() {
         const { loading, error, dispatch, match, history } = this.props;
         const { saveActionInit } = this.state;
-        console.log(error);
         if (typeof match.params.id !== 'undefined' && saveActionInit && !loading) {
             this.setState({ saveActionInit: false });
             dispatch(hidePageLoader());

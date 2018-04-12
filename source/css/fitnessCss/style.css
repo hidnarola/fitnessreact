@@ -1042,7 +1042,7 @@ flex-direction:row; display:-webkit-box; display:-webkit-flex; display:-ms-flex;
 .stepbox-b a{padding:12px; margin-left:auto; text-align:center; display:-webkit-box; display:-webkit-flex; display:-ms-flex; display:flex;}
 .stepbox-b a span{font-size:14px;	font-weight:900; line-height:26px; text-align:center; vertical-align:top;}
 .stepbox-b a.back-btn{ color:#FC1454;margin:0 10px 0 0; min-width:60px; justify-content:center;}
-.stepbox-b a.continues-btn{background:linear-gradient(123.28deg, #46E9C5 0%, #3FFBFC 100%); border-radius:100px; width:270px; color:#fff; justify-content:center;}
+.stepbox-b a.continues-btn{background:linear-gradient(123.28deg, #46E9C5 0%, #3FFBFC 100%); border-radius:100px; width:270px; color:#fff; justify-content:center;align-items: center;font-weight: bold;}
 .stepbox-b a i{vertical-align:top;}
 
 .work-level{margin:0; padding:0; list-style:none; display:flex; display:-webkit-box; display:-webkit-flex; display:-ms-flex; justify-content:center; height:100%;}
@@ -1129,9 +1129,6 @@ flex-direction:row; display:-webkit-box; display:-webkit-flex; display:-ms-flex;
 .table-listing-image-view-wrapper span {flex-direction: row;width: 60%;padding-left: 15px;padding-right: 15px;width: 28%;display: -webkit-box;display: -webkit-flex;display: -ms-flex;display: flex;justify-content: center;flex-direction: column;}
 .table-listing-image-view-wrapper span img{min-height: 100px;max-width: 100%;min-width: 150px;max-width: 150px;border-radius: 2px;}
 
-.dropzone-image-preview-wrapper{width: 190px;height: 190px;padding: 5px 0 0 5px;}
-.dropzone-image-preview-wrapper img{width: 100%;height: 100%;border-radius: 5px;}
-
 .image-preview-wrapper{width: 190px;height: 190px;padding: 5px 0 0 5px;}
 .image-preview-wrapper img{width: 100%;height: 100%;border-radius: 5px;}
 
@@ -1140,3 +1137,18 @@ flex-direction:row; display:-webkit-box; display:-webkit-flex; display:-ms-flex;
 .avatar {vertical-align: middle;width: 50px;height: 50px;border-radius: 50%;}
 
 .btn{margin-right: 5px;}
+.image-preview-wrapper {width: 190px;height: 190px;padding: 5px 0 0 5px;display: inline-block;vertical-align: top;margin-right: 20px;margin-top: 5px;}
+.image-form-main-wrapper:After {content: "";display: block;clear: both;}
+.image-form-main-wrapper .form-group {display: inline-block;vertical-align: top;}
+.image-form-main-wrapper label.control-label {width: 100%;}
+.display_block {display: block;}
+.dv-star-rating label {font-size: 20px;}
+.btn_remove {padding: 5px;vertical-align: middle;line-height: 100%;margin: 0;height: auto;    margin-top: 28px;}
+.btn_remove svg {vertical-align: bottom;}
+.stepbox-b.stepbox-b-center button {margin-left: 10px;}
+.stepbox-b.stepbox-b-center a {margin-right: 10px;}
+.stepbox-b.stepbox-b-center {display: inline-flex;}
+
+.react-datepicker-wrapper, .react-datepicker__input-container{display: block !important;}
+
+.quill.editor-min-height-200 .ql-container.ql-snow{min-height: 200px !important;}

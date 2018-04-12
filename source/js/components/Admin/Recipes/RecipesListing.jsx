@@ -23,6 +23,7 @@ import { capitalizeFirstLetter } from '../../../helpers/funs';
 import DeleteConfirmation from '../Common/DeleteConfirmation';
 import { showPageLoader } from '../../../actions/pageLoader';
 import { ingredientListRequest } from '../../../actions/admin/ingredients';
+import noImg from 'img/common/no-img.png'
 
 const difficultyOptions = [
     { value: '', label: 'All' },
@@ -97,8 +98,15 @@ class RecipesListing extends Component {
                                                 sortable: false,
                                                 Cell: (row) => {
                                                     return (
-                                                        <div className="avatar-wrapper">
-                                                            <img src={SERVER_BASE_URL + row.value} alt="Avatar" className="avatar" />
+                                                        <div className="avatar-wrapper text-center">
+                                                            <img
+                                                                src={SERVER_BASE_URL + row.value}
+                                                                alt="Avatar"
+                                                                className="avatar"
+                                                                onError={(e) => {
+                                                                    e.target.src = noImg
+                                                                }}
+                                                            />
                                                         </div>
                                                     );
                                                 }

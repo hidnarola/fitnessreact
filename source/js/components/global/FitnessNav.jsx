@@ -42,7 +42,7 @@ export default class FitnessNav extends Component {
                             <NavLink
                                 activeClassName='active'
                                 className='Menu-link'
-                                to={ routeCodes.FITNESSBODY }
+                                to={ routeCodes.BODY }
                             >
                                 <i className="icon-person"></i>
                                  <span>Body</span> 

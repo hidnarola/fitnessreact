@@ -10,7 +10,6 @@ import FitnessHeader from 'components/global/FitnessHeader';
 import FitnessNav from 'components/global/FitnessNav';
 import Stats from 'components/Stats/Stats';
 
-import FitnessBody from 'components/Body/FitnessBody';
 import NutritionShopping from 'components/Nutrition/NutritionShopping';
 import NutritionMeal from 'components/Nutrition/NutritionMeal';
 import Goals from 'components/Goals/Goals';
@@ -42,6 +41,7 @@ import Coupons from './Admin/Coupons';
 import Nutritions from './Admin/Nutritions';
 import Equipments from './Admin/Equipments';
 import Ingredients from './Admin/Ingredients';
+import Body from './Body';
 
 class App extends Component {
 
@@ -60,7 +60,7 @@ class App extends Component {
 
                         <PrivateRoute path={routeCodes.PROFILE} component={ProfilePage} />
 
-                        <PrivateRoute path={routeCodes.FITNESSBODY} component={FitnessBody} />
+                        <PrivateRoute path={routeCodes.BODY} component={Body} />
 
                         <PrivateRoute exact path={routeCodes.EXERCISE} component={Exercise} />
                         <PrivateRoute path={routeCodes.EXERCISEFITNESS} component={ExerciseSettings} />
@@ -107,7 +107,7 @@ class App extends Component {
 
                         {/* <Route path={routeCodes.PROFILE} component={ProfilePage} /> */}
 
-                        {/* <Route path={routeCodes.FITNESSBODY} component={FitnessBody} /> */}
+                        {/* <Route path={routeCodes.BODY} component={Body} /> */}
 
                         {/* <Route exact path={routeCodes.EXERCISE} component={Exercise} /> */}
                         {/* <Route path={routeCodes.EXERCISEFITNESS} component={ExerciseSettings} /> */}

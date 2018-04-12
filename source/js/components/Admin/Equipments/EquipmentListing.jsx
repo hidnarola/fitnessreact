@@ -11,6 +11,7 @@ import { SERVER_BASE_URL } from '../../../constants/consts';
 import DeleteConfirmation from '../Common/DeleteConfirmation';
 import _ from 'lodash';
 import { equipmentCategoryListRequest } from '../../../actions/admin/equipmentCategories';
+import noImg from 'img/common/no-img.png'
 
 class EquipmentListing extends Component {
     constructor(props) {
@@ -90,10 +91,15 @@ class EquipmentListing extends Component {
                                                     accessor: "image",
                                                     Cell: (row) => {
                                                         return (
-                                                            <div className="table-listing-image-view-wrapper">
-                                                                <span>
-                                                                    <img src={SERVER_BASE_URL + row.value} alt="image" />
-                                                                </span>
+                                                            <div className="avatar-wrapper text-center">
+                                                                <img
+                                                                    src={SERVER_BASE_URL + row.value}
+                                                                    alt="Avatar"
+                                                                    className="avatar"
+                                                                    onError={(e) => {
+                                                                        e.target.src = noImg
+                                                                    }}
+                                                                />
                                                             </div>
                                                         );
                                                     }

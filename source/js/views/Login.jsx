@@ -7,7 +7,9 @@ import { routeCodes } from 'constants/routes';
 import { showPageLoader, hidePageLoader } from '../actions/pageLoader';
 import { USER_ROLE } from '../constants/consts';
 import { isLogin, checkLogin } from '../helpers/loginHelper';
+import Auth from '../auth/Auth';
 
+const auth = new Auth();
 
 class Login extends Component {
     constructor(props) {
@@ -44,6 +46,10 @@ class Login extends Component {
         }
     }
 
+    handleLoginRequest = () => {
+        auth.login();
+    }
+
     render() {
         const { error, loading } = this.props;
         return (
@@ -54,6 +60,7 @@ class Login extends Component {
                             <h3>Create Your Account</h3>
                             <p>Come join the fitness community! Lets set up your Account. Already have one? <a href="#">Sign in here</a> </p>
                             <NavLink to={routeCodes.REGISTERUSER}>Register</NavLink>
+                            <button type="button" onClick={this.handleLoginRequest}>Login</button>
                         </div>
                     </div>
 

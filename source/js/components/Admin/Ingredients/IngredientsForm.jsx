@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
 import { showPageLoader, hidePageLoader } from '../../../actions/pageLoader';
 import { ingredientSelectOneRequest } from '../../../actions/admin/ingredients';
-import { InputField, TextAreaField, FileField_Dropzone, CheckboxField } from '../../../helpers/FormControlHelper';
+import { InputField, TextAreaField, CheckboxField, FileField_Dropzone_Single, EditorField } from '../../../helpers/FormControlHelper';
 import { required } from '../../../formValidation/validationRules';
 import { adminRouteCodes } from '../../../constants/adminRoutes';
 import { SERVER_BASE_URL } from '../../../constants/consts';
@@ -15,6 +15,8 @@ class IngredientsForm extends Component {
         this.state = {
             selectDataInit: false,
             allowInShopList: true,
+            existingImages: [],
+            description: '',
         };
     }
 
@@ -31,7 +33,7 @@ class IngredientsForm extends Component {
 
     render() {
         const { handleSubmit, ingredient } = this.props;
-        const { allowInShopList } = this.state;
+        const { allowInShopList, existingImages, description } = this.state;
         return (
             <div className="exercise-form-data">
                 <form onSubmit={handleSubmit}>
@@ -41,7 +43,7 @@ class IngredientsForm extends Component {
                                 name="name"
                                 className="form-control"
                                 label="Name"
-                                labelClass="control-label"
+                                labelClass="control-label display_block"
                                 wrapperClass="form-group"
                                 placeholder="Name"
                                 component={InputField}
@@ -51,40 +53,41 @@ class IngredientsForm extends Component {
                             />
                             <Field
                                 name="description"
-                                className="form-control"
+                                value={description}
+                                handleChange={this.handleChangeTextEditor}
+                                className="editor-min-height-200"
                                 label="Description"
-                                labelClass="control-label"
+                                labelClass="control-label display_block"
                                 wrapperClass="form-group"
                                 placeholder="Description"
-                                component={TextAreaField}
+                                component={EditorField}
                             />
                             <Field
-                                name="ingredient_img"
-                                label="Images"
-                                labelClass="control-label"
-                                wrapperClass="form-group"
-                                placeholder="Images"
-                                component={FileField_Dropzone}
-                                multiple={false}
-                            />
-                            {ingredient &&
-                                <div className="image-preview-wrapper">
-                                    <img src={SERVER_BASE_URL + ingredient.image} />
-                                </div>
-                            }
-                            <Field
+                                id="allow_in_shop_list"
                                 name="allow_in_shop_list"
                                 label="Allow In Shop List"
+                                fieldLabel="Yes"
                                 labelClass="control-label"
-                                wrapperClass="form-group"
+                                wrapperClass="form-group custom_check"
                                 component={CheckboxField}
                                 checked={allowInShopList}
                                 handleClick={this.setAllowInShopListState}
                                 errorClass=""
                                 warningClass=""
                             />
-                            <div className="col-md-12 mb-20 clear-both">
-                                <div className="stepbox-b">
+                            <Field
+                                name="ingredient_img"
+                                label="Images"
+                                labelClass="control-label display_block"
+                                mainWrapperClass="image-form-main-wrapper"
+                                wrapperClass="form-group"
+                                placeholder="Images"
+                                component={FileField_Dropzone_Single}
+                                multiple={false}
+                                existingImages={existingImages}
+                            />
+                            <div className="col-md-12 mb-20 clear-both text-center">
+                                <div className="stepbox-b stepbox-b-center">
                                     <NavLink to={adminRouteCodes.INGREDIENTS} className="continues-btn">Back</NavLink>
                                     <button type="submit" className="continues-btn"><span>Save</span></button>
                                 </div>
@@ -115,8 +118,12 @@ class IngredientsForm extends Component {
                     description: ingredient.description,
                     allow_in_shop_list: ingredient.allowInShopList,
                 };
-                this.setState({ allowInShopList: ingredient.allowInShopList });
                 initialize(ingredientData);
+                this.setState({
+                    allowInShopList: ingredient.allowInShopList,
+                    existingImages: [ingredient.image],
+                    description: ingredient.description,
+                });
             }
         }
         dispatch(hidePageLoader());
@@ -127,6 +134,11 @@ class IngredientsForm extends Component {
         this.setState({
             allowInShopList: value
         });
+    }
+
+    handleChangeTextEditor = (editorText) => {
+        this.props.change('description', editorText);
+        this.setState({ description: editorText });
     }
 }
 

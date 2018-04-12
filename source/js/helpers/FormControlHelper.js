@@ -4,6 +4,8 @@ import Dropzone from 'react-dropzone';
 import _ from 'lodash';
 import StarRatingComponent from 'react-star-rating-component';
 import DatePicker from 'react-datepicker';
+import ReactQuill from 'react-quill';
+import { SERVER_BASE_URL } from '../constants/consts';
 
 export const InputField = (props) => {
     const { label, input, meta, wrapperClass, className, labelClass, placeholder, errorClass, type } = props;
@@ -91,19 +93,22 @@ export const CheckboxField = (props) => {
         placeholder,
         errorClass,
         checked,
-        handleClick
+        handleClick,
+        fieldLabel,
+        id
     } = props;
     return (
         <div className={wrapperClass}>
-            <label htmlFor={input.name} className={labelClass}>{label}</label>
             <input
                 {...input}
+                id={id}
                 type="checkbox"
                 className={className}
                 placeholder={placeholder}
                 checked={checked}
                 onClick={(e) => handleClick(e.target.checked)}
             />
+            <label htmlFor={input.name} className={labelClass}>{label}</label>
             {meta.touched &&
                 ((meta.error && <span className={errorClass}>{meta.error}</span>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))
             }
@@ -167,6 +172,61 @@ export const SelectField_ReactSelectMulti = (props) => {
             }
         </div>
     );
+}
+
+export class FileField_Dropzone_Single extends Component {
+    render() {
+        const {
+            label,
+            input,
+            meta,
+            mainWrapperClass,
+            wrapperClass,
+            className,
+            labelClass,
+            errorClass,
+            accept,
+            multiple,
+            existingImages
+        } = this.props;
+        let filesArr = _.values(input.value);
+        let images = [];
+        let _existingImages = [];
+        _.forEach(existingImages, (path, key) => {
+            _existingImages.push(
+                <div className="image-preview-wrapper" key={key}>
+                    <img src={SERVER_BASE_URL + path} />
+                </div>
+            )
+        });
+        _.forEach(filesArr, (file, key) => {
+            images.push(
+                <div className="image-preview-wrapper" key={key}>
+                    <img src={file.preview} />
+                </div>
+            )
+        })
+        return (
+            <div className={mainWrapperClass}>
+                <label htmlFor={input.name} className={labelClass}>{label}</label>
+                {_existingImages}
+                {input.value && images}
+                <div className={wrapperClass}>
+                    <Dropzone
+                        {...input}
+                        accept={accept ? accept : "image/jpeg, image/png, image/jpg, image/gif"}
+                        onDrop={(filesToUpload, e) => input.onChange(filesToUpload)}
+                        multiple={multiple ? multiple : false}
+                        className={className}
+                    ></Dropzone>
+                    {meta.touched &&
+                        ((meta.error && <span className={errorClass}>{meta.error}</span>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))
+                    }
+                </div>
+            </div>
+        );
+    }
+
 }
 
 export const FileField_Dropzone = (props) => {
@@ -255,6 +315,37 @@ export const DateField = (props) => {
                 dateFormat={dateFormat ? dateFormat : "MM/DD/YYYY"}
                 className={className}
                 placeholderText={placeholder}
+            />
+            {meta.touched &&
+                ((meta.error && <span className={errorClass}>{meta.error}</span>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))
+            }
+        </div>
+    );
+}
+
+export const EditorField = (props) => {
+    const {
+        label,
+        input,
+        meta,
+        wrapperClass,
+        className,
+        labelClass,
+        placeholder,
+        errorClass,
+        type,
+        handleChange
+    } = props;
+    return (
+        <div className={wrapperClass}>
+            <label htmlFor={input.name} className={labelClass}>{label}</label>
+            <ReactQuill
+                {...input}
+                value={input.value ? input.value : ''}
+                onChange={(content, delta, source, editor) => handleChange(content)}
+                onBlur={(content) => { return content }}
+                className={className}
+                placeholder={placeholder}
             />
             {meta.touched &&
                 ((meta.error && <span className={errorClass}>{meta.error}</span>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))

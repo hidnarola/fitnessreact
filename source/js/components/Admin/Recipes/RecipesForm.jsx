@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { showPageLoader, hidePageLoader } from '../../../actions/pageLoader';
 import { reduxForm, Field, FieldArray } from 'redux-form';
 import _ from 'lodash';
-import { InputField, TextAreaField, FileField_Dropzone, SelectField_ReactSelectMulti, SelectField_ReactSelect, StarRating } from '../../../helpers/FormControlHelper';
+import { InputField, TextAreaField, FileField_Dropzone, SelectField_ReactSelectMulti, SelectField_ReactSelect, StarRating, FileField_Dropzone_Single } from '../../../helpers/FormControlHelper';
 import { required, requiredReactSelectMulti, requiredReactSelect } from '../../../formValidation/validationRules';
 import {
     SERVER_BASE_URL,
@@ -51,6 +51,7 @@ class RecipesForm extends Component {
             initPageDataLoad: false,
             starRating: 0,
             selectDataInit: false,
+            existingImages: [],
         };
     }
 
@@ -70,7 +71,7 @@ class RecipesForm extends Component {
 
     render() {
         const { handleSubmit, ingredients, nutritions, recipe } = this.props;
-        const { starRating } = this.state;
+        const { starRating, existingImages } = this.state;
         const ingredientsOptions = prepareDropdownOptionsData(ingredients, '_id', 'name');
         return (
             <div className="exercise-form-data">
@@ -81,7 +82,7 @@ class RecipesForm extends Component {
                                 name="name"
                                 className="form-control"
                                 label="Name"
-                                labelClass="control-label"
+                                labelClass="control-label display_block"
                                 wrapperClass="form-group"
                                 placeholder="Name"
                                 component={InputField}
@@ -93,7 +94,7 @@ class RecipesForm extends Component {
                                 name="description"
                                 className="form-control"
                                 label="Description"
-                                labelClass="control-label"
+                                labelClass="control-label display_block"
                                 wrapperClass="form-group"
                                 placeholder="Description"
                                 component={TextAreaField}
@@ -101,22 +102,19 @@ class RecipesForm extends Component {
                             <Field
                                 name="recipe_img"
                                 label="Image"
-                                labelClass="control-label"
+                                labelClass="control-label display_block"
+                                mainWrapperClass="image-form-main-wrapper"
                                 wrapperClass="form-group"
                                 placeholder="Images"
-                                component={FileField_Dropzone}
+                                component={FileField_Dropzone_Single}
                                 multiple={false}
+                                existingImages={existingImages}
                             />
-                            {recipe &&
-                                <div className="image-preview-wrapper">
-                                    <img src={SERVER_BASE_URL + recipe.image} />
-                                </div>
-                            }
                             <Field
                                 name="method"
                                 className="form-control"
                                 label="Method"
-                                labelClass="control-label"
+                                labelClass="control-label display_block"
                                 wrapperClass="form-group"
                                 placeholder="Method"
                                 component={TextAreaField}
@@ -125,7 +123,7 @@ class RecipesForm extends Component {
                                 name="ingredients"
                                 className="form-control"
                                 label="Ingredients"
-                                labelClass="control-label"
+                                labelClass="control-label display_block"
                                 wrapperClass="form-group"
                                 placeholder="Ingredients"
                                 component={TextAreaField}
@@ -133,7 +131,7 @@ class RecipesForm extends Component {
                             <Field
                                 name="ingredients_included"
                                 label="Ingredients Included"
-                                labelClass="control-label"
+                                labelClass="control-label display_block"
                                 wrapperClass="form-group"
                                 placeholder="Ingredients Included"
                                 component={SelectField_ReactSelectMulti}
@@ -144,7 +142,7 @@ class RecipesForm extends Component {
                                 name="preparation_time"
                                 className="form-control"
                                 label="Preparation Time"
-                                labelClass="control-label"
+                                labelClass="control-label display_block"
                                 wrapperClass="form-group"
                                 placeholder="Preparation Time"
                                 component={InputField}
@@ -156,7 +154,7 @@ class RecipesForm extends Component {
                                 name="cook_time"
                                 className="form-control"
                                 label="Cook Time"
-                                labelClass="control-label"
+                                labelClass="control-label display_block"
                                 wrapperClass="form-group"
                                 placeholder="Cook Time"
                                 component={InputField}
@@ -167,7 +165,7 @@ class RecipesForm extends Component {
                             <Field
                                 name="difficulty_level"
                                 label="Difficulty Level"
-                                labelClass="control-label"
+                                labelClass="control-label display_block"
                                 wrapperClass="form-group"
                                 placeholder="Difficulty Level"
                                 component={SelectField_ReactSelect}
@@ -178,7 +176,7 @@ class RecipesForm extends Component {
                                 name="rating"
                                 className="form-control"
                                 label="Rating"
-                                labelClass="control-label"
+                                labelClass="control-label display_block"
                                 wrapperClass="form-group"
                                 component={StarRating}
                                 starCount={5}
@@ -190,7 +188,7 @@ class RecipesForm extends Component {
                             <Field
                                 name="recipe_type"
                                 label="Recipe Type"
-                                labelClass="control-label"
+                                labelClass="control-label display_block"
                                 wrapperClass="form-group"
                                 placeholder="Recipe Type"
                                 component={SelectField_ReactSelectMulti}
@@ -203,8 +201,8 @@ class RecipesForm extends Component {
                                 nutritions={nutritions}
                             />
 
-                            <div className="col-md-12 mb-20 clear-both">
-                                <div className="stepbox-b">
+                            <div className="col-md-12 mb-20 clear-both text-center">
+                                <div className="stepbox-b stepbox-b-center">
                                     <NavLink to={adminRouteCodes.RECIPES} className="continues-btn">Back</NavLink>
                                     <button type="submit" className="continues-btn"><span>Save</span></button>
                                 </div>
@@ -267,7 +265,10 @@ class RecipesForm extends Component {
                     nutritions: nutries,
                 };
                 initialize(recipeData);
-                this.setState({ starRating: recipe.rating });
+                this.setState({
+                    starRating: recipe.rating,
+                    existingImages: [recipe.image]
+                });
             }
         } else {
             if (initPageDataLoad && !ingredientsLoading && !nutritionsLoading) {

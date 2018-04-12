@@ -91,7 +91,7 @@ class UserListing extends Component {
                                                 sortable: false,
                                                 Cell: (row) => {
                                                     return (
-                                                        <div className="avatar-wrapper">
+                                                        <div className="avatar-wrapper text-center">
                                                             <img
                                                                 src={SERVER_BASE_URL + row.value}
                                                                 alt="Avatar"
@@ -268,6 +268,7 @@ class UserListing extends Component {
                                                 Cell: (row) => {
                                                     return (
                                                         <div className="actions-wrapper">
+                                                            <NavLink className="btn btn-primary" to={`${adminRouteCodes.USERS_SAVE}/${row.value}`}><FaPencil /></NavLink>
                                                             <NavLink className="btn btn-primary" to={`${adminRouteCodes.USERS_SAVE}/${row.value}`}><FaPencil /></NavLink>
                                                             <a className="btn btn-danger" href="javascript:void(0)" onClick={() => this.confirmDelete(row.value)}><FaTrash /></a>
                                                         </div>

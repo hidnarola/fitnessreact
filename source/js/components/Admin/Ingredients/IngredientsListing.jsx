@@ -8,6 +8,13 @@ import { ingredientFilterRequest, ingredientDeleteRequest } from '../../../actio
 import { showPageLoader } from '../../../actions/pageLoader';
 import DeleteConfirmation from '../Common/DeleteConfirmation';
 import { SERVER_BASE_URL } from '../../../constants/consts';
+import noImg from 'img/common/no-img.png'
+
+const allowInShopListOptions = [
+    { value: '', label: 'All' },
+    { value: true, label: 'Yes' },
+    { value: false, label: 'No' },
+];
 
 class IngredientsListing extends Component {
     constructor(props) {
@@ -57,8 +64,15 @@ class IngredientsListing extends Component {
                                                 sortable: false,
                                                 Cell: (row) => {
                                                     return (
-                                                        <div className="avatar-wrapper">
-                                                            <img src={SERVER_BASE_URL + row.value} alt="Image" className="img-responsive img-rounded" />
+                                                        <div className="avatar-wrapper text-center">
+                                                            <img
+                                                                src={SERVER_BASE_URL + row.value}
+                                                                alt="Avatar"
+                                                                className="avatar"
+                                                                onError={(e) => {
+                                                                    e.target.src = noImg
+                                                                }}
+                                                            />
                                                         </div>
                                                     );
                                                 }
@@ -69,9 +83,38 @@ class IngredientsListing extends Component {
                                                 accessor: 'name',
                                             },
                                             {
-                                                id: 'description',
-                                                Header: 'Description',
-                                                accessor: 'description',
+                                                id: 'allowInShopList',
+                                                Header: 'Allow Shop List',
+                                                accessor: 'allowInShopList',
+                                                filterEqual: true,
+                                                convertBoolean: true,
+                                                Cell: (row) => {
+                                                    let dataObj = _.find(allowInShopListOptions, (o) => {
+                                                        return (o.value === row.value);
+                                                    });
+                                                    return (
+                                                        <div className="list-status-wrapper">
+                                                            {dataObj &&
+                                                                <span>{dataObj.label}</span>
+                                                            }
+                                                        </div>
+                                                    );
+                                                },
+                                                Filter: ({ filter, onChange }) => {
+                                                    return (
+                                                        <select
+                                                            onChange={event => onChange(event.target.value)}
+                                                            className="width-100-per"
+                                                            value={filter ? filter.value : "all"}
+                                                        >
+                                                            {allowInShopListOptions && allowInShopListOptions.length > 0 &&
+                                                                allowInShopListOptions.map((obj, index) => (
+                                                                    <option key={index} value={obj.value}>{obj.label}</option>
+                                                                ))
+                                                            }
+                                                        </select>
+                                                    );
+                                                }
                                             },
                                             {
                                                 Header: "Actions",
