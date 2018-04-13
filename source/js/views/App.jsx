@@ -43,7 +43,7 @@ import Equipments from './Admin/Equipments';
 import Ingredients from './Admin/Ingredients';
 import Body from './Body';
 import { AUTH_CALLBACK_ROUTE } from '../auth/auth0-variables';
-import Callback from '../auth/callback/callback';
+import Callback from '../auth/callback/Callback';
 
 class App extends Component {
 
