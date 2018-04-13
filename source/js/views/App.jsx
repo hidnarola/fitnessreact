@@ -42,6 +42,8 @@ import Nutritions from './Admin/Nutritions';
 import Equipments from './Admin/Equipments';
 import Ingredients from './Admin/Ingredients';
 import Body from './Body';
+import { AUTH_CALLBACK_ROUTE } from '../auth/auth0-variables';
+import Callback from '../auth/callback/callback';
 
 class App extends Component {
 
@@ -99,6 +101,8 @@ class App extends Component {
                         <AdminPrivateRoute path={adminRouteCodes.BUDGES} component={Budges} />
 
                         <AdminPrivateRoute path={adminRouteCodes.COUPONS} component={Coupons} />
+
+                        <Route exact path={AUTH_CALLBACK_ROUTE} component={Callback} />
 
                         {/* <Route path={routeCodes.PEOPLE} component={People} /> */}
                         {/* <Route path={routeCodes.DASHBOARD} component={Dashboard} /> */}

@@ -6,6 +6,7 @@ export const LOCALSTORAGE_ROLE_KEY = 'role';
 export const USER_ROLE = 'fitassist-user';
 export const ADMIN_ROLE = 'firassist-admin'
 
+export const BASE_URL = 'http://' + window.location.hostname + ':8080/';
 export const SERVER_BASE_URL = 'http://' + window.location.hostname + ':3300/';
 
 export const EXERCISE_MECHANICS_COMPOUND = 'compound';
