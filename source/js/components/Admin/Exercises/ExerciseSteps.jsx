@@ -9,11 +9,17 @@ class ExerciseSteps extends Component {
         const { fields } = this.props;
         return (
             <div className="exercise-steps-wrapper">
-                <div className="step-fields-wrapper">
+                <label className="control-label display_block">Steps</label>
+                <div className="add-step-wrapper-btn pull-right">
+                    <div className="col-md-12">
+                        <button type="button" className="btn btn-primary" onClick={() => fields.push({})}>Add Steps</button>
+                    </div>
+                </div>
+                <div className="row pull-left width-100-per step-fields-wrapper">
                     {fields &&
                         fields.map((field, index) => (
-                            <div className="row step-field" key={index}>
-                                <div className="col-md-11">
+                            <div className="col-md-12 step-field" key={index}>
+                                <div className="col-md-11 pull-left">
                                     <Field
                                         name={`${field}.name`}
                                         className="form-control"
@@ -22,22 +28,17 @@ class ExerciseSteps extends Component {
                                         wrapperClass="form-group"
                                         placeholder={`Step ${index + 1}`}
                                         component={InputField}
-                                        errorClass=""
+                                        errorClass="help-block"
                                         warningClass=""
                                         validate={[required]}
                                     />
                                 </div>
-                                <div className="col-md-1">
-                                    <button type="button" className="btn btn-danger" onClick={() => fields.remove(index)}><FaTrash /></button>
+                                <div className="col-md-1 text-vcenter no-padding pull-left">
+                                    <button type="button" className="btn btn-danger btn_remove" onClick={() => fields.remove(index)} tabIndex="-1"><FaTrash /></button>
                                 </div>
                             </div>
                         ))
                     }
-                </div>
-                <div className="add-step-wrapper-btn pull-right">
-                    <div className="col-md-12">
-                        <button type="button" className="btn btn-primary" onClick={() => fields.push({})}>Add Steps</button>
-                    </div>
                 </div>
             </div>
         );

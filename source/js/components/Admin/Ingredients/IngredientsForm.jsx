@@ -83,7 +83,6 @@ class IngredientsForm extends Component {
                                 wrapperClass="form-group"
                                 placeholder="Images"
                                 component={FileField_Dropzone_Single}
-                                multiple={false}
                                 existingImages={existingImages}
                             />
                             <div className="col-md-12 mb-20 clear-both text-center">

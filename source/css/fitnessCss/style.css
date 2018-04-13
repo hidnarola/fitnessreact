@@ -1151,4 +1151,35 @@ flex-direction:row; display:-webkit-box; display:-webkit-flex; display:-ms-flex;
 
 .react-datepicker-wrapper, .react-datepicker__input-container{display: block !important;}
 
-.quill.editor-min-height-200 .ql-container.ql-snow{min-height: 200px !important;}
+.quill.editor-min-height-200 .ql-container.ql-snow,
+.quill.editor-min-height-200 .ql-editor.ql-blank
+{min-height: 200px !important;}
+
+.has-error .Select-control{border-color: #a94442;-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);}
+.has-error .Select-control span.Select-arrow {border-color: #a94442 transparent transparent;}
+.no-padding{padding: 0 !important;}
+.no-margin{margin: 0 !important;}
+.btn-circle{border-radius: 50%;}
+
+.dropzone-image-preview-wrapper {position: relative;}
+.dropzone-image {opacity: 1;display: block;width: 100%;height: auto;transition: .5s ease;backface-visibility: hidden;}
+.middle {transition: .5s ease;opacity: 0;position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);-ms-transform: translate(-50%, -50%);text-align: center;}
+.dropzone-image-preview-wrapper:hover .image {opacity: 0.3;}
+.dropzone-image-preview-wrapper:hover .middle {opacity: 1;}
+
+
+
+
+
+
+
+
+
+
+
+/* .text {
+background-color: #4CAF50;
+color: white;
+font-size: 16px;
+padding: 16px 32px;
+} */

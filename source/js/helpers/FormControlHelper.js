@@ -6,11 +6,16 @@ import StarRatingComponent from 'react-star-rating-component';
 import DatePicker from 'react-datepicker';
 import ReactQuill from 'react-quill';
 import { SERVER_BASE_URL } from '../constants/consts';
+import noImg from 'img/common/no-img.png'
 
 export const InputField = (props) => {
     const { label, input, meta, wrapperClass, className, labelClass, placeholder, errorClass, type } = props;
     return (
-        <div className={wrapperClass}>
+        <div
+            className={
+                `${wrapperClass} ${(meta.touched && meta.error) ? 'has-error' : ''}`
+            }
+        >
             <label htmlFor={input.name} className={labelClass}>{label}</label>
             <input
                 {...input}
@@ -19,7 +24,7 @@ export const InputField = (props) => {
                 placeholder={placeholder}
             />
             {meta.touched &&
-                ((meta.error && <span className={errorClass}>{meta.error}</span>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))
+                ((meta.error && <div className={errorClass}>{meta.error}</div>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))
             }
         </div>
     );
@@ -68,7 +73,11 @@ export const RadioFields = (props) => {
 export const TextAreaField = (props) => {
     const { label, input, meta, wrapperClass, className, labelClass, placeholder, errorClass } = props;
     return (
-        <div className={wrapperClass}>
+        <div
+            className={
+                `${wrapperClass} ${(meta.touched && meta.error) ? 'has-error' : ''}`
+            }
+        >
             <label htmlFor={input.name} className={labelClass}>{label}</label>
             <textarea
                 {...input}
@@ -76,7 +85,7 @@ export const TextAreaField = (props) => {
                 placeholder={placeholder}
             />
             {meta.touched &&
-                ((meta.error && <span className={errorClass}>{meta.error}</span>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))
+                ((meta.error && <div className={errorClass}>{meta.error}</div>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))
             }
         </div>
     );
@@ -117,7 +126,7 @@ export const CheckboxField = (props) => {
 }
 
 export const SelectField_ReactSelect = (props) => {
-    const { label, input, meta, wrapperClass, className, labelClass, placeholder, errorClass, initialValue, options } = props;
+    const { label, input, meta, wrapperClass, className, labelClass, placeholder, errorClass, initialValue, options, clearable } = props;
     let val = '';
     if (input.value && Object.keys(input.value).length > 0) {
         val = input.value;
@@ -125,7 +134,11 @@ export const SelectField_ReactSelect = (props) => {
         val = initialValue;
     }
     return (
-        <div className={wrapperClass}>
+        <div
+            className={
+                `${wrapperClass} ${(meta.touched && meta.error) ? 'has-error' : ''}`
+            }
+        >
             <label htmlFor={input.name} className={labelClass}>{label}</label>
             <Select
                 {...input}
@@ -136,10 +149,10 @@ export const SelectField_ReactSelect = (props) => {
                 onChange={(value) => input.onChange(value)}
                 onBlur={() => input.onBlur({ ...input.value })}
                 multi={false}
-                clearable={false}
+                clearable={clearable ? clearable : true}
             />
             {meta.touched &&
-                ((meta.error && <span className={errorClass}>{meta.error}</span>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))
+                ((meta.error && <div className={errorClass}>{meta.error}</div>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))
             }
         </div>
     );
@@ -154,7 +167,11 @@ export const SelectField_ReactSelectMulti = (props) => {
         val = initialValue;
     }
     return (
-        <div className={wrapperClass}>
+        <div
+            className={
+                `${wrapperClass} ${(meta.touched && meta.error) ? 'has-error' : ''}`
+            }
+        >
             <label htmlFor={input.name} className={labelClass}>{label}</label>
             <Select
                 {...input}
@@ -168,7 +185,7 @@ export const SelectField_ReactSelectMulti = (props) => {
                 clearable={false}
             />
             {meta.touched &&
-                ((meta.error && <span className={errorClass}>{meta.error}</span>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))
+                ((meta.error && <div className={errorClass}>{meta.error}</div>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))
             }
         </div>
     );
@@ -186,16 +203,80 @@ export class FileField_Dropzone_Single extends Component {
             labelClass,
             errorClass,
             accept,
-            multiple,
             existingImages
         } = this.props;
         let filesArr = _.values(input.value);
         let images = [];
         let _existingImages = [];
         _.forEach(existingImages, (path, key) => {
-            _existingImages.push(
+            if (path) {
+                _existingImages.push(
+                    <div className="image-preview-wrapper" key={key}>
+                        <img
+                            src={SERVER_BASE_URL + path}
+                            alt="Image"
+                            onError={(e) => {
+                                e.target.src = noImg
+                            }}
+                        />
+                    </div>
+                )
+            }
+        });
+        _.forEach(filesArr, (file, key) => {
+            images.push(
                 <div className="image-preview-wrapper" key={key}>
-                    <img src={SERVER_BASE_URL + path} />
+                    <img src={file.preview} />
+                </div>
+            )
+        })
+        return (
+            <div className={mainWrapperClass}>
+                <label htmlFor={input.name} className={labelClass}>{label}</label>
+                {_existingImages}
+                {input.value && images}
+                <div className={wrapperClass}>
+                    <Dropzone
+                        {...input}
+                        accept={accept ? accept : "image/jpeg, image/png, image/jpg, image/gif"}
+                        onDrop={(filesToUpload, e) => input.onChange(filesToUpload)}
+                        multiple={false}
+                        className={className}
+                    ></Dropzone>
+                    {meta.touched &&
+                        ((meta.error && <span className={errorClass}>{meta.error}</span>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))
+                    }
+                </div>
+            </div>
+        );
+    }
+}
+
+export class FileField_Dropzone_Multi extends Component {
+    render() {
+        const {
+            label,
+            input,
+            meta,
+            mainWrapperClass,
+            wrapperClass,
+            className,
+            labelClass,
+            errorClass,
+            accept,
+            existingImages,
+            showExistingImageDeleteModel,
+        } = this.props;
+        let filesArr = _.values(input.value);
+        let images = [];
+        let _existingImages = [];
+        _.forEach(existingImages, (path, key) => {
+            _existingImages.push(
+                <div className="image-preview-wrapper dropzone-image-preview-wrapper" key={key}>
+                    <img src={SERVER_BASE_URL + path} className="image" />
+                    <div className="middle">
+                        <button type="button" className="btn btn-danger no-margin" onClick={() => showExistingImageDeleteModel(path)}>Delete</button>
+                    </div>
                 </div>
             )
         });
@@ -216,7 +297,7 @@ export class FileField_Dropzone_Single extends Component {
                         {...input}
                         accept={accept ? accept : "image/jpeg, image/png, image/jpg, image/gif"}
                         onDrop={(filesToUpload, e) => input.onChange(filesToUpload)}
-                        multiple={multiple ? multiple : false}
+                        multiple={true}
                         className={className}
                     ></Dropzone>
                     {meta.touched &&
@@ -226,7 +307,6 @@ export class FileField_Dropzone_Single extends Component {
             </div>
         );
     }
-
 }
 
 export const FileField_Dropzone = (props) => {

@@ -107,7 +107,6 @@ class RecipesForm extends Component {
                                 wrapperClass="form-group"
                                 placeholder="Images"
                                 component={FileField_Dropzone_Single}
-                                multiple={false}
                                 existingImages={existingImages}
                             />
                             <Field
