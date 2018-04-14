@@ -2,6 +2,10 @@ export const EXERCISE_TYPES_LIST_REQUEST = 'EXERCISE_TYPES_LIST_REQUEST';
 export const EXERCISE_TYPES_LIST_SUCCESS = 'EXERCISE_TYPES_LIST_SUCCESS';
 export const EXERCISE_TYPES_LIST_ERROR = 'EXERCISE_TYPES_LIST_ERROR';
 
+export const EXERCISE_TYPES_FILTER_REQUEST = 'EXERCISE_TYPES_FILTER_REQUEST';
+export const EXERCISE_TYPES_FILTER_SUCCESS = 'EXERCISE_TYPES_FILTER_SUCCESS';
+export const EXERCISE_TYPES_FILTER_ERROR = 'EXERCISE_TYPES_FILTER_ERROR';
+
 export const EXERCISE_TYPES_SELECT_ONE_REQUEST = 'EXERCISE_TYPES_SELECT_ONE_REQUEST';
 export const EXERCISE_TYPES_SELECT_ONE_SUCCESS = 'EXERCISE_TYPES_SELECT_ONE_SUCCESS';
 export const EXERCISE_TYPES_SELECT_ONE_ERROR = 'EXERCISE_TYPES_SELECT_ONE_ERROR';
@@ -34,6 +38,27 @@ export function exerciseTypeListSuccess(data) {
 export function exerciseTypeListError(error) {
     return {
         type: EXERCISE_TYPES_LIST_ERROR,
+        error
+    }
+}
+
+export function exerciseTypeFilterRequest(filterData) {
+    return {
+        type: EXERCISE_TYPES_FILTER_REQUEST,
+        filterData
+    }
+}
+
+export function exerciseTypeFilterSuccess(data) {
+    return {
+        type: EXERCISE_TYPES_FILTER_SUCCESS,
+        data
+    }
+}
+
+export function exerciseTypeFilterError(error) {
+    return {
+        type: EXERCISE_TYPES_FILTER_ERROR,
         error
     }
 }

@@ -13,6 +13,18 @@ function getExerciseTypes() {
     return fetchResource(requestUrl, options);
 }
 
+function filterExerciseTypes(filterData) {
+    let headers = extraHeaders();
+    var options = {
+        method: 'GET',
+        headers: headers,
+    }
+
+    return fetchResource(requestUrl, options);
+    // let headers = extraHeaders();
+    // return postFormData(requestUrl, filterData, headers);
+}
+
 function getExerciseType(_id) {
     let headers = extraHeaders();
     var options = {
@@ -45,6 +57,7 @@ function deleteExerciseType(_id) {
 
 export default {
     getExerciseTypes,
+    filterExerciseTypes,
     getExerciseType,
     addExerciseType,
     updateExerciseType,

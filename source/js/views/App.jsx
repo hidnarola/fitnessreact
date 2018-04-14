@@ -44,6 +44,7 @@ import Ingredients from './Admin/Ingredients';
 import Body from './Body';
 import { AUTH_CALLBACK_ROUTE } from '../auth/auth0-variables';
 import Callback from '../auth/callback/Callback';
+import ExerciseTypes from './Admin/ExerciseTypes';
 
 class App extends Component {
 
@@ -91,6 +92,8 @@ class App extends Component {
                         <AdminPrivateRoute path={adminRouteCodes.RECIPES} component={Recipes} />
 
                         <AdminPrivateRoute path={adminRouteCodes.INGREDIENTS} component={Ingredients} />
+
+                        <AdminPrivateRoute path={adminRouteCodes.EXERCISE_TYPE} component={ExerciseTypes} />
 
                         <AdminPrivateRoute path={adminRouteCodes.EXERCISE} component={Exercises} />
 

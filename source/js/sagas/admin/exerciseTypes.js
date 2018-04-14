@@ -14,7 +14,10 @@ import {
     EXERCISE_TYPES_SELECT_ONE_REQUEST,
     exerciseTypeUpdateSuccess,
     exerciseTypeUpdateError,
-    EXERCISE_TYPES_UPDATE_REQUEST
+    EXERCISE_TYPES_UPDATE_REQUEST,
+    exerciseTypeFilterError,
+    exerciseTypeFilterSuccess,
+    EXERCISE_TYPES_FILTER_REQUEST
 } from "../../actions/admin/exerciseTypes";
 import api from 'api/admin/exerciseTypes';
 
@@ -25,6 +28,17 @@ function getAdminExerciseTypesData() {
             yield put(exerciseTypeListSuccess(data));
         } catch (error) {
             yield put(exerciseTypeListError(error));
+        }
+    }
+}
+
+function filterAdminExerciseTypesData() {
+    return function* (action) {
+        try {
+            const data = yield call(() => api.filterExerciseTypes());
+            yield put(exerciseTypeFilterSuccess(data));
+        } catch (error) {
+            yield put(exerciseTypeFilterError(error));
         }
     }
 }
@@ -80,6 +94,7 @@ function deleteAdminExerciseTypeData() {
 
 export function* watchAdminExerciseTypes() {
     yield takeLatest(EXERCISE_TYPES_LIST_REQUEST, getAdminExerciseTypesData());
+    yield takeLatest(EXERCISE_TYPES_FILTER_REQUEST, filterAdminExerciseTypesData());
     yield takeLatest(EXERCISE_TYPES_SELECT_ONE_REQUEST, getAdminExerciseTypeData());
     yield takeLatest(EXERCISE_TYPES_ADD_REQUEST, postAdminExerciseTypeData());
     yield takeLatest(EXERCISE_TYPES_UPDATE_REQUEST, putAdminExerciseTypeData());

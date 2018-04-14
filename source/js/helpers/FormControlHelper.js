@@ -271,14 +271,23 @@ export class FileField_Dropzone_Multi extends Component {
         let images = [];
         let _existingImages = [];
         _.forEach(existingImages, (path, key) => {
-            _existingImages.push(
-                <div className="image-preview-wrapper dropzone-image-preview-wrapper" key={key}>
-                    <img src={SERVER_BASE_URL + path} className="image" />
-                    <div className="middle">
-                        <button type="button" className="btn btn-danger no-margin" onClick={() => showExistingImageDeleteModel(path)}>Delete</button>
+            if (path) {
+                _existingImages.push(
+                    <div className="image-preview-wrapper dropzone-image-preview-wrapper" key={key}>
+                        <img
+                            src={SERVER_BASE_URL + path}
+                            className="image"
+                            alt="Image"
+                            onError={(e) => {
+                                e.target.src = noImg
+                            }}
+                        />
+                        <div className="middle">
+                            <button type="button" className="btn btn-danger no-margin" onClick={() => showExistingImageDeleteModel(path)}>Delete</button>
+                        </div>
                     </div>
-                </div>
-            )
+                )
+            }
         });
         _.forEach(filesArr, (file, key) => {
             images.push(
