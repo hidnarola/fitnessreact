@@ -13,6 +13,13 @@ export const requiredReactSelect = (value) => {
     return undefined;
 }
 
+export const requiredReactSelectStatus = (value) => {
+    if (!value || Object.keys(value).length <= 0 || value.value === '') {
+        return "Field is required";
+    }
+    return undefined;
+}
+
 export const requiredReactSelectMulti = (value) => {
     if (!value || !_.isArray(value) || _.isEmpty(value)) {
         return "Field is required";

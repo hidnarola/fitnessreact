@@ -79,8 +79,8 @@ const actionMap = {
             loading: false,
             error: null,
             exerciseTypes: [],
-            filteredExerciseTypes: action.data.exercise_types,
-            filteredTotalPages: 0,
+            filteredExerciseTypes: action.data.filtered_exercise_types,
+            filteredTotalPages: action.data.filtered_total_pages,
             exerciseType: null,
         }));
     },

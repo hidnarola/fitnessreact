@@ -37,6 +37,12 @@ export const USER_STATUS_INACTIVE = 0;
 export const USER_STATUS_ACTIVE_STR = 'Active';
 export const USER_STATUS_INACTIVE_STR = 'Inactive';
 
+export const STATUS_ACTIVE = 1;
+export const STATUS_INACTIVE = 0;
+
+export const STATUS_ACTIVE_STR = 'Active';
+export const STATUS_INACTIVE_STR = 'Inactive';
+
 export const RECIPE_DIFFICULTY_EASY = 'easy';
 export const RECIPE_DIFFICULTY_MEDIUM = 'medium';
 export const RECIPE_DIFFICULTY_HARD = 'hard';

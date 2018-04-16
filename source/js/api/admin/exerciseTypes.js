@@ -14,15 +14,15 @@ function getExerciseTypes() {
 }
 
 function filterExerciseTypes(filterData) {
-    let headers = extraHeaders();
-    var options = {
-        method: 'GET',
-        headers: headers,
-    }
-
-    return fetchResource(requestUrl, options);
     // let headers = extraHeaders();
-    // return postFormData(requestUrl, filterData, headers);
+    // var options = {
+    //     method: 'GET',
+    //     headers: headers,
+    // }
+
+    // return fetchResource(requestUrl, options);
+    let headers = extraHeaders();
+    return postFormData(requestUrl + '/filter', filterData, headers);
 }
 
 function getExerciseType(_id) {
