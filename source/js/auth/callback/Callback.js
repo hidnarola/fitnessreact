@@ -14,6 +14,7 @@ class Callback extends Component {
     }
 
     render() {
+        console.log(this.props);
         return (
             <div className="auth0-callback-wrapper">
                 <h1>Loading...</h1>

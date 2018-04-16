@@ -7,39 +7,9 @@ import { routeCodes } from 'constants/routes';
 import { showPageLoader, hidePageLoader } from '../actions/pageLoader';
 import { USER_ROLE } from '../constants/consts';
 import { isLogin, checkLogin } from '../helpers/loginHelper';
-// import Auth from '../auth/Auth';
-import Auth0Lock from 'auth0-lock';
+import Auth from '../auth/Auth';
 
-// const auth = new Auth();
-// Initializing our Auth0Lock
-var lock = new Auth0Lock(
-    'YsOdTiUfiX1vpUodXsT6Dkh7waOSjzSH',
-    'fitassist.eu.auth0.com',
-    {
-        allowSignUp: false,
-        auth: {
-            audience: `https://fitassist.eu.auth0.com/userinfo`,
-            redirectUrl: 'http://localhost:8080/auth0_callback',
-            responseType: 'token id_token',
-        }
-    }
-);
-
-// Listening for the authenticated event
-// lock.on("authenticated", function (authResult) {
-//     // Use the token in authResult to getUserInfo() and save it to localStorage
-//     lock.getUserInfo(authResult.accessToken, function (error, profile) {
-//         if (error) {
-//             // Handle error
-//             return;
-//         }
-
-//         document.getElementById('nick').textContent = profile.nickname;
-
-//         localStorage.setItem('accessToken', authResult.accessToken);
-//         localStorage.setItem('profile', JSON.stringify(profile));
-//     });
-// });
+const auth = new Auth();
 
 class Login extends Component {
     constructor(props) {
@@ -77,8 +47,7 @@ class Login extends Component {
     }
 
     handleLoginRequest = () => {
-        lock.show();
-        // auth.login();
+        auth.login();
     }
 
     render() {
