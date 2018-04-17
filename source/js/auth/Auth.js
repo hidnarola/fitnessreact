@@ -78,7 +78,12 @@ export default class Auth {
   handleAuthentication(authResult) {
     if (authResult && authResult.accessToken && authResult.idToken) {
       let reqUrl = SERVER_BASE_URL + 'auth0_user_sync';
-      axios.get(reqUrl)
+      let options = {
+        'headers': {
+          'x-access-token': AUTH_CONFIG.tokenType + ' ' + authResult.accessToken
+        }
+      }
+      axios.get(reqUrl, options)
         .then((res) => {
           if (authResult.state && authResult.state !== '') {
             let authState = JSON.parse(authResult.state);

@@ -36,10 +36,17 @@ class Login extends Component {
                     <div className="step-box-l">
                         <div className="what-difference">
                             <h3>Create Your Account</h3>
-                            <p>Come join the fitness community! Lets set up your Account. Already have one? <a href="#">Sign in here</a> </p>
-                            {/* <NavLink to={routeCodes.REGISTERUSER}>Register</NavLink> */}
-                            <button type="button" onClick={this.handleSignUpRequest}>Register</button>
-                            <button type="button" onClick={this.handleLoginRequest}>Login</button>
+                            <p>Come join the fitness community! Lets set up your Account. Already have one? <a href="javascript:void(0)" onClick={this.handleSignUpRequest}>Sign in here</a> </p>
+                            <a href="javascript:void(0)" onClick={this.handleSignUpRequest}>Register</a>
+                        </div>
+                    </div>
+                    <div className="step-box-r">
+                        <div className="stepbox-head">
+                            <h3>Login</h3>
+                            <p>Come join the fitness community! Lets get to your Account.</p>
+                        </div>
+                        <div className="stepbox-b">
+                            <button type="button" className="continues-btn" onClick={this.handleLoginRequest}><span>Login</span> <i className="icon-skip_next"></i></button>
                         </div>
                     </div>
                 </div >
