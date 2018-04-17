@@ -4,7 +4,7 @@ import { login } from 'actions/login';
 import { showPageLoader, hidePageLoader } from 'actions/pageLoader';
 import AdminLoginForm from '../../components/Admin/Login/AdminLoginForm';
 import { adminRouteCodes } from '../../constants/adminRoutes';
-import { ADMIN_ROLE } from '../../constants/consts';
+import { ADMIN_ROLE, LOCALSTORAGE_ACCESS_TOKEN_KEY } from '../../constants/consts';
 import { checkLogin, isLogin } from '../../helpers/loginHelper';
 
 
@@ -37,7 +37,7 @@ class AdminLogin extends Component {
     }
 
     componentWillUpdate() {
-        var token = localStorage.getItem('token');
+        var token = localStorage.getItem(LOCALSTORAGE_ACCESS_TOKEN_KEY);
         if (token) {
             this.props.history.push(adminRouteCodes.DASHBOARD);
         }

@@ -10,6 +10,9 @@ import FaMail from 'react-icons/lib/md/markunread';
 import { FaSignOut } from 'react-icons/lib/fa'
 import { logout } from '../../actions/login';
 import { withRouter } from 'react-router-dom';
+import Auth from '../../auth/Auth';
+
+const auth = new Auth();
 
 class FitnessHeader extends Component {
     constructor(props) {
@@ -18,9 +21,10 @@ class FitnessHeader extends Component {
     }
 
     handleLogout = () => {
-        const { dispatch, history } = this.props;
-        dispatch(logout());
-        history.push('/');
+        auth.logout();
+        // const { dispatch, history } = this.props;
+        // dispatch(logout());
+        // history.push('/');
     }
 
     render() {

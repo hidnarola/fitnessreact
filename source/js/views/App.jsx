@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Link, Redirect, Switch, withRouter } from "react-router-dom";
+// import { BrowserRouter as Router, Route, Link, Redirect, Switch, withRouter } from "react-router-dom";
+import { Router, Route, Link, Redirect, Switch, withRouter } from "react-router-dom";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getPeople } from 'actions/people';
@@ -45,13 +46,14 @@ import Body from './Body';
 import { AUTH_CALLBACK_ROUTE } from '../auth/auth0-variables';
 import Callback from '../auth/callback/Callback';
 import ExerciseTypes from './Admin/ExerciseTypes';
+import history from '../config/history';
 
 class App extends Component {
 
     render() {
         return (
             <div className="appWrapper">
-                <Router>
+                <Router history={history}>
                     <ScrollToTop>
                         <Route exact path="/" component={Login} />
                         <Route path={routeCodes.REGISTERUSER} component={RegisterUser} />

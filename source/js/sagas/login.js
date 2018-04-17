@@ -2,7 +2,14 @@ import { takeLatest, put, call } from 'redux-saga/effects';
 import { LOGIN_REQUEST, loginSuccess, loginError, LOGOUT_REQUEST, logoutSuccess, logoutError } from "../actions/login";
 
 import api from 'api/login';
-import { LOCALSTORAGE_USER_ITEM_KEY, LOCALSTORAGE_TOKEN_ITEM_KEY, LOCALSTORAGE_REFRESH_TOKEN_ITEM_KEY, LOCALSTORAGE_ROLE_KEY, USER_ROLE, ADMIN_ROLE } from '../constants/consts';
+import {
+    LOCALSTORAGE_ROLE_KEY,
+    USER_ROLE,
+    ADMIN_ROLE,
+    LOCALSTORAGE_ACCESS_TOKEN_KEY,
+    LOCALSTORAGE_ID_TOKEN_KEY,
+    LOCALSTORAGE_REFRESH_TOKEN_KEY
+} from '../constants/consts';
 
 function authenticate() {
     return function* (action) {
@@ -18,9 +25,9 @@ function authenticate() {
                 encodedUserRole = window.btoa(USER_ROLE)
             }
             localStorage.setItem(LOCALSTORAGE_ROLE_KEY, encodedUserRole);
-            localStorage.setItem(LOCALSTORAGE_USER_ITEM_KEY, JSON.stringify(data.user));
-            localStorage.setItem(LOCALSTORAGE_TOKEN_ITEM_KEY, data.token);
-            localStorage.setItem(LOCALSTORAGE_REFRESH_TOKEN_ITEM_KEY, data.refresh_token);
+            localStorage.setItem(LOCALSTORAGE_ID_TOKEN_KEY, JSON.stringify(data.user));
+            localStorage.setItem(LOCALSTORAGE_ACCESS_TOKEN_KEY, data.token);
+            localStorage.setItem(LOCALSTORAGE_REFRESH_TOKEN_KEY, data.refresh_token);
             yield put(loginSuccess(data));
         } catch (error) {
             yield put(loginError(error));
@@ -32,9 +39,9 @@ function logout() {
     return function* (action) {
         try {
             localStorage.removeItem(LOCALSTORAGE_ROLE_KEY);
-            localStorage.removeItem(LOCALSTORAGE_USER_ITEM_KEY);
-            localStorage.removeItem(LOCALSTORAGE_TOKEN_ITEM_KEY);
-            localStorage.removeItem(LOCALSTORAGE_REFRESH_TOKEN_ITEM_KEY);
+            localStorage.removeItem(LOCALSTORAGE_ID_TOKEN_KEY);
+            localStorage.removeItem(LOCALSTORAGE_ACCESS_TOKEN_KEY);
+            localStorage.removeItem(LOCALSTORAGE_REFRESH_TOKEN_KEY);
             yield put(logoutSuccess());
         } catch (error) {
             yield put(logoutError());

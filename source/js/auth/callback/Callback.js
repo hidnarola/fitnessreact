@@ -8,13 +8,12 @@ class Callback extends Component {
         super(props);
     }
 
-
-    componentWillMount() {
-        this.handleAuthentication(this.props);
-    }
+    // componentWillMount() {
+    //     this.handleAuthentication(this.props);
+    // }
 
     render() {
-        console.log(this.props);
+        // console.log(this.props);
         return (
             <div className="auth0-callback-wrapper">
                 <h1>Loading...</h1>
@@ -23,11 +22,11 @@ class Callback extends Component {
     }
 
     // Start funs
-    handleAuthentication = ({ location }) => {
-        if (/access_token|id_token|error/.test(location.hash)) {
-            auth.handleAuthentication();
-        }
-    }
+    // handleAuthentication = ({ location }) => {
+    //     if (/access_token|id_token|error/.test(location.hash)) {
+    //         auth.handleAuthentication();
+    //     }
+    // }
     // End fund
 }
 

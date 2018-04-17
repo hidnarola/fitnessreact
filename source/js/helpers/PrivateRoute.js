@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import { LOCALSTORAGE_ROLE_KEY, USER_ROLE, LOCALSTORAGE_TOKEN_ITEM_KEY } from '../constants/consts';
+import { LOCALSTORAGE_ROLE_KEY, USER_ROLE, LOCALSTORAGE_ACCESS_TOKEN_KEY } from '../constants/consts';
 import { publicPath } from '../constants/routes';
 
 export default class PrivateRoute extends Component {
@@ -9,7 +9,7 @@ export default class PrivateRoute extends Component {
         return (
             <Route {...rest} render={
                 (props) => {
-                    let token = localStorage.getItem(LOCALSTORAGE_TOKEN_ITEM_KEY);
+                    let token = localStorage.getItem(LOCALSTORAGE_ACCESS_TOKEN_KEY);
                     let role = localStorage.getItem(LOCALSTORAGE_ROLE_KEY);
                     let decodedRole = window.atob(role)
                     if (decodedRole === USER_ROLE) {
