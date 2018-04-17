@@ -3,7 +3,18 @@ import Auth0Lock from 'auth0-lock';
 import { AUTH_CONFIG } from './auth0-variables';
 import history from '../config/history';
 import { publicPath, routeCodes } from '../constants/routes';
-import { LOCALSTORAGE_ACCESS_TOKEN_KEY, LOCALSTORAGE_ID_TOKEN_KEY, LOCALSTORAGE_EXPIRES_AT_KEY, LOCALSTORAGE_ROLE_KEY, USER_ROLE } from '../constants/consts';
+import {
+  LOCALSTORAGE_ACCESS_TOKEN_KEY,
+  LOCALSTORAGE_ID_TOKEN_KEY,
+  LOCALSTORAGE_EXPIRES_AT_KEY,
+  LOCALSTORAGE_ROLE_KEY,
+  USER_ROLE,
+  AUTH_STATE_ACTION_LOGIN,
+  AUTH_STATE_ACTION_SIGNUP,
+  SERVER_BASE_URL
+} from '../constants/consts';
+
+import axios from 'axios';
 
 export default class Auth {
   auth0Lock = new Auth0Lock(
@@ -14,7 +25,11 @@ export default class Auth {
         audience: `https://${AUTH_CONFIG.domain}/api/v2/`,
         redirectUrl: AUTH_CONFIG.callbackUrl,
         responseType: 'token id_token',
-      }
+        params: {
+          scope: 'openid profile email user_metadata app_metadata'
+        }
+      },
+      avatar: null
     }
   );
 
@@ -29,17 +44,60 @@ export default class Auth {
   }
 
   login() {
-    this.auth0Lock.show({ allowSignUp: false });
+    let authState = {
+      action: AUTH_STATE_ACTION_LOGIN,
+    }
+    let authOptions = {
+      allowSignUp: false,
+      auth: {
+        params: {
+          state: JSON.stringify(authState),
+          scope: 'openid profile email user_metadata app_metadata',
+        }
+      }
+    }
+    this.auth0Lock.show(authOptions);
+  }
+
+  signUp() {
+    let authState = {
+      action: AUTH_STATE_ACTION_SIGNUP,
+    }
+    let authOptions = {
+      allowLogin: false,
+      auth: {
+        params: {
+          state: JSON.stringify(authState),
+          scope: 'openid profile email user_metadata app_metadata',
+        }
+      }
+    }
+    this.auth0Lock.show(authOptions);
   }
 
   handleAuthentication(authResult) {
     if (authResult && authResult.accessToken && authResult.idToken) {
-      this.setSession(authResult);
-      history.replace(routeCodes.DASHBOARD);
+      let reqUrl = SERVER_BASE_URL + 'auth0_user_sync';
+      axios.get(reqUrl)
+        .then((res) => {
+          if (authResult.state && authResult.state !== '') {
+            let authState = JSON.parse(authResult.state);
+            if (authState && authState.action && authState.action === AUTH_STATE_ACTION_LOGIN) {
+              this.setSession(authResult);
+              history.replace(routeCodes.DASHBOARD);
+            } else if (authState && authState.action && authState.action === AUTH_STATE_ACTION_SIGNUP) {
+              this.setSession(authResult);
+              history.replace(routeCodes.DASHBOARD);
+            }
+          }
+        })
+        .catch((err) => {
+          history.replace(publicPath);
+          console.log(err);
+        });
     } else if (err) {
       history.replace(publicPath);
       console.log(err);
-      // alert(`Error: ${err.error}. Check the console for further details.`);
     }
   }
 

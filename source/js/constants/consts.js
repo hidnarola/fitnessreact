@@ -4,6 +4,9 @@ export const LOCALSTORAGE_REFRESH_TOKEN_KEY = 'refreshToken';
 export const LOCALSTORAGE_EXPIRES_AT_KEY = 'expires_at';
 export const LOCALSTORAGE_ROLE_KEY = 'role';
 
+export const AUTH_STATE_ACTION_LOGIN = 'login';
+export const AUTH_STATE_ACTION_SIGNUP = 'signup';
+
 export const USER_ROLE = 'fitassist-user';
 export const ADMIN_ROLE = 'firassist-admin'
 

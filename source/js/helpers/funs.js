@@ -1,8 +1,8 @@
-import { LOCALSTORAGE_TOKEN_ITEM_KEY } from "../constants/consts";
+import { LOCALSTORAGE_ACCESS_TOKEN_KEY } from "../constants/consts";
 import _ from 'lodash';
 
 export function extraHeaders() {
-    const token = localStorage.getItem(LOCALSTORAGE_TOKEN_ITEM_KEY);
+    const token = localStorage.getItem(LOCALSTORAGE_ACCESS_TOKEN_KEY);
     let headers = {
         'x-access-token': token,
     };

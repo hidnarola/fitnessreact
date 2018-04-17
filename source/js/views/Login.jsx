@@ -24,6 +24,10 @@ class Login extends Component {
         auth.login();
     }
 
+    handleSignUpRequest = () => {
+        auth.signUp();
+    }
+
     render() {
         const { error, loading } = this.props;
         return (
@@ -33,7 +37,8 @@ class Login extends Component {
                         <div className="what-difference">
                             <h3>Create Your Account</h3>
                             <p>Come join the fitness community! Lets set up your Account. Already have one? <a href="#">Sign in here</a> </p>
-                            <NavLink to={routeCodes.REGISTERUSER}>Register</NavLink>
+                            {/* <NavLink to={routeCodes.REGISTERUSER}>Register</NavLink> */}
+                            <button type="button" onClick={this.handleSignUpRequest}>Register</button>
                             <button type="button" onClick={this.handleLoginRequest}>Login</button>
                         </div>
                     </div>
