@@ -27,6 +27,7 @@ class ExerciseSave extends Component {
             equipments: JSON.stringify(_.map(data.equipments, 'value')),
             difficltyLevel: _.get(data.difficulty_level, 'value'),
             steps: JSON.stringify(_.map(data.steps, 'name')),
+            tips: JSON.stringify(_.map(data.tips, 'name')),
             images: data.images,
             deletedImages: data.deleted_images
         }
@@ -42,6 +43,7 @@ class ExerciseSave extends Component {
         formData.append('equipments', exerciseData.equipments);
         formData.append('difficltyLevel', exerciseData.difficltyLevel);
         formData.append('steps', exerciseData.steps);
+        formData.append('tips', exerciseData.tips);
         if (exerciseData.images) {
             _.forEach(exerciseData.images, (file) => {
                 formData.append('images', file);

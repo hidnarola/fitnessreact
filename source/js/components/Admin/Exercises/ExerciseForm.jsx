@@ -35,6 +35,7 @@ import { adminRouteCodes } from '../../../constants/adminRoutes';
 import { exerciseSelectOneRequest } from '../../../actions/admin/exercises';
 import _ from 'lodash';
 import DeleteConfirmation from '../Common/DeleteConfirmation';
+import ExerciseTips from './ExerciseTips';
 
 const maxLength15 = maxLength(15);
 const minLength2 = minLength(2);
@@ -203,11 +204,16 @@ class ExerciseForm extends Component {
                             />
                             <Field
                                 name="deleted_images"
-                                component='hidden'
+                                component='input'
+                                type='hidden'
                             />
                             <FieldArray
                                 name="steps"
                                 component={ExerciseSteps}
+                            />
+                            <FieldArray
+                                name="tips"
+                                component={ExerciseTips}
                             />
                             <div className="col-md-12 mb-20 clear-both text-center">
                                 <div className="stepbox-b stepbox-b-center">
@@ -273,6 +279,11 @@ class ExerciseForm extends Component {
                         name
                     }
                 });
+                let tips = _.map(exercise.tips, (name) => {
+                    return {
+                        name
+                    }
+                });
                 let exerciseData = {
                     name: exercise.name,
                     description: exercise.description,
@@ -284,6 +295,7 @@ class ExerciseForm extends Component {
                     equipments: equips,
                     difficulty_level: _.find(difficultyLevelOptions, (o) => { return (o.value === exercise.difficltyLevel) }),
                     steps: steps,
+                    tips: tips,
                     deleted_images: deletedImages
                 };
                 initialize(exerciseData);

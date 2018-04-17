@@ -1167,6 +1167,9 @@ flex-direction:row; display:-webkit-box; display:-webkit-flex; display:-ms-flex;
 .dropzone-image-preview-wrapper:hover .image {opacity: 0.3;}
 .dropzone-image-preview-wrapper:hover .middle {opacity: 1;}
 
+.exercise-steps-wrapper, .exercise-tips-wrapper
+{width: 100%;display: inline-block;margin-bottom: 15px;border: 1px solid #ccc;padding: 10px 0 10px 10px;border-radius: 5px;}
+
 
 
 

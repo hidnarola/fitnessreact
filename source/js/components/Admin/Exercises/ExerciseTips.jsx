@@ -4,15 +4,15 @@ import { InputField } from '../../../helpers/FormControlHelper';
 import { required } from '../../../formValidation/validationRules';
 import { FaTrash } from 'react-icons/lib/fa';
 
-class ExerciseSteps extends Component {
+class ExerciseTips extends Component {
     render() {
         const { fields } = this.props;
         return (
-            <div className="exercise-steps-wrapper">
-                <label className="control-label">Steps</label>
+            <div className="exercise-tips-wrapper">
+                <label className="control-label">Tips</label>
                 <div className="add-step-wrapper-btn pull-right">
                     <div className="col-md-12">
-                        <button type="button" className="btn btn-primary" onClick={() => fields.push({})}>Add Steps</button>
+                        <button type="button" className="btn btn-primary" onClick={() => fields.push({})}>Add Tips</button>
                     </div>
                 </div>
                 <div className="row pull-left width-100-per step-fields-wrapper">
@@ -23,10 +23,10 @@ class ExerciseSteps extends Component {
                                     <Field
                                         name={`${field}.name`}
                                         className="form-control"
-                                        label={`Step ${index + 1}`}
+                                        label={`Tips ${index + 1}`}
                                         labelClass="control-label"
                                         wrapperClass="form-group"
-                                        placeholder={`Step ${index + 1}`}
+                                        placeholder={`Tips ${index + 1}`}
                                         component={InputField}
                                         errorClass="help-block"
                                         warningClass=""
@@ -45,4 +45,4 @@ class ExerciseSteps extends Component {
     }
 }
 
-export default ExerciseSteps;
+export default ExerciseTips;
