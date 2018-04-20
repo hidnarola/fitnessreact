@@ -1,5 +1,6 @@
 import { all } from 'redux-saga/effects';
 
+import userBodyMeasurement from 'sagas/userBodyMeasurement';
 import peopleSagas from 'sagas/people';
 import dashboardSagas from 'sagas/dashboard';
 import nutritionSagas from 'sagas/nutrition';
@@ -20,6 +21,7 @@ import adminIngredientSagas from 'sagas/admin/ingredients';
 
 export default function* rootSaga() {
   yield all([
+    ...userBodyMeasurement,
     ...peopleSagas,
     ...dashboardSagas,
     ...nutritionSagas,

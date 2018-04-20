@@ -1,10 +1,19 @@
 import { LOCALSTORAGE_ACCESS_TOKEN_KEY } from "../constants/consts";
 import _ from 'lodash';
+import { AUTH_CONFIG } from "../auth/auth0-variables";
 
 export function extraHeaders() {
     const token = localStorage.getItem(LOCALSTORAGE_ACCESS_TOKEN_KEY);
     let headers = {
         'x-access-token': token,
+    };
+    return headers;
+}
+
+export function extraUserHeaders() {
+    const token = localStorage.getItem(LOCALSTORAGE_ACCESS_TOKEN_KEY);
+    let headers = {
+        'authorization': `${AUTH_CONFIG.tokenType} ${token}`,
     };
     return headers;
 }

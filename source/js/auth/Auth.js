@@ -85,7 +85,7 @@ export default class Auth {
       }
       axios.get(reqUrl, options)
         .then((res) => {
-          if (authResult.state && authResult.state !== '') {
+          if (authResult.state && authResult.state !== '' && res && res.data) {
             let authState = JSON.parse(authResult.state);
             if (authState && authState.action && authState.action === AUTH_STATE_ACTION_LOGIN) {
               this.setSession(authResult);

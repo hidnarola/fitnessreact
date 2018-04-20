@@ -112,6 +112,16 @@ export const postFormData = (path, data, headers) => {
     // Build Url
     const url = `${API_URL}${path}`;
 
+    let defaultHeaders = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+    }
+
+    let _headers = {
+        ...defaultHeaders,
+        ...headers
+    }
+
     return axios({
         method: 'POST',
         url: url,

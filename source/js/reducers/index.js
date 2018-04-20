@@ -1,6 +1,8 @@
 import { combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form'
 import app from 'reducers/app';
+import user from 'reducers/user';
+import userBodyMeasurement from 'reducers/userBodyMeasurement';
 import people from 'reducers/people';
 import dashboardnew from 'reducers/dashboard';
 import nutrition from 'reducers/nutrition';
@@ -22,6 +24,8 @@ import adminIngredients from 'reducers/admin/ingredients'
 
 export default combineReducers({
     app,
+    user,
+    userBodyMeasurement,
     people,
     dashboardnew,
     nutrition,

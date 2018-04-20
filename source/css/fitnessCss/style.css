@@ -460,10 +460,16 @@ box-shadow:0 0 20px 0 rgba(207,207,207,0.1); }
 .log-date-wrap{background:#fff;text-align:center;margin:0 0 20px;}
 .log-date-wrap img{width:88%;margin:20px 0;}
 .add-log{display:block;}
-.add-log a{max-width:310px;width:100%; border-radius:25px; background:linear-gradient(123.28deg, #46E9C5 0%, #3FFBFC 100%); position:relative;	
+.add-log a,
+.add-log button
+{max-width:310px;width:100%; border-radius:25px; background:linear-gradient(123.28deg, #46E9C5 0%, #3FFBFC 100%); position:relative;	
 box-shadow: 0 2px 4px 0 rgba(0,0,0,0.1); color:#fff; font-size:14px; font-weight:700; line-height:20px; border:2px solid transparent; padding:13px 25px;}
-.add-log a i{float:right;line-height:20px;position:absolute;top:50%;right:15px; -webkit-transform:translateY(-50%); -moz-transform:translateY(-50%); transform:translateY(-50%);}
-.add-log a:hover{border:2px solid #46e9c5;}
+.add-log a i,
+.add-log button i
+{float:right;line-height:20px;position:absolute;top:50%;right:15px; -webkit-transform:translateY(-50%); -moz-transform:translateY(-50%); transform:translateY(-50%);}
+.add-log a:hover,
+.add-log button:hover
+{border:2px solid #46e9c5;}
 
 .goal-content{border:3px solid #f9fafa;}
 .goal-content .part-l{border-right:3px solid #f9fafa;}
@@ -1171,19 +1177,11 @@ flex-direction:row; display:-webkit-box; display:-webkit-flex; display:-ms-flex;
 .exercise-steps-wrapper, .exercise-tips-wrapper
 {width: 100%;display: inline-block;margin-bottom: 15px;border: 1px solid #ccc;padding: 10px 0 10px 10px;border-radius: 5px;}
 
+.react-calendar{width: 100% !important;border: 1px solid #f9fafa !important;}
+.react-calendar__navigation button.react-calendar__navigation__arrow,
+.react-calendar__navigation button.react-calendar__navigation__label {font-size: 16px !important;font-weight: 700 !important;}
 
 
 
-
-
-
-
-
-
-
-/* .text {
-background-color: #4CAF50;
-color: white;
-font-size: 16px;
-padding: 16px 32px;
-} */
+/* .react-calendar__tile--highlight {background: #42f2e1 !important;border-radius: 50%;} */
+.react-calendar__tile--highlight {display: block;width: 8px;height: 8px;border-radius: 50%;background-color: #45edd1;position: relative;left: 45%;}

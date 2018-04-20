@@ -11,29 +11,29 @@ import { FaSignOut } from 'react-icons/lib/fa'
 import { logout } from '../../actions/login';
 import { withRouter } from 'react-router-dom';
 import Auth from '../../auth/Auth';
+import { setLoggedUserFromLocalStorage } from '../../actions/user';
+import noProfileImg from 'img/common/no-profile-img.png'
 
 const auth = new Auth();
 
 class FitnessHeader extends Component {
     constructor(props) {
         super(props);
-        this.handleLogout = this.handleLogout.bind(this);
     }
 
-    handleLogout = () => {
-        auth.logout();
-        // const { dispatch, history } = this.props;
-        // dispatch(logout());
-        // history.push('/');
+
+    componentWillMount() {
+        const { dispatch } = this.props;
+        dispatch(setLoggedUserFromLocalStorage());
     }
 
     render() {
+        const { loggedUserData } = this.props;
         return (
             <div className="header">
                 <header className="header d-flex justify-content-start">
                     <div className="logo">
                         <a href="index.html">
-
                         </a>
                     </div>
                     <div className="search">
@@ -46,14 +46,24 @@ class FitnessHeader extends Component {
                     </div>
                     <div className="header-r d-flex">
                         <div className="header-user">
-
+                        
                             <NavLink
                                 activeClassName='active'
                                 className='Menu-link'
                                 exact
                                 to={routeCodes.PROFILE}
                             >
-                                <span></span>Cecilia
+                                {loggedUserData &&
+                                    <img
+                                        src={loggedUserData.avatar}
+                                        alt="Avatar"
+                                        className="avatar"
+                                        onError={(e) => {
+                                            e.target.src = noProfileImg
+                                        }}
+                                    />
+                                }
+                                {loggedUserData && loggedUserData.name}
                             </NavLink>
 
                         </div>
@@ -82,6 +92,17 @@ class FitnessHeader extends Component {
             </div>
         );
     }
+
+    handleLogout = () => {
+        auth.logout();
+    }
 }
 
-export default connect()(withRouter(FitnessHeader));
+const mapStateToProps = (state) => {
+    const { user } = state;
+    return {
+        loggedUserData: user.get('loggedUserData')
+    }
+}
+
+export default connect(mapStateToProps)(withRouter(FitnessHeader));
