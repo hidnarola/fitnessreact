@@ -14,10 +14,6 @@ import { routeCodes } from 'constants/routes';
 import FitnessHeader from 'components/global/FitnessHeader';
 import FitnessNav from 'components/global/FitnessNav';
 
-function logUpdate() {
-    console.log('Over here');
-}
-
 export default class ExerciseSettings extends Component {
     render() {
         return (
@@ -76,9 +72,9 @@ export default class ExerciseSettings extends Component {
                     </div>
 
                     <Switch>
-                        <Route onChange={logUpdate} exact path={routeCodes.EXERCISEFITNESS} component={Fitness} />
-                        <Route onChange={logUpdate} exact path={routeCodes.EXERCISEEQP} component={Equipment} />
-                        <Route onChange={logUpdate} exact path={routeCodes.EXERCISEPREFERENCE} component={Setting} />
+                        <Route exact path={routeCodes.EXERCISEFITNESS} component={Fitness} />
+                        <Route exact path={routeCodes.EXERCISEEQP} component={Equipment} />
+                        <Route exact path={routeCodes.EXERCISEPREFERENCE} component={Setting} />
                     </Switch>
                 </section>
             </div>

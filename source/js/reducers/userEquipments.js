@@ -1,32 +1,30 @@
 import { Map } from "immutable";
-import { GET_EXERCISE_EQUIPMENT_START, GET_EXERCISE_EQUIPMENT_SUCCESS, GET_EXERCISE_EQUIPMENT_ERROR } from "../../actions/exercise/equipments";
+import { GET_USER_EQUIPMENTS_REQUEST, GET_USER_EQUIPMENTS_SUCCESS, GET_USER_EQUIPMENTS_ERROR } from "../actions/userEquipments";
 
 const initialState = Map({
     loading: false,
     error: null,
-    equipments: null,
+    equipments: [],
+    userEquipments: [],
 });
 
 const actionMap = {
-    [GET_EXERCISE_EQUIPMENT_START]: (state, action) => {
+    [GET_USER_EQUIPMENTS_REQUEST]: (state, action) => {
         return state.merge(Map({
             loading: true,
-            error: null,
-            equipments: null,
         }));
     },
-    [GET_EXERCISE_EQUIPMENT_SUCCESS]: (state, action) => {
+    [GET_USER_EQUIPMENTS_SUCCESS]: (state, action) => {
         return state.merge(Map({
             loading: false,
-            error: null,
-            equipments: action.data.equipments,
+            userEquipments: action.data.equipments.user_equipments,
+            equipments: action.data.equipments.all_equipments,
         }));
     },
-    [GET_EXERCISE_EQUIPMENT_ERROR]: (state, action) => {
+    [GET_USER_EQUIPMENTS_ERROR]: (state, action) => {
         return state.merge(Map({
             loading: false,
             error: action.error.message,
-            equipments: null,
         }));
     },
 }

@@ -7,7 +7,7 @@ import people from 'reducers/people';
 import dashboardnew from 'reducers/dashboard';
 import nutrition from 'reducers/nutrition';
 import exerciseFitness from 'reducers/exercise/fitness'
-import exerciseEquipments from 'reducers/exercise/equipments'
+import userEquipments from 'reducers/userEquipments'
 import friends from 'reducers/friends';
 import profilePhotos from 'reducers/profilePhotos';
 import login from 'reducers/login';
@@ -30,7 +30,7 @@ export default combineReducers({
     dashboardnew,
     nutrition,
     exerciseFitness,
-    exerciseEquipments,
+    userEquipments,
     friends,
     profilePhotos,
     login,

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getExerciseEquipments } from '../../actions/exercise/equipments';
 import EquipmentsContentItem from './EquipmentsContentItem';
+import { getUserEquipmentsRequest } from '../../actions/userEquipments';
 
 class Equipment extends Component {
     constructor(props) {
@@ -10,11 +10,11 @@ class Equipment extends Component {
 
     componentWillMount() {
         const { dispatch, equipments } = this.props;
-        dispatch(getExerciseEquipments());
+        dispatch(getUserEquipmentsRequest());
     }
 
     render() {
-        const { equipments } = this.props;
+        const { equipments, userEqipments } = this.props;
         return (
             <div className="body-content d-flex row justify-content-start profilephoto-content">
                 {!equipments &&
@@ -40,7 +40,7 @@ class Equipment extends Component {
                         <div className="col-md-4" key={index}>
                             <div className="white-box space-btm-20">
                                 <div className="whitebox-head">
-                                    <h3 className="title-h3 size-14">{equipment.title}</h3>
+                                    <h3 className="title-h3 size-14">{equipment.name}</h3>
                                 </div>
                                 <div className="whitebox-body">
                                     {equipment.items && equipment.items.length > 0 &&
@@ -60,11 +60,12 @@ class Equipment extends Component {
 }
 
 const mapStateToProps = (state) => {
-    const { exerciseEquipments } = state;
+    const { userEquipments } = state;
     return {
-        loading: exerciseEquipments.get('loading'),
-        error: exerciseEquipments.get('error'),
-        equipments: exerciseEquipments.get('equipments'),
+        loading: userEquipments.get('loading'),
+        error: userEquipments.get('error'),
+        equipments: userEquipments.get('equipments'),
+        userEquipments: userEquipments.get('userEquipments'),
     }
 }
 

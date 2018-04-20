@@ -5,7 +5,7 @@ import peopleSagas from 'sagas/people';
 import dashboardSagas from 'sagas/dashboard';
 import nutritionSagas from 'sagas/nutrition';
 import exerciseFitness from 'sagas/exercise/fitness'
-import exerciseEquipments from 'sagas/exercise/equipments'
+import userEquipments from 'sagas/userEquipments'
 import friends from 'sagas/friends';
 import profilePhotos from 'sagas/profilePhotos';
 import login from 'sagas/login'
@@ -26,7 +26,7 @@ export default function* rootSaga() {
     ...dashboardSagas,
     ...nutritionSagas,
     ...exerciseFitness,
-    ...exerciseEquipments,
+    ...userEquipments,
     ...friends,
     ...profilePhotos,
     ...login,
