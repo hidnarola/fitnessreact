@@ -4,15 +4,16 @@ import { NavLink } from 'react-router-dom';
 import { FaPencil, FaTrash } from 'react-icons/lib/fa';
 import { adminRouteCodes } from '../../../constants/adminRoutes';
 import ReactTable from 'react-table';
-import { reset, initialize } from 'redux-form';
 import moment from 'moment';
-import { badgeCategoryFilterRequest, badgeCategorySelectOneRequest, badgeCategoryUpdateRequest, badgeCategoryAddRequest, badgeCategoryDeleteRequest } from '../../../actions/admin/badgeCategories';
-import { generateDTTableFilterObj } from '../../../helpers/funs';
-import { showPageLoader } from '../../../actions/pageLoader';
-import BadgeCategorySaveForm from './BadgeCategorySaveForm';
-import { STATUS_ACTIVE, STATUS_INACTIVE, STATUS_INACTIVE_STR, STATUS_ACTIVE_STR } from '../../../constants/consts';
+import {
+    STATUS_ACTIVE,
+    STATUS_INACTIVE,
+    STATUS_INACTIVE_STR,
+    STATUS_ACTIVE_STR
+} from '../../../constants/consts';
 import _ from 'lodash';
-import DeleteConfirmation from '../Common/DeleteConfirmation';
+import { generateDTTableFilterObj } from '../../../helpers/funs';
+import { badgeFilterRequest } from '../../../actions/admin/badges';
 
 const statusOptions = [
     { value: '', label: 'All' },
@@ -26,40 +27,33 @@ const isDeletedOptions = [
     { value: 0, label: 'No' },
 ];
 
-class BadgeCategoryListing extends Component {
+class BadgeListing extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            badgeCategories: [],
+            badges: [],
             pages: 0,
             dtLoading: false,
             filterData: null,
-            saveModalShow: false,
             selectedId: null,
-            selectActionInit: false,
-            saveActionInit: false,
-            showDeleteModal: false,
         }
     }
 
     render() {
-        const { badgeCategory } = this.props;
+        const { badge } = this.props;
         const {
             dtLoading,
             pages,
-            badgeCategories,
-            saveModalShow,
-            showDeleteModal,
-            deleteActionInit
+            badges,
         } = this.state;
         return (
             <div className="badge-category-listing-wrapper">
                 <div className="body-head space-btm-45 d-flex justify-content-start">
                     <div className="body-head-l">
-                        <h2>Badge Category</h2>
+                        <h2>Badges</h2>
                     </div>
                     <div className="body-head-r">
-                        <a href="javascript:void(0)" onClick={() => this.handleShowSaveModal()} className="pink-btn">Add Badge Category</a>
+                        <a href="javascript:void(0)" onClick={() => this.handleShowSaveModal()} className="pink-btn">Add Badge</a>
                     </div>
                 </div>
 
@@ -67,13 +61,13 @@ class BadgeCategoryListing extends Component {
                     <div className="col-md-12">
                         <div className="white-box">
                             <div className="whitebox-head">
-                                <h3 className="title-h3">Bagde Category List</h3>
+                                <h3 className="title-h3">Bagde List</h3>
                             </div>
                             <div className="row d-flex whitebox-body">
                                 <div className="col-md-12">
                                     <ReactTable
                                         manual
-                                        data={badgeCategories}
+                                        data={badges}
                                         noDataText={"No records found..."}
                                         columns={[
                                             {
@@ -169,16 +163,16 @@ class BadgeCategoryListing extends Component {
                                                 accessor: "_id",
                                                 filterable: false,
                                                 sortable: false,
-                                                Cell: (row) => {
-                                                    return (
-                                                        <div className="actions-wrapper">
-                                                            <a href="javascript:void(0)" onClick={() => this.handleShowSaveModal(row.value)} className="btn btn-primary"><FaPencil /></a>
-                                                            {!row.original.isDeleted &&
-                                                                <a href="javascript:void(0)" onClick={() => this.confirmDelete(row.value)} className="btn btn-danger"><FaTrash /></a>
-                                                            }
-                                                        </div>
-                                                    );
-                                                }
+                                                // Cell: (row) => {
+                                                //     return (
+                                                //         <div className="actions-wrapper">
+                                                //             <a href="javascript:void(0)" onClick={() => this.handleShowSaveModal(row.value)} className="btn btn-primary"><FaPencil /></a>
+                                                //             {!row.original.isDeleted &&
+                                                //                 <a href="javascript:void(0)" onClick={() => this.confirmDelete(row.value)} className="btn btn-danger"><FaTrash /></a>
+                                                //             }
+                                                //         </div>
+                                                //     );
+                                                // }
                                             },
                                         ]}
                                         pages={pages}
@@ -196,53 +190,19 @@ class BadgeCategoryListing extends Component {
                     </div>
                 </div>
 
-                <BadgeCategorySaveForm
-                    show={saveModalShow}
-                    handleClose={this.handleHideSaveModal}
-                    onSubmit={this.handleSubmit}
-                />
-
-                <DeleteConfirmation
-                    show={showDeleteModal}
-                    handleClose={this.closeDeleteModal}
-                    handleYes={this.handleDelete}
-                />
-
             </div>
         );
     }
 
     componentDidUpdate(prevProps, prevState) {
-        const { loading, filteredBadgeCategories, filteredTotalPages, badgeCategory, dispatch } = this.props;
-        const { dtLoading, saveActionInit, selectActionInit, deleteActionInit } = this.state;
+        const { loading, filteredBadges, filteredTotalPages, badge } = this.props;
+        const { dtLoading } = this.state;
         if (dtLoading && !loading) {
             this.setState({
                 dtLoading: false,
-                badgeCategories: filteredBadgeCategories,
+                badges: filteredBadges,
                 pages: filteredTotalPages,
             });
-        }
-        if (saveActionInit && !loading) {
-            this.setState({
-                saveActionInit: false,
-                selectedId: null,
-                saveModalShow: false,
-                selectActionInit: false,
-            });
-            this.refreshDTData();
-        } else if (selectActionInit && !loading) {
-            const formData = {
-                name: badgeCategory.name,
-                status: _.find(statusOptions, (o) => { return (o.value === badgeCategory.status) })
-            }
-            dispatch(initialize('badgeCategorySave', formData));
-        } else if (deleteActionInit && !loading) {
-            this.setState({
-                selectedId: null,
-                showDeleteModal: false,
-                deleteActionInit: false
-            });
-            this.refreshDTData();
         }
     }
 
@@ -254,7 +214,7 @@ class BadgeCategoryListing extends Component {
         });
         let filterData = generateDTTableFilterObj(state, instance);
         this.setState({ filterData: filterData });
-        dispatch(badgeCategoryFilterRequest(filterData));
+        dispatch(badgeFilterRequest(filterData));
     }
 
     refreshDTData = () => {
@@ -263,86 +223,19 @@ class BadgeCategoryListing extends Component {
         this.setState({
             dtLoading: true,
         });
-        dispatch(badgeCategoryFilterRequest(filterData));
-    }
-
-    handleShowSaveModal = (id = null) => {
-        const { dispatch } = this.props;
-        const formData = {
-            name: '',
-            status: '',
-        }
-        dispatch(initialize('badgeCategorySave', formData));
-        dispatch(reset('badgeCategorySave'));
-        if (id) {
-            this.setState({ selectedId: id, selectActionInit: true });
-            dispatch(badgeCategorySelectOneRequest(id));
-        }
-        this.setState({ saveModalShow: true });
-    }
-
-    handleHideSaveModal = () => {
-        const { dispatch } = this.props;
-        dispatch(reset('badgeCategorySave'));
-        this.setState({
-            saveModalShow: false,
-            selectedId: null,
-            selectActionInit: false
-        });
-    }
-
-    handleSubmit = (data) => {
-        const { selectedId } = this.state;
-        const { dispatch } = this.props;
-        let badgeCategory = {
-            name: data.name,
-            status: data.status.value,
-        }
-        this.setState({
-            saveActionInit: true,
-        });
-        dispatch(showPageLoader());
-        if (selectedId) {
-            dispatch(badgeCategoryUpdateRequest(selectedId, badgeCategory));
-        } else {
-            dispatch(badgeCategoryAddRequest(badgeCategory));
-        }
-    }
-
-    confirmDelete = (_id) => {
-        this.setState({
-            selectedId: _id,
-            showDeleteModal: true
-        });
-    }
-
-    closeDeleteModal = () => {
-        this.setState({
-            selectedId: null,
-            showDeleteModal: false
-        });
-    }
-
-    handleDelete = () => {
-        const { selectedId } = this.state;
-        const { dispatch } = this.props;
-        dispatch(showPageLoader());
-        this.setState({
-            deleteActionInit: true
-        });
-        dispatch(badgeCategoryDeleteRequest(selectedId));
+        dispatch(badgeFilterRequest(filterData));
     }
     // End Funs
 }
 
 const mapStateToProps = (state) => {
-    const { adminBadgeCategories } = state;
+    const { adminBadges } = state;
     return {
-        loading: adminBadgeCategories.get('loading'),
-        filteredBadgeCategories: adminBadgeCategories.get('filteredBudgeCategories'),
-        filteredTotalPages: adminBadgeCategories.get('filteredTotalPages'),
-        badgeCategory: adminBadgeCategories.get('badgeCategory'),
+        loading: adminBadges.get('loading'),
+        filteredBadges: adminBadges.get('filteredBadges'),
+        filteredTotalPages: adminBadges.get('filteredTotalPages'),
+        badge: adminBadges.get('badge'),
     };
 }
 
-export default connect(mapStateToProps)(BadgeCategoryListing);
+export default connect(mapStateToProps)(BadgeListing);

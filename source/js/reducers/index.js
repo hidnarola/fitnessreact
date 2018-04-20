@@ -23,6 +23,7 @@ import adminRecipes from 'reducers/admin/recipes'
 import adminIngredients from 'reducers/admin/ingredients'
 import adminBadgeCategories from 'reducers/admin/badgeCategories'
 import adminBadgeTasks from 'reducers/admin/badgeTasks'
+import adminBadges from 'reducers/admin/badges'
 
 export default combineReducers({
     app,
@@ -48,6 +49,7 @@ export default combineReducers({
     adminIngredients,
     adminBadgeCategories,
     adminBadgeTasks,
+    adminBadges,
     // ...your other reducers here
     // you have to pass formReducer under 'form' key,
     // for custom keys look up the docs for 'getFormState'
