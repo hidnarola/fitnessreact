@@ -1,27 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-import { FaPencil } from 'react-icons/lib/fa';
+import { FaPencil, FaTrash } from 'react-icons/lib/fa';
 import { adminRouteCodes } from '../../../constants/adminRoutes';
 import ReactTable from 'react-table';
 import { reset, initialize } from 'redux-form';
-import {
-    exerciseTypeFilterRequest,
-    exerciseTypeAddRequest,
-    exerciseTypeUpdateRequest,
-    exerciseTypeSelectOneRequest
-} from '../../../actions/admin/exerciseTypes';
-import { generateDTTableFilterObj } from '../../../helpers/funs';
-import ExerciseTypeSaveForm from './ExerciseTypeSaveForm';
-import { showPageLoader } from '../../../actions/pageLoader';
-import {
-    STATUS_ACTIVE,
-    STATUS_INACTIVE,
-    STATUS_ACTIVE_STR,
-    STATUS_INACTIVE_STR
-} from '../../../constants/consts';
 import moment from 'moment';
+import { badgeCategoryFilterRequest, badgeCategorySelectOneRequest, badgeCategoryUpdateRequest, badgeCategoryAddRequest, badgeCategoryDeleteRequest } from '../../../actions/admin/badgeCategories';
+import { generateDTTableFilterObj } from '../../../helpers/funs';
+import { showPageLoader } from '../../../actions/pageLoader';
+import BadgeCategorySaveForm from './BadgeCategorySaveForm';
+import { STATUS_ACTIVE, STATUS_INACTIVE, STATUS_INACTIVE_STR, STATUS_ACTIVE_STR } from '../../../constants/consts';
 import _ from 'lodash';
+import DeleteConfirmation from '../Common/DeleteConfirmation';
 
 const statusOptions = [
     { value: '', label: 'All' },
@@ -29,11 +20,17 @@ const statusOptions = [
     { value: STATUS_INACTIVE, label: STATUS_INACTIVE_STR },
 ];
 
-class ExerciseTypeListing extends Component {
+const isDeletedOptions = [
+    { value: '', label: 'All' },
+    { value: 1, label: 'Yes' },
+    { value: 0, label: 'No' },
+];
+
+class BadgeCategoryListing extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            exerciseTypes: [],
+            badgeCategories: [],
             pages: 0,
             dtLoading: false,
             filterData: null,
@@ -41,25 +38,28 @@ class ExerciseTypeListing extends Component {
             selectedId: null,
             selectActionInit: false,
             saveActionInit: false,
+            showDeleteModal: false,
         }
     }
 
     render() {
-        const { exerciseType } = this.props;
+        const { badgeCategory } = this.props;
         const {
             dtLoading,
             pages,
-            exerciseTypes,
-            saveModalShow
+            badgeCategories,
+            saveModalShow,
+            showDeleteModal,
+            deleteActionInit
         } = this.state;
         return (
-            <div className="exercise-type-listing-wrapper">
+            <div className="badge-category-listing-wrapper">
                 <div className="body-head space-btm-45 d-flex justify-content-start">
                     <div className="body-head-l">
-                        <h2>Exercise Types</h2>
+                        <h2>Badge Category</h2>
                     </div>
                     <div className="body-head-r">
-                        <a href="javascript:void(0)" onClick={() => this.handleShowSaveModal()} className="pink-btn">Add Exercise Type</a>
+                        <a href="javascript:void(0)" onClick={() => this.handleShowSaveModal()} className="pink-btn">Add Badge Category</a>
                     </div>
                 </div>
 
@@ -67,13 +67,13 @@ class ExerciseTypeListing extends Component {
                     <div className="col-md-12">
                         <div className="white-box">
                             <div className="whitebox-head">
-                                <h3 className="title-h3">Exercise Types List</h3>
+                                <h3 className="title-h3">Bagde Category List</h3>
                             </div>
                             <div className="row d-flex whitebox-body">
                                 <div className="col-md-12">
                                     <ReactTable
                                         manual
-                                        data={exerciseTypes}
+                                        data={badgeCategories}
                                         noDataText={"No records found..."}
                                         columns={[
                                             {
@@ -131,13 +131,52 @@ class ExerciseTypeListing extends Component {
                                                 }
                                             },
                                             {
+                                                id: 'isDeleted',
+                                                Header: 'Deleted',
+                                                accessor: 'isDeleted',
+                                                filterDigit: true,
+                                                Cell: (row) => {
+                                                    let dataObj = _.find(isDeletedOptions, (o) => {
+                                                        return (o.value === row.value);
+                                                    });
+                                                    return (
+                                                        <div className="list-status-wrapper">
+                                                            {dataObj &&
+                                                                <span>{dataObj.label}</span>
+                                                            }
+                                                        </div>
+                                                    );
+                                                },
+                                                Filter: ({ filter, onChange }) => {
+                                                    return (
+                                                        <select
+                                                            onChange={event => onChange(event.target.value)}
+                                                            className="width-100-per"
+                                                            value={filter ? filter.value : "all"}
+                                                        >
+                                                            {isDeletedOptions && isDeletedOptions.length > 0 &&
+                                                                isDeletedOptions.map((obj, index) => (
+                                                                    <option key={index} value={obj.value}>{obj.label}</option>
+                                                                ))
+                                                            }
+                                                        </select>
+                                                    );
+                                                }
+                                            },
+                                            {
                                                 id: "_id",
                                                 Header: "Actions",
                                                 accessor: "_id",
+                                                filterable: false,
+                                                sortable: false,
                                                 Cell: (row) => {
+                                                    console.log()
                                                     return (
                                                         <div className="actions-wrapper">
                                                             <a href="javascript:void(0)" onClick={() => this.handleShowSaveModal(row.value)} className="btn btn-primary"><FaPencil /></a>
+                                                            {!row.original.isDeleted &&
+                                                                <a href="javascript:void(0)" onClick={() => this.confirmDelete(row.value)} className="btn btn-danger"><FaTrash /></a>
+                                                            }
                                                         </div>
                                                     );
                                                 }
@@ -158,11 +197,16 @@ class ExerciseTypeListing extends Component {
                     </div>
                 </div>
 
-                <ExerciseTypeSaveForm
+                <BadgeCategorySaveForm
                     show={saveModalShow}
-                    // data={exerciseType}
                     handleClose={this.handleHideSaveModal}
                     onSubmit={this.handleSubmit}
+                />
+
+                <DeleteConfirmation
+                    show={showDeleteModal}
+                    handleClose={this.closeDeleteModal}
+                    handleYes={this.handleDelete}
                 />
 
             </div>
@@ -170,12 +214,12 @@ class ExerciseTypeListing extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        const { loading, filteredExerciseTypes, filteredTotalPages, exerciseType, dispatch } = this.props;
-        const { dtLoading, saveActionInit, selectActionInit } = this.state;
+        const { loading, filteredBadgeCategories, filteredTotalPages, badgeCategory, dispatch } = this.props;
+        const { dtLoading, saveActionInit, selectActionInit, deleteActionInit } = this.state;
         if (dtLoading && !loading) {
             this.setState({
                 dtLoading: false,
-                exerciseTypes: filteredExerciseTypes,
+                badgeCategories: filteredBadgeCategories,
                 pages: filteredTotalPages,
             });
         }
@@ -189,11 +233,17 @@ class ExerciseTypeListing extends Component {
             this.refreshDTData();
         } else if (selectActionInit && !loading) {
             const formData = {
-                name: exerciseType.name,
-                description: exerciseType.description,
-                status: _.find(statusOptions, (o) => { return (o.value === exerciseType.status) })
+                name: badgeCategory.name,
+                status: _.find(statusOptions, (o) => { return (o.value === badgeCategory.status) })
             }
-            dispatch(initialize('exerciseTypeSave', formData));
+            dispatch(initialize('badgeCategorySave', formData));
+        } else if (deleteActionInit && !loading) {
+            this.setState({
+                selectedId: null,
+                showDeleteModal: false,
+                deleteActionInit: false
+            });
+            this.refreshDTData();
         }
     }
 
@@ -205,7 +255,7 @@ class ExerciseTypeListing extends Component {
         });
         let filterData = generateDTTableFilterObj(state, instance);
         this.setState({ filterData: filterData });
-        dispatch(exerciseTypeFilterRequest(filterData));
+        dispatch(badgeCategoryFilterRequest(filterData));
     }
 
     refreshDTData = () => {
@@ -214,7 +264,7 @@ class ExerciseTypeListing extends Component {
         this.setState({
             dtLoading: true,
         });
-        dispatch(exerciseTypeFilterRequest(filterData));
+        dispatch(badgeCategoryFilterRequest(filterData));
     }
 
     handleShowSaveModal = (id = null) => {
@@ -222,20 +272,19 @@ class ExerciseTypeListing extends Component {
         const formData = {
             name: '',
             status: '',
-            description: '',
         }
-        dispatch(initialize('exerciseTypeSave', formData));
-        dispatch(reset('exerciseTypeSave'));
+        dispatch(initialize('badgeCategorySave', formData));
+        dispatch(reset('badgeCategorySave'));
         if (id) {
             this.setState({ selectedId: id, selectActionInit: true });
-            dispatch(exerciseTypeSelectOneRequest(id));
+            dispatch(badgeCategorySelectOneRequest(id));
         }
         this.setState({ saveModalShow: true });
     }
 
     handleHideSaveModal = () => {
         const { dispatch } = this.props;
-        dispatch(reset('exerciseTypeSave'));
+        dispatch(reset('badgeCategorySave'));
         this.setState({
             saveModalShow: false,
             selectedId: null,
@@ -246,32 +295,55 @@ class ExerciseTypeListing extends Component {
     handleSubmit = (data) => {
         const { selectedId } = this.state;
         const { dispatch } = this.props;
-        let exerciseType = {
+        let badgeCategory = {
             name: data.name,
             status: data.status.value,
-            description: data.description,
         }
         this.setState({
             saveActionInit: true,
         });
         dispatch(showPageLoader());
         if (selectedId) {
-            dispatch(exerciseTypeUpdateRequest(selectedId, exerciseType));
+            dispatch(badgeCategoryUpdateRequest(selectedId, badgeCategory));
         } else {
-            dispatch(exerciseTypeAddRequest(exerciseType));
+            dispatch(badgeCategoryAddRequest(badgeCategory));
         }
+    }
+
+    confirmDelete = (_id) => {
+        this.setState({
+            selectedId: _id,
+            showDeleteModal: true
+        });
+    }
+
+    closeDeleteModal = () => {
+        this.setState({
+            selectedId: null,
+            showDeleteModal: false
+        });
+    }
+
+    handleDelete = () => {
+        const { selectedId } = this.state;
+        const { dispatch } = this.props;
+        dispatch(showPageLoader());
+        this.setState({
+            deleteActionInit: true
+        });
+        dispatch(badgeCategoryDeleteRequest(selectedId));
     }
     // End Funs
 }
 
 const mapStateToProps = (state) => {
-    const { adminExerciseTypes } = state;
+    const { adminBadgeCategories } = state;
     return {
-        loading: adminExerciseTypes.get('loading'),
-        filteredExerciseTypes: adminExerciseTypes.get('filteredExerciseTypes'),
-        filteredTotalPages: adminExerciseTypes.get('filteredTotalPages'),
-        exerciseType: adminExerciseTypes.get('exerciseType'),
+        loading: adminBadgeCategories.get('loading'),
+        filteredBadgeCategories: adminBadgeCategories.get('filteredBudgeCategories'),
+        filteredTotalPages: adminBadgeCategories.get('filteredTotalPages'),
+        badgeCategory: adminBadgeCategories.get('badgeCategory'),
     };
 }
 
-export default connect(mapStateToProps)(ExerciseTypeListing);
+export default connect(mapStateToProps)(BadgeCategoryListing);

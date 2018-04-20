@@ -18,6 +18,8 @@ import adminExerciseTypeSagas from 'sagas/admin/exerciseTypes';
 import adminUserSagas from 'sagas/admin/users';
 import adminRecipeSagas from 'sagas/admin/recipes';
 import adminIngredientSagas from 'sagas/admin/ingredients';
+import adminBadgeCategorySagas from 'sagas/admin/badgeCategories';
+import adminBadgeTaskSagas from 'sagas/admin/badgeTasks';
 
 export default function* rootSaga() {
   yield all([
@@ -39,5 +41,7 @@ export default function* rootSaga() {
     ...adminUserSagas,
     ...adminRecipeSagas,
     ...adminIngredientSagas,
+    ...adminBadgeCategorySagas,
+    ...adminBadgeTaskSagas,
   ]);
 }

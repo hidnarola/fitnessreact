@@ -47,6 +47,8 @@ import { AUTH_CALLBACK_ROUTE } from '../auth/auth0-variables';
 import Callback from '../auth/callback/Callback';
 import ExerciseTypes from './Admin/ExerciseTypes';
 import history from '../config/history';
+import BadgeCategories from './Admin/BadgeCategories';
+import BadgeTasks from './Admin/BadgeTasks';
 
 class App extends Component {
 
@@ -103,7 +105,11 @@ class App extends Component {
 
                         <AdminPrivateRoute path={adminRouteCodes.OPTIONS} component={Options} />
 
-                        <AdminPrivateRoute path={adminRouteCodes.BUDGES} component={Budges} />
+                        <AdminPrivateRoute path={adminRouteCodes.BADGE_CATEGORIES} component={BadgeCategories} />
+
+                        <AdminPrivateRoute path={adminRouteCodes.BADGE_TASKS} component={BadgeTasks} />
+
+                        <AdminPrivateRoute path={adminRouteCodes.BADGES} component={Budges} />
 
                         <AdminPrivateRoute path={adminRouteCodes.COUPONS} component={Coupons} />
 

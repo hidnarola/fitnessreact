@@ -93,7 +93,25 @@ export default class AdminNav extends Component {
                             <NavLink
                                 activeClassName='active'
                                 className='Menu-link'
-                                to={adminRouteCodes.BUDGES}
+                                to={adminRouteCodes.BADGE_CATEGORIES}
+                            >
+                                <span>Budge Categories</span>
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink
+                                activeClassName='active'
+                                className='Menu-link'
+                                to={adminRouteCodes.BADGE_TASKS}
+                            >
+                                <span>Budge Tasks</span>
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink
+                                activeClassName='active'
+                                className='Menu-link'
+                                to={adminRouteCodes.BADGES}
                             >
                                 <span>Budges</span>
                             </NavLink>

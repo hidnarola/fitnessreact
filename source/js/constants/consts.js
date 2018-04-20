@@ -66,3 +66,9 @@ export const GOAL_LOSE_FAT = 'lose_fat';
 export const GOAL_GAIN_STRENGTH = 'gain_strength';
 export const GOAL_GAIN_POWER = 'gain_power';
 export const GOAL_INCREASE_ENDURANCE = 'increase_endurance';
+
+export const TASKS_UNITS_KMS = 'kms';
+export const TASKS_UNITS_KGS = 'kgs';
+
+export const TASKS_UNITS_KMS_STR = 'Kilometers';
+export const TASKS_UNITS_KGS_STR = 'Kilograms';

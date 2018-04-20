@@ -26,6 +26,10 @@ export const adminRouteCodes = {
 
     PAYMENTS: `${adminRootRoute}/payments`,
     OPTIONS: `${adminRootRoute}/options`,
-    BUDGES: `${adminRootRoute}/budges`,
+
+    BADGES: `${adminRootRoute}/badges`,
+    BADGE_CATEGORIES: `${adminRootRoute}/badge_categories`,
+    BADGE_TASKS: `${adminRootRoute}/badge_tasks`,
+
     COUPONS: `${adminRootRoute}/coupons`,
 }
