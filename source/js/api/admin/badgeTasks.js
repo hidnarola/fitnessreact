@@ -9,7 +9,6 @@ function getBadgeTasks() {
         method: 'GET',
         headers: headers,
     }
-
     return fetchResource(requestUrl, options);
 }
 

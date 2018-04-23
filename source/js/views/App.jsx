@@ -37,7 +37,7 @@ import Users from './Admin/Users';
 import Recipes from './Admin/Recipes';
 import Exercises from './Admin/Exercises';
 import Options from './Admin/Options';
-import Budges from './Admin/Budges';
+import AdminBadges from './Admin/Badges';
 import Coupons from './Admin/Coupons';
 import Nutritions from './Admin/Nutritions';
 import Equipments from './Admin/Equipments';
@@ -49,6 +49,7 @@ import ExerciseTypes from './Admin/ExerciseTypes';
 import history from '../config/history';
 import BadgeCategories from './Admin/BadgeCategories';
 import BadgeTasks from './Admin/BadgeTasks';
+import { ToastContainer } from "react-toastify";
 
 class App extends Component {
 
@@ -109,7 +110,7 @@ class App extends Component {
 
                         <AdminPrivateRoute path={adminRouteCodes.BADGE_TASKS} component={BadgeTasks} />
 
-                        <AdminPrivateRoute path={adminRouteCodes.BADGES} component={Budges} />
+                        <AdminPrivateRoute path={adminRouteCodes.BADGES} component={AdminBadges} />
 
                         <AdminPrivateRoute path={adminRouteCodes.COUPONS} component={Coupons} />
 
@@ -143,6 +144,18 @@ class App extends Component {
                         {/* <Route path='*' component={NotFound} /> */}
                     </ScrollToTop>
                 </Router>
+
+                <ToastContainer
+                    position="top-right"
+                    autoClose={3000}
+                    hideProgressBar
+                    newestOnTop
+                    closeOnClick
+                    rtl={false}
+                    pauseOnVisibilityChange
+                    draggable
+                    pauseOnHover
+                />
             </div>
         );
     }

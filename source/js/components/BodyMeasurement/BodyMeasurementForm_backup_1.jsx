@@ -16,6 +16,8 @@ class BodyMeasurementForm extends Component {
         this.state = {
             selectActionInit: false,
             logDate: new Date(),
+            selectLogDatesActionInit: false,
+            logDates: [],
         }
     }
 
@@ -30,8 +32,9 @@ class BodyMeasurementForm extends Component {
     }
 
     render() {
-        const { logDate } = this.state;
-        const { logDates, handleSubmit } = this.props;
+        const { logDate, logDates } = this.state;
+        console.log(logDates);
+        const { handleSubmit } = this.props;
         return (
             <form onSubmit={handleSubmit}>
                 <div className="row d-flex whitebox-body">
@@ -208,7 +211,8 @@ class BodyMeasurementForm extends Component {
     componentDidUpdate(prevProps, prevState) {
         const {
             selectActionInit,
-            logDate
+            logDate,
+            selectLogDatesActionInit
         } = this.state;
         const {
             loading,
@@ -217,7 +221,8 @@ class BodyMeasurementForm extends Component {
             initialize,
             change,
             refreshBodyMeasurementForm,
-            resetRefreshBodyMeasurementForm
+            resetRefreshBodyMeasurementForm,
+            logDates
         } = this.props;
         if (selectActionInit && !loading) {
             this.setState({ selectActionInit: false });
@@ -251,12 +256,19 @@ class BodyMeasurementForm extends Component {
             }
             this.getBodyMeasurementLogData(requestData);
         }
+        if (selectLogDatesActionInit && !loadingLogDates) {
+            this.setState({
+                selectLogDatesActionInit: false,
+                logDates: logDates,
+            });
+        }
     }
 
     getBodyMeasurementLogData = (requestData) => {
         const { dispatch } = this.props;
         this.setState({
-            selectActionInit: true
+            selectActionInit: true,
+            selectLogDatesActionInit: true,
         });
         dispatch(showPageLoader());
         dispatch(getUserBodyMeasurementRequest(requestData));
@@ -265,6 +277,9 @@ class BodyMeasurementForm extends Component {
 
     getBodyMeasurementLogDates = (requestData) => {
         const { dispatch } = this.props;
+        this.setState({
+            selectLogDatesActionInit: true,
+        });
         dispatch(getUserBodyMeasurementLogDatesRequest(requestData));
     }
 

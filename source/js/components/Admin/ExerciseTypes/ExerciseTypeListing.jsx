@@ -11,7 +11,7 @@ import {
     exerciseTypeUpdateRequest,
     exerciseTypeSelectOneRequest
 } from '../../../actions/admin/exerciseTypes';
-import { generateDTTableFilterObj } from '../../../helpers/funs';
+import { generateDTTableFilterObj, ts } from '../../../helpers/funs';
 import ExerciseTypeSaveForm from './ExerciseTypeSaveForm';
 import { showPageLoader } from '../../../actions/pageLoader';
 import {
@@ -186,6 +186,7 @@ class ExerciseTypeListing extends Component {
                 saveModalShow: false,
                 selectActionInit: false,
             });
+            ts('Record saved successfully!');
             this.refreshDTData();
         } else if (selectActionInit && !loading) {
             const formData = {

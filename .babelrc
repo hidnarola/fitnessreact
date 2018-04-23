@@ -2,7 +2,8 @@
   "plugins": [
     "transform-decorators-legacy",
     "transform-class-properties",
-    "syntax-decorators"
+    "syntax-decorators",
+    "emotion"
   ],
   "presets": [
     ["env", {

@@ -15,7 +15,7 @@ const initialState = Map({
     loading: false,
     error: null,
     measurement: null,
-    loadingLogDatas: false,
+    loadingLogDates: false,
     errorLogDates: null,
     logDates: [],
 });
@@ -40,18 +40,18 @@ const actionsMap = {
     },
     [GET_USER_BODY_MEASUREMENT_LOG_DATES_REQUEST]: (state, action) => {
         return state.merge(Map({
-            loadingLogDatas: true,
+            loadingLogDates: true,
         }));
     },
     [GET_USER_BODY_MEASUREMENT_LOG_DATES_SUCCESS]: (state, action) => {
         return state.merge(Map({
-            loadingLogDatas: false,
+            loadingLogDates: false,
             logDates: action.data.logdates,
         }));
     },
     [GET_USER_BODY_MEASUREMENT_LOG_DATES_ERROR]: (state, action) => {
         return state.merge(Map({
-            loadingLogDatas: false,
+            loadingLogDates: false,
             errorLogDates: action.error,
         }));
     },

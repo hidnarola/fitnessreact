@@ -72,3 +72,7 @@ export const TASKS_UNITS_KGS = 'kgs';
 
 export const TASKS_UNITS_KMS_STR = 'Kilometers';
 export const TASKS_UNITS_KGS_STR = 'Kilograms';
+
+export const TIME_TYPE_STANDARD = 'standard';
+export const TIME_TYPE_TIME_WINDOW = 'time_window';
+export const TIME_TYPE_TIMED = 'timed';

@@ -53,7 +53,7 @@ class BadgeListing extends Component {
                         <h2>Badges</h2>
                     </div>
                     <div className="body-head-r">
-                        <a href="javascript:void(0)" onClick={() => this.handleShowSaveModal()} className="pink-btn">Add Badge</a>
+                        <NavLink to={adminRouteCodes.BADGES_SAVE} className="pink-btn">Add Badge</NavLink>
                     </div>
                 </div>
 

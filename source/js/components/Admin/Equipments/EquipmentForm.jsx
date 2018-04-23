@@ -3,7 +3,7 @@ import { NavLink, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import { InputField, EditorField, SelectField_ReactSelect, FileField_Dropzone_Single } from '../../../helpers/FormControlHelper';
-import { required, requiredReactSelect } from '../../../formValidation/validationRules';
+import { required, requiredReactSelect, requiredReactSelectStatus } from '../../../formValidation/validationRules';
 import { adminRouteCodes } from '../../../constants/adminRoutes';
 import { showPageLoader, hidePageLoader } from '../../../actions/pageLoader';
 import { equipmentCategoryListRequest } from '../../../actions/admin/equipmentCategories';
@@ -12,8 +12,8 @@ import { prepareDropdownOptionsData } from '../../../helpers/funs';
 import { equipmentSelectOneRequest } from '../../../actions/admin/equipments';
 
 const statusOptions = [
-    { value: true, label: 'Active' },
-    { value: false, label: 'Inactive' },
+    { value: 1, label: 'Active' },
+    { value: 0, label: 'Inactive' },
 ];
 
 class EquipmentForm extends Component {
@@ -90,7 +90,7 @@ class EquipmentForm extends Component {
                                 component={SelectField_ReactSelect}
                                 options={statusOptions}
                                 errorClass="help-block"
-                                validate={[requiredReactSelect]}
+                                validate={[requiredReactSelectStatus]}
                             />
                             <Field
                                 name="image"

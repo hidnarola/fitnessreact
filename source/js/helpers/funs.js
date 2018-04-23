@@ -1,6 +1,9 @@
+import React, { Component } from "react";
 import { LOCALSTORAGE_ACCESS_TOKEN_KEY } from "../constants/consts";
 import _ from 'lodash';
 import { AUTH_CONFIG } from "../auth/auth0-variables";
+import { toast } from "react-toastify";
+import { FaCheck } from 'react-icons/lib/fa';
 
 export function extraHeaders() {
     const token = localStorage.getItem(LOCALSTORAGE_ACCESS_TOKEN_KEY);
@@ -67,4 +70,12 @@ export function generateDTTableFilterObj(state, instance) {
     }
 
     return filterData;
+}
+
+export function ts(msg = 'Success') {
+    toast.success(
+        <span>
+            <FaCheck /> {msg}
+        </span>
+    );
 }

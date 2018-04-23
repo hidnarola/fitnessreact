@@ -24,7 +24,7 @@ const initialState = Map({
     loading: false,
     error: null,
     badges: [],
-    filteredBudges: [],
+    filteredBadges: [],
     filteredTotalPages: 0,
     badge: null,
 });
@@ -59,7 +59,7 @@ const actionMap = {
     [BADGES_FILTER_SUCCESS]: (state, action) => {
         return state.merge(Map({
             loading: false,
-            filteredBudges: action.data.filtered_badges,
+            filteredBadges: action.data.filtered_badges,
             filteredTotalPages: action.data.filtered_total_pages,
         }));
     },

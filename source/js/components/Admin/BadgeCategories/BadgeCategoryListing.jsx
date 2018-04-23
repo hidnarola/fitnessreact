@@ -7,12 +7,13 @@ import ReactTable from 'react-table';
 import { reset, initialize } from 'redux-form';
 import moment from 'moment';
 import { badgeCategoryFilterRequest, badgeCategorySelectOneRequest, badgeCategoryUpdateRequest, badgeCategoryAddRequest, badgeCategoryDeleteRequest } from '../../../actions/admin/badgeCategories';
-import { generateDTTableFilterObj } from '../../../helpers/funs';
+import { generateDTTableFilterObj, ts } from '../../../helpers/funs';
 import { showPageLoader } from '../../../actions/pageLoader';
 import BadgeCategorySaveForm from './BadgeCategorySaveForm';
 import { STATUS_ACTIVE, STATUS_INACTIVE, STATUS_INACTIVE_STR, STATUS_ACTIVE_STR } from '../../../constants/consts';
 import _ from 'lodash';
 import DeleteConfirmation from '../Common/DeleteConfirmation';
+import { ScaleLoader } from 'react-spinners';
 
 const statusOptions = [
     { value: '', label: 'All' },
@@ -54,6 +55,9 @@ class BadgeCategoryListing extends Component {
         } = this.state;
         return (
             <div className="badge-category-listing-wrapper">
+                <div className="loader">
+                    <ScaleLoader color="#f00" />
+                </div>
                 <div className="body-head space-btm-45 d-flex justify-content-start">
                     <div className="body-head-l">
                         <h2>Badge Category</h2>
@@ -229,6 +233,7 @@ class BadgeCategoryListing extends Component {
                 saveModalShow: false,
                 selectActionInit: false,
             });
+            ts('Record saved successfully!');
             this.refreshDTData();
         } else if (selectActionInit && !loading) {
             const formData = {
@@ -242,6 +247,7 @@ class BadgeCategoryListing extends Component {
                 showDeleteModal: false,
                 deleteActionInit: false
             });
+            ts('Record deleted successfully!');
             this.refreshDTData();
         }
     }

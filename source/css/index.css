@@ -13,3 +13,6 @@
 @import "react-select/dist/react-select.css";
 @import "react-datepicker/dist/react-datepicker.css";
 @import "react-quill/dist/quill.snow.css";
+@import 'react-toastify/dist/ReactToastify.css';
+@import 'react-tagsinput/react-tagsinput.css';
+@import 'react-daterange-picker/dist/css/react-calendar.css';

@@ -186,7 +186,7 @@ class UserListing extends Component {
                                                     return (
                                                         <div className="list-goal-wrapper">
                                                             <span>
-                                                                {row.value.map((m, i) => (m)).join(',')}
+                                                                {row.value && row.value.length > 0 && row.value.map((m, i) => (m)).join(',')}
                                                             </span>
                                                         </div>
                                                     );

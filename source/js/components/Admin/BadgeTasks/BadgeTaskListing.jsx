@@ -6,7 +6,7 @@ import { adminRouteCodes } from '../../../constants/adminRoutes';
 import ReactTable from 'react-table';
 import { reset, initialize } from 'redux-form';
 import moment from 'moment';
-import { generateDTTableFilterObj } from '../../../helpers/funs';
+import { generateDTTableFilterObj, ts } from '../../../helpers/funs';
 import { showPageLoader } from '../../../actions/pageLoader';
 import {
     STATUS_ACTIVE,
@@ -276,6 +276,7 @@ class BadgeTaskListing extends Component {
                 saveModalShow: false,
                 selectActionInit: false,
             });
+            ts('Record saved successfully!');
             this.refreshDTData();
         } else if (selectActionInit && !loading) {
             const formData = {
@@ -291,6 +292,7 @@ class BadgeTaskListing extends Component {
                 showDeleteModal: false,
                 deleteActionInit: false
             });
+            ts('Record deleted successfully!');
             this.refreshDTData();
         }
     }
