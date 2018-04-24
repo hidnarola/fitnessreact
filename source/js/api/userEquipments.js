@@ -13,6 +13,12 @@ function getUserEquipments() {
     return fetchResource(requestUrl, options);
 }
 
+function postUserEquipments(requestData) {
+    let headers = extraUserHeaders();
+    return postFormData(requestUrl, requestData, headers);
+}
+
 export default {
     getUserEquipments,
+    postUserEquipments,
 }

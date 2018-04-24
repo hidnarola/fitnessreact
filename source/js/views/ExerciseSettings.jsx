@@ -8,14 +8,26 @@ import Setting from 'components/Exercise/Setting';
 import Equipment from 'components/Exercise/Equipment';
 import Fitness from 'components/Exercise/Fitness';
 
-
 import { routeCodes } from 'constants/routes';
 
 import FitnessHeader from 'components/global/FitnessHeader';
 import FitnessNav from 'components/global/FitnessNav';
+import { submit } from 'redux-form';
+import ResetConfirmation from '../components/Admin/Common/ResetConfirmation';
+import { saveUserEquipmentsRequest } from '../actions/userEquipments';
 
-export default class ExerciseSettings extends Component {
+class ExerciseSettings extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            saveActionInit: false,
+            showResetModal: false,
+            resetActionFor: null,
+        }
+    }
+
     render() {
+        const { showResetModal } = this.state;
         return (
             <div className='stat-page'>
                 <FitnessHeader />
@@ -62,10 +74,10 @@ export default class ExerciseSettings extends Component {
                                 also allow us to identify opportunities for rapid improvement.</p>
                         </div>
                         <div className="body-head-r">
-                            <a className="white-btn">Reset
+                            <a className="white-btn" href="javascript:void(0)" onClick={this.handleShowResetModal}>Reset
                                 <i className="icon-print"></i>
                             </a>
-                            <a className="green-blue-btn">Update
+                            <a className="green-blue-btn" href="javascript:void(0)" onClick={this.handleExerciseSettings}>Update
                                 <i className="icon-control_point"></i>
                             </a>
                         </div>
@@ -73,11 +85,69 @@ export default class ExerciseSettings extends Component {
 
                     <Switch>
                         <Route exact path={routeCodes.EXERCISEFITNESS} component={Fitness} />
-                        <Route exact path={routeCodes.EXERCISEEQP} component={Equipment} />
+                        <Route
+                            exact
+                            path={routeCodes.EXERCISEEQP}
+                            render={
+                                () => <Equipment
+                                    {...this.state}
+                                    setSaveAction={this.setSaveAction}
+                                />
+                            }
+                        />
                         <Route exact path={routeCodes.EXERCISEPREFERENCE} component={Setting} />
                     </Switch>
                 </section>
+
+                <ResetConfirmation
+                    show={showResetModal}
+                    handleClose={this.closeResetModal}
+                    handleYes={this.handleReset}
+                />
+
             </div>
         );
     }
+
+    handleExerciseSettings = () => {
+        const { dispatch, match } = this.props;
+        if (match.path === routeCodes.EXERCISEEQP) {
+            dispatch(submit('userEquipmentsForm'));
+        }
+    }
+
+    handleShowResetModal = () => {
+        this.setState({
+            resetActionFor: 'userEquipmentsForm',
+            showResetModal: true
+        });
+    }
+
+    closeResetModal = () => {
+        this.setState({
+            resetActionFor: null,
+            showResetModal: false
+        });
+    }
+
+    handleReset = () => {
+        const { resetActionFor } = this.state;
+        const { dispatch } = this.props;
+        if (resetActionFor === 'userEquipmentsForm') {
+            let requestObj = {
+                equipmentIds: []
+            }
+            dispatch(saveUserEquipmentsRequest(requestObj));
+            this.setSaveAction(true);
+        }
+    }
+
+    setSaveAction = (flag) => {
+        this.setState({ saveActionInit: flag });
+        if (!flag) {
+            this.setState({ showResetModal: false });
+        }
+    }
 }
+
+export default connect()(ExerciseSettings)
