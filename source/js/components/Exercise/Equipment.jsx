@@ -76,7 +76,9 @@ class Equipment extends Component {
             saveActionInit,
             loading,
             setSaveAction,
-            dispatch
+            dispatch,
+            forceResetEquipmentsForm,
+            setForceResetEquipmentsForm
         } = this.props;
         if (saveActionInit && !loading) {
             dispatch(getUserEquipmentsRequest());
