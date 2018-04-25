@@ -4,22 +4,28 @@ import { Field, reduxForm } from "redux-form";
 import EquipmentsContentItem from './EquipmentsContentItem';
 import { getUserEquipmentsRequest, saveUserEquipmentsRequest } from '../../actions/userEquipments';
 import _ from "lodash";
+import { ts } from '../../helpers/funs';
 
 class Equipment extends Component {
     constructor(props) {
         super(props);
         this.state = {
             saveActionInit: false,
+            loadDataActionInit: false,
+            equipments: [],
+            userEquipments: [],
         }
     }
 
     componentWillMount() {
-        const { dispatch, equipments } = this.props;
+        const { dispatch } = this.props;
+        this.setState({ loadDataActionInit: true });
         dispatch(getUserEquipmentsRequest());
     }
 
     render() {
-        const { equipments, userEquipments, handleSubmit } = this.props;
+        const { handleSubmit } = this.props;
+        const { equipments, userEquipments } = this.state;
         return (
             <div className="body-content d-flex row justify-content-start profilephoto-content">
                 <form className="row">
@@ -77,11 +83,20 @@ class Equipment extends Component {
             loading,
             setSaveAction,
             dispatch,
-            forceResetEquipmentsForm,
-            setForceResetEquipmentsForm
+            equipments,
+            userEquipments
         } = this.props;
-        if (saveActionInit && !loading) {
+        const { loadDataActionInit } = this.state;
+        if (loadDataActionInit && !loading) {
+            this.setState({
+                loadDataActionInit: false,
+                equipments,
+                userEquipments
+            });
+        } else if (saveActionInit && !loading) {
             dispatch(getUserEquipmentsRequest());
+            ts('Equipments saved successfully!');
+            this.setState({ loadDataActionInit: true });
             setSaveAction(false);
         }
     }

@@ -23,8 +23,6 @@ class ExerciseSettings extends Component {
             saveActionInit: false,
             showResetModal: false,
             resetActionFor: null,
-            resetActionInit: false,
-            forceResetEquipmentsForm: false,
         }
     }
 
@@ -94,7 +92,6 @@ class ExerciseSettings extends Component {
                                 () => <Equipment
                                     {...this.state}
                                     setSaveAction={this.setSaveAction}
-                                    setForceResetEquipmentsForm={this.setForceResetEquipmentsForm}
                                 />
                             }
                         />
@@ -111,16 +108,6 @@ class ExerciseSettings extends Component {
             </div>
         );
     }
-
-    componentDidUpdate() {
-        const { loading } = this.props;
-        const { resetActionInit } = this.state;
-        if (resetActionInit && !loading) {
-            this.setState({ resetActionInit: false });
-            this.setForceResetEquipmentsForm(true);
-        }
-    }
-
 
     handleExerciseSettings = () => {
         const { dispatch, match } = this.props;
@@ -146,7 +133,6 @@ class ExerciseSettings extends Component {
     handleReset = () => {
         const { resetActionFor } = this.state;
         const { dispatch } = this.props;
-        this.setState({ resetActionInit: true });
         if (resetActionFor === 'userEquipmentsForm') {
             let requestObj = {
                 equipmentIds: []
@@ -162,17 +148,6 @@ class ExerciseSettings extends Component {
             this.setState({ showResetModal: false });
         }
     }
-
-    setForceResetEquipmentsForm = (flag) => {
-        this.setState({ forceResetEquipmentsForm: flag });
-    }
 }
 
-const mapStateToProps = (state) => {
-    const { userEquipments } = state;
-    return {
-        loading: userEquipments.get('loading'),
-    }
-}
-
-export default connect(mapStateToProps)(ExerciseSettings)
+export default connect()(ExerciseSettings)

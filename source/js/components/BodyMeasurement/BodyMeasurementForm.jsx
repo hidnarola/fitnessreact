@@ -5,7 +5,6 @@ import _ from 'lodash';
 import moment from 'moment';
 import ReactCalender from 'react-calendar/dist/entry.nostyle';
 import bodyGraph from 'img/site/body-graph.png';
-import { InputField } from '../../helpers/FormControlHelper';
 import { required } from '../../formValidation/validationRules';
 import { showPageLoader } from '../../actions/pageLoader';
 import { getUserBodyMeasurementRequest, getUserBodyMeasurementLogDatesRequest } from '../../actions/userBodyMeasurement';
@@ -46,7 +45,9 @@ class BodyMeasurementForm extends Component {
                                     errorClass="help-block"
                                     placeholder="Neck"
                                     validate={[required]}
+                                    unitValue="cm"
                                 />
+
                             </li>
                             <li>
                                 <Field
@@ -57,6 +58,7 @@ class BodyMeasurementForm extends Component {
                                     errorClass="help-block"
                                     placeholder="Shoulders"
                                     validate={[required]}
+                                    unitValue="cm"
                                 />
                             </li>
                             <li>
@@ -68,6 +70,7 @@ class BodyMeasurementForm extends Component {
                                     errorClass="help-block"
                                     placeholder="Chest"
                                     validate={[required]}
+                                    unitValue="cm"
                                 />
                             </li>
                             <li>
@@ -79,6 +82,7 @@ class BodyMeasurementForm extends Component {
                                     errorClass="help-block"
                                     placeholder="Upper Arm"
                                     validate={[required]}
+                                    unitValue="cm"
                                 />
                             </li>
                             <li>
@@ -90,6 +94,7 @@ class BodyMeasurementForm extends Component {
                                     errorClass="help-block"
                                     placeholder="Waist"
                                     validate={[required]}
+                                    unitValue="cm"
                                 />
                             </li>
                             <li>
@@ -101,6 +106,7 @@ class BodyMeasurementForm extends Component {
                                     errorClass="help-block"
                                     placeholder="Forearm"
                                     validate={[required]}
+                                    unitValue="cm"
                                 />
                             </li>
                             <li>
@@ -112,6 +118,7 @@ class BodyMeasurementForm extends Component {
                                     errorClass="help-block"
                                     placeholder="Hips"
                                     validate={[required]}
+                                    unitValue="cm"
                                 />
                             </li>
                             <li>
@@ -123,6 +130,7 @@ class BodyMeasurementForm extends Component {
                                     errorClass="help-block"
                                     placeholder="Thigh"
                                     validate={[required]}
+                                    unitValue="cm"
                                 />
                             </li>
                             <li>
@@ -134,6 +142,7 @@ class BodyMeasurementForm extends Component {
                                     errorClass="help-block"
                                     placeholder="Calf"
                                     validate={[required]}
+                                    unitValue="cm"
                                 />
                             </li>
                         </ul>
@@ -154,6 +163,7 @@ class BodyMeasurementForm extends Component {
                                     errorClass="help-block"
                                     placeholder="Weight"
                                     validate={[required]}
+                                    unitValue="kg"
                                 />
                             </li>
                             <li>
@@ -165,6 +175,7 @@ class BodyMeasurementForm extends Component {
                                     errorClass="help-block"
                                     placeholder="Height"
                                     validate={[required]}
+                                    unitValue="cm"
                                 />
                             </li>
                         </ul>
@@ -317,3 +328,28 @@ const mapStateToProps = (state) => {
 }
 
 export default connect(mapStateToProps)(BodyMeasurementForm);
+
+const InputField = (props) => {
+    const { label, input, meta, wrapperClass, className, labelClass, placeholder, errorClass, type, unitValue } = props;
+    return (
+        <div>
+            <div
+                className={
+                    `${wrapperClass} ${(meta.touched && meta.error) ? 'has-error' : ''}`
+                }
+            >
+                <label htmlFor={input.name} className={labelClass}>{label}</label>
+                <input
+                    {...input}
+                    type={type ? type : 'text'}
+                    className={className}
+                    placeholder={placeholder}
+                />
+                <div className="cm-kg">{unitValue}</div>
+            </div>
+            {meta.touched &&
+                ((meta.error && <div className={errorClass}>{meta.error}</div>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))
+            }
+        </div>
+    );
+}

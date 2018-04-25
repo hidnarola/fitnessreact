@@ -46,7 +46,7 @@ class FitnessHeader extends Component {
                     </div>
                     <div className="header-r d-flex">
                         <div className="header-user">
-                        
+
                             <NavLink
                                 activeClassName='active'
                                 className='Menu-link'
@@ -54,14 +54,16 @@ class FitnessHeader extends Component {
                                 to={routeCodes.PROFILE}
                             >
                                 {loggedUserData &&
-                                    <img
-                                        src={loggedUserData.avatar}
-                                        alt="Avatar"
-                                        className="avatar"
-                                        onError={(e) => {
-                                            e.target.src = noProfileImg
-                                        }}
-                                    />
+                                    <span>
+                                        <img
+                                            src={loggedUserData.avatar}
+                                            alt="Avatar"
+                                            className="avatar"
+                                            onError={(e) => {
+                                                e.target.src = noProfileImg
+                                            }}
+                                        />
+                                    </span>
                                 }
                                 {loggedUserData && loggedUserData.name}
                             </NavLink>
