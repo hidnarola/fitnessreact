@@ -9,6 +9,7 @@ import nutrition from 'reducers/nutrition';
 import exerciseFitness from 'reducers/exercise/fitness'
 import userEquipments from 'reducers/userEquipments'
 import userExercisePreferences from 'reducers/userExercisePreferences'
+import userNutritionPreferences from 'reducers/userNutritionPreferences'
 import userExerciseTypes from 'reducers/userExerciseTypes'
 import userBodyparts from 'reducers/userBodyparts'
 import userExercises from 'reducers/userExercises'
@@ -39,6 +40,7 @@ export default combineReducers({
     exerciseFitness,
     userEquipments,
     userExercisePreferences,
+    userNutritionPreferences,
     userExerciseTypes,
     userBodyparts,
     userExercises,
