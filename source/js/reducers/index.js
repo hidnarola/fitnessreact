@@ -8,6 +8,10 @@ import dashboardnew from 'reducers/dashboard';
 import nutrition from 'reducers/nutrition';
 import exerciseFitness from 'reducers/exercise/fitness'
 import userEquipments from 'reducers/userEquipments'
+import userExercisePreferences from 'reducers/userExercisePreferences'
+import userExerciseTypes from 'reducers/userExerciseTypes'
+import userBodyparts from 'reducers/userBodyparts'
+import userExercises from 'reducers/userExercises'
 import friends from 'reducers/friends';
 import profilePhotos from 'reducers/profilePhotos';
 import login from 'reducers/login';
@@ -34,6 +38,10 @@ export default combineReducers({
     nutrition,
     exerciseFitness,
     userEquipments,
+    userExercisePreferences,
+    userExerciseTypes,
+    userBodyparts,
+    userExercises,
     friends,
     profilePhotos,
     login,

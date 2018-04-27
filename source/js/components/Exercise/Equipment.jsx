@@ -28,7 +28,7 @@ class Equipment extends Component {
         const { equipments, userEquipments } = this.state;
         return (
             <div className="body-content d-flex row justify-content-start profilephoto-content">
-                <form className="row">
+                <form className="row width-100-per no-margin">
                     {!equipments &&
                         <div className="col-md-12">
                             <div className="white-box space-btm-20">
@@ -80,8 +80,10 @@ class Equipment extends Component {
     componentDidUpdate() {
         const {
             saveActionInit,
+            resetActionInit,
             loading,
             setSaveAction,
+            setResetAction,
             dispatch,
             equipments,
             userEquipments
@@ -98,6 +100,11 @@ class Equipment extends Component {
             ts('Equipments saved successfully!');
             this.setState({ loadDataActionInit: true });
             setSaveAction(false);
+        } else if (resetActionInit && !loading) {
+            dispatch(getUserEquipmentsRequest());
+            ts('Equipments reset successfully!');
+            this.setState({ loadDataActionInit: true });
+            setResetAction(false);
         }
     }
 

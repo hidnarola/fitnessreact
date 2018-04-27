@@ -4,6 +4,7 @@ import BodyMeasurementForm from './BodyMeasurementForm';
 import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
 import { saveUserBodyMeasurementRequest } from '../../actions/userBodyMeasurement';
 import moment from 'moment';
+import { ts } from '../../helpers/funs';
 
 class BodyMeasurement extends Component {
     constructor(props) {
@@ -57,6 +58,7 @@ class BodyMeasurement extends Component {
                 saveActionInit: false,
                 refreshBodyMeasurementForm: true,
             });
+            ts('Body measurement saved successfully!');
             dispatch(hidePageLoader());
         }
     }

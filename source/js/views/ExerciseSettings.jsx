@@ -15,6 +15,7 @@ import FitnessNav from 'components/global/FitnessNav';
 import { submit } from 'redux-form';
 import ResetConfirmation from '../components/Admin/Common/ResetConfirmation';
 import { saveUserEquipmentsRequest } from '../actions/userEquipments';
+import { resetUserExercisePreferencesRequest } from '../actions/userExercisePreferences';
 
 class ExerciseSettings extends Component {
     constructor(props) {
@@ -23,6 +24,7 @@ class ExerciseSettings extends Component {
             saveActionInit: false,
             showResetModal: false,
             resetActionFor: null,
+            resetActionInit: false,
         }
     }
 
@@ -92,10 +94,21 @@ class ExerciseSettings extends Component {
                                 () => <Equipment
                                     {...this.state}
                                     setSaveAction={this.setSaveAction}
+                                    setResetAction={this.setResetAction}
                                 />
                             }
                         />
-                        <Route exact path={routeCodes.EXERCISEPREFERENCE} component={Setting} />
+                        <Route
+                            exact
+                            path={routeCodes.EXERCISEPREFERENCE}
+                            render={
+                                () => <Setting
+                                    {...this.state}
+                                    setSaveAction={this.setSaveAction}
+                                    setResetAction={this.setResetAction}
+                                />
+                            }
+                        />
                     </Switch>
                 </section>
 
@@ -113,14 +126,22 @@ class ExerciseSettings extends Component {
         const { dispatch, match } = this.props;
         if (match.path === routeCodes.EXERCISEEQP) {
             dispatch(submit('userEquipmentsForm'));
+        } else if (match.path === routeCodes.EXERCISEPREFERENCE) {
+            dispatch(submit('userExercisePreferencesForm'));
         }
     }
 
     handleShowResetModal = () => {
-        this.setState({
-            resetActionFor: 'userEquipmentsForm',
-            showResetModal: true
-        });
+        const { match } = this.props;
+        let newModalState = {
+            showResetModal: true,
+        }
+        if (match.path === routeCodes.EXERCISEEQP) {
+            newModalState.resetActionFor = 'userEquipmentsForm';
+        } else if (match.path === routeCodes.EXERCISEPREFERENCE) {
+            newModalState.resetActionFor = 'userExercisePreferencesForm';
+        }
+        this.setState(newModalState);
     }
 
     closeResetModal = () => {
@@ -138,12 +159,22 @@ class ExerciseSettings extends Component {
                 equipmentIds: []
             }
             dispatch(saveUserEquipmentsRequest(requestObj));
-            this.setSaveAction(true);
+            this.setResetAction(true);
+        } else if (resetActionFor === 'userExercisePreferencesForm') {
+            dispatch(resetUserExercisePreferencesRequest());
+            this.setResetAction(true);
         }
     }
 
     setSaveAction = (flag) => {
         this.setState({ saveActionInit: flag });
+        if (!flag) {
+            this.setState({ showResetModal: false });
+        }
+    }
+
+    setResetAction = (flag) => {
+        this.setState({ resetActionInit: flag });
         if (!flag) {
             this.setState({ showResetModal: false });
         }

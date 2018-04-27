@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { LOCALSTORAGE_ACCESS_TOKEN_KEY } from "../constants/consts";
 import _ from 'lodash';
+import moment from "moment";
 import { AUTH_CONFIG } from "../auth/auth0-variables";
 import { toast } from "react-toastify";
 import { FaCheck } from 'react-icons/lib/fa';
@@ -78,4 +79,16 @@ export function ts(msg = 'Success') {
             <FaCheck /> {msg}
         </span>
     );
+}
+
+export function convertMinsToTime(_mins) {
+    var hours = Math.floor((_mins / 60)).toString();
+    var mins = (_mins - (hours * 60)).toString();
+    return moment(hours + ':' + mins, 'HH:mm')
+}
+
+export function convertTimeToMins(momentObj) {
+    var hours = parseInt(momentObj.hours());
+    var mins = parseInt(momentObj.minutes());
+    return ((hours * 60) + mins);
 }
