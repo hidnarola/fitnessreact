@@ -16,6 +16,7 @@ import userExercises from 'reducers/userExercises'
 import friends from 'reducers/friends';
 import profilePhotos from 'reducers/profilePhotos';
 import login from 'reducers/login';
+import healthLabels from 'reducers/healthLabels';
 import pageLoader from 'reducers/pageLoader';
 import adminNutritions from 'reducers/admin/nutritions'
 import adminEquipments from 'reducers/admin/equipments'
@@ -47,6 +48,7 @@ export default combineReducers({
     friends,
     profilePhotos,
     login,
+    healthLabels,
     pageLoader,
     adminNutritions,
     adminEquipments,

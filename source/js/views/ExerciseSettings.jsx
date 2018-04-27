@@ -169,14 +169,14 @@ class ExerciseSettings extends Component {
     setSaveAction = (flag) => {
         this.setState({ saveActionInit: flag });
         if (!flag) {
-            this.setState({ showResetModal: false });
+            this.closeResetModal();
         }
     }
 
     setResetAction = (flag) => {
         this.setState({ resetActionInit: flag });
         if (!flag) {
-            this.setState({ showResetModal: false });
+            this.closeResetModal();
         }
     }
 }

@@ -50,6 +50,7 @@ import history from '../config/history';
 import BadgeCategories from './Admin/BadgeCategories';
 import BadgeTasks from './Admin/BadgeTasks';
 import { ToastContainer } from "react-toastify";
+import NutritionPreferences from '../components/Nutrition/NutritionPreferences';
 
 class App extends Component {
 
@@ -76,6 +77,7 @@ class App extends Component {
                         <PrivateRoute path={routeCodes.EXERCISEPREFERENCE} component={ExerciseSettings} />
 
                         <PrivateRoute path={routeCodes.NUTRITIONMEAL} component={NutritionMeal} />
+                        <PrivateRoute path={routeCodes.NUTRITIONPREFERENCE} component={NutritionPreferences} />
                         <PrivateRoute path={routeCodes.NUTRITIONSHOP} component={NutritionShopping} />
 
                         <PrivateRoute path={routeCodes.CALENDAR} component={Calendar} />

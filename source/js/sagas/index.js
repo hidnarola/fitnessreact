@@ -14,6 +14,7 @@ import userExercises from 'sagas/userExercises'
 import friends from 'sagas/friends';
 import profilePhotos from 'sagas/profilePhotos';
 import login from 'sagas/login'
+import healthLabels from 'sagas/healthLabels'
 import adminNutritionSagas from 'sagas/admin/nutritions';
 import adminEquipmentSagas from 'sagas/admin/equipments';
 import adminEquipmentCategorySagas from 'sagas/admin/equipmentCategories';
@@ -43,6 +44,7 @@ export default function* rootSaga() {
     ...friends,
     ...profilePhotos,
     ...login,
+    ...healthLabels,
     ...adminNutritionSagas,
     ...adminEquipmentSagas,
     ...adminEquipmentCategorySagas,

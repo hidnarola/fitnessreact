@@ -72,6 +72,7 @@
     "immutable": "^3.8.2",
     "isomorphic-fetch": "^2.2.1",
     "jquery": "^3.3.1",
+    "jquery-ui-slider": "^1.12.1",
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.5",
     "moment": "^2.22.1",

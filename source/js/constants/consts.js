@@ -82,3 +82,8 @@ export const WORKOUT_SCHEDULE_TYPE_MANUAL = 2;
 
 export const WORKOUT_SCHEDULE_TYPE_AUTO_STR = 'Automatic';
 export const WORKOUT_SCHEDULE_TYPE_MANUAL_STR = 'Manual';
+
+export const DAY_DRIVE_BREAKFAST = 'breakfast';
+export const DAY_DRIVE_LUNCH = 'lunch';
+export const DAY_DRIVE_DINNER = 'dinner';
+export const DAY_DRIVE_SNACKS = 'snacks';

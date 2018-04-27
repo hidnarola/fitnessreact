@@ -16,6 +16,7 @@
 @import 'react-daterange-picker/dist/css/react-calendar.css';
 @import 'round-slider/dist/roundslider.min.css';
 @import 'rc-time-picker/assets/index.css';
+@import 'jquery-ui-slider/jquery-ui.css';
 
 @import "fitnessCss/style.css";
 @import "fitnessCss/custom.css";

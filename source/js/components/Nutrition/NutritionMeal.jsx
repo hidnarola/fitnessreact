@@ -44,9 +44,15 @@ class NutritionMeal extends Component {
                                 <i className="icon-shopping_cart"></i>
                             </NavLink>
 
-                            <a href="" className="white-btn">Nutrition Settings
+                            <NavLink
+                                activeClassName='active'
+                                className='white-btn'
+                                exact
+                                to={routeCodes.NUTRITIONPREFERENCE}
+                            >
+                                <span>Nutrition Settings</span>
                                 <i className="icon-settings"></i>
-                            </a>
+                            </NavLink>
                         </div>
                     </div>
                     <div className="body-content d-flex row justify-content-start">
