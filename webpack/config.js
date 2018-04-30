@@ -140,6 +140,7 @@ if (IS_PRODUCTION || SERVER_RENDER) {
     rules.push(
         {
             test: /\.css$/,
+            exclude: /node_modules/,
             loader: ExtractTextPlugin.extract({
                 fallback: 'style-loader',
                 use: [
