@@ -11,7 +11,7 @@ import FaCalendar from 'react-icons/lib/fa/calendar';
 import FaGoal from 'react-icons/lib/fa/bullseye';
 
 export default class FitnessNav extends Component {
- 
+
     render() {
         return (
             <div className='Menu'>
@@ -21,7 +21,7 @@ export default class FitnessNav extends Component {
                             <NavLink
                                 activeClassName='active'
                                 className='Menu-link'
-                                to={ routeCodes.DASHBOARD }
+                                to={routeCodes.DASHBOARD}
                             >
                                 <i className="icon-dashboard"></i>
                                 <span>Dashboard</span>
@@ -31,10 +31,10 @@ export default class FitnessNav extends Component {
                             <NavLink
                                 activeClassName='active'
                                 className='Menu-link'
-                                to={ routeCodes.STATSPAGE }
+                                to={routeCodes.STATSPAGE}
                             >
                                 <i className="icon-pie_chart"></i>
-                                <span>Stats</span> 
+                                <span>Stats</span>
                             </NavLink>
                         </li>
 
@@ -42,19 +42,19 @@ export default class FitnessNav extends Component {
                             <NavLink
                                 activeClassName='active'
                                 className='Menu-link'
-                                to={ routeCodes.BODY }
+                                to={routeCodes.BODY}
                             >
                                 <i className="icon-person"></i>
-                                 <span>Body</span> 
+                                <span>Body</span>
                             </NavLink>
                         </li>
 
 
                         <li>
-                           <NavLink
+                            <NavLink
                                 activeClassName='active'
                                 className='Menu-link'
-                                to={ routeCodes.EXERCISE }
+                                to={routeCodes.EXERCISE}
                             >
                                 <i className="icon-fitness_center"></i>
                                 <span>Exercise</span>
@@ -62,20 +62,20 @@ export default class FitnessNav extends Component {
                         </li>
 
                         <li>
-                           <NavLink
+                            <NavLink
                                 activeClassName='active'
                                 className='Menu-link'
-                                to={ routeCodes.NUTRITION }
+                                to={routeCodes.NUTRITION}
                             >
                                 <FaNutrition size={24} />
                                 <span>Nutrition</span>
                             </NavLink>
                         </li>
-                        <li>                            
+                        <li>
                             <NavLink
                                 activeClassName='active'
                                 className='Menu-link'
-                                to={ routeCodes.CALENDAR }
+                                to={routeCodes.CALENDAR}
                             >
                                 <i className="icon-insert_invitation"></i>
                                 <span>Calendar</span>
@@ -85,7 +85,7 @@ export default class FitnessNav extends Component {
                             <NavLink
                                 activeClassName='active'
                                 className='Menu-link'
-                                to={ routeCodes.GOALS }
+                                to={routeCodes.GOALS}
                             >
                                 <FaGoal size={24} />
                                 <span>Goals</span>

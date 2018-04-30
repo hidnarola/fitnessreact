@@ -1,6 +1,7 @@
 import React from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { required, email } from 'formValidation/validationRules';
+import { InputField } from '../../../helpers/FormControlHelper';
 
 const AdminLoginForm = (props) => {
     const { error, loading } = props;
@@ -16,28 +17,32 @@ const AdminLoginForm = (props) => {
                     </div>
                 }
                 <div className="stepbox-m personal-dtl">
-                    <ul className="">
-                        <li>
-                            <Field
-                                name="email"
-                                type="email"
-                                label="Email"
-                                placeholder="Email"
-                                component={loginFields}
-                                validate={[required, email]}
-                            />
-                        </li>
-                        <li>
-                            <Field
-                                name="password"
-                                type="password"
-                                label="Password"
-                                placeholder="Password"
-                                component={loginFields}
-                                validate={[required]}
-                            />
-                        </li>
-                    </ul>
+                    <Field
+                        name="email"
+                        type="email"
+                        className="form-control"
+                        label="Email"
+                        labelClass="control-label"
+                        wrapperClass="form-group"
+                        placeholder="Email"
+                        component={InputField}
+                        errorClass="help-block"
+                        warningClass=""
+                        validate={[required, email]}
+                    />
+                    <Field
+                        name="password"
+                        type="password"
+                        className="form-control"
+                        label="Password"
+                        labelClass="control-label"
+                        wrapperClass="form-group"
+                        placeholder="Password"
+                        component={InputField}
+                        errorClass="help-block"
+                        warningClass=""
+                        validate={[required]}
+                    />
                 </div>
                 <div className="stepbox-b">
                     <button type="submit" className="continues-btn"><span>Continues</span> <i className="icon-skip_next"></i></button>

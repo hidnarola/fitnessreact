@@ -117,7 +117,7 @@ body .no-flex{display:block !important;}
 h3.title-h3{padding:0;margin:0;display:block; color:#232B41; font-size:20px; font-weight:900; line-height:28px;text-transform:uppercase;}
 .size-14{font-size:14px !important;}
 
-.header{height:100px;width:100%;display:flex; position:fixed;top:0;left:0;z-index:10;background:#fff; display:-webkit-box; display:-webkit-flex; display:-ms-flexbox; display:flex;  -webkit-box-pack:start; -webkit-jutify-content:fles-start; -ms-jutify-content:fles-start; jutify-content:fles-start;}
+.header{height:100px;width:100%;display:flex; position:fixed;top:0;left:0;z-index:99;background:#fff; display:-webkit-box; display:-webkit-flex; display:-ms-flexbox; display:flex;  -webkit-box-pack:start; -webkit-jutify-content:fles-start; -ms-jutify-content:fles-start; jutify-content:fles-start;}
 .logo{padding:32px 34px;}
 .logo a{display:block;}
 .search{text-align:left;padding:30px 37px; }
@@ -332,7 +332,7 @@ ul.common-ul>li:last-child{margin-bottom:0;}
 .grey-white{border:3px solid #F9FAFA;background-color:#F9FAFA; display: -webkit-box!important; display: -webkit-flex!important; display: -ms-flexbox!important; display: flex!important; min-height:50px;}
 .grey-white label{widtH:34%; padding:0 15px;line-height:20px; color:#232B41;	font-size:14px; font-weight:500;margin:0; min-height:100%;
 display:flex; justify-content: center; flex-direction: column; text-align:left;}
-.grey-white input{width:66%; background:#fff; text-align:right; border:0; color:#232B41;	font-size:14px; font-weight:500; line-height:20px;padding:0 15px; min-height:100%;}
+.grey-white input{width:100%; background:#fff; text-align:right; border:0; color:#232B41;	font-size:14px; font-weight:500; line-height:20px;padding:0 15px; min-height:100%;}
 .selectpicker-wrap{width:66%;background:#fff;padding:0 15px;}
 .grey-white input::-webkit-input-placeholder {color:#232b41;}
 .grey-white input::-moz-placeholder { color:#232b41;}
@@ -692,7 +692,7 @@ display:-webkit-box; display:-webkit-flex; display:-ms-flex; display:flex; justi
 .restiction-box{background:#f9fafa;border-radius:5px;height:50px; display:flex; display:flex; display:-ms-flex;margin-bottom:10px;}
 .restiction-box h4{margin:0;padding:0 0 0 18px; display:-webkit-box; display:-webkit-flex; display:-ms-flex; justify-content:center; flex-direction:column;
 color: #232B41;	font-size: 14px;	font-weight: 500;	line-height: 20px;}
-.restiction-box span{width:100px;height:100%;border-radius:0 5px 5px 0;text-align:center;opacity:0;margin-left:auto; display:-webkit-box; display:-webkit-flex; display:-ms-flex; justify-content:center; flex-direction:column;}
+.restiction-box span{width:100px;height:100%;border-radius:0 5px 5px 0;text-align:center;opacity:0.1;margin-left:auto; display:-webkit-box; display:-webkit-flex; display:-ms-flex; justify-content:center; flex-direction:column;}
 .restiction-box span i{color:#fff; font-size: 20px;}
 .restiction-box.active span {opacity:1;}
 
@@ -735,7 +735,7 @@ flex-direction:column;}
 .machine-box h6>i{display:none;}
 .styled-checkbox { position: absolute; opacity: 0;}
 .styled-checkbox + label { position:relative; cursor: pointer; padding: 0; width:100%; height:100%; margin:0; }
-.styled-checkbox + label::before{content:'\e86c'; display: inline-block; background: transparent; font-family:'icomoon'; background:#fff; position: absolute; top:0; left:0; text-align:center; width:100%; height:100%; line-height:76px;}
+.styled-checkbox + label::before{content:'\e86c'; display: inline-block; background: transparent; font-family:'icomoon'; background:#fff; position: absolute; top:0; left:0; text-align:center; width:100%; height:100%; line-height:76px;    color: #d5d5d5;}
 .styled-checkbox:checked + label:before { content:'\e86c'; background: linear-gradient(123.28deg, #46E9C5 0%, #3FFBFC 100%); color:#fff; border-radius: 0 4px 4px 0;}
 
 
@@ -885,8 +885,8 @@ a.add-friend-btn:hover{opacity:.6;}
 .widgetbox-grey button.green-blue-btn{width:100%;margin:0 0 10px;}
 .widget-popup button.close-round{ top:-10px; right:-10px;}
 
-.exclude-srh{background-color:#F9FAFA; border-radius:3px;height:50px;width:100%; margin:0 0 30px;}
-.exclude-srh input{width:90%;border:0;background:transparent; display:-webkit-box;  display:-webkit-flex; display:-ms-flex; display:flex; justify-content: center; flex-direction:column;padding:0 15px;}
+.exclude-srh{background-color:#F9FAFA; border-radius:3px;height:50px;width:100%; margin:0 0 30px;position: relative;}
+.exclude-srh input{width:90%;border:0;background:transparent; display:-webkit-box;  display:-webkit-flex; display:-ms-flex; display:flex; justify-content: center; flex-direction:column;padding:0 15px;    height: 100%;}
 .exclude-srh button{width:10%;border:0;background:transparent; color:#282828; font-size:18px;
 display:-webkit-box;  display:-webkit-flex; display:-ms-flex; display:flex; justify-content: center; flex-direction: column;}
 .exclude-srh button i{color:#282828; font-size:18px;}
@@ -1194,3 +1194,17 @@ flex-direction:row; display:-webkit-box; display:-webkit-flex; display:-ms-flex;
 .badges-timed-date-range-wrapper{padding: 10px 15px; border: 1px solid #ccc; border-radius: 5px;}
 .cm-kg{line-height: 44px; font-size: 12px; padding: 0 10px; color: #999;}
 .body-measurement-list-section-wrapper .help-block{position: relative; bottom: 0; right: 0; margin: 0; font-size: 12px; display: block; text-align: right; color: red;}
+.react-autosuggest__container {width: 100%;}
+
+
+
+.react-autosuggest__suggestions-container {padding: 0;margin: 0;background: rgba(233, 239, 239, 0.63);position: absolute;bottom: -30px;width: 100%;}
+.react-autosuggest__suggestions-container ul{list-style: none;padding: 0;margin: 0;}
+.react-autosuggest__suggestions-container ul li{padding: 10px;}
+.restiction-box span a {width: 100px;height: 100%;align-items: center;display: flex;justify-content: center;}
+.rc-time-picker-panel-select {overflow-x: hidden;}
+
+
+.rc-time-picker-panel-narrow {max-width: 153px !important;width: 153 !important;min-width: 153 !important;}
+.rc-time-picker-panel-select {width: 50% !important;}
+.rc-time-picker-panel-inner {width: 100% !important;}

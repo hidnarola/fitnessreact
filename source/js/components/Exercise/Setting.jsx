@@ -95,7 +95,6 @@ class Setting extends Component {
                             </div>
                             <div className="whitebox-body">
                                 <div className="exclude-srh d-flex">
-                                    <input type="text" name="" placeholder="" />
                                     <Autosuggest
                                         suggestions={existingInjuriesSuggestion}
                                         onSuggestionsFetchRequested={this.onExistingInjuriesFetch}
@@ -178,7 +177,6 @@ class Setting extends Component {
                             </div>
                             <div className="whitebox-body">
                                 <div className="exclude-srh d-flex">
-                                    <input type="text" name="" placeholder="" />
                                     <Autosuggest
                                         suggestions={excludeExerciseSuggestion}
                                         onSuggestionsFetchRequested={this.onExcludeExerciseFetch}
