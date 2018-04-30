@@ -109,6 +109,7 @@ const rules = [
     // Images
     {
         test: /\.(png|gif|jpg|svg)$/,
+        exclude: /node_modules/,
         include: paths.images,
         use: [
             {
