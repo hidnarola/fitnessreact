@@ -13,7 +13,6 @@ import BadgeCategorySaveForm from './BadgeCategorySaveForm';
 import { STATUS_ACTIVE, STATUS_INACTIVE, STATUS_INACTIVE_STR, STATUS_ACTIVE_STR } from '../../../constants/consts';
 import _ from 'lodash';
 import DeleteConfirmation from '../Common/DeleteConfirmation';
-import { ScaleLoader } from 'react-spinners';
 
 const statusOptions = [
     { value: '', label: 'All' },
@@ -55,9 +54,6 @@ class BadgeCategoryListing extends Component {
         } = this.state;
         return (
             <div className="badge-category-listing-wrapper">
-                <div className="loader">
-                    <ScaleLoader color="#f00" />
-                </div>
                 <div className="body-head space-btm-45 d-flex justify-content-start">
                     <div className="body-head-l">
                         <h2>Badge Category</h2>
