@@ -65,7 +65,7 @@ export default class FitnessNav extends Component {
                            <NavLink
                                 activeClassName='active'
                                 className='Menu-link'
-                                to={ routeCodes.NUTRITIONMEAL }
+                                to={ routeCodes.NUTRITION }
                             >
                                 <FaNutrition size={24} />
                                 <span>Nutrition</span>
@@ -91,30 +91,6 @@ export default class FitnessNav extends Component {
                                 <span>Goals</span>
                             </NavLink>
                         </li>
-
-                        <li>
-                            <NavLink
-                                activeClassName='active'
-                                className='Menu-link'
-                                exact
-                                to={ routeCodes.HOME }
-                            >
-                                <i className="icon-dashboard"></i>
-                                Home
-                            </NavLink>
-                        </li>
-
-                         <li>
-                            <NavLink
-                                activeClassName='active'
-                                className='Menu-link'
-                                to={ routeCodes.PEOPLE }
-                            >
-                                <i className="icon-person"></i>
-                                People
-                            </NavLink>
-                        </li>
-
                     </ul>
                 </nav>
             </div>

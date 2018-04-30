@@ -40,11 +40,7 @@ class TodaysMeal extends Component {
 }
 
 const mapStateToProps = (state) => {
-    const { nutrition } = state;
     return {
-        loading: nutrition.get('loading'),
-        error: nutrition.get('error'),
-        todaysMeal: nutrition.get('todaysMeal'),
     }
 }
 

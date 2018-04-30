@@ -14,7 +14,11 @@ import {
 const initialState = Map({
     loading: false,
     error: null,
-    nutritionPreference: {},
+    dietRestrictionLabels: [],
+    excludeIngredients: [],
+    healthRestrictionLabels: [],
+    maxRecipeTime: [],
+    nutritionTargets: [],
 });
 
 const actionMap = {
@@ -26,7 +30,11 @@ const actionMap = {
     [GET_USER_NUTRITION_PREFERENCES_SUCCESS]: (state, action) => {
         return state.merge(Map({
             loading: false,
-            nutritionPreference: action.data.nutrition_preference,
+            dietRestrictionLabels: action.data.nutrition_preference.dietRestrictionLabels,
+            excludeIngredients: action.data.nutrition_preference.excludeIngredients,
+            healthRestrictionLabels: action.data.nutrition_preference.healthRestrictionLabels,
+            maxRecipeTime: action.data.nutrition_preference.maxRecipeTime,
+            nutritionTargets: action.data.nutrition_preference.nutritionTargets,
         }));
     },
     [GET_USER_NUTRITION_PREFERENCES_ERROR]: (state, action) => {

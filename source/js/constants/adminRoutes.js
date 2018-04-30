@@ -8,13 +8,13 @@ export const adminRouteCodes = {
     USERS: `${adminRootRoute}/users`,
     USERS_SAVE: `${adminRootRoute}/users/save`,
 
-    NUTRITIONS: `${adminRootRoute}/nutritions`,
+    // NUTRITIONS: `${adminRootRoute}/nutritions`,
 
-    INGREDIENTS: `${adminRootRoute}/ingredients`,
-    INGREDIENTS_SAVE: `${adminRootRoute}/ingredients/save`,
+    // INGREDIENTS: `${adminRootRoute}/ingredients`,
+    // INGREDIENTS_SAVE: `${adminRootRoute}/ingredients/save`,
 
-    RECIPES: `${adminRootRoute}/recipes`,
-    RECIPES_SAVE: `${adminRootRoute}/recipes/save`,
+    // RECIPES: `${adminRootRoute}/recipes`,
+    // RECIPES_SAVE: `${adminRootRoute}/recipes/save`,
 
     EXERCISE_TYPE: `${adminRootRoute}/exercise_type`,
 

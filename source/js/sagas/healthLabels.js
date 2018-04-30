@@ -1,5 +1,5 @@
 import { takeLatest, put, call } from 'redux-saga/effects';
-import api from 'api/healthLabels';
+import api from 'api/nutritionalLabels';
 import {
     getHealthLabelsSuccess,
     getHealthLabelsError,

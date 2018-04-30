@@ -1,29 +1,29 @@
 import { Map } from "immutable";
 import {
-    GET_HEALTH_LABELS_REQUEST,
-    GET_HEALTH_LABELS_SUCCESS,
-    GET_HEALTH_LABELS_ERROR,
-} from "../actions/healthLabels";
+    GET_DIET_LABELS_REQUEST,
+    GET_DIET_LABELS_SUCCESS,
+    GET_DIET_LABELS_ERROR,
+} from "../actions/dietLabels";
 
 const initialState = Map({
     loading: false,
     error: null,
-    healthLabels: {},
+    dietLabels: {},
 });
 
 const actionMap = {
-    [GET_HEALTH_LABELS_REQUEST]: (state, action) => {
+    [GET_DIET_LABELS_REQUEST]: (state, action) => {
         return state.merge(Map({
             loading: true,
         }));
     },
-    [GET_HEALTH_LABELS_SUCCESS]: (state, action) => {
+    [GET_DIET_LABELS_SUCCESS]: (state, action) => {
         return state.merge(Map({
             loading: false,
-            healthLabels: action.data.labels,
+            dietLabels: action.data.labels,
         }));
     },
-    [GET_HEALTH_LABELS_ERROR]: (state, action) => {
+    [GET_DIET_LABELS_ERROR]: (state, action) => {
         return state.merge(Map({
             loading: false,
             error: action.error.message,

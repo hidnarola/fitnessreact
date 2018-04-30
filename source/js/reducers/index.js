@@ -5,7 +5,7 @@ import user from 'reducers/user';
 import userBodyMeasurement from 'reducers/userBodyMeasurement';
 import people from 'reducers/people';
 import dashboardnew from 'reducers/dashboard';
-import nutrition from 'reducers/nutrition';
+import nutritions from 'reducers/nutritions';
 import exerciseFitness from 'reducers/exercise/fitness'
 import userEquipments from 'reducers/userEquipments'
 import userExercisePreferences from 'reducers/userExercisePreferences'
@@ -17,16 +17,17 @@ import friends from 'reducers/friends';
 import profilePhotos from 'reducers/profilePhotos';
 import login from 'reducers/login';
 import healthLabels from 'reducers/healthLabels';
+import dietLabels from 'reducers/dietLabels';
 import pageLoader from 'reducers/pageLoader';
-import adminNutritions from 'reducers/admin/nutritions'
+// import adminNutritions from 'reducers/admin/nutritions'
 import adminEquipments from 'reducers/admin/equipments'
 import adminEquipmentCategories from 'reducers/admin/equipmentCategories'
 import adminExercises from 'reducers/admin/exercises'
 import adminBodyParts from 'reducers/admin/bodyParts'
 import adminExerciseTypes from 'reducers/admin/exerciseTypes'
 import adminUsers from 'reducers/admin/users'
-import adminRecipes from 'reducers/admin/recipes'
-import adminIngredients from 'reducers/admin/ingredients'
+// import adminRecipes from 'reducers/admin/recipes'
+// import adminIngredients from 'reducers/admin/ingredients'
 import adminBadgeCategories from 'reducers/admin/badgeCategories'
 import adminBadgeTasks from 'reducers/admin/badgeTasks'
 import adminBadges from 'reducers/admin/badges'
@@ -37,7 +38,7 @@ export default combineReducers({
     userBodyMeasurement,
     people,
     dashboardnew,
-    nutrition,
+    nutritions,
     exerciseFitness,
     userEquipments,
     userExercisePreferences,
@@ -49,16 +50,17 @@ export default combineReducers({
     profilePhotos,
     login,
     healthLabels,
+    dietLabels,
     pageLoader,
-    adminNutritions,
+    // adminNutritions,
     adminEquipments,
     adminEquipmentCategories,
     adminExercises,
     adminBodyParts,
     adminExerciseTypes,
     adminUsers,
-    adminRecipes,
-    adminIngredients,
+    // adminRecipes,
+    // adminIngredients,
     adminBadgeCategories,
     adminBadgeTasks,
     adminBadges,

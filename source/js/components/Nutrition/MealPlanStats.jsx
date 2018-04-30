@@ -41,12 +41,7 @@ class MealPlanStats extends Component {
 }
 
 const mapStateToProps = (state) => {
-    const { nutrition } = state;
     return {
-        loading: nutrition.get('loading'),
-        error: nutrition.get('error'),
-        mealPlanStatus: nutrition.get('mealPlanStatus'),
-        mealPlanNutritionChart: nutrition.get('mealPlanNutritionChart'),
     }
 }
 

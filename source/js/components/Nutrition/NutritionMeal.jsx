@@ -4,19 +4,12 @@ import { NavLink } from 'react-router-dom';
 import { routeCodes } from 'constants/routes';
 import FitnessHeader from '../global/FitnessHeader';
 import FitnessNav from '../global/FitnessNav';
-import { getNutritionData } from '../../actions/nutrition';
 import TodaysMeal from './TodaysMeal';
 import MealPlanStats from './MealPlanStats';
 
 class NutritionMeal extends Component {
-
     constructor(props) {
         super(props);
-    }
-
-    componentWillMount() {
-        const { dispatch } = this.props;
-        dispatch(getNutritionData());
     }
 
     render() {
@@ -29,7 +22,7 @@ class NutritionMeal extends Component {
                         <div className="body-head-l">
                             <h2>nutrition</h2>
                             <p>Your meal plan is balanced and tailored to provide the right mix for your goal. For your fitness assistant
-                                to provide the best meal plans make sure you rate recipies you like. You can further fine tune the meals
+                                to provide the best meal plans make sure you rate recipes you like. You can further fine tune the meals
                                 selected for you by changing your nutrition settings. </p>
                         </div>
                         <div className="body-head-r ml-auto">

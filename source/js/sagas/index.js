@@ -3,7 +3,7 @@ import { all } from 'redux-saga/effects';
 import userBodyMeasurement from 'sagas/userBodyMeasurement';
 import peopleSagas from 'sagas/people';
 import dashboardSagas from 'sagas/dashboard';
-import nutritionSagas from 'sagas/nutrition';
+import nutritionsSagas from 'sagas/nutritions';
 import exerciseFitness from 'sagas/exercise/fitness'
 import userEquipments from 'sagas/userEquipments'
 import userExercisePreferences from 'sagas/userExercisePreferences'
@@ -15,15 +15,16 @@ import friends from 'sagas/friends';
 import profilePhotos from 'sagas/profilePhotos';
 import login from 'sagas/login'
 import healthLabels from 'sagas/healthLabels'
-import adminNutritionSagas from 'sagas/admin/nutritions';
+import dietLabels from 'sagas/dietLabels'
+// import adminNutritionSagas from 'sagas/admin/nutritions';
 import adminEquipmentSagas from 'sagas/admin/equipments';
 import adminEquipmentCategorySagas from 'sagas/admin/equipmentCategories';
 import adminExerciseSagas from 'sagas/admin/exercises';
 import adminBodyPartSagas from 'sagas/admin/bodyParts';
 import adminExerciseTypeSagas from 'sagas/admin/exerciseTypes';
 import adminUserSagas from 'sagas/admin/users';
-import adminRecipeSagas from 'sagas/admin/recipes';
-import adminIngredientSagas from 'sagas/admin/ingredients';
+// import adminRecipeSagas from 'sagas/admin/recipes';
+// import adminIngredientSagas from 'sagas/admin/ingredients';
 import adminBadgeCategorySagas from 'sagas/admin/badgeCategories';
 import adminBadgeTaskSagas from 'sagas/admin/badgeTasks';
 import adminBadgeSagas from 'sagas/admin/badges';
@@ -33,7 +34,7 @@ export default function* rootSaga() {
     ...userBodyMeasurement,
     ...peopleSagas,
     ...dashboardSagas,
-    ...nutritionSagas,
+    ...nutritionsSagas,
     ...exerciseFitness,
     ...userEquipments,
     ...userExercisePreferences,
@@ -45,15 +46,16 @@ export default function* rootSaga() {
     ...profilePhotos,
     ...login,
     ...healthLabels,
-    ...adminNutritionSagas,
+    ...dietLabels,
+    // ...adminNutritionSagas,
     ...adminEquipmentSagas,
     ...adminEquipmentCategorySagas,
     ...adminExerciseSagas,
     ...adminBodyPartSagas,
     ...adminExerciseTypeSagas,
     ...adminUserSagas,
-    ...adminRecipeSagas,
-    ...adminIngredientSagas,
+    // ...adminRecipeSagas,
+    // ...adminIngredientSagas,
     ...adminBadgeCategorySagas,
     ...adminBadgeTaskSagas,
     ...adminBadgeSagas,

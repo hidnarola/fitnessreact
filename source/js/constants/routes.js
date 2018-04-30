@@ -49,7 +49,6 @@ export const routeCodes = {
     NUTRITION:`${ publicPath }nutrition`,
     NUTRITIONPREFERENCE:`${ publicPath }nutrition/preference`,
     NUTRITIONSHOP:`${ publicPath }nutrition/shoppinglist`,
-    NUTRITIONMEAL:`${ publicPath }nutrition/nutritionmeal`,
 
     //Calendar Routes
     CALENDAR:`${ publicPath }calendar`,

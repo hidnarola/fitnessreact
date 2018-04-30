@@ -26,7 +26,7 @@ export default class AdminNav extends Component {
                                 <span>Users</span>
                             </NavLink>
                         </li>
-                        <li>
+                        {/* <li>
                             <NavLink
                                 activeClassName='active'
                                 className='Menu-link'
@@ -34,8 +34,8 @@ export default class AdminNav extends Component {
                             >
                                 <span>Nutritions</span>
                             </NavLink>
-                        </li>
-                        <li>
+                        </li> */}
+                        {/* <li>
                             <NavLink
                                 activeClassName='active'
                                 className='Menu-link'
@@ -43,8 +43,8 @@ export default class AdminNav extends Component {
                             >
                                 <span>Recipes</span>
                             </NavLink>
-                        </li>
-                        <li>
+                        </li> */}
+                        {/* <li>
                             <NavLink
                                 activeClassName='active'
                                 className='Menu-link'
@@ -52,7 +52,7 @@ export default class AdminNav extends Component {
                             >
                                 <span>Ingredients</span>
                             </NavLink>
-                        </li>
+                        </li> */}
                         <li>
                             <NavLink
                                 activeClassName='active'

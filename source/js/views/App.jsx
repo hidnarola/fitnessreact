@@ -34,14 +34,11 @@ import AdminDashboard from './Admin/Dashboard';
 import PrivateRoute from '../helpers/PrivateRoute';
 import AdminPrivateRoute from '../helpers/AdminPrivateRoute';
 import Users from './Admin/Users';
-import Recipes from './Admin/Recipes';
 import Exercises from './Admin/Exercises';
 import Options from './Admin/Options';
 import AdminBadges from './Admin/Badges';
 import Coupons from './Admin/Coupons';
-import Nutritions from './Admin/Nutritions';
 import Equipments from './Admin/Equipments';
-import Ingredients from './Admin/Ingredients';
 import Body from './Body';
 import { AUTH_CALLBACK_ROUTE } from '../auth/auth0-variables';
 import Callback from '../auth/callback/Callback';
@@ -76,7 +73,7 @@ class App extends Component {
                         <PrivateRoute path={routeCodes.EXERCISEEQP} component={ExerciseSettings} />
                         <PrivateRoute path={routeCodes.EXERCISEPREFERENCE} component={ExerciseSettings} />
 
-                        <PrivateRoute path={routeCodes.NUTRITIONMEAL} component={NutritionMeal} />
+                        <PrivateRoute exact path={routeCodes.NUTRITION} component={NutritionMeal} />
                         <PrivateRoute path={routeCodes.NUTRITIONPREFERENCE} component={NutritionPreferences} />
                         <PrivateRoute path={routeCodes.NUTRITIONSHOP} component={NutritionShopping} />
 
@@ -94,11 +91,11 @@ class App extends Component {
 
                         <AdminPrivateRoute path={adminRouteCodes.USERS} component={Users} />
 
-                        <AdminPrivateRoute path={adminRouteCodes.NUTRITIONS} component={Nutritions} />
+                        {/* <AdminPrivateRoute path={adminRouteCodes.NUTRITIONS} component={Nutritions} /> */}
 
-                        <AdminPrivateRoute path={adminRouteCodes.RECIPES} component={Recipes} />
+                        {/* <AdminPrivateRoute path={adminRouteCodes.RECIPES} component={Recipes} /> */}
 
-                        <AdminPrivateRoute path={adminRouteCodes.INGREDIENTS} component={Ingredients} />
+                        {/* <AdminPrivateRoute path={adminRouteCodes.INGREDIENTS} component={Ingredients} /> */}
 
                         <AdminPrivateRoute path={adminRouteCodes.EXERCISE_TYPE} component={ExerciseTypes} />
 
@@ -131,8 +128,7 @@ class App extends Component {
                         {/* <Route path={routeCodes.EXERCISEFITNESS} component={ExerciseSettings} /> */}
                         {/* <Route path={routeCodes.EXERCISEEQP} component={ExerciseSettings} /> */}
                         {/* <Route path={routeCodes.EXERCISEPREFERENCE} component={ExerciseSettings} /> */}
-
-                        {/* <Route path={routeCodes.NUTRITIONMEAL} component={NutritionMeal} /> */}
+                        
                         {/* <Route path={routeCodes.NUTRITIONSHOP} component={NutritionShopping} /> */}
 
                         {/* <Route path={routeCodes.CALENDAR} component={Calendar} /> */}
