@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { reduxForm } from 'redux-form';
 import $ from 'jquery';
-// import 'round-slider/dist/roundslider.min.js';
-// import 'round-slider/src/roundslider.js';
+import '../../../assets/js/roundslider.js';
 import { getUserExercisePreferencesRequest, setUserExercisePreferencesExcludeExercise, setUserExercisePreferencesExistingInjuries, setUserExercisePreferencesExcludeExerciseType, setUserExercisePreferencesWorkoutScheduleType, setUserExercisePreferencesTimeSchedule, setUserExercisePreferencesWorkoutIntensity, setUserExercisePreferencesExerciseExperience, saveUserExercisePreferencesRequest } from '../../actions/userExercisePreferences';
 import { getUserExerciseTypesRequest } from '../../actions/userExerciseTypes';
 import {
