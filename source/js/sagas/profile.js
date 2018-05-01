@@ -6,7 +6,8 @@ import api from 'api/profile';
 function fetchProfileDetailsData() {
     return function* (action) {
         try {
-            const data = yield call(() => api.getProfileDetails());
+            var username = action.username;
+            const data = yield call(() => api.getProfileDetails(username));
             yield put(getProfileDetailsSuccess(data));
         } catch (error) {
             yield put(getProfileDetailsError(error));

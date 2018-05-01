@@ -16,7 +16,7 @@ const actionMap = {
     [GET_PROFILE_DETAILS_SUCCESS]: (state, action) => {
         return state.merge(Map({
             loading: false,
-            profile: action.data.profile,
+            profile: action.data.user,
         }));
     },
     [GET_PROFILE_DETAILS_ERROR]: (state, action) => {

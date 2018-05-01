@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
-import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
 import ProfileFithub from 'components/Profile/ProfileFithub';
 import ProfileFriends from 'components/Profile/ProfileFriends';
@@ -11,9 +11,49 @@ import FitnessHeader from 'components/global/FitnessHeader';
 import FitnessNav from 'components/global/FitnessNav';
 
 import { routeCodes } from 'constants/routes';
+import { getProfileDetailsRequest } from '../actions/profile';
+import noProfileImg from 'img/common/no-profile-img.png'
 
-export default class Profile extends Component {
+class Profile extends Component {
+    constructor(props) {
+        super(props);
+        var username = props.match.params.username;
+        this.state = {
+            loadProfileActionInit: false,
+            profile: null,
+            username: (username) ? username : null,
+        }
+    }
+
+    componentWillMount() {
+        const { dispatch, match } = this.props;
+        if (match && match.params && (typeof match.params.username !== 'undefined')) {
+            var username = match.params.username;
+            this.setState({
+                loadProfileActionInit: true,
+                username
+            });
+            dispatch(getProfileDetailsRequest(username));
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        var oldUsername = this.state.username;
+        var match = nextProps.match;
+        if (match && match.params && match.params.username) {
+            var newUsername = match.params.username;
+            if (newUsername !== oldUsername) {
+                this.setState({
+                    loadProfileActionInit: true,
+                    username
+                });
+                dispatch(getProfileDetailsRequest(username));
+            }
+        }
+    }
+
     render() {
+        const { profile, username } = this.state;
         return (
             <div className='stat-page'>
                 <FitnessHeader />
@@ -21,14 +61,17 @@ export default class Profile extends Component {
                 <section className="body-wrap">
                     <div className="body-head d-flex">
                         <div className="body-head-l">
-                            <h2>Cecilia Brown</h2>
+                            <h2>
+                                {profile && (typeof profile.firstName !== 'undefined') && (profile.firstName)}
+                                {profile && (typeof profile.lastName !== 'undefined') && (profile.lastName)}
+                            </h2>
                             <div className="body-head-l-btm">
 
                                 <NavLink
                                     activeClassName='pink-btn'
                                     className='white-btn'
                                     exact
-                                    to={routeCodes.PROFILEFITHUB}
+                                    to={`${routeCodes.PROFILE}/${username}`}
                                 >
                                     Fithub
                                 </NavLink>
@@ -37,7 +80,7 @@ export default class Profile extends Component {
                                     activeClassName='pink-btn'
                                     className='white-btn'
                                     exact
-                                    to={routeCodes.PROFILEPHOTOS}
+                                    to={routeCodes.PROFILEPHOTOS.replace('{username}', username)}
                                 >
                                     Photos
                                 </NavLink>
@@ -46,7 +89,7 @@ export default class Profile extends Component {
                                     activeClassName='pink-btn'
                                     className='white-btn'
                                     exact
-                                    to={routeCodes.PROFILEFRIENDS}
+                                    to={routeCodes.PROFILEFRIENDS.replace('{username}', username)}
                                 >
                                     Friends
                                 </NavLink>
@@ -67,20 +110,40 @@ export default class Profile extends Component {
 
                             <div className="col-md-9">
                                 <Switch>
-                                    <Route exact path={routeCodes.PROFILEFITHUB} component={ProfileFithub} />
-                                    <Route exact path={routeCodes.PROFILEFRIENDS} component={ProfileFriends} />
-                                    <Route exact path={routeCodes.PROFILEPHOTOS} component={ProfilePhotos} />
+                                    <Route
+                                        exact
+                                        path={`${routeCodes.PROFILE}/:username`}
+                                        component={ProfileFithub}
+                                    />
+                                    <Route
+                                        exact
+                                        path={routeCodes.PROFILEFRIENDS.replace('{username}', username)}
+                                        component={ProfileFriends}
+                                    />
+                                    <Route
+                                        exact
+                                        path={routeCodes.PROFILEPHOTOS.replace('{username}', username)}
+                                        component={ProfilePhotos}
+                                    />
                                 </Switch>
                             </div>
 
                             <div className="col-md-3 ml-auto">
                                 <div className="lavel-img">
-                                    <span>
-                                        <img src="images/big-img.jpg" alt="" />
-                                        <a href="">
-                                            <i className="icon-add_a_photo"></i>
-                                        </a>
-                                    </span>
+                                    {profile &&
+                                        <span>
+                                            <img
+                                                src={profile.avatar}
+                                                alt="Profile image"
+                                                onError={(e) => {
+                                                    e.target.src = noProfileImg
+                                                }}
+                                            />
+                                            <a href="">
+                                                <i className="icon-add_a_photo"></i>
+                                            </a>
+                                        </span>
+                                    }
                                     <a href="" data-toggle="modal" data-target="#level-gallery">Lavel 13</a>
                                 </div>
 
@@ -92,10 +155,32 @@ export default class Profile extends Component {
                                         </div>
                                     </div>
                                     <div className="whitebox-body profile-about-body">
-                                        <a href="" className="purple-btn">Height:150 cm</a>
-                                        <a href="" className="green-blue-btn">Weight:62 kg</a>
-                                        <p>I’m doing my best to really get into my health and fitness, I’ve got my goals set to lose some body fat and
-                                    generally get healthier. Wish me luck!</p>
+                                        {profile && profile.height > 0 &&
+                                            <a href="" className="purple-btn">
+                                                Height:{profile.height} cm
+                                            </a>
+                                        }
+                                        {profile && profile.height <= 0 &&
+                                            <a href="" className="purple-btn">
+                                                Please add your height
+                                            </a>
+                                        }
+                                        {profile && profile.weight > 0 &&
+                                            <a href="" className="green-blue-btn">
+                                                Weight:{profile.weight} kg
+                                            </a>
+                                        }
+                                        {profile && profile.weight <= 0 &&
+                                            <a href="" className="green-blue-btn">
+                                                Please add your weight
+                                            </a>
+                                        }
+                                        {profile && profile.aboutMe !== '' &&
+                                            <p>{profile.aboutMe}</p>
+                                        }
+                                        {profile && profile.aboutMe === '' &&
+                                            <p>Write something about yourself!</p>
+                                        }
                                     </div>
                                 </div>
                             </div>
@@ -107,4 +192,32 @@ export default class Profile extends Component {
             </div>
         );
     }
+
+    componentDidUpdate() {
+        const {
+            profile,
+            profileLoading,
+            match
+        } = this.props;
+        const {
+            loadProfileActionInit
+        } = this.state;
+        if (loadProfileActionInit && !profileLoading) {
+            this.setState({
+                loadProfileActionInit: false,
+                profile
+            });
+        }
+    }
+
 }
+
+const mapStateToProps = (state) => {
+    const { profile } = state;
+    return {
+        profileLoading: profile.get('loading'),
+        profile: profile.get('profile'),
+    }
+}
+
+export default connect(mapStateToProps)(Profile);
