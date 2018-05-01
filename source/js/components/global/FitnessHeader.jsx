@@ -45,14 +45,13 @@ class FitnessHeader extends Component {
                     </div>
                     <div className="header-r d-flex">
                         <div className="header-user">
-
-                            <NavLink
-                                activeClassName='active'
-                                className='Menu-link'
-                                exact
-                                to={routeCodes.PROFILE}
-                            >
-                                {loggedUserData &&
+                            {loggedUserData &&
+                                <NavLink
+                                    activeClassName='active'
+                                    className='Menu-link'
+                                    exact
+                                    to={routeCodes.PROFILE + '/' + loggedUserData.username}
+                                >
                                     <span>
                                         <img
                                             src={loggedUserData.avatar}
@@ -63,10 +62,9 @@ class FitnessHeader extends Component {
                                             }}
                                         />
                                     </span>
-                                }
-                                {loggedUserData && loggedUserData.name}
-                            </NavLink>
-
+                                    {loggedUserData.name}
+                                </NavLink>
+                            }
                         </div>
                         <div className="header-alert">
                             <a>

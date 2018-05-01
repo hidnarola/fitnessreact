@@ -64,7 +64,7 @@ class App extends Component {
 
                         <PrivateRoute path={routeCodes.STATSPAGE} component={StatsPage} />
 
-                        <PrivateRoute path={routeCodes.PROFILE} component={ProfilePage} />
+                        <PrivateRoute path={`${routeCodes.PROFILE}/:username`} component={ProfilePage} />
 
                         <PrivateRoute path={routeCodes.BODY} component={Body} />
 

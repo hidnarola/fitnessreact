@@ -13,6 +13,7 @@ import userNutritionPreferences from 'reducers/userNutritionPreferences'
 import userExerciseTypes from 'reducers/userExerciseTypes'
 import userBodyparts from 'reducers/userBodyparts'
 import userExercises from 'reducers/userExercises'
+import profile from 'reducers/profile';
 import friends from 'reducers/friends';
 import profilePhotos from 'reducers/profilePhotos';
 import login from 'reducers/login';
@@ -46,6 +47,7 @@ export default combineReducers({
     userExerciseTypes,
     userBodyparts,
     userExercises,
+    profile,
     friends,
     profilePhotos,
     login,
