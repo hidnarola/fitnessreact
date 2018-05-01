@@ -88,3 +88,6 @@ export const DAY_DRIVE_BREAKFAST = 'breakfast';
 export const DAY_DRIVE_LUNCH = 'lunch';
 export const DAY_DRIVE_DINNER = 'dinner';
 export const DAY_DRIVE_SNACKS = 'snacks';
+
+export const FRIEND_APPROVED = 1;
+export const FRIEND_PENDING = 2;
