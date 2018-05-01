@@ -11,7 +11,8 @@ import {
   USER_ROLE,
   AUTH_STATE_ACTION_LOGIN,
   AUTH_STATE_ACTION_SIGNUP,
-  SERVER_BASE_URL
+  SERVER_BASE_URL,
+  LOCALSTORAGE_USERNAME_KEY
 } from '../constants/consts';
 
 import axios from 'axios';
@@ -88,10 +89,10 @@ export default class Auth {
           if (authResult.state && authResult.state !== '' && res && res.data) {
             let authState = JSON.parse(authResult.state);
             if (authState && authState.action && authState.action === AUTH_STATE_ACTION_LOGIN) {
-              this.setSession(authResult);
+              this.setSession(authResult, res.data.user);
               history.replace(routeCodes.DASHBOARD);
             } else if (authState && authState.action && authState.action === AUTH_STATE_ACTION_SIGNUP) {
-              this.setSession(authResult);
+              this.setSession(authResult, res.data.user);
               history.replace(routeCodes.DASHBOARD);
             }
           }
@@ -106,13 +107,18 @@ export default class Auth {
     }
   }
 
-  setSession(authResult) {
+  setSession(authResult, userData = null) {
     // Set the time that the access token will expire at
     let expiresAt = JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime());
     localStorage.setItem(LOCALSTORAGE_ACCESS_TOKEN_KEY, authResult.accessToken);
     localStorage.setItem(LOCALSTORAGE_ID_TOKEN_KEY, authResult.idToken);
     localStorage.setItem(LOCALSTORAGE_EXPIRES_AT_KEY, expiresAt);
     localStorage.setItem(LOCALSTORAGE_ROLE_KEY, window.btoa(USER_ROLE));
+    if (userData) {
+      if (userData.username) {
+        localStorage.setItem(LOCALSTORAGE_USERNAME_KEY, window.btoa(userData.username));
+      }
+    }
     // navigate to the home route
     history.replace(publicPath);
   }

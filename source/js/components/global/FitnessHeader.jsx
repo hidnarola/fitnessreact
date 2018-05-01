@@ -21,7 +21,6 @@ class FitnessHeader extends Component {
         super(props);
     }
 
-
     componentWillMount() {
         const { dispatch } = this.props;
         dispatch(setLoggedUserFromLocalStorage());
