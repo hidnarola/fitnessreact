@@ -7,20 +7,21 @@ const ProfileFriendBlock = (props) => {
             <div className="friend-box vertical-middle-r">
                 <div className="friend-box-img">
                     <a href="">
-                        <img src={friend.profileImage} alt="" />
+                        <img src={friend.avatar} alt="" />
                     </a>
                 </div>
                 <div className="friend-box-info">
                     <h5 className="vertical-middle-c">
-                        {friend.firstName + ' ' + friend.lastName}
-                        {friend.mutualFriendsCount > 0 &&
+                        {(typeof friend.firstName !== 'undefined') ? friend.firstName : ''}
+                        {(typeof friend.lastName !== 'undefined') ? friend.lastName : ''}
+                        {/* {friend.mutualFriendsCount > 0 &&
                             <small>
                                 {friend.mutualFriendsCount} Friend{friend.mutualFriendsCount > 1 && 's'}
                             </small>
                         }
                         {friend.mutualFriendsCount <= 0 &&
                             <small>No mutual friends</small>
-                        }
+                        } */}
                     </h5>
                 </div>
                 <div className="friend-box-status">

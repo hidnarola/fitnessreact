@@ -2,7 +2,10 @@ import { Map } from "immutable";
 import {
     GET_APPROVED_FRIENDS_REQUEST,
     GET_APPROVED_FRIENDS_SUCCESS,
-    GET_APPROVED_FRIENDS_ERROR
+    GET_APPROVED_FRIENDS_ERROR,
+    GET_PENDING_FRIENDS_REQUEST,
+    GET_PENDING_FRIENDS_SUCCESS,
+    GET_PENDING_FRIENDS_ERROR
 } from "../actions/friends";
 
 const initialState = Map({

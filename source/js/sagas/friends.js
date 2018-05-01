@@ -1,6 +1,6 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
 
-import api from 'api/newapi';
+import api from 'api/friends';
 import {
     GET_APPROVED_FRIENDS_REQUEST,
     GET_PENDING_FRIENDS_REQUEST,
