@@ -121,7 +121,7 @@ const rules = [
     },
     // Fonts
     {
-        test: /\.(eot|ttf|woff|woff2|svg)$/,
+        test: /\.(eot|ttf|woff|woff2)$/,
         include: paths.fonts,
         use: [
             {
