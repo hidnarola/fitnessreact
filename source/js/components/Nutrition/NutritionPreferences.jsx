@@ -193,6 +193,15 @@ class NutritionPreferences extends Component {
                                                                 value={obj.time}
                                                                 showSecond={false}
                                                                 onChange={(val) => this.handleChangeRecipeTime(val, key)}
+                                                                disabledHours={() => {
+                                                                    var hiddenValues = [];
+                                                                    for (let i = 6; i < 24; i++) {
+                                                                        hiddenValues.push(i);
+                                                                    }
+                                                                    return hiddenValues;
+                                                                }}
+                                                                hideDisabledOptions
+                                                                allowEmpty={false}
                                                             />
                                                         </div>
                                                     </li>

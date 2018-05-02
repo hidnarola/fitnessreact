@@ -1208,3 +1208,11 @@ flex-direction:row; display:-webkit-box; display:-webkit-flex; display:-ms-flex;
 .rc-time-picker-panel-narrow {max-width: 153px !important;width: 153 !important;min-width: 153 !important;}
 .rc-time-picker-panel-select {width: 50% !important;}
 .rc-time-picker-panel-inner {width: 100% !important;}
+
+/* Remove Spinner from number input For Firefox */
+.body-measurement-list-section-wrapper input[type='number'] {-moz-appearance:textfield;}
+/* Remove Spinner from number input Webkit browsers like Safari and Chrome */
+.body-measurement-list-section-wrapper input[type=number]::-webkit-inner-spin-button,
+.body-measurement-list-section-wrapper input[type=number]::-webkit-outer-spin-button {-webkit-appearance: none;margin: 0;}
+
+.rc-time-picker-panel {z-index: 70;}

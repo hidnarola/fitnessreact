@@ -246,14 +246,16 @@ class Setting extends Component {
                                                     value={timeSchedule.monday}
                                                     showSecond={false}
                                                     onChange={(val) => this.handleChangeWorkoutScheduleTime(val, 'monday')}
+                                                    disabledHours={() => {
+                                                        var hiddenValues = [];
+                                                        for (let i = 6; i < 24; i++) {
+                                                            hiddenValues.push(i);
+                                                        }
+                                                        return hiddenValues;
+                                                    }}
+                                                    hideDisabledOptions
+                                                    allowEmpty={false}
                                                 />
-                                                {/* <div className="selectpicker-wrap vertical-middle-c">
-                                                    <select className="selectpicker bg-none">
-                                                        <option>00:40</option>
-                                                        <option>00:20</option>
-                                                        <option>00:20</option>
-                                                    </select>
-                                                </div> */}
                                             </div>
                                         </li>
                                         <li>
@@ -263,6 +265,15 @@ class Setting extends Component {
                                                     value={timeSchedule.tuesday}
                                                     showSecond={false}
                                                     onChange={(val) => this.handleChangeWorkoutScheduleTime(val, 'tuesday')}
+                                                    disabledHours={() => {
+                                                        var hiddenValues = [];
+                                                        for (let i = 6; i < 24; i++) {
+                                                            hiddenValues.push(i);
+                                                        }
+                                                        return hiddenValues;
+                                                    }}
+                                                    hideDisabledOptions
+                                                    allowEmpty={false}
                                                 />
                                             </div>
                                         </li>
@@ -273,14 +284,16 @@ class Setting extends Component {
                                                     value={timeSchedule.wednesday}
                                                     showSecond={false}
                                                     onChange={(val) => this.handleChangeWorkoutScheduleTime(val, 'wednesday')}
+                                                    disabledHours={() => {
+                                                        var hiddenValues = [];
+                                                        for (let i = 6; i < 24; i++) {
+                                                            hiddenValues.push(i);
+                                                        }
+                                                        return hiddenValues;
+                                                    }}
+                                                    hideDisabledOptions
+                                                    allowEmpty={false}
                                                 />
-                                                {/* <div className="selectpicker-wrap vertical-middle-c">
-                                                    <select className="selectpicker bg-none">
-                                                        <option>00:40</option>
-                                                        <option>00:20</option>
-                                                        <option>00:20</option>
-                                                    </select>
-                                                </div> */}
                                             </div>
                                         </li>
                                         <li>
@@ -290,6 +303,15 @@ class Setting extends Component {
                                                     value={timeSchedule.thursday}
                                                     showSecond={false}
                                                     onChange={(val) => this.handleChangeWorkoutScheduleTime(val, 'thursday')}
+                                                    disabledHours={() => {
+                                                        var hiddenValues = [];
+                                                        for (let i = 6; i < 24; i++) {
+                                                            hiddenValues.push(i);
+                                                        }
+                                                        return hiddenValues;
+                                                    }}
+                                                    hideDisabledOptions
+                                                    allowEmpty={false}
                                                 />
                                             </div>
                                         </li>
@@ -300,6 +322,15 @@ class Setting extends Component {
                                                     value={timeSchedule.friday}
                                                     showSecond={false}
                                                     onChange={(val) => this.handleChangeWorkoutScheduleTime(val, 'friday')}
+                                                    disabledHours={() => {
+                                                        var hiddenValues = [];
+                                                        for (let i = 6; i < 24; i++) {
+                                                            hiddenValues.push(i);
+                                                        }
+                                                        return hiddenValues;
+                                                    }}
+                                                    hideDisabledOptions
+                                                    allowEmpty={false}
                                                 />
                                             </div>
                                         </li>
@@ -310,6 +341,15 @@ class Setting extends Component {
                                                     value={timeSchedule.saturday}
                                                     showSecond={false}
                                                     onChange={(val) => this.handleChangeWorkoutScheduleTime(val, 'saturday')}
+                                                    disabledHours={() => {
+                                                        var hiddenValues = [];
+                                                        for (let i = 6; i < 24; i++) {
+                                                            hiddenValues.push(i);
+                                                        }
+                                                        return hiddenValues;
+                                                    }}
+                                                    hideDisabledOptions
+                                                    allowEmpty={false}
                                                 />
                                             </div>
                                         </li>
@@ -320,6 +360,15 @@ class Setting extends Component {
                                                     value={timeSchedule.sunday}
                                                     showSecond={false}
                                                     onChange={(val) => this.handleChangeWorkoutScheduleTime(val, 'sunday')}
+                                                    disabledHours={() => {
+                                                        var hiddenValues = [];
+                                                        for (let i = 6; i < 24; i++) {
+                                                            hiddenValues.push(i);
+                                                        }
+                                                        return hiddenValues;
+                                                    }}
+                                                    hideDisabledOptions
+                                                    allowEmpty={false}
                                                 />
                                             </div>
                                         </li>

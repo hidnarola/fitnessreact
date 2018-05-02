@@ -39,6 +39,7 @@ class BodyMeasurementForm extends Component {
                             <li>
                                 <Field
                                     name="neck"
+                                    type="number"
                                     label="Neck"
                                     wrapperClass="grey-white"
                                     component={InputField}
@@ -52,6 +53,7 @@ class BodyMeasurementForm extends Component {
                             <li>
                                 <Field
                                     name="shoulders"
+                                    type="number"
                                     label="Shoulders"
                                     wrapperClass="grey-white"
                                     component={InputField}
@@ -64,6 +66,7 @@ class BodyMeasurementForm extends Component {
                             <li>
                                 <Field
                                     name="chest"
+                                    type="number"
                                     label="Chest"
                                     wrapperClass="grey-white"
                                     component={InputField}
@@ -76,6 +79,7 @@ class BodyMeasurementForm extends Component {
                             <li>
                                 <Field
                                     name="upper_arm"
+                                    type="number"
                                     label="Upper Arm"
                                     wrapperClass="grey-white"
                                     component={InputField}
@@ -88,6 +92,7 @@ class BodyMeasurementForm extends Component {
                             <li>
                                 <Field
                                     name="waist"
+                                    type="number"
                                     label="Waist"
                                     wrapperClass="grey-white"
                                     component={InputField}
@@ -100,6 +105,7 @@ class BodyMeasurementForm extends Component {
                             <li>
                                 <Field
                                     name="forearm"
+                                    type="number"
                                     label="Forearm"
                                     wrapperClass="grey-white"
                                     component={InputField}
@@ -112,6 +118,7 @@ class BodyMeasurementForm extends Component {
                             <li>
                                 <Field
                                     name="hips"
+                                    type="number"
                                     label="Hips"
                                     wrapperClass="grey-white"
                                     component={InputField}
@@ -124,6 +131,7 @@ class BodyMeasurementForm extends Component {
                             <li>
                                 <Field
                                     name="thigh"
+                                    type="number"
                                     label="Thigh"
                                     wrapperClass="grey-white"
                                     component={InputField}
@@ -136,6 +144,7 @@ class BodyMeasurementForm extends Component {
                             <li>
                                 <Field
                                     name="calf"
+                                    type="number"
                                     label="Calf"
                                     wrapperClass="grey-white"
                                     component={InputField}
@@ -157,6 +166,7 @@ class BodyMeasurementForm extends Component {
                             <li>
                                 <Field
                                     name="weight"
+                                    type="number"
                                     label="Weight"
                                     wrapperClass="grey-white"
                                     component={InputField}
@@ -169,6 +179,7 @@ class BodyMeasurementForm extends Component {
                             <li>
                                 <Field
                                     name="height"
+                                    type="number"
                                     label="Height"
                                     wrapperClass="grey-white"
                                     component={InputField}
@@ -274,11 +285,6 @@ class BodyMeasurementForm extends Component {
         dispatch(getUserBodyMeasurementLogDatesRequest(requestData));
     }
 
-    getBodyMeasurementLogDates = (requestData) => {
-        const { dispatch } = this.props;
-        dispatch(getUserBodyMeasurementLogDatesRequest(requestData));
-    }
-
     onChangeLogDate = (date) => {
         const { logDate } = this.state;
         if (moment(logDate).format('YYYY-MM-DD') !== moment(date).format('YYYY-MM-DD')) {
@@ -294,19 +300,45 @@ class BodyMeasurementForm extends Component {
     }
 
     onMonthClick = (date) => {
-        let requestData = {
-            logDate: date,
+        const { change } = this.props;
+        let now = new Date();
+        let requestData = {};
+        if (now.getMonth() === date.getMonth() && now.getFullYear() === date.getFullYear()) {
+            this.setState({ logDate: now });
+            change('log_date', now);
+            requestData = {
+                logDate: now,
+            }
+        } else {
+            this.setState({ logDate: date });
+            change('log_date', date);
+            requestData = {
+                logDate: date,
+            }
         }
-        this.getBodyMeasurementLogDates(requestData);
+        this.getBodyMeasurementLogData(requestData);
     }
 
     onActiveDateChange = (obj) => {
+        const { change } = this.props;
         if (obj.view === "month") {
             let date = obj.activeStartDate;
-            let requestData = {
-                logDate: date,
+            let now = new Date();
+            let requestData = {};
+            if (now.getMonth() === date.getMonth() && now.getFullYear() === date.getFullYear()) {
+                this.setState({ logDate: now });
+                change('log_date', now);
+                requestData = {
+                    logDate: now,
+                }
+            } else {
+                this.setState({ logDate: date });
+                change('log_date', date);
+                requestData = {
+                    logDate: date,
+                }
             }
-            this.getBodyMeasurementLogDates(requestData);
+            this.getBodyMeasurementLogData(requestData);
         }
     }
 }
