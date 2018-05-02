@@ -4,7 +4,7 @@ import { Modal, Button } from 'react-bootstrap';
 const ResetConfirmation = (props) => {
     const { show, handleYes, handleClose } = props;
     return (
-        <div className="delete-confirmation-wrapper">
+        <div className="reset-confirmation-wrapper">
             <Modal show={show}>
                 <Modal.Header>
                     <Modal.Title>Reset</Modal.Title>

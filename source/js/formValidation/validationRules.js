@@ -27,6 +27,13 @@ export const requiredReactSelectMulti = (value) => {
     return undefined;
 }
 
+export const requiredImage = (value) => {
+    if (!value || typeof value === 'undefined' || Object.keys(value).length <= 0) {
+        return "Field is required";
+    }
+    return undefined;
+}
+
 export const email = (value) => {
     if (!value || !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,5}$/i.test(value)) {
         return "Invalid email address";

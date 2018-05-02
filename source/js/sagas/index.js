@@ -17,6 +17,7 @@ import profilePhotos from 'sagas/profilePhotos';
 import login from 'sagas/login'
 import healthLabels from 'sagas/healthLabels'
 import dietLabels from 'sagas/dietLabels'
+import userProgressPhotos from 'sagas/userProgressPhotos'
 // import adminNutritionSagas from 'sagas/admin/nutritions';
 import adminEquipmentSagas from 'sagas/admin/equipments';
 import adminEquipmentCategorySagas from 'sagas/admin/equipmentCategories';
@@ -49,6 +50,7 @@ export default function* rootSaga() {
     ...login,
     ...healthLabels,
     ...dietLabels,
+    ...userProgressPhotos,
     // ...adminNutritionSagas,
     ...adminEquipmentSagas,
     ...adminEquipmentCategorySagas,

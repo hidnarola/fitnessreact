@@ -19,6 +19,7 @@ import profilePhotos from 'reducers/profilePhotos';
 import login from 'reducers/login';
 import healthLabels from 'reducers/healthLabels';
 import dietLabels from 'reducers/dietLabels';
+import userProgressPhotos from 'reducers/userProgressPhotos';
 import pageLoader from 'reducers/pageLoader';
 // import adminNutritions from 'reducers/admin/nutritions'
 import adminEquipments from 'reducers/admin/equipments'
@@ -53,6 +54,7 @@ export default combineReducers({
     login,
     healthLabels,
     dietLabels,
+    userProgressPhotos,
     pageLoader,
     // adminNutritions,
     adminEquipments,
