@@ -3,14 +3,14 @@ import { extraUserHeaders } from '../helpers/funs';
 
 const requestUrl = 'user/friend';
 
-function getFriends(approvedStatus = '') {
+function getFriends(username, approvedStatus = '') {
     let headers = extraUserHeaders();
     var options = {
         method: 'GET',
         headers: headers,
     }
 
-    return fetchResource(requestUrl + '/' + approvedStatus, options);
+    return fetchResource(requestUrl + '/' + username + '/' + approvedStatus, options);
 }
 
 export default {

@@ -91,3 +91,8 @@ export const DAY_DRIVE_SNACKS = 'snacks';
 
 export const FRIEND_APPROVED = 2;
 export const FRIEND_PENDING = 1;
+
+export const FRIENDSHIP_STATUS_SELF = 'self';
+export const FRIENDSHIP_STATUS_FRIEND = 'friend';
+export const FRIENDSHIP_STATUS_REQUEST_PENDING = 'request_pending';
+export const FRIENDSHIP_STATUS_UNKNOWN = 'unknown';

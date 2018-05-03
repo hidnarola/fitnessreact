@@ -17,7 +17,8 @@ import {
 function fetchApprovedFriendsData() {
     return function* (action) {
         try {
-            const data = yield call(() => api.getFriends(FRIEND_APPROVED));
+            var username = action.username;
+            const data = yield call(() => api.getFriends(username, FRIEND_APPROVED));
             yield put(getApprovedFriendsSuccess(data));
         } catch (error) {
             yield put(getApprovedFriendsError(error));
@@ -28,7 +29,8 @@ function fetchApprovedFriendsData() {
 function fetchPendingFriendsData() {
     return function* (action) {
         try {
-            const data = yield call(() => api.getFriends(FRIEND_PENDING));
+            var username = action.username;
+            const data = yield call(() => api.getFriends(username, FRIEND_PENDING));
             yield put(getPendingFriendsSuccess(data));
         } catch (error) {
             yield put(getPendingFriendsError(error));

@@ -13,6 +13,7 @@ import FitnessNav from 'components/global/FitnessNav';
 import { routeCodes } from 'constants/routes';
 import { getProfileDetailsRequest } from '../actions/profile';
 import noProfileImg from 'img/common/no-profile-img.png'
+import { FRIENDSHIP_STATUS_SELF, FRIENDSHIP_STATUS_REQUEST_PENDING, FRIENDSHIP_STATUS_UNKNOWN, FRIENDSHIP_STATUS_FRIEND } from '../constants/consts';
 
 class Profile extends Component {
     constructor(props) {
@@ -20,14 +21,14 @@ class Profile extends Component {
         var username = props.match.params.username;
         this.state = {
             loadProfileActionInit: false,
-            profile: null,
+            profile: {},
             username: (username) ? username : null,
         }
     }
 
     componentWillMount() {
         const { dispatch, match } = this.props;
-        if (match && match.params && (typeof match.params.username !== 'undefined')) {
+        if (typeof match.params.username !== 'undefined') {
             var username = match.params.username;
             this.setState({
                 loadProfileActionInit: true,
@@ -40,14 +41,14 @@ class Profile extends Component {
     componentWillReceiveProps(nextProps) {
         var oldUsername = this.state.username;
         var match = nextProps.match;
-        if (match && match.params && match.params.username) {
+        if (typeof match.params.username !== 'undefined') {
             var newUsername = match.params.username;
             if (newUsername !== oldUsername) {
                 this.setState({
                     loadProfileActionInit: true,
-                    username
+                    username: newUsername,
                 });
-                dispatch(getProfileDetailsRequest(username));
+                nextProps.dispatch(getProfileDetailsRequest(newUsername));
             }
         }
     }
@@ -95,14 +96,25 @@ class Profile extends Component {
                                 </NavLink>
                             </div>
                         </div>
-                        <div className="body-head-r add-friend">
-                            <a href="" className="add-friend-btn active">Add Friend
-                                <i className="icon-person_add"></i>
-                            </a>
-                            <a href="" className="green-blue-btn active">Friend
-                                <i className="icon-check"></i>
-                            </a>
-                        </div>
+                        {profile && profile.friendshipStatus && profile.friendshipStatus !== '' && profile.friendshipStatus !== FRIENDSHIP_STATUS_SELF &&
+                            <div className="body-head-r add-friend">
+                                {profile.friendshipStatus === FRIENDSHIP_STATUS_FRIEND &&
+                                    <a href="" className="green-blue-btn active">
+                                        Friend<i className="icon-check"></i>
+                                    </a>
+                                }
+                                {profile.friendshipStatus === FRIENDSHIP_STATUS_REQUEST_PENDING &&
+                                    <a href="" className="green-blue-btn active">
+                                        Action <i className="icon-check"></i>
+                                    </a>
+                                }
+                                {profile.friendshipStatus === FRIENDSHIP_STATUS_UNKNOWN &&
+                                    <a href="" className="add-friend-btn active">
+                                        Add Friend <i className="icon-person_add"></i>
+                                    </a>
+                                }
+                            </div>
+                        }
                     </div>
 
                     <div className="fitness-stats">
@@ -113,17 +125,29 @@ class Profile extends Component {
                                     <Route
                                         exact
                                         path={`${routeCodes.PROFILE}/:username`}
-                                        component={ProfileFithub}
+                                        render={() => {
+                                            return <ProfileFithub
+                                                {...this.state}
+                                            />
+                                        }}
                                     />
                                     <Route
                                         exact
                                         path={routeCodes.PROFILEFRIENDS.replace('{username}', username)}
-                                        component={ProfileFriends}
+                                        render={() => {
+                                            return <ProfileFriends
+                                                {...this.state}
+                                            />
+                                        }}
                                     />
                                     <Route
                                         exact
                                         path={routeCodes.PROFILEPHOTOS.replace('{username}', username)}
-                                        component={ProfilePhotos}
+                                        render={() => {
+                                            return <ProfilePhotos
+                                                {...this.state}
+                                            />
+                                        }}
                                     />
                                 </Switch>
                             </div>
@@ -189,7 +213,7 @@ class Profile extends Component {
                     </div>
 
                 </section>
-            </div>
+            </div >
         );
     }
 
@@ -202,7 +226,8 @@ class Profile extends Component {
         const {
             loadProfileActionInit
         } = this.state;
-        if (loadProfileActionInit && !profileLoading) {
+        const stateProfile = this.state.profile;
+        if (loadProfileActionInit && !profileLoading && (profile !== stateProfile)) {
             this.setState({
                 loadProfileActionInit: false,
                 profile

@@ -2,15 +2,56 @@ import { Map } from "immutable";
 import {
     ADD_USER_PROGRESS_PHOTO_REQUEST,
     ADD_USER_PROGRESS_PHOTO_SUCCESS,
-    ADD_USER_PROGRESS_PHOTO_ERROR
+    ADD_USER_PROGRESS_PHOTO_ERROR,
+    GET_USER_PROGRESS_PHOTO_REQUEST,
+    GET_USER_PROGRESS_PHOTO_SUCCESS,
+    GET_USER_PROGRESS_PHOTO_ERROR,
+    GET_USER_LATEST_PROGRESS_PHOTO_REQUEST,
+    GET_USER_LATEST_PROGRESS_PHOTO_SUCCESS,
+    GET_USER_LATEST_PROGRESS_PHOTO_ERROR
 } from "../actions/userProgressPhotos";
 
 const initialState = Map({
     loading: false,
     error: null,
+    progressPhotos: [],
 });
 
 const actionMap = {
+    [GET_USER_PROGRESS_PHOTO_REQUEST]: (state, action) => {
+        return state.merge(Map({
+            loading: true,
+        }));
+    },
+    [GET_USER_PROGRESS_PHOTO_SUCCESS]: (state, action) => {
+        return state.merge(Map({
+            loading: false,
+            progressPhotos: action.data.user_progress_photos,
+        }));
+    },
+    [GET_USER_PROGRESS_PHOTO_ERROR]: (state, action) => {
+        return state.merge(Map({
+            loading: false,
+            error: action.error.message,
+        }));
+    },
+    [GET_USER_LATEST_PROGRESS_PHOTO_REQUEST]: (state, action) => {
+        return state.merge(Map({
+            loading: true,
+        }));
+    },
+    [GET_USER_LATEST_PROGRESS_PHOTO_SUCCESS]: (state, action) => {
+        return state.merge(Map({
+            loading: false,
+            progressPhotos: action.data.user_progress_photos,
+        }));
+    },
+    [GET_USER_LATEST_PROGRESS_PHOTO_ERROR]: (state, action) => {
+        return state.merge(Map({
+            loading: false,
+            error: action.error.message,
+        }));
+    },
     [ADD_USER_PROGRESS_PHOTO_REQUEST]: (state, action) => {
         return state.merge(Map({
             loading: true,

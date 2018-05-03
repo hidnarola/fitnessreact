@@ -6,9 +6,10 @@ export const GET_PENDING_FRIENDS_REQUEST = 'GET_PENDING_FRIENDS_REQUEST';
 export const GET_PENDING_FRIENDS_SUCCESS = 'GET_PENDING_FRIENDS_SUCCESS';
 export const GET_PENDING_FRIENDS_ERROR = 'GET_PENDING_FRIENDS_ERROR';
 
-export function getApprovedFriendsRequest() {
+export function getApprovedFriendsRequest(username) {
     return {
         type: GET_APPROVED_FRIENDS_REQUEST,
+        username
     }
 }
 
@@ -26,9 +27,10 @@ export function getApprovedFriendsError(error) {
     }
 }
 
-export function getPendingFriendsRequest() {
+export function getPendingFriendsRequest(username) {
     return {
         type: GET_PENDING_FRIENDS_REQUEST,
+        username
     }
 }
 
