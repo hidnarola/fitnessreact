@@ -1,28 +1,34 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getProfilePhotosData } from '../../actions/profilePhotos';
+import { reset, initialize } from "redux-form";
 import ProfilePhotoBlock from './ProfilePhotoBlock';
+import AddProgressPhotoModal from '../Common/AddProgressPhotoModal';
+import { addUserProgressPhotoRequest } from '../../actions/userProgressPhotos';
+import { ts } from '../../helpers/funs';
 
 class ProfilePhotos extends Component {
-    
     constructor(props) {
         super(props);
-    }
-
-    componentWillMount() {
-        const { dispatch } = this.props;
-        dispatch(getProfilePhotosData());
+        this.state = {
+            progressPhotos: [],
+            showAddProgressPhotoModal: false,
+            saveProgressPhotoActionInit: false,
+        }
     }
 
     render() {
-        const { galleryPhotos, progressPhotos } = this.props;
+        const { galleryPhotos } = this.props;
+        const {
+            progressPhotos,
+            showAddProgressPhotoModal
+        } = this.state;
         return (
             <div className="profilePhotosComponentWrapper">
                 <div className="white-box space-btm-20">
                     <div className="whitebox-head profile-head d-flex">
                         <h3 className="title-h3 size-14">Progress Photos</h3>
                         <div className="whitebox-head-r">
-                            <a href="" data-toggle="modal" data-target="#progress-gallery">
+                            <a href="javascript:void(0)" onClick={this.handleShowAddProgressPhotoModal}>
                                 <span>Add Progress Photo</span>
                                 <i className="icon-add_a_photo"></i>
                             </a>
@@ -75,18 +81,69 @@ class ProfilePhotos extends Component {
                         }
                     </div>
                 </div>
+
+                <AddProgressPhotoModal
+                    onSubmit={this.handleProgressPhotoSubmit}
+                    show={showAddProgressPhotoModal}
+                    handleClose={this.handleCloseAddProgressPhotoModal}
+                />
             </div>
         );
     }
+
+    componentDidUpdate(prevProps, prevState) {
+        const { saveProgressPhotoActionInit } = this.state;
+        const { progressPhotoloading } = this.props;
+        if (saveProgressPhotoActionInit && !progressPhotoloading) {
+            this.setState({ saveProgressPhotoActionInit: false });
+            ts('Progress photo saved successfully!');
+            this.handleCloseAddProgressPhotoModal();
+        }
+    }
+    //#region funs
+    handleShowAddProgressPhotoModal = () => {
+        const { dispatch } = this.props;
+        this.setState({ showAddProgressPhotoModal: true });
+        dispatch(reset('addProgressPhotoModalForm'));
+        var now = new Date();
+        now.setHours(0, 0, 0, 0);
+        var initialFormData = {
+            photo_date: now,
+        }
+        dispatch(initialize('addProgressPhotoModalForm', initialFormData));
+    }
+
+    handleCloseAddProgressPhotoModal = () => {
+        const { dispatch } = this.props;
+        this.setState({ showAddProgressPhotoModal: false });
+        dispatch(reset('addProgressPhotoModalForm'));
+        var now = new Date();
+        now.setHours(0, 0, 0, 0);
+        var initialFormData = {
+            photo_date: now,
+        }
+        dispatch(initialize('addProgressPhotoModalForm', initialFormData));
+    }
+
+    handleProgressPhotoSubmit = (data) => {
+        const { dispatch } = this.props;
+        this.setState({ saveProgressPhotoActionInit: true });
+        var formData = new FormData();
+        formData.append('description', (data.description) ? data.description : '');
+        formData.append('date', data.photo_date);
+        if (data.photo) {
+            formData.append('image', data.photo[0]);
+        }
+        dispatch(addUserProgressPhotoRequest(formData));
+    }
+    //#endregion
 }
 
 const mapStateToProps = (state) => {
-    const { profilePhotos } = state;
+    const { userProgressPhotos } = state;
     return {
-        loading: profilePhotos.get('loading'),
-        error: profilePhotos.get('error'),
-        progressPhotos: profilePhotos.get('progressPhotos'),
-        galleryPhotos: profilePhotos.get('galleryPhotos'),
+        progressPhotoLoading: userProgressPhotos.get('loading'),
+        progressPhotos: userProgressPhotos.get('progressPhotos'),
     }
 }
 

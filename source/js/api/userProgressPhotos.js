@@ -20,7 +20,7 @@ function getUserLatestProgressPhotos(username, noOfPhotos = 5) {
         headers: headers,
     }
 
-    return fetchResource(requestUrl + '/latest/' + username + '/' + noOfPhotos, options);
+    return fetchResource(requestUrl + '/latest_month_wise/' + username + '/' + noOfPhotos, options);
 }
 
 function postUserProgressPhoto(formData) {
@@ -29,7 +29,7 @@ function postUserProgressPhoto(formData) {
 }
 
 export default {
-    getUserProgressPhoto,
+    getUserProgressPhotos,
     getUserLatestProgressPhotos,
     postUserProgressPhoto,
 }

@@ -6,8 +6,8 @@ import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
 import { saveUserBodyMeasurementRequest } from '../../actions/userBodyMeasurement';
 import moment from 'moment';
 import { ts } from '../../helpers/funs';
-import AddProgressPhotoModal from './AddProgressPhotoModal';
 import { addUserProgressPhotoRequest } from '../../actions/userProgressPhotos';
+import AddProgressPhotoModal from '../Common/AddProgressPhotoModal';
 
 class BodyMeasurement extends Component {
     constructor(props) {
