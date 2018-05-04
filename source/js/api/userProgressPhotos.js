@@ -1,4 +1,4 @@
-import { postFormData } from '.';
+import { fetchResource, postFormData } from '.';
 import { extraUserHeaders } from '../helpers/funs';
 
 const requestUrl = 'user/progress_photo';

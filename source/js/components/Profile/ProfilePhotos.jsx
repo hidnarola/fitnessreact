@@ -3,8 +3,12 @@ import { connect } from 'react-redux';
 import { reset, initialize } from "redux-form";
 import ProfilePhotoBlock from './ProfilePhotoBlock';
 import AddProgressPhotoModal from '../Common/AddProgressPhotoModal';
-import { addUserProgressPhotoRequest } from '../../actions/userProgressPhotos';
+import {
+    addUserProgressPhotoRequest,
+    getUserLatestProgressPhotoRequest
+} from '../../actions/userProgressPhotos';
 import { ts } from '../../helpers/funs';
+import { FRIENDSHIP_STATUS_SELF } from '../../constants/consts';
 
 class ProfilePhotos extends Component {
     constructor(props) {
@@ -13,11 +17,33 @@ class ProfilePhotos extends Component {
             progressPhotos: [],
             showAddProgressPhotoModal: false,
             saveProgressPhotoActionInit: false,
+            initProgressPhotosAction: false,
+            progressPhotos: [],
+            doLoadProgressPhotos: false,
+        }
+    }
+
+    componentWillMount() {
+        const {
+            dispatch,
+            profile
+        } = this.props;
+        if (profile && Object.keys(profile).length > 0) {
+            var username = profile.username;
+            this.setState({
+                initProgressPhotosAction: true,
+            });
+            dispatch(getUserLatestProgressPhotoRequest(username));
+        } else {
+            this.setState({ doLoadProgressPhotos: true });
         }
     }
 
     render() {
-        const { galleryPhotos } = this.props;
+        const {
+            galleryPhotos,
+            profile
+        } = this.props;
         const {
             progressPhotos,
             showAddProgressPhotoModal
@@ -27,12 +53,14 @@ class ProfilePhotos extends Component {
                 <div className="white-box space-btm-20">
                     <div className="whitebox-head profile-head d-flex">
                         <h3 className="title-h3 size-14">Progress Photos</h3>
-                        <div className="whitebox-head-r">
-                            <a href="javascript:void(0)" onClick={this.handleShowAddProgressPhotoModal}>
-                                <span>Add Progress Photo</span>
-                                <i className="icon-add_a_photo"></i>
-                            </a>
-                        </div>
+                        {profile && profile.friendshipStatus && profile.friendshipStatus === FRIENDSHIP_STATUS_SELF &&
+                            <div className="whitebox-head-r">
+                                <a href="javascript:void(0)" onClick={this.handleShowAddProgressPhotoModal}>
+                                    <span>Add Progress Photo</span>
+                                    <i className="icon-add_a_photo"></i>
+                                </a>
+                            </div>
+                        }
                     </div>
                     <div className="whitebox-body profile-body">
                         {!progressPhotos &&
@@ -45,7 +73,7 @@ class ProfilePhotos extends Component {
                             <ul className="d-flex profile-list-ul">
                                 {progressPhotos.map((photo, index) => (
                                     <li key={index}>
-                                        <ProfilePhotoBlock image={photo.image} caption={photo.logDate} />
+                                        <ProfilePhotoBlock image={photo.image} caption={photo.date} />
                                     </li>
                                 ))}
                             </ul>
@@ -91,13 +119,53 @@ class ProfilePhotos extends Component {
         );
     }
 
+    componentWillReceiveProps(nextProps) {
+        const {
+            profile,
+            dispatch,
+        } = nextProps;
+        const {
+            doLoadProgressPhotos,
+        } = this.state;
+        if ((doLoadProgressPhotos) && profile && Object.keys(profile).length > 0) {
+            var username = profile.username;
+            this.setState({
+                initProgressPhotosAction: true,
+            });
+            dispatch(getUserLatestProgressPhotoRequest(username));
+        }
+    }
+
     componentDidUpdate(prevProps, prevState) {
-        const { saveProgressPhotoActionInit } = this.state;
-        const { progressPhotoloading } = this.props;
+        const {
+            initProgressPhotosAction,
+            saveProgressPhotoActionInit,
+        } = this.state;
+        const {
+            progressPhotoloading,
+            progressPhotos,
+            dispatch,
+            profile
+        } = this.props;
+        const progressPhotosState = this.state.progressPhotos;
+        if (initProgressPhotosAction && !progressPhotoloading && (progressPhotosState !== progressPhotos)) {
+            this.setState({
+                initProgressPhotosAction: false,
+                progressPhotos,
+                doLoadProgressPhotos: false,
+            });
+        }
         if (saveProgressPhotoActionInit && !progressPhotoloading) {
             this.setState({ saveProgressPhotoActionInit: false });
             ts('Progress photo saved successfully!');
             this.handleCloseAddProgressPhotoModal();
+            if (profile && Object.keys(profile).length > 0) {
+                var username = profile.username;
+                this.setState({
+                    initProgressPhotosAction: true,
+                });
+                dispatch(getUserLatestProgressPhotoRequest(username));
+            }
         }
     }
     //#region funs
@@ -142,7 +210,7 @@ class ProfilePhotos extends Component {
 const mapStateToProps = (state) => {
     const { userProgressPhotos } = state;
     return {
-        progressPhotoLoading: userProgressPhotos.get('loading'),
+        progressPhotoloading: userProgressPhotos.get('loading'),
         progressPhotos: userProgressPhotos.get('progressPhotos'),
     }
 }
