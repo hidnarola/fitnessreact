@@ -444,7 +444,7 @@ class NutritionPreferences extends Component {
                 if (oldNutri) {
                     newNutri = oldNutri;
                 } else {
-                    newNutri = { start: 0, end: 0, _id: obj._id };
+                    newNutri = { start: 0, end: 0, _id: obj._id, nutritionId: obj._id };
                 }
                 newNutritionTargets.push(newNutri);
             }
