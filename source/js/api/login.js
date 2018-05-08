@@ -1,4 +1,4 @@
-import { fetchResource } from "./index";
+import { fetchResource, postFormData } from "./index";
 
 function userLogin(loginData) {
     var options = {
@@ -9,12 +9,9 @@ function userLogin(loginData) {
 }
 
 function adminLogin(loginData) {
-    var options = {
-        method: 'POST',
-        body: loginData
-    }
-    return fetchResource('admin_login', options);
+    return postFormData('admin_login', loginData);
 }
+
 
 export default {
     userLogin,

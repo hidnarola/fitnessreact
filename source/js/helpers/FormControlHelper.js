@@ -9,7 +9,7 @@ import { SERVER_BASE_URL } from '../constants/consts';
 import noImg from 'img/common/no-img.png'
 
 export const InputField = (props) => {
-    const { label, input, meta, wrapperClass, className, labelClass, placeholder, errorClass, type } = props;
+    const { label, input, meta, wrapperClass, className, labelClass, placeholder, errorClass, type, disabled } = props;
     return (
         <div
             className={
@@ -20,6 +20,7 @@ export const InputField = (props) => {
             <input
                 {...input}
                 type={type ? type : 'text'}
+                disabled={disabled ? disabled : false}
                 className={className}
                 placeholder={placeholder}
             />

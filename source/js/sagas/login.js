@@ -28,7 +28,7 @@ function authenticate() {
             localStorage.setItem(LOCALSTORAGE_ID_TOKEN_KEY, JSON.stringify(data.user));
             localStorage.setItem(LOCALSTORAGE_ACCESS_TOKEN_KEY, data.token);
             localStorage.setItem(LOCALSTORAGE_REFRESH_TOKEN_KEY, data.refresh_token);
-            yield put(loginSuccess(data));
+            yield put(loginSuccess());
         } catch (error) {
             yield put(loginError(error));
         }

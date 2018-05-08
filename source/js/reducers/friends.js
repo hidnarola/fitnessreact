@@ -5,16 +5,33 @@ import {
     GET_APPROVED_FRIENDS_ERROR,
     GET_PENDING_FRIENDS_REQUEST,
     GET_PENDING_FRIENDS_SUCCESS,
-    GET_PENDING_FRIENDS_ERROR
+    GET_PENDING_FRIENDS_ERROR,
+    SEND_FRIEND_REQUEST_REQUEST,
+    SEND_FRIEND_REQUEST_SUCCESS,
+    SEND_FRIEND_REQUEST_ERROR,
+    CANCEL_FRIEND_REQUEST_REQUEST,
+    CANCEL_FRIEND_REQUEST_SUCCESS,
+    CANCEL_FRIEND_REQUEST_ERROR,
+    ACCEPT_FRIEND_REQUEST_REQUEST,
+    ACCEPT_FRIEND_REQUEST_SUCCESS,
+    ACCEPT_FRIEND_REQUEST_ERROR,
 } from "../actions/friends";
+import { VALIDATION_FAILURE_STATUS } from "../constants/consts";
+import { generateValidationErrorMsgArr } from "../helpers/funs";
 
 const initialState = Map({
     approvedLoading: false,
-    approvedError: null,
+    approvedError: [],
     approvedFriends: [],
     pendingLoading: false,
-    pendingError: null,
+    pendingError: [],
     pendingFriends: [],
+    requestSendLoading: false,
+    requestSendError: [],
+    requestCancelLoading: false,
+    requestCancelError: [],
+    requestAcceptLoading: false,
+    requestAcceptError: [],
 });
 
 const actionMap = {
@@ -30,9 +47,17 @@ const actionMap = {
         }));
     },
     [GET_APPROVED_FRIENDS_ERROR]: (state, action) => {
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
+        }
         return state.merge(Map({
             approvedLoading: false,
-            approvedError: action.error.message,
+            approvedError: error,
         }));
     },
     [GET_PENDING_FRIENDS_REQUEST]: (state, action) => {
@@ -47,9 +72,89 @@ const actionMap = {
         }));
     },
     [GET_PENDING_FRIENDS_ERROR]: (state, action) => {
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
+        }
         return state.merge(Map({
             pendingLoading: false,
-            pendingError: action.error.message,
+            pendingError: error,
+        }));
+    },
+    [SEND_FRIEND_REQUEST_REQUEST]: (state, action) => {
+        return state.merge(Map({
+            requestSendLoading: true,
+        }));
+    },
+    [SEND_FRIEND_REQUEST_SUCCESS]: (state, action) => {
+        return state.merge(Map({
+            requestSendLoading: false,
+        }));
+    },
+    [SEND_FRIEND_REQUEST_ERROR]: (state, action) => {
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
+        }
+        return state.merge(Map({
+            requestSendLoading: false,
+            requestSendError: error,
+        }));
+    },
+    [CANCEL_FRIEND_REQUEST_REQUEST]: (state, action) => {
+        return state.merge(Map({
+            requestCancelLoading: true,
+        }));
+    },
+    [CANCEL_FRIEND_REQUEST_SUCCESS]: (state, action) => {
+        return state.merge(Map({
+            requestCancelLoading: false,
+        }));
+    },
+    [CANCEL_FRIEND_REQUEST_ERROR]: (state, action) => {
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
+        }
+        return state.merge(Map({
+            requestCancelLoading: false,
+            requestCancelError: error,
+        }));
+    },
+    [ACCEPT_FRIEND_REQUEST_REQUEST]: (state, action) => {
+        return state.merge(Map({
+            requestAcceptLoading: true,
+        }));
+    },
+    [ACCEPT_FRIEND_REQUEST_SUCCESS]: (state, action) => {
+        return state.merge(Map({
+            requestAcceptLoading: false,
+        }));
+    },
+    [ACCEPT_FRIEND_REQUEST_ERROR]: (state, action) => {
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
+        }
+        return state.merge(Map({
+            requestAcceptLoading: false,
+            requestAcceptError: error,
         }));
     },
 };

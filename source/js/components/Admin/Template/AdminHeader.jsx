@@ -10,17 +10,21 @@ import { withRouter } from 'react-router-dom';
 import { adminRouteCodes } from 'constants/adminRoutes';
 import { adminRootRoute } from 'constants/adminRoutes';
 import { logout } from 'actions/login';
+import { ts } from '../../../helpers/funs';
 
 class AdminHeader extends Component {
     constructor(props) {
         super(props);
-        this.handleLogout = this.handleLogout.bind(this);
+        this.state = {
+            logoutActionInit: false,
+        }
     }
 
     handleLogout = () => {
-        const { dispatch, history } = this.props;
+        const { dispatch } = this.props;
+        this.setState({ logoutActionInit: true });
         dispatch(logout());
-        history.push(adminRootRoute);
+
     }
 
     render() {
@@ -78,6 +82,23 @@ class AdminHeader extends Component {
             </div>
         );
     }
+
+    componentDidUpdate(prevProps, prevState) {
+        const { loading, history } = this.props;
+        const { logoutActionInit } = this.state;
+        if (logoutActionInit && !loading) {
+            ts('Logout success!');
+            history.push(adminRootRoute);
+        }
+    }
+
 }
 
-export default connect()(withRouter(AdminHeader));
+const mapStateToProps = (state) => {
+    const { login } = state;
+    return {
+        loading: login.get('loading')
+    }
+}
+
+export default connect(mapStateToProps)(withRouter(AdminHeader));

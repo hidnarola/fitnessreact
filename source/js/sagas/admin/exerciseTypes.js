@@ -36,7 +36,7 @@ function filterAdminExerciseTypesData() {
     return function* (action) {
         try {
             const data = yield call(() => api.filterExerciseTypes(action.filterData));
-            yield put(exerciseTypeFilterSuccess(data.data));
+            yield put(exerciseTypeFilterSuccess(data));
         } catch (error) {
             yield put(exerciseTypeFilterError(error));
         }

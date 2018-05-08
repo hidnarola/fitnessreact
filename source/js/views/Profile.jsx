@@ -13,7 +13,11 @@ import FitnessNav from 'components/global/FitnessNav';
 import { routeCodes } from 'constants/routes';
 import { getProfileDetailsRequest } from '../actions/profile';
 import noProfileImg from 'img/common/no-profile-img.png'
-import { FRIENDSHIP_STATUS_SELF, FRIENDSHIP_STATUS_REQUEST_PENDING, FRIENDSHIP_STATUS_UNKNOWN, FRIENDSHIP_STATUS_FRIEND } from '../constants/consts';
+import { FRIENDSHIP_STATUS_SELF, FRIENDSHIP_STATUS_UNKNOWN, FRIENDSHIP_STATUS_FRIEND, FRIENDSHIP_STATUS_REQUEST_RECEIVED, FRIENDSHIP_STATUS_REQUEST_SENT } from '../constants/consts';
+import { sendFriendRequestRequest, cancelFriendRequestRequest } from '../actions/friends';
+import { ts, te } from '../helpers/funs';
+import CancelFriendRequestModal from '../components/Profile/CancelFriendRequestModal';
+import UnfriendRequestModal from '../components/Profile/UnfriendRequestModal';
 
 class Profile extends Component {
     constructor(props) {
@@ -23,6 +27,15 @@ class Profile extends Component {
             loadProfileActionInit: false,
             profile: {},
             username: (username) ? username : null,
+            sendFriendRequestInit: false,
+            sendFriendRequestDisabled: false,
+            showCancelFriendRequestModal: false,
+            cancelFriendRequestInit: false,
+            cancelFriendRequestDisabled: false,
+            showUnfriendRequestModal: false,
+            UnfriendRequestInit: false,
+            UnfriendRequestDisabled: false,
+            selectFriendshipId: null,
         }
     }
 
@@ -54,7 +67,15 @@ class Profile extends Component {
     }
 
     render() {
-        const { profile, username } = this.state;
+        const {
+            profile,
+            username,
+            sendFriendRequestDisabled,
+            showCancelFriendRequestModal,
+            cancelFriendRequestDisabled,
+            UnfriendRequestDisabled,
+            showUnfriendRequestModal
+        } = this.state;
         return (
             <div className='stat-page'>
                 <FitnessHeader />
@@ -64,7 +85,7 @@ class Profile extends Component {
                         <div className="body-head-l">
                             <h2>
                                 {profile && (typeof profile.firstName !== 'undefined') && (profile.firstName)}
-                                {profile && (typeof profile.lastName !== 'undefined') && (profile.lastName)}
+                                {profile && (typeof profile.lastName !== 'undefined') && (' ' + profile.lastName)}
                             </h2>
                             <div className="body-head-l-btm">
 
@@ -98,20 +119,56 @@ class Profile extends Component {
                         </div>
                         {profile && profile.friendshipStatus && profile.friendshipStatus !== '' && profile.friendshipStatus !== FRIENDSHIP_STATUS_SELF &&
                             <div className="body-head-r add-friend">
-                                {profile.friendshipStatus === FRIENDSHIP_STATUS_FRIEND &&
-                                    <a href="" className="green-blue-btn active">
-                                        Friend<i className="icon-check"></i>
+                                {profile.friendshipStatus === FRIENDSHIP_STATUS_FRIEND && (!UnfriendRequestDisabled) &&
+                                    <a
+                                        href="javascript:void(0)"
+                                        className="green-blue-btn active"
+                                        onClick={() => {
+                                            this.handleShowUnfriendRequestModal(profile.friendshipId)
+                                        }}
+                                        disabled={UnfriendRequestDisabled}
+                                    >
+                                        Unfriend<i className="icon-check"></i>
                                     </a>
                                 }
-                                {profile.friendshipStatus === FRIENDSHIP_STATUS_REQUEST_PENDING &&
+                                {profile.friendshipStatus === FRIENDSHIP_STATUS_FRIEND && (UnfriendRequestDisabled) &&
+                                    <span>Please wait to unfriend...</span>
+                                }
+                                {profile.friendshipStatus === FRIENDSHIP_STATUS_REQUEST_RECEIVED &&
                                     <a href="" className="green-blue-btn active">
                                         Action <i className="icon-check"></i>
                                     </a>
                                 }
-                                {profile.friendshipStatus === FRIENDSHIP_STATUS_UNKNOWN &&
-                                    <a href="" className="add-friend-btn active">
+                                {profile.friendshipStatus === FRIENDSHIP_STATUS_REQUEST_SENT && (!cancelFriendRequestDisabled) &&
+                                    <a
+                                        href="javascript:void(0)"
+                                        className="green-blue-btn active"
+                                        onClick={() => {
+                                            this.handleShowCancelFriendRequestModal(profile.friendshipId)
+                                        }}
+                                        disabled={cancelFriendRequestDisabled}
+                                    >
+                                        Cancel Request <i className="icon-check"></i>
+                                    </a>
+                                }
+                                {profile.friendshipStatus === FRIENDSHIP_STATUS_REQUEST_SENT && (cancelFriendRequestDisabled) &&
+                                    <span>Friend request canceling...</span>
+                                }
+                                {profile.friendshipStatus === FRIENDSHIP_STATUS_UNKNOWN && (!sendFriendRequestDisabled) &&
+                                    <a
+                                        href="javascript:void(0)"
+                                        className="add-friend-btn active"
+                                        onClick={() => {
+                                            this.setState({ sendFriendRequestDisabled: true });
+                                            this.handleAddFriend(profile.authUserId)
+                                        }}
+                                        disabled={sendFriendRequestDisabled}
+                                    >
                                         Add Friend <i className="icon-person_add"></i>
                                     </a>
+                                }
+                                {profile.friendshipStatus === FRIENDSHIP_STATUS_UNKNOWN && (sendFriendRequestDisabled) &&
+                                    <span>Friend request sending...</span>
                                 }
                             </div>
                         }
@@ -175,7 +232,7 @@ class Profile extends Component {
                                     <div className="whitebox-head d-flex profile-about-head">
                                         <h3 className="title-h3">About</h3>
                                         <div className="whitebox-head-r">
-                                            <a href="">Edit</a>
+                                            <a href="javascript:void(0)">Edit</a>
                                         </div>
                                     </div>
                                     <div className="whitebox-body profile-about-body">
@@ -213,7 +270,17 @@ class Profile extends Component {
                     </div>
 
                 </section>
-            </div >
+                <CancelFriendRequestModal
+                    show={showCancelFriendRequestModal}
+                    handleYes={this.handleCancelFriendRequest}
+                    handleClose={this.handleHideCancelFriendRequestModal}
+                />
+                <UnfriendRequestModal
+                    show={showUnfriendRequestModal}
+                    handleYes={this.handleUnfriendRequest}
+                    handleClose={this.handleHideUnfriendRequestModal}
+                />
+            </div>
         );
     }
 
@@ -221,27 +288,139 @@ class Profile extends Component {
         const {
             profile,
             profileLoading,
-            match
+            match,
+            requestSendLoading,
+            requestSendError,
+            dispatch,
+            requestCancelLoading,
+            requestCancelError
         } = this.props;
         const {
-            loadProfileActionInit
+            loadProfileActionInit,
+            sendFriendRequestInit,
+            username,
+            cancelFriendRequestInit,
+            UnfriendRequestInit,
         } = this.state;
-        const stateProfile = this.state.profile;
+        var stateProfile = this.state.profile;
         if (loadProfileActionInit && !profileLoading && (profile !== stateProfile)) {
             this.setState({
                 loadProfileActionInit: false,
-                profile
+                profile,
+                sendFriendRequestDisabled: false,
+                cancelFriendRequestDisabled: false,
             });
         }
+        if (sendFriendRequestInit && !requestSendLoading) {
+            this.setState({
+                sendFriendRequestInit: false,
+                loadProfileActionInit: true
+            });
+            dispatch(getProfileDetailsRequest(username));
+            if ((requestSendError && requestSendError.length > 0)) {
+                te(requestSendError[0]);
+            } else {
+                ts('Friend request send!');
+            }
+        }
+        if (cancelFriendRequestInit && !requestCancelLoading) {
+            this.setState({
+                cancelFriendRequestInit: false,
+                loadProfileActionInit: true,
+            });
+            this.handleHideCancelFriendRequestModal();
+            dispatch(getProfileDetailsRequest(username));
+            if ((requestCancelError && requestCancelError.length > 0)) {
+                te(requestCancelError[0]);
+            } else {
+                ts('Friend request canceled!');
+            }
+        }
+        if (UnfriendRequestInit && !requestCancelLoading) {
+            this.setState({
+                UnfriendRequestInit: false,
+                loadProfileActionInit: true,
+            });
+            this.handleHideUnfriendRequestModal();
+            dispatch(getProfileDetailsRequest(username));
+            if ((requestCancelError && requestCancelError.length > 0)) {
+                te(requestCancelError[0]);
+            } else {
+                ts('You are now no friends any more!');
+            }
+        }
     }
+
+    //#region funs
+    handleAddFriend = (authId) => {
+        const { dispatch } = this.props;
+        var requestObj = {
+            friendId: authId
+        }
+        this.setState({ sendFriendRequestInit: true });
+        dispatch(sendFriendRequestRequest(requestObj));
+    }
+
+    handleShowCancelFriendRequestModal = (friendshipId) => {
+        this.setState({
+            showCancelFriendRequestModal: true,
+            selectFriendshipId: friendshipId
+        });
+    }
+
+    handleCancelFriendRequest = () => {
+        const { dispatch } = this.props;
+        const { selectFriendshipId } = this.state;
+        this.setState({
+            cancelFriendRequestInit: true,
+            cancelFriendRequestDisabled: true
+        });
+        dispatch(cancelFriendRequestRequest(selectFriendshipId));
+    }
+
+    handleHideCancelFriendRequestModal = () => {
+        this.setState({
+            showCancelFriendRequestModal: false,
+            selectFriendshipId: null
+        });
+    }
+
+    handleShowUnfriendRequestModal = (friendshipId) => {
+        this.setState({
+            showUnfriendRequestModal: true,
+            selectFriendshipId: friendshipId
+        });
+    }
+
+    handleUnfriendRequest = () => {
+        const { dispatch } = this.props;
+        const { selectFriendshipId } = this.state;
+        this.setState({
+            UnfriendRequestInit: true,
+            UnfriendRequestDisabled: true
+        });
+        dispatch(cancelFriendRequestRequest(selectFriendshipId));
+    }
+
+    handleHideUnfriendRequestModal = () => {
+        this.setState({
+            showUnfriendRequestModal: false,
+            selectFriendshipId: null
+        });
+    }
+    //#endregion
 
 }
 
 const mapStateToProps = (state) => {
-    const { profile } = state;
+    const { profile, friends } = state;
     return {
         profileLoading: profile.get('loading'),
         profile: profile.get('profile'),
+        requestSendLoading: friends.get('requestSendLoading'),
+        requestSendError: friends.get('requestSendError'),
+        requestCancelLoading: friends.get('requestCancelLoading'),
+        requestCancelError: friends.get('requestCancelError'),
     }
 }
 

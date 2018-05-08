@@ -7,7 +7,16 @@ import {
     getApprovedFriendsSuccess,
     getApprovedFriendsError,
     getPendingFriendsSuccess,
-    getPendingFriendsError
+    getPendingFriendsError,
+    sendFriendRequestSuccess,
+    sendFriendRequestError,
+    SEND_FRIEND_REQUEST_REQUEST,
+    cancelFriendRequestSuccess,
+    cancelFriendRequestError,
+    CANCEL_FRIEND_REQUEST_REQUEST,
+    acceptFriendRequestSuccess,
+    acceptFriendRequestError,
+    ACCEPT_FRIEND_REQUEST_REQUEST
 } from '../actions/friends';
 import {
     FRIEND_APPROVED,
@@ -38,9 +47,48 @@ function fetchPendingFriendsData() {
     }
 }
 
+function postFriendRequestData() {
+    return function* (action) {
+        try {
+            var requestData = action.requestData;
+            const data = yield call(() => api.sendRequest(requestData));
+            yield put(sendFriendRequestSuccess(data));
+        } catch (error) {
+            yield put(sendFriendRequestError(error));
+        }
+    }
+}
+
+function deleteFriendRequestData() {
+    return function* (action) {
+        try {
+            var friendshipId = action.friendshipId;
+            const data = yield call(() => api.cancelRequest(friendshipId));
+            yield put(cancelFriendRequestSuccess(data));
+        } catch (error) {
+            yield put(cancelFriendRequestError(error));
+        }
+    }
+}
+
+function putFriendAcceptData() {
+    return function* (action) {
+        try {
+            var friendshipId = action.friendshipId;
+            const data = yield call(() => api.acceptRequest(friendshipId));
+            yield put(acceptFriendRequestSuccess(data));
+        } catch (error) {
+            yield put(acceptFriendRequestError(error));
+        }
+    }
+}
+
 export function* watchFriendsData() {
     yield takeLatest(GET_APPROVED_FRIENDS_REQUEST, fetchApprovedFriendsData());
     yield takeLatest(GET_PENDING_FRIENDS_REQUEST, fetchPendingFriendsData());
+    yield takeLatest(SEND_FRIEND_REQUEST_REQUEST, postFriendRequestData());
+    yield takeLatest(CANCEL_FRIEND_REQUEST_REQUEST, deleteFriendRequestData());
+    yield takeLatest(ACCEPT_FRIEND_REQUEST_REQUEST, putFriendAcceptData());
 }
 
 export default [

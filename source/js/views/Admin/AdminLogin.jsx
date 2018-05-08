@@ -6,7 +6,8 @@ import AdminLoginForm from '../../components/Admin/Login/AdminLoginForm';
 import { adminRouteCodes } from '../../constants/adminRoutes';
 import { ADMIN_ROLE, LOCALSTORAGE_ACCESS_TOKEN_KEY } from '../../constants/consts';
 import { checkLogin, isLogin } from '../../helpers/loginHelper';
-
+import { ts } from '../../helpers/funs';
+import { freeLoginLogoutState } from '../../actions/login';
 
 class AdminLogin extends Component {
     constructor(props) {
@@ -29,6 +30,14 @@ class AdminLogin extends Component {
         dispatch(login(loginData));
     }
 
+    componentWillUpdate() {
+        var token = localStorage.getItem(LOCALSTORAGE_ACCESS_TOKEN_KEY);
+        if (token) {
+            ts('Login success!');
+            this.props.history.push(adminRouteCodes.DASHBOARD);
+        }
+    }
+
     componentDidUpdate() {
         const { dispatch, loading } = this.props;
         if (!loading) {
@@ -36,33 +45,27 @@ class AdminLogin extends Component {
         }
     }
 
-    componentWillUpdate() {
-        var token = localStorage.getItem(LOCALSTORAGE_ACCESS_TOKEN_KEY);
-        if (token) {
-            this.props.history.push(adminRouteCodes.DASHBOARD);
-        }
-    }
-
     render() {
-        const { error, loading } = this.props;
         return (
             <div className="step-wrap step-wrap-login login-wrapper">
                 <div className="step-box">
-                    <AdminLoginForm onSubmit={this.handleSubmit} loginError={error} loading={loading} />
+                    <AdminLoginForm onSubmit={this.handleSubmit} />
                 </div >
             </div >
         );
     }
+
+    componentWillUnmount() {
+        const { dispatch } = this.props;
+        dispatch(freeLoginLogoutState());
+    }
+
 }
 
 const mapStateToProps = (state) => {
     const { login } = state;
     return {
-        loading: login.get('loading'),
-        error: login.get('error'),
-        user: login.get('user'),
-        token: login.get('token'),
-        refreshToken: login.get('refreshToken'),
+        loading: login.get('loading')
     }
 }
 

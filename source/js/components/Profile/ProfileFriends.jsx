@@ -2,11 +2,17 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
     getApprovedFriendsRequest,
-    getPendingFriendsRequest
+    getPendingFriendsRequest,
+    acceptFriendRequestRequest,
+    cancelFriendRequestRequest
 } from '../../actions/friends';
 import ProfileFriendBlock from './ProfileFriendBlock';
 import { SET_LOGGED_USER_FROM_LOCALSTORAGE } from '../../actions/user';
 import _ from "lodash";
+import { FRIENDSHIP_STATUS_SELF } from '../../constants/consts';
+import ProfilePendingFriendBlock from './ProfilePendingFriendBlock';
+import CancelFriendRequestModal from './CancelFriendRequestModal';
+import { ts } from '../../helpers/funs';
 
 class ProfileFriends extends Component {
     constructor(props) {
@@ -18,6 +24,11 @@ class ProfileFriends extends Component {
             initPendingFriendAction: false,
             approvedFriends: [],
             pendingFriends: [],
+            acceptFriendRequestInit: false,
+            rejectFriendRequestInit: false,
+            pendingFriendsActionDisabled: false,
+            showPendingFriendsRejectRequestModal: false,
+            selectedFriendshipId: null,
         }
     }
 
@@ -28,12 +39,12 @@ class ProfileFriends extends Component {
         } = this.props;
         if (profile && Object.keys(profile).length > 0) {
             var username = profile.username;
-            this.setState({
-                initApprovedFriendAction: true,
-                initPendingFriendAction: true,
-            });
+            this.setState({ initApprovedFriendAction: true });
             dispatch(getApprovedFriendsRequest(username));
-            dispatch(getPendingFriendsRequest(username));
+            if (profile.friendshipStatus === FRIENDSHIP_STATUS_SELF) {
+                this.setState({ initPendingFriendAction: true });
+                dispatch(getPendingFriendsRequest(username));
+            }
         } else {
             this.setState({
                 doLoadApprovedFriends: true,
@@ -45,11 +56,16 @@ class ProfileFriends extends Component {
     render() {
         const {
             approvedFriends,
-            pendingFriends
+            pendingFriends,
+            pendingFriendsActionDisabled,
+            showPendingFriendsRejectRequestModal,
         } = this.state;
+        const {
+            profile
+        } = this.props;
         return (
             <div className="profile-friends-wrapper">
-                {pendingFriends && pendingFriends.length > 0 &&
+                {profile && profile.friendshipStatus && (profile.friendshipStatus === FRIENDSHIP_STATUS_SELF) && pendingFriends && pendingFriends.length > 0 &&
                     <div className="white-box space-btm-20">
                         <div className="whitebox-head d-flex">
                             <h3 className="title-h3">Pending Friends Request</h3>
@@ -58,7 +74,12 @@ class ProfileFriends extends Component {
                             <div className="row d-flex">
                                 {pendingFriends.map((friend, index) => (
                                     <div className="col-md-6" key={index}>
-                                        <ProfileFriendBlock friend={friend} />
+                                        <ProfilePendingFriendBlock
+                                            friend={friend}
+                                            handleAcceptFriendRequest={this.handleAcceptFriendRequest}
+                                            pendingFriendsActionDisabled={pendingFriendsActionDisabled}
+                                            handleShowRejectFriendRequest={this.handleShowRejectFriendRequest}
+                                        />
                                     </div>
                                 ))
                                 }
@@ -86,6 +107,11 @@ class ProfileFriends extends Component {
                         </div>
                     </div>
                 </div>
+                <CancelFriendRequestModal
+                    show={showPendingFriendsRejectRequestModal}
+                    handleYes={this.handleRejectFriendRequest}
+                    handleClose={this.handleHideRejectFriendRequest}
+                />
             </div>
         );
     }
@@ -101,12 +127,14 @@ class ProfileFriends extends Component {
         } = this.state;
         if ((doLoadApprovedFriends || doLoadPendingFriends) && profile && Object.keys(profile).length > 0) {
             var username = profile.username;
-            this.setState({
-                initApprovedFriendAction: true,
-                initPendingFriendAction: true,
-            });
+            this.setState({ initApprovedFriendAction: true });
             dispatch(getApprovedFriendsRequest(username));
-            dispatch(getPendingFriendsRequest(username));
+            if (profile.friendshipStatus === FRIENDSHIP_STATUS_SELF) {
+                this.setState({ initPendingFriendAction: true });
+                dispatch(getPendingFriendsRequest(username));
+            } else {
+                this.setState({ doLoadPendingFriends: false });
+            }
         }
     }
 
@@ -114,12 +142,18 @@ class ProfileFriends extends Component {
         const {
             initApprovedFriendAction,
             initPendingFriendAction,
+            acceptFriendRequestInit,
+            rejectFriendRequestInit
         } = this.state;
         const {
             approvedLoading,
             approvedFriends,
             pendingLoading,
             pendingFriends,
+            requestAcceptLoading,
+            requestCancelLoading,
+            dispatch,
+            profile
         } = this.props;
         const approvedFriendsState = this.state.approvedFriends;
         const pendingFriendsState = this.state.pendingFriends;
@@ -128,17 +162,82 @@ class ProfileFriends extends Component {
                 initApprovedFriendAction: false,
                 approvedFriends,
                 doLoadApprovedFriends: false,
+                pendingFriendsActionDisabled: false,
             });
         }
         if (initPendingFriendAction && !pendingLoading && (pendingFriendsState !== pendingFriends)) {
             this.setState({
                 initPendingFriendAction: false,
                 pendingFriends,
-                doLoadPendingFriends: false
+                doLoadPendingFriends: false,
+                pendingFriendsActionDisabled: false,
             });
+        }
+        if (acceptFriendRequestInit && !requestAcceptLoading) {
+            this.setState({
+                acceptFriendRequestInit: false,
+                initApprovedFriendAction: true,
+                initPendingFriendAction: true
+            });
+            var username = profile.username;
+            dispatch(getApprovedFriendsRequest(username));
+            dispatch(getPendingFriendsRequest(username));
+            ts('Friend request accepted!')
+        }
+        if (rejectFriendRequestInit && !requestCancelLoading) {
+            this.setState({
+                rejectFriendRequestInit: false,
+                initApprovedFriendAction: true,
+                initPendingFriendAction: true
+            });
+            this.handleHideRejectFriendRequest();
+            var username = profile.username;
+            dispatch(getApprovedFriendsRequest(username));
+            dispatch(getPendingFriendsRequest(username));
+            ts('Friend request rejected!')
         }
     }
 
+    //#region funs
+    handleAcceptFriendRequest = (friendshipId) => {
+        const {
+            dispatch
+        } = this.props;
+        this.setState({
+            acceptFriendRequestInit: true,
+            pendingFriendsActionDisabled: true,
+        });
+        dispatch(acceptFriendRequestRequest(friendshipId));
+    }
+
+    handleShowRejectFriendRequest = (friendshipId) => {
+        this.setState({
+            showPendingFriendsRejectRequestModal: true,
+            selectedFriendshipId: friendshipId,
+        });
+    }
+
+    handleRejectFriendRequest = () => {
+        const {
+            dispatch
+        } = this.props;
+        const {
+            selectedFriendshipId
+        } = this.state;
+        this.setState({
+            rejectFriendRequestInit: true,
+            pendingFriendsActionDisabled: true,
+        });
+        dispatch(cancelFriendRequestRequest(selectedFriendshipId));
+    }
+
+    handleHideRejectFriendRequest = () => {
+        this.setState({
+            showPendingFriendsRejectRequestModal: false,
+            selectedFriendshipId: null,
+        });
+    }
+    //#endregion
 }
 
 const mapStateToProps = (state) => {
@@ -148,6 +247,10 @@ const mapStateToProps = (state) => {
         pendingLoading: friends.get('pendingLoading'),
         approvedFriends: friends.get('approvedFriends'),
         pendingFriends: friends.get('pendingFriends'),
+        requestAcceptLoading: friends.get('requestAcceptLoading'),
+        requestAcceptError: friends.get('requestAcceptError'),
+        requestCancelLoading: friends.get('requestCancelLoading'),
+        requestCancelError: friends.get('requestCancelError'),
     }
 }
 

@@ -17,7 +17,7 @@ function fetchBodyMeasurementData() {
     return function* (action) {
         try {
             const data = yield call(() => api.getBodyMeasurementData(action.requestData));
-            yield put(getUserBodyMeasurementSuccess(data.data));
+            yield put(getUserBodyMeasurementSuccess(data));
         } catch (error) {
             yield put(getUserBodyMeasurementError(error));
         }
@@ -28,7 +28,7 @@ function fetchBodyMeasurementLogDatesData() {
     return function* (action) {
         try {
             const data = yield call(() => api.getBodyMeasurementLogDatesData(action.requestData));
-            yield put(getUserBodyMeasurementLogDatesSuccess(data.data));
+            yield put(getUserBodyMeasurementLogDatesSuccess(data));
         } catch (error) {
             yield put(getUserBodyMeasurementLogDatesError(error));
         }
@@ -39,7 +39,7 @@ function saveBodyMeasurementData() {
     return function* (action) {
         try {
             const data = yield call(() => api.saveBodyMeasurementData(action.data));
-            yield put(saveUserBodyMeasurementSuccess(data.data));
+            yield put(saveUserBodyMeasurementSuccess(data));
         } catch (error) {
             yield put(saveUserBodyMeasurementError(error));
         }

@@ -12,10 +12,12 @@ import {
   AUTH_STATE_ACTION_LOGIN,
   AUTH_STATE_ACTION_SIGNUP,
   SERVER_BASE_URL,
-  LOCALSTORAGE_USERNAME_KEY
+  LOCALSTORAGE_USERNAME_KEY,
+  LOCALSTORAGE_REFRESH_TOKEN_KEY
 } from '../constants/consts';
 
 import axios from 'axios';
+import { ts } from '../helpers/funs';
 
 export default class Auth {
   auth0Lock = new Auth0Lock(
@@ -129,7 +131,10 @@ export default class Auth {
     localStorage.removeItem(LOCALSTORAGE_ID_TOKEN_KEY);
     localStorage.removeItem(LOCALSTORAGE_EXPIRES_AT_KEY);
     localStorage.removeItem(LOCALSTORAGE_ROLE_KEY);
+    localStorage.removeItem(LOCALSTORAGE_USERNAME_KEY);
+    localStorage.removeItem(LOCALSTORAGE_REFRESH_TOKEN_KEY);
     // navigate to the home route
+    ts('Logout success!');
     history.replace(publicPath);
   }
 

@@ -5,66 +5,62 @@ import moment from 'moment';
 import { userUpdateRequest } from '../../../actions/admin/users';
 import { hidePageLoader, showPageLoader } from '../../../actions/pageLoader';
 import { adminRouteCodes } from '../../../constants/adminRoutes';
+import { focusToControl, ts } from '../../../helpers/funs';
 
 class UserSave extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            saveActionInit: false,
-            error: []
+            saveActionInit: false
         }
     }
+
     handleSubmit = (data) => {
-        const { dispatch, match } = this.props;
+        const { dispatch, match, history } = this.props;
         if (typeof match.params.id !== 'undefined') {
-            this.setState({ saveActionInit: true, error: [] });
+            this.setState({ saveActionInit: true });
             let dob = null;
             if (data.dob) {
                 dob = data.dob.format('YYYY-MM-DD');
             }
             const userData = {
                 firstName: data.first_name,
-                lastName: data.last_name,
-                username: data.username,
                 email: data.email,
-                mobileNumber: data.mobile_no,
-                gender: data.gender,
+                status: data.status.value,
+                lastName: (data.last_name) ? data.last_name : '',
+                mobileNumber: (data.mobile_no) ? data.mobile_no : '',
+                gender: (data.gender) ? data.gender : '',
                 dob: dob,
                 goal: _.map(data.goal, 'value'),
                 image: data.user_img,
-                aboutMe: data.about_me,
-                status: data.status.value,
+                aboutMe: (data.about_me) ? data.about_me : '',
             }
-            console.log(userData);
             var formData = new FormData();
-            formData.append('first_name', userData.firstName);
-            formData.append('last_name', userData.lastName);
-            formData.append('username', userData.username);
+            formData.append('firstName', userData.firstName);
             formData.append('email', userData.email);
+            formData.append('status', userData.status);
+            formData.append('lastName', userData.lastName);
             formData.append('mobileNumber', userData.mobileNumber);
             formData.append('gender', userData.gender);
-            formData.append('dateOfBirth', userData.dob);
-            formData.append('goal', JSON.stringify(userData.goal));
+            if (userData.dob) {
+                formData.append('dateOfBirth', userData.dob);
+            }
+            formData.append('goals', JSON.stringify(userData.goal));
             formData.append('aboutMe', userData.aboutMe);
-            formData.append('status', userData.status);
             if (userData.image) {
                 formData.append('user_img', userData.image[0]);
             }
             dispatch(showPageLoader());
             dispatch(userUpdateRequest(match.params.id, formData));
+        } else {
+            te();
+            history.push(adminRouteCodes.USERS);
         }
     }
 
     render() {
-        const { error } = this.state;
         return (
             <div className="user-save-wrapper">
-                <div className="body-head space-btm-45 d-flex justify-content-start">
-                    <div className="body-head-l">
-                        <h2>User</h2>
-                    </div>
-                </div>
-
                 <div className="body-content row d-flex">
                     <div className="col-md-12">
                         <div className="white-box">
@@ -72,13 +68,6 @@ class UserSave extends Component {
                                 <h3 className="title-h3">Save User</h3>
                             </div>
                             <div className="row d-flex whitebox-body">
-                                <div className="col-md-12">
-                                    {error && error.length > 0 &&
-                                        error.map((msg, index) => (
-                                            <p key={index}>{msg}</p>
-                                        ))
-                                    }
-                                </div>
                                 <div className="col-md-12">
                                     <UserForm onSubmit={this.handleSubmit} />
                                 </div>
@@ -96,14 +85,11 @@ class UserSave extends Component {
         if (typeof match.params.id !== 'undefined' && saveActionInit && !loading) {
             this.setState({ saveActionInit: false });
             dispatch(hidePageLoader());
-            if (!error) {
+            if (error.length <= 0) {
+                ts('User saved successfully!');
                 history.push(adminRouteCodes.USERS);
             } else {
-                let err = [];
-                _.forEach(error, (o) => {
-                    err.push(o.msg);
-                })
-                this.setState({ error: err });
+                focusToControl('#validation_errors_wrapper');
             }
         }
     }

@@ -6,6 +6,8 @@ export const LOGOUT_REQUEST = 'LOGOUT_REQUEST';
 export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
 export const LOGOUT_ERROR = 'LOGOUT_ERROR';
 
+export const FREE_LOGIN_LOGOUT_STATE = 'FREE_LOGIN_LOGOUT_STATE';
+
 export function login(loginData) {
     return {
         type: LOGIN_REQUEST,
@@ -13,10 +15,9 @@ export function login(loginData) {
     }
 }
 
-export function loginSuccess(data) {
+export function loginSuccess() {
     return {
         type: LOGIN_SUCCESS,
-        data
     }
 }
 
@@ -42,5 +43,11 @@ export function logoutSuccess() {
 export function logoutError() {
     return {
         type: LOGOUT_ERROR
+    }
+}
+
+export function freeLoginLogoutState() {
+    return {
+        type: FREE_LOGIN_LOGOUT_STATE
     }
 }

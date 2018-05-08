@@ -3,9 +3,14 @@ import { NavLink } from "react-router-dom";
 import { routeCodes } from '../../constants/routes';
 import noProfileImg from 'img/common/no-profile-img.png'
 
-class ProfileFriendBlock extends Component {
+class ProfilePendingFriendBlock extends Component {
     render() {
-        const { friend } = this.props;
+        const {
+            friend,
+            pendingFriendsActionDisabled,
+            handleAcceptFriendRequest,
+            handleShowRejectFriendRequest,
+        } = this.props;
         if (friend) {
             return (
                 <div className="friend-box vertical-middle-r">
@@ -36,7 +41,21 @@ class ProfileFriendBlock extends Component {
                     </div>
                     <div className="friend-box-status">
                         <h6 className="vertical-middle-c">
-                            <i className="icon-check_circle"></i> Friends</h6>
+                            <a
+                                href="javascript:void(0)"
+                                onClick={() => handleAcceptFriendRequest(friend.friendshipId)}
+                                disabled={pendingFriendsActionDisabled}
+                            >
+                                Accept
+                                </a>
+                            <a
+                                href="javascript:void(0)"
+                                onClick={() => handleShowRejectFriendRequest(friend.friendshipId)}
+                                disabled={pendingFriendsActionDisabled}
+                            >
+                                Reject
+                            </a>
+                        </h6>
                     </div>
                 </div>
             );
@@ -45,4 +64,4 @@ class ProfileFriendBlock extends Component {
     }
 }
 
-export default ProfileFriendBlock;
+export default ProfilePendingFriendBlock;

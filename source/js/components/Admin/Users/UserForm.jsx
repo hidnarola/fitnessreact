@@ -2,23 +2,23 @@ import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { NavLink, withRouter } from 'react-router-dom';
+import Dropzone from 'react-dropzone';
+import noImg from 'img/common/no-img.png'
 import moment from 'moment';
 import {
     InputField,
     SelectField_ReactSelectMulti,
-    FileField_Dropzone,
     TextAreaField,
     SelectField_ReactSelect,
     RadioFields,
     DateField,
-    FileField_Dropzone_Single,
     EditorField
 } from '../../../helpers/FormControlHelper';
 import {
     requiredReactSelectMulti,
     required,
-    requiredReactSelect,
-    email
+    email,
+    requiredReactSelectStatus
 } from '../../../formValidation/validationRules';
 import { adminRouteCodes } from '../../../constants/adminRoutes';
 import { capitalizeFirstLetter } from '../../../helpers/funs';
@@ -91,8 +91,7 @@ class UserForm extends Component {
                                 wrapperClass="form-group"
                                 placeholder="First Name"
                                 component={InputField}
-                                errorClass=""
-                                warningClass=""
+                                errorClass="help-block"
                                 validate={[required]}
                             />
                             <Field
@@ -103,21 +102,6 @@ class UserForm extends Component {
                                 wrapperClass="form-group"
                                 placeholder="Last Name"
                                 component={InputField}
-                                errorClass=""
-                                warningClass=""
-                                validate={[required]}
-                            />
-                            <Field
-                                name="username"
-                                className="form-control"
-                                label="Username"
-                                labelClass="control-label"
-                                wrapperClass="form-group"
-                                placeholder="Username"
-                                component={InputField}
-                                errorClass=""
-                                warningClass=""
-                                validate={[required]}
                             />
                             <Field
                                 name="email"
@@ -128,8 +112,7 @@ class UserForm extends Component {
                                 wrapperClass="form-group"
                                 placeholder="Email"
                                 component={InputField}
-                                errorClass=""
-                                warningClass=""
+                                errorClass="help-block"
                                 validate={[required, email]}
                             />
                             <Field
@@ -140,8 +123,6 @@ class UserForm extends Component {
                                 wrapperClass="form-group"
                                 placeholder="Mobile No."
                                 component={InputField}
-                                errorClass=""
-                                warningClass=""
                             />
                             <Field
                                 name="gender"
@@ -157,8 +138,7 @@ class UserForm extends Component {
                                 ]}
                                 checked={this.state.gender}
                                 handleChange={this.genderChange}
-                                errorClass=""
-                                warningClass=""
+                                errorClass="help-block"
                                 validate={[required]}
                             />
                             <Field
@@ -172,8 +152,7 @@ class UserForm extends Component {
                                 selectedDate={this.state.dob}
                                 handleChange={this.handleChangeDob}
                                 dateFormat="MM/DD/YYYY"
-                                errorClass=""
-                                warningClass=""
+                                errorClass="help-block"
                             />
                             <Field
                                 name="goal"
@@ -183,7 +162,6 @@ class UserForm extends Component {
                                 placeholder="Goals"
                                 component={SelectField_ReactSelectMulti}
                                 options={goalOptions}
-                                validate={[requiredReactSelectMulti]}
                             />
                             <Field
                                 name="user_img"
@@ -192,7 +170,7 @@ class UserForm extends Component {
                                 mainWrapperClass="image-form-main-wrapper"
                                 wrapperClass="form-group"
                                 placeholder="Profile Image"
-                                component={FileField_Dropzone_Single}
+                                component={UserProfileImageField}
                                 multiple={false}
                                 existingImages={existingProfilePics}
                             />
@@ -215,7 +193,8 @@ class UserForm extends Component {
                                 placeholder="Status"
                                 component={SelectField_ReactSelect}
                                 options={userStatusOptions}
-                                validate={[requiredReactSelect]}
+                                validate={[requiredReactSelectStatus]}
+                                errorClass="help-block"
                             />
                             <div className="col-md-12 mb-20 clear-both text-center">
                                 <div className="stepbox-b stepbox-b-center">
@@ -252,7 +231,6 @@ class UserForm extends Component {
                 gender: user.gender,
                 dob: dob,
                 goal: goals,
-                user_img: user.avatar,
                 about_me: user.aboutMe,
                 status: _.find(userStatusOptions, (o) => { return (o.value === user.status) }),
             }
@@ -261,7 +239,7 @@ class UserForm extends Component {
                 initSelectPageData: false,
                 dob: dob,
                 gender: user.gender,
-                existingProfilePics: user.avatar,
+                existingProfilePics: [user.avatar],
                 aboutMe: user.aboutMe,
             });
         }
@@ -300,3 +278,64 @@ const mapStateToProps = (state) => {
 }
 
 export default connect(mapStateToProps)(UserForm);
+
+class UserProfileImageField extends Component {
+    render() {
+        const {
+            label,
+            input,
+            meta,
+            mainWrapperClass,
+            wrapperClass,
+            className,
+            labelClass,
+            errorClass,
+            accept,
+            existingImages
+        } = this.props;
+        let filesArr = _.values(input.value);
+        let images = [];
+        let _existingImages = [];
+        _.forEach(existingImages, (path, key) => {
+            if (path) {
+                _existingImages.push(
+                    <div className="image-preview-wrapper" key={key}>
+                        <img
+                            src={path}
+                            alt="Image"
+                            onError={(e) => {
+                                e.target.src = noImg
+                            }}
+                        />
+                    </div>
+                )
+            }
+        });
+        _.forEach(filesArr, (file, key) => {
+            images.push(
+                <div className="image-preview-wrapper" key={key}>
+                    <img src={file.preview} />
+                </div>
+            )
+        })
+        return (
+            <div className={mainWrapperClass}>
+                <label htmlFor={input.name} className={labelClass}>{label}</label>
+                {_existingImages}
+                {input.value && images}
+                <div className={wrapperClass}>
+                    <Dropzone
+                        {...input}
+                        accept={accept ? accept : "image/jpeg, image/png, image/jpg, image/gif"}
+                        onDrop={(filesToUpload, e) => input.onChange(filesToUpload)}
+                        multiple={false}
+                        className={className}
+                    ></Dropzone>
+                    {meta.touched &&
+                        ((meta.error && <span className={errorClass}>{meta.error}</span>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))
+                    }
+                </div>
+            </div>
+        );
+    }
+}

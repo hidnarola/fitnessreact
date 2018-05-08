@@ -86,7 +86,7 @@ function filterAdminExerciseData() {
         try {
             const filterData = action.filterData;
             const data = yield call(() => api.filterExercise(filterData));
-            yield put(exerciseFilterSuccess(data.data));
+            yield put(exerciseFilterSuccess(data));
         } catch (error) {
             yield put(exerciseFilterError(error));
         }

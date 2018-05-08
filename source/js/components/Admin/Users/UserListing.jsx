@@ -14,7 +14,7 @@ import {
     USER_STATUS_INACTIVE,
     USER_STATUS_INACTIVE_STR
 } from '../../../constants/consts';
-import { capitalizeFirstLetter } from '../../../helpers/funs';
+import { capitalizeFirstLetter, ts } from '../../../helpers/funs';
 import { adminRouteCodes } from '../../../constants/adminRoutes';
 import DeleteConfirmation from '../Common/DeleteConfirmation';
 import { showPageLoader } from '../../../actions/pageLoader';
@@ -66,12 +66,6 @@ class UserListing extends Component {
         const { showDeleteModal, dtManualForceReload } = this.state;
         return (
             <div className="user-listing-wrapper">
-                <div className="body-head space-btm-45 d-flex justify-content-start">
-                    <div className="body-head-l">
-                        <h2>Users</h2>
-                    </div>
-                </div>
-
                 <div className="body-content row d-flex">
                     <div className="col-md-12">
                         <div className="white-box">
@@ -93,7 +87,7 @@ class UserListing extends Component {
                                                     return (
                                                         <div className="avatar-wrapper text-center">
                                                             <img
-                                                                src={SERVER_BASE_URL + row.value}
+                                                                src={row.value}
                                                                 alt="Avatar"
                                                                 className="avatar"
                                                                 onError={(e) => {
@@ -261,14 +255,13 @@ class UserListing extends Component {
                                             },
                                             {
                                                 Header: "Actions",
-                                                accessor: "_id",
-                                                id: "_id",
+                                                accessor: "authUserId",
+                                                id: "authUserId",
                                                 filterable: false,
                                                 sortable: false,
                                                 Cell: (row) => {
                                                     return (
                                                         <div className="actions-wrapper">
-                                                            <NavLink className="btn btn-primary" to={`${adminRouteCodes.USERS_SAVE}/${row.value}`}><FaPencil /></NavLink>
                                                             <NavLink className="btn btn-primary" to={`${adminRouteCodes.USERS_SAVE}/${row.value}`}><FaPencil /></NavLink>
                                                             <a className="btn btn-danger" href="javascript:void(0)" onClick={() => this.confirmDelete(row.value)}><FaTrash /></a>
                                                         </div>
@@ -305,6 +298,7 @@ class UserListing extends Component {
                 deleteActionInit: false,
                 // dtManualForceReload: false,
             });
+            ts('User deleted successfully');
             this.dispatchUsersFilter(dtFilter);
             // history.push(adminRouteCodes.USERS);
         }

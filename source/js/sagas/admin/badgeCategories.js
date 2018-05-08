@@ -36,7 +36,7 @@ function filterAdminBadgeCategoriesData() {
     return function* (action) {
         try {
             const data = yield call(() => api.filterBadgeCategories(action.filterData));
-            yield put(badgeCategoryFilterSuccess(data.data));
+            yield put(badgeCategoryFilterSuccess(data));
         } catch (error) {
             yield put(badgeCategoryFilterError(error));
         }

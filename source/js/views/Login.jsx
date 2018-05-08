@@ -5,9 +5,10 @@ import LoginForm from '../components/Login/LoginForm';
 import { login } from '../actions/login';
 import { routeCodes } from 'constants/routes';
 import { showPageLoader, hidePageLoader } from '../actions/pageLoader';
-import { USER_ROLE } from '../constants/consts';
+import { USER_ROLE, SESSION_EXPIRED_URL_TYPE } from '../constants/consts';
 import { checkLogin } from '../helpers/loginHelper';
 import Auth from '../auth/Auth';
+import { publicPath } from '../constants/routes';
 
 const auth = new Auth();
 
@@ -29,7 +30,7 @@ class Login extends Component {
     }
 
     render() {
-        const { error, loading } = this.props;
+        const { error, loading, match } = this.props;
         return (
             <div className="step-wrap step-wrap-login login-wrapper">
                 <div className="step-box">
@@ -41,6 +42,13 @@ class Login extends Component {
                         </div>
                     </div>
                     <div className="step-box-r">
+                        <div id="validation_errors_wrapper">
+                            {(match.path === (publicPath + SESSION_EXPIRED_URL_TYPE)) &&
+                                <div className="alert alert-danger" role="alert">
+                                    <p>Session expired! please login again.</p>
+                                </div>
+                            }
+                        </div>
                         <div className="stepbox-head">
                             <h3>Login</h3>
                             <p>Come join the fitness community! Lets get to your Account.</p>
@@ -49,7 +57,7 @@ class Login extends Component {
                             <button type="button" className="continues-btn" onClick={this.handleLoginRequest}><span>Login</span> <i className="icon-skip_next"></i></button>
                         </div>
                     </div>
-                </div >
+                </div>
             </div >
         );
     }

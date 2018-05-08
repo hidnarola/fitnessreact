@@ -71,7 +71,7 @@ function filterAdminUserData() {
         try {
             const filterData = action.filterData;
             const data = yield call(() => api.filterUser(filterData));
-            yield put(userFilterSuccess(data.data));
+            yield put(userFilterSuccess(data));
         } catch (error) {
             yield put(userFilterError(error));
         }

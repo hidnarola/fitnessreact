@@ -1,72 +1,55 @@
 import { Map } from "immutable";
-import { LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_ERROR, LOGOUT_REQUEST, LOGOUT_SUCCESS, LOGOUT_ERROR } from "../actions/login";
+import { LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_ERROR, LOGOUT_REQUEST, LOGOUT_SUCCESS, LOGOUT_ERROR, FREE_LOGIN_LOGOUT_STATE } from "../actions/login";
+import { VALIDATION_FAILURE_STATUS } from "../constants/consts";
+import { generateValidationErrorMsgArr } from "../helpers/funs";
 
 const initialState = Map({
     loading: false,
-    error: null,
-    user: null,
-    token: null,
-    refreshToken: null
+    error: [],
 });
 
 const actionMap = {
     [LOGIN_REQUEST]: (state, action) => {
         return state.merge(Map({
             loading: true,
-            error: null,
-            user: null,
-            token: null,
-            refreshToken: null
         }));
     },
     [LOGIN_SUCCESS]: (state, action) => {
         return state.merge(Map({
             loading: false,
-            error: null,
-            user: action.data.user,
-            token: action.data.token,
-            refreshToken: action.data.refresh_token
         }));
     },
     [LOGIN_ERROR]: (state, action) => {
-        let error = 'Server Error';
-        if (action.error && action.error.response) {
-            error = action.error.response.message;
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
         }
         return state.merge(Map({
             loading: false,
             error: error,
-            user: null,
-            token: null,
-            refreshToken: null
         }));
     },
     [LOGOUT_REQUEST]: (state, action) => {
         return state.merge(Map({
             loading: true,
-            error: null,
-            user: null,
-            token: null,
-            refreshToken: null
         }));
     },
     [LOGOUT_SUCCESS]: (state, action) => {
         return state.merge(Map({
             loading: false,
-            error: null,
-            user: null,
-            token: null,
-            refreshToken: null
         }));
     },
     [LOGOUT_ERROR]: (state, action) => {
         return state.merge(Map({
             loading: false,
-            error: null,
-            user: null,
-            token: null,
-            refreshToken: null
         }));
+    },
+    [FREE_LOGIN_LOGOUT_STATE]: (state, action) => {
+        return initialState;
     },
 };
 

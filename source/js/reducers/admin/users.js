@@ -1,4 +1,5 @@
 import { Map } from "immutable";
+import _ from "lodash";
 import {
     USERS_LIST_REQUEST,
     USERS_LIST_SUCCESS,
@@ -16,10 +17,12 @@ import {
     USERS_FILTER_SUCCESS,
     USERS_FILTER_ERROR
 } from "../../actions/admin/users";
+import { VALIDATION_FAILURE_STATUS } from "../../constants/consts";
+import { generateValidationErrorMsgArr } from "../../helpers/funs";
 
 const initialState = Map({
     loading: false,
-    error: null,
+    error: [],
     user: null,
     users: [],
     filteredUsers: [],
@@ -30,7 +33,7 @@ const actionMap = {
     [USERS_LIST_REQUEST]: (state, action) => {
         return state.merge(Map({
             loading: true,
-            error: null,
+            error: [],
             users: [],
             user: null,
             filteredUsers: [],
@@ -40,7 +43,7 @@ const actionMap = {
     [USERS_LIST_SUCCESS]: (state, action) => {
         return state.merge(Map({
             loading: false,
-            error: null,
+            error: [],
             users: action.data.users,
             user: null,
             filteredUsers: [],
@@ -48,9 +51,13 @@ const actionMap = {
         }));
     },
     [USERS_LIST_ERROR]: (state, action) => {
-        let error = 'Server error';
-        if (action.error && action.error.response) {
-            error = action.error.response.message;
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
         }
         return state.merge(Map({
             loading: false,
@@ -64,7 +71,7 @@ const actionMap = {
     [USERS_FILTER_REQUEST]: (state, action) => {
         return state.merge(Map({
             loading: true,
-            error: null,
+            error: [],
             users: [],
             user: null,
             filteredUsers: [],
@@ -74,7 +81,7 @@ const actionMap = {
     [USERS_FILTER_SUCCESS]: (state, action) => {
         return state.merge(Map({
             loading: false,
-            error: null,
+            error: [],
             users: [],
             user: null,
             filteredUsers: action.data.filtered_users,
@@ -82,9 +89,13 @@ const actionMap = {
         }));
     },
     [USERS_FILTER_ERROR]: (state, action) => {
-        let error = 'Server error';
-        if (action.error && action.error.response) {
-            error = action.error.response.message;
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
         }
         return state.merge(Map({
             loading: false,
@@ -98,7 +109,7 @@ const actionMap = {
     [USERS_SELECT_ONE_REQUEST]: (state, action) => {
         return state.merge(Map({
             loading: true,
-            error: null,
+            error: [],
             users: [],
             user: null,
             filteredUsers: [],
@@ -108,7 +119,7 @@ const actionMap = {
     [USERS_SELECT_ONE_SUCCESS]: (state, action) => {
         return state.merge(Map({
             loading: false,
-            error: null,
+            error: [],
             users: [],
             user: action.data.user,
             filteredUsers: [],
@@ -116,9 +127,13 @@ const actionMap = {
         }));
     },
     [USERS_SELECT_ONE_ERROR]: (state, action) => {
-        let error = 'Server error';
-        if (action.error && action.error.response) {
-            error = action.error.response.message;
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
         }
         return state.merge(Map({
             loading: false,
@@ -132,7 +147,7 @@ const actionMap = {
     [USERS_UPDATE_REQUEST]: (state, action) => {
         return state.merge(Map({
             loading: true,
-            error: null,
+            error: [],
             users: [],
             user: null,
             filteredUsers: [],
@@ -142,7 +157,7 @@ const actionMap = {
     [USERS_UPDATE_SUCCESS]: (state, action) => {
         return state.merge(Map({
             loading: false,
-            error: null,
+            error: [],
             users: [],
             user: action.data.user,
             filteredUsers: [],
@@ -150,7 +165,14 @@ const actionMap = {
         }));
     },
     [USERS_UPDATE_ERROR]: (state, action) => {
-        let { error } = action.error;
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
+        }
         return state.merge(Map({
             loading: false,
             error: error,
@@ -163,7 +185,7 @@ const actionMap = {
     [USERS_DELETE_REQUEST]: (state, action) => {
         return state.merge(Map({
             loading: true,
-            error: null,
+            error: [],
             users: [],
             user: null,
             filteredUsers: [],
@@ -173,7 +195,7 @@ const actionMap = {
     [USERS_DELETE_SUCCESS]: (state, action) => {
         return state.merge(Map({
             loading: false,
-            error: null,
+            error: [],
             users: [],
             user: null,
             filteredUsers: [],
@@ -181,9 +203,13 @@ const actionMap = {
         }));
     },
     [USERS_DELETE_ERROR]: (state, action) => {
-        let error = 'Server error';
-        if (action.error && action.error.response) {
-            error = action.error.response.message;
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
         }
         return state.merge(Map({
             loading: false,

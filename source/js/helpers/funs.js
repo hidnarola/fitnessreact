@@ -4,7 +4,8 @@ import _ from 'lodash';
 import moment from "moment";
 import { AUTH_CONFIG } from "../auth/auth0-variables";
 import { toast } from "react-toastify";
-import { FaCheck } from 'react-icons/lib/fa';
+import { FaCheck, FaFrownO } from 'react-icons/lib/fa';
+import $ from 'jquery';
 
 export function extraHeaders() {
     const token = localStorage.getItem(LOCALSTORAGE_ACCESS_TOKEN_KEY);
@@ -81,6 +82,14 @@ export function ts(msg = 'Success') {
     );
 }
 
+export function te(msg = 'Something went wrong!') {
+    toast.error(
+        <span>
+            <FaFrownO /> {msg}
+        </span>
+    );
+}
+
 export function convertMinsToTime(_mins) {
     var hours = Math.floor((_mins / 60)).toString();
     var mins = (_mins - (hours * 60)).toString();
@@ -91,4 +100,20 @@ export function convertTimeToMins(momentObj) {
     var hours = parseInt(momentObj.hours());
     var mins = parseInt(momentObj.minutes());
     return ((hours * 60) + mins);
+}
+
+export function generateValidationErrorMsgArr(errors) {
+    var errorMsgs = [];
+    _.forEach(errors, (err) => {
+        if (err.msg) {
+            errorMsgs.push(err.msg);
+        }
+    });
+    return errorMsgs;
+}
+
+export function focusToControl(divId) {
+    var divOffsetTop = $(document).find(divId).offset().top;
+    divOffsetTop -= 130;
+    $('html, body, document, window').animate({ scrollTop: divOffsetTop }, 'slow');
 }
