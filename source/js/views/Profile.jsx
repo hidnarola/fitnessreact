@@ -14,7 +14,7 @@ import { routeCodes } from 'constants/routes';
 import { getProfileDetailsRequest } from '../actions/profile';
 import noProfileImg from 'img/common/no-profile-img.png'
 import { FRIENDSHIP_STATUS_SELF, FRIENDSHIP_STATUS_UNKNOWN, FRIENDSHIP_STATUS_FRIEND, FRIENDSHIP_STATUS_REQUEST_RECEIVED, FRIENDSHIP_STATUS_REQUEST_SENT } from '../constants/consts';
-import { sendFriendRequestRequest, cancelFriendRequestRequest } from '../actions/friends';
+import { sendFriendRequestRequest, cancelFriendRequestRequest, acceptFriendRequestRequest } from '../actions/friends';
 import { ts, te } from '../helpers/funs';
 import CancelFriendRequestModal from '../components/Profile/CancelFriendRequestModal';
 import UnfriendRequestModal from '../components/Profile/UnfriendRequestModal';
@@ -35,6 +35,11 @@ class Profile extends Component {
             showUnfriendRequestModal: false,
             UnfriendRequestInit: false,
             UnfriendRequestDisabled: false,
+            forceUpdateChildComponents: false,
+            acceptFriendRequestReceivedInit: false,
+            friendRequestReceivedDisabled: false,
+            showRejectFriendRequestModal: false,
+            rejectFriendRequestInit: false,
             selectFriendshipId: null,
         }
     }
@@ -74,7 +79,9 @@ class Profile extends Component {
             showCancelFriendRequestModal,
             cancelFriendRequestDisabled,
             UnfriendRequestDisabled,
-            showUnfriendRequestModal
+            showUnfriendRequestModal,
+            friendRequestReceivedDisabled,
+            showRejectFriendRequestModal,
         } = this.state;
         return (
             <div className='stat-page'>
@@ -134,10 +141,32 @@ class Profile extends Component {
                                 {profile.friendshipStatus === FRIENDSHIP_STATUS_FRIEND && (UnfriendRequestDisabled) &&
                                     <span>Please wait to unfriend...</span>
                                 }
-                                {profile.friendshipStatus === FRIENDSHIP_STATUS_REQUEST_RECEIVED &&
-                                    <a href="" className="green-blue-btn active">
-                                        Action <i className="icon-check"></i>
-                                    </a>
+                                {profile.friendshipStatus === FRIENDSHIP_STATUS_REQUEST_RECEIVED && (!friendRequestReceivedDisabled) &&
+                                    <div>
+                                        <a
+                                            href="javascript:void(0)"
+                                            className="green-blue-btn active"
+                                            onClick={() => {
+                                                this.handleAcceptRequest(profile.friendshipId)
+                                            }}
+                                            disabled={friendRequestReceivedDisabled}
+                                        >
+                                            Accept <i className="icon-check"></i>
+                                        </a>
+                                        <a
+                                            href="javascript:void(0)"
+                                            className="green-blue-btn active"
+                                            onClick={() => {
+                                                this.handleShowRejectFriendRequestModal(profile.friendshipId)
+                                            }}
+                                            disabled={friendRequestReceivedDisabled}
+                                        >
+                                            Reject <i className="icon-check"></i>
+                                        </a>
+                                    </div>
+                                }
+                                {profile.friendshipStatus === FRIENDSHIP_STATUS_REQUEST_RECEIVED && (friendRequestReceivedDisabled) &&
+                                    <span>Please wait...</span>
                                 }
                                 {profile.friendshipStatus === FRIENDSHIP_STATUS_REQUEST_SENT && (!cancelFriendRequestDisabled) &&
                                     <a
@@ -185,6 +214,7 @@ class Profile extends Component {
                                         render={() => {
                                             return <ProfileFithub
                                                 {...this.state}
+                                                setForceUpdateChildComponents={this.setForceUpdateChildComponents}
                                             />
                                         }}
                                     />
@@ -194,6 +224,7 @@ class Profile extends Component {
                                         render={() => {
                                             return <ProfileFriends
                                                 {...this.state}
+                                                setForceUpdateChildComponents={this.setForceUpdateChildComponents}
                                             />
                                         }}
                                     />
@@ -203,6 +234,7 @@ class Profile extends Component {
                                         render={() => {
                                             return <ProfilePhotos
                                                 {...this.state}
+                                                setForceUpdateChildComponents={this.setForceUpdateChildComponents}
                                             />
                                         }}
                                     />
@@ -275,6 +307,11 @@ class Profile extends Component {
                     handleYes={this.handleCancelFriendRequest}
                     handleClose={this.handleHideCancelFriendRequestModal}
                 />
+                <CancelFriendRequestModal
+                    show={showRejectFriendRequestModal}
+                    handleYes={this.handleRejectFriendRequest}
+                    handleClose={this.handleHideRejectFriendRequestModal}
+                />
                 <UnfriendRequestModal
                     show={showUnfriendRequestModal}
                     handleYes={this.handleUnfriendRequest}
@@ -293,7 +330,9 @@ class Profile extends Component {
             requestSendError,
             dispatch,
             requestCancelLoading,
-            requestCancelError
+            requestCancelError,
+            requestAcceptLoading,
+            requestAcceptError,
         } = this.props;
         const {
             loadProfileActionInit,
@@ -301,6 +340,8 @@ class Profile extends Component {
             username,
             cancelFriendRequestInit,
             UnfriendRequestInit,
+            acceptFriendRequestReceivedInit,
+            rejectFriendRequestInit,
         } = this.state;
         var stateProfile = this.state.profile;
         if (loadProfileActionInit && !profileLoading && (profile !== stateProfile)) {
@@ -309,6 +350,8 @@ class Profile extends Component {
                 profile,
                 sendFriendRequestDisabled: false,
                 cancelFriendRequestDisabled: false,
+                UnfriendRequestDisabled: false,
+                friendRequestReceivedDisabled: false,
             });
         }
         if (sendFriendRequestInit && !requestSendLoading) {
@@ -341,13 +384,41 @@ class Profile extends Component {
                 UnfriendRequestInit: false,
                 loadProfileActionInit: true,
             });
-            this.handleHideUnfriendRequestModal();
             dispatch(getProfileDetailsRequest(username));
             if ((requestCancelError && requestCancelError.length > 0)) {
                 te(requestCancelError[0]);
             } else {
                 ts('You are now no friends any more!');
             }
+            this.handleHideUnfriendRequestModal();
+            this.setForceUpdateChildComponents(true);
+        }
+        if (acceptFriendRequestReceivedInit && !requestAcceptLoading) {
+            this.setState({
+                acceptFriendRequestReceivedInit: false,
+                loadProfileActionInit: true,
+            });
+            dispatch(getProfileDetailsRequest(username));
+            if ((requestAcceptError && requestAcceptError.length > 0)) {
+                te(requestAcceptError[0]);
+            } else {
+                ts('Friend request accepted!');
+            }
+            this.setForceUpdateChildComponents(true);
+        }
+        if (rejectFriendRequestInit && !requestCancelLoading) {
+            this.setState({
+                rejectFriendRequestInit: false,
+                loadProfileActionInit: true,
+            });
+            this.handleHideRejectFriendRequestModal();
+            dispatch(getProfileDetailsRequest(username));
+            if ((requestCancelError && requestCancelError.length > 0)) {
+                te(requestCancelError[0]);
+            } else {
+                ts('Friend request canceled!');
+            }
+            this.setForceUpdateChildComponents(true);
         }
     }
 
@@ -408,6 +479,46 @@ class Profile extends Component {
             selectFriendshipId: null
         });
     }
+
+    setForceUpdateChildComponents = (flag) => {
+        this.setState({ forceUpdateChildComponents: flag });
+    }
+
+    handleAcceptRequest = (friendshipId) => {
+        const {
+            dispatch
+        } = this.props;
+        this.setState({
+            acceptFriendRequestReceivedInit: true,
+            friendRequestReceivedDisabled: true,
+            selectFriendshipId: friendshipId,
+        });
+        dispatch(acceptFriendRequestRequest(friendshipId));
+    }
+
+    handleShowRejectFriendRequestModal = (friendshipId) => {
+        this.setState({
+            showRejectFriendRequestModal: true,
+            selectFriendshipId: friendshipId
+        });
+    }
+
+    handleRejectFriendRequest = () => {
+        const { dispatch } = this.props;
+        const { selectFriendshipId } = this.state;
+        this.setState({
+            rejectFriendRequestInit: true,
+            friendRequestReceivedDisabled: true
+        });
+        dispatch(cancelFriendRequestRequest(selectFriendshipId));
+    }
+
+    handleHideRejectFriendRequestModal = () => {
+        this.setState({
+            showRejectFriendRequestModal: false,
+            selectFriendshipId: null
+        });
+    }
     //#endregion
 
 }
@@ -421,6 +532,8 @@ const mapStateToProps = (state) => {
         requestSendError: friends.get('requestSendError'),
         requestCancelLoading: friends.get('requestCancelLoading'),
         requestCancelError: friends.get('requestCancelError'),
+        requestAcceptLoading: friends.get('requestAcceptLoading'),
+        requestAcceptError: friends.get('requestAcceptError'),
     }
 }
 

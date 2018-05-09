@@ -2,10 +2,16 @@ import React, { Component } from 'react';
 import { NavLink } from "react-router-dom";
 import { routeCodes } from '../../constants/routes';
 import noProfileImg from 'img/common/no-profile-img.png'
+import { FRIENDSHIP_STATUS_SELF } from '../../constants/consts';
 
 class ProfileFriendBlock extends Component {
     render() {
-        const { friend } = this.props;
+        const {
+            friend,
+            handleShowUnfriendRequest,
+            friendsActionDisabled,
+            friendshipStatus
+        } = this.props;
         if (friend) {
             return (
                 <div className="friend-box vertical-middle-r">
@@ -35,8 +41,19 @@ class ProfileFriendBlock extends Component {
                         </h5>
                     </div>
                     <div className="friend-box-status">
-                        <h6 className="vertical-middle-c">
-                            <i className="icon-check_circle"></i> Friends</h6>
+                        {(!friendsActionDisabled) &&
+                            <h6 className="vertical-middle-c">
+                                {friendshipStatus && friendshipStatus === FRIENDSHIP_STATUS_SELF &&
+                                    <a href="javascript:void(0)" onClick={() => handleShowUnfriendRequest(friend.friendshipId)}>
+                                        Unfriend
+                                    </a>
+                                }
+                                <i className="icon-check_circle"></i> Friends
+                        </h6>
+                        }
+                        {friendsActionDisabled &&
+                            <h6><span>Please wait...</span></h6>
+                        }
                     </div>
                 </div>
             );

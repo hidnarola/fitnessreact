@@ -40,22 +40,27 @@ class ProfilePendingFriendBlock extends Component {
                         </h5>
                     </div>
                     <div className="friend-box-status">
-                        <h6 className="vertical-middle-c">
-                            <a
-                                href="javascript:void(0)"
-                                onClick={() => handleAcceptFriendRequest(friend.friendshipId)}
-                                disabled={pendingFriendsActionDisabled}
-                            >
-                                Accept
+                        {(!pendingFriendsActionDisabled) &&
+                            <h6 className="vertical-middle-c">
+                                <a
+                                    href="javascript:void(0)"
+                                    onClick={() => handleAcceptFriendRequest(friend.friendshipId)}
+                                    disabled={pendingFriendsActionDisabled}
+                                >
+                                    Accept
                                 </a>
-                            <a
-                                href="javascript:void(0)"
-                                onClick={() => handleShowRejectFriendRequest(friend.friendshipId)}
-                                disabled={pendingFriendsActionDisabled}
-                            >
-                                Reject
+                                <a
+                                    href="javascript:void(0)"
+                                    onClick={() => handleShowRejectFriendRequest(friend.friendshipId)}
+                                    disabled={pendingFriendsActionDisabled}
+                                >
+                                    Reject
                             </a>
-                        </h6>
+                            </h6>
+                        }
+                        {pendingFriendsActionDisabled &&
+                            <h6><span>Please wait...</span></h6>
+                        }
                     </div>
                 </div>
             );

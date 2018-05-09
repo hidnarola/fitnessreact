@@ -145,7 +145,9 @@ class ProfilePhotos extends Component {
             progressPhotoloading,
             progressPhotos,
             dispatch,
-            profile
+            profile,
+            forceUpdateChildComponents,
+            setForceUpdateChildComponents,
         } = this.props;
         const progressPhotosState = this.state.progressPhotos;
         if (initProgressPhotosAction && !progressPhotoloading && (progressPhotosState !== progressPhotos)) {
@@ -166,6 +168,14 @@ class ProfilePhotos extends Component {
                 });
                 dispatch(getUserLatestProgressPhotoRequest(username));
             }
+        }
+        if (forceUpdateChildComponents) {
+            var username = profile.username;
+            this.setState({
+                initProgressPhotosAction: true,
+            });
+            dispatch(getUserLatestProgressPhotoRequest(username));
+            setForceUpdateChildComponents(false);
         }
     }
     //#region funs
