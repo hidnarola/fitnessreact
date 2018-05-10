@@ -84,12 +84,14 @@ class ProfilePhotos extends Component {
                 <div className="white-box space-btm-20">
                     <div className="whitebox-head profile-head d-flex ">
                         <h3 className="title-h3 size-14">Photos Gallery</h3>
-                        <div className="whitebox-head-r">
-                            <a href="" data-toggle="modal" data-target="#photo-gallery">
-                                <span>Add Gallery Photo</span>
-                                <i className="icon-add_a_photo"></i>
-                            </a>
-                        </div>
+                        {profile && profile.friendshipStatus && profile.friendshipStatus === FRIENDSHIP_STATUS_SELF &&
+                            <div className="whitebox-head-r">
+                                <a href="" data-toggle="modal" data-target="#photo-gallery">
+                                    <span>Add Gallery Photo</span>
+                                    <i className="icon-add_a_photo"></i>
+                                </a>
+                            </div>
+                        }
                     </div>
                     <div className="whitebox-body profile-body">
                         {!galleryPhotos &&

@@ -77,10 +77,10 @@ class ExerciseSettings extends Component {
                         </div>
                         <div className="body-head-r">
                             <a className="white-btn" href="javascript:void(0)" onClick={this.handleShowResetModal}>Reset
-                                <i className="icon-print"></i>
+                                <i className="icon-settings_backup_restore"></i>
                             </a>
-                            <a className="green-blue-btn" href="javascript:void(0)" onClick={this.handleExerciseSettings}>Update
-                                <i className="icon-control_point"></i>
+                            <a className="green-blue-btn" href="javascript:void(0)" onClick={this.handleExerciseSettings}>Update Changes
+                                <i className="icon-update"></i>
                             </a>
                         </div>
                     </div>

@@ -50,12 +50,16 @@ import { ToastContainer } from "react-toastify";
 import NutritionPreferences from '../components/Nutrition/NutritionPreferences'
 import { publicPath } from '../constants/routes';
 import { SESSION_EXPIRED_URL_TYPE } from '../constants/consts';
+import { FaCircleONotch } from "react-icons/lib/fa";
 
 class App extends Component {
 
     render() {
         return (
             <div className="appWrapper">
+                <div id="loader" className="display_none">
+                    <FaCircleONotch className="loader-spinner fs-100" />
+                </div>
                 <Router history={history}>
                     <ScrollToTop>
                         <Switch>

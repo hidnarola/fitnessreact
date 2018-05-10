@@ -95,10 +95,10 @@ class NutritionPreferences extends Component {
                         </div>
                         <div className="body-head-r">
                             <a href="javascript:void(0)" className="white-btn" onClick={this.handleShowResetModal}>Reset
-                                <i className="icon-print"></i>
+                                <i className="icon-settings_backup_restore"></i>
                             </a>
-                            <a href="javascript:void(0)" className="green-blue-btn" onClick={this.handleSave}>Update
-                                <i className="icon-control_point"></i>
+                            <a href="javascript:void(0)" className="green-blue-btn" onClick={this.handleSave}>Update Changes
+                                <i className="icon-update"></i>
                             </a>
                         </div>
                     </div>
@@ -262,7 +262,9 @@ class NutritionPreferences extends Component {
                                         excludeIngredients.map((val, index) => {
                                             return (
                                                 <div className="exclude-box" key={index}>
-                                                    <h5>{val}</h5>
+                                                    <div className="col-md-12">
+                                                        <h5>{val}</h5>
+                                                    </div>
                                                     <h6>
                                                         <i className="icon-close" onClick={() => this.handleRemoveExcludedIngredient(index)}></i>
                                                     </h6>

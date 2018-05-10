@@ -9,7 +9,17 @@ import {
     WORKOUT_SCHEDULE_TYPE_MANUAL,
     WORKOUT_SCHEDULE_TYPE_MANUAL_STR,
     WORKOUT_SCHEDULE_TYPE_AUTO,
-    WORKOUT_SCHEDULE_TYPE_AUTO_STR
+    WORKOUT_SCHEDULE_TYPE_AUTO_STR,
+    WORKOUT_INTENSITY_LABEL_EASY,
+    WORKOUT_INTENSITY_LABEL_LOW,
+    WORKOUT_INTENSITY_LABEL_MODERATE,
+    WORKOUT_INTENSITY_LABEL_HARD,
+    WORKOUT_INTENSITY_LABEL_MAXIMAL,
+    EXPERIENCE_LEVEL_1_LABEL,
+    EXPERIENCE_LEVEL_2_LABEL,
+    EXPERIENCE_LEVEL_3_LABEL,
+    EXPERIENCE_LEVEL_4_LABEL,
+    EXPERIENCE_LEVEL_5_LABEL
 } from '../../constants/consts';
 import { getUserExercisesRequest } from '../../actions/userExercises';
 import { getUserBodypartsRequest } from '../../actions/userBodyparts';
@@ -85,7 +95,7 @@ class Setting extends Component {
                                 <h3 className="title-h3 size-14">Workout Intensity</h3>
                             </div>
                             <div className="whitebox-body text-c">
-                                <div id="workout-intensity"></div>
+                                <div id="workout-intensity" className="custom-round-slider-1 margin-0-auto"></div>
                             </div>
                         </div>
 
@@ -99,15 +109,16 @@ class Setting extends Component {
                                         suggestions={existingInjuriesSuggestion}
                                         onSuggestionsFetchRequested={this.onExistingInjuriesFetch}
                                         onSuggestionsClearRequested={this.onExistingInjuriesClear}
-                                        getSuggestionValue={this.getExistingInjuriesSuggestionValue}
+                                        getSuggestionValue={(suggestion) => suggestion}
                                         renderSuggestion={this.renderExistingInjuriesSuggestion}
+                                        onSuggestionSelected={this.existingInjurySelected}
                                         inputProps={{
                                             value: existingInjuriesVal,
                                             placeholder: 'Search Body Parts',
                                             onChange: this.handleExistingInjuriesChange
                                         }}
                                     />
-                                    <button type="submit">
+                                    <button type="button">
                                         <i className="icon-search"></i>
                                     </button>
                                 </div>
@@ -141,7 +152,7 @@ class Setting extends Component {
                                 <h3 className="title-h3 size-14">Experience Level</h3>
                             </div>
                             <div className="whitebox-body text-c">
-                                <div id="experience-level"></div>
+                                <div id="experience-level" className="custom-round-slider-1 margin-0-auto"></div>
                             </div>
                         </div>
 
@@ -181,15 +192,16 @@ class Setting extends Component {
                                         suggestions={excludeExerciseSuggestion}
                                         onSuggestionsFetchRequested={this.onExcludeExerciseFetch}
                                         onSuggestionsClearRequested={this.onExcludeExerciseClear}
-                                        getSuggestionValue={this.getExcludedExerciseSuggestionValue}
+                                        getSuggestionValue={(suggestion) => suggestion}
                                         renderSuggestion={this.renderExcludeExerciseSuggestion}
+                                        onSuggestionSelected={this.excludedExerciseSelected}
                                         inputProps={{
                                             value: excludeExerciseVal,
                                             placeholder: 'Search Exercises',
                                             onChange: this.handleExcludeExerciseChange
                                         }}
                                     />
-                                    <button type="submit">
+                                    <button type="button">
                                         <i className="icon-search"></i>
                                     </button>
                                 </div>
@@ -392,11 +404,25 @@ class Setting extends Component {
         const { dispatch } = this.props;
         $("#workout-intensity").roundSlider({
             value: workoutIntensity,
-            radius: 80,
-            width: 8,
+            radius: 110,
+            width: 12,
             handleSize: "+16",
             handleShape: "dot",
             sliderType: "min-range",
+            editableTooltip: false,
+            startAngle: 90,
+            value: 0,
+            tooltipFormat: (e) => {
+                var val = e.value;
+                var intensity = '';
+                if (val >= 0 && val <= 20) intensity = WORKOUT_INTENSITY_LABEL_EASY;
+                else if (val > 20 && val <= 40) intensity = WORKOUT_INTENSITY_LABEL_LOW;
+                else if (val > 40 && val <= 60) intensity = WORKOUT_INTENSITY_LABEL_MODERATE;
+                else if (val > 60 && val <= 80) intensity = WORKOUT_INTENSITY_LABEL_HARD;
+                else intensity = WORKOUT_INTENSITY_LABEL_MAXIMAL;
+
+                return "<div>" + intensity + "<div>";
+            },
             change: (data) => {
                 var val = data.value;
                 this.setState({ workoutIntensity: val });
@@ -405,11 +431,25 @@ class Setting extends Component {
         });
         $("#experience-level").roundSlider({
             value: exerciseExperience,
-            radius: 80,
-            width: 8,
+            radius: 110,
+            width: 12,
             handleSize: "+16",
             handleShape: "dot",
             sliderType: "min-range",
+            editableTooltip: false,
+            startAngle: 90,
+            value: 0,
+            tooltipFormat: (e) => {
+                var val = e.value;
+                var experi = '';
+                if (val >= 0 && val <= 20) experi = EXPERIENCE_LEVEL_1_LABEL;
+                else if (val > 20 && val <= 40) experi = EXPERIENCE_LEVEL_2_LABEL;
+                else if (val > 40 && val <= 60) experi = EXPERIENCE_LEVEL_3_LABEL;
+                else if (val > 60 && val <= 80) experi = EXPERIENCE_LEVEL_4_LABEL;
+                else experi = EXPERIENCE_LEVEL_5_LABEL;
+
+                return "<div>" + experi + "<div>";
+            },
             change: (data) => {
                 var val = data.value;
                 this.setState({ exerciseExperience: val });
@@ -537,7 +577,7 @@ class Setting extends Component {
         const inputLength = inputValue.length;
 
         return inputLength === 0 ? [] : exercises.filter((lang) =>
-            lang.name.toLowerCase().slice(0, inputLength) === inputValue
+            (lang.name.toLowerCase().search(inputValue) >= 0)
         );
     };
 
@@ -547,7 +587,7 @@ class Setting extends Component {
         const inputLength = inputValue.length;
 
         return inputLength === 0 ? [] : bodyparts.filter((lang) =>
-            lang.bodypart.toLowerCase().slice(0, inputLength) === inputValue
+            (lang.bodypart.toLowerCase().search(inputValue) >= 0)
         );
     };
 
@@ -575,16 +615,20 @@ class Setting extends Component {
         });
     };
 
-    handleExcludeExerciseChange = (event, { newValue }) => {
-        this.setState({
-            excludeExerciseVal: newValue
-        });
+    handleExcludeExerciseChange = (event, { newValue, method }) => {
+        if (method === 'type') {
+            this.setState({
+                excludeExerciseVal: newValue
+            });
+        }
     };
 
-    handleExistingInjuriesChange = (event, { newValue }) => {
-        this.setState({
-            existingInjuriesVal: newValue
-        });
+    handleExistingInjuriesChange = (event, { newValue, method }) => {
+        if (method === 'type') {
+            this.setState({
+                existingInjuriesVal: newValue
+            });
+        }
     };
 
     renderExcludeExerciseSuggestion = (suggestion) => (
@@ -599,7 +643,7 @@ class Setting extends Component {
         </div>
     );
 
-    getExcludedExerciseSuggestionValue = (suggestion) => {
+    excludedExerciseSelected = (event, { suggestion }) => {
         const { excludeExercise } = this.state;
         const { dispatch } = this.props;
         var exercises = excludeExercise;
@@ -607,13 +651,12 @@ class Setting extends Component {
         var index = _.indexOf(exercises, val);
         if (index < 0) {
             exercises.push(val);
-            this.setState({ excludeExercise: exercises });
+            this.setState({ excludeExercise: exercises, excludeExerciseVal: '' });
             dispatch(setUserExercisePreferencesExcludeExercise(exercises));
         }
-        return '';
     };
 
-    getExistingInjuriesSuggestionValue = (suggestion) => {
+    existingInjurySelected = (event, { suggestion }) => {
         const { existingInjuries } = this.state;
         const { dispatch } = this.props;
         var injuries = existingInjuries;
@@ -621,11 +664,10 @@ class Setting extends Component {
         var index = _.indexOf(injuries, val);
         if (index < 0) {
             injuries.push(val);
-            this.setState({ existingInjuries: injuries });
+            this.setState({ existingInjuries: injuries, existingInjuriesVal: '' });
             dispatch(setUserExercisePreferencesExistingInjuries(injuries));
         }
-        return '';
-    };
+    }
     //#endregion
 }
 

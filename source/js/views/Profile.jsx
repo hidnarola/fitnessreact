@@ -252,9 +252,11 @@ class Profile extends Component {
                                                     e.target.src = noProfileImg
                                                 }}
                                             />
-                                            <a href="">
-                                                <i className="icon-add_a_photo"></i>
-                                            </a>
+                                            {profile && profile.friendshipStatus && profile.friendshipStatus === FRIENDSHIP_STATUS_SELF &&
+                                                <a href="">
+                                                    <i className="icon-add_a_photo"></i>
+                                                </a>
+                                            }
                                         </span>
                                     }
                                     <a href="" data-toggle="modal" data-target="#level-gallery">Lavel 13</a>
@@ -263,9 +265,11 @@ class Profile extends Component {
                                 <div className="white-box profile-about">
                                     <div className="whitebox-head d-flex profile-about-head">
                                         <h3 className="title-h3">About</h3>
-                                        <div className="whitebox-head-r">
-                                            <a href="javascript:void(0)">Edit</a>
-                                        </div>
+                                        {profile && profile.friendshipStatus && profile.friendshipStatus === FRIENDSHIP_STATUS_SELF &&
+                                            <div className="whitebox-head-r">
+                                                <a href="javascript:void(0)">Edit</a>
+                                            </div>
+                                        }
                                     </div>
                                     <div className="whitebox-body profile-about-body">
                                         {profile && profile.height > 0 &&

@@ -108,3 +108,15 @@ export const DATABASE_ERROR_STATUS = 422;
 export const INTERNAL_SERVER_ERROR = 500;
 
 export const SESSION_EXPIRED_URL_TYPE = 'session_expired';
+
+export const WORKOUT_INTENSITY_LABEL_EASY = 'Easy';
+export const WORKOUT_INTENSITY_LABEL_LOW = 'Low';
+export const WORKOUT_INTENSITY_LABEL_MODERATE = 'Moderate';
+export const WORKOUT_INTENSITY_LABEL_HARD = 'Hard';
+export const WORKOUT_INTENSITY_LABEL_MAXIMAL = 'Maximal';
+
+export const EXPERIENCE_LEVEL_1_LABEL = 'Novice';
+export const EXPERIENCE_LEVEL_2_LABEL = 'Advance Learner';
+export const EXPERIENCE_LEVEL_3_LABEL = 'Competent Learner';
+export const EXPERIENCE_LEVEL_4_LABEL = 'Skilled Learner';
+export const EXPERIENCE_LEVEL_5_LABEL = 'Expert';
