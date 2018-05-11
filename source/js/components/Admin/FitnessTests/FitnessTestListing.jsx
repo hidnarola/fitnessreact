@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom';
 import ReactTable from "react-table";
 import moment from "moment";
 import { generateDTTableFilterObj, capitalizeFirstLetter } from '../../../helpers/funs';
-import { fitnessTestsFilterRequest } from '../../../actions/admin/fitnessTests';
+import { fitnessTestsFilterRequest, fitnessTestsDeleteRequest } from '../../../actions/admin/fitnessTests';
 import {
     FITNESS_TEST_CAT_STRENGTH,
     FITNESS_TEST_CAT_FLEXIBILITY,
@@ -312,12 +312,14 @@ class FitnessTestListing extends Component {
                                                                     <MenuItem eventKey="1">
                                                                         <FaPencil className="v-align-sub" /> Edit
                                                                     </MenuItem>
-                                                                    <MenuItem
-                                                                        eventKey="2"
-                                                                        onClick={() => this.handleDeleteModal(true, row.value)}
-                                                                    >
-                                                                        <FaTrash className="v-align-sub" /> Delete
+                                                                    {!row.original.isDeleted &&
+                                                                        <MenuItem
+                                                                            eventKey="2"
+                                                                            onClick={() => this.handleDeleteModal(true, row.value)}
+                                                                        >
+                                                                            <FaTrash className="v-align-sub" /> Delete
                                                                     </MenuItem>
+                                                                    }
                                                                 </DropdownButton>
                                                             </ButtonToolbar>
                                                         </div>
@@ -350,9 +352,11 @@ class FitnessTestListing extends Component {
 
     componentDidUpdate(prevProps, prevState) {
         const {
-            dtLoading
+            dtLoading,
+            deleteActionInit,
         } = this.state;
         const {
+            loading,
             filteredLoading,
             filteredFitnessTests,
             filteredTotalPages,
@@ -364,17 +368,26 @@ class FitnessTestListing extends Component {
                 dtPages: filteredTotalPages,
             });
         }
+        if (deleteActionInit && !loading) {
+            this.setState({ deleteActionInit: false });
+            this.handleDeleteModal(false);
+            this.refreshDtData();
+        }
     }
 
     //#region function for fetching data
     fetchData = (state, instance) => {
         const { dispatch } = this.props;
-        this.setState({
-            dtLoading: true,
-        });
         let filterData = generateDTTableFilterObj(state, instance);
-        this.setState({ dtFilterData: filterData });
+        this.setState({ dtLoading: true, dtFilterData: filterData });
         dispatch(fitnessTestsFilterRequest(filterData));
+    }
+
+    refreshDtData = () => {
+        const { dispatch } = this.props;
+        const { dtFilterData } = this.state;
+        this.setState({ dtLoading: true });
+        dispatch(fitnessTestsFilterRequest(dtFilterData));
     }
     //#endregion
 
@@ -388,9 +401,11 @@ class FitnessTestListing extends Component {
 
     handleDelete = () => {
         const { dispatch } = this.props;
+        const { selectedId } = this.state;
         this.setState({
             deleteActionInit: true,
         });
+        dispatch(fitnessTestsDeleteRequest(selectedId))
     }
     //#endregion
 }
@@ -398,6 +413,7 @@ class FitnessTestListing extends Component {
 const mapStateToProps = (state) => {
     const { adminFitnessTests } = state;
     return {
+        loading: adminFitnessTests.get('loading'),
         filteredLoading: adminFitnessTests.get('filteredLoading'),
         filteredFitnessTests: adminFitnessTests.get('filteredFitnessTests'),
         filteredTotalPages: adminFitnessTests.get('filteredTotalPages'),

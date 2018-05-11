@@ -1,4 +1,4 @@
-import { postFormData } from '..';
+import { postFormData, fetchResource } from '..';
 import { extraHeaders } from '../../helpers/funs';
 
 const requestUrl = 'admin/test_exercise';
