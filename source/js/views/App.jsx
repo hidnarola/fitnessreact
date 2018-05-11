@@ -51,6 +51,7 @@ import NutritionPreferences from '../components/Nutrition/NutritionPreferences'
 import { publicPath } from '../constants/routes';
 import { SESSION_EXPIRED_URL_TYPE } from '../constants/consts';
 import { FaCircleONotch } from "react-icons/lib/fa";
+import FitnessTests from './Admin/FitnessTests';
 
 class App extends Component {
 
@@ -104,6 +105,8 @@ class App extends Component {
                             <AdminPrivateRoute path={adminRouteCodes.EXERCISE_TYPE} component={ExerciseTypes} />
 
                             <AdminPrivateRoute path={adminRouteCodes.EXERCISE} component={Exercises} />
+
+                            <AdminPrivateRoute path={adminRouteCodes.FITNESS_TESTS} component={FitnessTests} />
 
                             <AdminPrivateRoute path={adminRouteCodes.EQUIPMENTS} component={Equipments} />
 

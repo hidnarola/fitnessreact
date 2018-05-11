@@ -26,33 +26,6 @@ export default class AdminNav extends Component {
                                 <span>Users</span>
                             </NavLink>
                         </li>
-                        {/* <li>
-                            <NavLink
-                                activeClassName='active'
-                                className='Menu-link'
-                                to={adminRouteCodes.NUTRITIONS}
-                            >
-                                <span>Nutritions</span>
-                            </NavLink>
-                        </li> */}
-                        {/* <li>
-                            <NavLink
-                                activeClassName='active'
-                                className='Menu-link'
-                                to={adminRouteCodes.RECIPES}
-                            >
-                                <span>Recipes</span>
-                            </NavLink>
-                        </li> */}
-                        {/* <li>
-                            <NavLink
-                                activeClassName='active'
-                                className='Menu-link'
-                                to={adminRouteCodes.INGREDIENTS}
-                            >
-                                <span>Ingredients</span>
-                            </NavLink>
-                        </li> */}
                         <li>
                             <NavLink
                                 activeClassName='active'
@@ -78,6 +51,15 @@ export default class AdminNav extends Component {
                                 to={adminRouteCodes.EQUIPMENTS}
                             >
                                 <span>Equipments</span>
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink
+                                activeClassName='active'
+                                className='Menu-link'
+                                to={adminRouteCodes.FITNESS_TESTS}
+                            >
+                                <span>Fitness Test</span>
                             </NavLink>
                         </li>
                         <li>
