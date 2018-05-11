@@ -8,6 +8,17 @@ function filterFitnessTests(filterData) {
     return postFormData(requestUrl + '/filter', filterData, headers);
 }
 
+function deleteFitnessTest(_id) {
+    let headers = extraHeaders();
+    var options = {
+        method: 'DELETE',
+        headers: headers,
+    }
+
+    return fetchResource((requestUrl + '/' + _id), options);
+}
+
 export default {
-    filterFitnessTests
+    filterFitnessTests,
+    deleteFitnessTest
 }
