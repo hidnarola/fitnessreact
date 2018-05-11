@@ -3,7 +3,7 @@ import {
     FITNESS_TESTS_FILTER_REQUEST,
     FITNESS_TESTS_FILTER_SUCCESS,
     FITNESS_TESTS_FILTER_ERROR
-} from "../../actions/admin/FitnessTests";
+} from "../../actions/admin/fitnessTests";
 
 import { generateValidationErrorMsgArr } from "../../helpers/funs";
 import { VALIDATION_FAILURE_STATUS } from "../../constants/consts";

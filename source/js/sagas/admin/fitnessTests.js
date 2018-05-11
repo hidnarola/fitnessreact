@@ -3,9 +3,9 @@ import {
     fitnessTestsFilterSuccess,
     fitnessTestsFilterError,
     FITNESS_TESTS_FILTER_REQUEST
-} from '../../actions/admin/FitnessTests';
+} from '../../actions/admin/fitnessTests';
 
-import api from 'api/admin/exercises';
+import api from 'api/admin/fitnessTests';
 
 function filterAdminFitnessTestData() {
     return function* (action) {

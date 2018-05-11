@@ -120,3 +120,23 @@ export const EXPERIENCE_LEVEL_2_LABEL = 'Advance Learner';
 export const EXPERIENCE_LEVEL_3_LABEL = 'Competent Learner';
 export const EXPERIENCE_LEVEL_4_LABEL = 'Skilled Learner';
 export const EXPERIENCE_LEVEL_5_LABEL = 'Expert';
+
+export const FITNESS_TEST_CAT_STRENGTH = 'strength';
+export const FITNESS_TEST_CAT_FLEXIBILITY = 'flexibility';
+export const FITNESS_TEST_CAT_POSTURE = 'posture';
+export const FITNESS_TEST_CAT_CARDIO = 'cardio';
+
+export const FITNESS_TEST_SUB_CAT_UPPER_BODY = 'upper_body';
+export const FITNESS_TEST_SUB_CAT_SIDE = 'side';
+export const FITNESS_TEST_SUB_CAT_LOWER_BODY = 'lower_body';
+export const FITNESS_TEST_SUB_CAT_CARDIO = 'cardio';
+
+export const FITNESS_TEST_FORMAT_MAX_REP = 'max_rep';
+export const FITNESS_TEST_FORMAT_MULTISELECT = 'multiselect';
+export const FITNESS_TEST_FORMAT_TEXT_FIELD = 'text_field';
+export const FITNESS_TEST_FORMAT_A_OR_B = 'a_or_b';
+
+export const FITNESS_TEST_FORMAT_MAX_REP_STR = 'Max Reps';
+export const FITNESS_TEST_FORMAT_MULTISELECT_STR = 'Multiselect';
+export const FITNESS_TEST_FORMAT_TEXT_FIELD_STR = 'Text Field';
+export const FITNESS_TEST_FORMAT_A_OR_B_STR = 'A or B';

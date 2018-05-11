@@ -1245,3 +1245,7 @@ div#loader .loader-spinner {-webkit-animation-name: spin;-webkit-animation-durat
 .slider-range{margin: 28px 20px 0 20px;}
 .ui-state-active, .ui-widget-content .ui-state-active{color: #ffffff;border: 1px solid #5937b9 !important;background: linear-gradient(134.72deg, #3023AE 0%, #C86DD7 100%) !important;}
 .ui-widget-header{background: linear-gradient(134.72deg, #3023AE 0%, #C86DD7 100%);}
+
+.ReactTable .rt-th, .ReactTable .rt-td{overflow: initial;}
+
+.v-align-sub{vertical-align: sub !important;}
