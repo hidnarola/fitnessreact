@@ -35,8 +35,14 @@ class BodyMeasurement extends Component {
                                 on track and meeting the goals you’ve set out for yourself.</p>
                     </div>
                     <div className="body-head-r">
-                        <a href="" className="white-btn">Enter Body Fat</a>
-                        <a href="javascript:void(0)" onClick={this.handleShowAddProgressPhotoModal} className="pink-btn">Add Progress Photo</a>
+                        <a href="" className="white-btn">
+                            <span>Enter Body Fat</span>
+                            <i class="icon-accessibility"></i>
+                        </a>
+                        <a href="javascript:void(0)" onClick={this.handleShowAddProgressPhotoModal} className="pink-btn">
+                            <span>Add Progress Photo</span>
+                            <i class="icon-add_a_photo"></i>
+                        </a>
                     </div>
                 </div>
                 <div className="body-content">
