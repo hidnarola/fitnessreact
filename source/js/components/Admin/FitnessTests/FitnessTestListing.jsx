@@ -34,6 +34,7 @@ import {
 } from "react-bootstrap";
 import { FaPencil, FaTrash } from "react-icons/lib/fa";
 import DeleteConfirmation from '../Common/DeleteConfirmation';
+import { adminRouteCodes } from '../../../constants/adminRoutes';
 
 //#region basic consts
 const categoryOptions = [
@@ -99,6 +100,12 @@ class FitnessTestListing extends Component {
                 <div className="body-head space-btm-45 d-flex justify-content-start">
                     <div className="body-head-l">
                         <h2>Fitness Tests</h2>
+                    </div>
+                    <div className="body-head-r">
+                        <NavLink to={adminRouteCodes.FITNESS_TESTS_SAVE} className="pink-btn">
+                            Add Fitness Test
+                            <i className="icon-add"></i>
+                        </NavLink>
                     </div>
                 </div>
 

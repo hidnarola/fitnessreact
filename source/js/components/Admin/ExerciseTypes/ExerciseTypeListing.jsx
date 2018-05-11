@@ -22,6 +22,11 @@ import {
 } from '../../../constants/consts';
 import moment from 'moment';
 import _ from 'lodash';
+import {
+    DropdownButton,
+    ButtonToolbar,
+    MenuItem
+} from "react-bootstrap";
 
 const statusOptions = [
     { value: '', label: 'All' },
@@ -59,7 +64,10 @@ class ExerciseTypeListing extends Component {
                         <h2>Exercise Types</h2>
                     </div>
                     <div className="body-head-r">
-                        <a href="javascript:void(0)" onClick={() => this.handleShowSaveModal()} className="pink-btn">Add Exercise Type</a>
+                        <a href="javascript:void(0)" onClick={() => this.handleShowSaveModal()} className="pink-btn">
+                            <span>Add Exercise Type</span>
+                            <i className="icon-control_point"></i>
+                        </a>
                     </div>
                 </div>
 
@@ -134,10 +142,18 @@ class ExerciseTypeListing extends Component {
                                                 id: "_id",
                                                 Header: "Actions",
                                                 accessor: "_id",
+                                                filterable: false,
+                                                sortable: false,
                                                 Cell: (row) => {
                                                     return (
                                                         <div className="actions-wrapper">
-                                                            <a href="javascript:void(0)" onClick={() => this.handleShowSaveModal(row.value)} className="btn btn-primary"><FaPencil /></a>
+                                                            <ButtonToolbar>
+                                                                <DropdownButton title="Actions" pullRight id="dropdown-size-medium">
+                                                                    <MenuItem eventKey="1" onClick={() => this.handleShowSaveModal(row.value)}>
+                                                                        <FaPencil className="v-align-sub" /> Edit
+                                                                    </MenuItem>
+                                                                </DropdownButton>
+                                                            </ButtonToolbar>
                                                         </div>
                                                     );
                                                 }

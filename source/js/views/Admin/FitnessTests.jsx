@@ -4,6 +4,7 @@ import AdminHeader from 'components/Admin/Template/AdminHeader';
 import AdminNav from 'components/Admin/Template/AdminNav';
 import { adminRouteCodes } from '../../constants/adminRoutes';
 import FitnessTestListing from '../../components/Admin/FitnessTests/FitnessTestListing';
+import FitnessTestSave from '../../components/Admin/FitnessTests/FitnessTestSave';
 
 class FitnessTests extends Component {
     render() {
@@ -14,6 +15,7 @@ class FitnessTests extends Component {
                 <section className="body-wrap">
                     <Switch>
                         <Route exact path={adminRouteCodes.FITNESS_TESTS} component={FitnessTestListing} />
+                        <Route exact path={adminRouteCodes.FITNESS_TESTS_SAVE} component={FitnessTestSave} />
                     </Switch>
                 </section>
             </div>
