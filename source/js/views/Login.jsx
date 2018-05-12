@@ -9,6 +9,7 @@ import { USER_ROLE, SESSION_EXPIRED_URL_TYPE } from '../constants/consts';
 import { checkLogin } from '../helpers/loginHelper';
 import Auth from '../auth/Auth';
 import { publicPath } from '../constants/routes';
+import $ from "jquery";
 
 const auth = new Auth();
 
@@ -61,6 +62,16 @@ class Login extends Component {
             </div >
         );
     }
+
+    componentDidMount() {
+        $('body').addClass('no-padding');
+    }
+    
+    componentWillUnmount() {
+        $('body').removeClass('no-padding');
+    }
+    
+    
 }
 
 export default Login;

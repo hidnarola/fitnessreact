@@ -8,7 +8,7 @@ class ExerciseSteps extends Component {
     render() {
         const { fields } = this.props;
         return (
-            <div className="exercise-steps-wrapper">
+            <div className="exercise-steps-wrapper dynamic-control-generator-wrapper">
                 <label className="control-label">Steps</label>
                 <div className="add-step-wrapper-btn pull-right">
                     <div className="col-md-12">
@@ -29,7 +29,6 @@ class ExerciseSteps extends Component {
                                         placeholder={`Step ${index + 1}`}
                                         component={InputField}
                                         errorClass="help-block"
-                                        warningClass=""
                                         validate={[required]}
                                     />
                                 </div>

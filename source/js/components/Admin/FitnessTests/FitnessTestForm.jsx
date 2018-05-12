@@ -170,51 +170,55 @@ class FitnessTestForm extends Component {
                                 />
                             }
                             {format && format.value === FITNESS_TEST_FORMAT_A_OR_B &&
-                                <div>
-                                    <Field
-                                        name="titleA"
-                                        className="form-control"
-                                        label="Title A"
-                                        labelClass="control-label"
-                                        wrapperClass="form-group"
-                                        placeholder="Title A"
-                                        component={InputField}
-                                        errorClass="help-block"
-                                        warningClass=""
-                                        validate={[required]}
-                                    />
-                                    <Field
-                                        name="imageA"
-                                        label="Image A"
-                                        labelClass="control-label display_block"
-                                        mainWrapperClass="image-form-main-wrapper"
-                                        wrapperClass="form-group"
-                                        placeholder="Image A"
-                                        component={FileField_Dropzone}
-                                        existingImages={[]}
-                                    />
-                                    <Field
-                                        name="titleB"
-                                        className="form-control"
-                                        label="Title B"
-                                        labelClass="control-label"
-                                        wrapperClass="form-group"
-                                        placeholder="Title B"
-                                        component={InputField}
-                                        errorClass="help-block"
-                                        warningClass=""
-                                        validate={[required]}
-                                    />
-                                    <Field
-                                        name="imageB"
-                                        label="Image B"
-                                        labelClass="control-label display_block"
-                                        mainWrapperClass="image-form-main-wrapper"
-                                        wrapperClass="form-group"
-                                        placeholder="Image B"
-                                        component={FileField_Dropzone}
-                                        existingImages={[]}
-                                    />
+                                <div className="row">
+                                    <div className="col-md-6">
+                                        <Field
+                                            name="titleA"
+                                            className="form-control"
+                                            label="Title A"
+                                            labelClass="control-label"
+                                            wrapperClass="form-group"
+                                            placeholder="Title A"
+                                            component={InputField}
+                                            errorClass="help-block"
+                                            warningClass=""
+                                            validate={[required]}
+                                        />
+                                        <Field
+                                            name="imageA"
+                                            label="Image A"
+                                            labelClass="control-label display_block"
+                                            mainWrapperClass="image-form-main-wrapper"
+                                            wrapperClass="form-group"
+                                            placeholder="Image A"
+                                            component={FileField_Dropzone}
+                                            existingImages={[]}
+                                        />
+                                    </div>
+                                    <div className="col-md-6">
+                                        <Field
+                                            name="titleB"
+                                            className="form-control"
+                                            label="Title B"
+                                            labelClass="control-label"
+                                            wrapperClass="form-group"
+                                            placeholder="Title B"
+                                            component={InputField}
+                                            errorClass="help-block"
+                                            warningClass=""
+                                            validate={[required]}
+                                        />
+                                        <Field
+                                            name="imageB"
+                                            label="Image B"
+                                            labelClass="control-label display_block"
+                                            mainWrapperClass="image-form-main-wrapper"
+                                            wrapperClass="form-group"
+                                            placeholder="Image B"
+                                            component={FileField_Dropzone}
+                                            existingImages={[]}
+                                        />
+                                    </div>
                                 </div>
                             }
                             <div className="col-md-12 mb-20 clear-both text-center">

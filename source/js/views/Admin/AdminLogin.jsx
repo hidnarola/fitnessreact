@@ -8,6 +8,7 @@ import { ADMIN_ROLE, LOCALSTORAGE_ACCESS_TOKEN_KEY } from '../../constants/const
 import { checkLogin, isLogin } from '../../helpers/loginHelper';
 import { ts } from '../../helpers/funs';
 import { freeLoginLogoutState } from '../../actions/login';
+import $ from "jquery";
 
 class AdminLogin extends Component {
     constructor(props) {
@@ -55,9 +56,15 @@ class AdminLogin extends Component {
         );
     }
 
+    componentDidMount() {
+        $('body').addClass('no-padding');
+    }
+    
+
     componentWillUnmount() {
         const { dispatch } = this.props;
         dispatch(freeLoginLogoutState());
+        $('body').removeClass('no-padding');
     }
 
 }

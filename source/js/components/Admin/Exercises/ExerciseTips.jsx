@@ -8,7 +8,7 @@ class ExerciseTips extends Component {
     render() {
         const { fields } = this.props;
         return (
-            <div className="exercise-tips-wrapper">
+            <div className="exercise-tips-wrapper dynamic-control-generator-wrapper">
                 <label className="control-label">Tips</label>
                 <div className="add-step-wrapper-btn pull-right">
                     <div className="col-md-12">

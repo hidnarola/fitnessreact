@@ -31,9 +31,9 @@ class ExerciseTypeSaveForm extends Component {
         return (
             <div className="exercise-type-save-form-wrapper">
                 <div className="exercise-type-save-modal-wrapper">
-                    <Modal show={show} onHide={handleClose}>
+                    <Modal show={show}>
                         <form onSubmit={handleSubmit}>
-                            <Modal.Header closeButton>
+                            <Modal.Header>
                                 <Modal.Title>Save Exercise Type</Modal.Title>
                             </Modal.Header>
 
