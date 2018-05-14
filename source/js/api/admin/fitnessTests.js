@@ -8,6 +8,11 @@ function filterFitnessTests(filterData) {
     return postFormData(requestUrl + '/filter', filterData, headers);
 }
 
+function addFitnessTest(formData) {
+    let headers = extraHeaders();
+    return postFormData(requestUrl, formData, headers);
+}
+
 function deleteFitnessTest(_id) {
     let headers = extraHeaders();
     var options = {
@@ -20,5 +25,6 @@ function deleteFitnessTest(_id) {
 
 export default {
     filterFitnessTests,
+    addFitnessTest,
     deleteFitnessTest
 }

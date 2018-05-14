@@ -232,11 +232,19 @@ export class FileField_Dropzone_Single extends Component {
             )
         })
         return (
-            <div className={mainWrapperClass}>
+            <div
+                className={
+                    `${mainWrapperClass} ${(meta.touched && meta.error) ? 'has-error' : ''}`
+                }
+            >
                 <label htmlFor={input.name} className={labelClass}>{label}</label>
                 {_existingImages}
                 {input.value && images}
-                <div className={wrapperClass}>
+                <div
+                    className={
+                        `${wrapperClass} ${(meta.touched && meta.error) ? 'has-error' : ''}`
+                    }
+                >
                     <Dropzone
                         {...input}
                         accept={accept ? accept : "image/jpeg, image/png, image/jpg, image/gif"}

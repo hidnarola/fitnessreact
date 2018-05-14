@@ -17,7 +17,7 @@ class FitnessTestMaxRep extends Component {
                                 <div className="col-md-4 step-field" key={index}>
                                     <div className="col-md-11 pull-left">
                                         <Field
-                                            name={`${field}.max_rep`}
+                                            name={`${field}`}
                                             label="Max Rep"
                                             labelClass="control-label"
                                             wrapperClass="form-group"

@@ -25,7 +25,6 @@ class FitnessTestMultiselect extends Component {
                                             placeholder={`Title ${(index + 1)}`}
                                             component={InputField}
                                             errorClass="help-block"
-                                            warningClass=""
                                             validate={[required]}
                                         />
                                     </div>
@@ -36,9 +35,11 @@ class FitnessTestMultiselect extends Component {
                                             labelClass="control-label display_block"
                                             mainWrapperClass="image-form-main-wrapper"
                                             wrapperClass="form-group"
+                                            className="filefield-dropzone-wrapper"
                                             placeholder={`Image ${(index + 1)}`}
                                             component={FileField_Dropzone_Single}
-                                            validate={requiredImage}
+                                            validate={[requiredImage]}
+                                            errorClass="help-block"
                                             existingImages={[]}
                                         />
                                     </div>

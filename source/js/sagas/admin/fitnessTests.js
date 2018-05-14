@@ -5,7 +5,10 @@ import {
     FITNESS_TESTS_FILTER_REQUEST,
     fitnessTestsDeleteSuccess,
     fitnessTestsDeleteError,
-    FITNESS_TESTS_DELETE_REQUEST
+    FITNESS_TESTS_DELETE_REQUEST,
+    fitnessTestsAddSuccess,
+    fitnessTestsAddError,
+    FITNESS_TESTS_ADD_REQUEST
 } from '../../actions/admin/fitnessTests';
 
 import api from 'api/admin/fitnessTests';
@@ -18,6 +21,18 @@ function filterAdminFitnessTestData() {
             yield put(fitnessTestsFilterSuccess(data));
         } catch (error) {
             yield put(fitnessTestsFilterError(error));
+        }
+    }
+}
+
+function addAdminFitnessTestData() {
+    return function* (action) {
+        try {
+            const formData = action.formData;
+            const data = yield call(() => api.addFitnessTest(formData));
+            yield put(fitnessTestsAddSuccess(data));
+        } catch (error) {
+            yield put(fitnessTestsAddError(error));
         }
     }
 }
@@ -36,6 +51,7 @@ function deleteAdminFitnessTestData() {
 
 export function* watchAdminFitnessTests() {
     yield takeLatest(FITNESS_TESTS_FILTER_REQUEST, filterAdminFitnessTestData());
+    yield takeLatest(FITNESS_TESTS_ADD_REQUEST, addAdminFitnessTestData());
     yield takeLatest(FITNESS_TESTS_DELETE_REQUEST, deleteAdminFitnessTestData());
 }
 

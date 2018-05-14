@@ -15,7 +15,7 @@ class FitnessTests extends Component {
                 <section className="body-wrap">
                     <Switch>
                         <Route exact path={adminRouteCodes.FITNESS_TESTS} component={FitnessTestListing} />
-                        <Route exact path={adminRouteCodes.FITNESS_TESTS_SAVE} component={FitnessTestSave} />
+                        <Route exact path={`${adminRouteCodes.FITNESS_TESTS_SAVE}/:id?`} component={FitnessTestSave} />
                     </Switch>
                 </section>
             </div>

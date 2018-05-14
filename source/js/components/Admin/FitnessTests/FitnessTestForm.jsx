@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { Field, reduxForm, FieldArray, formValueSelector } from 'redux-form';
-import { InputField, EditorField, SelectField_ReactSelect, FileField_Dropzone } from '../../../helpers/FormControlHelper';
-import { required, requiredReactSelect } from '../../../formValidation/validationRules';
+import { InputField, EditorField, SelectField_ReactSelect, FileField_Dropzone_Single } from '../../../helpers/FormControlHelper';
+import { required, requiredReactSelect, requiredImage } from '../../../formValidation/validationRules';
 import { adminRouteCodes } from '../../../constants/adminRoutes';
 import {
     FITNESS_TEST_CAT_STRENGTH,
@@ -73,10 +73,11 @@ class FitnessTestForm extends Component {
         } = this.state;
         const {
             format,
+            handleSubmit,
         } = this.props;
         return (
             <div className="fitness-test-form-data">
-                <form>
+                <form onSubmit={handleSubmit}>
                     <div className="row">
                         <div className="col-md-12">
                             <Field
@@ -110,7 +111,6 @@ class FitnessTestForm extends Component {
                                 placeholder="Name"
                                 component={InputField}
                                 errorClass="help-block"
-                                warningClass=""
                                 validate={[required]}
                             />
                             <Field
@@ -131,7 +131,10 @@ class FitnessTestForm extends Component {
                                 mainWrapperClass="image-form-main-wrapper"
                                 wrapperClass="form-group"
                                 placeholder="Image"
-                                component={FileField_Dropzone}
+                                className="filefield-dropzone-wrapper"
+                                component={FileField_Dropzone_Single}
+                                validate={[requiredImage]}
+                                errorClass="help-block"
                                 existingImages={[]}
                             />
                             <Field
@@ -190,8 +193,11 @@ class FitnessTestForm extends Component {
                                             labelClass="control-label display_block"
                                             mainWrapperClass="image-form-main-wrapper"
                                             wrapperClass="form-group"
+                                            className="filefield-dropzone-wrapper"
                                             placeholder="Image A"
-                                            component={FileField_Dropzone}
+                                            component={FileField_Dropzone_Single}
+                                            validate={[requiredImage]}
+                                            errorClass="help-block"
                                             existingImages={[]}
                                         />
                                     </div>
@@ -214,8 +220,11 @@ class FitnessTestForm extends Component {
                                             labelClass="control-label display_block"
                                             mainWrapperClass="image-form-main-wrapper"
                                             wrapperClass="form-group"
+                                            className="filefield-dropzone-wrapper"
                                             placeholder="Image B"
-                                            component={FileField_Dropzone}
+                                            component={FileField_Dropzone_Single}
+                                            validate={[requiredImage]}
+                                            errorClass="help-block"
                                             existingImages={[]}
                                         />
                                     </div>

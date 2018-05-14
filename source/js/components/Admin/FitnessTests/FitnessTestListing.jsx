@@ -316,12 +316,20 @@ class FitnessTestListing extends Component {
                                                         <div className="actions-wrapper">
                                                             <ButtonToolbar>
                                                                 <DropdownButton title="Actions" pullRight id="dropdown-size-medium">
-                                                                    <MenuItem eventKey="1">
+                                                                    <MenuItem
+                                                                        eventKey="1"
+                                                                        href={`${adminRouteCodes.FITNESS_TESTS_SAVE}/${row.value}`}
+                                                                        onClick={(e) => {
+                                                                            e.preventDefault();
+                                                                            this.props.history.push(`${adminRouteCodes.FITNESS_TESTS_SAVE}/${row.value}`);
+                                                                        }}
+                                                                    >
                                                                         <FaPencil className="v-align-sub" /> Edit
                                                                     </MenuItem>
                                                                     {!row.original.isDeleted &&
                                                                         <MenuItem
                                                                             eventKey="2"
+                                                                            href="javascript:void(0)"
                                                                             onClick={() => this.handleDeleteModal(true, row.value)}
                                                                         >
                                                                             <FaTrash className="v-align-sub" /> Delete

@@ -1248,3 +1248,16 @@ div#loader .loader-spinner {-webkit-animation-name: spin;-webkit-animation-durat
 .ReactTable .rt-th, .ReactTable .rt-td{overflow: initial;}
 
 .v-align-sub{vertical-align: sub !important;}
+
+.filefield-dropzone-wrapper{
+    min-width: 200px;
+    min-height: 200px;
+    border: 2px dashed #333;
+    border-radius: 5px;
+}
+
+.has-error .filefield-dropzone-wrapper{
+    border-color: #a94442;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+}
