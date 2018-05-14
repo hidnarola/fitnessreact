@@ -7,7 +7,7 @@ import {
     FITNESS_TEST_FORMAT_A_OR_B
 } from '../../../constants/consts';
 import _ from "lodash";
-import { fitnessTestsAddRequest } from '../../../actions/admin/fitnessTests';
+import { fitnessTestsAddRequest, fitnessTestsUpdateRequest } from '../../../actions/admin/fitnessTests';
 import { adminRouteCodes } from '../../../constants/adminRoutes';
 import { ts } from '../../../helpers/funs';
 
@@ -47,8 +47,13 @@ class FitnessTestSave extends Component {
     }
 
     componentDidUpdate() {
-        const { saveActionInit } = this.state;
-        const { loading, history } = this.props;
+        const {
+            saveActionInit,
+        } = this.state;
+        const {
+            loading,
+            history,
+        } = this.props;
         if (saveActionInit && !loading) {
             this.setState({ saveActionInit: false });
             ts('Fitness test saved successfully!');
@@ -58,7 +63,7 @@ class FitnessTestSave extends Component {
 
     //#region 
     handleSubmit = (data) => {
-        const { dispatch } = this.props;
+        const { dispatch, match } = this.props;
         var format = data.format.value;
         var requestObj = {
             name: data.name,
@@ -80,7 +85,7 @@ class FitnessTestSave extends Component {
             var images = [];
             _.forEach(data.multiselect, (obj, index) => {
                 titles.push(obj.title);
-                images.push((obj.image[0]) ? obj.image[0] : null);
+                images.push((obj.image && obj.image[0]) ? obj.image[0] : null);
             });
             requestObj.title = JSON.stringify(titles);
             requestObj.images = images;
@@ -96,6 +101,8 @@ class FitnessTestSave extends Component {
             requestObj.title = JSON.stringify(titles);
             requestObj.images = images;
         }
+
+        console.log(requestObj);
 
         var formData = new FormData();
         formData.append('name', requestObj.name);
@@ -113,13 +120,15 @@ class FitnessTestSave extends Component {
             formData.append('title', requestObj.title);
             for (let index = 0; index < requestObj.images.length; index++) {
                 const element = requestObj.images[index];
-                if (element) {
-                    formData.append('images', element);
-                }
+                formData.append('images', element);
             }
         }
+        if (match.params.id) {
+            dispatch(fitnessTestsUpdateRequest(match.params.id, formData));
+        } else {
+            dispatch(fitnessTestsAddRequest(formData));
+        }
         this.setState({ saveActionInit: true });
-        dispatch(fitnessTestsAddRequest(formData));
     }
     //#endregion
 }

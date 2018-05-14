@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { NavLink } from 'react-router-dom';
+import { NavLink, withRouter } from 'react-router-dom';
 import { Field, reduxForm, FieldArray, formValueSelector } from 'redux-form';
 import { InputField, EditorField, SelectField_ReactSelect, FileField_Dropzone_Single } from '../../../helpers/FormControlHelper';
 import { required, requiredReactSelect, requiredImage } from '../../../formValidation/validationRules';
@@ -26,6 +26,7 @@ import {
 import { capitalizeFirstLetter } from '../../../helpers/funs';
 import FitnessTestMaxRep from './FitnessTestMaxRep';
 import FitnessTestMultiselect from './FitnessTestMultiselect';
+import { fitnessTestsSelectOneRequest } from '../../../actions/admin/fitnessTests';
 
 const categoryOptions = [
     { value: FITNESS_TEST_CAT_STRENGTH, label: capitalizeFirstLetter(FITNESS_TEST_CAT_STRENGTH.replace('_', ' ')) },
@@ -63,6 +64,38 @@ class FitnessTestForm extends Component {
         this.state = {
             description: '',
             instructions: '',
+            selectActionInit: false,
+            existingFeatureImages: [],
+            existingImageA: [],
+            existingImageB: [],
+            existingMultiselectImages: [],
+        }
+        this.validationRules = {
+            category: [requiredReactSelect],
+            subCategory: [requiredReactSelect],
+            name: [required],
+            format: [requiredReactSelect],
+            image: [requiredImage],
+            titleA: [required],
+            titleB: [required],
+            imageA: [requiredImage],
+            imageB: [requiredImage],
+            max_rep: [requiredReactSelect],
+            multiselect: {
+                title: [required],
+                image: [requiredImage],
+            },
+        };
+    }
+
+    componentWillMount() {
+        const { match, dispatch } = this.props;
+        if (match.params.id) {
+            this.setState({ selectActionInit: true });
+            dispatch(fitnessTestsSelectOneRequest(match.params.id));
+            this.validationRules.image = [];
+            this.validationRules.imageA = [];
+            this.validationRules.imageB = [];
         }
     }
 
@@ -70,6 +103,10 @@ class FitnessTestForm extends Component {
         const {
             description,
             instructions,
+            existingFeatureImages,
+            existingImageA,
+            existingImageB,
+            existingMultiselectImages,
         } = this.state;
         const {
             format,
@@ -89,7 +126,7 @@ class FitnessTestForm extends Component {
                                 component={SelectField_ReactSelect}
                                 options={categoryOptions}
                                 errorClass="help-block"
-                                validate={[requiredReactSelect]}
+                                validate={this.validationRules.category}
                             />
                             <Field
                                 name="subCategory"
@@ -100,7 +137,7 @@ class FitnessTestForm extends Component {
                                 component={SelectField_ReactSelect}
                                 options={subCategoryOptions}
                                 errorClass="help-block"
-                                validate={[requiredReactSelect]}
+                                validate={this.validationRules.subCategory}
                             />
                             <Field
                                 name="name"
@@ -111,7 +148,7 @@ class FitnessTestForm extends Component {
                                 placeholder="Name"
                                 component={InputField}
                                 errorClass="help-block"
-                                validate={[required]}
+                                validate={this.validationRules.name}
                             />
                             <Field
                                 name="format"
@@ -122,7 +159,7 @@ class FitnessTestForm extends Component {
                                 component={SelectField_ReactSelect}
                                 options={formatOptions}
                                 errorClass="help-block"
-                                validate={[requiredReactSelect]}
+                                validate={this.validationRules.format}
                             />
                             <Field
                                 name="image"
@@ -133,9 +170,9 @@ class FitnessTestForm extends Component {
                                 placeholder="Image"
                                 className="filefield-dropzone-wrapper"
                                 component={FileField_Dropzone_Single}
-                                validate={[requiredImage]}
+                                validate={this.validationRules.image}
                                 errorClass="help-block"
-                                existingImages={[]}
+                                existingImages={existingFeatureImages}
                             />
                             <Field
                                 name="description"
@@ -164,12 +201,16 @@ class FitnessTestForm extends Component {
                                     name="max_rep"
                                     component={FitnessTestMaxRep}
                                     options={maxRepOptions}
+                                    validationRules={this.validationRules.max_rep}
                                 />
                             }
                             {format && format.value === FITNESS_TEST_FORMAT_MULTISELECT &&
                                 <FieldArray
                                     name="multiselect"
                                     component={FitnessTestMultiselect}
+                                    existingMultiselectImages={existingMultiselectImages}
+                                    validationRules={this.validationRules.multiselect}
+                                    handleDeleteExistingMultiselectImages={this.handleDeleteExistingMultiselectImages}
                                 />
                             }
                             {format && format.value === FITNESS_TEST_FORMAT_A_OR_B &&
@@ -185,7 +226,7 @@ class FitnessTestForm extends Component {
                                             component={InputField}
                                             errorClass="help-block"
                                             warningClass=""
-                                            validate={[required]}
+                                            validate={this.validationRules.titleA}
                                         />
                                         <Field
                                             name="imageA"
@@ -196,9 +237,9 @@ class FitnessTestForm extends Component {
                                             className="filefield-dropzone-wrapper"
                                             placeholder="Image A"
                                             component={FileField_Dropzone_Single}
-                                            validate={[requiredImage]}
+                                            validate={this.validationRules.imageA}
                                             errorClass="help-block"
-                                            existingImages={[]}
+                                            existingImages={existingImageA}
                                         />
                                     </div>
                                     <div className="col-md-6">
@@ -212,7 +253,7 @@ class FitnessTestForm extends Component {
                                             component={InputField}
                                             errorClass="help-block"
                                             warningClass=""
-                                            validate={[required]}
+                                            validate={this.validationRules.titleB}
                                         />
                                         <Field
                                             name="imageB"
@@ -223,9 +264,9 @@ class FitnessTestForm extends Component {
                                             className="filefield-dropzone-wrapper"
                                             placeholder="Image B"
                                             component={FileField_Dropzone_Single}
-                                            validate={[requiredImage]}
+                                            validate={this.validationRules.imageB}
                                             errorClass="help-block"
-                                            existingImages={[]}
+                                            existingImages={existingImageB}
                                         />
                                     </div>
                                 </div>
@@ -243,6 +284,70 @@ class FitnessTestForm extends Component {
         );
     }
 
+    componentDidUpdate() {
+        const {
+            selectActionInit,
+        } = this.state;
+        const {
+            loading,
+            fitnessTest,
+            initialize,
+        } = this.props;
+        if (selectActionInit && !loading) {
+            this.setState({ selectActionInit: false });
+            var maxRepsData = [];
+            var multiselectData = [];
+            var formDataInit = {
+                category: _.find(categoryOptions, { value: fitnessTest.category }),
+                subCategory: _.find(subCategoryOptions, { value: fitnessTest.subCategory }),
+                name: fitnessTest.name,
+                format: _.find(formatOptions, { value: fitnessTest.format }),
+                description: fitnessTest.description,
+                instructions: fitnessTest.instructions,
+            }
+            this.setState({
+                description: fitnessTest.description,
+                instructions: fitnessTest.instructions,
+                existingFeatureImages: (fitnessTest.image) ? [fitnessTest.image] : [],
+            });
+            if (fitnessTest.format === FITNESS_TEST_FORMAT_MAX_REP) {
+                _.forEach(fitnessTest.max_rep, (val) => {
+                    maxRepsData.push({
+                        value: val,
+                        label: val,
+                    });
+                });
+            }
+            formDataInit.max_rep = maxRepsData;
+            if (fitnessTest.format === FITNESS_TEST_FORMAT_MULTISELECT) {
+                var images = [];
+                _.forEach(fitnessTest.multiselect, (obj) => {
+                    multiselectData.push({
+                        title: obj.title,
+                    });
+                    images.push(obj.image);
+                });
+                this.setState({ existingMultiselectImages: images });
+            }
+            formDataInit.multiselect = multiselectData;
+            if (fitnessTest.format === FITNESS_TEST_FORMAT_A_OR_B) {
+                formDataInit.titleA = fitnessTest.a_or_b[0].title;
+                formDataInit.titleB = fitnessTest.a_or_b[1].title;
+                this.setState({
+                    existingImageA: [fitnessTest.a_or_b[0].image],
+                    existingImageB: [fitnessTest.a_or_b[1].image],
+                });
+            }
+            initialize(formDataInit);
+        }
+    }
+
+    handleDeleteExistingMultiselectImages = (index) => {
+        let images = this.state.existingMultiselectImages;
+        images.splice(index, 1);
+        this.setState({ existingMultiselectImages: images });
+    }
+
     handleChangeTextEditor = (name, value) => {
         this.props.change(name, value);
         this.setState({ [name]: value });
@@ -253,11 +358,17 @@ FitnessTestForm = reduxForm({
     form: 'fitnessTestForm'
 })(FitnessTestForm)
 
+FitnessTestForm = withRouter(FitnessTestForm);
+
 const formSelector = formValueSelector('fitnessTestForm');
 
 const mapStateToProps = (state) => {
+    const { adminFitnessTests } = state;
     return {
         format: formSelector(state, 'format'),
+        loading: adminFitnessTests.get('loading'),
+        error: adminFitnessTests.get('error'),
+        fitnessTest: adminFitnessTests.get('fitnessTest'),
     };
 }
 

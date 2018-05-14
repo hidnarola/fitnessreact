@@ -8,7 +8,13 @@ import {
     FITNESS_TESTS_DELETE_ERROR,
     FITNESS_TESTS_ADD_REQUEST,
     FITNESS_TESTS_ADD_SUCCESS,
-    FITNESS_TESTS_ADD_ERROR
+    FITNESS_TESTS_ADD_ERROR,
+    FITNESS_TESTS_SELECT_ONE_REQUEST,
+    FITNESS_TESTS_SELECT_ONE_SUCCESS,
+    FITNESS_TESTS_SELECT_ONE_ERROR,
+    FITNESS_TESTS_UPDATE_REQUEST,
+    FITNESS_TESTS_UPDATE_SUCCESS,
+    FITNESS_TESTS_UPDATE_ERROR
 } from "../../actions/admin/fitnessTests";
 
 import { generateValidationErrorMsgArr } from "../../helpers/funs";
@@ -24,6 +30,31 @@ const initialState = Map({
 });
 
 const actionMap = {
+    [FITNESS_TESTS_SELECT_ONE_REQUEST]: (state, action) => {
+        return state.merge(Map({
+            loading: true,
+        }));
+    },
+    [FITNESS_TESTS_SELECT_ONE_SUCCESS]: (state, action) => {
+        return state.merge(Map({
+            loading: false,
+            fitnessTest: action.data.test_exercise,
+        }));
+    },
+    [FITNESS_TESTS_SELECT_ONE_ERROR]: (state, action) => {
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
+        }
+        return state.merge(Map({
+            loading: false,
+            error: error,
+        }));
+    },
     [FITNESS_TESTS_FILTER_REQUEST]: (state, action) => {
         return state.merge(Map({
             filteredLoading: true,
@@ -62,6 +93,31 @@ const actionMap = {
         }));
     },
     [FITNESS_TESTS_ADD_ERROR]: (state, action) => {
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
+        }
+        return state.merge(Map({
+            loading: false,
+            error: error,
+        }));
+    },
+    [FITNESS_TESTS_UPDATE_REQUEST]: (state, action) => {
+        return state.merge(Map({
+            loading: true,
+        }));
+    },
+    [FITNESS_TESTS_UPDATE_SUCCESS]: (state, action) => {
+        return state.merge(Map({
+            loading: false,
+            fitnessTest: action.data.test_exercise,
+        }));
+    },
+    [FITNESS_TESTS_UPDATE_ERROR]: (state, action) => {
         let error = [];
         if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
             error = generateValidationErrorMsgArr(action.error.response.message);

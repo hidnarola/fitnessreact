@@ -6,7 +6,11 @@ import { FaTrash } from 'react-icons/lib/fa'
 
 class FitnessTestMaxRep extends Component {
     render() {
-        const { fields, options } = this.props;
+        const {
+            fields,
+            options,
+            validationRules,
+        } = this.props;
         return (
             <div className="max-rep-wrapper dynamic-control-generator-wrapper">
                 <label className="control-label">Max Reps</label>
@@ -25,7 +29,7 @@ class FitnessTestMaxRep extends Component {
                                             component={SelectField_ReactSelect}
                                             options={options}
                                             errorClass="help-block"
-                                            validate={[requiredReactSelect]}
+                                            validate={validationRules}
                                         />
                                     </div>
                                     <div className="col-md-1 text-vcenter no-padding pull-left">
