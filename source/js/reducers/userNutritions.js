@@ -2,7 +2,10 @@ import { Map } from "immutable";
 import {
     GET_USER_TODAYS_MEAL_REQUEST,
     GET_USER_TODAYS_MEAL_SUCCESS,
-    GET_USER_TODAYS_MEAL_ERROR
+    GET_USER_TODAYS_MEAL_ERROR,
+    GET_USER_NUTRITION_RECIPE_DETAILS_REQUEST,
+    GET_USER_NUTRITION_RECIPE_DETAILS_SUCCESS,
+    GET_USER_NUTRITION_RECIPE_DETAILS_ERROR
 } from "../actions/userNutritions";
 import { VALIDATION_FAILURE_STATUS } from "../constants/consts";
 import { generateValidationErrorMsgArr } from "../helpers/funs";
@@ -11,6 +14,7 @@ const initialState = Map({
     loading: false,
     error: [],
     todaysMeal: [],
+    recipe: {},
 });
 
 const actionMap = {
@@ -26,6 +30,31 @@ const actionMap = {
         }));
     },
     [GET_USER_TODAYS_MEAL_ERROR]: (state, action) => {
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
+        }
+        return state.merge(Map({
+            loading: false,
+            error: error,
+        }));
+    },
+    [GET_USER_NUTRITION_RECIPE_DETAILS_REQUEST]: (state, action) => {
+        return state.merge(Map({
+            loading: true,
+        }));
+    },
+    [GET_USER_NUTRITION_RECIPE_DETAILS_SUCCESS]: (state, action) => {
+        return state.merge(Map({
+            loading: false,
+            recipe: action.data.user_recipe,
+        }));
+    },
+    [GET_USER_NUTRITION_RECIPE_DETAILS_ERROR]: (state, action) => {
         let error = [];
         if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
             error = generateValidationErrorMsgArr(action.error.response.message);

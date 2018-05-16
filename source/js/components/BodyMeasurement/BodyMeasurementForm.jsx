@@ -259,7 +259,6 @@ class BodyMeasurementForm extends Component {
                     log_date: new Date(measurement.logDate),
                 }
                 initialize(measurementData);
-                this.setState({ logDate: new Date(measurement.logDate) });
             } else {
                 initialize({});
                 change('log_date', logDate);

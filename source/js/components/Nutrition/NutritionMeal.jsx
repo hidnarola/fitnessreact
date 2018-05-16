@@ -4,14 +4,54 @@ import { NavLink } from 'react-router-dom';
 import { routeCodes } from 'constants/routes';
 import FitnessHeader from '../global/FitnessHeader';
 import FitnessNav from '../global/FitnessNav';
+import moment from "moment";
+import { getUserTodaysMealRequest } from '../../actions/userNutritions';
+import noProfileImg from 'img/common/no-profile-img.png'
+import { capitalizeFirstLetter } from '../../helpers/funs';
+import {
+    DAY_DRIVE_BREAKFAST,
+    DAY_DRIVE_LUNCH,
+    DAY_DRIVE_DINNER,
+    DAY_DRIVE_PRE_LUNCH_SNACKS,
+    DAY_DRIVE_SNACKS,
+    DAY_DRIVE_POST_LUNCH_SNACKS
+} from '../../constants/consts';
+import _ from "lodash";
+
+const dayDriveOptions = [
+    { value: DAY_DRIVE_BREAKFAST, label: capitalizeFirstLetter(DAY_DRIVE_BREAKFAST.replace('_', ' ')) },
+    { value: DAY_DRIVE_LUNCH, label: capitalizeFirstLetter(DAY_DRIVE_LUNCH.replace('_', ' ')) },
+    { value: DAY_DRIVE_DINNER, label: capitalizeFirstLetter(DAY_DRIVE_DINNER.replace('_', ' ')) },
+    { value: DAY_DRIVE_PRE_LUNCH_SNACKS, label: capitalizeFirstLetter(DAY_DRIVE_SNACKS.replace('_', ' ')) },
+    { value: DAY_DRIVE_POST_LUNCH_SNACKS, label: capitalizeFirstLetter(DAY_DRIVE_SNACKS.replace('_', ' ')) },
+];
 
 class NutritionMeal extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            selectActionInit: false,
+            todaysMeal: [],
+        }
+    }
+
+    componentWillMount() {
+        const { dispatch } = this.props;
+        var todaysDate = moment().startOf('day');
+        var requestObj = {
+            date: todaysDate,
+        }
+        this.setState({ selectActionInit: true });
+        dispatch(getUserTodaysMealRequest(requestObj));
     }
 
     render() {
-        const { todaysMeal, mealPlanStatus } = this.props;
+        var total_enerc_kal = 0;
+        var total_procnt = 0;
+        var total_fat = 0;
+        var total_chocdf = 0;
+        const { todaysMeal } = this.state;
+        const { loading } = this.props;
         return (
             <div className="fitness-nutrition">
                 <FitnessHeader />
@@ -60,45 +100,75 @@ class NutritionMeal extends Component {
                                 </div>
 
                                 <div className="whitebox-body">
-                                    {!todaysMeal &&
-                                        <span>No meals found.</span>
-                                    }
-                                    {todaysMeal && todaysMeal.length <= 0 &&
-                                        <span>No meals found.</span>
+                                    {todaysMeal && todaysMeal.length <= 0 && (!loading) &&
+                                        <span>No Records found</span>
                                     }
                                     {todaysMeal && todaysMeal.length > 0 &&
-                                        todaysMeal.map((meal, index) => (
-                                            <div className="meal-wrap d-flex">
-                                                <div className="meal-img">
-                                                    <img src="" alt="" />
+                                        todaysMeal.map((meal, index) => {
+                                            var dayDriveType = _.find(dayDriveOptions, { value: meal.dayDriveType });
+                                            var enerc_kal = Math.round(meal.totalNutrients['ENERC_KCAL'].quantity).toFixed(0);
+                                            var procnt = Math.round(meal.totalNutrients['PROCNT'].quantity).toFixed(0);
+                                            var fat = Math.round(meal.totalNutrients['FAT'].quantity).toFixed(0);
+                                            var chocdf = Math.round(meal.totalNutrients['CHOCDF'].quantity).toFixed(0);
+                                            total_enerc_kal = parseInt(total_enerc_kal) + parseInt(enerc_kal);
+                                            total_procnt = parseInt(total_procnt) + parseInt(procnt);
+                                            total_fat = parseInt(total_fat) + parseInt(fat);
+                                            total_chocdf = parseInt(total_chocdf) + parseInt(chocdf);
+                                            return (
+                                                <div className="meal-wrap d-flex" key={index}>
+                                                    <div className="meal-img">
+                                                        <img
+                                                            src={meal.image}
+                                                            alt="Recipe"
+                                                            onError={(e) => {
+                                                                e.target.src = noProfileImg
+                                                            }}
+                                                        />
+                                                    </div>
+                                                    <div className="meal-name">
+                                                        <small>{(dayDriveType) ? dayDriveType.label : ''}</small>
+                                                        <h5>
+                                                            <NavLink to={`${routeCodes.NUTRITION_RECIPE_DETAILS}/${meal._id}`}>
+                                                                {meal.name}
+                                                            </NavLink>
+                                                        </h5>
+                                                    </div>
+                                                    <div className="meal-info">
+                                                        <small>Cals</small>
+                                                        <big>
+                                                            {enerc_kal}
+                                                            {meal.totalNutrients['ENERC_KCAL'].unit}
+                                                        </big>
+                                                    </div>
+                                                    <div className="meal-info">
+                                                        <small>Protein</small>
+                                                        <big>
+                                                            {procnt}
+                                                            {meal.totalNutrients['PROCNT'].unit}
+                                                        </big>
+                                                    </div>
+                                                    <div className="meal-info">
+                                                        <small>Fat</small>
+                                                        <big>
+                                                            {fat}
+                                                            {meal.totalNutrients['FAT'].unit}
+                                                        </big>
+                                                    </div>
+                                                    <div className="meal-info">
+                                                        <small>Carbs</small>
+                                                        <big>
+                                                            {chocdf}
+                                                            {meal.totalNutrients['CHOCDF'].unit}
+                                                        </big>
+                                                    </div>
+                                                    <div className="meal-info">
+                                                        <a href="">
+                                                            <i className="icon-more_horiz"></i>
+                                                        </a>
+                                                    </div>
                                                 </div>
-                                                <div className="meal-name">
-                                                    <small>Day Drive</small>
-                                                    <h5>Title</h5>
-                                                </div>
-                                                <div className="meal-info">
-                                                    <small>Cals</small>
-                                                    <big>Cals</big>
-                                                </div>
-                                                <div className="meal-info">
-                                                    <small>Protein</small>
-                                                    <big>Protein</big>
-                                                </div>
-                                                <div className="meal-info">
-                                                    <small>Fat</small>
-                                                    <big>Fat</big>
-                                                </div>
-                                                <div className="meal-info">
-                                                    <small>Carbs</small>
-                                                    <big>Carbs</big>
-                                                </div>
-                                                <div className="meal-info">
-                                                    <a href="">
-                                                        <i className="icon-more_horiz"></i>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        ))
+                                            )
+                                        })
                                     }
                                 </div>
                             </div>
@@ -110,29 +180,48 @@ class NutritionMeal extends Component {
                                 </div>
                                 <div className="whitebox-body">
                                     <div className="dtl-div">
-                                        {!mealPlanStatus &&
-                                            <span>No meal plan statistics found.</span>
-                                        }
-                                        {mealPlanStatus && mealPlanStatus.length <= 0 &&
-                                            <span>No meal plan statistics found.</span>
-                                        }
-                                        {mealPlanStatus && mealPlanStatus.length > 0 &&
-                                            <ul className="common-ul">
-                                                {
-                                                    mealPlanStatus.map((mealPlanStat, index) => (
-                                                        <li>
-                                                            <div className="grey-white">
-                                                                <h4>Title</h4>
-                                                                <h5>
-                                                                    Value
-                                                                    <sub>Units</sub>
-                                                                </h5>
-                                                            </div>
-                                                        </li>
-                                                    ))
-                                                }
-                                            </ul>
-                                        }
+                                        <ul className="common-ul">
+                                            <li>
+                                                <div className="grey-white">
+                                                    <h4>
+                                                        Total Calories
+                                                        </h4>
+                                                    <h5>
+                                                        {total_enerc_kal}<sub>kcal</sub>
+                                                    </h5>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div className="grey-white">
+                                                    <h4>
+                                                        Total Protein
+                                                        </h4>
+                                                    <h5>
+                                                        {total_procnt}<sub>g</sub>
+                                                    </h5>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div className="grey-white">
+                                                    <h4>
+                                                        Total Fat
+                                                        </h4>
+                                                    <h5>
+                                                        {total_fat}<sub>g</sub>
+                                                    </h5>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div className="grey-white">
+                                                    <h4>
+                                                        Total Carbs
+                                                        </h4>
+                                                    <h5>
+                                                        {total_chocdf}<sub>g</sub>
+                                                    </h5>
+                                                </div>
+                                            </li>
+                                        </ul>
                                     </div>
                                     <div className="nutrition-chart">
                                         <img src="" alt="" />
@@ -145,6 +234,31 @@ class NutritionMeal extends Component {
             </div>
         );
     }
+
+    componentDidUpdate() {
+        const {
+            loading,
+            todaysMeal,
+        } = this.props;
+        const {
+            selectActionInit,
+        } = this.state;
+        if (selectActionInit && !loading) {
+            this.setState({ selectActionInit: false, todaysMeal });
+        }
+    }
+
 }
 
-export default connect()(NutritionMeal);
+const mapStateToProps = (state) => {
+    const { userNutritions } = state;
+    return {
+        loading: userNutritions.get('loading'),
+        error: userNutritions.get('error'),
+        todaysMeal: userNutritions.get('todaysMeal'),
+    };
+}
+
+export default connect(
+    mapStateToProps
+)(NutritionMeal);

@@ -112,7 +112,7 @@ class FitnessTestSave extends Component {
         formData.append('instructions', requestObj.instructions);
         formData.append('format', requestObj.format);
         if (requestObj.image) {
-            formData.append('image', requestObj.image[0]);
+            formData.append('featureImage', requestObj.image[0]);
         }
         if (format === FITNESS_TEST_FORMAT_MAX_REP) {
             formData.append('max_rep', requestObj.max_rep);

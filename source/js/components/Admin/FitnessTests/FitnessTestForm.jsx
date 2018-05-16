@@ -308,7 +308,7 @@ class FitnessTestForm extends Component {
             this.setState({
                 description: fitnessTest.description,
                 instructions: fitnessTest.instructions,
-                existingFeatureImages: (fitnessTest.image) ? [fitnessTest.image] : [],
+                existingFeatureImages: (fitnessTest.featureImage) ? [fitnessTest.featureImage] : [],
             });
             if (fitnessTest.format === FITNESS_TEST_FORMAT_MAX_REP) {
                 _.forEach(fitnessTest.max_rep, (val) => {

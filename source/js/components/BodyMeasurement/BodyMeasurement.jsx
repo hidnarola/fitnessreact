@@ -37,11 +37,11 @@ class BodyMeasurement extends Component {
                     <div className="body-head-r">
                         <a href="" className="white-btn">
                             <span>Enter Body Fat</span>
-                            <i class="icon-accessibility"></i>
+                            <i className="icon-accessibility"></i>
                         </a>
                         <a href="javascript:void(0)" onClick={this.handleShowAddProgressPhotoModal} className="pink-btn">
                             <span>Add Progress Photo</span>
-                            <i class="icon-add_a_photo"></i>
+                            <i className="icon-add_a_photo"></i>
                         </a>
                     </div>
                 </div>

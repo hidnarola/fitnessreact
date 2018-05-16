@@ -52,6 +52,7 @@ import { publicPath } from '../constants/routes';
 import { SESSION_EXPIRED_URL_TYPE } from '../constants/consts';
 import { FaCircleONotch } from "react-icons/lib/fa";
 import FitnessTests from './Admin/FitnessTests';
+import NutritionRecipeDetails from '../components/Nutrition/NutritionRecipeDetails';
 
 class App extends Component {
 
@@ -83,6 +84,7 @@ class App extends Component {
                             <PrivateRoute path={routeCodes.EXERCISEPREFERENCE} component={ExerciseSettings} />
 
                             <PrivateRoute exact path={routeCodes.NUTRITION} component={NutritionMeal} />
+                            <PrivateRoute path={`${routeCodes.NUTRITION_RECIPE_DETAILS}/:id`} component={NutritionRecipeDetails} />
                             <PrivateRoute path={routeCodes.NUTRITIONPREFERENCE} component={NutritionPreferences} />
                             <PrivateRoute path={routeCodes.NUTRITIONSHOP} component={NutritionShopping} />
 
@@ -164,7 +166,7 @@ class App extends Component {
                 />
             </div>
         );
-    }    
+    }
 }
 
 export default hot(module)(App);

@@ -3,7 +3,10 @@ import api from 'api/userNutritions';
 import {
     GET_USER_TODAYS_MEAL_REQUEST,
     getUserTodaysMealSuccess,
-    getUserTodaysMealError
+    getUserTodaysMealError,
+    getUserNutritionRecipeDetailsSuccess,
+    getUserNutritionRecipeDetailsError,
+    GET_USER_NUTRITION_RECIPE_DETAILS_REQUEST
 } from '../actions/userNutritions';
 
 function getUserTodaysMealData() {
@@ -18,8 +21,21 @@ function getUserTodaysMealData() {
     }
 }
 
+function getUserRecipeDetailsData() {
+    return function* (action) {
+        try {
+            let _id = action._id;
+            const data = yield call(() => api.getUserRecipeDetails(_id));
+            yield put(getUserNutritionRecipeDetailsSuccess(data));
+        } catch (error) {
+            yield put(getUserNutritionRecipeDetailsError(error));
+        }
+    }
+}
+
 export function* watchUserNutritionsData() {
     yield takeLatest(GET_USER_TODAYS_MEAL_REQUEST, getUserTodaysMealData());
+    yield takeLatest(GET_USER_NUTRITION_RECIPE_DETAILS_REQUEST, getUserRecipeDetailsData());
 }
 
 export default [

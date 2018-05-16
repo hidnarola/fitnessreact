@@ -127,7 +127,6 @@ class FitnessTestListing extends Component {
                                                 Header: 'Created At',
                                                 accessor: 'createdAt',
                                                 filterable: false,
-                                                sortable: false,
                                                 Cell: (row) => {
                                                     return (
                                                         <div className="list-dob-wrapper">
@@ -350,6 +349,12 @@ class FitnessTestListing extends Component {
                                         className="-striped -highlight"
                                         showPaginationTop={true}
                                         showPaginationBottom={true}
+                                        defaultSorted={[
+                                            {
+                                                id: "createdAt",
+                                                desc: true
+                                            }
+                                        ]}
                                     />
                                 </div>
                             </div>
