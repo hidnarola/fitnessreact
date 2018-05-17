@@ -18,6 +18,8 @@ export const FITNESS_TESTS_DELETE_REQUEST = 'FITNESS_TESTS_DELETE_REQUEST';
 export const FITNESS_TESTS_DELETE_SUCCESS = 'FITNESS_TESTS_DELETE_SUCCESS';
 export const FITNESS_TESTS_DELETE_ERROR = 'FITNESS_TESTS_DELETE_ERROR';
 
+export const FITNESS_TESTS_REINITIALIZE = 'FITNESS_TESTS_REINITIALIZE';
+
 export function fitnessTestsSelectOneRequest(_id) {
     return {
         type: FITNESS_TESTS_SELECT_ONE_REQUEST,
@@ -121,5 +123,11 @@ export function fitnessTestsDeleteError(error) {
     return {
         type: FITNESS_TESTS_DELETE_ERROR,
         error
+    }
+}
+
+export function fitnessTestsReinitialize() {
+    return {
+        type: FITNESS_TESTS_REINITIALIZE
     }
 }

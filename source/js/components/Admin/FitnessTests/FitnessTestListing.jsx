@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import ReactTable from "react-table";
 import moment from "moment";
-import { generateDTTableFilterObj, capitalizeFirstLetter } from '../../../helpers/funs';
-import { fitnessTestsFilterRequest, fitnessTestsDeleteRequest } from '../../../actions/admin/fitnessTests';
+import { generateDTTableFilterObj, capitalizeFirstLetter, te, ts } from '../../../helpers/funs';
+import { fitnessTestsFilterRequest, fitnessTestsDeleteRequest, fitnessTestsReinitialize } from '../../../actions/admin/fitnessTests';
 import {
     FITNESS_TEST_CAT_STRENGTH,
     FITNESS_TEST_CAT_FLEXIBILITY,
@@ -380,6 +380,8 @@ class FitnessTestListing extends Component {
             filteredLoading,
             filteredFitnessTests,
             filteredTotalPages,
+            error,
+            dispatch,
         } = this.props;
         if (dtLoading && !filteredLoading) {
             this.setState({
@@ -389,6 +391,12 @@ class FitnessTestListing extends Component {
             });
         }
         if (deleteActionInit && !loading) {
+            if (error && error.length > 0) {
+                te(error[0]);
+                dispatch(fitnessTestsReinitialize());
+            } else {
+                ts('Fitness test deleted successfully!');
+            }
             this.setState({ deleteActionInit: false });
             this.handleDeleteModal(false);
             this.refreshDtData();

@@ -14,7 +14,8 @@ import {
     FITNESS_TESTS_SELECT_ONE_ERROR,
     FITNESS_TESTS_UPDATE_REQUEST,
     FITNESS_TESTS_UPDATE_SUCCESS,
-    FITNESS_TESTS_UPDATE_ERROR
+    FITNESS_TESTS_UPDATE_ERROR,
+    FITNESS_TESTS_REINITIALIZE
 } from "../../actions/admin/fitnessTests";
 
 import { generateValidationErrorMsgArr } from "../../helpers/funs";
@@ -36,10 +37,19 @@ const actionMap = {
         }));
     },
     [FITNESS_TESTS_SELECT_ONE_SUCCESS]: (state, action) => {
-        return state.merge(Map({
+        var newStateObj = {
             loading: false,
-            fitnessTest: action.data.test_exercise,
-        }));
+        };
+        if (action.data.status && action.data.status === 1) {
+            newStateObj.fitnessTest = action.data.test_exercise;
+        } else {
+            var errorMsg = 'Something went wrong! please try again later.';
+            if (action.data.message) {
+                errorMsg = action.data.message;
+            }
+            newStateObj.error = [errorMsg];
+        }
+        return state.merge(Map(newStateObj));
     },
     [FITNESS_TESTS_SELECT_ONE_ERROR]: (state, action) => {
         let error = [];
@@ -137,9 +147,17 @@ const actionMap = {
         }));
     },
     [FITNESS_TESTS_DELETE_SUCCESS]: (state, action) => {
-        return state.merge(Map({
+        var newStateObj = {
             loading: false,
-        }));
+        }
+        if (action.data.status !== 1) {
+            var errorMsg = 'Something went wrong! please try again later.';
+            if (action.data.message) {
+                errorMsg = action.data.message;
+            }
+            newStateObj.error = [errorMsg];
+        }
+        return state.merge(Map(newStateObj));
     },
     [FITNESS_TESTS_DELETE_ERROR]: (state, action) => {
         let error = [];
@@ -154,6 +172,9 @@ const actionMap = {
             loading: false,
             error: error,
         }));
+    },
+    [FITNESS_TESTS_REINITIALIZE]: (state, action) => {
+        return state.merge(initialState);
     },
 };
 

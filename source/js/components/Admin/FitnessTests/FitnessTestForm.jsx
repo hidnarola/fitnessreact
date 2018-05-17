@@ -4,6 +4,7 @@ import { NavLink, withRouter } from 'react-router-dom';
 import { Field, reduxForm, FieldArray, formValueSelector } from 'redux-form';
 import { InputField, EditorField, SelectField_ReactSelect, FileField_Dropzone_Single } from '../../../helpers/FormControlHelper';
 import { required, requiredReactSelect, requiredImage } from '../../../formValidation/validationRules';
+import { FaTrash } from 'react-icons/lib/fa'
 import { adminRouteCodes } from '../../../constants/adminRoutes';
 import {
     FITNESS_TEST_CAT_STRENGTH,
@@ -21,12 +22,14 @@ import {
     FITNESS_TEST_FORMAT_TEXT_FIELD,
     FITNESS_TEST_FORMAT_TEXT_FIELD_STR,
     FITNESS_TEST_FORMAT_A_OR_B,
-    FITNESS_TEST_FORMAT_A_OR_B_STR
+    FITNESS_TEST_FORMAT_A_OR_B_STR,
+    SERVER_BASE_URL
 } from '../../../constants/consts';
-import { capitalizeFirstLetter } from '../../../helpers/funs';
+import { capitalizeFirstLetter, te } from '../../../helpers/funs';
 import FitnessTestMaxRep from './FitnessTestMaxRep';
 import FitnessTestMultiselect from './FitnessTestMultiselect';
 import { fitnessTestsSelectOneRequest } from '../../../actions/admin/fitnessTests';
+import noProfileImg from 'img/common/no-profile-img.png'
 
 const categoryOptions = [
     { value: FITNESS_TEST_CAT_STRENGTH, label: capitalizeFirstLetter(FITNESS_TEST_CAT_STRENGTH.replace('_', ' ')) },
@@ -68,7 +71,8 @@ class FitnessTestForm extends Component {
             existingFeatureImages: [],
             existingImageA: [],
             existingImageB: [],
-            existingMultiselectImages: [],
+            existingMultiselectData: [],
+            deletedMultiselectIds: [],
         }
         this.validationRules = {
             category: [requiredReactSelect],
@@ -106,7 +110,8 @@ class FitnessTestForm extends Component {
             existingFeatureImages,
             existingImageA,
             existingImageB,
-            existingMultiselectImages,
+            existingMultiselectData,
+            deletedMultiselectIds,
         } = this.state;
         const {
             format,
@@ -202,16 +207,68 @@ class FitnessTestForm extends Component {
                                     component={FitnessTestMaxRep}
                                     options={maxRepOptions}
                                     validationRules={this.validationRules.max_rep}
+                                    validate={this.validateMaxRepsRequired}
+                                    wrapperClass="form-group"
+                                    errorClass="help-block"
                                 />
                             }
                             {format && format.value === FITNESS_TEST_FORMAT_MULTISELECT &&
-                                <FieldArray
-                                    name="multiselect"
-                                    component={FitnessTestMultiselect}
-                                    existingMultiselectImages={existingMultiselectImages}
-                                    validationRules={this.validationRules.multiselect}
-                                    handleDeleteExistingMultiselectImages={this.handleDeleteExistingMultiselectImages}
-                                />
+                                <div className="fitness-test-multiselect-wrapper">
+                                    {existingMultiselectData && existingMultiselectData.length > 0 &&
+                                        <div className="fitness-test-existing">
+                                            <div className="multiselect-wrapper dynamic-control-generator-wrapper">
+                                                <label className="control-label">Multiselect Options</label>
+                                                <div className="row pull-left width-100-per step-fields-wrapper">
+                                                    {existingMultiselectData.map((data, index) => {
+                                                        return (
+                                                            <div className="col-md-12 step-field" key={index}>
+                                                                <div className="col-md-4 pull-left">
+                                                                    {data.title}
+                                                                </div>
+                                                                <div className="col-md-7 pull-left">
+                                                                    <img
+                                                                        src={SERVER_BASE_URL + data.image}
+                                                                        alt="Multiselect Image"
+                                                                        className="avatar"
+                                                                        onError={(e) => {
+                                                                            e.target.src = noProfileImg
+                                                                        }}
+                                                                    />
+                                                                </div>
+                                                                <div className="col-md-1 text-vcenter no-padding pull-left">
+                                                                    <button
+                                                                        type="button"
+                                                                        className="btn btn-danger btn_remove"
+                                                                        onClick={() => {
+                                                                            this.handleDeleteExistingMultiselectData(index);
+                                                                        }}
+                                                                        tabIndex="-1"
+                                                                    >
+                                                                        <FaTrash />
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        );
+                                                    })}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                    <FieldArray
+                                        name="multiselect"
+                                        component={FitnessTestMultiselect}
+                                        validationRules={this.validationRules.multiselect}
+                                        validate={this.validateMultiselectRequired}
+                                        wrapperClass="form-group"
+                                        errorClass="help-block"
+                                    />
+                                    <Field
+                                        id="deletedMultiselectIds"
+                                        name="deletedMultiselectIds"
+                                        type="hidden"
+                                        component="input"
+                                    />
+                                </div>
                             }
                             {format && format.value === FITNESS_TEST_FORMAT_A_OR_B &&
                                 <div className="row">
@@ -280,7 +337,7 @@ class FitnessTestForm extends Component {
                         </div>
                     </div>
                 </form>
-            </div>
+            </div >
         );
     }
 
@@ -292,65 +349,99 @@ class FitnessTestForm extends Component {
             loading,
             fitnessTest,
             initialize,
+            fitnessTestError,
+            history,
         } = this.props;
         if (selectActionInit && !loading) {
-            this.setState({ selectActionInit: false });
-            var maxRepsData = [];
-            var multiselectData = [];
-            var formDataInit = {
-                category: _.find(categoryOptions, { value: fitnessTest.category }),
-                subCategory: _.find(subCategoryOptions, { value: fitnessTest.subCategory }),
-                name: fitnessTest.name,
-                format: _.find(formatOptions, { value: fitnessTest.format }),
-                description: fitnessTest.description,
-                instructions: fitnessTest.instructions,
-            }
-            this.setState({
-                description: fitnessTest.description,
-                instructions: fitnessTest.instructions,
-                existingFeatureImages: (fitnessTest.featureImage) ? [fitnessTest.featureImage] : [],
-            });
-            if (fitnessTest.format === FITNESS_TEST_FORMAT_MAX_REP) {
-                _.forEach(fitnessTest.max_rep, (val) => {
-                    maxRepsData.push({
-                        value: val,
-                        label: val,
-                    });
-                });
-            }
-            formDataInit.max_rep = maxRepsData;
-            if (fitnessTest.format === FITNESS_TEST_FORMAT_MULTISELECT) {
-                var images = [];
-                _.forEach(fitnessTest.multiselect, (obj) => {
-                    multiselectData.push({
-                        title: obj.title,
-                    });
-                    images.push(obj.image);
-                });
-                this.setState({ existingMultiselectImages: images });
-            }
-            formDataInit.multiselect = multiselectData;
-            if (fitnessTest.format === FITNESS_TEST_FORMAT_A_OR_B) {
-                formDataInit.titleA = fitnessTest.a_or_b[0].title;
-                formDataInit.titleB = fitnessTest.a_or_b[1].title;
+            if (fitnessTestError && fitnessTestError.length > 0) {
+                te('No fitness test found! Please try again');
+                history.push(adminRouteCodes.FITNESS_TESTS);
+            } else {
+                this.setState({ selectActionInit: false });
+                var maxRepsData = [];
+                var formDataInit = {
+                    category: _.find(categoryOptions, { value: fitnessTest.category }),
+                    subCategory: _.find(subCategoryOptions, { value: fitnessTest.subCategory }),
+                    name: fitnessTest.name,
+                    format: _.find(formatOptions, { value: fitnessTest.format }),
+                    description: fitnessTest.description,
+                    instructions: fitnessTest.instructions,
+                }
                 this.setState({
-                    existingImageA: [fitnessTest.a_or_b[0].image],
-                    existingImageB: [fitnessTest.a_or_b[1].image],
+                    description: fitnessTest.description,
+                    instructions: fitnessTest.instructions,
+                    existingFeatureImages: (fitnessTest.featureImage) ? [fitnessTest.featureImage] : [],
                 });
+                if (fitnessTest.format === FITNESS_TEST_FORMAT_MAX_REP) {
+                    _.forEach(fitnessTest.max_rep, (val) => {
+                        maxRepsData.push({
+                            value: val,
+                            label: val,
+                        });
+                    });
+                    formDataInit.max_rep = maxRepsData;
+                }
+                if (fitnessTest.format === FITNESS_TEST_FORMAT_MULTISELECT) {
+                    this.setState({ existingMultiselectData: fitnessTest.multiselect });
+                }
+                if (fitnessTest.format === FITNESS_TEST_FORMAT_A_OR_B) {
+                    formDataInit.titleA = fitnessTest.a_or_b[0].title;
+                    formDataInit.titleB = fitnessTest.a_or_b[1].title;
+                    this.setState({
+                        existingImageA: [fitnessTest.a_or_b[0].image],
+                        existingImageB: [fitnessTest.a_or_b[1].image],
+                    });
+                }
+                initialize(formDataInit);
             }
-            initialize(formDataInit);
         }
     }
 
-    handleDeleteExistingMultiselectImages = (index) => {
-        let images = this.state.existingMultiselectImages;
-        images.splice(index, 1);
-        this.setState({ existingMultiselectImages: images });
+    handleDeleteExistingMultiselectData = (index) => {
+        let data = this.state.existingMultiselectData;
+        let deletedIds = this.state.deletedMultiselectIds;
+        let deletedId = (data[index]) ? data[index]._id : null;
+        if (deletedId) {
+            deletedIds.push(deletedId);
+        }
+        data.splice(index, 1);
+        this.setState({
+            existingMultiselectData: data,
+            deletedMultiselectIds: deletedIds,
+        });
+        this.props.change('deletedMultiselectIds', JSON.stringify(deletedIds));
     }
 
     handleChangeTextEditor = (name, value) => {
         this.props.change(name, value);
         this.setState({ [name]: value });
+    }
+
+    validateMaxRepsRequired = (value, allValues, props) => {
+        if (typeof value === 'undefined' || value === '' || value === null || value.length <= 0) {
+            return "Atleast one max rep option is required";
+        }
+        return undefined;
+    }
+
+    validateMultiselectRequired = (value, allValues, props) => {
+        const { existingMultiselectData } = this.state;
+        const { match } = this.props;
+        if (match.params.id) {
+            if (existingMultiselectData.length <= 0) {
+                if (typeof value === 'undefined' || value === '' || value === null || value.length <= 0) {
+                    return "Atleast one multiselect option is required";
+                }
+                return undefined;
+            } else {
+                return undefined;
+            }
+        } else {
+            if (typeof value === 'undefined' || value === '' || value === null || value.length <= 0) {
+                return "Atleast one multiselect option is required";
+            }
+            return undefined;
+        }
     }
 }
 
@@ -367,7 +458,7 @@ const mapStateToProps = (state) => {
     return {
         format: formSelector(state, 'format'),
         loading: adminFitnessTests.get('loading'),
-        error: adminFitnessTests.get('error'),
+        fitnessTestError: adminFitnessTests.get('error'),
         fitnessTest: adminFitnessTests.get('fitnessTest'),
     };
 }
