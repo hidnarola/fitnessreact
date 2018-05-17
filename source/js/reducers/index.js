@@ -6,7 +6,6 @@ import userBodyMeasurement from 'reducers/userBodyMeasurement';
 import people from 'reducers/people';
 import dashboardnew from 'reducers/dashboard';
 import nutritions from 'reducers/nutritions';
-import exerciseFitness from 'reducers/exercise/fitness'
 import userEquipments from 'reducers/userEquipments'
 import userExercisePreferences from 'reducers/userExercisePreferences'
 import userNutritionPreferences from 'reducers/userNutritionPreferences'
@@ -39,7 +38,6 @@ export default combineReducers({
     people,
     dashboardnew,
     nutritions,
-    exerciseFitness,
     userEquipments,
     userExercisePreferences,
     userNutritionPreferences,

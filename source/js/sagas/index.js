@@ -4,7 +4,6 @@ import userBodyMeasurement from 'sagas/userBodyMeasurement';
 import peopleSagas from 'sagas/people';
 import dashboardSagas from 'sagas/dashboard';
 import nutritionsSagas from 'sagas/nutritions';
-import exerciseFitness from 'sagas/exercise/fitness'
 import userEquipments from 'sagas/userEquipments'
 import userExercisePreferences from 'sagas/userExercisePreferences'
 import userNutritionPreferences from 'sagas/userNutritionPreferences'
@@ -35,7 +34,6 @@ export default function* rootSaga() {
     ...peopleSagas,
     ...dashboardSagas,
     ...nutritionsSagas,
-    ...exerciseFitness,
     ...userEquipments,
     ...userExercisePreferences,
     ...userNutritionPreferences,
