@@ -9,7 +9,7 @@ import {
 import _ from "lodash";
 import { adminRouteCodes } from '../../../constants/adminRoutes';
 import { ts, focusToControl } from '../../../helpers/funs';
-import { fitnessTestsAddRequest, fitnessTestsUpdateRequest, fitnessTestsReinitialize } from '../../../actions/admin/fitnessTests';
+import { fitnessTestsAddRequest, fitnessTestsUpdateRequest, fitnessTestsReinitialize } from '../../../actions/admin/fitness_tests';
 
 class FitnessTestSave extends Component {
     constructor(props) {

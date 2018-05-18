@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom';
 import ReactTable from "react-table";
 import moment from "moment";
 import { generateDTTableFilterObj, capitalizeFirstLetter, te, ts } from '../../../helpers/funs';
-import { fitnessTestsFilterRequest, fitnessTestsDeleteRequest, fitnessTestsReinitialize } from '../../../actions/admin/fitnessTests';
+import { fitnessTestsFilterRequest, fitnessTestsDeleteRequest, fitnessTestsReinitialize } from '../../../actions/admin/fitness_tests';
 import {
     FITNESS_TEST_CAT_STRENGTH,
     FITNESS_TEST_CAT_FLEXIBILITY,

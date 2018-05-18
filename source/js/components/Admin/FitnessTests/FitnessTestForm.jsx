@@ -28,7 +28,7 @@ import {
 import { capitalizeFirstLetter, te } from '../../../helpers/funs';
 import FitnessTestMaxRep from './FitnessTestMaxRep';
 import FitnessTestMultiselect from './FitnessTestMultiselect';
-import { fitnessTestsSelectOneRequest } from '../../../actions/admin/fitnessTests';
+import { fitnessTestsSelectOneRequest } from '../../../actions/admin/fitness_tests';
 import noProfileImg from 'img/common/no-profile-img.png'
 
 const categoryOptions = [

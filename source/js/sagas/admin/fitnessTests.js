@@ -15,7 +15,7 @@ import {
     fitnessTestsUpdateSuccess,
     fitnessTestsUpdateError,
     FITNESS_TESTS_UPDATE_REQUEST
-} from '../../actions/admin/fitnessTests';
+} from '../../actions/admin/fitness_tests';
 
 import api from 'api/admin/fitnessTests';
 
