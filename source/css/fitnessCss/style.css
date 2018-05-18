@@ -753,7 +753,7 @@ display:-webkit-box; display:webkit-flex; display:-ms-flex; display:flex; justif
 .fitness-test>h5 small{color: #232B41; font-size: 14px;	font-weight: 500;	line-height: 20px;}
 .fitness-test>a{text-decoration:none; color:#232B41; font-size:15px; line-height:20px; width:47px; text-align:center; border-right:2px solid #f9fafa; margin-right:20px; display:-webkit-box; display:webkit-flex; display:-ms-flex; display:flex; justify-content:center; flex-direction:column;}
 
-.fitness-test-box .dropdown-menu{position:relative;padding:15px 10px;top:0; margin:0;border:0; box-shadow:none; width:100%;}
+.fitness-test-box .dropdown-menu{position:relative;padding:15px 10px;top:0; margin:0;border:0; box-shadow:none; width:100%;z-index: 10;}
 .fitness-test-box .grey-white{margin-bottom:10px;    border: 2px solid #F9FAFA;}
 .fitness-test-box .grey-white label{width:50%; color:#282828;	font-size:12px;	font-weight:300; line-height:17px;}
 .fitness-test-box .grey-white  h5{margin:0;padding:0;background:#fff;widtH:50%;text-align:right;padding:0 20px 0 0; color:#232B41; font-size:14px; font-weight:500; line-height:18px; display:-webkit-box; display:webkit-flex; display:-ms-flex; display:flex; justify-content:center; flex-direction:column;}
@@ -768,6 +768,7 @@ display:-webkit-box; display:webkit-flex; display:-ms-flex; display:flex; justif
 
 .vertical-drop{padding:20px;}
 .vertical-drop p{color: #282828;	font-size:12px;	font-weight:300; line-height: 17px; margin:0;}
+.horizontal-drop p{color: #282828;	font-size:12px;	font-weight:300; line-height: 17px; margin:0;padding: 0 0 0 15px;}
 .vertical-drop ul{list-style:none;margin:0 0 20px; padding:0; display:-webkit-box; display:webkit-flex; display:-ms-flex; display:flex;}
 .vertical-drop ul li{width:49%;border:2px solid #f9fafa; border-radius:5px; position:relative;}
 .vertical-drop ul li + li{margin-left:auto;}
@@ -1208,8 +1209,11 @@ flex-direction:row; display:-webkit-box; display:-webkit-flex; display:-ms-flex;
 .rc-time-picker-panel-inner {width: 100% !important;}
 
 /* Remove Spinner from number input For Firefox */
+.remove-spinner input[type='number'],
 .body-measurement-list-section-wrapper input[type='number'] {-moz-appearance:textfield;}
 /* Remove Spinner from number input Webkit browsers like Safari and Chrome */
+.remove-spinner input[type=number]::-webkit-inner-spin-button,
+.remove-spinner input[type=number]::-webkit-outer-spin-button,
 .body-measurement-list-section-wrapper input[type=number]::-webkit-inner-spin-button,
 .body-measurement-list-section-wrapper input[type=number]::-webkit-outer-spin-button {-webkit-appearance: none;margin: 0;}
 

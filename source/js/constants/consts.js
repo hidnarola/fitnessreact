@@ -142,3 +142,6 @@ export const FITNESS_TEST_FORMAT_MAX_REP_STR = 'Max Reps';
 export const FITNESS_TEST_FORMAT_MULTISELECT_STR = 'Multiselect';
 export const FITNESS_TEST_FORMAT_TEXT_FIELD_STR = 'Text Field';
 export const FITNESS_TEST_FORMAT_A_OR_B_STR = 'A or B';
+
+export const MAX_REPS_CONST_1 = 1.0278;
+export const MAX_REPS_CONST_2 = 0.0278;

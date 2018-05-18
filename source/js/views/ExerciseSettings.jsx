@@ -3,19 +3,17 @@ import { connect } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
-
 import Setting from 'components/Exercise/Setting';
 import Equipment from 'components/Exercise/Equipment';
 import Fitness from 'components/Exercise/Fitness';
-
-import { routeCodes } from 'constants/routes';
-
 import FitnessHeader from 'components/global/FitnessHeader';
 import FitnessNav from 'components/global/FitnessNav';
 import { submit } from 'redux-form';
 import ResetConfirmation from '../components/Admin/Common/ResetConfirmation';
 import { saveUserEquipmentsRequest } from '../actions/userEquipments';
 import { resetUserExercisePreferencesRequest } from '../actions/userExercisePreferences';
+import { routeCodes } from '../constants/routes';
+import { resetUserFitnessTestsRequest } from '../actions/userFitnessTests';
 
 class ExerciseSettings extends Component {
     constructor(props) {
@@ -26,6 +24,7 @@ class ExerciseSettings extends Component {
             resetActionFor: null,
             resetActionInit: false,
         }
+        this.fitnessChildRef = React.createRef();
     }
 
     render() {
@@ -86,7 +85,18 @@ class ExerciseSettings extends Component {
                     </div>
 
                     <Switch>
-                        <Route exact path={routeCodes.EXERCISEFITNESS} component={Fitness} />
+                        <Route
+                            exact
+                            path={routeCodes.EXERCISEFITNESS}
+                            render={
+                                () => <Fitness
+                                    {...this.state}
+                                    setSaveAction={this.setSaveAction}
+                                    setResetAction={this.setResetAction}
+                                    ref={(ref) => this.fitnessChildRef = ref}
+                                />
+                            }
+                        />
                         <Route
                             exact
                             path={routeCodes.EXERCISEEQP}
@@ -128,6 +138,8 @@ class ExerciseSettings extends Component {
             dispatch(submit('userEquipmentsForm'));
         } else if (match.path === routeCodes.EXERCISEPREFERENCE) {
             dispatch(submit('userExercisePreferencesForm'));
+        } else if (match.path === routeCodes.EXERCISEFITNESS) {
+            this.fitnessChildRef.getWrappedInstance().handleSave();
         }
     }
 
@@ -140,6 +152,8 @@ class ExerciseSettings extends Component {
             newModalState.resetActionFor = 'userEquipmentsForm';
         } else if (match.path === routeCodes.EXERCISEPREFERENCE) {
             newModalState.resetActionFor = 'userExercisePreferencesForm';
+        } else if (match.path === routeCodes.EXERCISEFITNESS) {
+            newModalState.resetActionFor = 'userFitnessTests';
         }
         this.setState(newModalState);
     }
@@ -162,6 +176,9 @@ class ExerciseSettings extends Component {
             this.setResetAction(true);
         } else if (resetActionFor === 'userExercisePreferencesForm') {
             dispatch(resetUserExercisePreferencesRequest());
+            this.setResetAction(true);
+        } else if (resetActionFor === 'userFitnessTests') {
+            dispatch(resetUserFitnessTestsRequest());
             this.setResetAction(true);
         }
     }

@@ -10,7 +10,6 @@ class Equipment extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            saveActionInit: false,
             loadDataActionInit: false,
             equipments: [],
             userEquipments: [],
