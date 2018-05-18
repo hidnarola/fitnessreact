@@ -7,9 +7,9 @@ import {
     FITNESS_TEST_FORMAT_A_OR_B
 } from '../../../constants/consts';
 import _ from "lodash";
-import { fitnessTestsAddRequest, fitnessTestsUpdateRequest, fitnessTestsReinitialize } from '../../../actions/admin/fitnessTests';
 import { adminRouteCodes } from '../../../constants/adminRoutes';
 import { ts, focusToControl } from '../../../helpers/funs';
+import { fitnessTestsAddRequest, fitnessTestsUpdateRequest, fitnessTestsReinitialize } from '../../../actions/admin/fitnessTests';
 
 class FitnessTestSave extends Component {
     constructor(props) {
