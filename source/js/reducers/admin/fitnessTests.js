@@ -16,7 +16,7 @@ import {
     FITNESS_TESTS_UPDATE_SUCCESS,
     FITNESS_TESTS_UPDATE_ERROR,
     FITNESS_TESTS_REINITIALIZE
-} from "../../actions/admin/fitness_tests";
+} from "../../actions/admin/fitnessTests";
 
 import { generateValidationErrorMsgArr } from "../../helpers/funs";
 import { VALIDATION_FAILURE_STATUS } from "../../constants/consts";
