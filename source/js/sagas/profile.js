@@ -22,7 +22,7 @@ function fetchProfileDetailsData() {
     }
 }
 
-function postAboutProfileDetailsData() {
+function updateAboutProfileDetailsData() {
     return function* (action) {
         try {
             var requestData = action.requestData;
@@ -36,7 +36,7 @@ function postAboutProfileDetailsData() {
 
 export function* watchProfileDetailsData() {
     yield takeLatest(GET_PROFILE_DETAILS_REQUEST, fetchProfileDetailsData());
-    yield takeLatest(SAVE_ABOUT_PROFILE_DETAILS_REQUEST, postAboutProfileDetailsData());
+    yield takeLatest(SAVE_ABOUT_PROFILE_DETAILS_REQUEST, updateAboutProfileDetailsData());
 }
 
 export default [

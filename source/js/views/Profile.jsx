@@ -2,22 +2,22 @@ import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
-
+import { reset, initialize } from 'redux-form';
 import ProfileFithub from 'components/Profile/ProfileFithub';
 import ProfileFriends from 'components/Profile/ProfileFriends';
 import ProfilePhotos from 'components/Profile/ProfilePhotos';
-
 import FitnessHeader from 'components/global/FitnessHeader';
 import FitnessNav from 'components/global/FitnessNav';
-
 import { routeCodes } from 'constants/routes';
-import { getProfileDetailsRequest } from '../actions/profile';
+import { getProfileDetailsRequest, saveAboutProfileDetailsRequest } from '../actions/profile';
 import noProfileImg from 'img/common/no-profile-img.png'
 import { FRIENDSHIP_STATUS_SELF, FRIENDSHIP_STATUS_UNKNOWN, FRIENDSHIP_STATUS_FRIEND, FRIENDSHIP_STATUS_REQUEST_RECEIVED, FRIENDSHIP_STATUS_REQUEST_SENT } from '../constants/consts';
 import { sendFriendRequestRequest, cancelFriendRequestRequest, acceptFriendRequestRequest } from '../actions/friends';
 import { ts, te } from '../helpers/funs';
 import CancelFriendRequestModal from '../components/Profile/CancelFriendRequestModal';
 import UnfriendRequestModal from '../components/Profile/UnfriendRequestModal';
+import UpdateAboutMeModal from '../components/Profile/UpdateAboutMeModal';
+import ReactHtmlParser from 'react-html-parser';
 
 class Profile extends Component {
     constructor(props) {
@@ -41,6 +41,8 @@ class Profile extends Component {
             showRejectFriendRequestModal: false,
             rejectFriendRequestInit: false,
             selectFriendshipId: null,
+            showUpdateAboutMeModal: false,
+            updateAboutMeDetailsActionInit: false,
         }
     }
 
@@ -82,6 +84,7 @@ class Profile extends Component {
             showUnfriendRequestModal,
             friendRequestReceivedDisabled,
             showRejectFriendRequestModal,
+            showUpdateAboutMeModal,
         } = this.state;
         return (
             <div className='stat-page'>
@@ -267,7 +270,7 @@ class Profile extends Component {
                                         <h3 className="title-h3">About</h3>
                                         {profile && profile.friendshipStatus && profile.friendshipStatus === FRIENDSHIP_STATUS_SELF &&
                                             <div className="whitebox-head-r">
-                                                <a href="javascript:void(0)">Edit</a>
+                                                <a href="javascript:void(0)" onClick={this.showUpdateAboutMeModal}>Edit</a>
                                             </div>
                                         }
                                     </div>
@@ -293,10 +296,7 @@ class Profile extends Component {
                                             </a>
                                         }
                                         {profile && profile.aboutMe !== '' &&
-                                            <p>{profile.aboutMe}</p>
-                                        }
-                                        {profile && profile.aboutMe === '' &&
-                                            <p>Write something about yourself!</p>
+                                            <p>{ReactHtmlParser(profile.aboutMe)}</p>
                                         }
                                     </div>
                                 </div>
@@ -320,6 +320,11 @@ class Profile extends Component {
                     show={showUnfriendRequestModal}
                     handleYes={this.handleUnfriendRequest}
                     handleClose={this.handleHideUnfriendRequestModal}
+                />
+                <UpdateAboutMeModal
+                    show={showUpdateAboutMeModal}
+                    onSubmit={this.handleUpdateAboutMeSubmit}
+                    handleClose={this.handleHideUpdateAboutMeModal}
                 />
             </div>
         );
@@ -346,6 +351,7 @@ class Profile extends Component {
             UnfriendRequestInit,
             acceptFriendRequestReceivedInit,
             rejectFriendRequestInit,
+            updateAboutMeDetailsActionInit,
         } = this.state;
         var stateProfile = this.state.profile;
         if (loadProfileActionInit && !profileLoading && (profile !== stateProfile)) {
@@ -357,6 +363,12 @@ class Profile extends Component {
                 UnfriendRequestDisabled: false,
                 friendRequestReceivedDisabled: false,
             });
+            const updateAboutMeFormData = {
+                about_me: profile.aboutMe,
+                height: profile.height,
+                weight: profile.weight,
+            }
+            dispatch(initialize('aboutMeUpdateModalForm', updateAboutMeFormData));
         }
         if (sendFriendRequestInit && !requestSendLoading) {
             this.setState({
@@ -423,6 +435,15 @@ class Profile extends Component {
                 ts('Friend request canceled!');
             }
             this.setForceUpdateChildComponents(true);
+        }
+        if (updateAboutMeDetailsActionInit && !profileLoading) {
+            this.setState({
+                updateAboutMeDetailsActionInit: false,
+                loadProfileActionInit: true
+            });
+            dispatch(getProfileDetailsRequest(username));
+            this.handleHideUpdateAboutMeModal();
+            // error and success message handling is remaining
         }
     }
 
@@ -522,6 +543,25 @@ class Profile extends Component {
             showRejectFriendRequestModal: false,
             selectFriendshipId: null
         });
+    }
+
+    showUpdateAboutMeModal = () => {
+        this.setState({ showUpdateAboutMeModal: true });
+    }
+
+    handleHideUpdateAboutMeModal = () => {
+        this.setState({ showUpdateAboutMeModal: false });
+    }
+
+    handleUpdateAboutMeSubmit = (data) => {
+        const { dispatch } = this.props;
+        var requestObj = {
+            aboutMe: data.about_me,
+            height: data.height,
+            weight: data.weight,
+        }
+        this.setState({ updateAboutMeDetailsActionInit: true });
+        dispatch(saveAboutProfileDetailsRequest(requestObj));
     }
     //#endregion
 

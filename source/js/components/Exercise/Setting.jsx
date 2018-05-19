@@ -28,6 +28,7 @@ import _ from "lodash";
 import TimePicker from 'rc-time-picker';
 import moment from "moment";
 import { capitalizeFirstLetter, convertMinsToTime, convertTimeToMins, ts } from '../../helpers/funs';
+import { showPageLoader, hidePageLoader } from '../../actions/pageLoader.js';
 
 const defaultTimeSchedule = {
     monday: moment('00:00', 'HH:mm'),
@@ -61,6 +62,7 @@ class Setting extends Component {
     componentWillMount() {
         const { dispatch } = this.props;
         this.setState({ loadDataActionInit: true });
+        dispatch(showPageLoader());
         dispatch(getUserExerciseTypesRequest());
         dispatch(getUserExercisesRequest());
         dispatch(getUserBodypartsRequest());
@@ -402,6 +404,7 @@ class Setting extends Component {
             exerciseExperience,
         } = this.state;
         const { dispatch } = this.props;
+        $.fn.roundSlider.prototype._handleDragDistance = 100;
         $("#workout-intensity").roundSlider({
             value: workoutIntensity,
             radius: 110,
@@ -488,6 +491,7 @@ class Setting extends Component {
             });
             $("#workout-intensity").roundSlider('option', { value: workoutIntensity });
             $("#experience-level").roundSlider('option', { value: exerciseExperience });
+            dispatch(hidePageLoader());
         } else if (saveActionInit && !loading) {
             dispatch(getUserExercisePreferencesRequest());
             ts('Preferences saved successfully!');

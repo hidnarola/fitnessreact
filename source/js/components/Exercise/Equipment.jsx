@@ -5,6 +5,7 @@ import EquipmentsContentItem from './EquipmentsContentItem';
 import { getUserEquipmentsRequest, saveUserEquipmentsRequest } from '../../actions/userEquipments';
 import _ from "lodash";
 import { ts } from '../../helpers/funs';
+import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
 
 class Equipment extends Component {
     constructor(props) {
@@ -19,6 +20,7 @@ class Equipment extends Component {
     componentWillMount() {
         const { dispatch } = this.props;
         this.setState({ loadDataActionInit: true });
+        dispatch(showPageLoader());
         dispatch(getUserEquipmentsRequest());
     }
 
@@ -28,24 +30,6 @@ class Equipment extends Component {
         return (
             <div className="body-content d-flex row justify-content-start profilephoto-content">
                 <form className="row width-100-per no-margin">
-                    {!equipments &&
-                        <div className="col-md-12">
-                            <div className="white-box space-btm-20">
-                                <div className="whitebox-body">
-                                    <span>No equipments found.</span>
-                                </div>
-                            </div>
-                        </div>
-                    }
-                    {equipments && equipments.length <= 0 &&
-                        <div className="col-md-12">
-                            <div className="white-box space-btm-20">
-                                <div className="whitebox-body">
-                                    <span>No equipments found.</span>
-                                </div>
-                            </div>
-                        </div>
-                    }
                     {equipments && equipments.length > 0 &&
                         equipments.map((equipment, index) => (
                             <div className="col-md-4" key={index}>
@@ -94,6 +78,7 @@ class Equipment extends Component {
                 equipments,
                 userEquipments
             });
+            dispatch(hidePageLoader());
         } else if (saveActionInit && !loading) {
             dispatch(getUserEquipmentsRequest());
             ts('Equipments saved successfully!');

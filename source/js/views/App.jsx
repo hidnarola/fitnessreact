@@ -53,13 +53,14 @@ import { SESSION_EXPIRED_URL_TYPE } from '../constants/consts';
 import { FaCircleONotch } from "react-icons/lib/fa";
 import FitnessTests from './Admin/FitnessTests';
 import NutritionRecipeDetails from '../components/Nutrition/NutritionRecipeDetails';
+import cns from "classnames";
 
 class App extends Component {
-
     render() {
+        const { showPageLoader } = this.props;
         return (
             <div className="appWrapper">
-                <div id="loader" className="display_none">
+                <div id="loader" className={cns({ 'display_none': !showPageLoader })}>
                     <FaCircleONotch className="loader-spinner fs-100" />
                 </div>
                 <Router history={history}>
@@ -168,5 +169,14 @@ class App extends Component {
         );
     }
 }
+
+const mapStateToProps = (state) => {
+    const { pageLoader } = state;
+    return {
+        showPageLoader: pageLoader.get("loading"),
+    };
+}
+
+App = connect(mapStateToProps)(App);
 
 export default hot(module)(App);

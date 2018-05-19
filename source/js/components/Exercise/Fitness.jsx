@@ -5,6 +5,7 @@ import { capitalizeFirstLetter, ts } from '../../helpers/funs';
 import noProfileImg from 'img/common/no-profile-img.png'
 import { SERVER_BASE_URL, FITNESS_TEST_FORMAT_MULTISELECT, FITNESS_TEST_FORMAT_MAX_REP, FITNESS_TEST_FORMAT_A_OR_B, FITNESS_TEST_FORMAT_TEXT_FIELD } from '../../constants/consts';
 import FitnessItem from './FitnessItem';
+import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
 
 class Fitness extends Component {
     constructor(props) {
@@ -19,6 +20,7 @@ class Fitness extends Component {
     componentWillMount() {
         const { dispatch } = this.props;
         this.setState({ selectActionInit: true });
+        dispatch(showPageLoader());
         dispatch(getUserFitnessTestsRequest());
     }
 
@@ -95,6 +97,7 @@ class Fitness extends Component {
                 fitnessTests,
                 syncedUserFitnessTests,
             });
+            dispatch(hidePageLoader());
         } else if (saveActionInit && !loading) {
             dispatch(getUserFitnessTestsRequest());
             ts('Fitness test updated successfully!');

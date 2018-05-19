@@ -6,7 +6,7 @@ import moment from 'moment';
 import ReactCalender from 'react-calendar/dist/entry.nostyle';
 import bodyGraph from 'img/site/body-graph.png';
 import { required } from '../../formValidation/validationRules';
-import { showPageLoader } from '../../actions/pageLoader';
+import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
 import { getUserBodyMeasurementRequest, getUserBodyMeasurementLogDatesRequest } from '../../actions/userBodyMeasurement';
 
 class BodyMeasurementForm extends Component {
@@ -239,7 +239,8 @@ class BodyMeasurementForm extends Component {
             initialize,
             change,
             refreshBodyMeasurementForm,
-            resetRefreshBodyMeasurementForm
+            resetRefreshBodyMeasurementForm,
+            dispatch,
         } = this.props;
         if (selectActionInit && !loading) {
             this.setState({ selectActionInit: false });
@@ -264,6 +265,7 @@ class BodyMeasurementForm extends Component {
                 change('log_date', logDate);
                 this.setState({ logDate: logDate });
             }
+            dispatch(hidePageLoader());
         }
         if (refreshBodyMeasurementForm && !loading) {
             resetRefreshBodyMeasurementForm();

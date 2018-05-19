@@ -15,7 +15,7 @@ function getProfileDetails(username) {
 
 function saveAboutProfileDetails(requestData) {
     let headers = extraUserHeaders();
-    return putFormData(requestUrl, requestData, headers);
+    return putFormData(requestUrl + '/update_aboutme', requestData, headers);
 }
 
 export default {

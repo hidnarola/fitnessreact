@@ -37,16 +37,19 @@ const actionMap = {
         }));
     },
     [GET_USER_EXERCISE_PREFERENCES_SUCCESS]: (state, action) => {
-        return state.merge(Map({
+        let newState = {
             loading: false,
-            workoutIntensity: action.data.exercise_preference.workoutIntensity,
-            exerciseExperience: action.data.exercise_preference.exerciseExperience,
-            excludeExercise: action.data.exercise_preference.excludeExercise,
-            excludeExerciseType: action.data.exercise_preference.excludeExerciseType,
-            existingInjuries: action.data.exercise_preference.existingInjuries,
-            workoutscheduletype: action.data.exercise_preference.workoutscheduletype,
-            timeSchedule: action.data.exercise_preference.timeSchedule,
-        }));
+        }
+        if (action.data.exercise_preference) {
+            newState.workoutIntensity = (action.data.exercise_preference.workoutIntensity) ? action.data.exercise_preference.workoutIntensity : 0;
+            newState.exerciseExperience = (action.data.exercise_preference.exerciseExperience) ? action.data.exercise_preference.exerciseExperience : 0;
+            newState.excludeExercise = (action.data.exercise_preference.excludeExercise) ? action.data.exercise_preference.excludeExercise : [];
+            newState.excludeExerciseType = (action.data.exercise_preference.excludeExerciseType) ? action.data.exercise_preference.excludeExerciseType : [];
+            newState.existingInjuries = (action.data.exercise_preference.existingInjuries) ? action.data.exercise_preference.existingInjuries : [];
+            newState.workoutscheduletype = (action.data.exercise_preference.workoutscheduletype) ? action.data.exercise_preference.workoutscheduletype : 1;
+            newState.timeSchedule = (action.data.exercise_preference.timeSchedule) ? action.data.exercise_preference.timeSchedule : {};
+        }
+        return state.merge(Map(newState));
     },
     [GET_USER_EXERCISE_PREFERENCES_ERROR]: (state, action) => {
         return state.merge(Map({
