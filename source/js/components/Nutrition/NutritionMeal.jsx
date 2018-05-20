@@ -17,6 +17,7 @@ import {
     DAY_DRIVE_POST_LUNCH_SNACKS
 } from '../../constants/consts';
 import _ from "lodash";
+import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
 
 const dayDriveOptions = [
     { value: DAY_DRIVE_BREAKFAST, label: capitalizeFirstLetter(DAY_DRIVE_BREAKFAST.replace('_', ' ')) },
@@ -42,6 +43,7 @@ class NutritionMeal extends Component {
             date: todaysDate,
         }
         this.setState({ selectActionInit: true });
+        dispatch(showPageLoader());
         dispatch(getUserTodaysMealRequest(requestObj));
     }
 
@@ -239,12 +241,14 @@ class NutritionMeal extends Component {
         const {
             loading,
             todaysMeal,
+            dispatch,
         } = this.props;
         const {
             selectActionInit,
         } = this.state;
         if (selectActionInit && !loading) {
             this.setState({ selectActionInit: false, todaysMeal });
+            dispatch(hidePageLoader());
         }
     }
 

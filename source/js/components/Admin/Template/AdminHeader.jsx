@@ -11,6 +11,7 @@ import { adminRouteCodes } from 'constants/adminRoutes';
 import { adminRootRoute } from 'constants/adminRoutes';
 import { logout } from 'actions/login';
 import { ts } from '../../../helpers/funs';
+import ReactTooltip from "react-tooltip";
 
 class AdminHeader extends Component {
     constructor(props) {
@@ -32,9 +33,7 @@ class AdminHeader extends Component {
             <div className="header">
                 <header className="header d-flex justify-content-start">
                     <div className="logo">
-                        <a href="index.html">
-
-                        </a>
+                        <a href="index.html"></a>
                     </div>
                     <div className="search">
                         <form>
@@ -46,20 +45,19 @@ class AdminHeader extends Component {
                     </div>
                     <div className="header-r d-flex">
                         <div className="header-user">
-
                             <NavLink
                                 activeClassName='active'
                                 className='Menu-link'
                                 exact
                                 to={adminRouteCodes.PROFILE}
                             >
-                                <span></span>Admin
+                                Admin
                             </NavLink>
 
                         </div>
                         <div className="header-alert">
                             <a>
-                                <FaNoti size={24} />
+                                <FaNoti />
                             </a>
                         </div>
                         <div className="header-email">
@@ -67,9 +65,12 @@ class AdminHeader extends Component {
                                 <FaMail />
                             </a>
                         </div>
-                        <div className="header-logout">
-                            <a href="javascript:void(0)" onClick={this.handleLogout}>
-                                <FaSignOut size={24} />
+                        <div className="header-logout header-icons">
+                            <a href="javascript:void(0)" onClick={this.handleLogout} data-tip data-for='logout'>
+                                <FaSignOut />
+                                <ReactTooltip id='logout' place="bottom" type="dark" effect="solid">
+                                    <span>Logout</span>
+                                </ReactTooltip>
                             </a>
                         </div>
                         <div className="header-nav">

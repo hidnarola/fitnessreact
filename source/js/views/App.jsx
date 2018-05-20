@@ -35,9 +35,7 @@ import PrivateRoute from '../helpers/PrivateRoute';
 import AdminPrivateRoute from '../helpers/AdminPrivateRoute';
 import Users from './Admin/Users';
 import Exercises from './Admin/Exercises';
-import Options from './Admin/Options';
 import AdminBadges from './Admin/Badges';
-import Coupons from './Admin/Coupons';
 import Equipments from './Admin/Equipments';
 import Body from './Body';
 import { AUTH_CALLBACK_ROUTE } from '../auth/auth0-variables';
@@ -95,8 +93,6 @@ class App extends Component {
 
                             <PrivateRoute path={routeCodes.RECEIP} component={Receip} />
 
-                            {/* Admin Routes */}
-
                             <Route exact path={adminRootRoute} component={AdminLogin} />
                             <Route exact path={`${adminRootRoute}/${SESSION_EXPIRED_URL_TYPE}`} component={AdminLogin} />
 
@@ -113,42 +109,14 @@ class App extends Component {
 
                             <AdminPrivateRoute path={adminRouteCodes.EQUIPMENTS} component={Equipments} />
 
-                            <AdminPrivateRoute path={adminRouteCodes.OPTIONS} component={Options} />
-
                             <AdminPrivateRoute path={adminRouteCodes.BADGE_CATEGORIES} component={BadgeCategories} />
 
                             <AdminPrivateRoute path={adminRouteCodes.BADGE_TASKS} component={BadgeTasks} />
 
                             <AdminPrivateRoute path={adminRouteCodes.BADGES} component={AdminBadges} />
 
-                            <AdminPrivateRoute path={adminRouteCodes.COUPONS} component={Coupons} />
-
                             <Route exact path={AUTH_CALLBACK_ROUTE} component={Callback} />
-
-                            {/* <Route path={routeCodes.PEOPLE} component={People} /> */}
-                            {/* <Route path={routeCodes.DASHBOARD} component={Dashboard} /> */}
-
-                            {/* <Route path={routeCodes.STATSPAGE} component={StatsPage} /> */}
-
-                            {/* <Route path={routeCodes.PROFILE} component={ProfilePage} /> */}
-
-                            {/* <Route path={routeCodes.BODY} component={Body} /> */}
-
-                            {/* <Route exact path={routeCodes.EXERCISE} component={Exercise} /> */}
-                            {/* <Route path={routeCodes.EXERCISEFITNESS} component={ExerciseSettings} /> */}
-                            {/* <Route path={routeCodes.EXERCISEEQP} component={ExerciseSettings} /> */}
-                            {/* <Route path={routeCodes.EXERCISEPREFERENCE} component={ExerciseSettings} /> */}
-
-                            {/* <Route path={routeCodes.NUTRITIONSHOP} component={NutritionShopping} /> */}
-
-                            {/* <Route path={routeCodes.CALENDAR} component={Calendar} /> */}
-                            {/* <Route path={routeCodes.BADGES} component={Badges} /> */}
-                            {/* <Route path={routeCodes.GOALS} component={Goals} /> */}
-
-                            {/* <Route path={routeCodes.RECEIP} component={Receip} /> */}
-
-                            {/* <Route path={routeCodes.REGISTERUSER} component={RegisterUser} /> */}
-
+                            
                             <Route path='*' component={NotFound} />
                         </Switch>
                     </ScrollToTop>

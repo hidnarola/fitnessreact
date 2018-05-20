@@ -8,6 +8,7 @@ import {
 } from '../../constants/consts';
 import noProfileImg from 'img/common/no-profile-img.png';
 import cns from "classnames";
+import ReactHtmlParser from "react-html-parser";
 
 class FitnessItem extends Component {
     constructor(props) {
@@ -47,7 +48,7 @@ class FitnessItem extends Component {
 
                 {item && item.format && item.format === FITNESS_TEST_FORMAT_MAX_REP &&
                     <div className="dropdown-menu" aria-labelledby="test-01">
-                        <p>{item.description}</p>
+                        {ReactHtmlParser(item.description)}
                         {item.max_rep && item.max_rep.length > 0 &&
                             item.max_rep.map((val, i) => {
                                 var userVal = '';
@@ -104,7 +105,7 @@ class FitnessItem extends Component {
                                     )
                                 })
                             }
-                            <p>{item.description}</p>
+                            {ReactHtmlParser(item.description)}
                         </div>
                     </div>
                 }
@@ -144,14 +145,14 @@ class FitnessItem extends Component {
                                     })
                                 }
                             </ul>
-                            <p>{item.description}</p>
+                            {ReactHtmlParser(item.description)}
                         </div>
                     </div>
                 }
 
                 {item && item.format && item.format === FITNESS_TEST_FORMAT_TEXT_FIELD &&
                     <div className="dropdown-menu" aria-labelledby="test-03">
-                        <p>{item.description}</p>
+                        {ReactHtmlParser(item.description)}
                         <div className={cns('grey-white remove-spinner')}>
                             <label>Value</label>
                             <input

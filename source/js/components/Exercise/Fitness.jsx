@@ -29,6 +29,7 @@ class Fitness extends Component {
             fitnessTests,
             syncedUserFitnessTests,
         } = this.state;
+        const { loading } = this.props;
         var fitnessTestsKeys = Object.keys(fitnessTests);
         return (
             <div className="body-content d-flex row justify-content-start profilephoto-content">
@@ -72,6 +73,15 @@ class Fitness extends Component {
                             </div>
                         )
                     })
+                }
+                {fitnessTests && fitnessTests.length <= 0 && !loading &&
+                    <div className="col-md-12">
+                        <div className="white-box space-btm-20">
+                            <div className="whitebox-body">
+                                No records found...
+                            </div>
+                        </div>
+                    </div>
                 }
             </div>
         );

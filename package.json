@@ -101,6 +101,7 @@
     "react-table": "^6.8.0",
     "react-tagsinput": "^3.19.0",
     "react-toastify": "^4.0.0-rc.5",
+    "react-tooltip": "^3.6.0",
     "recharts": "^1.0.0-beta.10",
     "redux": "^3.7.2",
     "redux-form": "^7.2.3",

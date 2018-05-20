@@ -12,7 +12,8 @@ import { logout } from '../../actions/login';
 import { withRouter } from 'react-router-dom';
 import Auth from '../../auth/Auth';
 import { setLoggedUserFromLocalStorage } from '../../actions/user';
-import noProfileImg from 'img/common/no-profile-img.png'
+import noProfileImg from 'img/common/no-profile-img.png';
+import ReactTooltip from "react-tooltip";
 
 const auth = new Auth();
 
@@ -68,7 +69,7 @@ class FitnessHeader extends Component {
                         </div>
                         <div className="header-alert">
                             <a>
-                                <FaNoti size={24} />
+                                <FaNoti />
                             </a>
                         </div>
                         <div className="header-email">
@@ -76,9 +77,12 @@ class FitnessHeader extends Component {
                                 <FaMail />
                             </a>
                         </div>
-                        <div className="header-logout">
-                            <a href="javascript:void(0)" onClick={this.handleLogout}>
-                                <FaSignOut size={24} />
+                        <div className="header-logout header-icons">
+                            <a href="javascript:void(0)" onClick={this.handleLogout} data-tip data-for='logout'>
+                                <FaSignOut />
+                                <ReactTooltip id='logout' place="bottom" type="dark" effect="solid">
+                                    <span>Logout</span>
+                                </ReactTooltip>
                             </a>
                         </div>
                         <div className="header-nav">
