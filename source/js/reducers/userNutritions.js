@@ -5,7 +5,10 @@ import {
     GET_USER_TODAYS_MEAL_ERROR,
     GET_USER_NUTRITION_RECIPE_DETAILS_REQUEST,
     GET_USER_NUTRITION_RECIPE_DETAILS_SUCCESS,
-    GET_USER_NUTRITION_RECIPE_DETAILS_ERROR
+    GET_USER_NUTRITION_RECIPE_DETAILS_ERROR,
+    DELETE_USER_RECIPE_REQUEST,
+    DELETE_USER_RECIPE_SUCCESS,
+    DELETE_USER_RECIPE_ERROR
 } from "../actions/userNutritions";
 import { VALIDATION_FAILURE_STATUS } from "../constants/consts";
 import { generateValidationErrorMsgArr } from "../helpers/funs";
@@ -55,6 +58,30 @@ const actionMap = {
         }));
     },
     [GET_USER_NUTRITION_RECIPE_DETAILS_ERROR]: (state, action) => {
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
+        }
+        return state.merge(Map({
+            loading: false,
+            error: error,
+        }));
+    },
+    [DELETE_USER_RECIPE_REQUEST]: (state, action) => {
+        return state.merge(Map({
+            loading: true,
+        }));
+    },
+    [DELETE_USER_RECIPE_SUCCESS]: (state, action) => {
+        return state.merge(Map({
+            loading: false,
+        }));
+    },
+    [DELETE_USER_RECIPE_ERROR]: (state, action) => {
         let error = [];
         if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
             error = generateValidationErrorMsgArr(action.error.response.message);

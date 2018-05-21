@@ -514,9 +514,9 @@ display: flex; justify-content: center; flex-direction: column; text-align: cent
 .profile-list-ul{list-style:none;margin:0 -5px;flex-wrap: wrap;}
 .profile-list-ul li{width:20%;padding:5px;}
 .profile-list{display:block;background:#f8f9f9;border-radius:5px;overflow:hidden;}
-.profile-list span{display:block;height:174px;overflow:hidden;}
-.profile-list span a{text-decoration:none;background:#666;text-align:center;}
-.profile-list span a img{min-height:174px;}
+.profile-list span{display:block;height:185px;overflow:hidden;}
+.profile-list span a{text-decoration:none;background:#f8f9f9;text-align:center;}
+.profile-list span a img{min-height:185px;width: 100%;height: 100%;}
 .profile-list h4{margin:0;padding:15px; line-height:100%; font-size:100%; text-align:center;}
 .profile-list h4 a{line-height:30px;text-align:center; color:#1A2032; font-size:14px; font-weight:700;}
 
@@ -560,7 +560,7 @@ display: flex; justify-content: center; flex-direction: column; text-align: cent
 .progress-popup .modal-dialog{max-width:1006px; width:100%;}
 .progress-popup .modal-dialog .modal-content{border:0;box-shadow:none;border-radius:0;padding:30px 48px 82px 66px;}
 .progress-popup-head .close-round{top:-50px; right:-60px;}
-.progress-popup-head{position:relative;}
+.progress-popup-head{position:relative;padding: 0;border-bottom: 0;}
 .progress-popup-head h3{margin:0 0 30px;padding:0;color:#232B41; font-size:20px;	font-weight:700; line-height:20px;}
 
 .progress-popup-body-l{width:30%;padding-right:20px;position:relative;height:293px;}
@@ -569,7 +569,7 @@ display: flex; justify-content: center; flex-direction: column; text-align: cent
 .progress-popup-body-l>a{height:50px; width:50px; background:linear-gradient(148.66deg, #FF3366 0%, #FF339A 100%); box-shadow:0 2px 4px 0 rgba(0,0,0,0.1); position:absolute; bottom:-5px; right:10px; display:block;text-align:center; border-radius:80px;}
 .progress-popup-body-l>a>i{line-height:50px;color:#fff;}
 .progress-popup-body-m{width:33%;padding-right:30px;}
-.progress-popup-body-m textarea{height:289px;	border: 2px solid #F9FAFA;	border-radius:5px;background:#fff;font-size:13px;font-weight:500;color:#999;width:100%;padding:10px;}
+.progress-popup-body-m textarea{height:329px;	border: 2px solid #F9FAFA;	border-radius:5px;background:#fff;font-size:13px;font-weight:500;color:#999;width:100%;padding:10px;}
 .progress-popup-body-r{width:37%;}
 .progress-popup-body-r .log-date-head {padding: 5px 11px 5px 27px;}
 .progress-popup-body-r .log-date-head a{line-height:20px;}
@@ -580,6 +580,8 @@ display: flex; justify-content: center; flex-direction: column; text-align: cent
 .pregres-submit{text-align:right;margin:30px 0 0;}
 .pregres-submit button{width:320px; border-radius:80px; background:linear-gradient(123.28deg, #46E9C5 0%, #3FFBFC 100%); border:0;color:#fff; font-size:14px; font-weight:700; line-height: 20px;padding:10px;line-height:26px;border:2px solid transparent;}
 .pregres-submit button:hover{background:transparent;color:#46e9c5;border:2px solid #46e9c5;}
+.progress-popup .progress-popup-body .progress-popup-body-l .progress-dropzone {width: 100%;height: 329px;border-width: 1px;border-color: rgb(234, 234, 234);border-style: solid;border-radius: 5px;cursor: pointer;}
+.progress-popup .progress-popup-body .progress-popup-body-l .progress-dropzone .image-preview-wrapper{width: 100%;height: 100%;padding: 0;margin: 0;}
 
 .level-popup  .modal-dialog{max-width:915px;width:100%;}
 .level-popup .modal-dialog .modal-content{border:0;box-shadow:none;border-radius:6px;padding:0;position:relative;}

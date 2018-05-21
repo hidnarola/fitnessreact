@@ -26,15 +26,52 @@ class AddProgressPhotoModal extends Component {
         const { photoDate } = this.state;
         return (
             <div className="add-progress-photo-modal-wrapper">
-                <Modal show={show} bsSize="large">
+                <Modal show={show} bsSize="large" className="progress-popup">
                     <form onSubmit={handleSubmit}>
-                        <Modal.Header closeButton={true} onHide={handleClose}>
-                            <Modal.Title>New Progress Photo</Modal.Title>
-                        </Modal.Header>
+                        <div className="progress-popup-head">
+                            <button type="button" className="close-round" onClick={handleClose}>
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h3 className="title-h3">New Progress Photo</h3>
+                        </div>
 
-                        <Modal.Body>
-
-                            <div className="row d-flex whitebox-body">
+                        <div className="progress-popup-body d-flex">
+                            <div className="progress-popup-body-l">
+                                <Field
+                                    name="photo"
+                                    mainWrapperClass="image-form-main-wrapper"
+                                    component={PhotoUploadField}
+                                    className="progress-dropzone"
+                                    multiple={false}
+                                    validate={[requiredImage]}
+                                />
+                            </div>
+                            <div className="progress-popup-body-m">
+                                <Field
+                                    name="description"
+                                    component="textarea"
+                                    placeholder="Say something about this photo..."
+                                    className="form-control"
+                                />
+                            </div>
+                            <div className="progress-popup-body-r">
+                                <div className="log-date">
+                                    <div className="log-date-head d-flex">
+                                        <h4>Log Date</h4>
+                                    </div>
+                                    <div className="log-date-wrap">
+                                        <ReactCalender
+                                            name="photo_date"
+                                            onChange={this.onChangePhotoDate}
+                                            value={photoDate}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="pregres-submit">
+                                    <button type="submit">Save</button>
+                                </div>
+                            </div>
+                            {/* <div className="row d-flex whitebox-body">
                                 <div className="col-md-4">
                                     <Field
                                         name="photo"
@@ -69,12 +106,10 @@ class AddProgressPhotoModal extends Component {
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </Modal.Body>
+                            </div> */}
 
-                        <Modal.Footer>
-                            <button type="submit" className="green-blue-btn">Save</button>
-                        </Modal.Footer>
+
+                        </div>
                     </form>
                 </Modal>
             </div>

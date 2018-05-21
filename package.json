@@ -92,6 +92,7 @@
     "react-hot-loader": "^4.0.0-beta.12",
     "react-html-parser": "^2.0.2",
     "react-icons": "^2.2.7",
+    "react-image-crop": "^3.0.11",
     "react-quill": "^1.2.7",
     "react-redux": "^5.0.6",
     "react-router": "^4.2.0",

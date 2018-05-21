@@ -5,7 +5,7 @@ import { routeCodes } from 'constants/routes';
 import FitnessHeader from '../global/FitnessHeader';
 import FitnessNav from '../global/FitnessNav';
 import moment from "moment";
-import { getUserTodaysMealRequest } from '../../actions/userNutritions';
+import { getUserTodaysMealRequest, deleteUserRecipeRequest } from '../../actions/userNutritions';
 import noProfileImg from 'img/common/no-profile-img.png'
 import { capitalizeFirstLetter } from '../../helpers/funs';
 import {
@@ -18,6 +18,14 @@ import {
 } from '../../constants/consts';
 import _ from "lodash";
 import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
+import {
+    DropdownButton,
+    ButtonToolbar,
+    MenuItem
+} from "react-bootstrap";
+import { FaTrash } from 'react-icons/lib/fa';
+import DeleteConfirmation from '../Admin/Common/DeleteConfirmation';
+
 
 const dayDriveOptions = [
     { value: DAY_DRIVE_BREAKFAST, label: capitalizeFirstLetter(DAY_DRIVE_BREAKFAST.replace('_', ' ')) },
@@ -33,6 +41,9 @@ class NutritionMeal extends Component {
         this.state = {
             selectActionInit: false,
             todaysMeal: [],
+            showDeleteModal: false,
+            selectedMealId: null,
+            deleteActionInit: false,
         }
     }
 
@@ -52,7 +63,10 @@ class NutritionMeal extends Component {
         var total_procnt = 0;
         var total_fat = 0;
         var total_chocdf = 0;
-        const { todaysMeal } = this.state;
+        const {
+            todaysMeal,
+            showDeleteModal,
+        } = this.state;
         const { loading } = this.props;
         return (
             <div className="fitness-nutrition">
@@ -164,9 +178,13 @@ class NutritionMeal extends Component {
                                                         </big>
                                                     </div>
                                                     <div className="meal-info">
-                                                        <a href="">
-                                                            <i className="icon-more_horiz"></i>
-                                                        </a>
+                                                        <ButtonToolbar>
+                                                            <DropdownButton title="" className="icon-more_horiz" id="dropdown-size-small" noCaret>
+                                                                <MenuItem eventKey="1" onClick={() => this.handleShowDeleteModal(meal._id)}>
+                                                                    <FaTrash className="v-align-sub" /> Delete
+                                                                </MenuItem>
+                                                            </DropdownButton>
+                                                        </ButtonToolbar>
                                                     </div>
                                                 </div>
                                             )
@@ -233,6 +251,11 @@ class NutritionMeal extends Component {
                         </div>
                     </div>
                 </section>
+                <DeleteConfirmation
+                    show={showDeleteModal}
+                    handleClose={this.handleCloseDeleteModal}
+                    handleYes={this.handleDelete}
+                />
             </div>
         );
     }
@@ -245,11 +268,42 @@ class NutritionMeal extends Component {
         } = this.props;
         const {
             selectActionInit,
+            deleteActionInit,
         } = this.state;
         if (selectActionInit && !loading) {
             this.setState({ selectActionInit: false, todaysMeal });
             dispatch(hidePageLoader());
+        } else if (deleteActionInit && !loading) {
+            var todaysDate = moment().startOf('day');
+            var requestObj = {
+                date: todaysDate,
+            }
+            this.setState({ deleteActionInit: false, selectActionInit: true });
+            this.handleCloseDeleteModal();
+            dispatch(getUserTodaysMealRequest(requestObj));
         }
+    }
+
+    handleShowDeleteModal = (_id) => {
+        this.setState({
+            selectedMealId: _id,
+            showDeleteModal: true
+        });
+    }
+
+    handleCloseDeleteModal = () => {
+        this.setState({
+            selectedMealId: null,
+            showDeleteModal: false
+        });
+    }
+
+    handleDelete = () => {
+        const { dispatch } = this.props;
+        var _id = this.state.selectedMealId;
+        dispatch(showPageLoader());
+        dispatch(deleteUserRecipeRequest(_id));
+        this.setState({ deleteActionInit: true });
     }
 
 }
