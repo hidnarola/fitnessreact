@@ -25,8 +25,8 @@ class NutritionMealAdd extends Component {
             searchActionInit: false,
             searchRecipes: [],
             from: 0,
-            offset: 100,
-            to: 100,
+            offset: 10,
+            to: 10,
             hasMoreData: true,
         }
     }
@@ -92,7 +92,7 @@ class NutritionMealAdd extends Component {
                                     {searchRecipes && searchRecipes.length > 0 &&
                                         <InfiniteScroll
                                             pageStart={0}
-                                            loadMore={this.handleSearch}
+                                            loadMore={this.loadMore}
                                             hasMore={hasMoreData}
                                             loader={<div className="loader" key={0}>Loading ...</div>}
                                         >
@@ -122,36 +122,6 @@ class NutritionMealAdd extends Component {
                                             }
                                         </InfiniteScroll>
                                     }
-
-
-                                    {/* {searchRecipes && searchRecipes.length <= 0 && (!searchRecipeLoading) &&
-                                        <span>No Records found</span>
-                                    }
-                                    {searchRecipes && searchRecipes.length > 0 &&
-                                        searchRecipes.map((recipeData, index) => {
-                                            var recipe = recipeData.recipe;
-                                            return (
-                                                <div className="meal-wrap d-flex" key={index}>
-                                                    <div className="meal-img">
-                                                        <img
-                                                            src={recipe.image}
-                                                            alt="Recipe"
-                                                            onError={(e) => {
-                                                                e.target.src = noProfileImg
-                                                            }}
-                                                        />
-                                                    </div>
-                                                    <div className="meal-name">
-                                                        <h5>
-                                                            <a href="">
-                                                                {recipe.label}
-                                                            </a>
-                                                        </h5>
-                                                    </div>
-                                                </div>
-                                            )
-                                        })
-                                    } */}
                                 </div>
                             </div>
                         </div>
@@ -182,20 +152,27 @@ class NutritionMealAdd extends Component {
             this.prepareNutriData();
         }
         if (searchActionInit && !searchRecipeLoading) {
-            var shortArr = [];
-            _.forEach(searchRecipes, (obj, index) => {
-                var rec = obj.recipe;
-                shortArr.push({
-                    label: (rec.label) ? rec.label : '',
-                    image: (rec.image) ? rec.image : '',
+            if (searchRecipes && searchRecipes.length > 0) {
+                var shortArr = [];
+                _.forEach(searchRecipes, (obj, index) => {
+                    var rec = obj.recipe;
+                    shortArr.push({
+                        label: (rec.label) ? rec.label : '',
+                        image: (rec.image) ? rec.image : '',
+                    });
                 });
-            });
-            this.setState({
-                searchActionInit: false,
-                searchRecipes: _.concat(this.state.searchRecipes, shortArr),
-                from: (from + offset),
-                to: (to + offset)
-            });
+                this.setState({
+                    searchActionInit: false,
+                    searchRecipes: _.concat(this.state.searchRecipes, shortArr),
+                    from: (from + offset),
+                    to: (to + offset)
+                });
+            } else {
+                this.setState({
+                    searchActionInit: false,
+                    hasMoreData: false,
+                });
+            }
         }
     }
 
@@ -262,32 +239,72 @@ class NutritionMealAdd extends Component {
             searchActionInit,
         } = this.state;
         if (!searchActionInit) {
-            var requestUrl = RECIPE_API_SEARCH_URL;
-            requestUrl += `&q=${searchTerm}`;
-            requestUrl += `&from=${from}`;
-            requestUrl += `&to=${to}`;
-            requestUrl += `&ingr=${10}`;
-            _.forEach(dietLabels, (obj, index) => {
-                requestUrl += `&diet=${obj}`;
+            this.setState({
+                searchRecipes: [],
+                from: 0,
+                offset: 10,
+                to: 10,
+                hasMoreData: true,
+            }, () => {
+                var requestUrl = this.generateRequestUrl();
+                this.setState({ searchActionInit: true });
+                dispatch(searchRecipesApiRequest(requestUrl));
             });
-            _.forEach(healthLabels, (obj, index) => {
-                requestUrl += `&health=${obj}`;
-            });
-            _.forEach(excludeIngredients, (obj, index) => {
-                requestUrl += `&excluded=${obj}`;
-            });
-            _.forEach(nutritionTargets, (obj, index) => {
-                if (obj.type === 'nutrient') {
-                    requestUrl += `&nutrients[${obj.ntrCode}]=${obj.start}-${obj.end}`;
-                } else {
-                    requestUrl += `&calories=${obj.start}-${obj.end}`;
-                }
-            });
+        }
+    }
+
+    loadMore = () => {
+        const { dispatch } = this.props;
+        const {
+            searchTerm,
+            dietLabels,
+            healthLabels,
+            excludeIngredients,
+            nutritionTargets,
+            from,
+            to,
+            searchActionInit,
+        } = this.state;
+        if (!searchActionInit) {
+            var requestUrl = this.generateRequestUrl();
             this.setState({ searchActionInit: true });
             dispatch(searchRecipesApiRequest(requestUrl));
         }
     }
 
+    generateRequestUrl = () => {
+        const {
+            searchTerm,
+            dietLabels,
+            healthLabels,
+            excludeIngredients,
+            nutritionTargets,
+            from,
+            to,
+        } = this.state;
+        var requestUrl = RECIPE_API_SEARCH_URL;
+        requestUrl += `&q=${searchTerm}`;
+        requestUrl += `&from=${from}`;
+        requestUrl += `&to=${to}`;
+        requestUrl += `&ingr=${10}`;
+        _.forEach(dietLabels, (obj, index) => {
+            requestUrl += `&diet=${obj}`;
+        });
+        _.forEach(healthLabels, (obj, index) => {
+            requestUrl += `&health=${obj}`;
+        });
+        _.forEach(excludeIngredients, (obj, index) => {
+            requestUrl += `&excluded=${obj}`;
+        });
+        _.forEach(nutritionTargets, (obj, index) => {
+            if (obj.type === 'nutrient') {
+                requestUrl += `&nutrients[${obj.ntrCode}]=${obj.start}-${obj.end}`;
+            } else {
+                requestUrl += `&calories=${obj.start}-${obj.end}`;
+            }
+        });
+        return requestUrl;
+    }
 }
 
 const mapStateToProps = (state) => {
