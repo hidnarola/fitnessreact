@@ -337,7 +337,6 @@ class ExerciseListing extends Component {
     // ----Start funs -----
     updateList = () => {
         const { dispatch } = this.props;
-        dispatch(showPageLoader());
         dispatch(bodyPartListRequest());
         dispatch(exerciseTypeListRequest());
     }
