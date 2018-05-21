@@ -52,6 +52,7 @@ import { FaCircleONotch } from "react-icons/lib/fa";
 import FitnessTests from './Admin/FitnessTests';
 import NutritionRecipeDetails from '../components/Nutrition/NutritionRecipeDetails';
 import cns from "classnames";
+import NutritionMealAdd from '../components/Nutrition/NutritionMealAdd';
 
 class App extends Component {
     render() {
@@ -83,6 +84,7 @@ class App extends Component {
                             <PrivateRoute path={routeCodes.EXERCISEPREFERENCE} component={ExerciseSettings} />
 
                             <PrivateRoute exact path={routeCodes.NUTRITION} component={NutritionMeal} />
+                            <PrivateRoute exact path={routeCodes.NUTRITION_ADD} component={NutritionMealAdd} />
                             <PrivateRoute path={`${routeCodes.NUTRITION_RECIPE_DETAILS}/:id`} component={NutritionRecipeDetails} />
                             <PrivateRoute path={routeCodes.NUTRITIONPREFERENCE} component={NutritionPreferences} />
                             <PrivateRoute path={routeCodes.NUTRITIONSHOP} component={NutritionShopping} />

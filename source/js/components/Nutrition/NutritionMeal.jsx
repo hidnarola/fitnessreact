@@ -109,9 +109,9 @@ class NutritionMeal extends Component {
                                 <div className="whitebox-head d-flex profile-head">
                                     <h3 className="title-h3 size-14">Today's Meals</h3>
                                     <div className="whitebox-head-r">
-                                        <a href="" className="green-blue">
+                                        <NavLink to={routeCodes.NUTRITION_ADD} className="green-blue">
                                             Add meal<i className="icon-control_point"></i>
-                                        </a>
+                                        </NavLink>
                                     </div>
                                 </div>
 
@@ -122,10 +122,10 @@ class NutritionMeal extends Component {
                                     {todaysMeal && todaysMeal.length > 0 &&
                                         todaysMeal.map((meal, index) => {
                                             var dayDriveType = _.find(dayDriveOptions, { value: meal.dayDriveType });
-                                            var enerc_kal = Math.round(meal.totalNutrients['ENERC_KCAL'].quantity).toFixed(0);
-                                            var procnt = Math.round(meal.totalNutrients['PROCNT'].quantity).toFixed(0);
-                                            var fat = Math.round(meal.totalNutrients['FAT'].quantity).toFixed(0);
-                                            var chocdf = Math.round(meal.totalNutrients['CHOCDF'].quantity).toFixed(0);
+                                            var enerc_kal = (meal.totalNutrients['ENERC_KCAL']) ? Math.round(meal.totalNutrients['ENERC_KCAL'].quantity).toFixed(0) : 0;
+                                            var procnt = (meal.totalNutrients['PROCNT']) ? Math.round(meal.totalNutrients['PROCNT'].quantity).toFixed(0) : 0;
+                                            var fat = (meal.totalNutrients['FAT']) ? Math.round(meal.totalNutrients['FAT'].quantity).toFixed(0) : 0;
+                                            var chocdf = (meal.totalNutrients['CHOCDF']) ? Math.round(meal.totalNutrients['CHOCDF'].quantity).toFixed(0) : 0;
                                             total_enerc_kal = parseInt(total_enerc_kal) + parseInt(enerc_kal);
                                             total_procnt = parseInt(total_procnt) + parseInt(procnt);
                                             total_fat = parseInt(total_fat) + parseInt(fat);
@@ -153,28 +153,28 @@ class NutritionMeal extends Component {
                                                         <small>Cals</small>
                                                         <big>
                                                             {enerc_kal}
-                                                            {meal.totalNutrients['ENERC_KCAL'].unit}
+                                                            {(meal.totalNutrients['ENERC_KCAL']) ? meal.totalNutrients['ENERC_KCAL'].unit : ''}
                                                         </big>
                                                     </div>
                                                     <div className="meal-info">
                                                         <small>Protein</small>
                                                         <big>
                                                             {procnt}
-                                                            {meal.totalNutrients['PROCNT'].unit}
+                                                            {(meal.totalNutrients['PROCNT']) ? meal.totalNutrients['PROCNT'].unit : ''}
                                                         </big>
                                                     </div>
                                                     <div className="meal-info">
                                                         <small>Fat</small>
                                                         <big>
                                                             {fat}
-                                                            {meal.totalNutrients['FAT'].unit}
+                                                            {(meal.totalNutrients['FAT']) ? meal.totalNutrients['FAT'].unit : ''}
                                                         </big>
                                                     </div>
                                                     <div className="meal-info">
                                                         <small>Carbs</small>
                                                         <big>
                                                             {chocdf}
-                                                            {meal.totalNutrients['CHOCDF'].unit}
+                                                            {(meal.totalNutrients['CHOCDF']) ? meal.totalNutrients['CHOCDF'].unit : ''}
                                                         </big>
                                                     </div>
                                                     <div className="meal-info">

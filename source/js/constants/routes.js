@@ -46,6 +46,7 @@ export const routeCodes = {
 
     // Nutrition Routes
     NUTRITION: `${publicPath}nutrition`,
+    NUTRITION_ADD: `${publicPath}nutrition/add`,
     NUTRITION_RECIPE_DETAILS: `${publicPath}nutrition/recipe`,
     NUTRITIONPREFERENCE: `${publicPath}nutrition/preference`,
     NUTRITIONSHOP: `${publicPath}nutrition/shoppinglist`,

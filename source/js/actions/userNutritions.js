@@ -10,6 +10,10 @@ export const DELETE_USER_RECIPE_REQUEST = 'DELETE_USER_RECIPE_REQUEST';
 export const DELETE_USER_RECIPE_SUCCESS = 'DELETE_USER_RECIPE_SUCCESS';
 export const DELETE_USER_RECIPE_ERROR = 'DELETE_USER_RECIPE_ERROR';
 
+export const SEARCH_RECIPES_API_REQUEST = 'SEARCH_RECIPES_API_REQUEST';
+export const SEARCH_RECIPES_API_SUCCESS = 'SEARCH_RECIPES_API_SUCCESS';
+export const SEARCH_RECIPES_API_ERROR = 'SEARCH_RECIPES_API_ERROR';
+
 export function getUserTodaysMealRequest(requestData) {
     return {
         type: GET_USER_TODAYS_MEAL_REQUEST,
@@ -69,6 +73,27 @@ export function deleteUserRecipeSuccess(data) {
 export function deleteUserRecipeError(error) {
     return {
         type: DELETE_USER_RECIPE_ERROR,
+        error
+    }
+}
+
+export function searchRecipesApiRequest(url) {
+    return {
+        type: SEARCH_RECIPES_API_REQUEST,
+        url
+    }
+}
+
+export function searchRecipesApiSuccess(data) {
+    return {
+        type: SEARCH_RECIPES_API_SUCCESS,
+        data
+    }
+}
+
+export function searchRecipesApiError(error) {
+    return {
+        type: SEARCH_RECIPES_API_ERROR,
         error
     }
 }

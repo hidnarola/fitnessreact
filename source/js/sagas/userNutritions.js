@@ -9,7 +9,10 @@ import {
     GET_USER_NUTRITION_RECIPE_DETAILS_REQUEST,
     deleteUserRecipeError,
     deleteUserRecipeSuccess,
-    DELETE_USER_RECIPE_REQUEST
+    DELETE_USER_RECIPE_REQUEST,
+    searchRecipesApiSuccess,
+    searchRecipesApiError,
+    SEARCH_RECIPES_API_REQUEST
 } from '../actions/userNutritions';
 
 function getUserTodaysMealData() {
@@ -48,10 +51,23 @@ function deleteUserRecipeData() {
     }
 }
 
+function searchRecipesApiData() {
+    return function* (action) {
+        try {
+            let url = action.url;
+            const data = yield call(() => api.searchRecipesApi(url));
+            yield put(searchRecipesApiSuccess(data));
+        } catch (error) {
+            yield put(searchRecipesApiError(error));
+        }
+    }
+}
+
 export function* watchUserNutritionsData() {
     yield takeLatest(GET_USER_TODAYS_MEAL_REQUEST, getUserTodaysMealData());
     yield takeLatest(GET_USER_NUTRITION_RECIPE_DETAILS_REQUEST, getUserRecipeDetailsData());
     yield takeLatest(DELETE_USER_RECIPE_REQUEST, deleteUserRecipeData());
+    yield takeLatest(SEARCH_RECIPES_API_REQUEST, searchRecipesApiData());
 }
 
 export default [

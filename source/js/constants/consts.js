@@ -145,3 +145,7 @@ export const FITNESS_TEST_FORMAT_A_OR_B_STR = 'A or B';
 
 export const MAX_REPS_CONST_1 = 1.0278;
 export const MAX_REPS_CONST_2 = 0.0278;
+
+export const RECIPE_API_APP_ID = 'b55ed2b8';
+export const RECIPE_API_APP_KEY = '791594812dac61912e88ba6af2dd73b7';
+export const RECIPE_API_SEARCH_URL = `https://api.edamam.com/search?app_id=${RECIPE_API_APP_ID}&app_key=${RECIPE_API_APP_KEY}`;
