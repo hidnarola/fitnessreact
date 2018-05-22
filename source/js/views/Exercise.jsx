@@ -1,28 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Route, Switch } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
-import PropTypes from 'prop-types';
-
-import Setting from 'components/Exercise/Setting';
-import Equipment from 'components/Exercise/Equipment';
-import Fitness from 'components/Exercise/Fitness';
-
-
-import { routeCodes } from 'constants/routes';
-
 import FitnessHeader from 'components/global/FitnessHeader';
 import FitnessNav from 'components/global/FitnessNav';
+import { routeCodes } from '../constants/routes';
 
-function logUpdate() {
-    console.log('Over here');
-}
-
-export default class Exercise extends Component {
-
-
+class Exercise extends Component {
     render() {
-
         return (
             <div className='stat-page'>
                 <FitnessHeader />
@@ -190,3 +174,13 @@ export default class Exercise extends Component {
         );
     }
 }
+
+const mapStateToProps = (state) => {
+    return {
+
+    };
+}
+
+export default connect(
+    mapStateToProps
+)(Exercise)

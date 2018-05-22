@@ -15,6 +15,7 @@ import userBodyparts from 'reducers/userBodyparts';
 import userExercises from 'reducers/userExercises';
 import userFitnessTests from 'reducers/userFitnessTests';
 import userShoppingList from 'reducers/userShoppingList';
+import userWorkouts from 'reducers/userWorkouts';
 import profile from 'reducers/profile';
 import friends from 'reducers/friends';
 import login from 'reducers/login';
@@ -49,6 +50,7 @@ export default combineReducers({
     userExercises,
     userFitnessTests,
     userShoppingList,
+    userWorkouts,
     profile,
     friends,
     login,
