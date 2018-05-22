@@ -26,11 +26,11 @@ const actionMap = {
             loading: false,
         };
         if (action.data.status === 1) {
-            newState.exercises = action.data.user_workouts;
+            newState.workouts = action.data.user_workouts;
             newState.error = [];
         } else {
             var msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
-            newState.exercises = [];
+            newState.workouts = [];
             newState.error = [msg];
         }
         return state.merge(Map(newState));

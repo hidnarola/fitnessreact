@@ -4,9 +4,36 @@ import { NavLink } from 'react-router-dom';
 import FitnessHeader from 'components/global/FitnessHeader';
 import FitnessNav from 'components/global/FitnessNav';
 import { routeCodes } from '../constants/routes';
+import moment from "moment";
+import { showPageLoader, hidePageLoader } from '../actions/pageLoader';
+import { getUserWorkoutByDateRequest } from '../actions/userWorkouts';
+import { capitalizeFirstLetter } from '../helpers/funs';
+import cns from "classnames";
+import ReactHtmlParser from "react-html-parser";
+import noProfileImg from 'img/common/no-profile-img.png'
+import { SERVER_BASE_URL } from '../constants/consts';
 
 class Exercise extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            selectActionInit: false,
+            workouts: [],
+        }
+    }
+
+    componentWillMount() {
+        const { dispatch } = this.props;
+        var requestData = {
+            date: moment().startOf('day'),
+        };
+        this.setState({ selectActionInit: true });
+        dispatch(showPageLoader());
+        dispatch(getUserWorkoutByDateRequest(requestData));
+    }
+
     render() {
+        const { workouts } = this.state;
         return (
             <div className='stat-page'>
                 <FitnessHeader />
@@ -29,7 +56,7 @@ class Exercise extends Component {
                                 <small>Workout Completed</small>
                                 <div className="material-switch">
                                     <input id="someSwitchOptionDefault" name="someSwitchOption001" type="checkbox" />
-                                    <label for="someSwitchOptionDefault" className="label-default"></label>
+                                    <label htmlFor="someSwitchOptionDefault" className="label-default"></label>
                                 </div>
                             </div>
                         </div>
@@ -37,95 +64,54 @@ class Exercise extends Component {
 
                     <div className="body-content d-flex row justify-content-start profilephoto-content">
                         <div className="col-md-9">
-                            <div className="white-box space-btm-20 padding-none workout-wrap">
-                                <div className="workout-head">
-                                    <div className="workout-1">
-                                        <h3>Warmup</h3>
-                                        <a href=""><i className="icon-more_horiz"></i></a>
-                                    </div>
-                                    <div className="workout-2">Weight</div>
-                                    <div className="workout-3">Reps</div>
-                                    <div className="workout-4">Sets</div>
-                                    <div className="workout-5">Reset</div>
-                                </div>
-                                <div className="workout-body">
-                                    <div className="workout-1">
-                                        <span><img src="images/img-13.jpg" alt="" /></span>
-                                        <div className="workout-1-info">
-                                            <h3><small>Medicine Ball Slam</small> <a href=""><i className="icon-more_horiz"></i></a></h3>
-                                            <p>The medicine ball slam is an explosive exercise, put max effort into each repetition.</p>
+                            {workouts && workouts.length > 0 &&
+                                workouts.map((workout, index) => {
+                                    var schedule = workout.schedule;
+                                    return (
+                                        <div className="white-box space-btm-20 padding-none workout-wrap" key={index}>
+                                            <div className="workout-head">
+                                                <div
+                                                    className={cns("workout-1", { "bg-pink": (index % 2 == 0) })}
+                                                >
+                                                    <h3>{(workout.type) ? capitalizeFirstLetter(workout.type) : 'Workout'}</h3>
+                                                    <a href=""><i className="icon-more_horiz"></i></a>
+                                                </div>
+                                                <div className="workout-2">Weight</div>
+                                                <div className="workout-3">Reps</div>
+                                                <div className="workout-4">Sets</div>
+                                                <div className="workout-5">Reset</div>
+                                            </div>
+                                            {schedule && schedule.length > 0 &&
+                                                schedule.map((sch, schIndex) => {
+                                                    return (
+                                                        <div className="workout-body" key={schIndex}>
+                                                            <div className="workout-1">
+                                                                <span>
+                                                                    <img
+                                                                        src={SERVER_BASE_URL + sch.exerciseId.images[0]}
+                                                                        alt="Exercise"
+                                                                        onError={(e) => {
+                                                                            e.target.src = noProfileImg
+                                                                        }}
+                                                                    />
+                                                                </span>
+                                                                <div className="workout-1-info">
+                                                                    <h3><small>{sch.exerciseId.name}</small> <a href=""><i className="icon-more_horiz"></i></a></h3>
+                                                                    {ReactHtmlParser(sch.exerciseId.description)}
+                                                                </div>
+                                                            </div>
+                                                            <div className="workout-2">{sch.weight}Kg</div>
+                                                            <div className="workout-3">{sch.reps}</div>
+                                                            <div className="workout-4">{sch.sets}</div>
+                                                            <div className="workout-5">{sch.restTime}sec</div>
+                                                        </div>
+                                                    )
+                                                })
+                                            }
                                         </div>
-                                    </div>
-                                    <div className="workout-2">20Kg</div>
-                                    <div className="workout-3">12</div>
-                                    <div className="workout-4">6</div>
-                                    <div className="workout-5">30 sec</div>
-                                </div>
-                                <div className="workout-body">
-                                    <div className="workout-1">
-                                        <span><img src="images/img-13.jpg" alt="" /></span>
-                                        <div className="workout-1-info">
-                                            <h3><small>Medicine Ball Slam</small> <a href=""><i className="icon-more_horiz"></i></a></h3>
-                                            <p>The medicine ball slam is an explosive exercise, put max effort into each repetition.</p>
-                                        </div>
-                                    </div>
-                                    <div className="workout-2">20Kg</div>
-                                    <div className="workout-3">12</div>
-                                    <div className="workout-4">6</div>
-                                    <div className="workout-5">30 sec</div>
-                                </div>
-                                <div className="workout-body">
-                                    <div className="workout-1">
-                                        <span><img src="images/img-13.jpg" alt="" /></span>
-                                        <div className="workout-1-info">
-                                            <h3><small>Medicine Ball Slam</small> <a href=""><i className="icon-more_horiz"></i></a></h3>
-                                            <p>The medicine ball slam is an explosive exercise, put max effort into each repetition.</p>
-                                        </div>
-                                    </div>
-                                    <div className="workout-2">20Kg</div>
-                                    <div className="workout-3">12</div>
-                                    <div className="workout-4">6</div>
-                                    <div className="workout-5">30 sec</div>
-                                </div>
-                            </div>
-                            <div className="white-box space-btm-20 padding-none workout-wrap">
-                                <div className="workout-head">
-                                    <div className="workout-1 bg-pink">
-                                        <h3>Warmup</h3>
-                                        <a href=""><i className="icon-more_horiz"></i></a>
-                                    </div>
-                                    <div className="workout-2">Weight</div>
-                                    <div className="workout-3">Reps</div>
-                                    <div className="workout-4">Sets</div>
-                                    <div className="workout-5">Reset</div>
-                                </div>
-                                <div className="workout-body">
-                                    <div className="workout-1">
-                                        <span><img src="images/img-13.jpg" alt="" /></span>
-                                        <div className="workout-1-info">
-                                            <h3><small>Medicine Ball Slam</small> <a href=""><i className="icon-more_horiz"></i></a></h3>
-                                            <p>The medicine ball slam is an explosive exercise, put max effort into each repetition.</p>
-                                        </div>
-                                    </div>
-                                    <div className="workout-2">20Kg</div>
-                                    <div className="workout-3">12</div>
-                                    <div className="workout-4">6</div>
-                                    <div className="workout-5">30 sec</div>
-                                </div>
-                                <div className="workout-body">
-                                    <div className="workout-1">
-                                        <span><img src="images/img-13.jpg" alt="" /></span>
-                                        <div className="workout-1-info">
-                                            <h3><small>Medicine Ball Slam</small> <a href=""><i className="icon-more_horiz"></i></a></h3>
-                                            <p>The medicine ball slam is an explosive exercise, put max effort into each repetition.</p>
-                                        </div>
-                                    </div>
-                                    <div className="workout-2">20Kg</div>
-                                    <div className="workout-3">12</div>
-                                    <div className="workout-4">6</div>
-                                    <div className="workout-5">30 sec</div>
-                                </div>
-                            </div>
+                                    )
+                                })
+                            }
                         </div>
 
                         <div className="col-md-3">
@@ -173,11 +159,33 @@ class Exercise extends Component {
             </div>
         );
     }
+
+    componentDidUpdate() {
+        const {
+            selectActionInit,
+        } = this.state;
+        const {
+            loading,
+            workouts,
+            dispatch,
+        } = this.props;
+        if (selectActionInit && !loading) {
+            this.setState({
+                selectActionInit: false,
+                workouts,
+            });
+            dispatch(hidePageLoader());
+        }
+    }
+
 }
 
 const mapStateToProps = (state) => {
+    const { userWorkouts } = state;
     return {
-
+        loading: userWorkouts.get('loading'),
+        workouts: userWorkouts.get('workouts'),
+        error: userWorkouts.get('error'),
     };
 }
 
