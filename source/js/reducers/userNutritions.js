@@ -11,7 +11,10 @@ import {
     DELETE_USER_RECIPE_ERROR,
     SEARCH_RECIPES_API_REQUEST,
     SEARCH_RECIPES_API_SUCCESS,
-    SEARCH_RECIPES_API_ERROR
+    SEARCH_RECIPES_API_ERROR,
+    ADD_USER_RECIPE_REQUEST,
+    ADD_USER_RECIPE_SUCCESS,
+    ADD_USER_RECIPE_ERROR
 } from "../actions/userNutritions";
 import { VALIDATION_FAILURE_STATUS } from "../constants/consts";
 import { generateValidationErrorMsgArr } from "../helpers/funs";
@@ -123,6 +126,32 @@ const actionMap = {
         }
         return state.merge(Map({
             searchRecipeLoading: false,
+            error: error,
+        }));
+    },
+    [ADD_USER_RECIPE_REQUEST]: (state, action) => {
+        return state.merge(Map({
+            loading: true,
+            error: [],
+        }));
+    },
+    [ADD_USER_RECIPE_SUCCESS]: (state, action) => {
+        return state.merge(Map({
+            loading: false,
+            error: [],
+        }));
+    },
+    [ADD_USER_RECIPE_ERROR]: (state, action) => {
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
+        }
+        return state.merge(Map({
+            loading: false,
             error: error,
         }));
     },

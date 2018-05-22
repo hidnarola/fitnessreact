@@ -7,10 +7,35 @@ import { getHealthLabelsRequest } from '../../actions/healthLabels';
 import { getDietLabelsRequest } from '../../actions/dietLabels';
 import { getNutritionsRequest } from '../../actions/nutritions';
 import _ from "lodash";
-import { RECIPE_API_SEARCH_URL } from '../../constants/consts';
-import { searchRecipesApiRequest } from '../../actions/userNutritions';
+import {
+    RECIPE_API_SEARCH_URL,
+    DAY_DRIVE_BREAKFAST,
+    DAY_DRIVE_PRE_LUNCH_SNACKS,
+    DAY_DRIVE_LUNCH,
+    DAY_DRIVE_POST_LUNCH_SNACKS,
+    DAY_DRIVE_DINNER
+} from '../../constants/consts';
+import { searchRecipesApiRequest, addUserRecipeRequest } from '../../actions/userNutritions';
 import noProfileImg from 'img/common/no-profile-img.png'
 import InfiniteScroll from 'react-infinite-scroller';
+import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
+import NutritionMealAddSearchForm from './NutritionMealAddSearchForm';
+import NutritionSearchRecipeDetailsModal from './NutritionSearchRecipeDetailsModal';
+import {
+    DropdownButton,
+    ButtonToolbar,
+    MenuItem
+} from "react-bootstrap";
+import moment from "moment";
+import { ts, te } from '../../helpers/funs';
+
+const dayDriveOptions = [
+    { value: DAY_DRIVE_BREAKFAST, label: 'Breakfast' },
+    { value: DAY_DRIVE_PRE_LUNCH_SNACKS, label: 'Pre Lunch Snacks' },
+    { value: DAY_DRIVE_LUNCH, label: 'Lunch' },
+    { value: DAY_DRIVE_POST_LUNCH_SNACKS, label: 'Post Lunch Snacks' },
+    { value: DAY_DRIVE_DINNER, label: 'Dinner' },
+]
 
 class NutritionMealAdd extends Component {
     constructor(props) {
@@ -28,6 +53,9 @@ class NutritionMealAdd extends Component {
             offset: 10,
             to: 10,
             hasMoreData: true,
+            selectedRecipe: {},
+            showDetailedRecipeModal: false,
+            addActionInit: false,
         }
     }
 
@@ -45,6 +73,8 @@ class NutritionMealAdd extends Component {
             searchTerm,
             searchRecipes,
             hasMoreData,
+            selectedRecipe,
+            showDetailedRecipeModal,
         } = this.state;
         const {
             searchRecipeLoading,
@@ -75,19 +105,10 @@ class NutritionMealAdd extends Component {
                                 </div>
 
                                 <div className="whitebox-body">
-                                    <div className="col-md-11 pull-left">
-                                        <div className="form-group">
-                                            <input type="text" className="form-control" name="recipe_search_term" placeholder="Search.." value={searchTerm} onChange={this.handleSearchTermChange} />
-                                        </div>
-                                    </div>
-                                    <div className="col-md-1 pull-left">
-                                        <div className="form-group">
-                                            <button type="button" className="btn btn-primary" onClick={this.handleSearch}>Search</button>
-                                        </div>
-                                    </div>
+                                    <NutritionMealAddSearchForm onSubmit={this.handleSearch} />
 
-                                    {searchRecipes && searchRecipes.length <= 0 && (!searchRecipeLoading) &&
-                                        <span>No Records found</span>
+                                    {searchRecipes && searchRecipes.length <= 0 && !searchRecipeLoading && !hasMoreData &&
+                                        <span>No recipe found</span>
                                     }
                                     {searchRecipes && searchRecipes.length > 0 &&
                                         <InfiniteScroll
@@ -97,7 +118,8 @@ class NutritionMealAdd extends Component {
                                             loader={<div className="loader" key={0}>Loading ...</div>}
                                         >
                                             {
-                                                searchRecipes.map((recipe, index) => {
+                                                searchRecipes.map((recipeData, index) => {
+                                                    var recipe = recipeData.recipe;
                                                     return (
                                                         <div className="meal-wrap d-flex" key={index}>
                                                             <div className="meal-img">
@@ -111,10 +133,27 @@ class NutritionMealAdd extends Component {
                                                             </div>
                                                             <div className="meal-name">
                                                                 <h5>
-                                                                    <a href="">
+                                                                    <a href="javascript:void(0)" onClick={() => this.getSelectedRecipeDetails(recipe)}>
                                                                         {recipe.label}
                                                                     </a>
                                                                 </h5>
+                                                                {dayDriveOptions && dayDriveOptions.length > 0 &&
+                                                                    <ButtonToolbar>
+                                                                        <DropdownButton title="Add Recipe To Meal" id="add_recipe_actions">
+                                                                            {dayDriveOptions.map((drive, index) => {
+                                                                                return (
+                                                                                    <MenuItem
+                                                                                        eventKey={index}
+                                                                                        key={index}
+                                                                                        onClick={() => this.handleAddRecipe(drive.value, recipe)}
+                                                                                    >
+                                                                                        {drive.label}
+                                                                                    </MenuItem>
+                                                                                )
+                                                                            })}
+                                                                        </DropdownButton>
+                                                                    </ButtonToolbar>
+                                                                }
                                                             </div>
                                                         </div>
                                                     )
@@ -127,6 +166,11 @@ class NutritionMealAdd extends Component {
                         </div>
                     </div>
                 </section>
+                <NutritionSearchRecipeDetailsModal
+                    show={showDetailedRecipeModal}
+                    handleClose={this.handleCloseRecipeDetailesModal}
+                    recipe={selectedRecipe}
+                />
             </div>
         );
     }
@@ -138,6 +182,7 @@ class NutritionMealAdd extends Component {
             from,
             to,
             offset,
+            addActionInit,
         } = this.state;
         const {
             userNutriPrefLoading,
@@ -146,6 +191,9 @@ class NutritionMealAdd extends Component {
             nutritionLoading,
             searchRecipeLoading,
             searchRecipes,
+            dispatch,
+            userNutritionsLoading,
+            userNutritionsError,
         } = this.props;
         if (selectPageDataActionInit && !userNutriPrefLoading && !healthLabelLoading && !dietLabelLoading && !nutritionLoading) {
             this.setState({ selectPageDataActionInit: false });
@@ -153,17 +201,9 @@ class NutritionMealAdd extends Component {
         }
         if (searchActionInit && !searchRecipeLoading) {
             if (searchRecipes && searchRecipes.length > 0) {
-                var shortArr = [];
-                _.forEach(searchRecipes, (obj, index) => {
-                    var rec = obj.recipe;
-                    shortArr.push({
-                        label: (rec.label) ? rec.label : '',
-                        image: (rec.image) ? rec.image : '',
-                    });
-                });
                 this.setState({
                     searchActionInit: false,
-                    searchRecipes: _.concat(this.state.searchRecipes, shortArr),
+                    searchRecipes: _.concat(this.state.searchRecipes, searchRecipes),
                     from: (from + offset),
                     to: (to + offset)
                 });
@@ -173,11 +213,17 @@ class NutritionMealAdd extends Component {
                     hasMoreData: false,
                 });
             }
+            dispatch(hidePageLoader());
         }
-    }
-
-    handleSearchTermChange = (e) => {
-        this.setState({ searchTerm: e.target.value });
+        if (addActionInit && !userNutritionsLoading) {
+            this.setState({ addActionInit: false });
+            dispatch(hidePageLoader());
+            if (userNutritionsError && userNutritionsError.length > 0) {
+                te(userNutritionsError[0]);
+            } else {
+                ts('Recipe added to your todays meal!');
+            }
+        }
     }
 
     prepareNutriData = () => {
@@ -226,10 +272,10 @@ class NutritionMealAdd extends Component {
         });
     }
 
-    handleSearch = () => {
+    handleSearch = (data) => {
+        var searchTerm = data.search_term;
         const { dispatch } = this.props;
         const {
-            searchTerm,
             dietLabels,
             healthLabels,
             excludeIngredients,
@@ -240,6 +286,7 @@ class NutritionMealAdd extends Component {
         } = this.state;
         if (!searchActionInit) {
             this.setState({
+                searchTerm: searchTerm,
                 searchRecipes: [],
                 from: 0,
                 offset: 10,
@@ -248,6 +295,7 @@ class NutritionMealAdd extends Component {
             }, () => {
                 var requestUrl = this.generateRequestUrl();
                 this.setState({ searchActionInit: true });
+                dispatch(showPageLoader());
                 dispatch(searchRecipesApiRequest(requestUrl));
             });
         }
@@ -305,6 +353,28 @@ class NutritionMealAdd extends Component {
         });
         return requestUrl;
     }
+
+    getSelectedRecipeDetails = (recipe) => {
+        this.setState({ selectedRecipe: recipe, showDetailedRecipeModal: true });
+    }
+
+    handleCloseRecipeDetailesModal = () => {
+        this.setState({ selectedRecipe: {}, showDetailedRecipeModal: false });
+    }
+
+    handleAddRecipe = (dayDrive, recipe) => {
+        const { dispatch } = this.props;
+        var requestData = {
+            user_recipe: {
+                dayDrive: dayDrive,
+                recipe: recipe,
+                date: moment().startOf('day'),
+            }
+        }
+        this.setState({ addActionInit: true });
+        dispatch(showPageLoader());
+        dispatch(addUserRecipeRequest(requestData));
+    }
 }
 
 const mapStateToProps = (state) => {
@@ -322,6 +392,8 @@ const mapStateToProps = (state) => {
         dietLabels: dietLabels.get('dietLabels'),
         nutritionLoading: nutritions.get('loading'),
         nutritions: nutritions.get('nutritions'),
+        userNutritionsLoading: userNutritions.get('loading'),
+        userNutritionsError: userNutritions.get('error'),
         searchRecipeLoading: userNutritions.get('searchRecipeLoading'),
         searchRecipes: userNutritions.get('searchRecipes'),
         searchRecipeError: userNutritions.get('searchRecipeError'),

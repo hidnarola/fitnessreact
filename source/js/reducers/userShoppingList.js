@@ -10,7 +10,7 @@ import { generateValidationErrorMsgArr } from "../helpers/funs";
 const initialState = Map({
     loading: false,
     error: [],
-    shoppingList: [],
+    shoppingList: {},
 });
 
 const actionMap = {
@@ -20,10 +20,15 @@ const actionMap = {
         }));
     },
     [GET_USER_SHOPPING_LIST_SUCCESS]: (state, action) => {
-        return state.merge(Map({
+        var newState = {
             loading: false,
-            shoppingList: action.data.shoppingcart,
-        }));
+        };
+        if (action.data.status === 1) {
+            newState.shoppingList = action.data.ingredients;
+        } else {
+            newState.shoppingList = {};
+        }
+        return state.merge(Map(newState));
     },
     [GET_USER_SHOPPING_LIST_ERROR]: (state, action) => {
         let error = [];

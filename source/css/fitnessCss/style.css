@@ -675,7 +675,8 @@ color:#282828;font-size: 12px; font-weight: 500;	line-height:50px;}
 .meal-img img{width:150px;min-height:150px;border-radius:5px 0 0 5px;}
 .meal-name{width:30%;text-align:left !important;padding-left:30px;}
 .meal-name small{	color: #282828;	font-size: 12px;	font-weight: 300;	line-height: 17px;margin:0 0 12px;}
-.meal-name h5{margin:0;padding:0;color: #232B41;	font-family: "GT Walsheim Pro";	font-size: 14px; font-weight:700; line-height: 20px;}
+/* .meal-name h5{margin:0;padding:0;color: #232B41;	font-family: "GT Walsheim Pro";	font-size: 14px; font-weight:700; line-height: 20px;} */
+.meal-name h5 a{margin:0;padding:0;color: #232B41;	font-family: 'gt_walsheim_proregular';	font-size: 15px; font-weight:600; line-height: 20px;}
 .meal-info{width:10%;}
 .meal-info small,
 .meal-info big{color:#232B41; font-size:14px;	font-weight: 500;	line-height: 20px; display:block;}
@@ -1184,6 +1185,7 @@ flex-direction:row; display:-webkit-box; display:-webkit-flex; display:-ms-flex;
 .has-error .Select-control span.Select-arrow {border-color: #a94442 transparent transparent;}
 .no-padding{padding: 0 !important;}
 .no-margin{margin: 0 !important;}
+.no-border{border: none !important;}
 .btn-circle{border-radius: 50%;}
 
 .dropzone-image-preview-wrapper {position: relative;}
@@ -1267,3 +1269,9 @@ div#loader .loader-spinner {-webkit-animation-name: spin;-webkit-animation-durat
 .has-error .filefield-dropzone-wrapper{border-color: #a94442;-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);}
 
 .fs-28{font-size: 28px !important;}
+
+.nutrition-todays-meal-section .dropdown .btn-default,
+.nutrition-todays-meal-section .dropdown .btn-default:hover,
+.nutrition-todays-meal-section .dropdown .btn-default:active,
+.nutrition-todays-meal-section .open>.dropdown-toggle.btn-default
+{background: #ffffff;}

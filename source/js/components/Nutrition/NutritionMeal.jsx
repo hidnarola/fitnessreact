@@ -7,7 +7,7 @@ import FitnessNav from '../global/FitnessNav';
 import moment from "moment";
 import { getUserTodaysMealRequest, deleteUserRecipeRequest } from '../../actions/userNutritions';
 import noProfileImg from 'img/common/no-profile-img.png'
-import { capitalizeFirstLetter } from '../../helpers/funs';
+import { capitalizeFirstLetter, ts, te } from '../../helpers/funs';
 import {
     DAY_DRIVE_BREAKFAST,
     DAY_DRIVE_LUNCH,
@@ -72,7 +72,7 @@ class NutritionMeal extends Component {
             <div className="fitness-nutrition">
                 <FitnessHeader />
                 <FitnessNav />
-                <section className="body-wrap">
+                <section className="body-wrap nutrition-todays-meal-section">
                     <div className="body-head d-flex justify-content-start">
                         <div className="body-head-l">
                             <h2>nutrition</h2>
@@ -107,7 +107,7 @@ class NutritionMeal extends Component {
                         <div className="col-md-8">
                             <div className="white-box">
                                 <div className="whitebox-head d-flex profile-head">
-                                    <h3 className="title-h3 size-14">Today's Meals</h3>
+                                    <h3 className="title-h3">Today's Meals</h3>
                                     <div className="whitebox-head-r">
                                         <NavLink to={routeCodes.NUTRITION_ADD} className="green-blue">
                                             Add meal<i className="icon-control_point"></i>
@@ -178,8 +178,8 @@ class NutritionMeal extends Component {
                                                         </big>
                                                     </div>
                                                     <div className="meal-info">
-                                                        <ButtonToolbar>
-                                                            <DropdownButton title="" className="icon-more_horiz" id="dropdown-size-small" noCaret>
+                                                        <ButtonToolbar bsClass="">
+                                                            <DropdownButton title="" className="icon-more_horiz no-border" id="dropdown-size-small" noCaret pullRight>
                                                                 <MenuItem eventKey="1" onClick={() => this.handleShowDeleteModal(meal._id)}>
                                                                     <FaTrash className="v-align-sub" /> Delete
                                                                 </MenuItem>
@@ -265,6 +265,7 @@ class NutritionMeal extends Component {
             loading,
             todaysMeal,
             dispatch,
+            error,
         } = this.props;
         const {
             selectActionInit,
@@ -274,6 +275,11 @@ class NutritionMeal extends Component {
             this.setState({ selectActionInit: false, todaysMeal });
             dispatch(hidePageLoader());
         } else if (deleteActionInit && !loading) {
+            if (error && error.length > 0) {
+                te(error[0]);
+            } else {
+                ts('Recipe deleted from your todays meal!');
+            }
             var todaysDate = moment().startOf('day');
             var requestObj = {
                 date: todaysDate,

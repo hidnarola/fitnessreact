@@ -14,6 +14,10 @@ export const SEARCH_RECIPES_API_REQUEST = 'SEARCH_RECIPES_API_REQUEST';
 export const SEARCH_RECIPES_API_SUCCESS = 'SEARCH_RECIPES_API_SUCCESS';
 export const SEARCH_RECIPES_API_ERROR = 'SEARCH_RECIPES_API_ERROR';
 
+export const ADD_USER_RECIPE_REQUEST = 'ADD_USER_RECIPE_REQUEST';
+export const ADD_USER_RECIPE_SUCCESS = 'ADD_USER_RECIPE_SUCCESS';
+export const ADD_USER_RECIPE_ERROR = 'ADD_USER_RECIPE_ERROR';
+
 export function getUserTodaysMealRequest(requestData) {
     return {
         type: GET_USER_TODAYS_MEAL_REQUEST,
@@ -94,6 +98,27 @@ export function searchRecipesApiSuccess(data) {
 export function searchRecipesApiError(error) {
     return {
         type: SEARCH_RECIPES_API_ERROR,
+        error
+    }
+}
+
+export function addUserRecipeRequest(requestData) {
+    return {
+        type: ADD_USER_RECIPE_REQUEST,
+        requestData
+    }
+}
+
+export function addUserRecipeSuccess(data) {
+    return {
+        type: ADD_USER_RECIPE_SUCCESS,
+        data
+    }
+}
+
+export function addUserRecipeError(error) {
+    return {
+        type: ADD_USER_RECIPE_ERROR,
         error
     }
 }

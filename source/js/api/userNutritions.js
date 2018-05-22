@@ -32,7 +32,11 @@ function searchRecipesApi(url) {
     return axios({
         method: 'GET',
         url: url,
-        headers: { "Access-Control-Allow-Origin": "*" }
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+        }
     }).then(function (res) {
         return res.data;
     }).catch(function (error) {
@@ -52,9 +56,15 @@ function searchRecipesApi(url) {
     });
 }
 
+function addUserRecipe(requestData) {
+    let headers = extraUserHeaders();
+    return postFormData(requestUrlRecipe, requestData, headers);
+}
+
 export default {
     getUserTodaysMeal,
     getUserRecipeDetails,
     deleteUserRecipe,
     searchRecipesApi,
+    addUserRecipe,
 }

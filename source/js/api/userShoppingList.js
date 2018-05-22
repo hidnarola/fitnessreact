@@ -1,7 +1,7 @@
 import { postFormData } from '.';
 import { extraUserHeaders } from '../helpers/funs';
 
-const requestUrl = 'user/shoppingcart';
+const requestUrl = 'user/shopping_cart';
 
 function getUserShoppingList(requestData) {
     let headers = extraUserHeaders();
