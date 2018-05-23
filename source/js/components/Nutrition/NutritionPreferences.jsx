@@ -117,6 +117,9 @@ class NutritionPreferences extends Component {
                                 </div>
                                 <div className="whitebox-body nutrition-target">
                                     <ul className="common-ul">
+                                        {nutritionTargets && nutritionTargets.length <= 0 &&
+                                            <span>No nutrition targets to track</span>
+                                        }
                                         {nutritionTargets && nutritionTargets.length > 0 &&
                                             nutritionTargets.map((obj, key) => {
                                                 var pref = _.find(nutritions, (o, index) => {
@@ -479,9 +482,8 @@ class NutritionPreferences extends Component {
         });
     }
 
-    handleNutritionTrackSelect = (e) => {
+    handleNutritionTrackSelect = (val) => {
         const { nutritionTrackList } = this.state;
-        var val = e.target.value;
         var list = nutritionTrackList;
         var index = _.indexOf(list, val);
         if (index < 0) {

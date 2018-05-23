@@ -583,6 +583,18 @@ display: flex; justify-content: center; flex-direction: column; text-align: cent
 .progress-popup .progress-popup-body .progress-popup-body-l .progress-dropzone {width: 100%;height: 329px;border-width: 1px;border-color: rgb(234, 234, 234);border-style: solid;border-radius: 5px;cursor: pointer;}
 .progress-popup .progress-popup-body .progress-popup-body-l .progress-dropzone .image-preview-wrapper{width: 100%;height: 100%;padding: 0;margin: 0;}
 
+
+.nutrition-track-options-modal .modal-dialog{max-width:1006px; width:100%;}
+.nutrition-track-options-modal .modal-dialog .modal-content{border:0;box-shadow:none;border-radius:0;padding:30px 48px 82px 66px;}
+.nutrition-track-options-modal-head .close-round{top:-50px; right:-60px;}
+.nutrition-track-options-modal-head{position:relative;padding: 0;border-bottom: 0;}
+.nutrition-track-options-modal-head h3{margin:0 0 30px;padding:0;color:#232B41; font-size:20px;	font-weight:700; line-height:20px;}
+.nutrition-track-options-modal-submit{text-align:right;padding:10px 0 0;}
+.nutrition-track-options-modal-submit button{width:320px; border-radius:80px; background:linear-gradient(123.28deg, #46E9C5 0%, #3FFBFC 100%); border:0;color:#fff; font-size:14px; font-weight:700; line-height: 20px;padding:10px;line-height:26px;border:2px solid transparent;}
+.nutrition-track-options-modal-submit button:hover{background:transparent;color:#46e9c5;border:2px solid #46e9c5;}
+.nutrition-track-options-modal-body .pull-left.custom_check {margin: 0 80px 10px 0;}
+
+
 .level-popup  .modal-dialog{max-width:915px;width:100%;}
 .level-popup .modal-dialog .modal-content{border:0;box-shadow:none;border-radius:6px;padding:0;position:relative;}
 .level-popup-body-l{width:60%;}

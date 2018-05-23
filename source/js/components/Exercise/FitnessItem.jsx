@@ -29,9 +29,9 @@ class FitnessItem extends Component {
         } = this.props;
         const { open } = this.state;
         return (
-            <div className={cns("fitness-item-wrapper fitness-test-box dropdown", { open: open })}>
+            <div onClick={() => this.setState({ open: !this.state.open })} className={cns("fitness-item-wrapper fitness-test-box dropdown", { open: open })}>
                 <div className="fitness-test" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                    <a href="javascript:void(0)" onClick={() => this.setState({ open: !this.state.open })}>
+                    <a href="javascript:void(0)">
                         <i className="icon-play_arrow"></i>
                     </a>
                     <h5>{item.name}</h5>
@@ -140,6 +140,9 @@ class FitnessItem extends Component {
                                                     />
                                                 </div>
                                                 <h6>{val.title}</h6>
+                                                <span>
+                                                    <i class="icon-check"></i>
+                                                </span>
                                             </li>
                                         )
                                     })

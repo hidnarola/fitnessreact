@@ -96,8 +96,8 @@ class Exercise extends Component {
                                                                     />
                                                                 </span>
                                                                 <div className="workout-1-info">
-                                                                    <h3><small>{sch.exerciseId.name}</small> <a href=""><i className="icon-more_horiz"></i></a></h3>
-                                                                    {ReactHtmlParser(sch.exerciseId.description)}
+                                                                    <h3><small>{(sch.exerciseId.name) ? sch.exerciseId.name : '-'}</small> <a href=""><i className="icon-more_horiz"></i></a></h3>
+                                                                    {(sch.exerciseId.description) ? ReactHtmlParser(sch.exerciseId.description) : '-'}
                                                                 </div>
                                                             </div>
                                                             <div className="workout-2">{sch.weight}Kg</div>
