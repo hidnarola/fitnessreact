@@ -8,6 +8,17 @@ function getUserWorkoutByDate(requestData) {
     return postFormData(requestUrl, requestData, headers);
 }
 
+function getUserWorkoutById(_id) {
+    let headers = extraUserHeaders();
+    var options = {
+        method: 'GET',
+        headers: headers,
+    }
+
+    return fetchResource(requestUrl + '/' + _id, options);
+}
+
 export default {
     getUserWorkoutByDate,
+    getUserWorkoutById,
 }
