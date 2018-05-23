@@ -107,19 +107,11 @@ class NutritionRecipeDetails extends Component {
                                                 <h5>15 Mins</h5>
                                             </div>
                                         </li> */}
-                                        {recipe.totalTime && recipe.totalTime != '' &&
+                                        {recipe.totalTime != '' &&
                                             <li>
                                                 <div className="grey-white">
                                                     <h4>Cook Time:</h4>
                                                     <h5>{recipe.totalTime} Mins</h5>
-                                                </div>
-                                            </li>
-                                        }
-                                        {recipe.metaData && recipe.metaData.yield && recipe.metaData.yield != '' &&
-                                            <li>
-                                                <div className="grey-white">
-                                                    <h4>Serves:</h4>
-                                                    <h5>{recipe.metaData.yield}</h5>
                                                 </div>
                                             </li>
                                         }
@@ -202,7 +194,8 @@ class NutritionRecipeDetails extends Component {
                                                 {
                                                     nutritionKeys.map((key, index) => {
                                                         var nutriObj = recipe.totalNutrients[key];
-                                                        var qty = Math.round(nutriObj.quantity).toFixed(0);
+                                                        var qty = (nutriObj.quantity) ? nutriObj.quantity : 0;
+                                                        qty = Math.round((qty / recipe.serving)).toFixed(0);
                                                         return (
                                                             <li key={key}>
                                                                 <div className="grey-white">

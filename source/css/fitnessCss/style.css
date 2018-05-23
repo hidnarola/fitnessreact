@@ -863,6 +863,7 @@ display:-webkit-box; display:-webkit-flex; display:-ms-flex; display:flex; flex-
 .benchpress-popup .modal-content{border:0; border-radius:0; padding:30px 5px 30px 20px; height:700px;}
 .benchpress-popup button.close-round{top:-20px; right:-20px;}
 .benchpress-popup h3.title-h3{margin-bottom:30px;}
+.benchpress-popup .content-wrapper{width: 100%;height: 100%;display: block;float: left;padding: 0 0 70px 0;}
 
 .dtl-format-head{display:-webkit-box; display:-webkit-flex; display:-ms-flex; display:flex; flex-direction:row; background:#f9fafa;padding:30px;}
 .dtl-format-head h3{display:-webkit-box; display:-webkit-flex; display:-ms-flex; display:flex; flex-direction:column;  text-align:left; margin:0;padding:0;  line-height:20px; color:#232B41; font-size: 14px;font-weight:700;	line-height: 19px; text-transform:uppercase;}
@@ -1287,3 +1288,5 @@ div#loader .loader-spinner {-webkit-animation-name: spin;-webkit-animation-durat
 .nutrition-todays-meal-section .dropdown .btn-default:active,
 .nutrition-todays-meal-section .open>.dropdown-toggle.btn-default
 {background: #ffffff;}
+
+.workout-body-description p span{width: 100% !important;}

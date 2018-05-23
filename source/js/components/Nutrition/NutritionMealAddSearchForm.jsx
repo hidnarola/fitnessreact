@@ -59,6 +59,7 @@ const InputField = (props) => {
                 disabled={disabled ? disabled : false}
                 className={className}
                 placeholder={placeholder}
+                autoComplete={false}
             />
             {meta.touched &&
                 ((meta.error && <div className={errorClass}>{meta.error}</div>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))

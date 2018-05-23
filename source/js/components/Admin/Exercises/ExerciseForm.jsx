@@ -101,7 +101,7 @@ class ExerciseForm extends Component {
                                 component={InputField}
                                 errorClass="help-block"
                                 warningClass=""
-                                validate={[required, maxLength15, minLength2]}
+                                validate={[required, minLength2]}
                             />
                             <Field
                                 name="description"

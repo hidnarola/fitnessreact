@@ -10,8 +10,10 @@ import { getUserWorkoutByDateRequest } from '../actions/userWorkouts';
 import { capitalizeFirstLetter } from '../helpers/funs';
 import cns from "classnames";
 import ReactHtmlParser from "react-html-parser";
-import noProfileImg from 'img/common/no-profile-img.png'
+import noImg from 'img/common/no-img.png'
 import { SERVER_BASE_URL } from '../constants/consts';
+import WorkoutDetailsModal from '../components/Workout/WorkoutDetailsModal';
+import Dotdotdot from 'react-dotdotdot'
 
 class Exercise extends Component {
     constructor(props) {
@@ -19,6 +21,8 @@ class Exercise extends Component {
         this.state = {
             selectActionInit: false,
             workouts: [],
+            selectedWorkout: null,
+            showWorkoutDetailsModal: false,
         }
     }
 
@@ -33,7 +37,11 @@ class Exercise extends Component {
     }
 
     render() {
-        const { workouts } = this.state;
+        const {
+            workouts,
+            showWorkoutDetailsModal,
+            selectedWorkout,
+        } = this.state;
         return (
             <div className='stat-page'>
                 <FitnessHeader />
@@ -91,13 +99,20 @@ class Exercise extends Component {
                                                                         src={SERVER_BASE_URL + sch.exerciseId.images[0]}
                                                                         alt="Exercise"
                                                                         onError={(e) => {
-                                                                            e.target.src = noProfileImg
+                                                                            e.target.src = noImg
                                                                         }}
                                                                     />
                                                                 </span>
                                                                 <div className="workout-1-info">
-                                                                    <h3><small>{(sch.exerciseId.name) ? sch.exerciseId.name : '-'}</small> <a href=""><i className="icon-more_horiz"></i></a></h3>
-                                                                    {(sch.exerciseId.description) ? ReactHtmlParser(sch.exerciseId.description) : '-'}
+                                                                    <h3>
+                                                                        <a href="javascript:void(0)" onClick={() => this.handleShowWorkoutDetailsModal(sch)}><small>{(sch.exerciseId.name) ? sch.exerciseId.name : '-'}</small></a>
+                                                                        <a href=""><i className="icon-more_horiz"></i></a>
+                                                                    </h3>
+                                                                    <Dotdotdot clamp={'auto'}>
+                                                                        <div className="workout-body-description">
+                                                                            {(sch.exerciseId.description) ? ReactHtmlParser(sch.exerciseId.description) : '-'}
+                                                                        </div>
+                                                                    </Dotdotdot>
                                                                 </div>
                                                             </div>
                                                             <div className="workout-2">{sch.weight}Kg</div>
@@ -156,6 +171,11 @@ class Exercise extends Component {
                         </div>
                     </div>
                 </section>
+                <WorkoutDetailsModal
+                    show={showWorkoutDetailsModal}
+                    workout={selectedWorkout}
+                    handleClose={this.handleCloseWorkoutDetailsModal}
+                />
             </div>
         );
     }
@@ -176,6 +196,20 @@ class Exercise extends Component {
             });
             dispatch(hidePageLoader());
         }
+    }
+
+    handleShowWorkoutDetailsModal = (workout) => {
+        this.setState({
+            showWorkoutDetailsModal: true,
+            selectedWorkout: workout,
+        });
+    }
+
+    handleCloseWorkoutDetailsModal = (workout) => {
+        this.setState({
+            showWorkoutDetailsModal: false,
+            selectedWorkout: null,
+        });
     }
 
 }

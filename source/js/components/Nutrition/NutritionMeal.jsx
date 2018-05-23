@@ -122,10 +122,14 @@ class NutritionMeal extends Component {
                                     {todaysMeal && todaysMeal.length > 0 &&
                                         todaysMeal.map((meal, index) => {
                                             var dayDriveType = _.find(dayDriveOptions, { value: meal.dayDriveType });
-                                            var enerc_kal = (meal.totalNutrients['ENERC_KCAL']) ? Math.round(meal.totalNutrients['ENERC_KCAL'].quantity).toFixed(0) : 0;
-                                            var procnt = (meal.totalNutrients['PROCNT']) ? Math.round(meal.totalNutrients['PROCNT'].quantity).toFixed(0) : 0;
-                                            var fat = (meal.totalNutrients['FAT']) ? Math.round(meal.totalNutrients['FAT'].quantity).toFixed(0) : 0;
-                                            var chocdf = (meal.totalNutrients['CHOCDF']) ? Math.round(meal.totalNutrients['CHOCDF'].quantity).toFixed(0) : 0;
+                                            var enerc_kal = (meal.totalNutrients['ENERC_KCAL']) ? meal.totalNutrients['ENERC_KCAL'].quantity : 0;
+                                            var procnt = (meal.totalNutrients['PROCNT']) ? meal.totalNutrients['PROCNT'].quantity : 0;
+                                            var fat = (meal.totalNutrients['FAT']) ? meal.totalNutrients['FAT'].quantity : 0;
+                                            var chocdf = (meal.totalNutrients['CHOCDF']) ? meal.totalNutrients['CHOCDF'].quantity : 0;
+                                            enerc_kal = Math.round((enerc_kal / meal.serving)).toFixed(0);
+                                            procnt = Math.round((procnt / meal.serving)).toFixed(0);
+                                            fat = Math.round((fat / meal.serving)).toFixed(0);
+                                            chocdf = Math.round((chocdf / meal.serving)).toFixed(0);
                                             total_enerc_kal = parseInt(total_enerc_kal) + parseInt(enerc_kal);
                                             total_procnt = parseInt(total_procnt) + parseInt(procnt);
                                             total_fat = parseInt(total_fat) + parseInt(fat);
