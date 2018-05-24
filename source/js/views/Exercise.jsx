@@ -14,6 +14,12 @@ import noImg from 'img/common/no-img.png'
 import { SERVER_BASE_URL } from '../constants/consts';
 import WorkoutDetailsModal from '../components/Workout/WorkoutDetailsModal';
 import Dotdotdot from 'react-dotdotdot'
+import { FaTrash } from 'react-icons/lib/fa';
+import {
+    DropdownButton,
+    ButtonToolbar,
+    MenuItem
+} from "react-bootstrap";
 
 class Exercise extends Component {
     constructor(props) {
@@ -106,7 +112,13 @@ class Exercise extends Component {
                                                                 <div className="workout-1-info">
                                                                     <h3>
                                                                         <a href="javascript:void(0)" onClick={() => this.handleShowWorkoutDetailsModal(sch)}><small>{(sch.exerciseId.name) ? sch.exerciseId.name : '-'}</small></a>
-                                                                        <a href=""><i className="icon-more_horiz"></i></a>
+                                                                        <ButtonToolbar bsClass="">
+                                                                            <DropdownButton title="" className="icon-more_horiz no-border" id="dropdown-size-small" noCaret pullRight>
+                                                                                <MenuItem eventKey="1" onClick={() => console.log('Open delete modal')}>
+                                                                                    <FaTrash className="v-align-sub" /> Delete
+                                                                                </MenuItem>
+                                                                            </DropdownButton>
+                                                                        </ButtonToolbar>
                                                                     </h3>
                                                                     <Dotdotdot clamp={'auto'}>
                                                                         <div className="workout-body-description">

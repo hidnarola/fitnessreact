@@ -18,7 +18,18 @@ function getUserWorkoutById(_id) {
     return fetchResource(requestUrl + '/' + _id, options);
 }
 
+function deleteUserWorkoutById(_id) {
+    let headers = extraUserHeaders();
+    var options = {
+        method: 'DELETE',
+        headers: headers,
+    }
+
+    return fetchResource(requestUrl + '/' + _id, options);
+}
+
 export default {
     getUserWorkoutByDate,
     getUserWorkoutById,
+    deleteUserWorkoutById,
 }

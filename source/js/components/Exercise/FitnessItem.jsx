@@ -6,7 +6,7 @@ import {
     FITNESS_TEST_FORMAT_A_OR_B,
     FITNESS_TEST_FORMAT_TEXT_FIELD
 } from '../../constants/consts';
-import noProfileImg from 'img/common/no-profile-img.png';
+import noImg from 'img/common/no-img.png'
 import cns from "classnames";
 import ReactHtmlParser from "react-html-parser";
 
@@ -29,8 +29,8 @@ class FitnessItem extends Component {
         } = this.props;
         const { open } = this.state;
         return (
-            <div onClick={() => this.setState({ open: !this.state.open })} className={cns("fitness-item-wrapper fitness-test-box dropdown", { open: open })}>
-                <div className="fitness-test" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            <div className={cns("fitness-item-wrapper fitness-test-box dropdown", { open: open })}>
+                <div onClick={() => this.setState({ open: !this.state.open })} className="fitness-test" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                     <a href="javascript:void(0)">
                         <i className="icon-play_arrow"></i>
                     </a>
@@ -40,7 +40,7 @@ class FitnessItem extends Component {
                             src={SERVER_BASE_URL + item.featureImage}
                             alt="Image"
                             onError={(e) => {
-                                e.target.src = noProfileImg
+                                e.target.src = noImg
                             }}
                         />
                     </span>
@@ -64,6 +64,7 @@ class FitnessItem extends Component {
                                             name={`${item._id}_max_rep_${i}`}
                                             value={userVal}
                                             onChange={(e) => handleMaxRepChange(item._id, e, val)}
+                                            placeholder="Max Rep"
                                         />
                                     </div>
                                 )
@@ -83,23 +84,26 @@ class FitnessItem extends Component {
                                     }
                                     return (
                                         <div className="push-ups" key={i}>
-                                            <input
-                                                type="checkbox"
-                                                id={`${item._id}_multiselect_${i}`}
-                                                name={`${item._id}_multiselect_${i}`}
-                                                value={i}
-                                                checked={userVal}
-                                                onChange={(e) => handleMultiselectChange(item._id, e)}
-                                            />
+
                                             <h5>{val.title}</h5>
                                             <span>
-                                                <img
+                                                <div class="custom_checkbox_cstm">
+                                                <input
+                                                    type="checkbox"
+                                                    id={`${item._id}_multiselect_${i}`}
+                                                    name={`${item._id}_multiselect_${i}`}
+                                                    value={i}
+                                                    checked={userVal}
+                                                    onChange={(e) => handleMultiselectChange(item._id, e)}
+                                                />
+                                                <label for={`${item._id}_multiselect_${i}`}><img
                                                     src={SERVER_BASE_URL + val.image}
                                                     alt="Image"
                                                     onError={(e) => {
-                                                        e.target.src = noProfileImg
+                                                        e.target.src = noImg
                                                     }}
-                                                />
+                                                /></label>
+                                                </div>
                                             </span>
                                         </div>
                                     )
@@ -122,27 +126,30 @@ class FitnessItem extends Component {
                                         }
                                         return (
                                             <li key={i}>
-                                                <input
-                                                    type="radio"
-                                                    id={`${item._id}_a_or_b`}
-                                                    name={`${item._id}_a_or_b`}
-                                                    value={i}
-                                                    checked={userVal}
-                                                    onChange={(e) => handleAOrBChange(item._id, e)}
-                                                />
-                                                <div className="verticaldrop-img">
-                                                    <img
-                                                        src={SERVER_BASE_URL + val.image}
-                                                        alt="Image"
-                                                        onError={(e) => {
-                                                            e.target.src = noProfileImg
-                                                        }}
+
+
+                                                <div class="custom_radio">
+                                                    <input
+                                                        type="radio"
+                                                        id={`${item._id}_a_or_b_${i}`}
+                                                        name={`${item._id}_a_or_b`}
+                                                        value={i}
+                                                        checked={userVal}
+                                                        onChange={(e) => handleAOrBChange(item._id, e)}
                                                     />
+                                                    <label for={`${item._id}_a_or_b_${i}`}>
+                                                        <img
+                                                            src={SERVER_BASE_URL + val.image}
+                                                            alt="Image"
+                                                            onError={(e) => {
+                                                                e.target.src = noImg
+                                                            }}
+                                                        />
+                                                    </label>
                                                 </div>
                                                 <h6>{val.title}</h6>
-                                                <span>
-                                                    <i class="icon-check"></i>
-                                                </span>
+
+
                                             </li>
                                         )
                                     })
@@ -164,6 +171,7 @@ class FitnessItem extends Component {
                                 name={`${item._id}_text_field`}
                                 value={(userValue.value) ? userValue.value : ''}
                                 onChange={(e) => handleTextFieldChange(item._id, e)}
+                                placeholder="Value"
                             />
                         </div>
                     </div>
