@@ -149,3 +149,11 @@ export const MAX_REPS_CONST_2 = 0.0278;
 export const RECIPE_API_APP_ID = 'b55ed2b8';
 export const RECIPE_API_APP_KEY = '791594812dac61912e88ba6af2dd73b7';
 export const RECIPE_API_SEARCH_URL = `https://api.edamam.com/search?app_id=${RECIPE_API_APP_ID}&app_key=${RECIPE_API_APP_KEY}`;
+
+export const ACCESS_LEVEL_PRIVATE = '1';
+export const ACCESS_LEVEL_FRIENDS = '2';
+export const ACCESS_LEVEL_PUBLIC = '3';
+
+export const ACCESS_LEVEL_PRIVATE_STR = 'Only Me';
+export const ACCESS_LEVEL_FRIENDS_STR = 'Friends';
+export const ACCESS_LEVEL_PUBLIC_STR = 'Public';

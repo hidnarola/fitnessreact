@@ -34,7 +34,7 @@ class Login extends Component {
         const { error, loading, match } = this.props;
         return (
             <div className="step-wrap step-wrap-login login-wrapper">
-                <div className="step-box">
+                <div className="step-box step-box_expried">
                     <div className="step-box-l">
                         <div className="what-difference">
                             <h3>Create Your Account</h3>

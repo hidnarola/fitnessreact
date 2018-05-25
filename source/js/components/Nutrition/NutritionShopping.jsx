@@ -19,6 +19,7 @@ class NutritionShopping extends Component {
             timeDateRangeState: null,
             selectActionInit: false,
             shoppingList: {},
+            showSearch: false,
         }
     }
 
@@ -30,6 +31,7 @@ class NutritionShopping extends Component {
         const {
             timeDateRange,
             shoppingList,
+            showSearch,
         } = this.state;
         const { loading } = this.props;
         var shoppingListKeys = Object.keys(shoppingList);
@@ -46,7 +48,11 @@ class NutritionShopping extends Component {
                         </div>
                         <div className="body-head-r">
                             <a href="" className="white-btn">Print <i className="icon-print"></i></a>
-                            <a href="javascript:void(0)" onClick={this.getShoppingList} className="green-blue-btn">Search  <i className="icon-control_point"></i></a>
+                            <a href="javascript:void(0)" onClick={() => this.setState({ showSearch: !showSearch })} className="pink-btn">Search  <i className="icon-search"></i></a>
+                        </div>
+                    </div>
+                    {showSearch &&
+                        <div className="date_select_func">
                             <DateRangePicker
                                 firstOfWeek={1}
                                 numberOfCalendars={2}
@@ -55,8 +61,7 @@ class NutritionShopping extends Component {
                                 onSelect={this.handleTimeDateRange}
                             />
                         </div>
-                    </div>
-
+                    }
                     <div className="body-content d-flex row justify-content-start profilephoto-content">
                         <div className="col-md-12">
                             <div className="white-box space-btm-20">
@@ -68,9 +73,9 @@ class NutritionShopping extends Component {
                                         {shoppingList && shoppingListKeys.length > 0 &&
                                             shoppingListKeys.map((key, index) => {
                                                 return (
-                                                    <div className="col-md-4" key={index}>
+                                                    <div className="col-md-3" key={index}>
                                                         <div className="friend-box vertical-middle-r">
-                                                            <div className="friend-box-info"><h5 className="vertical-middle-c">{capitalizeFirstLetter(key)}</h5></div>
+                                                            <div className="friend-box-info"><h5 className="vertical-middle-c ml-20">{capitalizeFirstLetter(key)}</h5></div>
                                                             <div className="friend-box-status"><h6 className="vertical-middle-c">{Math.ceil(shoppingList[key]).toFixed(0)}g</h6></div>
                                                         </div>
                                                     </div>
@@ -111,6 +116,8 @@ class NutritionShopping extends Component {
         this.setState({
             timeDateRange: range,
             timeDateRangeState: state
+        }, () => {
+            this.getShoppingList();
         });
     }
 

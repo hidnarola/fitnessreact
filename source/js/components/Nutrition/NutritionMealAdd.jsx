@@ -16,7 +16,7 @@ import {
     DAY_DRIVE_DINNER
 } from '../../constants/consts';
 import { searchRecipesApiRequest, addUserRecipeRequest } from '../../actions/userNutritions';
-import noProfileImg from 'img/common/no-profile-img.png'
+import noImg from 'img/common/no-img.png'
 import InfiniteScroll from 'react-infinite-scroller';
 import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
 import NutritionMealAddSearchForm from './NutritionMealAddSearchForm';
@@ -28,6 +28,11 @@ import {
 } from "react-bootstrap";
 import moment from "moment";
 import { ts, te } from '../../helpers/funs';
+import { NavLink } from "react-router-dom";
+import { routeCodes } from '../../constants/routes';
+import Dotdotdot from "react-dotdotdot";
+import ReactHtmlParser from "react-html-parser";
+import { FaCircleONotch } from "react-icons/lib/fa";
 
 const dayDriveOptions = [
     { value: DAY_DRIVE_BREAKFAST, label: 'Breakfast' },
@@ -91,17 +96,20 @@ class NutritionMealAdd extends Component {
                                 to provide the best meal plans make sure you rate recipes you like. You can further fine tune the meals
                                 selected for you by changing your nutrition settings. </p>
                         </div>
+                        <div className="body-head-r">
+                            <NavLink
+                                className='pink-btn'
+                                to={routeCodes.NUTRITION}>
+                                <i className="icon-arrow_back"></i>
+                                Back
+                            </NavLink>
+                        </div>
                     </div>
-                    <div className="body-content d-flex row justify-content-start">
+                    <div className="body-content d-flex row justify-content-start nutrition-meal-add-wrapper">
                         <div className="col-md-12">
                             <div className="white-box">
                                 <div className="whitebox-head d-flex profile-head">
                                     <h3 className="title-h3 size-14">Search Recipes</h3>
-                                    {/* <div className="whitebox-head-r">
-                                        <a href="" className="green-blue">
-                                            Search<i className="icon-control_point"></i>
-                                        </a>
-                                    </div> */}
                                 </div>
 
                                 <div className="whitebox-body">
@@ -115,11 +123,30 @@ class NutritionMealAdd extends Component {
                                             pageStart={0}
                                             loadMore={this.loadMore}
                                             hasMore={hasMoreData}
-                                            loader={<div className="loader" key={0}>Loading ...</div>}
+                                            className="margin-top-30"
+                                            loader={
+                                                <div className="loader" key={0}>
+                                                    <FaCircleONotch className="loader-spinner loader-spinner-icon" /> Loading ...
+                                                </div>
+                                            }
                                         >
                                             {
                                                 searchRecipes.map((recipeData, index) => {
                                                     var recipe = recipeData.recipe;
+                                                    var enerc_kal = (recipe.totalNutrients['ENERC_KCAL']) ? recipe.totalNutrients['ENERC_KCAL'].quantity : 0;
+                                                    var procnt = (recipe.totalNutrients['PROCNT']) ? recipe.totalNutrients['PROCNT'].quantity : 0;
+                                                    var fat = (recipe.totalNutrients['FAT']) ? recipe.totalNutrients['FAT'].quantity : 0;
+                                                    var chocdf = (recipe.totalNutrients['CHOCDF']) ? recipe.totalNutrients['CHOCDF'].quantity : 0;
+                                                    enerc_kal = Math.round((enerc_kal / recipe.yield)).toFixed(0);
+                                                    procnt = Math.round((procnt / recipe.yield)).toFixed(0);
+                                                    fat = Math.round((fat / recipe.yield)).toFixed(0);
+                                                    chocdf = Math.round((chocdf / recipe.yield)).toFixed(0);
+                                                    var recipeIngreLines = '';
+                                                    if (recipe && recipe.ingredientLines && recipe.ingredientLines.length > 0) {
+                                                        recipe.ingredientLines.map((line, i) => {
+                                                            recipeIngreLines = recipeIngreLines + line + '<br />';
+                                                        })
+                                                    }
                                                     return (
                                                         <div className="meal-wrap d-flex" key={index}>
                                                             <div className="meal-img">
@@ -127,7 +154,7 @@ class NutritionMealAdd extends Component {
                                                                     src={recipe.image}
                                                                     alt="Recipe"
                                                                     onError={(e) => {
-                                                                        e.target.src = noProfileImg
+                                                                        e.target.src = noImg
                                                                     }}
                                                                 />
                                                             </div>
@@ -137,9 +164,44 @@ class NutritionMealAdd extends Component {
                                                                         {recipe.label}
                                                                     </a>
                                                                 </h5>
+
+                                                                <Dotdotdot clamp={3}>
+                                                                    <small>{ReactHtmlParser(recipeIngreLines)}</small>
+                                                                </Dotdotdot>
+                                                            </div>
+                                                            <div className="meal-info">
+                                                                <small>Cals</small>
+                                                                <big>
+                                                                    {enerc_kal}
+                                                                    {(recipe.totalNutrients['ENERC_KCAL']) ? recipe.totalNutrients['ENERC_KCAL'].unit : ''}
+                                                                </big>
+                                                            </div>
+                                                            <div className="meal-info">
+                                                                <small>Protein</small>
+                                                                <big>
+                                                                    {procnt}
+                                                                    {(recipe.totalNutrients['PROCNT']) ? recipe.totalNutrients['PROCNT'].unit : ''}
+                                                                </big>
+                                                            </div>
+                                                            <div className="meal-info">
+                                                                <small>Fat</small>
+                                                                <big>
+                                                                    {fat}
+                                                                    {(recipe.totalNutrients['FAT']) ? recipe.totalNutrients['FAT'].unit : ''}
+                                                                </big>
+                                                            </div>
+                                                            <div className="meal-info">
+                                                                <small>Carbs</small>
+                                                                <big>
+                                                                    {chocdf}
+                                                                    {(recipe.totalNutrients['CHOCDF']) ? recipe.totalNutrients['CHOCDF'].unit : ''}
+                                                                </big>
+                                                            </div>
+                                                            <div className="meal-info">
                                                                 {dayDriveOptions && dayDriveOptions.length > 0 &&
-                                                                    <ButtonToolbar>
-                                                                        <DropdownButton title="Add Recipe To Meal" id="add_recipe_actions">
+                                                                    <ButtonToolbar bsClass="">
+                                                                        <DropdownButton title="" className="icon-more_horiz no-border" id="add_recipe_actions" noCaret pullRight>
+                                                                            <MenuItem header>Add Recipe</MenuItem>
                                                                             {dayDriveOptions.map((drive, index) => {
                                                                                 return (
                                                                                     <MenuItem
@@ -151,6 +213,9 @@ class NutritionMealAdd extends Component {
                                                                                     </MenuItem>
                                                                                 )
                                                                             })}
+                                                                            <MenuItem divider />
+                                                                            <MenuItem header>Details</MenuItem>
+                                                                            <MenuItem eventKey={10} onClick={() => this.getSelectedRecipeDetails(recipe)}>View</MenuItem>
                                                                         </DropdownButton>
                                                                     </ButtonToolbar>
                                                                 }

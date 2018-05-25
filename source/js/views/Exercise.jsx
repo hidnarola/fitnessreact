@@ -110,7 +110,7 @@ class Exercise extends Component {
                                                                     />
                                                                 </span>
                                                                 <div className="workout-1-info">
-                                                                    <h3>
+                                                                    <h3 className="h3_left_content">
                                                                         <a href="javascript:void(0)" onClick={() => this.handleShowWorkoutDetailsModal(sch)}><small>{(sch.exerciseId.name) ? sch.exerciseId.name : '-'}</small></a>
                                                                         <ButtonToolbar bsClass="">
                                                                             <DropdownButton title="" className="icon-more_horiz no-border" id="dropdown-size-small" noCaret pullRight>

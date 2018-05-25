@@ -296,7 +296,7 @@ class Profile extends Component {
                                             </a>
                                         }
                                         {profile && profile.aboutMe !== '' &&
-                                            <p>{ReactHtmlParser(profile.aboutMe)}</p>
+                                            <div>{ReactHtmlParser(profile.aboutMe)}</div>
                                         }
                                     </div>
                                 </div>

@@ -14,6 +14,7 @@ import { saveUserEquipmentsRequest } from '../actions/userEquipments';
 import { resetUserExercisePreferencesRequest } from '../actions/userExercisePreferences';
 import { routeCodes } from '../constants/routes';
 import { resetUserFitnessTestsRequest } from '../actions/userFitnessTests';
+import { showPageLoader } from '../actions/pageLoader';
 
 class ExerciseSettings extends Component {
     constructor(props) {
@@ -141,6 +142,7 @@ class ExerciseSettings extends Component {
         } else if (match.path === routeCodes.EXERCISEFITNESS) {
             this.fitnessChildRef.getWrappedInstance().handleSave();
         }
+        dispatch(showPageLoader());
     }
 
     handleShowResetModal = () => {
@@ -181,6 +183,7 @@ class ExerciseSettings extends Component {
             dispatch(resetUserFitnessTestsRequest());
             this.setResetAction(true);
         }
+        dispatch(showPageLoader());
     }
 
     setSaveAction = (flag) => {

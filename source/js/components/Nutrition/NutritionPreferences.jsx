@@ -15,6 +15,7 @@ import { convertMinsToTime, capitalizeFirstLetter, convertTimeToMins, ts } from 
 import { getNutritionsRequest } from '../../actions/nutritions';
 import NutritionTrackModal from './NutritionTrackModal';
 import ResetConfirmation from '../Admin/Common/ResetConfirmation';
+import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
 
 const defaultRecipeTime = [
     {
@@ -61,6 +62,7 @@ class NutritionPreferences extends Component {
         dispatch(getDietLabelsRequest());
         dispatch(getHealthLabelsRequest());
         dispatch(getUserNutritionPreferencesRequest());
+        dispatch(showPageLoader());
     }
 
     render() {
@@ -248,19 +250,22 @@ class NutritionPreferences extends Component {
                                     <h3 className="title-h3 size-14">Exclude Ingredient</h3>
                                 </div>
                                 <div className="whitebox-body">
-                                    <div className="ingredient-srh d-flex">
-                                        <input
-                                            type="text"
-                                            value={excludeIngredientVal}
-                                            onChange={(e) => this.setState({ excludeIngredientVal: e.target.value })}
-                                            id="exclude_ingredient"
-                                            name="exclude_ingredient"
-                                            placeholder="Start typing ingredient…"
-                                        />
-                                        <button type="button" onClick={this.handleAddExcludeIngredient}>
-                                            <i className="icon-add"></i>
-                                        </button>
-                                    </div>
+                                    <form onSubmit={this.handleAddExcludeIngredient}>
+                                        <div className="ingredient-srh d-flex">
+                                            <input
+                                                type="text"
+                                                value={excludeIngredientVal}
+                                                onChange={(e) => this.setState({ excludeIngredientVal: e.target.value })}
+                                                id="exclude_ingredient"
+                                                name="exclude_ingredient"
+                                                placeholder="Start typing ingredient…"
+                                                autoComplete="off"
+                                            />
+                                            <button type="submit" onClick={this.handleAddExcludeIngredient}>
+                                                <i className="icon-add"></i>
+                                            </button>
+                                        </div>
+                                    </form>
                                     {excludeIngredients && excludeIngredients.length > 0 &&
                                         excludeIngredients.map((val, index) => {
                                             return (
@@ -351,6 +356,7 @@ class NutritionPreferences extends Component {
                         step: (nutri && nutri.step) ? nutri.step : 1,
                     });
                 });
+                dispatch(hidePageLoader());
             });
         } else if (saveActionInit && !loading) {
             this.setState({
@@ -371,7 +377,8 @@ class NutritionPreferences extends Component {
     }
 
     //#region Common funs
-    handleAddExcludeIngredient = () => {
+    handleAddExcludeIngredient = (e) => {
+        e.preventDefault();
         const { excludeIngredientVal, excludeIngredients } = this.state;
         if (excludeIngredientVal.trim() !== '') {
             var newExcludeIngredient = excludeIngredients;
@@ -553,12 +560,14 @@ class NutritionPreferences extends Component {
             nutritionTargets: nutritionTargets,
         }
         dispatch(saveUserNutritionPreferencesRequest(requestData));
+        dispatch(showPageLoader());
     }
 
     handleReset = () => {
         const { dispatch } = this.props;
         this.setState({ resetActionInit: true });
         dispatch(resetUserNutritionPreferencesRequest());
+        dispatch(showPageLoader());
     }
 
     handleShowResetModal = () => {

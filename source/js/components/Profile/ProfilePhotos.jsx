@@ -9,6 +9,7 @@ import {
 } from '../../actions/userProgressPhotos';
 import { ts } from '../../helpers/funs';
 import { FRIENDSHIP_STATUS_SELF } from '../../constants/consts';
+import AddGalleryPhotoModal from './AddGalleryPhotoModal';
 
 class ProfilePhotos extends Component {
     constructor(props) {
@@ -18,8 +19,8 @@ class ProfilePhotos extends Component {
             showAddProgressPhotoModal: false,
             saveProgressPhotoActionInit: false,
             initProgressPhotosAction: false,
-            progressPhotos: [],
             doLoadProgressPhotos: false,
+            showGalleryPhotoModal: false,
         }
     }
 
@@ -46,7 +47,8 @@ class ProfilePhotos extends Component {
         } = this.props;
         const {
             progressPhotos,
-            showAddProgressPhotoModal
+            showAddProgressPhotoModal,
+            showGalleryPhotoModal,
         } = this.state;
         return (
             <div className="profilePhotosComponentWrapper">
@@ -86,7 +88,7 @@ class ProfilePhotos extends Component {
                         <h3 className="title-h3 size-14">Photos Gallery</h3>
                         {profile && profile.friendshipStatus && profile.friendshipStatus === FRIENDSHIP_STATUS_SELF &&
                             <div className="whitebox-head-r">
-                                <a href="" data-toggle="modal" data-target="#photo-gallery">
+                                <a href="javascript:void(0)" onClick={this.handleShowGalleryPhotoModal}>
                                     <span>Add Gallery Photo</span>
                                     <i className="icon-add_a_photo"></i>
                                 </a>
@@ -116,6 +118,11 @@ class ProfilePhotos extends Component {
                     onSubmit={this.handleProgressPhotoSubmit}
                     show={showAddProgressPhotoModal}
                     handleClose={this.handleCloseAddProgressPhotoModal}
+                />
+
+                <AddGalleryPhotoModal
+                    show={showGalleryPhotoModal}
+                    handlePost={this.handleGalleryPhotoSubmit}
                 />
             </div>
         );
@@ -180,6 +187,7 @@ class ProfilePhotos extends Component {
             setForceUpdateChildComponents(false);
         }
     }
+    
     //#region funs
     handleShowAddProgressPhotoModal = () => {
         const { dispatch } = this.props;
@@ -215,6 +223,22 @@ class ProfilePhotos extends Component {
             formData.append('image', data.photo[0]);
         }
         dispatch(addUserProgressPhotoRequest(formData));
+    }
+
+    handleGalleryPhotoSubmit = (data) => {
+        console.log(data);
+    }
+
+    handleShowGalleryPhotoModal = () => {
+        this.setState({
+            showGalleryPhotoModal: true,
+        });
+    }
+
+    handleCloseGalleryPhotoModal = () => {
+        this.setState({
+            showGalleryPhotoModal: false,
+        });
     }
     //#endregion
 }

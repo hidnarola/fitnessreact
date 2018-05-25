@@ -96,7 +96,7 @@ class FitnessItem extends Component {
                                                     checked={userVal}
                                                     onChange={(e) => handleMultiselectChange(item._id, e)}
                                                 />
-                                                <label for={`${item._id}_multiselect_${i}`}><img
+                                                <label htmlFor={`${item._id}_multiselect_${i}`}><img
                                                     src={SERVER_BASE_URL + val.image}
                                                     alt="Image"
                                                     onError={(e) => {
@@ -137,7 +137,7 @@ class FitnessItem extends Component {
                                                         checked={userVal}
                                                         onChange={(e) => handleAOrBChange(item._id, e)}
                                                     />
-                                                    <label for={`${item._id}_a_or_b_${i}`}>
+                                                    <label htmlFor={`${item._id}_a_or_b_${i}`}>
                                                         <img
                                                             src={SERVER_BASE_URL + val.image}
                                                             alt="Image"
