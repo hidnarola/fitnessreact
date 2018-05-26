@@ -1,4 +1,4 @@
-import { postFormData } from '.';
+import { postFormData, fetchResource } from '.';
 import { extraUserHeaders } from '../helpers/funs';
 
 const requestUrl = 'user/workout';
