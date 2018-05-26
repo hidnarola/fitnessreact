@@ -15,6 +15,7 @@ import userFitnessTests from 'sagas/userFitnessTests'
 import userShoppingList from 'sagas/userShoppingList'
 import userWorkouts from 'sagas/userWorkouts'
 import userTimeline from 'sagas/userTimeline'
+import userSearch from 'sagas/userSearch'
 import userGalleryPhotos from 'sagas/userGalleryPhotos'
 import profile from 'sagas/profile';
 import friends from 'sagas/friends';
@@ -50,6 +51,7 @@ export default function* rootSaga() {
     ...userShoppingList,
     ...userWorkouts,
     ...userTimeline,
+    ...userSearch,
     ...userGalleryPhotos,
     ...profile,
     ...friends,
