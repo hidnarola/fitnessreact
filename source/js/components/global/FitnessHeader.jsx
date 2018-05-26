@@ -14,12 +14,21 @@ import Auth from '../../auth/Auth';
 import { setLoggedUserFromLocalStorage } from '../../actions/user';
 import noProfileImg from 'img/common/no-profile-img.png';
 import ReactTooltip from "react-tooltip";
+import Autosuggest from "react-autosuggest";
+import _ from "lodash";
+import { getUserSearchRequest } from '../../actions/userSearch';
 
 const auth = new Auth();
 
 class FitnessHeader extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            searchValue: '',
+            searchSuggestions: [],
+            searchIsLoading: false,
+        }
+        this.searchDebounce = _.debounce(this.searchUsers, 1000);
     }
 
     componentWillMount() {
@@ -29,6 +38,10 @@ class FitnessHeader extends Component {
 
     render() {
         const { loggedUserData } = this.props;
+        const {
+            searchValue,
+            searchSuggestions,
+        } = this.state;
         return (
             <div className="header">
                 <header className="header d-flex justify-content-start">
@@ -41,7 +54,27 @@ class FitnessHeader extends Component {
                             <button type="submit">
                                 <FaSearch size={24} />
                             </button>
-                            <input type="search" name="" placeholder="Search" />
+                            <input
+                                type="text"
+                                id="header_search_users"
+                                name="header_search_users"
+                                placeholder="Search"
+                            />
+                            <Autosuggest
+                                suggestions={searchSuggestions}
+                                onSuggestionsFetchRequested={this.handleSuggestionsFetchRequested}
+                                onSuggestionsClearRequested={this.handleSuggestionsClearRequested}
+                                getSuggestionValue={this.getSuggestionValue}
+                                renderSuggestion={this.renderSearchSuggestion}
+                                inputProps={{
+                                    id: 'header_search_users',
+                                    name: 'header_search_users',
+                                    value: searchValue,
+                                    onChange: this.handleSearchChange,
+                                    placeholder: 'Search',
+                                }}
+                            />
+
                         </form>
                     </div>
                     <div className="header-r d-flex">
@@ -96,15 +129,88 @@ class FitnessHeader extends Component {
         );
     }
 
+    componentDidUpdate(prevProps, prevState) {
+        const {
+            searchSuggestions,
+            userSearchLoading,
+        } = this.props;
+        const {
+            searchIsLoading,
+        } = this.state;
+        if (searchIsLoading && !userSearchLoading && searchSuggestions !== prevProps.searchSuggestions) {
+            var suggestedUsers = searchSuggestions;
+            suggestedUsers.push({
+                _id: 'view_all',
+                text: 'View All',
+            });
+            this.setState({
+                searchIsLoading: true,
+                searchSuggestions,
+            });
+        }
+    }
+
     handleLogout = () => {
         auth.logout();
+    }
+
+    handleSearchChange = (e) => {
+        var value = e.target.value;
+        this.setState({ searchValue: value });
+    }
+
+    handleSuggestionsFetchRequested = ({ value }) => {
+        this.searchDebounce.cancel;
+        this.searchDebounce(value);
+    };
+
+    searchUsers = (value) => {
+        const { dispatch } = this.props;
+        var requestData = {
+            name: value,
+            start: 0,
+            offset: 5,
+        }
+        this.setState({ searchIsLoading: true });
+        dispatch(getUserSearchRequest(requestData));
+    }
+
+    handleSuggestionsClearRequested = () => {
+        this.setState({
+            searchSuggestions: []
+        });
+    };
+
+    getSuggestionValue = (suggestion) => {
+        console.log('getSuggestionValue => ', suggestion);
+        return "Suggestion Value";
+    }
+
+    renderSearchSuggestion = (suggestion) => {
+        console.log('renderSearchSuggestion => ', suggestion);
+        if (suggestion._id !== 'view_all') {
+            var fullName = suggestion.firstName;
+            if (suggestion.lastName) {
+                fullName += ' ' + suggestion.lastName;
+            }
+            return (
+                <span>{fullName}</span>
+            );
+        } else {
+            return (
+                <span>{suggestion.text}</span>
+            );
+        }
+
     }
 }
 
 const mapStateToProps = (state) => {
-    const { user } = state;
+    const { user, userSearch } = state;
     return {
-        loggedUserData: user.get('loggedUserData')
+        loggedUserData: user.get('loggedUserData'),
+        userSearchLoading: userSearch.get('loading'),
+        searchSuggestions: userSearch.get('users'),
     }
 }
 
