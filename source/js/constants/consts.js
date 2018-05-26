@@ -157,3 +157,6 @@ export const ACCESS_LEVEL_PUBLIC = '3';
 export const ACCESS_LEVEL_PRIVATE_STR = 'Only Me';
 export const ACCESS_LEVEL_FRIENDS_STR = 'Friends';
 export const ACCESS_LEVEL_PUBLIC_STR = 'Public';
+
+export const POST_TYPE_TIMELINE = 'timeline'
+export const POST_TYPE_GALLERY = 'gallery'

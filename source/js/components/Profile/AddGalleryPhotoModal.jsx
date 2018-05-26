@@ -25,7 +25,19 @@ class AddGalleryPhotoModal extends Component {
         this.state = {
             images: [],
             description: "",
-            accessLevel: accessLevelOptions[0],
+            accessLevel: accessLevelOptions[0].value,
+        }
+    }
+
+    componentWillUpdate(nextProps, nextState) {
+        const { resetState, doResetState } = nextProps;
+        if (doResetState) {
+            this.setState({
+                images: [],
+                description: "",
+                accessLevel: accessLevelOptions[0].value,
+            });
+            resetState(false);
         }
     }
 
@@ -37,13 +49,14 @@ class AddGalleryPhotoModal extends Component {
         } = this.state;
         const {
             show,
-            handlePost
+            handlePost,
+            handleClose,
         } = this.props;
         return (
             <div className="add-galary-photo-modal-wrapper">
                 <Modal show={show} bsSize="large" className="gallery-popup">
                     <div className="gallery-popup-head">
-                        <button type="button" className="close-round">
+                        <button type="button" className="close-round" onClick={handleClose}>
                             <span aria-hidden="true">&times;</span>
                         </button>
                         <h3 className="title-h3">New Gallery Photos</h3>

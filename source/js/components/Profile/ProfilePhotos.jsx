@@ -8,19 +8,26 @@ import {
     getUserLatestProgressPhotoRequest
 } from '../../actions/userProgressPhotos';
 import { ts } from '../../helpers/funs';
-import { FRIENDSHIP_STATUS_SELF } from '../../constants/consts';
+import { FRIENDSHIP_STATUS_SELF, POST_TYPE_GALLERY } from '../../constants/consts';
 import AddGalleryPhotoModal from './AddGalleryPhotoModal';
+import { addUserGalleryPhotoRequest, getUserGalleryPhotoRequest } from '../../actions/userGalleryPhotos';
+import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
 
 class ProfilePhotos extends Component {
     constructor(props) {
         super(props);
         this.state = {
             progressPhotos: [],
+            galleryPhotos: [],
             showAddProgressPhotoModal: false,
             saveProgressPhotoActionInit: false,
             initProgressPhotosAction: false,
             doLoadProgressPhotos: false,
             showGalleryPhotoModal: false,
+            saveGalleryPhotoActionInit: false,
+            forceResetGalleryModalState: false,
+            initGalleryPhotosAction: false,
+            doLoadGalleryPhotos: false,
         }
     }
 
@@ -33,22 +40,28 @@ class ProfilePhotos extends Component {
             var username = profile.username;
             this.setState({
                 initProgressPhotosAction: true,
+                initGalleryPhotosAction: true,
             });
             dispatch(getUserLatestProgressPhotoRequest(username));
+            dispatch(getUserGalleryPhotoRequest(username, 0, 10));
         } else {
-            this.setState({ doLoadProgressPhotos: true });
+            this.setState({
+                doLoadProgressPhotos: true,
+                doLoadGalleryPhotos: true,
+            });
         }
     }
 
     render() {
         const {
-            galleryPhotos,
             profile
         } = this.props;
         const {
             progressPhotos,
+            galleryPhotos,
             showAddProgressPhotoModal,
             showGalleryPhotoModal,
+            forceResetGalleryModalState,
         } = this.state;
         return (
             <div className="profilePhotosComponentWrapper">
@@ -97,18 +110,22 @@ class ProfilePhotos extends Component {
                     </div>
                     <div className="whitebox-body profile-body">
                         {!galleryPhotos &&
-                            <span>No progress image</span>
+                            <span>No gallery images</span>
                         }
                         {galleryPhotos && galleryPhotos.length <= 0 &&
-                            <span>No progress image</span>
+                            <span>No gallery images</span>
                         }
                         {galleryPhotos && galleryPhotos.length > 0 &&
                             <ul className="d-flex profile-list-ul">
-                                {galleryPhotos.map((photo, index) => (
-                                    <li key={index}>
-                                        <ProfilePhotoBlock image={photo.image} caption={photo.logDate} />
-                                    </li>
-                                ))}
+                                {galleryPhotos.map((galleryPhoto, index) => {
+                                    return galleryPhoto.images.map((photo, i) => {
+                                        return (
+                                            <li key={`${index}_${i}`}>
+                                                <ProfilePhotoBlock image={photo.image} caption={photo.logDate} />
+                                            </li>
+                                        )
+                                    })
+                                })}
                             </ul>
                         }
                     </div>
@@ -123,6 +140,9 @@ class ProfilePhotos extends Component {
                 <AddGalleryPhotoModal
                     show={showGalleryPhotoModal}
                     handlePost={this.handleGalleryPhotoSubmit}
+                    handleClose={this.handleCloseGalleryPhotoModal}
+                    doResetState={forceResetGalleryModalState}
+                    resetState={this.handleForceResetGalleryModalState}
                 />
             </div>
         );
@@ -135,6 +155,7 @@ class ProfilePhotos extends Component {
         } = nextProps;
         const {
             doLoadProgressPhotos,
+            doLoadGalleryPhotos,
         } = this.state;
         if ((doLoadProgressPhotos) && profile && Object.keys(profile).length > 0) {
             var username = profile.username;
@@ -143,12 +164,21 @@ class ProfilePhotos extends Component {
             });
             dispatch(getUserLatestProgressPhotoRequest(username));
         }
+        if ((doLoadGalleryPhotos) && profile && Object.keys(profile).length > 0) {
+            var username = profile.username;
+            this.setState({
+                initGalleryPhotosAction: true,
+            });
+            dispatch(getUserGalleryPhotoRequest(username, 0, 10));
+        }
     }
 
     componentDidUpdate(prevProps, prevState) {
         const {
             initProgressPhotosAction,
             saveProgressPhotoActionInit,
+            saveGalleryPhotoActionInit,
+            initGalleryPhotosAction,
         } = this.state;
         const {
             progressPhotoloading,
@@ -157,13 +187,23 @@ class ProfilePhotos extends Component {
             profile,
             forceUpdateChildComponents,
             setForceUpdateChildComponents,
+            galleryPhotoloading,
+            galleryPhotos,
         } = this.props;
         const progressPhotosState = this.state.progressPhotos;
+        const galleryPhotosState = this.state.galleryPhotos;
         if (initProgressPhotosAction && !progressPhotoloading && (progressPhotosState !== progressPhotos)) {
             this.setState({
                 initProgressPhotosAction: false,
                 progressPhotos,
                 doLoadProgressPhotos: false,
+            });
+        }
+        if (initGalleryPhotosAction && !galleryPhotoloading && (galleryPhotosState !== galleryPhotos)) {
+            this.setState({
+                initGalleryPhotosAction: false,
+                galleryPhotos,
+                doLoadGalleryPhotos: false,
             });
         }
         if (saveProgressPhotoActionInit && !progressPhotoloading) {
@@ -178,6 +218,17 @@ class ProfilePhotos extends Component {
                 dispatch(getUserLatestProgressPhotoRequest(username));
             }
         }
+        if (saveGalleryPhotoActionInit && !galleryPhotoloading) {
+            this.setState({ saveGalleryPhotoActionInit: false });
+            ts('Gallery photos saved successfully!');
+            this.handleCloseGalleryPhotoModal();
+            dispatch(hidePageLoader());
+            var username = profile.username;
+            this.setState({
+                initGalleryPhotosAction: true,
+            });
+            dispatch(getUserGalleryPhotoRequest(username, 0, 10));
+        }
         if (forceUpdateChildComponents) {
             var username = profile.username;
             this.setState({
@@ -187,7 +238,7 @@ class ProfilePhotos extends Component {
             setForceUpdateChildComponents(false);
         }
     }
-    
+
     //#region funs
     handleShowAddProgressPhotoModal = () => {
         const { dispatch } = this.props;
@@ -226,7 +277,20 @@ class ProfilePhotos extends Component {
     }
 
     handleGalleryPhotoSubmit = (data) => {
-        console.log(data);
+        const { dispatch } = this.props;
+        var formData = new FormData();
+        formData.append('description', data.description);
+        formData.append('privacy', data.accessLevel);
+        formData.append('postType', POST_TYPE_GALLERY);
+        if (data.images.length > 0) {
+            for (let index = 0; index < data.images.length; index++) {
+                const file = data.images[index];
+                formData.append('images', file);
+            }
+        }
+        this.setState({ saveGalleryPhotoActionInit: true });
+        dispatch(addUserGalleryPhotoRequest(formData));
+        dispatch(showPageLoader());
     }
 
     handleShowGalleryPhotoModal = () => {
@@ -239,15 +303,25 @@ class ProfilePhotos extends Component {
         this.setState({
             showGalleryPhotoModal: false,
         });
+        this.handleForceResetGalleryModalState(true);
+    }
+
+    handleForceResetGalleryModalState = (flag) => {
+        this.setState({
+            forceResetGalleryModalState: flag,
+        });
     }
     //#endregion
 }
 
 const mapStateToProps = (state) => {
-    const { userProgressPhotos } = state;
+    const { userProgressPhotos, userGalleryPhotos } = state;
     return {
         progressPhotoloading: userProgressPhotos.get('loading'),
         progressPhotos: userProgressPhotos.get('progressPhotos'),
+        galleryPhotoloading: userGalleryPhotos.get('loading'),
+        galleryPhotoError: userGalleryPhotos.get('error'),
+        galleryPhotos: userGalleryPhotos.get('galleryPhotos'),
     }
 }
 
