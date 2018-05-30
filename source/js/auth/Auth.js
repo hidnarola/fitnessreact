@@ -13,11 +13,14 @@ import {
   AUTH_STATE_ACTION_SIGNUP,
   SERVER_BASE_URL,
   LOCALSTORAGE_USERNAME_KEY,
-  LOCALSTORAGE_REFRESH_TOKEN_KEY
+  LOCALSTORAGE_REFRESH_TOKEN_KEY,
+  LOCALSTORAGE_USER_DETAILS_KEY,
+  FITASSIST_USER_DETAILS_TOKEN_KEY
 } from '../constants/consts';
 
 import axios from 'axios';
 import { ts } from '../helpers/funs';
+import jwt from "jwt-simple";
 
 export default class Auth {
   auth0Lock = new Auth0Lock(
@@ -116,6 +119,7 @@ export default class Auth {
     localStorage.setItem(LOCALSTORAGE_ID_TOKEN_KEY, authResult.idToken);
     localStorage.setItem(LOCALSTORAGE_EXPIRES_AT_KEY, expiresAt);
     localStorage.setItem(LOCALSTORAGE_ROLE_KEY, window.btoa(USER_ROLE));
+    localStorage.setItem(LOCALSTORAGE_USER_DETAILS_KEY, jwt.encode(userData, FITASSIST_USER_DETAILS_TOKEN_KEY));
     if (userData) {
       if (userData.username) {
         localStorage.setItem(LOCALSTORAGE_USERNAME_KEY, window.btoa(userData.username));
@@ -133,6 +137,7 @@ export default class Auth {
     localStorage.removeItem(LOCALSTORAGE_ROLE_KEY);
     localStorage.removeItem(LOCALSTORAGE_USERNAME_KEY);
     localStorage.removeItem(LOCALSTORAGE_REFRESH_TOKEN_KEY);
+    localStorage.removeItem(LOCALSTORAGE_USER_DETAILS_KEY);
     // navigate to the home route
     ts('Logout success!');
     history.replace(publicPath);

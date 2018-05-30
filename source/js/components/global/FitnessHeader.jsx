@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { routeCodes } from 'constants/routes';
-
 import FaSearch from 'react-icons/lib/fa/search';
 import FaNoti from 'react-icons/lib/md/notifications-none';
 import FaMenu from 'react-icons/lib/md/menu';
@@ -16,7 +15,8 @@ import noProfileImg from 'img/common/no-profile-img.png';
 import ReactTooltip from "react-tooltip";
 import Autosuggest from "react-autosuggest";
 import _ from "lodash";
-import { getUserSearchRequest } from '../../actions/userSearch';
+import { getUserSearchRequest, resetUserSearch, handleChangeUserSearchFor } from '../../actions/userSearch';
+import $ from "jquery";
 
 const auth = new Auth();
 
@@ -24,7 +24,6 @@ class FitnessHeader extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            searchValue: '',
             searchSuggestions: [],
             searchIsLoading: false,
         }
@@ -37,9 +36,11 @@ class FitnessHeader extends Component {
     }
 
     render() {
-        const { loggedUserData } = this.props;
         const {
+            loggedUserData,
             searchValue,
+        } = this.props;
+        const {
             searchSuggestions,
         } = this.state;
         return (
@@ -50,16 +51,10 @@ class FitnessHeader extends Component {
                         </a>
                     </div>
                     <div className="search">
-                        <form>
-                            <button type="submit">
-                                <FaSearch size={24} />
-                            </button>
-                            <input
-                                type="text"
-                                id="header_search_users"
-                                name="header_search_users"
-                                placeholder="Search"
-                            />
+                        <div className="search-form header-search-form">
+                            <span className="search-icon">
+                                <FaSearch size={22} />
+                            </span>
                             <Autosuggest
                                 suggestions={searchSuggestions}
                                 onSuggestionsFetchRequested={this.handleSuggestionsFetchRequested}
@@ -75,7 +70,7 @@ class FitnessHeader extends Component {
                                 }}
                             />
 
-                        </form>
+                        </div>
                     </div>
                     <div className="header-r d-flex">
                         <div className="header-user">
@@ -119,7 +114,7 @@ class FitnessHeader extends Component {
                             </a>
                         </div>
                         <div className="header-nav">
-                            <a>
+                            <a href="javascript:void(0)" onClick={() => this.handleSideMenu(true)}>
                                 <FaMenu size={24} />
                             </a>
                         </div>
@@ -139,10 +134,12 @@ class FitnessHeader extends Component {
         } = this.state;
         if (searchIsLoading && !userSearchLoading && searchSuggestions !== prevProps.searchSuggestions) {
             var suggestedUsers = searchSuggestions;
-            suggestedUsers.push({
-                _id: 'view_all',
-                text: 'View All',
-            });
+            if (suggestedUsers.length > 0) {
+                suggestedUsers.push({
+                    _id: 'view_all',
+                    text: 'View All',
+                });
+            }
             this.setState({
                 searchIsLoading: true,
                 searchSuggestions,
@@ -150,13 +147,30 @@ class FitnessHeader extends Component {
         }
     }
 
+    componentWillUnmount() {
+        const {
+            searchSuggestions,
+            dispatch,
+        } = this.props;
+        if (searchSuggestions && searchSuggestions.length > 0) {
+            var resetSearchUserState = {
+                loading: false,
+                users: [],
+                error: [],
+            }
+            dispatch(resetUserSearch(resetSearchUserState));
+        }
+    }
+
+
+    //#region Common functions
     handleLogout = () => {
         auth.logout();
     }
 
-    handleSearchChange = (e) => {
-        var value = e.target.value;
-        this.setState({ searchValue: value });
+    handleSearchChange = (event, { newValue, method }) => {
+        const { dispatch } = this.props;
+        dispatch(handleChangeUserSearchFor('searchValue', newValue));
     }
 
     handleSuggestionsFetchRequested = ({ value }) => {
@@ -182,27 +196,44 @@ class FitnessHeader extends Component {
     };
 
     getSuggestionValue = (suggestion) => {
-        console.log('getSuggestionValue => ', suggestion);
-        return "Suggestion Value";
+        if (suggestion._id === "view_all") {
+            return this.props.searchValue;
+        }
+        var fullName = suggestion.firstName;
+        if (suggestion.lastName) {
+            fullName += ' ' + suggestion.lastName;
+        }
+        return fullName;
     }
 
     renderSearchSuggestion = (suggestion) => {
-        console.log('renderSearchSuggestion => ', suggestion);
-        if (suggestion._id !== 'view_all') {
+        if (suggestion._id === 'view_all') {
+            return (
+                <NavLink to={`${routeCodes.USERS}`}>
+                    <span>{suggestion.text}</span>
+                </NavLink>
+            );
+        } else {
             var fullName = suggestion.firstName;
             if (suggestion.lastName) {
                 fullName += ' ' + suggestion.lastName;
             }
             return (
-                <span>{fullName}</span>
-            );
-        } else {
-            return (
-                <span>{suggestion.text}</span>
+                <NavLink to={`${routeCodes.PROFILE}/${suggestion.username}`}>
+                    <span>{fullName}</span>
+                </NavLink>
             );
         }
-
     }
+
+    handleSideMenu = (show) => {
+        if (show) {
+            $('#user-right-menu').toggle({ direction: "left" });
+        } else {
+            $('#user-right-menu').hide();
+        }
+    }
+    //#endregion
 }
 
 const mapStateToProps = (state) => {
@@ -210,6 +241,7 @@ const mapStateToProps = (state) => {
     return {
         loggedUserData: user.get('loggedUserData'),
         userSearchLoading: userSearch.get('loading'),
+        searchValue: userSearch.get('searchValue'),
         searchSuggestions: userSearch.get('users'),
     }
 }

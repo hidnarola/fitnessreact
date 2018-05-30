@@ -3,6 +3,7 @@ export const publicPath = '/';
 export const routeCodes = {
     HOME: publicPath,
     PEOPLE: `${publicPath}people`,
+    USERS: `${publicPath}users`,
 
     // Dashboard Routes
     DASHBOARD: `${publicPath}dashboard`,
@@ -26,6 +27,7 @@ export const routeCodes = {
     PROFILE: `${publicPath}profile`,
     PROFILEPHOTOS: `${publicPath}profile/{username}/photos`,
     PROFILEFRIENDS: `${publicPath}profile/{username}/friends`,
+    UPDATE_PROFILE: `${publicPath}update_profile`,
 
     // Recipe Routes
     RECEIP: `${publicPath}receip`,

@@ -75,6 +75,7 @@
     "jquery": "^3.3.1",
     "jquery-ui-slider": "^1.12.1",
     "jwt-decode": "^2.2.0",
+    "jwt-simple": "^0.5.1",
     "lodash": "^4.17.5",
     "moment": "^2.22.1",
     "prop-types": "^15.6.0",

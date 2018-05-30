@@ -10,13 +10,11 @@ import ScrollToTop from 'components/global/ScrollToTop';
 import FitnessHeader from 'components/global/FitnessHeader';
 import FitnessNav from 'components/global/FitnessNav';
 import Stats from 'components/Stats/Stats';
-
 import NutritionShopping from 'components/Nutrition/NutritionShopping';
 import NutritionMeal from 'components/Nutrition/NutritionMeal';
 import Goals from 'components/Goals/Goals';
 import Receip from '../components/Receip/Receip';
 import Calendar from 'components/Calendar/Calendar';
-
 import Home from 'views/Home';
 import People from 'views/People';
 import NotFound from 'views/NotFound';
@@ -34,6 +32,7 @@ import AdminDashboard from './Admin/Dashboard';
 import PrivateRoute from '../helpers/PrivateRoute';
 import AdminPrivateRoute from '../helpers/AdminPrivateRoute';
 import Users from './Admin/Users';
+import FrontEndUsersList from './Users';
 import Exercises from './Admin/Exercises';
 import AdminBadges from './Admin/Badges';
 import Equipments from './Admin/Equipments';
@@ -53,10 +52,17 @@ import FitnessTests from './Admin/FitnessTests';
 import NutritionRecipeDetails from '../components/Nutrition/NutritionRecipeDetails';
 import cns from "classnames";
 import NutritionMealAdd from '../components/Nutrition/NutritionMealAdd';
+import $ from "jquery";
+import { MenuItem } from "react-bootstrap";
+import { NavLink } from "react-router-dom";
+import UpdateProfile from './UpdateProfile';
 
 class App extends Component {
     render() {
-        const { showPageLoader } = this.props;
+        const {
+            showPageLoader,
+            loggedUserData,
+        } = this.props;
         return (
             <div className="appWrapper">
                 <div id="loader" className={cns({ 'display_none': !showPageLoader })}>
@@ -75,6 +81,7 @@ class App extends Component {
                             <PrivateRoute path={routeCodes.STATSPAGE} component={StatsPage} />
 
                             <PrivateRoute path={`${routeCodes.PROFILE}/:username`} component={ProfilePage} />
+                            <PrivateRoute path={`${routeCodes.UPDATE_PROFILE}`} component={UpdateProfile} />
 
                             <PrivateRoute path={routeCodes.BODY} component={Body} />
 
@@ -94,6 +101,8 @@ class App extends Component {
                             <PrivateRoute path={routeCodes.GOALS} component={Goals} />
 
                             <PrivateRoute path={routeCodes.RECEIP} component={Receip} />
+
+                            <PrivateRoute path={routeCodes.USERS} component={FrontEndUsersList} />
 
                             <Route exact path={adminRootRoute} component={AdminLogin} />
                             <Route exact path={`${adminRootRoute}/${SESSION_EXPIRED_URL_TYPE}`} component={AdminLogin} />
@@ -118,32 +127,58 @@ class App extends Component {
                             <AdminPrivateRoute path={adminRouteCodes.BADGES} component={AdminBadges} />
 
                             <Route exact path={AUTH_CALLBACK_ROUTE} component={Callback} />
-                            
+
                             <Route path='*' component={NotFound} />
                         </Switch>
+
+
+                        <ToastContainer
+                            position="top-right"
+                            autoClose={3000}
+                            hideProgressBar
+                            newestOnTop
+                            closeOnClick
+                            rtl={false}
+                            pauseOnVisibilityChange
+                            draggable
+                            pauseOnHover
+                        />
+
+                        {loggedUserData &&
+                            <div id="user-right-menu" className="chat-wrap">
+                                <div className="chat-bg"></div>
+                                <div className="chat-inr">
+                                    <div className="chat-head">
+                                        <h3><small>{loggedUserData.name}</small></h3>
+                                        <a href="javascript:void(0)" onClick={() => this.handleHideRightSideMenu('user-right-menu')}><i className="icon-close"></i></a>
+                                    </div>
+                                    <div className="chat-body" id="chat-body">
+                                        <ul>
+                                            <li><NavLink to={routeCodes.UPDATE_PROFILE}>Update Profile</NavLink></li>
+                                            <li>Change Password</li>
+                                            <li>Settings</li>
+                                            <li>Logout</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        }
                     </ScrollToTop>
                 </Router>
-
-                <ToastContainer
-                    position="top-right"
-                    autoClose={3000}
-                    hideProgressBar
-                    newestOnTop
-                    closeOnClick
-                    rtl={false}
-                    pauseOnVisibilityChange
-                    draggable
-                    pauseOnHover
-                />
             </div>
         );
+    }
+
+    handleHideRightSideMenu = (id, direction = 'right') => {
+        $(`#${id}`).toggle({ direction: direction });
     }
 }
 
 const mapStateToProps = (state) => {
-    const { pageLoader } = state;
+    const { pageLoader, user } = state;
     return {
         showPageLoader: pageLoader.get("loading"),
+        loggedUserData: user.get('loggedUserData'),
     };
 }
 
