@@ -8,7 +8,6 @@ import {
     SERVER_BASE_URL,
     GENDER_MALE,
     GENDER_FEMALE,
-    GENDER_TRANSGENDER,
     USER_STATUS_ACTIVE,
     USER_STATUS_ACTIVE_STR,
     USER_STATUS_INACTIVE,
@@ -25,7 +24,6 @@ const genderOptions = [
     { value: '', label: 'All' },
     { value: GENDER_MALE, label: capitalizeFirstLetter(GENDER_MALE) },
     { value: GENDER_FEMALE, label: capitalizeFirstLetter(GENDER_FEMALE) },
-    { value: GENDER_TRANSGENDER, label: capitalizeFirstLetter(GENDER_TRANSGENDER) },
 ];
 const userStatusOptions = [
     { value: '', label: 'All' },

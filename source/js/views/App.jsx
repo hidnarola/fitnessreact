@@ -56,6 +56,7 @@ import $ from "jquery";
 import { MenuItem } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import UpdateProfile from './UpdateProfile';
+import { toggleSideMenu } from '../helpers/funs';
 
 class App extends Component {
     render() {
@@ -150,11 +151,18 @@ class App extends Component {
                                 <div className="chat-inr">
                                     <div className="chat-head">
                                         <h3><small>{loggedUserData.name}</small></h3>
-                                        <a href="javascript:void(0)" onClick={() => this.handleHideRightSideMenu('user-right-menu')}><i className="icon-close"></i></a>
+                                        <a href="javascript:void(0)" onClick={() => toggleSideMenu('user-right-menu', false)}><i className="icon-close"></i></a>
                                     </div>
                                     <div className="chat-body" id="chat-body">
                                         <ul>
-                                            <li><NavLink to={routeCodes.UPDATE_PROFILE}>Update Profile</NavLink></li>
+                                            <li>
+                                                <NavLink
+                                                    to={routeCodes.UPDATE_PROFILE}
+                                                    onClick={() => toggleSideMenu('user-right-menu', false)}
+                                                >
+                                                    Update Profile
+                                                </NavLink>
+                                            </li>
                                             <li>Change Password</li>
                                             <li>Settings</li>
                                             <li>Logout</li>
@@ -167,10 +175,6 @@ class App extends Component {
                 </Router>
             </div>
         );
-    }
-
-    handleHideRightSideMenu = (id, direction = 'right') => {
-        $(`#${id}`).toggle({ direction: direction });
     }
 }
 

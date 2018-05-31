@@ -117,3 +117,11 @@ export function focusToControl(divId) {
     divOffsetTop -= 130;
     $('html, body, document, window').animate({ scrollTop: divOffsetTop }, 'slow');
 }
+
+export function toggleSideMenu(id, show) {
+    if (show) {
+        $(`#${id}`).toggle({ direction: "left" });
+    } else {
+        $(`#${id}`).toggle({ direction: "right" });
+    }
+}

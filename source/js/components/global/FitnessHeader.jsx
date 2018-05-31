@@ -17,6 +17,7 @@ import Autosuggest from "react-autosuggest";
 import _ from "lodash";
 import { getUserSearchRequest, resetUserSearch, handleChangeUserSearchFor } from '../../actions/userSearch';
 import $ from "jquery";
+import { toggleSideMenu } from '../../helpers/funs';
 
 const auth = new Auth();
 
@@ -114,7 +115,7 @@ class FitnessHeader extends Component {
                             </a>
                         </div>
                         <div className="header-nav">
-                            <a href="javascript:void(0)" onClick={() => this.handleSideMenu(true)}>
+                            <a href="javascript:void(0)" onClick={() => toggleSideMenu('user-right-menu', true)}>
                                 <FaMenu size={24} />
                             </a>
                         </div>
@@ -223,14 +224,6 @@ class FitnessHeader extends Component {
                     <span>{fullName}</span>
                 </NavLink>
             );
-        }
-    }
-
-    handleSideMenu = (show) => {
-        if (show) {
-            $('#user-right-menu').toggle({ direction: "left" });
-        } else {
-            $('#user-right-menu').hide();
         }
     }
     //#endregion

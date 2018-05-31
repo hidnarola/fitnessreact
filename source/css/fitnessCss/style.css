@@ -1345,3 +1345,5 @@ div#loader .loader-spinner, div.loader .loader-spinner {-webkit-animation-name: 
 .step-box.step-box_expried {position: relative;}
 .nutrition-meal-add-wrapper .dropdown.btn-group button#add_recipe_actions {background: none !important;}
 .height-725{height: 725px;}
+
+.pb-0{padding-bottom: 0 !important;}

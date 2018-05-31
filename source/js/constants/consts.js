@@ -36,7 +36,6 @@ export const exerciseDifficultyLevelObj = {
 
 export const GENDER_MALE = 'male';
 export const GENDER_FEMALE = 'female';
-export const GENDER_TRANSGENDER = 'transgender';
 
 export const USER_STATUS_ACTIVE = 1;
 export const USER_STATUS_INACTIVE = 0;
@@ -162,3 +161,6 @@ export const ACCESS_LEVEL_PUBLIC_STR = 'Public';
 
 export const POST_TYPE_TIMELINE = 'timeline'
 export const POST_TYPE_GALLERY = 'gallery'
+
+export const WORKOUT_LOCATION_HOME = 'home';
+export const WORKOUT_LOCATION_GYM = 'gym';

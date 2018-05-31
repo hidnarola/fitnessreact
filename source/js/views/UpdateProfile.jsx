@@ -3,9 +3,18 @@ import { connect } from 'react-redux';
 import FitnessHeader from '../components/global/FitnessHeader';
 import FitnessNav from '../components/global/FitnessNav';
 import UpdateProfileForm from '../components/Profile/UpdateProfileForm';
+import { submit } from 'redux-form';
 
 class UpdateProfile extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            saveActionInit: false,
+        }
+    }
+
     render() {
+        const { saveActionInit } = this.state;
         return (
             <div className='stat-page'>
                 <FitnessHeader />
@@ -17,16 +26,27 @@ class UpdateProfile extends Component {
                             <p>Your goal choice shapes how your fitness assistant will ceate your meal and exercise plans, it’s important that you set goals which are achieveable. Keep updating your profile and your fitness assistant will keep you on track and meeting the goals you’ve set out for yourself.</p>
                         </div>
                         <div className="body-head-r">
-                            <a href="" className="white-btn">Reset <i className="icon-settings_backup_restore"></i></a>
-                            <a href="" className="green-blue-btn">Update Changes <i className="icon-restore"></i></a>
+                            <a href="javascript:void(0)" onClick={this.handleSave} className="green-blue-btn">Update Changes <i className="icon-restore"></i></a>
                         </div>
                     </div>
                     <div className="body-content row prefferences d-flex">
-                        <UpdateProfileForm />
+                        <UpdateProfileForm
+                            saveActionInit={saveActionInit}
+                            handleSaveActionFlag={this.handleSaveActionFlag}
+                        />
                     </div>
                 </section>
             </div>
         );
+    }
+
+    handleSave = () => {
+        const { dispatch } = this.props;
+        dispatch(submit('update_profile_details_form'));
+    }
+
+    handleSaveActionFlag = (flag) => {
+        this.setState({ saveActionInit: flag });
     }
 }
 

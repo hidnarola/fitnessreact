@@ -6,9 +6,26 @@ import {
     SAVE_ABOUT_PROFILE_DETAILS_REQUEST,
     saveAboutProfileDetailsSuccess,
     saveAboutProfileDetailsError,
+    getLoggedUserProfileDetailsSuccess,
+    getLoggedUserProfileDetailsError,
+    GET_LOGGED_USER_PROFILE_DETAILS_REQUEST,
+    saveLoggedUserProfileDetailsSuccess,
+    saveLoggedUserProfileDetailsError,
+    SAVE_LOGGED_USER_PROFILE_DETAILS_REQUEST,
 } from '../actions/profile';
 
 import api from 'api/profile';
+
+function fetchLoggedUserProfileDetailsData() {
+    return function* (action) {
+        try {
+            const data = yield call(() => api.getLoggedUserProfileDetails());
+            yield put(getLoggedUserProfileDetailsSuccess(data));
+        } catch (error) {
+            yield put(getLoggedUserProfileDetailsError(error));
+        }
+    }
+}
 
 function fetchProfileDetailsData() {
     return function* (action) {
@@ -34,9 +51,23 @@ function updateAboutProfileDetailsData() {
     }
 }
 
+function updateLoggedUserProfileDetailsData() {
+    return function* (action) {
+        try {
+            var formData = action.formData;
+            const data = yield call(() => api.saveLoggedUserProfileDetails(formData));
+            yield put(saveLoggedUserProfileDetailsSuccess(data));
+        } catch (error) {
+            yield put(saveLoggedUserProfileDetailsError(error));
+        }
+    }
+}
+
 export function* watchProfileDetailsData() {
+    yield takeLatest(GET_LOGGED_USER_PROFILE_DETAILS_REQUEST, fetchLoggedUserProfileDetailsData());
     yield takeLatest(GET_PROFILE_DETAILS_REQUEST, fetchProfileDetailsData());
     yield takeLatest(SAVE_ABOUT_PROFILE_DETAILS_REQUEST, updateAboutProfileDetailsData());
+    yield takeLatest(SAVE_LOGGED_USER_PROFILE_DETAILS_REQUEST, updateLoggedUserProfileDetailsData());
 }
 
 export default [

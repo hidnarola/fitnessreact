@@ -22,6 +22,11 @@ class Login extends Component {
         }
     }
 
+    componentWillMount() {
+        const { dispatch } = this.props;
+        dispatch(hidePageLoader());
+    }
+
     handleLoginRequest = () => {
         auth.login();
     }
@@ -66,12 +71,11 @@ class Login extends Component {
     componentDidMount() {
         $('body').addClass('no-padding');
     }
-    
+
     componentWillUnmount() {
         $('body').removeClass('no-padding');
     }
-    
-    
+
 }
 
-export default Login;
+export default connect()(Login);

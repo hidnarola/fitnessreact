@@ -35,7 +35,6 @@ import {
     USER_STATUS_INACTIVE_STR,
     GENDER_MALE,
     GENDER_FEMALE,
-    GENDER_TRANSGENDER
 } from '../../../constants/consts';
 import { userSelectOneRequest } from '../../../actions/admin/users';
 import { showPageLoader } from '../../../actions/pageLoader';
@@ -134,7 +133,6 @@ class UserForm extends Component {
                                 radioList={[
                                     { label: capitalizeFirstLetter(GENDER_MALE), value: GENDER_MALE },
                                     { label: capitalizeFirstLetter(GENDER_FEMALE), value: GENDER_FEMALE },
-                                    { label: capitalizeFirstLetter(GENDER_TRANSGENDER), value: GENDER_TRANSGENDER },
                                 ]}
                                 checked={this.state.gender}
                                 handleChange={this.genderChange}
