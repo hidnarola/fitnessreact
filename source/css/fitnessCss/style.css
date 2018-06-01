@@ -1345,5 +1345,23 @@ div#loader .loader-spinner, div.loader .loader-spinner {-webkit-animation-name: 
 .step-box.step-box_expried {position: relative;}
 .nutrition-meal-add-wrapper .dropdown.btn-group button#add_recipe_actions {background: none !important;}
 .height-725{height: 725px;}
+.height-auto{height: auto !important;}
 
 .pb-0{padding-bottom: 0 !important;}
+.liked-color{color: #0029ff !important;}
+#user-right-menu .chat-body ul li {color: #282828;font-size: 16px;font-weight: 400;line-height: normal;display: block;margin-bottom: 10px;padding-bottom: 10px;border-bottom: 1px solid #eee;}
+#user-right-menu .chat-body ul li svg {width: 20px;height: 20px;vertical-align: top;margin-right: 10px;fill: #282828;position: absolute;left: 0;}
+#user-right-menu .chat-body ul li a {color: #282828;font-size: 16px;position: relative;padding-left: 32px;}
+#user-right-menu .chat-body ul li:last-child {border: 0;padding: 0;margin: 0;}
+
+.posttype-body-grey.third_row p,
+.posttype-body-grey.second_row p,
+.posttype-body-grey.forth_row p {clear: both;text-align: left;}
+
+.posttype-body-grey.second_row span {width: 50%;display: inline-block;}
+
+.posttype-body-grey.third_row span {display: inline-block;width: 30%;background: #fff;margin: 0 5px;border-radius: 4px;}
+.posttype-body-grey.third_row {padding: 10px;text-align: center;}
+
+.posttype-body-grey.forth_row span {width: 47%;text-align: center;background: #fff;margin: 0 1% 10px 1%;display: inline-block;}
+.posttype-body-grey.forth_row {padding: 10px;text-align: center;}

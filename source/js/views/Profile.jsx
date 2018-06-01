@@ -247,10 +247,11 @@ class Profile extends Component {
                             <div className="col-md-3 ml-auto">
                                 <div className="lavel-img">
                                     {profile &&
-                                        <span>
+                                        <span className="height-auto">
                                             <img
                                                 src={profile.avatar}
                                                 alt="Profile image"
+                                                className="width-100-per"
                                                 onError={(e) => {
                                                     e.target.src = noProfileImg
                                                 }}

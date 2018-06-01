@@ -18,7 +18,8 @@ function fetchUserProgressPhotosData() {
             let username = action.username;
             let start = action.start;
             let noOfPhotos = action.noOfPhotos;
-            const data = yield call(() => api.getUserProgressPhotos(username, start, noOfPhotos));
+            let sort = action.sort;
+            const data = yield call(() => api.getUserProgressPhotos(username, start, noOfPhotos, sort));
             yield put(getUserProgressPhotoSuccess(data));
         } catch (error) {
             yield put(getUserProgressPhotoError(error));

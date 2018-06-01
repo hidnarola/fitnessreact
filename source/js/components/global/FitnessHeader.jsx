@@ -106,14 +106,14 @@ class FitnessHeader extends Component {
                                 <FaMail />
                             </a>
                         </div>
-                        <div className="header-logout header-icons">
+                        {/* <div className="header-logout header-icons">
                             <a href="javascript:void(0)" onClick={this.handleLogout} data-tip data-for='logout'>
                                 <FaSignOut />
                                 <ReactTooltip id='logout' place="bottom" type="dark" effect="solid">
                                     <span>Logout</span>
                                 </ReactTooltip>
                             </a>
-                        </div>
+                        </div> */}
                         <div className="header-nav">
                             <a href="javascript:void(0)" onClick={() => toggleSideMenu('user-right-menu', true)}>
                                 <FaMenu size={24} />

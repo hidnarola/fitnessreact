@@ -13,6 +13,17 @@ function getUserTimeline(username, start, offset) {
     return fetchResource(requestUrl + '/' + username + '/' + start + '/' + offset, options);
 }
 
+function getUserSingleTimeline(postId) {
+    let headers = extraUserHeaders();
+    var options = {
+        method: 'GET',
+        headers: headers,
+    }
+
+    return fetchResource(requestUrl + '/' + postId, options);
+}
+
 export default {
     getUserTimeline,
+    getUserSingleTimeline,
 }

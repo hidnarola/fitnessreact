@@ -8,6 +8,7 @@ import ReactQuill from 'react-quill';
 import { getLoggedUserProfileDetailsRequest, saveLoggedUserProfileDetailsRequest } from '../../actions/profile';
 import moment from "moment";
 import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
+import { required } from '../../formValidation/validationRules';
 
 class UpdateProfileForm extends Component {
     constructor(props) {
@@ -55,6 +56,7 @@ class UpdateProfileForm extends Component {
                                                 errorClass="help-block"
                                                 type="text"
                                                 component={InputField}
+                                                validate={[required]}
                                             />
                                         </div>
                                     </li>
@@ -69,6 +71,7 @@ class UpdateProfileForm extends Component {
                                                 errorClass="help-block"
                                                 type="text"
                                                 component={InputField}
+                                                validate={[required]}
                                             />
                                         </div>
                                     </li>

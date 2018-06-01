@@ -10,12 +10,13 @@ export const ADD_USER_PROGRESS_PHOTO_REQUEST = 'ADD_USER_PROGRESS_PHOTO_REQUEST'
 export const ADD_USER_PROGRESS_PHOTO_SUCCESS = 'ADD_USER_PROGRESS_PHOTO_SUCCESS';
 export const ADD_USER_PROGRESS_PHOTO_ERROR = 'ADD_USER_PROGRESS_PHOTO_ERROR';
 
-export function getUserProgressPhotoRequest(username, start = 0, noOfPhotos = 10) {
+export function getUserProgressPhotoRequest(username, start = 0, noOfPhotos = 5, sort = -1) {
     return {
         type: GET_USER_PROGRESS_PHOTO_REQUEST,
         username,
         start,
         noOfPhotos,
+        sort,
     }
 }
 

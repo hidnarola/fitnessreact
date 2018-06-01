@@ -3,14 +3,14 @@ import { extraUserHeaders } from '../helpers/funs';
 
 const requestUrl = 'user/progress_photo';
 
-function getUserProgressPhotos(username, start = 0, noOfPhotos = 10) {
+function getUserProgressPhotos(username, start = 0, noOfPhotos = 5, sort = -1) {
     let headers = extraUserHeaders();
     var options = {
         method: 'GET',
         headers: headers,
     }
 
-    return fetchResource(requestUrl + '/' + username + '/' + start + '/' + noOfPhotos, options);
+    return fetchResource(requestUrl + '/' + username + '/' + start + '/' + noOfPhotos + '/' + sort, options);
 }
 
 function getUserLatestProgressPhotos(username, noOfPhotos = 5) {

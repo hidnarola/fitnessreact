@@ -3,7 +3,10 @@ import api from 'api/userTimeline';
 import {
     getUserTimelineSuccess,
     getUserTimelineError,
-    GET_USER_TIMELINE_REQUEST
+    GET_USER_TIMELINE_REQUEST,
+    getUserSingleTimelineSuccess,
+    getUserSingleTimelineError,
+    GET_USER_SINGLE_TIMELINE_REQUEST
 } from '../actions/userTimeline';
 
 function getUserTimelineData() {
@@ -20,8 +23,21 @@ function getUserTimelineData() {
     }
 }
 
+function getUserSingleTimelineData() {
+    return function* (action) {
+        try {
+            let postId = action.postId;
+            const data = yield call(() => api.getUserSingleTimeline(postId));
+            yield put(getUserSingleTimelineSuccess(data));
+        } catch (error) {
+            yield put(getUserSingleTimelineError(error));
+        }
+    }
+}
+
 export function* watchUserTimelineData() {
     yield takeLatest(GET_USER_TIMELINE_REQUEST, getUserTimelineData());
+    yield takeLatest(GET_USER_SINGLE_TIMELINE_REQUEST, getUserSingleTimelineData());
 }
 
 export default [

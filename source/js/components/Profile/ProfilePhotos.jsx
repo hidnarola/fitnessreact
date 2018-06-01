@@ -5,7 +5,7 @@ import ProfilePhotoBlock from './ProfilePhotoBlock';
 import AddProgressPhotoModal from '../Common/AddProgressPhotoModal';
 import {
     addUserProgressPhotoRequest,
-    getUserLatestProgressPhotoRequest
+    getUserProgressPhotoRequest,
 } from '../../actions/userProgressPhotos';
 import { ts } from '../../helpers/funs';
 import { FRIENDSHIP_STATUS_SELF, POST_TYPE_GALLERY } from '../../constants/consts';
@@ -42,7 +42,7 @@ class ProfilePhotos extends Component {
                 initProgressPhotosAction: true,
                 initGalleryPhotosAction: true,
             });
-            dispatch(getUserLatestProgressPhotoRequest(username));
+            dispatch(getUserProgressPhotoRequest(username));
             dispatch(getUserGalleryPhotoRequest(username, 0, 10));
         } else {
             this.setState({
@@ -162,7 +162,7 @@ class ProfilePhotos extends Component {
             this.setState({
                 initProgressPhotosAction: true,
             });
-            dispatch(getUserLatestProgressPhotoRequest(username));
+            dispatch(getUserProgressPhotoRequest(username));
         }
         if ((doLoadGalleryPhotos) && profile && Object.keys(profile).length > 0) {
             var username = profile.username;
@@ -215,7 +215,7 @@ class ProfilePhotos extends Component {
                 this.setState({
                     initProgressPhotosAction: true,
                 });
-                dispatch(getUserLatestProgressPhotoRequest(username));
+                dispatch(getUserProgressPhotoRequest(username));
             }
         }
         if (saveGalleryPhotoActionInit && !galleryPhotoloading) {
@@ -234,7 +234,7 @@ class ProfilePhotos extends Component {
             this.setState({
                 initProgressPhotosAction: true,
             });
-            dispatch(getUserLatestProgressPhotoRequest(username));
+            dispatch(getUserProgressPhotoRequest(username));
             setForceUpdateChildComponents(false);
         }
     }

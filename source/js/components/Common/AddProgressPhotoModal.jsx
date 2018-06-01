@@ -64,6 +64,7 @@ class AddProgressPhotoModal extends Component {
                                             name="photo_date"
                                             onChange={this.onChangePhotoDate}
                                             value={photoDate}
+                                            maxDate={new Date()}
                                         />
                                     </div>
                                 </div>
