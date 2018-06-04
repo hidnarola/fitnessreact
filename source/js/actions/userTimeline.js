@@ -6,6 +6,10 @@ export const GET_USER_SINGLE_TIMELINE_REQUEST = 'GET_USER_SINGLE_TIMELINE_REQUES
 export const GET_USER_SINGLE_TIMELINE_SUCCESS = 'GET_USER_SINGLE_TIMELINE_SUCCESS';
 export const GET_USER_SINGLE_TIMELINE_ERROR = 'GET_USER_SINGLE_TIMELINE_ERROR';
 
+export const ADD_POST_ON_USER_TIMELINE_REQUEST = 'ADD_POST_ON_USER_TIMELINE_REQUEST';
+export const ADD_POST_ON_USER_TIMELINE_SUCCESS = 'ADD_POST_ON_USER_TIMELINE_SUCCESS';
+export const ADD_POST_ON_USER_TIMELINE_ERROR = 'ADD_POST_ON_USER_TIMELINE_ERROR';
+
 export function getUserTimelineRequest(username, start, offset) {
     return {
         type: GET_USER_TIMELINE_REQUEST,
@@ -46,6 +50,27 @@ export function getUserSingleTimelineSuccess(data) {
 export function getUserSingleTimelineError(error) {
     return {
         type: GET_USER_SINGLE_TIMELINE_ERROR,
+        error
+    }
+}
+
+export function addPostOnUserTimelineRequest(formData) {
+    return {
+        type: ADD_POST_ON_USER_TIMELINE_REQUEST,
+        formData,
+    }
+}
+
+export function addPostOnUserTimelineSuccess(data) {
+    return {
+        type: ADD_POST_ON_USER_TIMELINE_SUCCESS,
+        data
+    }
+}
+
+export function addPostOnUserTimelineError(error) {
+    return {
+        type: ADD_POST_ON_USER_TIMELINE_ERROR,
         error
     }
 }

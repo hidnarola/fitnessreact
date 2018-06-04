@@ -6,7 +6,10 @@ import {
     GET_USER_TIMELINE_REQUEST,
     getUserSingleTimelineSuccess,
     getUserSingleTimelineError,
-    GET_USER_SINGLE_TIMELINE_REQUEST
+    GET_USER_SINGLE_TIMELINE_REQUEST,
+    addPostOnUserTimelineSuccess,
+    addPostOnUserTimelineError,
+    ADD_POST_ON_USER_TIMELINE_REQUEST
 } from '../actions/userTimeline';
 
 function getUserTimelineData() {
@@ -35,9 +38,22 @@ function getUserSingleTimelineData() {
     }
 }
 
+function postPostOnUserTimelineData() {
+    return function* (action) {
+        try {
+            let formData = action.formData;
+            const data = yield call(() => api.addPostOnUserTimeline(formData));
+            yield put(addPostOnUserTimelineSuccess(data));
+        } catch (error) {
+            yield put(addPostOnUserTimelineError(error));
+        }
+    }
+}
+
 export function* watchUserTimelineData() {
     yield takeLatest(GET_USER_TIMELINE_REQUEST, getUserTimelineData());
     yield takeLatest(GET_USER_SINGLE_TIMELINE_REQUEST, getUserSingleTimelineData());
+    yield takeLatest(ADD_POST_ON_USER_TIMELINE_REQUEST, postPostOnUserTimelineData());
 }
 
 export default [

@@ -1,4 +1,4 @@
-import { fetchResource } from '.';
+import { fetchResource, postFormData } from '.';
 import { extraUserHeaders } from '../helpers/funs';
 
 const requestUrl = 'user/timeline';
@@ -23,7 +23,13 @@ function getUserSingleTimeline(postId) {
     return fetchResource(requestUrl + '/' + postId, options);
 }
 
+function addPostOnUserTimeline(formData) {
+    let headers = extraUserHeaders();
+    return postFormData(requestUrl, formData, headers);
+}
+
 export default {
     getUserTimeline,
     getUserSingleTimeline,
+    addPostOnUserTimeline,
 }

@@ -1,9 +1,9 @@
 import { Map } from "immutable";
 import {
-    TOGGLE_LIKE_ON_POST_REQUEST,
-    TOGGLE_LIKE_ON_POST_SUCCESS,
-    TOGGLE_LIKE_ON_POST_ERROR
-} from "../actions/postLikes";
+    COMMENT_ON_POST_REQUEST,
+    COMMENT_ON_POST_SUCCESS,
+    COMMENT_ON_POST_ERROR
+} from "../actions/postComments";
 import { VALIDATION_FAILURE_STATUS } from "../constants/consts";
 import { generateValidationErrorMsgArr } from "../helpers/funs";
 
@@ -14,14 +14,14 @@ const initialState = Map({
 });
 
 const actionMap = {
-    [TOGGLE_LIKE_ON_POST_REQUEST]: (state, action) => {
+    [COMMENT_ON_POST_REQUEST]: (state, action) => {
         return state.merge(Map({
             loading: true,
             post: null,
             error: [],
         }));
     },
-    [TOGGLE_LIKE_ON_POST_SUCCESS]: (state, action) => {
+    [COMMENT_ON_POST_SUCCESS]: (state, action) => {
         var newState = {
             loading: false,
         };
@@ -33,7 +33,7 @@ const actionMap = {
         }
         return state.merge(Map(newState));
     },
-    [TOGGLE_LIKE_ON_POST_ERROR]: (state, action) => {
+    [COMMENT_ON_POST_ERROR]: (state, action) => {
         let error = [];
         if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
             error = generateValidationErrorMsgArr(action.error.response.message);

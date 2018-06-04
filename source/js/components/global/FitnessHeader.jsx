@@ -44,6 +44,13 @@ class FitnessHeader extends Component {
         const {
             searchSuggestions,
         } = this.state;
+        var loggedUserImage = '';
+        if (loggedUserData && loggedUserData.avatar) {
+            loggedUserImage = loggedUserData.avatar;
+            if (loggedUserData.userDetails && loggedUserData.userDetails.avatar) {
+                loggedUserImage = loggedUserData.userDetails.avatar;
+            }
+        }
         return (
             <div className="header">
                 <header className="header d-flex justify-content-start">
@@ -84,7 +91,7 @@ class FitnessHeader extends Component {
                                 >
                                     <span>
                                         <img
-                                            src={loggedUserData.avatar}
+                                            src={loggedUserImage}
                                             alt="Avatar"
                                             className="avatar"
                                             onError={(e) => {

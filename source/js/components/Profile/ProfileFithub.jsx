@@ -1,15 +1,24 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import { getUserTimelineRequest, getUserSingleTimelineRequest } from '../../actions/userTimeline';
+import { getUserTimelineRequest, getUserSingleTimelineRequest, addPostOnUserTimelineRequest } from '../../actions/userTimeline';
 import _ from "lodash";
 import noProfileImg from 'img/common/no-profile-img.png'
+import noImg from 'img/common/no-img.png'
 import moment from "moment";
 import { POST_TYPE_TIMELINE, POST_TYPE_GALLERY, POST_TYPE_PROGRESS_PHOTO, SERVER_BASE_URL } from '../../constants/consts';
 import cns from "classnames";
 import { routeCodes } from '../../constants/routes';
 import { NavLink } from "react-router-dom";
 import { toggleLikeOnPostRequest } from '../../actions/postLikes';
+import CommentBoxForm from './CommentBoxForm';
+import { commentOnPostRequest } from '../../actions/postComments';
+import { reset } from "redux-form";
+import ReactHtmlParser from "react-html-parser";
+import ReactQuill from 'react-quill';
+import { te } from '../../helpers/funs';
+import InfiniteScroll from 'react-infinite-scroller';
+import { FaCircleONotch } from "react-icons/lib/fa";
 
 class ProfileFithub extends Component {
     constructor(props) {
@@ -19,11 +28,14 @@ class ProfileFithub extends Component {
             progressPhotos: {},
             start: 0,
             offset: 10,
+            hasMorePosts: true,
             selectActionInit: false,
             likeActionInit: false,
-            selectSingleActionInit: false,
             selectedTimelineIndex: null,
             selectedTimelineId: null,
+            commentActionInit: false,
+            postContent: '',
+            newPostActionInit: false,
         }
     }
 
@@ -43,10 +55,33 @@ class ProfileFithub extends Component {
         }
     }
 
+    componentWillReceiveProps(nextProps) {
+        const {
+            match,
+            dispatch,
+        } = nextProps;
+        if (match.params.username !== this.props.match.params.username) {
+            this.setState({
+                posts: [],
+                progressPhotos: {},
+                start: 0,
+                offset: 10,
+            }, () => {
+                if (match.params && match.params.username) {
+                    var username = match.params.username;
+                    this.setState({ selectActionInit: true });
+                    dispatch(getUserTimelineRequest(username, this.state.start, this.state.offset));
+                }
+            });
+        }
+    }
+
     render() {
         const {
             posts,
             progressPhotos,
+            postContent,
+            hasMorePosts,
         } = this.state;
         const {
             loggedUserData,
@@ -78,7 +113,7 @@ class ProfileFithub extends Component {
                                                     <img
                                                         src={SERVER_BASE_URL + progressPhotos.current}
                                                         onError={(e) => {
-                                                            e.target.src = noProfileImg
+                                                            e.target.src = noImg
                                                         }}
                                                     />
                                                 </a>
@@ -95,7 +130,7 @@ class ProfileFithub extends Component {
                                                     <img
                                                         src={SERVER_BASE_URL + progressPhotos.beginning}
                                                         onError={(e) => {
-                                                            e.target.src = noProfileImg
+                                                            e.target.src = noImg
                                                         }}
                                                     />
                                                 </a>
@@ -172,8 +207,15 @@ class ProfileFithub extends Component {
                             </div>
                         </div>
                         <div className="whitebox-body">
-                            <div className="how-training">
-                                <textarea></textarea>
+                            <div className="how-training timeline-new-post-editor">
+                                <ReactQuill
+                                    value={postContent}
+                                    onChange={this.handlePostContentChange}
+                                    placeholder="What's in your mind"
+                                    modules={{
+                                        toolbar: ['bold', 'italic', 'underline', 'strike']
+                                    }}
+                                />
                                 <div className="how-training-btm d-flex justify-content-end">
                                     <a href="">
                                         <i className="icon-photo_size_select_actual vertical-middle-c"></i>
@@ -181,168 +223,195 @@ class ProfileFithub extends Component {
                                     <a href="">
                                         <i className="icon-settings vertical-middle-c"></i>
                                     </a>
-                                    <button type="submit" className="vertical-middle-r">
+                                    <button type="button" onClick={this.handleMakePost} className="vertical-middle-r">
                                         Post<i className="icon-send"></i>
                                     </button>
                                 </div>
                             </div>
 
                             {posts && posts.length > 0 &&
-                                posts.map((post, index) => {
-                                    var createdBy = (post.created_by && Object.keys(post.created_by).length > 0) ? post.created_by : null;
-                                    if (!createdBy) {
-                                        return null;
+                                <InfiniteScroll
+                                    pageStart={0}
+                                    loadMore={this.loadMore}
+                                    hasMore={hasMorePosts}
+                                    className="margin-top-30"
+                                    loader={
+                                        <div className="loader" key={0}>
+                                            <FaCircleONotch className="loader-spinner loader-spinner-icon" /> Loading ...
+                                        </div>
                                     }
-                                    var postCreatedAt = post.createdAt;
-                                    postCreatedAt = moment.utc(postCreatedAt).toDate();
-                                    postCreatedAt = moment(postCreatedAt).local().format('Do MMMM [at] hh:mm');
-                                    var type = post.type;
-                                    var description = '';
-                                    var images = [];
-                                    if (type === POST_TYPE_TIMELINE || type === POST_TYPE_GALLERY) {
-                                        description = post.post_description;
-                                        images = post.post_images;
-                                    } else if (type === POST_TYPE_PROGRESS_PHOTO) {
-                                        description = post.progress_description;
-                                        images = post.progress_photos;
-                                    } else {
-                                        return null;
-                                    }
-                                    var imagesCount = images.length;
-                                    var postImageDisplayClass = '';
-                                    if (imagesCount === 2) {
-                                        postImageDisplayClass = 'second_row';
-                                    } else if (imagesCount === 3) {
-                                        postImageDisplayClass = 'third_row';
-                                    } else if (imagesCount === 4) {
-                                        postImageDisplayClass = 'forth_row';
-                                    } else if (imagesCount > 4) {
-                                        postImageDisplayClass = 'forth_row';
-                                    }
-                                    var comments = post.comments;
-                                    var totalComments = comments.length;
-                                    var lastComment = {};
-                                    var lastCommentCreatedAt = null;
-                                    if (totalComments > 0) {
-                                        lastComment = comments[(totalComments - 1)];
-                                        lastCommentCreatedAt = lastComment.create_date;
-                                        lastCommentCreatedAt = moment.utc(lastCommentCreatedAt).toDate();
-                                        lastCommentCreatedAt = moment(lastCommentCreatedAt).local().format('Do MMMM [at] hh:mm');
-                                    }
-                                    var likes = post.likes;
-                                    var totalLikes = likes.length;
-                                    var likesStr = '';
-                                    var isLikedByLoggedUser = false;
-                                    if (totalLikes > 0) {
-                                        var likedOfLoggedUser = _.find(likes, ['authUserId', loggedUserData.authId]);
-                                        if (likedOfLoggedUser) {
-                                            isLikedByLoggedUser = true;
-                                        }
-                                        if (totalLikes > 4) {
-                                            for (let i = 0; i < 2; i++) {
-                                                const obj = likes[i];
-                                                if (obj) {
-                                                    likesStr += obj.firstName;
-                                                    if (obj.lastName) {
-                                                        likesStr += ' ' + obj.lastName;
+                                >
+                                    {
+                                        posts.map((post, index) => {
+                                            var createdBy = (post.created_by && Object.keys(post.created_by).length > 0) ? post.created_by : null;
+                                            if (!createdBy) {
+                                                return null;
+                                            }
+                                            var postCreatedAt = post.createdAt;
+                                            postCreatedAt = moment.utc(postCreatedAt).toDate();
+                                            postCreatedAt = moment(postCreatedAt).local().format('Do MMMM [at] hh:mm');
+                                            var type = post.type;
+                                            var description = '';
+                                            var images = [];
+                                            if (type === POST_TYPE_TIMELINE || type === POST_TYPE_GALLERY) {
+                                                description = post.post_description;
+                                                images = post.post_images;
+                                            } else if (type === POST_TYPE_PROGRESS_PHOTO) {
+                                                description = post.progress_description;
+                                                images = post.progress_photos;
+                                            } else {
+                                                return null;
+                                            }
+                                            var imagesCount = images.length;
+                                            var postImageDisplayClass = '';
+                                            if (imagesCount === 2) {
+                                                postImageDisplayClass = 'second_row';
+                                            } else if (imagesCount === 3) {
+                                                postImageDisplayClass = 'third_row';
+                                            } else if (imagesCount === 4) {
+                                                postImageDisplayClass = 'forth_row';
+                                            } else if (imagesCount > 4) {
+                                                postImageDisplayClass = 'forth_row';
+                                            }
+                                            var comments = post.comments;
+                                            var totalComments = comments.length;
+                                            var lastComment = {};
+                                            var lastCommentCreatedAt = null;
+                                            if (totalComments > 0) {
+                                                lastComment = comments[(totalComments - 1)];
+                                                lastCommentCreatedAt = lastComment.create_date;
+                                                lastCommentCreatedAt = moment.utc(lastCommentCreatedAt).toDate();
+                                                lastCommentCreatedAt = moment(lastCommentCreatedAt).local().format('Do MMMM [at] hh:mm');
+                                            }
+                                            var likes = post.likes;
+                                            var totalLikes = likes.length;
+                                            var likesStr = '';
+                                            var isLikedByLoggedUser = false;
+                                            if (totalLikes > 0) {
+                                                var likedOfLoggedUser = _.find(likes, ['authUserId', loggedUserData.authId]);
+                                                if (likedOfLoggedUser) {
+                                                    isLikedByLoggedUser = true;
+                                                }
+                                                if (totalLikes > 4) {
+                                                    for (let i = 0; i < 2; i++) {
+                                                        const obj = likes[i];
+                                                        if (obj) {
+                                                            likesStr += obj.firstName;
+                                                            if (obj.lastName) {
+                                                                likesStr += ' ' + obj.lastName;
+                                                            }
+                                                            if ((i - 1) !== 2) {
+                                                                likesStr += ', ';
+                                                            }
+                                                        }
                                                     }
-                                                    if ((i - 1) !== 2) {
-                                                        likesStr += ', ';
+                                                    likesStr += ' and ' + (totalLikes - 2) + ' more liked this';
+                                                } else {
+                                                    for (let i = 0; i < totalLikes; i++) {
+                                                        const obj = likes[i];
+                                                        likesStr += obj.firstName;
+                                                        if (obj.lastName) {
+                                                            likesStr += ' ' + obj.lastName;
+                                                        }
+                                                        if (i !== (totalLikes - 1)) {
+                                                            likesStr += ', ';
+                                                        }
                                                     }
+                                                    likesStr += ' liked this';
                                                 }
                                             }
-                                            likesStr += ' and ' + (totalLikes - 2) + ' more liked this';
-                                        } else {
-                                            for (let i = 0; i < totalLikes; i++) {
-                                                const obj = likes[i];
-                                                likesStr += obj.firstName;
-                                                if (obj.lastName) {
-                                                    likesStr += ' ' + obj.lastName;
-                                                }
-                                                if (i !== (totalLikes - 1)) {
-                                                    likesStr += ', ';
-                                                }
-                                            }
-                                            likesStr += ' liked this';
-                                        }
-                                    }
-                                    return (
-                                        <div className="post-type" key={index}>
-                                            <div className="posttype-head d-flex justify-content-start">
-                                                <span>
-                                                    <img
-                                                        src={createdBy.avatar}
-                                                        alt={createdBy.firstName}
-                                                        onError={(e) => {
-                                                            e.target.src = noProfileImg
-                                                        }}
-                                                    />
-                                                </span>
-                                                <h4 className="vertical-middle-c">
-                                                    <big>{`${createdBy.firstName} ${(createdBy.lastName) ? createdBy.lastName : ''}`}</big>
-                                                    <small>{(post.tag_line) ? post.tag_line : ''}</small>
-                                                </h4>
-                                                <p className="vertical-middle-c">{postCreatedAt}</p>
-                                            </div>
-                                            <div className="posttype-body">
-                                                <div className="posttype-body-white">
-                                                    {description}
-                                                </div>
-                                                <div className={cns("posttype-body-grey", postImageDisplayClass)}>
-                                                    {images && images.length > 0 &&
-                                                        images.map((imageD, imageI) => {
-                                                            return (
-                                                                <span key={imageI}>
-                                                                    <img
-                                                                        src={SERVER_BASE_URL + imageD.image}
-                                                                        onError={(e) => {
-                                                                            e.target.src = noProfileImg
-                                                                        }}
-                                                                    />
-                                                                </span>
-                                                            )
-                                                        })
-                                                    }
-                                                    {likesStr &&
-                                                        <p>{likesStr}</p>
-                                                    }
-                                                </div>
-                                            </div>
-                                            <div className="posttype-btm d-flex">
-                                                <LikeButton
-                                                    index={index}
-                                                    postId={post._id}
-                                                    isLikedByLoggedUser={isLikedByLoggedUser}
-                                                    handleToggleLike={this.handleToggleLike}
-                                                />
-                                                <a href="" className="icon-chat"></a>
-                                            </div>
-                                            {totalComments > 0 &&
-                                                <div className="post-comment d-flex">
-                                                    <span>
-                                                        <img
-                                                            src={lastComment.avatar}
-                                                            alt={lastComment.firstName}
-                                                            onError={(e) => {
-                                                                e.target.src = noProfileImg
-                                                            }}
-                                                        />
-                                                    </span>
-                                                    <div className="post-comment-r">
-                                                        <h4>
-                                                            <NavLink to={`${routeCodes.PROFILE}/${lastComment.username}`}>
-                                                                {lastComment.firstName} {(lastComment.lastName) ? lastComment.lastName : ''}
-                                                            </NavLink> {lastComment.comment}
+                                            return (
+                                                <div className="post-type" key={index}>
+                                                    <div className="posttype-head d-flex justify-content-start">
+                                                        <span>
+                                                            <img
+                                                                src={createdBy.avatar}
+                                                                alt={createdBy.firstName}
+                                                                onError={(e) => {
+                                                                    e.target.src = noProfileImg
+                                                                }}
+                                                            />
+                                                        </span>
+                                                        <h4 className="vertical-middle-c">
+                                                            <big>{`${createdBy.firstName} ${(createdBy.lastName) ? createdBy.lastName : ''}`}</big>
+                                                            <small>{(post.tag_line) ? post.tag_line : ''}</small>
                                                         </h4>
-                                                        <div className="post-comment-r-btm d-flex">
-                                                            <p>{lastCommentCreatedAt}</p>
+                                                        <p className="vertical-middle-c">{postCreatedAt}</p>
+                                                    </div>
+                                                    <div className="posttype-body">
+                                                        {description &&
+                                                            <div className="posttype-body-white">
+                                                                {ReactHtmlParser(description)}
+                                                            </div>
+                                                        }
+                                                        <div className={cns("posttype-body-grey", postImageDisplayClass)}>
+                                                            {images && images.length > 0 &&
+                                                                images.map((imageD, imageI) => {
+                                                                    if (imageI >= 4) {
+                                                                        return null;
+                                                                    }
+                                                                    return (
+                                                                        <span key={imageI}>
+                                                                            <img
+                                                                                src={SERVER_BASE_URL + imageD.image}
+                                                                                onError={(e) => {
+                                                                                    e.target.src = noImg
+                                                                                }}
+                                                                            />
+                                                                        </span>
+                                                                    )
+                                                                })
+                                                            }
+                                                            {likesStr &&
+                                                                <p>{likesStr}</p>
+                                                            }
+                                                            {totalComments > 0 &&
+                                                                <p>Comments {totalComments}</p>
+                                                            }
                                                         </div>
                                                     </div>
+                                                    <div className="posttype-btm d-flex">
+                                                        <LikeButton
+                                                            index={index}
+                                                            postId={post._id}
+                                                            isLikedByLoggedUser={isLikedByLoggedUser}
+                                                            handleToggleLike={this.handleToggleLike}
+                                                        />
+                                                        <a href="" className="icon-chat"></a>
+                                                    </div>
+                                                    {totalComments > 0 &&
+                                                        <div className="post-comment d-flex">
+                                                            <span>
+                                                                <img
+                                                                    src={lastComment.avatar}
+                                                                    alt={lastComment.firstName}
+                                                                    onError={(e) => {
+                                                                        e.target.src = noProfileImg
+                                                                    }}
+                                                                />
+                                                            </span>
+                                                            <div className="post-comment-r">
+                                                                <h4>
+                                                                    <NavLink to={`${routeCodes.PROFILE}/${lastComment.username}`}>
+                                                                        {lastComment.firstName} {(lastComment.lastName) ? lastComment.lastName : ''}
+                                                                    </NavLink> {ReactHtmlParser(lastComment.comment)}
+                                                                </h4>
+                                                                <div className="post-comment-r-btm d-flex">
+                                                                    <p>{lastCommentCreatedAt}</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                    <CommentBoxForm
+                                                        index={index}
+                                                        postId={post._id}
+                                                        onSubmit={this.handleComment}
+                                                    />
                                                 </div>
-                                            }
-                                        </div>
-                                    );
-                                })
+                                            );
+                                        })
+                                    }
+                                </InfiniteScroll>
                             }
                         </div>
                     </div>
@@ -359,40 +428,81 @@ class ProfileFithub extends Component {
             likeActionInit,
             selectedTimelineIndex,
             selectedTimelineId,
-            selectSingleActionInit,
+            commentActionInit,
+            newPostActionInit,
         } = this.state;
         const {
+            dispatch,
             postLoading,
             posts,
             post,
+            error,
             progressPhotos,
             likeLoading,
-            dispatch,
+            likePost,
+            likeError,
+            commentLoading,
+            commentPost,
+            commentError,
         } = this.props;
         if (selectActionInit && !postLoading) {
+            var hasMorePosts = (posts && posts.length > 0) ? true : false;
+            var newPosts = this.state.posts;
+            if (posts && posts.length > 0) {
+                newPosts = _.concat(this.state.posts, posts);
+            }
             this.setState({
                 selectActionInit: false,
-                posts: _.concat(this.state.posts, posts),
+                posts: newPosts,
                 progressPhotos,
-                start: (start + offset)
+                start: (start + offset),
+                hasMorePosts,
             });
         }
-        if (selectSingleActionInit && !postLoading) {
-            var newPostsState = posts;
-            newPostsState[selectedTimelineIndex] = post;
+        if (newPostActionInit && !postLoading) {
+            var newPostsState = this.state.posts;
+            if (error && error.length > 0) {
+                // show errors
+            } else {
+                newPostsState.splice(0, 0, post);
+            }
             this.setState({
-                selectSingleActionInit: false,
+                newPostActionInit: false,
+                posts: newPostsState,
+                postContent: '',
+            });
+        }
+        if (likeActionInit && !likeLoading) {
+            var newPostsState = this.state.posts;
+            if (likeError && likeError.length > 0) {
+                te(likeError[0]);
+            } else {
+                newPostsState[selectedTimelineIndex] = likePost;
+            }
+            this.setState({
+                likeActionInit: false,
                 selectedTimelineIndex: null,
                 selectedTimelineId: null,
                 posts: newPostsState,
             });
         }
-        if (likeActionInit && !likeLoading) {
+        if (commentActionInit && !commentLoading) {
+            var newPostsState = this.state.posts;
+            if (commentError && commentError.length > 0) {
+                te(commentError[0]);
+            } else {
+                newPostsState[selectedTimelineIndex] = commentPost;
+            }
+            var formData = {
+                [`comment_${selectedTimelineId}`]: '',
+            };
+            dispatch(reset('commentBoxForm'));
             this.setState({
-                likeActionInit: false,
-                selectSingleActionInit: true,
+                commentActionInit: false,
+                selectedTimelineIndex: null,
+                selectedTimelineId: null,
+                posts: newPostsState,
             });
-            dispatch(getUserSingleTimelineRequest(selectedTimelineId));
         }
     }
 
@@ -409,19 +519,77 @@ class ProfileFithub extends Component {
         dispatch(toggleLikeOnPostRequest(requestData));
     }
 
+    handleComment = (data, actionGenerator, props) => {
+        const { dispatch } = this.props;
+        var index = props.index;
+        var postId = props.postId;
+        var comment = data[`comment_${postId}`];
+        var requestData = {
+            comment: comment.replace(/\n/gi, '<br/>'),
+            postId: postId,
+        };
+        this.setState({
+            selectedTimelineIndex: index,
+            selectedTimelineId: postId,
+            commentActionInit: true,
+        });
+        dispatch(commentOnPostRequest(requestData));
+    }
+
+    handlePostContentChange = (content, delta, source, editor) => {
+        this.setState({
+            postContent: content,
+        });
+    }
+
+    handleMakePost = () => {
+        const { postContent } = this.state;
+        const {
+            loggedUserData,
+            dispatch,
+        } = this.props;
+        var formData = new FormData();
+        formData.append('description', postContent);
+        formData.append('privacy', 3);
+        formData.append('createdBy', loggedUserData.authId);
+        this.setState({ newPostActionInit: true });
+        dispatch(addPostOnUserTimelineRequest(formData));
+    }
+
+    loadMore = () => {
+        const {
+            start,
+            offset,
+        } = this.state;
+        const {
+            match,
+            dispatch,
+        } = this.props;
+        if (match.params && match.params.username) {
+            var username = match.params.username;
+            this.setState({ selectActionInit: true });
+            dispatch(getUserTimelineRequest(username, start, offset));
+        }
+    }
 }
 
 ProfileFithub = withRouter(ProfileFithub);
 
 const mapStateToProps = (state) => {
-    const { userTimeline, user, postLikes } = state;
+    const { userTimeline, user, postLikes, postComments } = state;
     return {
         postLoading: userTimeline.get('loading'),
         posts: userTimeline.get('posts'),
         post: userTimeline.get('post'),
+        error: userTimeline.get('error'),
         progressPhotos: userTimeline.get('progressPhotos'),
         loggedUserData: user.get('loggedUserData'),
         likeLoading: postLikes.get('loading'),
+        likePost: postLikes.get('post'),
+        likeError: postLikes.get('error'),
+        commentLoading: postComments.get('loading'),
+        commentPost: postComments.get('post'),
+        commentError: postComments.get('error'),
     };
 }
 

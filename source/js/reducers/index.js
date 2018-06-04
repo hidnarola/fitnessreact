@@ -20,6 +20,7 @@ import userTimeline from 'reducers/userTimeline';
 import userSearch from 'reducers/userSearch';
 import userGalleryPhotos from 'reducers/userGalleryPhotos';
 import postLikes from 'reducers/postLikes';
+import postComments from 'reducers/postComments';
 import profile from 'reducers/profile';
 import friends from 'reducers/friends';
 import login from 'reducers/login';
@@ -59,6 +60,7 @@ export default combineReducers({
     userSearch,
     userGalleryPhotos,
     postLikes,
+    postComments,
     profile,
     friends,
     login,
