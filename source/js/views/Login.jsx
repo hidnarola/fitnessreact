@@ -3,12 +3,11 @@ import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import LoginForm from '../components/Login/LoginForm';
 import { login } from '../actions/login';
-import { routeCodes } from 'constants/routes';
 import { showPageLoader, hidePageLoader } from '../actions/pageLoader';
 import { USER_ROLE, SESSION_EXPIRED_URL_TYPE } from '../constants/consts';
 import { checkLogin } from '../helpers/loginHelper';
 import Auth from '../auth/Auth';
-import { publicPath } from '../constants/routes';
+import { publicPath, routeCodes } from '../constants/routes';
 import $ from "jquery";
 
 const auth = new Auth();

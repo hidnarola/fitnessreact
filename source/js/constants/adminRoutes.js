@@ -1,4 +1,6 @@
-export const adminRootRoute = '/admin';
+import { publicPath } from "./routes";
+
+export const adminRootRoute = publicPath + 'admin/';
 
 export const adminRouteCodes = {
     LOGIN: adminRootRoute,

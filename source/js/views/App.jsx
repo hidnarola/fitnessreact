@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getPeople } from 'actions/people';
 import { hot } from 'react-hot-loader';
-import { routeCodes } from 'constants/routes';
 import ScrollToTop from 'components/global/ScrollToTop';
 import FitnessHeader from 'components/global/FitnessHeader';
 import FitnessNav from 'components/global/FitnessNav';
@@ -45,7 +44,7 @@ import BadgeCategories from './Admin/BadgeCategories';
 import BadgeTasks from './Admin/BadgeTasks';
 import { ToastContainer } from "react-toastify";
 import NutritionPreferences from '../components/Nutrition/NutritionPreferences'
-import { publicPath } from '../constants/routes';
+import { publicPath, routeCodes } from '../constants/routes';
 import { SESSION_EXPIRED_URL_TYPE } from '../constants/consts';
 import { FaCircleONotch } from "react-icons/lib/fa";
 import FitnessTests from './Admin/FitnessTests';
@@ -74,7 +73,7 @@ class App extends Component {
                 <Router history={history}>
                     <ScrollToTop>
                         <Switch>
-                            <Route exact path="/" component={Login} />
+                            <Route exact path={routeCodes.HOME} component={Login} />
                             <Route exact path={`${publicPath}${SESSION_EXPIRED_URL_TYPE}`} component={Login} />
                             <Route path={routeCodes.REGISTERUSER} component={RegisterUser} />
 
