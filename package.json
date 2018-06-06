@@ -85,6 +85,7 @@
     "react-bootstrap": "^0.32.1",
     "react-calendar": "^2.13.2",
     "react-circular-progressbar": "^0.8.0",
+    "react-cropper": "^1.0.1",
     "react-custom-scrollbars": "^4.2.1",
     "react-date-range": "^1.0.0-alpha4",
     "react-datepicker": "^1.4.1",
