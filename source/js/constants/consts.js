@@ -13,7 +13,13 @@ export const AUTH_STATE_ACTION_SIGNUP = 'signup';
 export const USER_ROLE = 'fitassist-user';
 export const ADMIN_ROLE = 'firassist-admin'
 
-export const BASE_URL = 'http://' + window.location.hostname + ':8080/';
+var baseUrl = 'http://' + window.location.hostname;
+if (window.location.port) {
+    baseUrl += ':' + window.location.port;
+}
+baseUrl += '/';
+
+export const BASE_URL = baseUrl;
 export const SERVER_BASE_URL = 'http://' + window.location.hostname + ':3300/';
 
 // amit's system url of api

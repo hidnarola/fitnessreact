@@ -9,7 +9,7 @@ import ProfilePhotos from 'components/Profile/ProfilePhotos';
 import FitnessHeader from 'components/global/FitnessHeader';
 import FitnessNav from 'components/global/FitnessNav';
 import { routeCodes } from 'constants/routes';
-import { getProfileDetailsRequest, saveAboutProfileDetailsRequest } from '../actions/profile';
+import { getProfileDetailsRequest, saveAboutProfileDetailsRequest, saveLoggedUserProfilePhotoRequest } from '../actions/profile';
 import noProfileImg from 'img/common/no-profile-img.png'
 import { FRIENDSHIP_STATUS_SELF, FRIENDSHIP_STATUS_UNKNOWN, FRIENDSHIP_STATUS_FRIEND, FRIENDSHIP_STATUS_REQUEST_RECEIVED, FRIENDSHIP_STATUS_REQUEST_SENT } from '../constants/consts';
 import { sendFriendRequestRequest, cancelFriendRequestRequest, acceptFriendRequestRequest } from '../actions/friends';
@@ -18,6 +18,7 @@ import CancelFriendRequestModal from '../components/Profile/CancelFriendRequestM
 import UnfriendRequestModal from '../components/Profile/UnfriendRequestModal';
 import UpdateAboutMeModal from '../components/Profile/UpdateAboutMeModal';
 import ReactHtmlParser from 'react-html-parser';
+import ChangeProfilePhotoModal from '../components/Profile/ChangeProfilePhotoModal';
 
 class Profile extends Component {
     constructor(props) {
@@ -43,6 +44,8 @@ class Profile extends Component {
             selectFriendshipId: null,
             showUpdateAboutMeModal: false,
             updateAboutMeDetailsActionInit: false,
+            showChangeProfilePicModal: false,
+            updateProfilePhotoActionInit: false,
         }
     }
 
@@ -85,6 +88,7 @@ class Profile extends Component {
             friendRequestReceivedDisabled,
             showRejectFriendRequestModal,
             showUpdateAboutMeModal,
+            showChangeProfilePicModal,
         } = this.state;
         return (
             <div className='stat-page'>
@@ -257,7 +261,7 @@ class Profile extends Component {
                                                 }}
                                             />
                                             {profile && profile.friendshipStatus && profile.friendshipStatus === FRIENDSHIP_STATUS_SELF &&
-                                                <a href="">
+                                                <a href="javascript:void(0)" onClick={this.handleShowChangeProfilePhotoModal}>
                                                     <i className="icon-add_a_photo"></i>
                                                 </a>
                                             }
@@ -327,6 +331,11 @@ class Profile extends Component {
                     onSubmit={this.handleUpdateAboutMeSubmit}
                     handleClose={this.handleHideUpdateAboutMeModal}
                 />
+                <ChangeProfilePhotoModal
+                    show={showChangeProfilePicModal}
+                    handleSubmit={this.saveProfilePhoto}
+                    handleClose={this.handleHideChangeProfilePhotoModal}
+                />
             </div>
         );
     }
@@ -353,6 +362,7 @@ class Profile extends Component {
             acceptFriendRequestReceivedInit,
             rejectFriendRequestInit,
             updateAboutMeDetailsActionInit,
+            updateProfilePhotoActionInit,
         } = this.state;
         var stateProfile = this.state.profile;
         if (loadProfileActionInit && !profileLoading && (profile !== stateProfile)) {
@@ -444,6 +454,15 @@ class Profile extends Component {
             });
             dispatch(getProfileDetailsRequest(username));
             this.handleHideUpdateAboutMeModal();
+            // error and success message handling is remaining
+        }
+        if (updateProfilePhotoActionInit && !profileLoading) {
+            this.setState({
+                updateProfilePhotoActionInit: false,
+                loadProfileActionInit: true
+            });
+            dispatch(getProfileDetailsRequest(username));
+            this.handleHideChangeProfilePhotoModal();
             // error and success message handling is remaining
         }
     }
@@ -563,6 +582,22 @@ class Profile extends Component {
         }
         this.setState({ updateAboutMeDetailsActionInit: true });
         dispatch(saveAboutProfileDetailsRequest(requestObj));
+    }
+
+    handleShowChangeProfilePhotoModal = () => {
+        this.setState({ showChangeProfilePicModal: true });
+    }
+
+    handleHideChangeProfilePhotoModal = () => {
+        this.setState({ showChangeProfilePicModal: false });
+    }
+
+    saveProfilePhoto = (data) => {
+        const { dispatch } = this.props;
+        var formData = new FormData();
+        formData.append('user_img', data.croppedImg);
+        dispatch(saveLoggedUserProfilePhotoRequest(formData));
+        this.setState({ updateProfilePhotoActionInit: true });
     }
     //#endregion
 

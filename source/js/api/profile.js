@@ -33,9 +33,15 @@ function saveLoggedUserProfileDetails(formData) {
     return putFormData(requestUrl, formData, headers);
 }
 
+function saveLoggedUserProfilePhoto(requestData) {
+    let headers = extraUserHeaders();
+    return putFormData(requestUrl + '/photo', requestData, headers);
+}
+
 export default {
     getLoggedUserProfileDetails,
     getProfileDetails,
     saveAboutProfileDetails,
     saveLoggedUserProfileDetails,
+    saveLoggedUserProfilePhoto,
 }

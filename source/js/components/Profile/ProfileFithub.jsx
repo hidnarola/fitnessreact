@@ -16,7 +16,8 @@ import {
     ACCESS_LEVEL_PRIVATE,
     ACCESS_LEVEL_PUBLIC_STR,
     ACCESS_LEVEL_FRIENDS_STR,
-    ACCESS_LEVEL_PRIVATE_STR
+    ACCESS_LEVEL_PRIVATE_STR,
+    FRIENDSHIP_STATUS_SELF
 } from '../../constants/consts';
 import cns from "classnames";
 import { routeCodes } from '../../constants/routes';
@@ -48,7 +49,7 @@ class ProfileFithub extends Component {
             selectedTimelineId: null,
             commentActionInit: false,
             postContent: '',
-            postPrivacy: ACCESS_LEVEL_PUBLIC,
+            postPrivacy: ACCESS_LEVEL_PRIVATE,
             newPostActionInit: false,
         }
     }
@@ -56,7 +57,7 @@ class ProfileFithub extends Component {
     componentWillReceiveProps(nextProps) {
         const {
             match,
-            dispatch,
+            activeProfile,
         } = nextProps;
         if (match.params.username !== this.props.match.params.username) {
             this.setState({
@@ -66,6 +67,15 @@ class ProfileFithub extends Component {
                 offset: 10,
                 hasMorePosts: true,
             });
+        }
+    }
+
+    componentWillUpdate(nextProps, nextState) {
+        const { activeProfile } = nextProps;
+        if (activeProfile && activeProfile.friendshipStatus === FRIENDSHIP_STATUS_SELF && nextState.postPrivacy === ACCESS_LEVEL_PRIVATE) {
+            this.setState({ postPrivacy: ACCESS_LEVEL_PUBLIC });
+        } else if (activeProfile && activeProfile.friendshipStatus !== FRIENDSHIP_STATUS_SELF && nextState.postPrivacy === ACCESS_LEVEL_PUBLIC) {
+            this.setState({ postPrivacy: ACCESS_LEVEL_PRIVATE });
         }
     }
 
@@ -79,6 +89,7 @@ class ProfileFithub extends Component {
         } = this.state;
         const {
             loggedUserData,
+            activeProfile,
         } = this.props;
         return (
             <div className="row">
@@ -221,8 +232,12 @@ class ProfileFithub extends Component {
                                             {postPrivacy === ACCESS_LEVEL_PRIVATE && <span><FaLock /> {ACCESS_LEVEL_PRIVATE_STR}</span>}
                                         </Dropdown.Toggle>
                                         <Dropdown.Menu>
-                                            <MenuItem eventKey="3" onClick={() => this.handlePostPrivacy(ACCESS_LEVEL_PUBLIC)}><FaGlobe /> {ACCESS_LEVEL_PUBLIC_STR}</MenuItem>
-                                            <MenuItem eventKey="2" onClick={() => this.handlePostPrivacy(ACCESS_LEVEL_FRIENDS)}><FaGroup /> {ACCESS_LEVEL_FRIENDS_STR}</MenuItem>
+                                            {activeProfile && activeProfile.friendshipStatus === FRIENDSHIP_STATUS_SELF &&
+                                                <MenuItem eventKey="3" onClick={() => this.handlePostPrivacy(ACCESS_LEVEL_PUBLIC)}><FaGlobe /> {ACCESS_LEVEL_PUBLIC_STR}</MenuItem>
+                                            }
+                                            {activeProfile && activeProfile.friendshipStatus === FRIENDSHIP_STATUS_SELF &&
+                                                <MenuItem eventKey="2" onClick={() => this.handlePostPrivacy(ACCESS_LEVEL_FRIENDS)}><FaGroup /> {ACCESS_LEVEL_FRIENDS_STR}</MenuItem>
+                                            }
                                             <MenuItem eventKey="1" onClick={() => this.handlePostPrivacy(ACCESS_LEVEL_PRIVATE)}><FaLock /> {ACCESS_LEVEL_PRIVATE_STR}</MenuItem>
                                         </Dropdown.Menu>
                                     </Dropdown>
@@ -238,9 +253,7 @@ class ProfileFithub extends Component {
                                 hasMore={hasMorePosts}
                                 className="margin-top-30"
                                 loader={
-                                    <div className="loader" key={0}>
-                                        <FaCircleONotch className="loader-spinner loader-spinner-icon" /> Loading ...
-                                        </div>
+                                    <div className="loader" key={0}><FaCircleONotch className="loader-spinner loader-spinner-icon" /> Loading ...</div>
                                 }
                             >
                                 {

@@ -14,6 +14,10 @@ export const SAVE_LOGGED_USER_PROFILE_DETAILS_REQUEST = 'SAVE_LOGGED_USER_PROFIL
 export const SAVE_LOGGED_USER_PROFILE_DETAILS_SUCCESS = 'SAVE_LOGGED_USER_PROFILE_DETAILS_SUCCESS'
 export const SAVE_LOGGED_USER_PROFILE_DETAILS_ERROR = 'SAVE_LOGGED_USER_PROFILE_DETAILS_ERROR'
 
+export const SAVE_LOGGED_USER_PROFILE_PHOTO_REQUEST = 'SAVE_LOGGED_USER_PROFILE_PHOTO_REQUEST'
+export const SAVE_LOGGED_USER_PROFILE_PHOTO_SUCCESS = 'SAVE_LOGGED_USER_PROFILE_PHOTO_SUCCESS'
+export const SAVE_LOGGED_USER_PROFILE_PHOTO_ERROR = 'SAVE_LOGGED_USER_PROFILE_PHOTO_ERROR'
+
 export function getProfileDetailsRequest(username) {
     return {
         type: GET_PROFILE_DETAILS_REQUEST,
@@ -93,6 +97,27 @@ export function saveLoggedUserProfileDetailsSuccess(data) {
 export function saveLoggedUserProfileDetailsError(error) {
     return {
         type: SAVE_LOGGED_USER_PROFILE_DETAILS_ERROR,
+        error
+    }
+}
+
+export function saveLoggedUserProfilePhotoRequest(requestData) {
+    return {
+        type: SAVE_LOGGED_USER_PROFILE_PHOTO_REQUEST,
+        requestData
+    }
+}
+
+export function saveLoggedUserProfilePhotoSuccess(data) {
+    return {
+        type: SAVE_LOGGED_USER_PROFILE_PHOTO_SUCCESS,
+        data
+    }
+}
+
+export function saveLoggedUserProfilePhotoError(error) {
+    return {
+        type: SAVE_LOGGED_USER_PROFILE_PHOTO_ERROR,
         error
     }
 }

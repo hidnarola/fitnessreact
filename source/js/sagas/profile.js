@@ -12,6 +12,9 @@ import {
     saveLoggedUserProfileDetailsSuccess,
     saveLoggedUserProfileDetailsError,
     SAVE_LOGGED_USER_PROFILE_DETAILS_REQUEST,
+    saveLoggedUserProfilePhotoSuccess,
+    saveLoggedUserProfilePhotoError,
+    SAVE_LOGGED_USER_PROFILE_PHOTO_REQUEST,
 } from '../actions/profile';
 
 import api from 'api/profile';
@@ -63,11 +66,24 @@ function updateLoggedUserProfileDetailsData() {
     }
 }
 
+function updateLoggedUserProfilePhotoData() {
+    return function* (action) {
+        try {
+            var requestData = action.requestData;
+            const data = yield call(() => api.saveLoggedUserProfilePhoto(requestData));
+            yield put(saveLoggedUserProfilePhotoSuccess(data));
+        } catch (error) {
+            yield put(saveLoggedUserProfilePhotoError(error));
+        }
+    }
+}
+
 export function* watchProfileDetailsData() {
     yield takeLatest(GET_LOGGED_USER_PROFILE_DETAILS_REQUEST, fetchLoggedUserProfileDetailsData());
     yield takeLatest(GET_PROFILE_DETAILS_REQUEST, fetchProfileDetailsData());
     yield takeLatest(SAVE_ABOUT_PROFILE_DETAILS_REQUEST, updateAboutProfileDetailsData());
     yield takeLatest(SAVE_LOGGED_USER_PROFILE_DETAILS_REQUEST, updateLoggedUserProfileDetailsData());
+    yield takeLatest(SAVE_LOGGED_USER_PROFILE_PHOTO_REQUEST, updateLoggedUserProfilePhotoData());
 }
 
 export default [
