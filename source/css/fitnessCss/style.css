@@ -1360,7 +1360,7 @@ div#loader .loader-spinner, div.loader .loader-spinner {-webkit-animation-name: 
 .posttype-body-grey.second_row p,
 .posttype-body-grey.forth_row p {clear: both;text-align: left;}
 
-.posttype-body-grey.second_row span {width: 50%;display: inline-block;}
+.posttype-body-grey.second_row span {width: 47%;display: inline-block;margin: 0 5px;height: 140px;}
 
 .posttype-body-grey.third_row span {display: inline-block;width: 30%;background: #fff;margin: 0 5px;border-radius: 4px;height: 90px;}
 .posttype-body-grey.third_row {padding: 10px;text-align: center;}

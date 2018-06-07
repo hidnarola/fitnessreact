@@ -33,6 +33,8 @@ import InfiniteScroll from 'react-infinite-scroller';
 import { FaCircleONotch } from "react-icons/lib/fa";
 import { MenuItem, Dropdown } from "react-bootstrap";
 import { FaGlobe, FaLock, FaGroup } from 'react-icons/lib/fa';
+import AddPostPhotoModal from './AddPostPhotoModal';
+import PostDetailsModal from './PostDetailsModal';
 
 class ProfileFithub extends Component {
     constructor(props) {
@@ -49,8 +51,13 @@ class ProfileFithub extends Component {
             selectedTimelineId: null,
             commentActionInit: false,
             postContent: '',
+            postImages: [],
             postPrivacy: ACCESS_LEVEL_PRIVATE,
             newPostActionInit: false,
+            showPostPhotoModal: false,
+            selectedPostForDetailsIndex: null,
+            selectedPostForDetails: null,
+            showPostDetailsModal: false,
         }
     }
 
@@ -86,6 +93,11 @@ class ProfileFithub extends Component {
             postContent,
             postPrivacy,
             hasMorePosts,
+            showPostPhotoModal,
+            showPostDetailsModal,
+            selectedPostForDetailsIndex,
+            selectedPostForDetails,
+            postImages,
         } = this.state;
         const {
             loggedUserData,
@@ -222,7 +234,7 @@ class ProfileFithub extends Component {
                                     }}
                                 />
                                 <div className="how-training-btm d-flex justify-content-end">
-                                    <a href="">
+                                    <a href="javascript:void(0)" onClick={this.handleShowPostPhotosModal}>
                                         <i className="icon-photo_size_select_actual vertical-middle-c"></i>
                                     </a>
                                     <Dropdown id="post_privacy">
@@ -348,8 +360,12 @@ class ProfileFithub extends Component {
                                                         />
                                                     </span>
                                                     <h4 className="vertical-middle-c">
-                                                        <big>{`${createdBy.firstName} ${(createdBy.lastName) ? createdBy.lastName : ''}`}</big>
-                                                        <small>{(post.tag_line) ? post.tag_line : ''}</small>
+                                                        <big>
+                                                            <NavLink to={`${routeCodes.PROFILE}/${createdBy.username}`}>
+                                                                {`${createdBy.firstName} ${(createdBy.lastName) ? createdBy.lastName : ''}`}
+                                                            </NavLink>
+                                                        </big>
+                                                        <small><a href="javascript:void(0)" onClick={this.handleShowPostDetailsModal}>{(post.tag_line) ? post.tag_line : ''}</a></small>
                                                     </h4>
                                                     <p className="vertical-middle-c">{postCreatedAt}</p>
                                                 </div>
@@ -378,10 +394,10 @@ class ProfileFithub extends Component {
                                                             })
                                                         }
                                                         {likesStr &&
-                                                            <p>{likesStr}</p>
+                                                            <p><a href="javascript:void(0)" onClick={console.log()}>{likesStr}</a></p>
                                                         }
                                                         {totalComments > 0 &&
-                                                            <p>Comments {totalComments}</p>
+                                                            <p><a href="javascript:void(0)" onClick={this.handleShowPostDetailsModal}>Comments {totalComments}</a></p>
                                                         }
                                                     </div>
                                                 </div>
@@ -392,7 +408,7 @@ class ProfileFithub extends Component {
                                                         isLikedByLoggedUser={isLikedByLoggedUser}
                                                         handleToggleLike={this.handleToggleLike}
                                                     />
-                                                    <a href="" className="icon-chat"></a>
+                                                    <a href="javascript:void(0)" onClick={this.handleShowPostDetailsModal} className="icon-chat"></a>
                                                 </div>
                                                 {totalComments > 0 &&
                                                     <div className="post-comment d-flex">
@@ -430,6 +446,19 @@ class ProfileFithub extends Component {
                         </div>
                     </div>
                 </div>
+                <AddPostPhotoModal
+                    show={showPostPhotoModal}
+                    handleClose={this.handleHidePostPhotosModal}
+                    images={postImages}
+                    handleAddPostImages={this.handleAddPostImages}
+                    handleRemovePostImags={this.handleRemovePostImage}
+                />
+                <PostDetailsModal
+                    show={showPostDetailsModal}
+                    handleClose={this.handleHidePostDetailsModal}
+                    postIndex={selectedPostForDetailsIndex}
+                    post={selectedPostForDetails}
+                />
             </div>
         );
     }
@@ -487,6 +516,7 @@ class ProfileFithub extends Component {
                 posts: newPostsState,
                 postContent: '',
                 postPrivacy: ACCESS_LEVEL_PUBLIC,
+                postImages: [],
             });
         }
         if (likeActionInit && !likeLoading) {
@@ -579,6 +609,7 @@ class ProfileFithub extends Component {
         const {
             postContent,
             postPrivacy,
+            postImages,
         } = this.state;
         const {
             activeProfile,
@@ -588,6 +619,11 @@ class ProfileFithub extends Component {
         formData.append('description', postContent);
         formData.append('privacy', postPrivacy);
         formData.append('onWall', activeProfile.authUserId);
+        if (postImages.length > 0) {
+            postImages.map((img, index) => {
+                formData.append('images', img);
+            })
+        }
         this.setState({ newPostActionInit: true });
         dispatch(addPostOnUserTimelineRequest(formData));
     }
@@ -607,6 +643,44 @@ class ProfileFithub extends Component {
             dispatch(getUserTimelineRequest(username, start, offset));
             this.setState({ selectActionInit: true });
         }
+    }
+
+    handleShowPostPhotosModal = () => {
+        this.setState({ showPostPhotoModal: true });
+    }
+
+    handleHidePostPhotosModal = () => {
+        this.setState({ showPostPhotoModal: false });
+    }
+
+    handleAddPostImages = (filesToUpload, e) => {
+        const { postImages } = this.state;
+        var allImages = _.concat(postImages, filesToUpload);
+        this.setState({ postImages: allImages });
+    }
+
+    handleRemovePostImage = (index) => {
+        var postImages = this.state.postImages;
+        postImages.splice(index, 1);
+        this.setState({ postImages });
+    }
+
+    handleShowPostDetailsModal = (index) => {
+        const { posts } = this.state;
+        var selectedPost = posts[index];
+        this.setState({
+            showPostDetailsModal: true,
+            selectedPostForDetailsIndex: selectedPost,
+            selectedPostForDetails: index,
+        });
+    }
+
+    handleHidePostDetailsModal = () => {
+        this.setState({
+            showPostDetailsModal: false,
+            selectedPostForDetailsIndex: null,
+            selectedPostForDetails: null,
+        });
     }
 }
 
