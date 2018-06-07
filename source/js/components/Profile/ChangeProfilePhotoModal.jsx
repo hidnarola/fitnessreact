@@ -37,7 +37,7 @@ class ChangeProfilePhotoModal extends Component {
                                 ref='cropper'
                                 src={selectedImage.preview}
                                 style={{ width: 600, height: 600 }}
-                                viewMode={3}
+                                viewMode={0}
                                 aspectRatio={1}
                                 guides={false}
                                 autoCropArea={0.8}
@@ -70,8 +70,12 @@ class ChangeProfilePhotoModal extends Component {
                                 </Dropzone>
                             </div>
                             <div className="gallery-post">
-                                <button type="button" onClick={this.cropImg}>Crop</button>
-                                <button type="button" onClick={() => handleSubmit({ ...this.state })}>Save</button>
+                                {selectedImage &&
+                                    <button type="button" onClick={this.cropImg}>Crop</button>
+                                }
+                                {croppedImg &&
+                                    <button type="button" onClick={() => handleSubmit({ ...this.state })}>Save</button>
+                                }
                             </div>
                         </div>
                     </div>

@@ -56,7 +56,6 @@ import { NavLink } from "react-router-dom";
 import UpdateProfile from './UpdateProfile';
 import { toggleSideMenu } from '../helpers/funs';
 import Auth from '../auth/Auth';
-import Test from './Test';
 
 const auth = new Auth();
 
@@ -74,8 +73,6 @@ class App extends Component {
                 <Router history={history}>
                     <ScrollToTop>
                         <Switch>
-                            <Route exact path={`${publicPath}test`} component={Test} />
-
                             <Route exact path={routeCodes.HOME} component={Login} />
                             <Route exact path={`${publicPath}${SESSION_EXPIRED_URL_TYPE}`} component={Login} />
                             <Route path={routeCodes.REGISTERUSER} component={RegisterUser} />

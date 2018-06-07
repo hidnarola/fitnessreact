@@ -458,6 +458,8 @@ class ProfileFithub extends Component {
             commentLoading,
             commentPost,
             commentError,
+            forceUpdateChildComponents,
+            setForceUpdateChildComponents,
         } = this.props;
         if (selectActionInit && !postLoading) {
             var hasMorePosts = (posts && posts.length > 0) ? true : false;
@@ -518,6 +520,18 @@ class ProfileFithub extends Component {
                 selectedTimelineId: null,
                 posts: newPostsState,
             });
+        }
+        if (forceUpdateChildComponents) {
+            this.setState({
+                posts: [],
+                progressPhotos: {},
+                start: 0,
+                offset: 10,
+                hasMorePosts: true,
+            }, () => {
+                this.loadPostsData();
+            });
+            setForceUpdateChildComponents(false);
         }
     }
 

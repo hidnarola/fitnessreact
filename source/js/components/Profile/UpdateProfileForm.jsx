@@ -9,6 +9,11 @@ import { getLoggedUserProfileDetailsRequest, saveLoggedUserProfileDetailsRequest
 import moment from "moment";
 import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
 import { required } from '../../formValidation/validationRules';
+import userFemale from 'img/common/user-female.png';
+import userMale from 'img/common/user-male.png';
+import home from 'img/common/home.png';
+import gym from 'img/common/gym.png';
+import ReactTooltip from "react-tooltip";
 
 class UpdateProfileForm extends Component {
     constructor(props) {
@@ -100,7 +105,9 @@ class UpdateProfileForm extends Component {
                                                     errorClass="help-block"
                                                     type="radio"
                                                     component={InputField}
-                                                    units={(<label htmlFor={GENDER_MALE}>Male</label>)}
+                                                    units={(
+                                                        <label htmlFor="male" data-tip="Male"><img src={userMale} /></label>
+                                                    )}
                                                     value={GENDER_MALE}
                                                 />
                                                 <Field
@@ -110,7 +117,9 @@ class UpdateProfileForm extends Component {
                                                     errorClass="help-block"
                                                     type="radio"
                                                     component={InputField}
-                                                    units={(<label htmlFor={GENDER_FEMALE}>Female</label>)}
+                                                    units={(
+                                                        <label htmlFor="female" data-tip="Female"><img src={userFemale} /></label>
+                                                    )}
                                                     value={GENDER_FEMALE}
                                                 />
                                             </div>
@@ -183,7 +192,7 @@ class UpdateProfileForm extends Component {
                                                     errorClass="help-block"
                                                     type="radio"
                                                     component={InputField}
-                                                    units={(<label htmlFor="home">Home</label>)}
+                                                    units={(<label htmlFor="home" data-tip="Home"><img src={home} /></label>)}
                                                     value={WORKOUT_LOCATION_HOME}
                                                 />
                                                 <Field
@@ -193,7 +202,7 @@ class UpdateProfileForm extends Component {
                                                     errorClass="help-block"
                                                     type="radio"
                                                     component={InputField}
-                                                    units={(<label htmlFor="gym">GYM</label>)}
+                                                    units={(<label htmlFor="gym" data-tip="Gym"><img src={gym} /></label>)}
                                                     value={WORKOUT_LOCATION_GYM}
                                                 />
                                             </div>
@@ -215,7 +224,7 @@ class UpdateProfileForm extends Component {
                                                 <Field
                                                     id={GOAL_GAIN_MUSCLE}
                                                     name={GOAL_GAIN_MUSCLE}
-                                                    wrapperClass="pull-left custom_check"
+                                                    wrapperClass="pull-left custom_check mb-10"
                                                     component={CheckField}
                                                     checked={this.state[GOAL_GAIN_MUSCLE]}
                                                     handleClick={this.handleCheckClick}
@@ -226,7 +235,7 @@ class UpdateProfileForm extends Component {
                                                 <Field
                                                     id={GOAL_GAIN_FLEXIBILITY}
                                                     name={GOAL_GAIN_FLEXIBILITY}
-                                                    wrapperClass="pull-left custom_check"
+                                                    wrapperClass="pull-left custom_check mb-10"
                                                     component={CheckField}
                                                     checked={this.state[GOAL_GAIN_FLEXIBILITY]}
                                                     handleClick={this.handleCheckClick}
@@ -237,7 +246,7 @@ class UpdateProfileForm extends Component {
                                                 <Field
                                                     id={GOAL_LOSE_FAT}
                                                     name={GOAL_LOSE_FAT}
-                                                    wrapperClass="pull-left custom_check"
+                                                    wrapperClass="pull-left custom_check mb-10"
                                                     component={CheckField}
                                                     checked={this.state[GOAL_LOSE_FAT]}
                                                     handleClick={this.handleCheckClick}
@@ -248,7 +257,7 @@ class UpdateProfileForm extends Component {
                                                 <Field
                                                     id={GOAL_GAIN_STRENGTH}
                                                     name={GOAL_GAIN_STRENGTH}
-                                                    wrapperClass="pull-left custom_check"
+                                                    wrapperClass="pull-left custom_check mb-10"
                                                     component={CheckField}
                                                     checked={this.state[GOAL_GAIN_STRENGTH]}
                                                     handleClick={this.handleCheckClick}
@@ -259,7 +268,7 @@ class UpdateProfileForm extends Component {
                                                 <Field
                                                     id={GOAL_GAIN_POWER}
                                                     name={GOAL_GAIN_POWER}
-                                                    wrapperClass="pull-left custom_check"
+                                                    wrapperClass="pull-left custom_check mb-10"
                                                     component={CheckField}
                                                     checked={this.state[GOAL_GAIN_POWER]}
                                                     handleClick={this.handleCheckClick}
@@ -270,7 +279,7 @@ class UpdateProfileForm extends Component {
                                                 <Field
                                                     id={GOAL_INCREASE_ENDURANCE}
                                                     name={GOAL_INCREASE_ENDURANCE}
-                                                    wrapperClass="pull-left custom_check"
+                                                    wrapperClass="pull-left custom_check mb-10"
                                                     component={CheckField}
                                                     checked={this.state[GOAL_INCREASE_ENDURANCE]}
                                                     handleClick={this.handleCheckClick}
@@ -307,6 +316,7 @@ class UpdateProfileForm extends Component {
                         </div>
                     </div>
                 </form>
+                <ReactTooltip place="top" type="dark" effect="float" />
             </div>
         );
     }
@@ -324,7 +334,10 @@ class UpdateProfileForm extends Component {
         } = this.props;
         if (selectActionInit && !loading) {
             this.setState({ selectActionInit: false });
-            var dob = moment(profile.dateOfBirth);
+            var dob = null;
+            if (profile.dateOfBirth) {
+                dob = moment(profile.dateOfBirth);
+            }
             this.setState({ dob });
             var formData = {
                 first_name: profile.firstName,
@@ -388,8 +401,8 @@ const handleSubmit = (data, dispatch, props) => {
         }
     });
     var formData = {
-        firstName: data.first_name,
-        lastName: (data.last_name) ? data.last_name : '',
+        firstName: capitalizeFirstLetter(data.first_name),
+        lastName: (data.last_name) ? capitalizeFirstLetter(data.last_name) : '',
         mobileNumber: (data.mobile_no) ? data.mobile_no : '',
         gender: (data.gender) ? data.gender : GENDER_MALE,
         dateOfBirth: (data.dob) ? data.dob : '',
@@ -436,6 +449,7 @@ const InputField = (props) => {
         disabled,
         units,
         id,
+        dataTip,
     } = props;
     return (
         <div

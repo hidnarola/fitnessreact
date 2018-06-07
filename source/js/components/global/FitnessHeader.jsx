@@ -228,6 +228,7 @@ class FitnessHeader extends Component {
             }
             return (
                 <NavLink to={`${routeCodes.PROFILE}/${suggestion.username}`}>
+                    <img src={suggestion.avatar} />
                     <span>{fullName}</span>
                 </NavLink>
             );

@@ -11,7 +11,7 @@ import FitnessNav from 'components/global/FitnessNav';
 import { routeCodes } from 'constants/routes';
 import { getProfileDetailsRequest, saveAboutProfileDetailsRequest, saveLoggedUserProfilePhotoRequest } from '../actions/profile';
 import noProfileImg from 'img/common/no-profile-img.png'
-import { FRIENDSHIP_STATUS_SELF, FRIENDSHIP_STATUS_UNKNOWN, FRIENDSHIP_STATUS_FRIEND, FRIENDSHIP_STATUS_REQUEST_RECEIVED, FRIENDSHIP_STATUS_REQUEST_SENT } from '../constants/consts';
+import { FRIENDSHIP_STATUS_SELF, FRIENDSHIP_STATUS_UNKNOWN, FRIENDSHIP_STATUS_FRIEND, FRIENDSHIP_STATUS_REQUEST_RECEIVED, FRIENDSHIP_STATUS_REQUEST_SENT, LOCALSTORAGE_USER_DETAILS_KEY, FITASSIST_USER_DETAILS_TOKEN_KEY } from '../constants/consts';
 import { sendFriendRequestRequest, cancelFriendRequestRequest, acceptFriendRequestRequest } from '../actions/friends';
 import { ts, te } from '../helpers/funs';
 import CancelFriendRequestModal from '../components/Profile/CancelFriendRequestModal';
@@ -19,6 +19,8 @@ import UnfriendRequestModal from '../components/Profile/UnfriendRequestModal';
 import UpdateAboutMeModal from '../components/Profile/UpdateAboutMeModal';
 import ReactHtmlParser from 'react-html-parser';
 import ChangeProfilePhotoModal from '../components/Profile/ChangeProfilePhotoModal';
+import jwt from "jwt-simple";
+import { setLoggedUserFromLocalStorage } from '../actions/user';
 
 class Profile extends Component {
     constructor(props) {
@@ -46,7 +48,9 @@ class Profile extends Component {
             updateAboutMeDetailsActionInit: false,
             showChangeProfilePicModal: false,
             updateProfilePhotoActionInit: false,
+            updateLocalStorageData: false,
         }
+        this.changeProfilePhotoRef = React.createRef();
     }
 
     componentWillMount() {
@@ -332,6 +336,7 @@ class Profile extends Component {
                     handleClose={this.handleHideUpdateAboutMeModal}
                 />
                 <ChangeProfilePhotoModal
+                    ref={this.changeProfilePhotoRef}
                     show={showChangeProfilePicModal}
                     handleSubmit={this.saveProfilePhoto}
                     handleClose={this.handleHideChangeProfilePhotoModal}
@@ -363,6 +368,7 @@ class Profile extends Component {
             rejectFriendRequestInit,
             updateAboutMeDetailsActionInit,
             updateProfilePhotoActionInit,
+            updateLocalStorageData,
         } = this.state;
         var stateProfile = this.state.profile;
         if (loadProfileActionInit && !profileLoading && (profile !== stateProfile)) {
@@ -380,6 +386,11 @@ class Profile extends Component {
                 weight: profile.weight,
             }
             dispatch(initialize('aboutMeUpdateModalForm', updateAboutMeFormData));
+            if (updateLocalStorageData) {
+                this.setState({ updateLocalStorageData: false });
+                localStorage.setItem(LOCALSTORAGE_USER_DETAILS_KEY, jwt.encode(profile, FITASSIST_USER_DETAILS_TOKEN_KEY));
+                dispatch(setLoggedUserFromLocalStorage());
+            }
         }
         if (sendFriendRequestInit && !requestSendLoading) {
             this.setState({
@@ -459,10 +470,12 @@ class Profile extends Component {
         if (updateProfilePhotoActionInit && !profileLoading) {
             this.setState({
                 updateProfilePhotoActionInit: false,
-                loadProfileActionInit: true
+                loadProfileActionInit: true,
+                updateLocalStorageData: true,
             });
             dispatch(getProfileDetailsRequest(username));
             this.handleHideChangeProfilePhotoModal();
+            this.setForceUpdateChildComponents(true);
             // error and success message handling is remaining
         }
     }
@@ -585,10 +598,12 @@ class Profile extends Component {
     }
 
     handleShowChangeProfilePhotoModal = () => {
+        this.changeProfilePhotoRef.current.setState({ croppedImg: null, selectedImage: null });
         this.setState({ showChangeProfilePicModal: true });
     }
 
     handleHideChangeProfilePhotoModal = () => {
+        this.changeProfilePhotoRef.current.setState({ croppedImg: null, selectedImage: null });
         this.setState({ showChangeProfilePicModal: false });
     }
 
