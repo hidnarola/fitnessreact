@@ -31,10 +31,11 @@ import ReactQuill from 'react-quill';
 import { te } from '../../helpers/funs';
 import InfiniteScroll from 'react-infinite-scroller';
 import { FaCircleONotch } from "react-icons/lib/fa";
-import { MenuItem, Dropdown } from "react-bootstrap";
+import { MenuItem, Dropdown, DropdownButton } from "react-bootstrap";
 import { FaGlobe, FaLock, FaGroup } from 'react-icons/lib/fa';
 import AddPostPhotoModal from './AddPostPhotoModal';
 import PostDetailsModal from './PostDetailsModal';
+import LikeButton from "./LikeButton";
 
 class ProfileFithub extends Component {
     constructor(props) {
@@ -66,6 +67,11 @@ class ProfileFithub extends Component {
             match,
             activeProfile,
         } = nextProps;
+        if (activeProfile && activeProfile.friendshipStatus === FRIENDSHIP_STATUS_SELF && this.state.postPrivacy !== ACCESS_LEVEL_PUBLIC) {
+            this.setState({ postPrivacy: ACCESS_LEVEL_PUBLIC });
+        } else if (activeProfile && activeProfile.friendshipStatus !== FRIENDSHIP_STATUS_SELF && this.state.postPrivacy !== ACCESS_LEVEL_PRIVATE) {
+            this.setState({ postPrivacy: ACCESS_LEVEL_PRIVATE });
+        }
         if (match.params.username !== this.props.match.params.username) {
             this.setState({
                 posts: [],
@@ -74,15 +80,6 @@ class ProfileFithub extends Component {
                 offset: 10,
                 hasMorePosts: true,
             });
-        }
-    }
-
-    componentWillUpdate(nextProps, nextState) {
-        const { activeProfile } = nextProps;
-        if (activeProfile && activeProfile.friendshipStatus === FRIENDSHIP_STATUS_SELF && nextState.postPrivacy === ACCESS_LEVEL_PRIVATE) {
-            this.setState({ postPrivacy: ACCESS_LEVEL_PUBLIC });
-        } else if (activeProfile && activeProfile.friendshipStatus !== FRIENDSHIP_STATUS_SELF && nextState.postPrivacy === ACCESS_LEVEL_PUBLIC) {
-            this.setState({ postPrivacy: ACCESS_LEVEL_PRIVATE });
         }
     }
 
@@ -233,26 +230,39 @@ class ProfileFithub extends Component {
                                         toolbar: ['bold', 'italic', 'underline', 'strike']
                                     }}
                                 />
+                                {postImages && postImages.length > 0 &&
+                                    <div className="post-photos-selected-view-wrapper">
+                                        <ul>
+                                            {postImages.map((img, imgI) => {
+                                                return (
+                                                    <li>
+                                                        <img
+                                                            src={img.preview}
+                                                        />
+                                                    </li>
+                                                );
+                                            })}
+                                        </ul>
+                                    </div>
+                                }
                                 <div className="how-training-btm d-flex justify-content-end">
                                     <a href="javascript:void(0)" onClick={this.handleShowPostPhotosModal}>
                                         <i className="icon-photo_size_select_actual vertical-middle-c"></i>
                                     </a>
-                                    <Dropdown id="post_privacy">
-                                        <Dropdown.Toggle noCaret>
-                                            {postPrivacy === ACCESS_LEVEL_PUBLIC && <span><FaGlobe /> {ACCESS_LEVEL_PUBLIC_STR}</span>}
-                                            {postPrivacy === ACCESS_LEVEL_FRIENDS && <span><FaGroup /> {ACCESS_LEVEL_FRIENDS_STR}</span>}
-                                            {postPrivacy === ACCESS_LEVEL_PRIVATE && <span><FaLock /> {ACCESS_LEVEL_PRIVATE_STR}</span>}
-                                        </Dropdown.Toggle>
-                                        <Dropdown.Menu>
-                                            {activeProfile && activeProfile.friendshipStatus === FRIENDSHIP_STATUS_SELF &&
+                                    {activeProfile && activeProfile.friendshipStatus === FRIENDSHIP_STATUS_SELF &&
+                                        <Dropdown id="post_privacy">
+                                            <Dropdown.Toggle noCaret>
+                                                {postPrivacy === ACCESS_LEVEL_PUBLIC && <span><FaGlobe /> {ACCESS_LEVEL_PUBLIC_STR}</span>}
+                                                {postPrivacy === ACCESS_LEVEL_FRIENDS && <span><FaGroup /> {ACCESS_LEVEL_FRIENDS_STR}</span>}
+                                                {postPrivacy === ACCESS_LEVEL_PRIVATE && <span><FaLock /> {ACCESS_LEVEL_PRIVATE_STR}</span>}
+                                            </Dropdown.Toggle>
+                                            <Dropdown.Menu>
                                                 <MenuItem eventKey="3" onClick={() => this.handlePostPrivacy(ACCESS_LEVEL_PUBLIC)}><FaGlobe /> {ACCESS_LEVEL_PUBLIC_STR}</MenuItem>
-                                            }
-                                            {activeProfile && activeProfile.friendshipStatus === FRIENDSHIP_STATUS_SELF &&
                                                 <MenuItem eventKey="2" onClick={() => this.handlePostPrivacy(ACCESS_LEVEL_FRIENDS)}><FaGroup /> {ACCESS_LEVEL_FRIENDS_STR}</MenuItem>
-                                            }
-                                            <MenuItem eventKey="1" onClick={() => this.handlePostPrivacy(ACCESS_LEVEL_PRIVATE)}><FaLock /> {ACCESS_LEVEL_PRIVATE_STR}</MenuItem>
-                                        </Dropdown.Menu>
-                                    </Dropdown>
+                                                <MenuItem eventKey="1" onClick={() => this.handlePostPrivacy(ACCESS_LEVEL_PRIVATE)}><FaLock /> {ACCESS_LEVEL_PRIVATE_STR}</MenuItem>
+                                            </Dropdown.Menu>
+                                        </Dropdown>
+                                    }
                                     <button type="button" onClick={this.handleMakePost} className="vertical-middle-r">
                                         Post<i className="icon-send"></i>
                                     </button>
@@ -263,7 +273,7 @@ class ProfileFithub extends Component {
                                 pageStart={0}
                                 loadMore={this.loadPostsData}
                                 hasMore={hasMorePosts}
-                                className="margin-top-30"
+                                className="margin-top-30 timeline-infinite-scroll"
                                 loader={
                                     <div className="loader" key={0}><FaCircleONotch className="loader-spinner loader-spinner-icon" /> Loading ...</div>
                                 }
@@ -276,7 +286,7 @@ class ProfileFithub extends Component {
                                         }
                                         var postCreatedAt = post.createdAt;
                                         postCreatedAt = moment.utc(postCreatedAt).toDate();
-                                        postCreatedAt = moment(postCreatedAt).local().format('Do MMMM [at] hh:mm');
+                                        postCreatedAt = moment(postCreatedAt).local().format('Do MMM [at] hh:mm');
                                         var type = post.type;
                                         var description = '';
                                         var images = [];
@@ -319,7 +329,7 @@ class ProfileFithub extends Component {
                                             if (likedOfLoggedUser) {
                                                 isLikedByLoggedUser = true;
                                             }
-                                            if (totalLikes > 4) {
+                                            if (totalLikes > 2) {
                                                 for (let i = 0; i < 2; i++) {
                                                     const obj = likes[i];
                                                     if (obj) {
@@ -327,7 +337,7 @@ class ProfileFithub extends Component {
                                                         if (obj.lastName) {
                                                             likesStr += ' ' + obj.lastName;
                                                         }
-                                                        if ((i - 1) !== 2) {
+                                                        if (i !== (2 - 1)) {
                                                             likesStr += ', ';
                                                         }
                                                     }
@@ -359,15 +369,27 @@ class ProfileFithub extends Component {
                                                             }}
                                                         />
                                                     </span>
-                                                    <h4 className="vertical-middle-c">
+                                                    <h4 className="head_post_f">
                                                         <big>
                                                             <NavLink to={`${routeCodes.PROFILE}/${createdBy.username}`}>
                                                                 {`${createdBy.firstName} ${(createdBy.lastName) ? createdBy.lastName : ''}`}
                                                             </NavLink>
                                                         </big>
-                                                        <small><a href="javascript:void(0)" onClick={this.handleShowPostDetailsModal}>{(post.tag_line) ? post.tag_line : ''}</a></small>
+                                                        <small><a href="javascript:void(0)" onClick={() => this.handleShowPostDetailsModal(index)}>{(post.tag_line) ? post.tag_line : ''}</a></small>
+                                                        <p className="">
+                                                            {postCreatedAt}
+                                                            {post.privacy == ACCESS_LEVEL_PUBLIC && <FaGlobe />}
+                                                            {post.privacy == ACCESS_LEVEL_FRIENDS && <FaGroup />}
+                                                            {post.privacy == ACCESS_LEVEL_PRIVATE && <FaLock />}
+                                                        </p>
                                                     </h4>
-                                                    <p className="vertical-middle-c">{postCreatedAt}</p>
+                                                    <DropdownButton
+                                                        key={index}
+                                                        title={''}
+                                                        id={`post_actions_${index}`}
+                                                    >
+                                                        <MenuItem eventKey="1">Action</MenuItem>
+                                                    </DropdownButton>
                                                 </div>
                                                 <div className="posttype-body">
                                                     {description &&
@@ -393,11 +415,15 @@ class ProfileFithub extends Component {
                                                                 )
                                                             })
                                                         }
-                                                        {likesStr &&
-                                                            <p><a href="javascript:void(0)" onClick={console.log()}>{likesStr}</a></p>
-                                                        }
-                                                        {totalComments > 0 &&
-                                                            <p><a href="javascript:void(0)" onClick={this.handleShowPostDetailsModal}>Comments {totalComments}</a></p>
+                                                        {(likesStr || totalComments > 0) &&
+                                                            <p>
+                                                                {likesStr &&
+                                                                    <a href="javascript:void(0)" onClick={console.log()}>{likesStr}</a>
+                                                                }
+                                                                {totalComments > 0 &&
+                                                                    <a href="javascript:void(0)" className="pull-right" onClick={() => this.handleShowPostDetailsModal(index)}>Comments {totalComments}</a>
+                                                                }
+                                                            </p>
                                                         }
                                                     </div>
                                                 </div>
@@ -408,7 +434,7 @@ class ProfileFithub extends Component {
                                                         isLikedByLoggedUser={isLikedByLoggedUser}
                                                         handleToggleLike={this.handleToggleLike}
                                                     />
-                                                    <a href="javascript:void(0)" onClick={this.handleShowPostDetailsModal} className="icon-chat"></a>
+                                                    <a href="javascript:void(0)" onClick={() => this.handleShowPostDetailsModal(index)} className="icon-chat"></a>
                                                 </div>
                                                 {totalComments > 0 &&
                                                     <div className="post-comment d-flex">
@@ -425,7 +451,7 @@ class ProfileFithub extends Component {
                                                             <h4>
                                                                 <NavLink to={`${routeCodes.PROFILE}/${lastComment.username}`}>
                                                                     {lastComment.firstName} {(lastComment.lastName) ? lastComment.lastName : ''}
-                                                                </NavLink> {ReactHtmlParser(lastComment.comment)}
+                                                                </NavLink> {(lastComment.comment)}
                                                             </h4>
                                                             <div className="post-comment-r-btm d-flex">
                                                                 <p>{lastCommentCreatedAt}</p>
@@ -458,6 +484,9 @@ class ProfileFithub extends Component {
                     handleClose={this.handleHidePostDetailsModal}
                     postIndex={selectedPostForDetailsIndex}
                     post={selectedPostForDetails}
+                    loggedUserData={loggedUserData}
+                    handleToggleLike={this.handleToggleLike}
+                    handleComment={this.handleComment}
                 />
             </div>
         );
@@ -521,24 +550,33 @@ class ProfileFithub extends Component {
         }
         if (likeActionInit && !likeLoading) {
             var newPostsState = this.state.posts;
+            var selectedPostForDetails = this.state.selectedPostForDetails;
             if (likeError && likeError.length > 0) {
                 te(likeError[0]);
             } else {
                 newPostsState[selectedTimelineIndex] = likePost;
+            }
+            if (this.state.showPostDetailsModal) {
+                selectedPostForDetails = likePost;
             }
             this.setState({
                 likeActionInit: false,
                 selectedTimelineIndex: null,
                 selectedTimelineId: null,
                 posts: newPostsState,
+                selectedPostForDetails,
             });
         }
         if (commentActionInit && !commentLoading) {
             var newPostsState = this.state.posts;
+            var selectedPostForDetails = this.state.selectedPostForDetails;
             if (commentError && commentError.length > 0) {
                 te(commentError[0]);
             } else {
                 newPostsState[selectedTimelineIndex] = commentPost;
+            }
+            if (this.state.showPostDetailsModal) {
+                selectedPostForDetails = commentPost;
             }
             var formData = {
                 [`comment_${selectedTimelineId}`]: '',
@@ -549,6 +587,7 @@ class ProfileFithub extends Component {
                 selectedTimelineIndex: null,
                 selectedTimelineId: null,
                 posts: newPostsState,
+                selectedPostForDetails,
             });
         }
         if (forceUpdateChildComponents) {
@@ -582,17 +621,19 @@ class ProfileFithub extends Component {
         const { dispatch } = this.props;
         var index = props.index;
         var postId = props.postId;
-        var comment = data[`comment_${postId}`];
-        var requestData = {
-            comment: comment.replace(/\n/gi, '<br/>'),
-            postId: postId,
-        };
-        this.setState({
-            selectedTimelineIndex: index,
-            selectedTimelineId: postId,
-            commentActionInit: true,
-        });
-        dispatch(commentOnPostRequest(requestData));
+        var comment = data[`comment_${postId}`].trim();
+        if (comment) {
+            var requestData = {
+                comment: comment.replace(/\n/gi, '<br/>'),
+                postId: postId,
+            };
+            this.setState({
+                selectedTimelineIndex: index,
+                selectedTimelineId: postId,
+                commentActionInit: true,
+            });
+            dispatch(commentOnPostRequest(requestData));
+        }
     }
 
     handlePostPrivacy = (access) => {
@@ -600,9 +641,12 @@ class ProfileFithub extends Component {
     }
 
     handlePostContentChange = (content, delta, source, editor) => {
-        this.setState({
-            postContent: content,
-        });
+        var editorText = editor.getText().trim();
+        if (editorText !== '' && editorText !== '\n') {
+            this.setState({ postContent: content });
+        } else {
+            this.setState({ postContent: '' });
+        }
     }
 
     handleMakePost = () => {
@@ -615,17 +659,19 @@ class ProfileFithub extends Component {
             activeProfile,
             dispatch,
         } = this.props;
-        var formData = new FormData();
-        formData.append('description', postContent);
-        formData.append('privacy', postPrivacy);
-        formData.append('onWall', activeProfile.authUserId);
-        if (postImages.length > 0) {
-            postImages.map((img, index) => {
-                formData.append('images', img);
-            })
+        if ((postContent) || (postImages && postImages.length > 0)) {
+            var formData = new FormData();
+            formData.append('description', postContent);
+            formData.append('privacy', postPrivacy);
+            formData.append('onWall', activeProfile.authUserId);
+            if (postImages.length > 0) {
+                postImages.map((img, index) => {
+                    formData.append('images', img);
+                })
+            }
+            this.setState({ newPostActionInit: true });
+            dispatch(addPostOnUserTimelineRequest(formData));
         }
-        this.setState({ newPostActionInit: true });
-        dispatch(addPostOnUserTimelineRequest(formData));
     }
 
     loadPostsData = () => {
@@ -670,8 +716,8 @@ class ProfileFithub extends Component {
         var selectedPost = posts[index];
         this.setState({
             showPostDetailsModal: true,
-            selectedPostForDetailsIndex: selectedPost,
-            selectedPostForDetails: index,
+            selectedPostForDetailsIndex: index,
+            selectedPostForDetails: selectedPost,
         });
     }
 
@@ -708,50 +754,3 @@ const mapStateToProps = (state) => {
 export default connect(
     mapStateToProps,
 )(ProfileFithub);
-
-class LikeButton extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            isLikedByLoggedUser: false
-        }
-    }
-
-    componentWillMount() {
-        const { isLikedByLoggedUser } = this.props;
-        if (isLikedByLoggedUser !== this.state.isLikedByLoggedUser) {
-            this.setState({ isLikedByLoggedUser });
-        }
-    }
-
-    componentWillReceiveProps(nextProps) {
-        if (this.props.isLikedByLoggedUser !== nextProps.isLikedByLoggedUser) {
-            this.setState({ isLikedByLoggedUser: nextProps.isLikedByLoggedUser });
-        }
-    }
-
-
-    render() {
-        const {
-            isLikedByLoggedUser,
-        } = this.state;
-        return (
-            <a
-                href="javascript:void(0)"
-                className={cns('icon-thumb_up', { 'liked-color': isLikedByLoggedUser })}
-                onClick={this.handleClick}
-            >
-            </a>
-        );
-    }
-
-    handleClick = () => {
-        const {
-            index,
-            postId,
-            handleToggleLike,
-        } = this.props;
-        this.setState({ isLikedByLoggedUser: !this.state.isLikedByLoggedUser });
-        handleToggleLike(index, postId);
-    }
-}

@@ -18,6 +18,9 @@ import _ from "lodash";
 import { getUserSearchRequest, resetUserSearch, handleChangeUserSearchFor } from '../../actions/userSearch';
 import $ from "jquery";
 import { toggleSideMenu } from '../../helpers/funs';
+import AutosuggestHighlightMatch from 'autosuggest-highlight/match';
+import AutosuggestHighlightParse from 'autosuggest-highlight/parse';
+import cns from "classnames";
 
 const auth = new Auth();
 
@@ -214,7 +217,7 @@ class FitnessHeader extends Component {
         return fullName;
     }
 
-    renderSearchSuggestion = (suggestion) => {
+    renderSearchSuggestion = (suggestion, { query }) => {
         if (suggestion._id === 'view_all') {
             return (
                 <NavLink to={`${routeCodes.USERS}`}>
@@ -226,10 +229,23 @@ class FitnessHeader extends Component {
             if (suggestion.lastName) {
                 fullName += ' ' + suggestion.lastName;
             }
+            const matches = AutosuggestHighlightMatch(fullName, query);
+            const parts = AutosuggestHighlightParse(fullName, matches);
             return (
                 <NavLink to={`${routeCodes.PROFILE}/${suggestion.username}`}>
-                    <img src={suggestion.avatar} />
-                    <span>{fullName}</span>
+                    <img
+                        src={suggestion.avatar}
+                        onError={(e) => {
+                            e.target.src = noProfileImg
+                        }}
+                    />
+                    <span>
+                        {parts.map((part, i) => {
+                            return (
+                                <span key={i} className={cns({ 'search-word-highlight': part.highlight })}>{part.text}</span>
+                            )
+                        })}
+                    </span>
                 </NavLink>
             );
         }
