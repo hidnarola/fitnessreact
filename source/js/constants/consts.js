@@ -174,3 +174,144 @@ export const POST_TYPE_PROGRESS_PHOTO = 'progress_photo';
 
 export const WORKOUT_LOCATION_HOME = 'home';
 export const WORKOUT_LOCATION_GYM = 'gym';
+
+export const MEASUREMENT_UNIT_KEY_PERCENTAGE = 'percentage';
+export const MEASUREMENT_UNIT_KEY_KCAL = 'kcal';
+export const MEASUREMENT_UNIT_KEY_COUNT = 'count';
+export const MEASUREMENT_UNIT_KEY_TIME = 'time';
+export const MEASUREMENT_UNIT_KEY_LIGHT_MASS = 'light_mass';
+export const MEASUREMENT_UNIT_KEY_HEAVY_MASS = 'heavy_mass';
+export const MEASUREMENT_UNIT_KEY_MEASUREMENT = 'measurement';
+export const MEASUREMENT_UNIT_KEY_SMALL_DISTANCE = 'small_distance';
+export const MEASUREMENT_UNIT_KEY_LARGE_DISTANCE = 'large_distance';
+
+export const MEASUREMENT_UNIT_PERCENTAGE = 'percentage';
+export const MEASUREMENT_UNIT_KCAL = 'kcal';
+export const MEASUREMENT_UNIT_NUMBER = 'number';
+export const MEASUREMENT_UNIT_MINUTE = 'minute';
+export const MEASUREMENT_UNIT_GRAM = 'g';
+export const MEASUREMENT_UNIT_MILIGRAM = 'mg';
+export const MEASUREMENT_UNIT_KILOGRAM = 'kg';
+export const MEASUREMENT_UNIT_POUND = 'lb';
+export const MEASUREMENT_UNIT_INCH = 'in';
+export const MEASUREMENT_UNIT_CENTIMETER = 'cm';
+export const MEASUREMENT_UNIT_METER = 'meter';
+export const MEASUREMENT_UNIT_FEET = 'feet';
+export const MEASUREMENT_UNIT_KILOMETER = 'km';
+export const MEASUREMENT_UNIT_MILE = 'mile';
+
+export const GOALS_DETAILS = [
+    { value: 'weight_gain', label: 'Gain Weight', unitsKey: MEASUREMENT_UNIT_KEY_HEAVY_MASS },
+    { value: 'weight_loss', label: 'Loss Weight', unitsKey: MEASUREMENT_UNIT_KEY_HEAVY_MASS },
+    { value: 'body_fat_gain', label: 'Gain Body Fat', unitsKey: MEASUREMENT_UNIT_KEY_PERCENTAGE },
+    { value: 'body_fat_loss', label: 'Loss Body Fat', unitsKey: MEASUREMENT_UNIT_KEY_PERCENTAGE },
+    { value: 'body_fat_average', label: 'Target Average Body Fat', unitsKey: MEASUREMENT_UNIT_KEY_PERCENTAGE },
+    { value: 'body_fat_most', label: 'Target Max Body Fat', unitsKey: MEASUREMENT_UNIT_KEY_PERCENTAGE },
+    { value: 'body_fat_least', label: 'Target Least Body Fat ', unitsKey: MEASUREMENT_UNIT_KEY_PERCENTAGE },
+    { value: 'neck_measurement_gain', label: 'Gain Neck', unitsKey: MEASUREMENT_UNIT_KEY_MEASUREMENT },
+    { value: 'neck_measurement_loss', label: 'Loss Neck', unitsKey: MEASUREMENT_UNIT_KEY_MEASUREMENT },
+    { value: 'shoulders_measurement_gain', label: 'Gain Shoulders', unitsKey: MEASUREMENT_UNIT_KEY_MEASUREMENT },
+    { value: 'shoulders_measurement_loss', label: 'Loss Shoulders', unitsKey: MEASUREMENT_UNIT_KEY_MEASUREMENT },
+    { value: 'chest_measurement_gain', label: 'Gain Chest', unitsKey: MEASUREMENT_UNIT_KEY_MEASUREMENT },
+    { value: 'chest_measurement_loss', label: 'Loss Chest', unitsKey: MEASUREMENT_UNIT_KEY_MEASUREMENT },
+    { value: 'upper_arm_measurement_gain', label: 'Gain Upper Arm', unitsKey: MEASUREMENT_UNIT_KEY_MEASUREMENT },
+    { value: 'upper_arm_measurement_loss', label: 'Loss Upper Arm', unitsKey: MEASUREMENT_UNIT_KEY_MEASUREMENT },
+    { value: 'waist_measurement_gain', label: 'Gain Waist', unitsKey: MEASUREMENT_UNIT_KEY_MEASUREMENT },
+    { value: 'waist_measurement_loss', label: 'Loss Waist', unitsKey: MEASUREMENT_UNIT_KEY_MEASUREMENT },
+    { value: 'forearm_measurement_gain', label: 'Gain Forearm', unitsKey: MEASUREMENT_UNIT_KEY_MEASUREMENT },
+    { value: 'forearm_measurement_loss', label: 'Loss Forearm', unitsKey: MEASUREMENT_UNIT_KEY_MEASUREMENT },
+    { value: 'hips_measurement_gain', label: 'Gain Hips', unitsKey: MEASUREMENT_UNIT_KEY_MEASUREMENT },
+    { value: 'hips_measurement_loss', label: 'Loss Hips', unitsKey: MEASUREMENT_UNIT_KEY_MEASUREMENT },
+    { value: 'thigh_measurement_gain', label: 'Gain Thigh', unitsKey: MEASUREMENT_UNIT_KEY_MEASUREMENT },
+    { value: 'thigh_measurement_loss', label: 'Loss Thigh', unitsKey: MEASUREMENT_UNIT_KEY_MEASUREMENT },
+    { value: 'calf_measurement_gain', label: 'Gain Calf', unitsKey: MEASUREMENT_UNIT_KEY_MEASUREMENT },
+    { value: 'calf_measurement_loss', label: 'Loss Calf', unitsKey: MEASUREMENT_UNIT_KEY_MEASUREMENT },
+    { value: 'weight_lifted_total', label: 'Lift Total Weight', unitsKey: MEASUREMENT_UNIT_KEY_HEAVY_MASS },
+    { value: 'weight_lifted_average', label: 'Lift Average Weight', unitsKey: MEASUREMENT_UNIT_KEY_HEAVY_MASS },
+    { value: 'weight_lifted_most', label: 'Lift Max Weight', unitsKey: MEASUREMENT_UNIT_KEY_HEAVY_MASS },
+    { value: 'weight_lifted_least', label: 'Lift Least Weight', unitsKey: MEASUREMENT_UNIT_KEY_HEAVY_MASS },
+    { value: 'workouts_total', label: 'Complete Total Workouts', unitsKey: MEASUREMENT_UNIT_KEY_COUNT },
+    { value: 'workouts_average', label: 'Complete Average Workouts', unitsKey: MEASUREMENT_UNIT_KEY_COUNT },
+    { value: 'running_distance_total', label: 'Run Total Distance', unitsKey: MEASUREMENT_UNIT_KEY_LARGE_DISTANCE },
+    { value: 'running_distance_average', label: 'Run Average Distance', unitsKey: MEASUREMENT_UNIT_KEY_LARGE_DISTANCE },
+    { value: 'running_distance_most', label: 'Run Max Distance', unitsKey: MEASUREMENT_UNIT_KEY_LARGE_DISTANCE },
+    { value: 'running_distance_least', label: 'Run Least Distance', unitsKey: MEASUREMENT_UNIT_KEY_LARGE_DISTANCE },
+    { value: 'running_time_average', label: 'Run Average Time', unitsKey: MEASUREMENT_UNIT_KEY_TIME },
+    { value: 'running_time_total', label: 'Run Total Time', unitsKey: MEASUREMENT_UNIT_KEY_TIME },
+    { value: 'running_elevation_total', label: 'Run Total Elevation', unitsKey: MEASUREMENT_UNIT_KEY_SMALL_DISTANCE },
+    { value: 'running_elevation_average', label: 'Run Average Elevation', unitsKey: MEASUREMENT_UNIT_KEY_SMALL_DISTANCE },
+    { value: 'cycle_distance_total', label: 'Cycling Total Distance', unitsKey: MEASUREMENT_UNIT_KEY_LARGE_DISTANCE },
+    { value: 'cycle_distance_average', label: 'Cycling Average Distance', unitsKey: MEASUREMENT_UNIT_KEY_LARGE_DISTANCE },
+    { value: 'cycle_distance_most', label: 'Cycling Max Distance', unitsKey: MEASUREMENT_UNIT_KEY_LARGE_DISTANCE },
+    { value: 'cycle_distance_least', label: 'Cycling Least Distance', unitsKey: MEASUREMENT_UNIT_KEY_LARGE_DISTANCE },
+    { value: 'cycle_time_total', label: 'Cycling Total Time', unitsKey: MEASUREMENT_UNIT_KEY_TIME },
+    { value: 'cycle_time_average', label: 'Cycling Average Time', unitsKey: MEASUREMENT_UNIT_KEY_TIME },
+    { value: 'cycle_elevation_total', label: 'Cycling Total Elevation', unitsKey: MEASUREMENT_UNIT_KEY_SMALL_DISTANCE },
+    { value: 'cycle_elevation_average', label: 'Cycling Average Elevation', unitsKey: MEASUREMENT_UNIT_KEY_SMALL_DISTANCE },
+    { value: 'steps_total', label: 'Walk Total Steps', unitsKey: MEASUREMENT_UNIT_KEY_COUNT },
+    { value: 'steps_average', label: 'Walk Average Steps', unitsKey: MEASUREMENT_UNIT_KEY_COUNT },
+    { value: 'steps_most', label: 'Walk Max Steps', unitsKey: MEASUREMENT_UNIT_KEY_COUNT },
+    { value: 'steps_least', label: 'Walk Least Steps', unitsKey: MEASUREMENT_UNIT_KEY_COUNT },
+];
+
+export const MEASUREMENT_UNITS = [
+    {
+        key: MEASUREMENT_UNIT_KEY_PERCENTAGE,
+        value: [
+            { value: MEASUREMENT_UNIT_PERCENTAGE, label: "Percentage" },
+        ],
+    },
+    {
+        key: MEASUREMENT_UNIT_KEY_KCAL,
+        value: [
+            { value: MEASUREMENT_UNIT_KCAL, label: "Calories" },
+        ],
+    },
+    {
+        key: MEASUREMENT_UNIT_KEY_COUNT,
+        value: [
+            { value: MEASUREMENT_UNIT_NUMBER, label: "Counter" },
+        ],
+    },
+    {
+        key: MEASUREMENT_UNIT_KEY_TIME,
+        value: [
+            { value: MEASUREMENT_UNIT_MINUTE, label: "Minutes" },
+        ],
+    },
+    {
+        key: MEASUREMENT_UNIT_KEY_LIGHT_MASS,
+        value: [
+            { value: MEASUREMENT_UNIT_GRAM, label: "Grams" },
+            { value: MEASUREMENT_UNIT_MILIGRAM, label: "Miligrams" },
+        ],
+    },
+    {
+        key: MEASUREMENT_UNIT_KEY_HEAVY_MASS,
+        value: [
+            { value: MEASUREMENT_UNIT_KILOGRAM, label: "Kilograms" },
+            { value: MEASUREMENT_UNIT_POUND, label: "Pounds" },
+        ],
+    },
+    {
+        key: MEASUREMENT_UNIT_KEY_MEASUREMENT,
+        value: [
+            { value: MEASUREMENT_UNIT_INCH, label: "Inches" },
+            { value: MEASUREMENT_UNIT_CENTIMETER, label: "Centimeters" },
+        ],
+    },
+    {
+        key: MEASUREMENT_UNIT_KEY_SMALL_DISTANCE,
+        value: [
+            { value: MEASUREMENT_UNIT_METER, label: "Meters" },
+            { value: MEASUREMENT_UNIT_FEET, label: "Foot" },
+        ],
+    },
+    {
+        key: MEASUREMENT_UNIT_KEY_LARGE_DISTANCE,
+        value: [
+            { value: MEASUREMENT_UNIT_KILOMETER, label: "Kilometers" },
+            { value: MEASUREMENT_UNIT_MILE, label: "Miles" },
+        ],
+    },
+]

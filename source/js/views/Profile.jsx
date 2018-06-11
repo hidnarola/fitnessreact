@@ -21,6 +21,7 @@ import ReactHtmlParser from 'react-html-parser';
 import ChangeProfilePhotoModal from '../components/Profile/ChangeProfilePhotoModal';
 import jwt from "jwt-simple";
 import { setLoggedUserFromLocalStorage } from '../actions/user';
+import { FaCircleONotch } from "react-icons/lib/fa";
 
 class Profile extends Component {
     constructor(props) {
@@ -93,228 +94,236 @@ class Profile extends Component {
             showRejectFriendRequestModal,
             showUpdateAboutMeModal,
             showChangeProfilePicModal,
+            loadProfileActionInit,
         } = this.state;
         return (
             <div className='stat-page'>
                 <FitnessHeader />
                 <FitnessNav />
-                <section className="body-wrap">
-                    <div className="body-head d-flex">
-                        <div className="body-head-l">
-                            <h2>
-                                {profile && (typeof profile.firstName !== 'undefined') && (profile.firstName)}
-                                {profile && (typeof profile.lastName !== 'undefined') && (' ' + profile.lastName)}
-                            </h2>
-                            <div className="body-head-l-btm">
-
-                                <NavLink
-                                    activeClassName='pink-btn'
-                                    className='white-btn'
-                                    exact
-                                    to={`${routeCodes.PROFILE}/${username}`}
-                                >
-                                    Fithub
-                                </NavLink>
-
-                                <NavLink
-                                    activeClassName='pink-btn'
-                                    className='white-btn'
-                                    exact
-                                    to={routeCodes.PROFILEPHOTOS.replace('{username}', username)}
-                                >
-                                    Photos
-                                </NavLink>
-
-                                <NavLink
-                                    activeClassName='pink-btn'
-                                    className='white-btn'
-                                    exact
-                                    to={routeCodes.PROFILEFRIENDS.replace('{username}', username)}
-                                >
-                                    Friends
-                                </NavLink>
-                            </div>
-                        </div>
-                        {profile && profile.friendshipStatus && profile.friendshipStatus !== '' && profile.friendshipStatus !== FRIENDSHIP_STATUS_SELF &&
-                            <div className="body-head-r add-friend">
-                                {profile.friendshipStatus === FRIENDSHIP_STATUS_FRIEND && (!UnfriendRequestDisabled) &&
-                                    <a
-                                        href="javascript:void(0)"
-                                        className="green-blue-btn active"
-                                        onClick={() => {
-                                            this.handleShowUnfriendRequestModal(profile.friendshipId)
-                                        }}
-                                        disabled={UnfriendRequestDisabled}
-                                    >
-                                        Unfriend<i className="icon-check"></i>
-                                    </a>
-                                }
-                                {profile.friendshipStatus === FRIENDSHIP_STATUS_FRIEND && (UnfriendRequestDisabled) &&
-                                    <span>Please wait to unfriend...</span>
-                                }
-                                {profile.friendshipStatus === FRIENDSHIP_STATUS_REQUEST_RECEIVED && (!friendRequestReceivedDisabled) &&
-                                    <div>
-                                        <a
-                                            href="javascript:void(0)"
-                                            className="green-blue-btn active"
-                                            onClick={() => {
-                                                this.handleAcceptRequest(profile.friendshipId)
-                                            }}
-                                            disabled={friendRequestReceivedDisabled}
-                                        >
-                                            Accept <i className="icon-check"></i>
-                                        </a>
-                                        <a
-                                            href="javascript:void(0)"
-                                            className="green-blue-btn active"
-                                            onClick={() => {
-                                                this.handleShowRejectFriendRequestModal(profile.friendshipId)
-                                            }}
-                                            disabled={friendRequestReceivedDisabled}
-                                        >
-                                            Reject <i className="icon-check"></i>
-                                        </a>
-                                    </div>
-                                }
-                                {profile.friendshipStatus === FRIENDSHIP_STATUS_REQUEST_RECEIVED && (friendRequestReceivedDisabled) &&
-                                    <span>Please wait...</span>
-                                }
-                                {profile.friendshipStatus === FRIENDSHIP_STATUS_REQUEST_SENT && (!cancelFriendRequestDisabled) &&
-                                    <a
-                                        href="javascript:void(0)"
-                                        className="green-blue-btn active"
-                                        onClick={() => {
-                                            this.handleShowCancelFriendRequestModal(profile.friendshipId)
-                                        }}
-                                        disabled={cancelFriendRequestDisabled}
-                                    >
-                                        Cancel Request <i className="icon-check"></i>
-                                    </a>
-                                }
-                                {profile.friendshipStatus === FRIENDSHIP_STATUS_REQUEST_SENT && (cancelFriendRequestDisabled) &&
-                                    <span>Friend request canceling...</span>
-                                }
-                                {profile.friendshipStatus === FRIENDSHIP_STATUS_UNKNOWN && (!sendFriendRequestDisabled) &&
-                                    <a
-                                        href="javascript:void(0)"
-                                        className="add-friend-btn active"
-                                        onClick={() => {
-                                            this.setState({ sendFriendRequestDisabled: true });
-                                            this.handleAddFriend(profile.authUserId)
-                                        }}
-                                        disabled={sendFriendRequestDisabled}
-                                    >
-                                        Add Friend <i className="icon-person_add"></i>
-                                    </a>
-                                }
-                                {profile.friendshipStatus === FRIENDSHIP_STATUS_UNKNOWN && (sendFriendRequestDisabled) &&
-                                    <span>Friend request sending...</span>
-                                }
-                            </div>
-                        }
+                {loadProfileActionInit &&
+                    <div className="no-content-loader">
+                        <FaCircleONotch className="loader-spinner fs-100" />
                     </div>
+                }
+                {!loadProfileActionInit && profile && Object.keys(profile).length > 0 &&
+                    <section className="body-wrap">
+                        <div className="body-head d-flex">
+                            <div className="body-head-l">
+                                <h2>
+                                    {profile && (typeof profile.firstName !== 'undefined') && (profile.firstName)}
+                                    {profile && (typeof profile.lastName !== 'undefined') && (' ' + profile.lastName)}
+                                </h2>
+                                <div className="body-head-l-btm">
 
-                    <div className="fitness-stats">
-                        <div className="body-content d-flex row justify-content-start profilephoto-content">
+                                    <NavLink
+                                        activeClassName='pink-btn'
+                                        className='white-btn'
+                                        exact
+                                        to={`${routeCodes.PROFILE}/${username}`}
+                                    >
+                                        Fithub
+                                </NavLink>
 
-                            <div className="col-md-9">
-                                <Switch>
-                                    <Route
+                                    <NavLink
+                                        activeClassName='pink-btn'
+                                        className='white-btn'
                                         exact
-                                        path={`${routeCodes.PROFILE}/:username`}
-                                        render={() => {
-                                            return <ProfileFithub
-                                                {...this.state}
-                                                setForceUpdateChildComponents={this.setForceUpdateChildComponents}
-                                            />
-                                        }}
-                                    />
-                                    <Route
+                                        to={routeCodes.PROFILEPHOTOS.replace('{username}', username)}
+                                    >
+                                        Photos
+                                </NavLink>
+
+                                    <NavLink
+                                        activeClassName='pink-btn'
+                                        className='white-btn'
                                         exact
-                                        path={routeCodes.PROFILEFRIENDS.replace('{username}', username)}
-                                        render={() => {
-                                            return <ProfileFriends
-                                                {...this.state}
-                                                setForceUpdateChildComponents={this.setForceUpdateChildComponents}
-                                            />
-                                        }}
-                                    />
-                                    <Route
-                                        exact
-                                        path={routeCodes.PROFILEPHOTOS.replace('{username}', username)}
-                                        render={() => {
-                                            return <ProfilePhotos
-                                                {...this.state}
-                                                setForceUpdateChildComponents={this.setForceUpdateChildComponents}
-                                            />
-                                        }}
-                                    />
-                                </Switch>
+                                        to={routeCodes.PROFILEFRIENDS.replace('{username}', username)}
+                                    >
+                                        Friends
+                                </NavLink>
+                                </div>
                             </div>
-
-                            <div className="col-md-3 ml-auto">
-                                <div className="lavel-img">
-                                    {profile &&
-                                        <span className="height-auto">
-                                            <img
-                                                src={profile.avatar}
-                                                alt="Profile image"
-                                                className="width-100-per"
-                                                onError={(e) => {
-                                                    e.target.src = noProfileImg
-                                                }}
-                                            />
-                                            {profile && profile.friendshipStatus && profile.friendshipStatus === FRIENDSHIP_STATUS_SELF &&
-                                                <a href="javascript:void(0)" onClick={this.handleShowChangeProfilePhotoModal}>
-                                                    <i className="icon-add_a_photo"></i>
-                                                </a>
-                                            }
-                                        </span>
+                            {profile && profile.friendshipStatus && profile.friendshipStatus !== '' && profile.friendshipStatus !== FRIENDSHIP_STATUS_SELF &&
+                                <div className="body-head-r add-friend">
+                                    {profile.friendshipStatus === FRIENDSHIP_STATUS_FRIEND && (!UnfriendRequestDisabled) &&
+                                        <a
+                                            href="javascript:void(0)"
+                                            className="green-blue-btn active"
+                                            onClick={() => {
+                                                this.handleShowUnfriendRequestModal(profile.friendshipId)
+                                            }}
+                                            disabled={UnfriendRequestDisabled}
+                                        >
+                                            Unfriend<i className="icon-check"></i>
+                                        </a>
                                     }
-                                    <a href="" data-toggle="modal" data-target="#level-gallery">Lavel 13</a>
+                                    {profile.friendshipStatus === FRIENDSHIP_STATUS_FRIEND && (UnfriendRequestDisabled) &&
+                                        <span>Please wait to unfriend...</span>
+                                    }
+                                    {profile.friendshipStatus === FRIENDSHIP_STATUS_REQUEST_RECEIVED && (!friendRequestReceivedDisabled) &&
+                                        <div>
+                                            <a
+                                                href="javascript:void(0)"
+                                                className="green-blue-btn active"
+                                                onClick={() => {
+                                                    this.handleAcceptRequest(profile.friendshipId)
+                                                }}
+                                                disabled={friendRequestReceivedDisabled}
+                                            >
+                                                Accept <i className="icon-check"></i>
+                                            </a>
+                                            <a
+                                                href="javascript:void(0)"
+                                                className="green-blue-btn active"
+                                                onClick={() => {
+                                                    this.handleShowRejectFriendRequestModal(profile.friendshipId)
+                                                }}
+                                                disabled={friendRequestReceivedDisabled}
+                                            >
+                                                Reject <i className="icon-check"></i>
+                                            </a>
+                                        </div>
+                                    }
+                                    {profile.friendshipStatus === FRIENDSHIP_STATUS_REQUEST_RECEIVED && (friendRequestReceivedDisabled) &&
+                                        <span>Please wait...</span>
+                                    }
+                                    {profile.friendshipStatus === FRIENDSHIP_STATUS_REQUEST_SENT && (!cancelFriendRequestDisabled) &&
+                                        <a
+                                            href="javascript:void(0)"
+                                            className="green-blue-btn active"
+                                            onClick={() => {
+                                                this.handleShowCancelFriendRequestModal(profile.friendshipId)
+                                            }}
+                                            disabled={cancelFriendRequestDisabled}
+                                        >
+                                            Cancel Request <i className="icon-check"></i>
+                                        </a>
+                                    }
+                                    {profile.friendshipStatus === FRIENDSHIP_STATUS_REQUEST_SENT && (cancelFriendRequestDisabled) &&
+                                        <span>Friend request canceling...</span>
+                                    }
+                                    {profile.friendshipStatus === FRIENDSHIP_STATUS_UNKNOWN && (!sendFriendRequestDisabled) &&
+                                        <a
+                                            href="javascript:void(0)"
+                                            className="add-friend-btn active"
+                                            onClick={() => {
+                                                this.setState({ sendFriendRequestDisabled: true });
+                                                this.handleAddFriend(profile.authUserId)
+                                            }}
+                                            disabled={sendFriendRequestDisabled}
+                                        >
+                                            Add Friend <i className="icon-person_add"></i>
+                                        </a>
+                                    }
+                                    {profile.friendshipStatus === FRIENDSHIP_STATUS_UNKNOWN && (sendFriendRequestDisabled) &&
+                                        <span>Friend request sending...</span>
+                                    }
                                 </div>
-
-                                <div className="white-box profile-about">
-                                    <div className="whitebox-head d-flex profile-about-head">
-                                        <h3 className="title-h3">About</h3>
-                                        {profile && profile.friendshipStatus && profile.friendshipStatus === FRIENDSHIP_STATUS_SELF &&
-                                            <div className="whitebox-head-r">
-                                                <a href="javascript:void(0)" onClick={this.showUpdateAboutMeModal}>Edit</a>
-                                            </div>
-                                        }
-                                    </div>
-                                    <div className="whitebox-body profile-about-body">
-                                        {profile && profile.height > 0 &&
-                                            <a href="" className="purple-btn">
-                                                Height:{profile.height} cm
-                                            </a>
-                                        }
-                                        {profile && profile.height <= 0 &&
-                                            <a href="" className="purple-btn">
-                                                Please add your height
-                                            </a>
-                                        }
-                                        {profile && profile.weight > 0 &&
-                                            <a href="" className="green-blue-btn">
-                                                Weight:{profile.weight} kg
-                                            </a>
-                                        }
-                                        {profile && profile.weight <= 0 &&
-                                            <a href="" className="green-blue-btn">
-                                                Please add your weight
-                                            </a>
-                                        }
-                                        {profile && profile.aboutMe !== '' &&
-                                            <div>{ReactHtmlParser(profile.aboutMe)}</div>
-                                        }
-                                    </div>
-                                </div>
-                            </div>
-
+                            }
                         </div>
-                    </div>
 
-                </section>
+                        <div className="fitness-stats">
+                            <div className="body-content d-flex row justify-content-start profilephoto-content">
+
+                                <div className="col-md-9">
+                                    <Switch>
+                                        <Route
+                                            exact
+                                            path={`${routeCodes.PROFILE}/:username`}
+                                            render={() => {
+                                                return <ProfileFithub
+                                                    {...this.state}
+                                                    setForceUpdateChildComponents={this.setForceUpdateChildComponents}
+                                                />
+                                            }}
+                                        />
+                                        <Route
+                                            exact
+                                            path={routeCodes.PROFILEFRIENDS.replace('{username}', username)}
+                                            render={() => {
+                                                return <ProfileFriends
+                                                    {...this.state}
+                                                    setForceUpdateChildComponents={this.setForceUpdateChildComponents}
+                                                />
+                                            }}
+                                        />
+                                        <Route
+                                            exact
+                                            path={routeCodes.PROFILEPHOTOS.replace('{username}', username)}
+                                            render={() => {
+                                                return <ProfilePhotos
+                                                    {...this.state}
+                                                    setForceUpdateChildComponents={this.setForceUpdateChildComponents}
+                                                />
+                                            }}
+                                        />
+                                    </Switch>
+                                </div>
+
+                                <div className="col-md-3 ml-auto">
+                                    <div className="lavel-img">
+                                        {profile &&
+                                            <span className="height-auto">
+                                                <img
+                                                    src={profile.avatar}
+                                                    alt="Profile image"
+                                                    className="width-100-per"
+                                                    onError={(e) => {
+                                                        e.target.src = noProfileImg
+                                                    }}
+                                                />
+                                                {profile && profile.friendshipStatus && profile.friendshipStatus === FRIENDSHIP_STATUS_SELF &&
+                                                    <a href="javascript:void(0)" onClick={this.handleShowChangeProfilePhotoModal}>
+                                                        <i className="icon-add_a_photo"></i>
+                                                    </a>
+                                                }
+                                            </span>
+                                        }
+                                        <a href="" data-toggle="modal" data-target="#level-gallery">Lavel 13</a>
+                                    </div>
+
+                                    <div className="white-box profile-about">
+                                        <div className="whitebox-head d-flex profile-about-head">
+                                            <h3 className="title-h3">About</h3>
+                                            {profile && profile.friendshipStatus && profile.friendshipStatus === FRIENDSHIP_STATUS_SELF &&
+                                                <div className="whitebox-head-r">
+                                                    <a href="javascript:void(0)" onClick={this.showUpdateAboutMeModal}>Edit</a>
+                                                </div>
+                                            }
+                                        </div>
+                                        <div className="whitebox-body profile-about-body">
+                                            {profile && profile.height > 0 &&
+                                                <a href="javascript:void(0)" className="purple-btn">
+                                                    Height:{profile.height} cm
+                                            </a>
+                                            }
+                                            {profile && profile.height <= 0 &&
+                                                <a href="javascript:void(0)" className="purple-btn">
+                                                    Please add your height
+                                            </a>
+                                            }
+                                            {profile && profile.weight > 0 &&
+                                                <a href="javascript:void(0)" className="green-blue-btn">
+                                                    Weight:{profile.weight} kg
+                                            </a>
+                                            }
+                                            {profile && profile.weight <= 0 &&
+                                                <a href="javascript:void(0)" className="green-blue-btn">
+                                                    Please add your weight
+                                            </a>
+                                            }
+                                            {profile && profile.aboutMe !== '' &&
+                                                <div>{ReactHtmlParser(profile.aboutMe)}</div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </section>
+                }
                 <CancelFriendRequestModal
                     show={showCancelFriendRequestModal}
                     handleYes={this.handleCancelFriendRequest}

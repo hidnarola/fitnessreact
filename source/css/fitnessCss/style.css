@@ -1180,6 +1180,7 @@ flex-direction:row; display:-webkit-box; display:-webkit-flex; display:-ms-flex;
 .display_none {display: none !important;}
 .display_inline_block {display: inline-block !important;}
 .fs-100{font-size: 100px !important;}
+.fs-25{font-size: 25px !important;}
 .dv-star-rating label {font-size: 20px;}
 .btn_remove {padding: 5px;vertical-align: middle;line-height: 100%;margin: 0;height: auto;    margin-top: 28px;}
 .btn_remove svg {vertical-align: bottom;}
@@ -1257,9 +1258,10 @@ flex-direction:row; display:-webkit-box; display:-webkit-flex; display:-ms-flex;
 .react-autosuggest__suggestion--highlighted {background-color: #ddd;}
 
 #loader{text-align:center;z-index:9999;position:fixed;vertical-align:middle;width: 100%;filter: Alpha(Opacity=70);opacity: 0.5;background-color: #000000;height:100%;padding-top:320px;top:0; left:0;}
+.no-content-loader {text-align: center;width: 100%;height: 100%;display: block;padding: 220px 20px 20px 20px;position: fixed;}
 
-
-div#loader .loader-spinner, div.loader .loader-spinner {-webkit-animation-name: spin;-webkit-animation-duration: 1000ms;-webkit-animation-iteration-count: infinite;-webkit-animation-timing-function: linear;-moz-animation-name: spin;-moz-animation-duration: 1000ms;-moz-animation-iteration-count: infinite;-moz-animation-timing-function: linear;-ms-animation-name: spin;-ms-animation-duration: 1000ms;-ms-animation-iteration-count: infinite;-ms-animation-timing-function: linear;animation-name: spin;animation-duration: 1000ms;animation-iteration-count: infinite;animation-timing-function: linear;}
+div#loader .loader-spinner, div.loader .loader-spinner, div.no-content-loader .loader-spinner
+{-webkit-animation-name: spin;-webkit-animation-duration: 1000ms;-webkit-animation-iteration-count: infinite;-webkit-animation-timing-function: linear;-moz-animation-name: spin;-moz-animation-duration: 1000ms;-moz-animation-iteration-count: infinite;-moz-animation-timing-function: linear;-ms-animation-name: spin;-ms-animation-duration: 1000ms;-ms-animation-iteration-count: infinite;-ms-animation-timing-function: linear;animation-name: spin;animation-duration: 1000ms;animation-iteration-count: infinite;animation-timing-function: linear;}
 @-ms-keyframes spin {from { -ms-transform: rotate(0deg); }to { -ms-transform: rotate(360deg); }}
 @-moz-keyframes spin {from { -moz-transform: rotate(0deg); }to { -moz-transform: rotate(360deg); }}
 @-webkit-keyframes spin {from { -webkit-transform: rotate(0deg); }to { -webkit-transform: rotate(360deg); }}

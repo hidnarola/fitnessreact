@@ -1,14 +1,31 @@
-import React,{ Component } from 'react';
+import React, { Component } from 'react';
+import { connect } from "react-redux";
 import FitnessHeader from '../global/FitnessHeader';
 import FitnessNav from '../global/FitnessNav';
+import AddPersonalGoal from './AddPersonalGoal';
+import { addUserPersonalGoalRequest } from '../../actions/userPersonalGoals';
+import { reset } from "redux-form";
+import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
 
-export default class Goals extends Component{
+class Goals extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            showAddPersonalGoal: false,
+            savePersonalGoalActionInit: false,
+            savePersonalGoalError: [],
+        }
+    }
 
-    render(){
-        return(
+    render() {
+        const {
+            showAddPersonalGoal,
+            savePersonalGoalError,
+        } = this.state;
+        return (
             <div className="fitness-goals">
-                <FitnessHeader/>
-                <FitnessNav/>
+                <FitnessHeader />
+                <FitnessNav />
                 <section className="body-wrap">
                     <div className="body-head d-flex justify-content-start">
                         <div className="body-head-l">
@@ -21,7 +38,7 @@ export default class Goals extends Component{
                             <a href="" className="white-btn">Add Secondary Goal
                                 <i className="icon-control_point"></i>
                             </a>
-                            <a href="" className="green-blue-btn">Add Personal Goal
+                            <a href="javascript:void(0)" onClick={this.handleShowAddPersonalGoalModal} className="green-blue-btn">Add Personal Goal
                                 <i className="icon-control_point"></i>
                             </a>
                         </div>
@@ -142,7 +159,68 @@ export default class Goals extends Component{
                         </div>
                     </div>
                 </section>
+                <AddPersonalGoal
+                    show={showAddPersonalGoal}
+                    handleClose={this.handleCloseAddPersonalGoalModal}
+                    onSubmit={this.handleSavePersonalGoal}
+                    errors={savePersonalGoalError}
+                />
             </div>
         );
     }
+
+    componentDidUpdate(prevProps, prevState) {
+        const {
+            personalGoalLoading,
+            dispatch,
+            personalGoalError,
+        } = this.props;
+        const {
+            savePersonalGoalActionInit
+        } = this.state;
+        if (savePersonalGoalActionInit && !personalGoalLoading) {
+            if (personalGoalError && personalGoalError.length > 0) {
+                this.setState({ savePersonalGoalError: personalGoalError });
+            } else {
+                this.handleCloseAddPersonalGoalModal();
+            }
+            this.setState({ savePersonalGoalActionInit: false });
+            dispatch(hidePageLoader());
+        }
+    }
+
+    handleShowAddPersonalGoalModal = () => {
+        this.setState({ showAddPersonalGoal: true });
+    }
+
+    handleCloseAddPersonalGoalModal = () => {
+        const { dispatch } = this.props;
+        this.setState({
+            showAddPersonalGoal: false,
+            savePersonalGoalError: [],
+        });
+        dispatch(reset('addPersonalGoalForm'));
+    }
+
+    handleSavePersonalGoal = (data) => {
+        const { dispatch } = this.props;
+        var requestData = {
+            target: data.target,
+            task: data.task.value,
+            unit: data.unit.value,
+        }
+        this.setState({ savePersonalGoalActionInit: true });
+        dispatch(showPageLoader());
+        dispatch(addUserPersonalGoalRequest(requestData));
+    }
 }
+
+const mapStateToProps = (state) => {
+    const { userPersonalGoals } = state;
+    return {
+        personalGoalLoading: userPersonalGoals.get('loading'),
+        personalGoalError: userPersonalGoals.get('error'),
+    }
+}
+
+export default connect(mapStateToProps)(Goals);
