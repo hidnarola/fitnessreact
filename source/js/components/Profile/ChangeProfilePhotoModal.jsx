@@ -23,7 +23,7 @@ class ChangeProfilePhotoModal extends Component {
         } = this.state;
         return (
             <div className="change-profile-photo-modal-wrapper">
-                <Modal show={show} bsSize="large" className="gallery-popup">
+                <Modal show={show} bsSize="large" className="gallery-popup profile-photo-update-modal">
                     <div className="gallery-popup-head">
                         <button type="button" className="close-round" onClick={() => this.handleClose()}>
                             <span aria-hidden="true">&times;</span>
@@ -31,29 +31,32 @@ class ChangeProfilePhotoModal extends Component {
                         <h3 className="title-h3">Select Photo</h3>
                     </div>
 
-                    <div className="progress-popup-body d-flex">
+                    <div className="progress-popup-body">
                         {selectedImage &&
                             <Cropper
                                 ref='cropper'
                                 src={selectedImage.preview}
-                                style={{ width: 600, height: 600 }}
-                                viewMode={0}
+
+                                viewMode={3}
                                 aspectRatio={1}
                                 guides={false}
                                 autoCropArea={0.8}
                                 cropBoxResizable={true}
-                                minCropBoxWidth={200}
-                                minCropBoxHeight={200}
+                                minCropBoxWidth={291}
+                                minCropBoxHeight={291}
+                                className="profile-image-cropper-wrapper"
                             />
                         }
                         {croppedImg &&
-                            <img
-                                src={croppedImg}
-                                style={{
-                                    width: 200,
-                                    height: 200,
-                                }}
-                            />
+                            <div className="profile-image-cropped-output">
+                                <img
+                                    src={croppedImg}
+                                    style={{
+                                        width: 291,
+                                        height: 291,
+                                    }}
+                                />
+                            </div>
                         }
                         <div className="gallery-popup-body-r">
                             <div className="upload-gallery">

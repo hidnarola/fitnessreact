@@ -516,7 +516,7 @@ display: flex; justify-content: center; flex-direction: column; text-align: cent
 .profile-list h4 a{line-height:30px;text-align:center; color:#1A2032; font-size:14px; font-weight:700;}
 
 .lavel-img{display:block;margin:0 0 20px;}
-.lavel-img>span{border-radius:5px;box-shadow: 0 4px 3px 0 rgba(207,207,207,0.5);height:291px;position:relative;display:block;margin:0 0 20px;}
+.lavel-img>span{border-radius:5px;box-shadow: 0 4px 3px 0 rgba(207,207,207,0.5);height:291px;position:relative;display:block;margin:0 0 20px;    background: #fff;}
 .lavel-img>span img{border-radius:5px;max-width:100%;min-height:291px;}
 .lavel-img>span a{width:50px; height:50px; background: linear-gradient(148.66deg, #FF3366 0%, #FF339A 100%);	box-shadow: 0 2px 4px 0 rgba(0,0,0,0.5);font-size: 20px;text-align:center;position:absolute;top:-15px;right:-15px;display:block;text-align:center; border-radius:80px;line-height:50px;color:#fff;}
 .lavel-img>a{border-radius:5px;	background: linear-gradient(148.66deg, #FF3366 0%, #FF339A 100%); color:#fff; font-size:20px; font-weight:900;	line-height:26px;display:block; padding:10px; text-align: center; text-transform:uppercase; border:2px solid transparent;}
@@ -1411,3 +1411,15 @@ div#loader .loader-spinner, div.loader .loader-spinner, div.no-content-loader .l
 .timeline-new-post-editor .post-photos-selected-view-wrapper ul li img {width: 100%;height: 100%;}
 
 .timeline-infinite-scroll .posttype-head>h4 p svg {margin-left: 5px;position: absolute;}
+.gallery-popup.profile-photo-update-modal .modal-dialog {max-width: 600px;}
+.gallery-popup.profile-photo-update-modal .modal-dialog .modal-content {padding: 42px 30px 38px 40px;}
+.gallery-popup.profile-photo-update-modal .modal-dialog .gallery-popup-body-r .upload-gallery {margin: 15px 0;}
+.gallery-popup.profile-photo-update-modal .modal-dialog {max-width: 600px;}
+.gallery-popup.profile-photo-update-modal .modal-dialog .gallery-popup-body-r .upload-gallery:After {content: " ";display: block;clear: both;}
+.gallery-popup.profile-photo-update-modal .modal-dialog .gallery-popup-body-r .upload-gallery span {margin: 0;width: 100%;}
+.gallery-popup.profile-photo-update-modal .modal-dialog .modal-content {padding: 42px 30px 38px 40px;}
+.gallery-popup.profile-photo-update-modal .modal-dialog .modal-content .gallery-popup-body-r {width: 100%;}
+.profile-image-cropper-wrapper {border: 2px solid #F9FAFA;padding: 20px;border-radius: 4px;}
+.profile-image-cropper-wrapper {border: 2px solid #F9FAFA;padding:0px;border-radius: 4px;width: 100%;height: 530px;}
+.profile-image-cropped-output {text-align: center;border: 2px solid #F9FAFA;    padding: 15px 0;}
+.posttype-body-grey p:After {content: " ";display: block;clear: both;}
