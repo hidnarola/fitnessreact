@@ -315,3 +315,12 @@ export const MEASUREMENT_UNITS = [
         ],
     },
 ]
+
+export const SECONDARY_GOALS = [
+    { value: GOAL_GAIN_MUSCLE, label: 'Gain Muscle' },
+    { value: GOAL_GAIN_FLEXIBILITY, label: 'Gain Flexibility' },
+    { value: GOAL_LOSE_FAT, label: 'Lose Fat' },
+    { value: GOAL_GAIN_STRENGTH, label: 'Gain Strength' },
+    { value: GOAL_GAIN_POWER, label: 'Gain Power' },
+    { value: GOAL_INCREASE_ENDURANCE, label: 'Increase Endurance' },
+]
