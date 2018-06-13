@@ -58,8 +58,8 @@ function getAdminBadgeData() {
 function postAdminBadgeData() {
     return function* (action) {
         try {
-            const badgeData = action.badgeData;
-            const data = yield call(() => api.addBadge(badgeData));
+            const requestData = action.requestData;
+            const data = yield call(() => api.addBadge(requestData));
             yield put(badgeAddSuccess(data));
         } catch (error) {
             yield put(badgeAddError(error));
@@ -71,8 +71,8 @@ function putAdminBadgeData() {
     return function* (action) {
         try {
             const _id = action._id;
-            const badgeData = action.badgeData;
-            const data = yield call(() => api.updateBadge(_id, badgeData));
+            const requestData = action.requestData;
+            const data = yield call(() => api.updateBadge(_id, requestData));
             yield put(badgeUpdateSuccess(data));
         } catch (error) {
             yield put(badgeUpdateError(error));

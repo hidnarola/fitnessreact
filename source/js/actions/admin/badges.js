@@ -84,10 +84,10 @@ export function badgeSelectOneError(error) {
     }
 }
 
-export function badgeAddRequest(badgeData) {
+export function badgeAddRequest(requestData) {
     return {
         type: BADGES_ADD_REQUEST,
-        badgeData
+        requestData
     }
 }
 
@@ -105,11 +105,11 @@ export function badgeAddError(error) {
     }
 }
 
-export function badgeUpdateRequest(_id, badgeData) {
+export function badgeUpdateRequest(_id, requestData) {
     return {
         type: BADGES_UPDATE_REQUEST,
         _id,
-        badgeData
+        requestData
     }
 }
 

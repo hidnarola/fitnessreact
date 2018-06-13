@@ -19,10 +19,12 @@ import {
     BADGES_FILTER_SUCCESS,
     BADGES_FILTER_ERROR
 } from "../../actions/admin/badges";
+import { VALIDATION_FAILURE_STATUS } from "../../constants/consts";
+import { generateValidationErrorMsgArr } from "../../helpers/funs";
 
 const initialState = Map({
     loading: false,
-    error: null,
+    error: [],
     badges: [],
     filteredBadges: [],
     filteredTotalPages: 0,
@@ -76,18 +78,30 @@ const actionMap = {
     [BADGES_SELECT_ONE_REQUEST]: (state, action) => {
         return state.merge(Map({
             loading: true,
+            badge: null,
+            error: [],
         }));
     },
     [BADGES_SELECT_ONE_SUCCESS]: (state, action) => {
-        return state.merge(Map({
+        var newState = {
             loading: false,
-            badge: action.data.badge,
-        }));
+        }
+        if (action.data.status === 1) {
+            newState.badge = action.data.badge;
+        } else {
+            var msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
+            newState.error = [msg];
+        }
+        return state.merge(Map(newState));
     },
     [BADGES_SELECT_ONE_ERROR]: (state, action) => {
-        let error = 'Server error';
-        if (action.error && action.error.response) {
-            error = action.error.response.message;
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
         }
         return state.merge(Map({
             loading: false,
@@ -97,18 +111,27 @@ const actionMap = {
     [BADGES_ADD_REQUEST]: (state, action) => {
         return state.merge(Map({
             loading: true,
+            error: [],
         }));
     },
     [BADGES_ADD_SUCCESS]: (state, action) => {
-        return state.merge(Map({
+        var newState = {
             loading: false,
-            badge: action.data.badge
-        }));
+        };
+        if (action.data.status !== 1) {
+            var msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
+            newState.error = [msg];
+        }
+        return state.merge(Map(newState));
     },
     [BADGES_ADD_ERROR]: (state, action) => {
-        let error = 'Server error';
-        if (action.error && action.error.response) {
-            error = action.error.response.message;
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
         }
         return state.merge(Map({
             loading: false,
@@ -118,18 +141,27 @@ const actionMap = {
     [BADGES_UPDATE_REQUEST]: (state, action) => {
         return state.merge(Map({
             loading: true,
+            error: [],
         }));
     },
     [BADGES_UPDATE_SUCCESS]: (state, action) => {
-        return state.merge(Map({
+        var newState = {
             loading: false,
-            badge: action.data.badge
-        }));
+        }
+        if (action.data.status !== 1) {
+            var msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
+            newState.error = [msg];
+        }
+        return state.merge(Map(newState));
     },
     [BADGES_UPDATE_ERROR]: (state, action) => {
-        let error = 'Server error';
-        if (action.error && action.error.response) {
-            error = action.error.response.message;
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
         }
         return state.merge(Map({
             loading: false,

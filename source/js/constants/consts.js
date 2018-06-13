@@ -86,7 +86,6 @@ export const TASKS_UNITS_KGS_STR = 'Kilograms';
 
 export const TIME_TYPE_STANDARD = 'standard';
 export const TIME_TYPE_TIME_WINDOW = 'time_window';
-export const TIME_TYPE_TIMED = 'timed';
 
 export const WORKOUT_SCHEDULE_TYPE_AUTO = 1;
 export const WORKOUT_SCHEDULE_TYPE_MANUAL = 2;

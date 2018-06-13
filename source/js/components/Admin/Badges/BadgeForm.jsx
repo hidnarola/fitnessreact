@@ -1,22 +1,20 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { NavLink } from 'react-router-dom';
-import { reduxForm, Field } from 'redux-form';
-import { InputField, EditorField, SelectField_ReactSelect, SelectField_ReactSelectMulti } from '../../../helpers/FormControlHelper';
-import { required, requiredReactSelect, requiredReactSelectMulti } from '../../../formValidation/validationRules';
-import BadgeTaskField from './BadgeTaskField';
+import { NavLink, withRouter } from 'react-router-dom';
+import { reduxForm, Field, formValueSelector, initialize } from 'redux-form';
+import { InputField, EditorField, SelectField_ReactSelect } from '../../../helpers/FormControlHelper';
+import { required, requiredReactSelect } from '../../../formValidation/validationRules';
 import { adminRouteCodes } from '../../../constants/adminRoutes';
-import TagsInput from "react-tagsinput";
-import { TIME_TYPE_TIMED, TIME_TYPE_TIME_WINDOW, TIME_TYPE_STANDARD } from '../../../constants/consts';
-import { capitalizeFirstLetter, prepareDropdownOptionsData } from '../../../helpers/funs';
+import { TIME_TYPE_TIME_WINDOW, TIME_TYPE_STANDARD, BADGES_TASKS, MEASUREMENT_UNITS } from '../../../constants/consts';
+import { capitalizeFirstLetter } from '../../../helpers/funs';
 import DateRangePicker from 'react-daterange-picker';
-import { badgeTaskListRequest } from '../../../actions/admin/badgeTasks';
-import { badgeCategoryListRequest } from '../../../actions/admin/badgeCategories';
+import _ from "lodash";
+import { badgeSelectOneRequest } from '../../../actions/admin/badges';
+import moment from "moment";
 
 const timeTypeOptions = [
     { value: TIME_TYPE_STANDARD, label: capitalizeFirstLetter(TIME_TYPE_STANDARD).replace('_', ' ') },
     { value: TIME_TYPE_TIME_WINDOW, label: capitalizeFirstLetter(TIME_TYPE_TIME_WINDOW).replace('_', ' ') },
-    { value: TIME_TYPE_TIMED, label: capitalizeFirstLetter(TIME_TYPE_TIMED).replace('_', ' ') },
 ];
 
 class BadgeForm extends Component {
@@ -25,64 +23,85 @@ class BadgeForm extends Component {
         this.state = {
             incompleteDescription: '',
             completeDescription: '',
-            tags: [],
             timeDateRange: null,
             timeDateRangeState: null,
             timeType: '',
-            initPageDataLoad: false,
+            selectOneActionInit: false,
         }
+        this.taskUnits = [];
     }
 
     componentWillMount() {
-        const { dispatch } = this.props;
-        this.setState({ initPageDataLoad: true });
-        dispatch(badgeTaskListRequest());
-        dispatch(badgeCategoryListRequest());
+        const {
+            match,
+            dispatch,
+        } = this.props;
+        if (typeof match.params.id !== 'undefined') {
+            this.setState({ selectOneActionInit: true });
+            dispatch(badgeSelectOneRequest(match.params.id));
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.selectedTask) {
+            if ((!this.props.selectedTask) || (this.props.selectedTask && nextProps.selectedTask && this.props.selectedTask.value !== nextProps.selectedTask.value)) {
+                var units = _.find(MEASUREMENT_UNITS, ['key', nextProps.selectedTask.unitKey]);
+                if (units) {
+                    this.taskUnits = units.value;
+                } else {
+                    this.taskUnits = [];
+                }
+                if (typeof nextProps.match.params.id !== 'undefined' && this.props.initialized) {
+                    this.props.change('unit', null);
+                } else if (typeof nextProps.match.params.id === 'undefined' && !this.props.initialized) {
+                    this.props.change('unit', null);
+                }
+            }
+        }
     }
 
     render() {
-        const { incompleteDescription, completeDescription, tags, timeDateRange, timeType } = this.state;
-        const { handleSubmit, badgeTasks, badgeCategories } = this.props;
-        const badgeTasksOptions = prepareDropdownOptionsData(badgeTasks, '_id', 'name');
-        const badgeCategoriesOptions = prepareDropdownOptionsData(badgeCategories, '_id', 'name');
+        const { incompleteDescription, completeDescription, timeDateRange, timeType } = this.state;
+        const { handleSubmit } = this.props;
         return (
             <div className="badge-form-data">
                 <form onSubmit={handleSubmit}>
                     <div className="row">
                         <div className="col-md-12">
                             <Field
-                                name="name"
-                                className="form-control"
-                                label="Name"
+                                name="task"
+                                label="Task"
                                 labelClass="control-label display_block"
                                 wrapperClass="form-group"
-                                placeholder="Name"
+                                placeholder="Task"
+                                component={SelectField_ReactSelect}
+                                options={BADGES_TASKS}
+                                errorClass="help-block"
+                                validate={[requiredReactSelect]}
+                            />
+                            <Field
+                                name="target"
+                                type="number"
+                                className="form-control"
+                                label="Target"
+                                labelClass="control-label display_block"
+                                wrapperClass="form-group"
+                                placeholder="Target"
                                 component={InputField}
                                 errorClass="help-block"
                                 warningClass=""
                                 validate={[required]}
                             />
                             <Field
-                                name="incomplete_description"
-                                value={incompleteDescription}
-                                handleChange={this.handleChangeIncompleteDesc}
-                                className="editor-min-height-200"
-                                label="Incomplete Description"
+                                name="unit"
+                                label="Unit"
                                 labelClass="control-label display_block"
                                 wrapperClass="form-group"
-                                placeholder="Incomplete Description"
-                                component={EditorField}
-                            />
-                            <Field
-                                name="complete_description"
-                                value={completeDescription}
-                                handleChange={this.handleChangeCompleteDesc}
-                                className="editor-min-height-200"
-                                label="Complete Description"
-                                labelClass="control-label display_block"
-                                wrapperClass="form-group"
-                                placeholder="Complete Description"
-                                component={EditorField}
+                                placeholder="Unit"
+                                component={SelectField_ReactSelect}
+                                options={this.taskUnits}
+                                errorClass="help-block"
+                                validate={[requiredReactSelect]}
                             />
                             <Field
                                 name="points"
@@ -98,12 +117,38 @@ class BadgeForm extends Component {
                                 validate={[required]}
                             />
                             <Field
-                                name="task"
-                                label="Task"
+                                name="name"
+                                className="form-control"
+                                label="Name"
                                 labelClass="control-label display_block"
-                                wrapperClass="col-md-12 form-group no-padding"
-                                actionOptions={badgeTasksOptions}
-                                component={BadgeTaskField}
+                                wrapperClass="form-group"
+                                placeholder="Name"
+                                component={InputField}
+                                errorClass="help-block"
+                                warningClass=""
+                                validate={[required]}
+                            />
+                            <Field
+                                name="incompleteDescription"
+                                value={incompleteDescription}
+                                handleChange={(editorText) => this.handleEditorChange('incompleteDescription', editorText)}
+                                className="editor-min-height-200"
+                                label="Incomplete Description"
+                                labelClass="control-label display_block"
+                                wrapperClass="form-group"
+                                placeholder="Incomplete Description"
+                                component={EditorField}
+                            />
+                            <Field
+                                name="completeDescription"
+                                value={completeDescription}
+                                handleChange={(editorText) => this.handleEditorChange('completeDescription', editorText)}
+                                className="editor-min-height-200"
+                                label="Complete Description"
+                                labelClass="control-label display_block"
+                                wrapperClass="form-group"
+                                placeholder="Complete Description"
+                                component={EditorField}
                             />
                             <Field
                                 name="time_type"
@@ -122,6 +167,7 @@ class BadgeForm extends Component {
                                     <label className="control-label display_block">Select Dates</label>
                                     <div className="badges-timed-date-range-wrapper">
                                         <DateRangePicker
+                                            name="duration"
                                             firstOfWeek={1}
                                             numberOfCalendars={2}
                                             selectionType='range'
@@ -131,47 +177,9 @@ class BadgeForm extends Component {
                                     </div>
                                 </div>
                             }
-                            {timeType && timeType === TIME_TYPE_TIMED &&
-                                <Field
-                                    name="hours"
-                                    type="number"
-                                    className="form-control"
-                                    label="Hours"
-                                    labelClass="control-label display_block"
-                                    wrapperClass="form-group"
-                                    placeholder="Hours"
-                                    component={InputField}
-                                    errorClass="help-block"
-                                    warningClass=""
-                                    validate={[required]}
-                                />
-                            }
-                            <Field
-                                name="categories"
-                                label="Categories"
-                                labelClass="control-label display_block"
-                                wrapperClass="form-group"
-                                placeholder="Categories"
-                                component={SelectField_ReactSelectMulti}
-                                options={badgeCategoriesOptions}
-                                errorClass="help-block"
-                                validate={[requiredReactSelectMulti]}
-                            />
-
-                            <div className="form-group">
-                                <label>Tags</label>
-                                <TagsInput
-                                    value={tags}
-                                    onChange={this.handleTagChange}
-                                    inputProps={{
-                                        placeholder: 'Tags'
-                                    }}
-                                />
-                            </div>
-
                             <div className="col-md-12 mb-20 clear-both text-center">
                                 <div className="stepbox-b stepbox-b-center">
-                                    <NavLink to={adminRouteCodes.EXERCISE} className="continues-btn">Back</NavLink>
+                                    <NavLink to={adminRouteCodes.BADGES} className="continues-btn">Back</NavLink>
                                     <button type="submit" className="continues-btn"><span>Save</span></button>
                                 </div>
                             </div>
@@ -182,23 +190,70 @@ class BadgeForm extends Component {
         );
     }
 
+    componentDidUpdate() {
+        const {
+            selectOneActionInit,
+        } = this.state;
+        const {
+            loading,
+            badge,
+            dispatch,
+        } = this.props;
+        if (selectOneActionInit && !loading) {
+            this.setState({ selectOneActionInit: false });
+            var task = badge.task;
+            var taskObj = _.find(BADGES_TASKS, ['value', task]);
+            var badgeUnitObj = null;
+            var unit = badge.unit;
+            if (taskObj) {
+                var taskUnitsObj = _.find(MEASUREMENT_UNITS, ['key', taskObj.unitKey]);
+                if (taskUnitsObj) {
+                    var taskUnits = taskUnitsObj.value;
+                    var unitObj = _.find(taskUnits, ['value', unit]);
+                    if (unitObj) {
+                        badgeUnitObj = unitObj;
+                    }
+                }
+            }
+            var timeTypeObj = _.find(timeTypeOptions, ['value', badge.timeType]);
+            var duration = null;
+            if (badge.timeType === TIME_TYPE_TIME_WINDOW) {
+                if (badge.duration && badge.duration.start && badge.duration.end) {
+                    duration = moment.range(
+                        moment(badge.duration.start),
+                        moment(badge.duration.end),
+                    )
+                }
+            }
+            var formData = {
+                task: (taskObj) ? taskObj : null,
+                target: badge.value,
+                unit: badgeUnitObj,
+                points: badge.point,
+                name: badge.name,
+                incompleteDescription: badge.descriptionInCompleted,
+                completeDescription: badge.descriptionCompleted,
+                time_type: timeTypeObj ? timeTypeObj : null,
+                duration: duration,
+            }
+            dispatch(initialize('badgeSaveForm', formData));
+            this.setState({
+                incompleteDescription: badge.descriptionInCompleted,
+                completeDescription: badge.descriptionCompleted,
+                timeType: timeTypeObj ? timeTypeObj.value : '',
+                timeDateRange: duration,
+            });
+        }
+    }
+
     // ----Start Methods----
-    handleChangeIncompleteDesc = (editorText) => {
-        this.props.change('incomplete_description', editorText);
-        this.setState({ incompleteDescription: editorText });
+    handleEditorChange = (name, editorText) => {
+        this.props.change(name, editorText);
+        this.setState({ [name]: editorText });
     }
 
-    handleChangeCompleteDesc = (editorText) => {
-        this.props.change('complete_description', editorText);
-        this.setState({ completeDescription: editorText });
-    }
-
-    handleTagChange = (tags) => {
-        // this.props.change('complete_description', editorText);
-        this.setState({ tags });
-    }
     handleTimeDateRange = (range, state) => {
-        // this.props.change('complete_description', editorText);
+        this.props.change('duration', range);
         this.setState({
             timeDateRange: range,
             timeDateRangeState: state
@@ -207,13 +262,21 @@ class BadgeForm extends Component {
     // ----End Methods----
 }
 
-BadgeForm = reduxForm({ form: 'badgeSaveForm' })(BadgeForm);
+const badgeSaveFormSelector = formValueSelector('badgeSaveForm');
+
+BadgeForm = withRouter(BadgeForm);
+
+BadgeForm = reduxForm({
+    form: 'badgeSaveForm'
+})(BadgeForm);
 
 const mapStateToProps = (state) => {
-    const { adminBadgeTasks, adminBadgeCategories } = state;
+    const { adminBadges } = state;
     return {
-        badgeTasks: adminBadgeTasks.get('badgeTasks'),
-        badgeCategories: adminBadgeCategories.get('badgeCategories'),
+        selectedTask: badgeSaveFormSelector(state, 'task'),
+        loading: adminBadges.get('loading'),
+        badge: adminBadges.get('badge'),
+        error: adminBadges.get('error'),
     };
 }
 

@@ -28,14 +28,14 @@ function getBadge(_id) {
     return fetchResource(requestUrl + '/' + _id, options);
 }
 
-function addBadge(exerciseData) {
+function addBadge(requestData) {
     let headers = extraHeaders();
-    return postFormData(requestUrl, exerciseData, headers);
+    return postFormData(requestUrl, requestData, headers);
 }
 
-function updateBadge(_id, exerciseData) {
+function updateBadge(_id, requestData) {
     let headers = extraHeaders();
-    return putFormData(requestUrl + '/' + _id, exerciseData, headers);
+    return putFormData(requestUrl + '/' + _id, requestData, headers);
 }
 
 function deleteBadge(_id) {
