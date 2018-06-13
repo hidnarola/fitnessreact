@@ -195,7 +195,7 @@ class Goals extends Component {
                                 <div className="whitebox-head">
                                     <h3 className="title-h3">Your Personal Goal</h3>
                                 </div>
-                                <div className="whitebox-body personal-goal">
+                                <div className="whitebox-body personal-goal d-flex margin_minus">
                                     {
                                         personalGoals.map((goalD, goalI) => {
                                             var goalStr = 'I’m going to';
@@ -227,12 +227,12 @@ class Goals extends Component {
                                             return null;
                                         })
                                     }
-                                    <Pager>
-                                        <Pager.Item href="javascript:void(0)" onClick={() => this.turnPage('prev')} disabled={(personalGoalStart <= 0) || selectPersonalGoalActionInit}>Previous</Pager.Item>
-                                        {' '}
-                                        <Pager.Item href="javascript:void(0)" onClick={() => this.turnPage('next')} disabled={((personalGoalStart + personalGoalOffset) >= totalPersonalGoals) || selectPersonalGoalActionInit}>Next</Pager.Item>
-                                    </Pager>
                                 </div>
+                                <Pager className="text-right">
+                                    <Pager.Item href="javascript:void(0)" onClick={() => this.turnPage('prev')} disabled={(personalGoalStart <= 0) || selectPersonalGoalActionInit}>Previous</Pager.Item>
+                                    {' '}
+                                    <Pager.Item href="javascript:void(0)" onClick={() => this.turnPage('next')} disabled={((personalGoalStart + personalGoalOffset) >= totalPersonalGoals) || selectPersonalGoalActionInit}>Next</Pager.Item>
+                                </Pager>
                             </div>
                         }
                     </div>

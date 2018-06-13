@@ -1423,3 +1423,26 @@ div#loader .loader-spinner, div.loader .loader-spinner, div.no-content-loader .l
 .profile-image-cropper-wrapper {border: 2px solid #F9FAFA;padding:0px;border-radius: 4px;width: 100%;height: 530px;}
 .profile-image-cropped-output {text-align: center;border: 2px solid #F9FAFA;    padding: 15px 0;}
 .posttype-body-grey p:After {content: " ";display: block;clear: both;}
+
+.add-personal-goal-modal .gallery-popup-head h3 {font-weight: 600 !important;font-size: 22px;text-transform: capitalize;}
+.add-personal-goal-modal .progress-popup-body .form-group .Select {padding: 0;border: 0 !important;height: auto;box-shadow: none !important;}
+.add-personal-goal-modal .progress-popup-body .form-group .Select .Select-control {border: 0;background: #f8f8f8;box-shadow: none;padding: 0;height: auto;padding: 0;border-radius: 40px;height: 64px;text-align: center;}
+.add-personal-goal-modal .progress-popup-body .form-group .Select .Select-control .Select-placeholder {line-height: 64px;text-align: center;color: #000;font-size: 16px;}
+.add-personal-goal-modal .progress-popup-body .form-group .Select .Select-control span.Select-arrow-zone {padding-right: 20px;}
+.add-personal-goal-modal .progress-popup-body .form-group label {display: none;}
+p.p_name {padding: 0;margin: 0;display: block;color: #232B41;font-size: 16px;line-height: 28px;font-weight: normal;position: absolute;top: 15px;left: 0;}
+.no-padding.block_task_field {position: relative;padding-left: 100px !important;}
+.add-personal-goal-modal .progress-popup-body .form-group .Select .Select-control .Select-value {text-align: center;line-height: 62px;}
+.add-personal-goal-modal .progress-popup-body .form-group input.form-control {background: #f8f8f8;border: 0;border-radius: 6px;box-shadow: none;height: 64px;padding: 0 10px;line-height: 64px;text-align: center;font-size: 16px;color: #000;}
+.btn_right {text-align: right;margin-top: 10px;}
+.btn_right button {background: linear-gradient(123.28deg, #46E9C5 0%, #3FFBFC 100%);margin: 0;border: 0;box-shadow: none;padding: 10px 70px;line-height: normal;border-radius: 40px;font-size: 16px;color: #fff;}
+.gallery-popup.small_modal .modal-dialog {max-width: 600px;}
+.add-personal-goal-modal .row {margin: 0;}
+.gallery-popup.add-personal-goal-modal .modal-dialog .modal-content {padding: 42px 30px 38px 42px;}
+ul.text-right.pager {text-align: right;}
+.margin_minus .personal-goal-l {width: 50%;margin: 0 15px;position: relative;}
+.margin_minus {margin: 0 -15px;}
+.margin_minus .personal-goal-2 a {border-radius: 80px;background: linear-gradient(148.66deg, #FF3366 0%, #FF339A 100%);-webkit-box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .1);box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .1);width: 30px;height: 30px;text-align: center;border: 0;position: absolute;top: -12px;right: -10px;z-index: 1;line-height: 36px;}
+.margin_minus .personal-goal-2 a i {font-size: 18px;color: #fff;}
+.add-personal-goal-modal .progress-popup-body .form-group .Select .Select-control .Select-input {line-height: 60px;}
+.pager li.disabled a {background: #f8f8f8 !important;cursor: not-allowed !important;pointer-events: initial !important;}

@@ -16,7 +16,7 @@ class AddSecondaryGoal extends Component {
         } = this.props;
         return (
             <div className="add-secondary-goal-modal-wrapper">
-                <Modal show={show} bsSize="large" className="gallery-popup">
+                <Modal show={show} bsSize="large" className="gallery-popup add-personal-goal-modal small_modal">
                     <form onSubmit={handleSubmit}>
                         <div className="gallery-popup-head">
                             <button type="button" className="close-round" onClick={handleClose}>
@@ -42,11 +42,11 @@ class AddSecondaryGoal extends Component {
                                 </div>
                             }
                             <div className="row">
-                                <div className="col-md-12 no-padding">
-                                    <div className="col-md-3 pull-left">
-                                        <span>Track my</span>
-                                    </div>
-                                    <div className="col-md-3 pull-left">
+                                <div className="col-md-12 no-padding block_task_field">
+                                    
+                                    <p className="p_name">Track my</p>
+                                    
+                                    <div className="col-md-12 pull-left">
                                         <Field
                                             name="task"
                                             wrapperClass="form-group"
@@ -59,12 +59,8 @@ class AddSecondaryGoal extends Component {
                                     </div>
                                 </div>
                             </div>
-                            <div className="row">
-                                <div className="col-md-12 no-padding">
-                                    <div className="col-md-4 col-md-offset-8">
-                                        <button type="submit" className="btn btn-primary">Save</button>
-                                    </div>
-                                </div>
+                            <div className="btn_right">
+                                <button type="submit">Save</button>
                             </div>
                         </div>
                     </form>
