@@ -9,7 +9,9 @@ import {
     STATUS_ACTIVE,
     STATUS_INACTIVE,
     STATUS_INACTIVE_STR,
-    STATUS_ACTIVE_STR
+    STATUS_ACTIVE_STR,
+    BADGES_TASKS,
+    MEASUREMENT_UNITS
 } from '../../../constants/consts';
 import _ from 'lodash';
 import { generateDTTableFilterObj } from '../../../helpers/funs';
@@ -40,7 +42,6 @@ class BadgeListing extends Component {
     }
 
     render() {
-        const { badge } = this.props;
         const {
             dtLoading,
             pages,
@@ -87,9 +88,79 @@ class BadgeListing extends Component {
                                                 }
                                             },
                                             {
+                                                id: 'task',
+                                                Header: 'Tasks',
+                                                accessor: 'task',
+                                                minWidth: 200,
+                                                Cell: (row) => {
+                                                    let dataObj = _.find(BADGES_TASKS, (o) => {
+                                                        return (o.value === row.value);
+                                                    });
+                                                    return (
+                                                        <div className="list-status-wrapper">
+                                                            {dataObj &&
+                                                                <span>{dataObj.label}</span>
+                                                            }
+                                                        </div>
+                                                    );
+                                                },
+                                                Filter: ({ filter, onChange }) => {
+                                                    var badgeTasks = Object.assign([], BADGES_TASKS);
+                                                    badgeTasks.splice(0, 0, { value: '', label: 'All' });
+                                                    return (
+                                                        <select
+                                                            onChange={event => onChange(event.target.value)}
+                                                            className="width-100-per"
+                                                            value={filter ? filter.value : "all"}
+                                                        >
+                                                            {badgeTasks && badgeTasks.length > 0 &&
+                                                                badgeTasks.map((obj, index) => (
+                                                                    <option key={index} value={obj.value}>{obj.label}</option>
+                                                                ))
+                                                            }
+                                                        </select>
+                                                    );
+                                                }
+                                            },
+                                            {
+                                                id: 'value',
+                                                Header: 'Target',
+                                                accessor: 'value',
+                                                filterable: false,
+                                                sortable: false,
+                                                Cell: (row) => {
+                                                    var task = row.original.task;
+                                                    var unitLabel = row.original.unit;
+                                                    var taskObj = _.find(BADGES_TASKS, ['value', task]);
+                                                    if (taskObj) {
+                                                        var unitKey = taskObj.unitKey;
+                                                        var unitKeyObj = _.find(MEASUREMENT_UNITS, ['key', unitKey]);
+                                                        if (unitKeyObj) {
+                                                            var units = unitKeyObj.value;
+                                                            var unitObj = _.find(units, ['value', row.original.unit]);
+                                                            if (unitObj) {
+                                                                unitLabel = unitObj.label;
+                                                            }
+                                                        }
+
+                                                    }
+                                                    return (
+                                                        <div className="list-status-wrapper">
+                                                            {`${row.value} ${unitLabel}`}
+                                                        </div>
+                                                    );
+                                                },
+                                            },
+                                            {
+                                                id: 'point',
+                                                Header: 'Points',
+                                                accessor: 'point',
+                                            },
+                                            {
                                                 id: 'name',
                                                 Header: 'Name',
                                                 accessor: 'name',
+                                                minWidth:200,
                                             },
                                             {
                                                 id: 'status',
@@ -234,7 +305,6 @@ const mapStateToProps = (state) => {
         loading: adminBadges.get('loading'),
         filteredBadges: adminBadges.get('filteredBadges'),
         filteredTotalPages: adminBadges.get('filteredTotalPages'),
-        badge: adminBadges.get('badge'),
     };
 }
 
