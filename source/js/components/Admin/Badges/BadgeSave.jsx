@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import BadgeForm from './BadgeForm';
 import { TIME_TYPE_TIME_WINDOW } from '../../../constants/consts';
-import { badgeAddRequest, badgeUpdateRequest } from '../../../actions/admin/badges';
+import { badgeAddRequest, badgeUpdateRequest, badgeRestData } from '../../../actions/admin/badges';
 import { ts, focusToControl } from '../../../helpers/funs';
 import { adminRouteCodes } from '../../../constants/adminRoutes';
 import { showPageLoader, hidePageLoader } from '../../../actions/pageLoader';
@@ -64,17 +64,23 @@ class BadgeSave extends Component {
         }
     }
 
+    componentWillUnmount() {
+        const { dispatch } = this.props;
+        dispatch(badgeRestData());
+    }
+
+
     handleSubmit = (data) => {
         const { dispatch, match } = this.props;
         var timeType = data.time_type.value;
         var requestData = {
-            name: data.name,
-            descriptionCompleted: data.completeDescription,
-            descriptionInCompleted: data.incompleteDescription,
-            task: data.task.value,
-            value: data.target,
-            unit: data.unit.value,
-            point: data.points,
+            // name: data.name,
+            // descriptionCompleted: data.completeDescription,
+            // descriptionInCompleted: data.incompleteDescription,
+            // task: data.task.value,
+            // value: data.target,
+            // unit: data.unit.value,
+            // point: data.points,
             timeType: timeType,
         }
         if (timeType === TIME_TYPE_TIME_WINDOW) {

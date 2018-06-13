@@ -17,7 +17,8 @@ import {
     BADGES_UPDATE_ERROR,
     BADGES_FILTER_REQUEST,
     BADGES_FILTER_SUCCESS,
-    BADGES_FILTER_ERROR
+    BADGES_FILTER_ERROR,
+    BADGES_RESET_DATA
 } from "../../actions/admin/badges";
 import { VALIDATION_FAILURE_STATUS } from "../../constants/consts";
 import { generateValidationErrorMsgArr } from "../../helpers/funs";
@@ -187,6 +188,13 @@ const actionMap = {
             loading: false,
             error: error,
         }));
+    },
+    [BADGES_RESET_DATA]: (state, action) => {
+        if (action.resetState && Object.keys(action.resetState).length > 0) {
+            return state.merge(Map(action.resetState));
+        } else {
+            return state.merge(initialState);
+        }
     },
 };
 

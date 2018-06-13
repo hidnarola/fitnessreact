@@ -22,6 +22,8 @@ export const BADGES_DELETE_REQUEST = 'BADGES_DELETE_REQUEST';
 export const BADGES_DELETE_SUCCESS = 'BADGES_DELETE_SUCCESS';
 export const BADGES_DELETE_ERROR = 'BADGES_DELETE_ERROR';
 
+export const BADGES_RESET_DATA = 'BADGES_RESET_DATA';
+
 export function badgeListRequest() {
     return {
         type: BADGES_LIST_REQUEST,
@@ -145,5 +147,12 @@ export function badgeDeleteError(error) {
     return {
         type: BADGES_DELETE_ERROR,
         error
+    }
+}
+
+export function badgeRestData(resetState = null) {
+    return {
+        type: BADGES_RESET_DATA,
+        resetState,
     }
 }
