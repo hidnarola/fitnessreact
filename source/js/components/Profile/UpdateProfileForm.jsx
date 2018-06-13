@@ -2,10 +2,24 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm, initialize } from "redux-form";
 import DatePicker from "react-datepicker";
-import { WORKOUT_LOCATION_HOME, WORKOUT_LOCATION_GYM, GOAL_GAIN_MUSCLE, GOAL_GAIN_FLEXIBILITY, GOAL_LOSE_FAT, GOAL_GAIN_STRENGTH, GOAL_GAIN_POWER, GOAL_INCREASE_ENDURANCE, GENDER_MALE, GENDER_FEMALE } from '../../constants/consts';
+import {
+    WORKOUT_LOCATION_HOME,
+    WORKOUT_LOCATION_GYM,
+    GOAL_GAIN_MUSCLE,
+    GOAL_GAIN_FLEXIBILITY,
+    GOAL_LOSE_FAT,
+    GOAL_GAIN_STRENGTH,
+    GOAL_GAIN_POWER,
+    GOAL_INCREASE_ENDURANCE,
+    GENDER_MALE,
+    GENDER_FEMALE
+} from '../../constants/consts';
 import { capitalizeFirstLetter, ts } from '../../helpers/funs';
 import ReactQuill from 'react-quill';
-import { getLoggedUserProfileDetailsRequest, saveLoggedUserProfileDetailsRequest } from '../../actions/profile';
+import {
+    getLoggedUserProfileDetailsRequest,
+    saveLoggedUserProfileDetailsRequest
+} from '../../actions/profile';
 import moment from "moment";
 import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
 import { required } from '../../formValidation/validationRules';
@@ -434,111 +448,114 @@ export default connect(
     mapStateToProps,
 )(UpdateProfileForm);
 
-const InputField = (props) => {
-    const {
-        label,
-        input,
-        meta,
-        wrapperClass,
-        inputWrapperClass,
-        className,
-        labelClass,
-        placeholder,
-        errorClass,
-        type,
-        disabled,
-        units,
-        id,
-        dataTip,
-    } = props;
-    return (
-        <div
-            className={
-                `${wrapperClass} ${(meta.touched && meta.error) ? 'has-error' : ''}`
-            }
-        >
-            <input
-                {...input}
-                id={(id) ? id : ''}
-                type={type ? type : 'text'}
-                disabled={disabled ? disabled : false}
-                className={className}
-                placeholder={placeholder}
-            />
-            {(units) ? units : ''}
-            {meta.touched &&
-                ((meta.error && <div className={errorClass}>{meta.error}</div>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))
-            }
-        </div>
-    );
+class InputField extends Component {
+    render() {
+        const {
+            input,
+            meta,
+            wrapperClass,
+            className,
+            placeholder,
+            errorClass,
+            type,
+            disabled,
+            units,
+            id,
+        } = this.props;
+        return (
+            <div
+                className={
+                    `${wrapperClass} ${(meta.touched && meta.error) ? 'has-error' : ''}`
+                }
+            >
+                <input
+                    {...input}
+                    id={(id) ? id : ''}
+                    type={type ? type : 'text'}
+                    disabled={disabled ? disabled : false}
+                    className={className}
+                    placeholder={placeholder}
+                />
+                {(units) ? units : ''}
+                {meta.touched &&
+                    ((meta.error && <div className={errorClass}>{meta.error}</div>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))
+                }
+            </div>
+        );
+    }
 }
 
-const DateField = (props) => {
-    const {
-        input,
-        meta,
-        wrapperClass,
-        className,
-        placeholder,
-        errorClass,
-        selectedDate,
-        handleChange,
-        dateFormat,
-    } = props;
-    return (
-        <div className={wrapperClass}>
-            <DatePicker
-                selected={selectedDate}
-                onChange={handleChange}
-                dateFormat={dateFormat ? dateFormat : "MM/DD/YYYY"}
-                className={className}
-                placeholderText={placeholder}
-            />
-            {meta.touched &&
-                ((meta.error && <span className={errorClass}>{meta.error}</span>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))
-            }
-        </div>
-    );
+class DateField extends Component {
+    render() {
+        const {
+            meta,
+            wrapperClass,
+            className,
+            placeholder,
+            errorClass,
+            selectedDate,
+            handleChange,
+            dateFormat,
+        } = this.props;
+        return (
+            <div className={wrapperClass}>
+                <DatePicker
+                    selected={selectedDate}
+                    onChange={handleChange}
+                    dateFormat={dateFormat ? dateFormat : "MM/DD/YYYY"}
+                    className={className}
+                    placeholderText={placeholder}
+                />
+                {meta.touched &&
+                    ((meta.error && <span className={errorClass}>{meta.error}</span>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))
+                }
+            </div>
+        );
+    }
 }
 
-const CheckField = (props) => {
-    const {
-        input,
-        wrapperClass,
-        title,
-        checked,
-        handleClick,
-    } = props;
-    return (
-        <div className={wrapperClass} onClick={() => handleClick(input.name)}>
-            <input
-                {...input}
-                type="checkbox"
-                checked={checked}
-            />
-            <label>{title}</label>
-        </div>
-    );
+class CheckField extends Component {
+    render() {
+        const {
+            input,
+            wrapperClass,
+            title,
+            checked,
+            handleClick,
+        } = this.props;
+        return (
+            <div className={wrapperClass} onClick={() => handleClick(input.name)}>
+                <input
+                    {...input}
+                    type="checkbox"
+                    checked={checked}
+                />
+                <label>{title}</label>
+            </div>
+        );
+    }
 }
 
-const EditorField = (props) => {
-    const {
-        input,
-        wrapperClass,
-        placeholder,
-        handleChange,
-        className,
-    } = props;
-    return (
-        <div className={wrapperClass}>
-            <ReactQuill
-                {...input}
-                value={input.value ? input.value : ''}
-                onChange={(content, delta, source, editor) => handleChange(content)}
-                onBlur={(content) => { return content }}
-                placeholder={placeholder}
-                className={className}
-            />
-        </div>
-    );
+class EditorField extends Component {
+    render() {
+        const {
+            input,
+            wrapperClass,
+            placeholder,
+            handleChange,
+            className,
+        } = this.props;
+        return (
+            <div className={wrapperClass}>
+                <ReactQuill
+                    {...input}
+                    value={input.value ? input.value : ''}
+                    onChange={(content, delta, source, editor) => handleChange(content)}
+                    onBlur={(content) => { return content }}
+                    placeholder={placeholder}
+                    className={className}
+                />
+            </div>
+        );
+    }
 }
