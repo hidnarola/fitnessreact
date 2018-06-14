@@ -65,7 +65,7 @@ class App extends Component {
     componentWillMount() {
         let token = localStorage.getItem(LOCALSTORAGE_ACCESS_TOKEN_KEY);
         if (token) {
-            console.log('App.js mounted => ', token);
+            // console.log('App.js mounted => ', token);
         }
     }
 
