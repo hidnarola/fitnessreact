@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import openSocket from 'socket.io-client';
 import { SERVER_BASE_URL } from '../constants/consts';
-const socket = openSocket(SERVER_BASE_URL);
 class SocketDemo extends Component {
     constructor(props) {
         super(props);
+        const socket = openSocket(SERVER_BASE_URL);
         this.state = {
             username: '',
             receiver: '',
