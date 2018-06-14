@@ -43,9 +43,7 @@ class AddSecondaryGoal extends Component {
                             }
                             <div className="row">
                                 <div className="col-md-12 no-padding block_task_field">
-                                    
                                     <p className="p_name">Track my</p>
-                                    
                                     <div className="col-md-12 pull-left">
                                         <Field
                                             name="task"

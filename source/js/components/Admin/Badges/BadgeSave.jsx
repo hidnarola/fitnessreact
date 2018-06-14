@@ -74,14 +74,15 @@ class BadgeSave extends Component {
         const { dispatch, match } = this.props;
         var timeType = data.time_type.value;
         var requestData = {
-            // name: data.name,
-            // descriptionCompleted: data.completeDescription,
-            // descriptionInCompleted: data.incompleteDescription,
-            // task: data.task.value,
-            // value: data.target,
-            // unit: data.unit.value,
-            // point: data.points,
+            name: data.name,
+            descriptionCompleted: data.completeDescription,
+            descriptionInCompleted: data.incompleteDescription,
+            task: data.task.value,
+            value: data.target,
+            unit: data.unit.value,
+            point: data.points,
             timeType: timeType,
+            status: (data.status) ? data.status.value : null,
         }
         if (timeType === TIME_TYPE_TIME_WINDOW) {
             requestData.duration = {

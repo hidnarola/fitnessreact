@@ -18,7 +18,10 @@ import {
     BADGES_FILTER_REQUEST,
     BADGES_FILTER_SUCCESS,
     BADGES_FILTER_ERROR,
-    BADGES_RESET_DATA
+    BADGES_RESET_DATA,
+    BADGES_UNDO_DELETE_REQUEST,
+    BADGES_UNDO_DELETE_SUCCESS,
+    BADGES_UNDO_DELETE_ERROR
 } from "../../actions/admin/badges";
 import { VALIDATION_FAILURE_STATUS } from "../../constants/consts";
 import { generateValidationErrorMsgArr } from "../../helpers/funs";
@@ -172,17 +175,57 @@ const actionMap = {
     [BADGES_DELETE_REQUEST]: (state, action) => {
         return state.merge(Map({
             loading: true,
+            error: [],
         }));
     },
     [BADGES_DELETE_SUCCESS]: (state, action) => {
-        return state.merge(Map({
+        var newState = {
             loading: false,
-        }));
+        }
+        if (action.data.status !== 1) {
+            var msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
+            newState.error = [msg];
+        }
+        return state.merge(Map(newState));
     },
     [BADGES_DELETE_ERROR]: (state, action) => {
-        let error = 'Server error';
-        if (action.error && action.error.response) {
-            error = action.error.response.message;
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
+        }
+        return state.merge(Map({
+            loading: false,
+            error: error,
+        }));
+    },
+    [BADGES_UNDO_DELETE_REQUEST]: (state, action) => {
+        return state.merge(Map({
+            loading: true,
+            error: [],
+        }));
+    },
+    [BADGES_UNDO_DELETE_SUCCESS]: (state, action) => {
+        var newState = {
+            loading: false,
+        }
+        if (action.data.status !== 1) {
+            var msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
+            newState.error = [msg];
+        }
+        return state.merge(Map(newState));
+    },
+    [BADGES_UNDO_DELETE_ERROR]: (state, action) => {
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
         }
         return state.merge(Map({
             loading: false,

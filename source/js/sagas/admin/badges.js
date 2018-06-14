@@ -17,7 +17,10 @@ import {
     BADGES_UPDATE_REQUEST,
     badgeFilterError,
     badgeFilterSuccess,
-    BADGES_FILTER_REQUEST
+    BADGES_FILTER_REQUEST,
+    badgeUndoDeleteSuccess,
+    badgeUndoDeleteError,
+    BADGES_UNDO_DELETE_REQUEST
 } from "../../actions/admin/badges";
 import api from 'api/admin/badges';
 
@@ -92,6 +95,18 @@ function deleteAdminBadgeData() {
     }
 }
 
+function undoDeleteAdminBadgeData() {
+    return function* (action) {
+        try {
+            const _id = action._id;
+            const data = yield call(() => api.undoDeleteBadge(_id));
+            yield put(badgeUndoDeleteSuccess(data));
+        } catch (error) {
+            yield put(badgeUndoDeleteError(error));
+        }
+    }
+}
+
 export function* watchAdminBadges() {
     yield takeLatest(BADGES_LIST_REQUEST, getAdminBadgesData());
     yield takeLatest(BADGES_FILTER_REQUEST, filterAdminBadgesData());
@@ -99,6 +114,7 @@ export function* watchAdminBadges() {
     yield takeLatest(BADGES_ADD_REQUEST, postAdminBadgeData());
     yield takeLatest(BADGES_UPDATE_REQUEST, putAdminBadgeData());
     yield takeLatest(BADGES_DELETE_REQUEST, deleteAdminBadgeData());
+    yield takeLatest(BADGES_UNDO_DELETE_REQUEST, undoDeleteAdminBadgeData());
 }
 
 export default [

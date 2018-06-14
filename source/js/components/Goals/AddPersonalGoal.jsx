@@ -65,9 +65,7 @@ class AddPersonalGoal extends Component {
                             }
                             <div className="row">
                                 <div className="col-md-12 no-padding block_task_field">
-                                    
-                                        <p className="p_name">I am going to</p>
-                                    
+                                    <p className="p_name">I am going to</p>
                                     <div className="col-md-4 pull-left">
                                         <Field
                                             name="task"
@@ -105,8 +103,6 @@ class AddPersonalGoal extends Component {
                             <div className="btn_right">
                                 <button type="submit">Save</button>
                             </div>
-                                        
-                            
                         </div>
                     </form>
                 </Modal>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-import { FaPencil, FaTrash } from 'react-icons/lib/fa';
+import { FaPencil, FaTrash, FaRotateLeft } from 'react-icons/lib/fa';
 import { adminRouteCodes } from '../../../constants/adminRoutes';
 import ReactTable from 'react-table';
 import moment from 'moment';
@@ -14,8 +14,16 @@ import {
     MEASUREMENT_UNITS
 } from '../../../constants/consts';
 import _ from 'lodash';
-import { generateDTTableFilterObj } from '../../../helpers/funs';
-import { badgeFilterRequest } from '../../../actions/admin/badges';
+import { generateDTTableFilterObj, te, ts } from '../../../helpers/funs';
+import { badgeFilterRequest, badgeDeleteRequest, badgeUndoDeleteRequest } from '../../../actions/admin/badges';
+import {
+    DropdownButton,
+    ButtonToolbar,
+    MenuItem
+} from "react-bootstrap";
+import { showPageLoader, hidePageLoader } from '../../../actions/pageLoader';
+import DeleteConfirmation from '../Common/DeleteConfirmation';
+import UndoDeleteConfirmation from '../Common/UndoDeleteConfirmation';
 
 const statusOptions = [
     { value: '', label: 'All' },
@@ -37,7 +45,11 @@ class BadgeListing extends Component {
             pages: 0,
             dtLoading: false,
             filterData: null,
+            showDeleteModal: false,
+            deleteActionInit: false,
             selectedId: null,
+            showUndoDeleteModal: false,
+            undoDeleteActionInit: false,
         }
     }
 
@@ -46,6 +58,8 @@ class BadgeListing extends Component {
             dtLoading,
             pages,
             badges,
+            showDeleteModal,
+            showUndoDeleteModal,
         } = this.state;
         return (
             <div className="badge-category-listing-wrapper">
@@ -54,7 +68,7 @@ class BadgeListing extends Component {
                         <h2>Badges</h2>
                     </div>
                     <div className="body-head-r">
-                        <NavLink to={adminRouteCodes.BADGES_SAVE} className="pink-btn">Add Badge</NavLink>
+                        <NavLink to={adminRouteCodes.BADGES_SAVE} className="pink-btn">Add Badge <i className="icon-control_point"></i></NavLink>
                     </div>
                 </div>
 
@@ -77,6 +91,7 @@ class BadgeListing extends Component {
                                                 accessor: 'createdAt',
                                                 filterable: false,
                                                 sortable: false,
+                                                minWidth: 80,
                                                 Cell: (row) => {
                                                     return (
                                                         <div className="list-dob-wrapper">
@@ -91,7 +106,7 @@ class BadgeListing extends Component {
                                                 id: 'task',
                                                 Header: 'Tasks',
                                                 accessor: 'task',
-                                                minWidth: 200,
+                                                minWidth: 150,
                                                 Cell: (row) => {
                                                     let dataObj = _.find(BADGES_TASKS, (o) => {
                                                         return (o.value === row.value);
@@ -127,7 +142,7 @@ class BadgeListing extends Component {
                                                 Header: 'Target',
                                                 accessor: 'value',
                                                 filterable: false,
-                                                sortable: false,
+                                                minWidth: 70,
                                                 Cell: (row) => {
                                                     var task = row.original.task;
                                                     var unitLabel = row.original.unit;
@@ -155,18 +170,28 @@ class BadgeListing extends Component {
                                                 id: 'point',
                                                 Header: 'Points',
                                                 accessor: 'point',
+                                                filterable: false,
+                                                minWidth: 50,
+                                                Cell: (row) => {
+                                                    return (
+                                                        <div className="list-status-wrapper">
+                                                            {`${row.value} pts`}
+                                                        </div>
+                                                    )
+                                                }
                                             },
                                             {
                                                 id: 'name',
                                                 Header: 'Name',
                                                 accessor: 'name',
-                                                minWidth:200,
+                                                minWidth: 150,
                                             },
                                             {
                                                 id: 'status',
                                                 Header: 'Status',
                                                 accessor: 'status',
                                                 filterDigit: true,
+                                                minWidth: 50,
                                                 Cell: (row) => {
                                                     let dataObj = _.find(statusOptions, (o) => {
                                                         return (o.value === row.value);
@@ -200,6 +225,7 @@ class BadgeListing extends Component {
                                                 Header: 'Deleted',
                                                 accessor: 'isDeleted',
                                                 filterDigit: true,
+                                                minWidth: 50,
                                                 Cell: (row) => {
                                                     let dataObj = _.find(isDeletedOptions, (o) => {
                                                         return (o.value === row.value);
@@ -234,16 +260,40 @@ class BadgeListing extends Component {
                                                 accessor: "_id",
                                                 filterable: false,
                                                 sortable: false,
-                                                // Cell: (row) => {
-                                                //     return (
-                                                //         <div className="actions-wrapper">
-                                                //             <a href="javascript:void(0)" onClick={() => this.handleShowSaveModal(row.value)} className="btn btn-primary"><FaPencil /></a>
-                                                //             {!row.original.isDeleted &&
-                                                //                 <a href="javascript:void(0)" onClick={() => this.confirmDelete(row.value)} className="btn btn-danger"><FaTrash /></a>
-                                                //             }
-                                                //         </div>
-                                                //     );
-                                                // }
+                                                minWidth: 60,
+                                                Cell: (row) => {
+                                                    return (
+                                                        <div className="actions-wrapper">
+                                                            <ButtonToolbar>
+                                                                <DropdownButton title="Actions" pullRight id="dropdown-size-medium">
+                                                                    <MenuItem
+                                                                        eventKey="1"
+                                                                        onClick={(e) => this.routeTo(e, `${adminRouteCodes.BADGES_SAVE}/${row.value}`)}
+                                                                        href={`${adminRouteCodes.BADGES_SAVE}/${row.value}`}
+                                                                    >
+                                                                        <FaPencil className="v-align-sub" /> Edit
+                                                                    </MenuItem>
+                                                                    {row.original.isDeleted === 0 &&
+                                                                        <MenuItem
+                                                                            eventKey="2"
+                                                                            onClick={() => this.handleShowDeleteModal(row.value)}
+                                                                        >
+                                                                            <FaTrash className="v-align-sub" /> Delete
+                                                                        </MenuItem>
+                                                                    }
+                                                                    {row.original.isDeleted === 1 &&
+                                                                        <MenuItem
+                                                                            eventKey="3"
+                                                                            onClick={() => this.handleShowUndoDeleteModal(row.value)}
+                                                                        >
+                                                                            <FaRotateLeft className="v-align-sub" /> Recover
+                                                                        </MenuItem>
+                                                                    }
+                                                                </DropdownButton>
+                                                            </ButtonToolbar>
+                                                        </div>
+                                                    );
+                                                }
                                             },
                                         ]}
                                         pages={pages}
@@ -261,13 +311,35 @@ class BadgeListing extends Component {
                     </div>
                 </div>
 
+                <DeleteConfirmation
+                    show={showDeleteModal}
+                    handleClose={this.handleHideDeleteModal}
+                    handleYes={this.handleDelete}
+                />
+
+                <UndoDeleteConfirmation
+                    show={showUndoDeleteModal}
+                    handleClose={this.handleHideUndoDeleteModal}
+                    handleYes={this.handleUndoDelete}
+                />
+
             </div>
         );
     }
 
     componentDidUpdate(prevProps, prevState) {
-        const { loading, filteredBadges, filteredTotalPages, badge } = this.props;
-        const { dtLoading } = this.state;
+        const {
+            loading,
+            filteredBadges,
+            filteredTotalPages,
+            error,
+            dispatch,
+        } = this.props;
+        const {
+            dtLoading,
+            deleteActionInit,
+            undoDeleteActionInit,
+        } = this.state;
         if (dtLoading && !loading) {
             this.setState({
                 dtLoading: false,
@@ -275,9 +347,31 @@ class BadgeListing extends Component {
                 pages: filteredTotalPages,
             });
         }
+        if (deleteActionInit && !loading) {
+            if (error.length > 0) {
+                te(error[0]);
+            } else {
+                ts('Badge deleted successfully');
+            }
+            dispatch(hidePageLoader());
+            this.setState({ deleteActionInit: false });
+            this.handleHideDeleteModal();
+            this.refreshDTData();
+        }
+        if (undoDeleteActionInit && !loading) {
+            if (error.length > 0) {
+                te(error[0]);
+            } else {
+                ts('Badge recovered successfully');
+            }
+            dispatch(hidePageLoader());
+            this.setState({ undoDeleteActionInit: false });
+            this.handleHideUndoDeleteModal();
+            this.refreshDTData();
+        }
     }
 
-    // Start Funs
+    //#region Start Funs
     fetchData = (state, instance) => {
         const { dispatch } = this.props;
         this.setState({
@@ -296,13 +390,68 @@ class BadgeListing extends Component {
         });
         dispatch(badgeFilterRequest(filterData));
     }
-    // End Funs
+
+    routeTo = (e, route) => {
+        const {
+            history,
+        } = this.props;
+        e.preventDefault();
+        history.push(route);
+    }
+
+    handleShowDeleteModal = (_id) => {
+        this.setState({
+            showDeleteModal: true,
+            selectedId: _id,
+        });
+    }
+
+    handleHideDeleteModal = () => {
+        this.setState({
+            showDeleteModal: false,
+            selectedId: null,
+        });
+    }
+
+    handleDelete = () => {
+        const {
+            dispatch,
+        } = this.props;
+        this.setState({ deleteActionInit: true });
+        dispatch(showPageLoader());
+        dispatch(badgeDeleteRequest(this.state.selectedId));
+    }
+
+    handleShowUndoDeleteModal = (_id) => {
+        this.setState({
+            showUndoDeleteModal: true,
+            selectedId: _id,
+        });
+    }
+
+    handleHideUndoDeleteModal = () => {
+        this.setState({
+            showUndoDeleteModal: false,
+            selectedId: null,
+        });
+    }
+
+    handleUndoDelete = () => {
+        const {
+            dispatch,
+        } = this.props;
+        this.setState({ undoDeleteActionInit: true });
+        dispatch(showPageLoader());
+        dispatch(badgeUndoDeleteRequest(this.state.selectedId));
+    }
+    //#endregion
 }
 
 const mapStateToProps = (state) => {
     const { adminBadges } = state;
     return {
         loading: adminBadges.get('loading'),
+        error: adminBadges.get('error'),
         filteredBadges: adminBadges.get('filteredBadges'),
         filteredTotalPages: adminBadges.get('filteredTotalPages'),
     };

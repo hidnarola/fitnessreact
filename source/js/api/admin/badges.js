@@ -48,11 +48,22 @@ function deleteBadge(_id) {
     return fetchResource((requestUrl + '/' + _id), options);
 }
 
+function undoDeleteBadge(_id) {
+    let headers = extraHeaders();
+    var options = {
+        method: 'GET',
+        headers: headers,
+    }
+
+    return fetchResource((requestUrl + '/undo/' + _id), options);
+}
+
 export default {
     getBadges,
     filterBadges,
     getBadge,
     addBadge,
     updateBadge,
-    deleteBadge
+    deleteBadge,
+    undoDeleteBadge,
 }

@@ -22,6 +22,10 @@ export const BADGES_DELETE_REQUEST = 'BADGES_DELETE_REQUEST';
 export const BADGES_DELETE_SUCCESS = 'BADGES_DELETE_SUCCESS';
 export const BADGES_DELETE_ERROR = 'BADGES_DELETE_ERROR';
 
+export const BADGES_UNDO_DELETE_REQUEST = 'BADGES_UNDO_DELETE_REQUEST';
+export const BADGES_UNDO_DELETE_SUCCESS = 'BADGES_UNDO_DELETE_SUCCESS';
+export const BADGES_UNDO_DELETE_ERROR = 'BADGES_UNDO_DELETE_ERROR';
+
 export const BADGES_RESET_DATA = 'BADGES_RESET_DATA';
 
 export function badgeListRequest() {
@@ -146,6 +150,27 @@ export function badgeDeleteSuccess(data) {
 export function badgeDeleteError(error) {
     return {
         type: BADGES_DELETE_ERROR,
+        error
+    }
+}
+
+export function badgeUndoDeleteRequest(_id) {
+    return {
+        type: BADGES_UNDO_DELETE_REQUEST,
+        _id
+    }
+}
+
+export function badgeUndoDeleteSuccess(data) {
+    return {
+        type: BADGES_UNDO_DELETE_SUCCESS,
+        data
+    }
+}
+
+export function badgeUndoDeleteError(error) {
+    return {
+        type: BADGES_UNDO_DELETE_ERROR,
         error
     }
 }

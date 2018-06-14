@@ -3,9 +3,18 @@ import { connect } from 'react-redux';
 import { NavLink, withRouter } from 'react-router-dom';
 import { reduxForm, Field, formValueSelector, initialize } from 'redux-form';
 import { InputField, EditorField, SelectField_ReactSelect } from '../../../helpers/FormControlHelper';
-import { required, requiredReactSelect } from '../../../formValidation/validationRules';
+import { required, requiredReactSelect, requiredReactSelectStatus } from '../../../formValidation/validationRules';
 import { adminRouteCodes } from '../../../constants/adminRoutes';
-import { TIME_TYPE_TIME_WINDOW, TIME_TYPE_STANDARD, BADGES_TASKS, MEASUREMENT_UNITS } from '../../../constants/consts';
+import {
+    TIME_TYPE_TIME_WINDOW,
+    TIME_TYPE_STANDARD,
+    BADGES_TASKS,
+    MEASUREMENT_UNITS,
+    STATUS_ACTIVE,
+    STATUS_INACTIVE,
+    STATUS_ACTIVE_STR,
+    STATUS_INACTIVE_STR
+} from '../../../constants/consts';
 import { capitalizeFirstLetter } from '../../../helpers/funs';
 import DateRangePicker from 'react-daterange-picker';
 import _ from "lodash";
@@ -15,6 +24,11 @@ import moment from "moment";
 const timeTypeOptions = [
     { value: TIME_TYPE_STANDARD, label: capitalizeFirstLetter(TIME_TYPE_STANDARD).replace('_', ' ') },
     { value: TIME_TYPE_TIME_WINDOW, label: capitalizeFirstLetter(TIME_TYPE_TIME_WINDOW).replace('_', ' ') },
+];
+
+const statusOptions = [
+    { value: STATUS_ACTIVE, label: STATUS_ACTIVE_STR },
+    { value: STATUS_INACTIVE, label: STATUS_INACTIVE_STR },
 ];
 
 class BadgeForm extends Component {
@@ -151,6 +165,17 @@ class BadgeForm extends Component {
                                 component={EditorField}
                             />
                             <Field
+                                name="status"
+                                label="Status"
+                                labelClass="control-label display_block"
+                                wrapperClass="form-group"
+                                placeholder="Status"
+                                component={SelectField_ReactSelect}
+                                options={statusOptions}
+                                errorClass="help-block"
+                                validate={[requiredReactSelectStatus]}
+                            />
+                            <Field
                                 name="time_type"
                                 label="Time Type"
                                 labelClass="control-label display_block"
@@ -198,51 +223,59 @@ class BadgeForm extends Component {
             loading,
             badge,
             dispatch,
+            history,
+            badgeErrors,
         } = this.props;
         if (selectOneActionInit && !loading) {
-            this.setState({ selectOneActionInit: false });
-            var task = badge.task;
-            var taskObj = _.find(BADGES_TASKS, ['value', task]);
-            var badgeUnitObj = null;
-            var unit = badge.unit;
-            if (taskObj) {
-                var taskUnitsObj = _.find(MEASUREMENT_UNITS, ['key', taskObj.unitKey]);
-                if (taskUnitsObj) {
-                    var taskUnits = taskUnitsObj.value;
-                    var unitObj = _.find(taskUnits, ['value', unit]);
-                    if (unitObj) {
-                        badgeUnitObj = unitObj;
+            if (badgeErrors && badgeErrors.length > 0) {
+                history.push(adminRouteCodes.BADGES);
+            } else {
+                this.setState({ selectOneActionInit: false });
+                var task = badge.task;
+                var taskObj = _.find(BADGES_TASKS, ['value', task]);
+                var badgeUnitObj = null;
+                var unit = badge.unit;
+                if (taskObj) {
+                    var taskUnitsObj = _.find(MEASUREMENT_UNITS, ['key', taskObj.unitKey]);
+                    if (taskUnitsObj) {
+                        var taskUnits = taskUnitsObj.value;
+                        var unitObj = _.find(taskUnits, ['value', unit]);
+                        if (unitObj) {
+                            badgeUnitObj = unitObj;
+                        }
                     }
                 }
-            }
-            var timeTypeObj = _.find(timeTypeOptions, ['value', badge.timeType]);
-            var duration = null;
-            if (badge.timeType === TIME_TYPE_TIME_WINDOW) {
-                if (badge.duration && badge.duration.start && badge.duration.end) {
-                    duration = moment.range(
-                        moment(badge.duration.start),
-                        moment(badge.duration.end),
-                    )
+                var timeTypeObj = _.find(timeTypeOptions, ['value', badge.timeType]);
+                var duration = null;
+                if (badge.timeType === TIME_TYPE_TIME_WINDOW) {
+                    if (badge.duration && badge.duration.start && badge.duration.end) {
+                        duration = moment.range(
+                            moment(badge.duration.start),
+                            moment(badge.duration.end),
+                        )
+                    }
                 }
+                var badgeStatusObj = _.find(statusOptions, ['value', badge.status]);
+                var formData = {
+                    task: (taskObj) ? taskObj : null,
+                    target: badge.value,
+                    unit: badgeUnitObj,
+                    points: badge.point,
+                    name: badge.name,
+                    incompleteDescription: badge.descriptionInCompleted,
+                    completeDescription: badge.descriptionCompleted,
+                    time_type: timeTypeObj ? timeTypeObj : null,
+                    duration: duration,
+                    status: (badgeStatusObj) ? badgeStatusObj : null,
+                }
+                dispatch(initialize('badgeSaveForm', formData));
+                this.setState({
+                    incompleteDescription: badge.descriptionInCompleted,
+                    completeDescription: badge.descriptionCompleted,
+                    timeType: timeTypeObj ? timeTypeObj.value : '',
+                    timeDateRange: duration,
+                });
             }
-            var formData = {
-                task: (taskObj) ? taskObj : null,
-                target: badge.value,
-                unit: badgeUnitObj,
-                points: badge.point,
-                name: badge.name,
-                incompleteDescription: badge.descriptionInCompleted,
-                completeDescription: badge.descriptionCompleted,
-                time_type: timeTypeObj ? timeTypeObj : null,
-                duration: duration,
-            }
-            dispatch(initialize('badgeSaveForm', formData));
-            this.setState({
-                incompleteDescription: badge.descriptionInCompleted,
-                completeDescription: badge.descriptionCompleted,
-                timeType: timeTypeObj ? timeTypeObj.value : '',
-                timeDateRange: duration,
-            });
         }
     }
 
@@ -276,7 +309,7 @@ const mapStateToProps = (state) => {
         selectedTask: badgeSaveFormSelector(state, 'task'),
         loading: adminBadges.get('loading'),
         badge: adminBadges.get('badge'),
-        error: adminBadges.get('error'),
+        badgeErrors: adminBadges.get('error'),
     };
 }
 
