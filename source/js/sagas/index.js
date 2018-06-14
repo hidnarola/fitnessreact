@@ -17,6 +17,7 @@ import userWorkouts from 'sagas/userWorkouts'
 import userTimeline from 'sagas/userTimeline'
 import userPersonalGoals from 'sagas/userPersonalGoals'
 import userSecondaryGoals from 'sagas/userSecondaryGoals'
+import userPrimaryGoals from 'sagas/userPrimaryGoals'
 import userSearch from 'sagas/userSearch'
 import userGalleryPhotos from 'sagas/userGalleryPhotos'
 import postLikes from 'sagas/postLikes'
@@ -57,6 +58,7 @@ export default function* rootSaga() {
     ...userTimeline,
     ...userPersonalGoals,
     ...userSecondaryGoals,
+    ...userPrimaryGoals,
     ...userSearch,
     ...userGalleryPhotos,
     ...postLikes,
