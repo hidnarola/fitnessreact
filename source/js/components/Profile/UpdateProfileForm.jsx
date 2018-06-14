@@ -35,12 +35,6 @@ class UpdateProfileForm extends Component {
         this.state = {
             selectActionInit: false,
             dob: null,
-            [GOAL_GAIN_MUSCLE]: false,
-            [GOAL_GAIN_FLEXIBILITY]: false,
-            [GOAL_LOSE_FAT]: false,
-            [GOAL_GAIN_STRENGTH]: false,
-            [GOAL_GAIN_POWER]: false,
-            [GOAL_INCREASE_ENDURANCE]: false,
             aboutMe: '',
         }
     }
@@ -237,67 +231,73 @@ class UpdateProfileForm extends Component {
                                             <div className="col-md-4">
                                                 <Field
                                                     id={GOAL_GAIN_MUSCLE}
-                                                    name={GOAL_GAIN_MUSCLE}
-                                                    wrapperClass="pull-left custom_check mb-10"
-                                                    component={CheckField}
-                                                    checked={this.state[GOAL_GAIN_MUSCLE]}
-                                                    handleClick={this.handleCheckClick}
-                                                    title={capitalizeFirstLetter(GOAL_GAIN_MUSCLE.replace('_', ' '))}
+                                                    name="primary_goal"
+                                                    wrapperClass="custom_radio mb-10"
+                                                    errorClass="help-block"
+                                                    type="radio"
+                                                    component={InputField}
+                                                    units={(<label htmlFor={GOAL_GAIN_MUSCLE}>{capitalizeFirstLetter(GOAL_GAIN_MUSCLE.replace('_', ' '))}</label>)}
+                                                    value={GOAL_GAIN_MUSCLE}
                                                 />
                                             </div>
                                             <div className="col-md-4">
                                                 <Field
                                                     id={GOAL_GAIN_FLEXIBILITY}
-                                                    name={GOAL_GAIN_FLEXIBILITY}
-                                                    wrapperClass="pull-left custom_check mb-10"
-                                                    component={CheckField}
-                                                    checked={this.state[GOAL_GAIN_FLEXIBILITY]}
-                                                    handleClick={this.handleCheckClick}
-                                                    title={capitalizeFirstLetter(GOAL_GAIN_FLEXIBILITY.replace('_', ' '))}
+                                                    name="primary_goal"
+                                                    wrapperClass="custom_radio mb-10"
+                                                    errorClass="help-block"
+                                                    type="radio"
+                                                    component={InputField}
+                                                    units={(<label htmlFor={GOAL_GAIN_FLEXIBILITY}>{capitalizeFirstLetter(GOAL_GAIN_FLEXIBILITY.replace('_', ' '))}</label>)}
+                                                    value={GOAL_GAIN_FLEXIBILITY}
                                                 />
                                             </div>
                                             <div className="col-md-4">
                                                 <Field
                                                     id={GOAL_LOSE_FAT}
-                                                    name={GOAL_LOSE_FAT}
-                                                    wrapperClass="pull-left custom_check mb-10"
-                                                    component={CheckField}
-                                                    checked={this.state[GOAL_LOSE_FAT]}
-                                                    handleClick={this.handleCheckClick}
-                                                    title={capitalizeFirstLetter(GOAL_LOSE_FAT.replace('_', ' '))}
+                                                    name="primary_goal"
+                                                    wrapperClass="custom_radio mb-10"
+                                                    errorClass="help-block"
+                                                    type="radio"
+                                                    component={InputField}
+                                                    units={(<label htmlFor={GOAL_LOSE_FAT}>{capitalizeFirstLetter(GOAL_LOSE_FAT.replace('_', ' '))}</label>)}
+                                                    value={GOAL_LOSE_FAT}
                                                 />
                                             </div>
                                             <div className="col-md-4">
                                                 <Field
                                                     id={GOAL_GAIN_STRENGTH}
-                                                    name={GOAL_GAIN_STRENGTH}
-                                                    wrapperClass="pull-left custom_check mb-10"
-                                                    component={CheckField}
-                                                    checked={this.state[GOAL_GAIN_STRENGTH]}
-                                                    handleClick={this.handleCheckClick}
-                                                    title={capitalizeFirstLetter(GOAL_GAIN_STRENGTH.replace('_', ' '))}
+                                                    name="primary_goal"
+                                                    wrapperClass="custom_radio mb-10"
+                                                    errorClass="help-block"
+                                                    type="radio"
+                                                    component={InputField}
+                                                    units={(<label htmlFor={GOAL_GAIN_STRENGTH}>{capitalizeFirstLetter(GOAL_GAIN_STRENGTH.replace('_', ' '))}</label>)}
+                                                    value={GOAL_GAIN_STRENGTH}
                                                 />
                                             </div>
                                             <div className="col-md-4">
                                                 <Field
                                                     id={GOAL_GAIN_POWER}
-                                                    name={GOAL_GAIN_POWER}
-                                                    wrapperClass="pull-left custom_check mb-10"
-                                                    component={CheckField}
-                                                    checked={this.state[GOAL_GAIN_POWER]}
-                                                    handleClick={this.handleCheckClick}
-                                                    title={capitalizeFirstLetter(GOAL_GAIN_POWER.replace('_', ' '))}
+                                                    name="primary_goal"
+                                                    wrapperClass="custom_radio mb-10"
+                                                    errorClass="help-block"
+                                                    type="radio"
+                                                    component={InputField}
+                                                    units={(<label htmlFor={GOAL_GAIN_POWER}>{capitalizeFirstLetter(GOAL_GAIN_POWER.replace('_', ' '))}</label>)}
+                                                    value={GOAL_GAIN_POWER}
                                                 />
                                             </div>
                                             <div className="col-md-4">
                                                 <Field
                                                     id={GOAL_INCREASE_ENDURANCE}
-                                                    name={GOAL_INCREASE_ENDURANCE}
-                                                    wrapperClass="pull-left custom_check mb-10"
-                                                    component={CheckField}
-                                                    checked={this.state[GOAL_INCREASE_ENDURANCE]}
-                                                    handleClick={this.handleCheckClick}
-                                                    title={capitalizeFirstLetter(GOAL_INCREASE_ENDURANCE.replace('_', ' '))}
+                                                    name="primary_goal"
+                                                    wrapperClass="custom_radio mb-10"
+                                                    errorClass="help-block"
+                                                    type="radio"
+                                                    component={InputField}
+                                                    units={(<label htmlFor={GOAL_INCREASE_ENDURANCE}>{capitalizeFirstLetter(GOAL_INCREASE_ENDURANCE.replace('_', ' '))}</label>)}
+                                                    value={GOAL_INCREASE_ENDURANCE}
                                                 />
                                             </div>
                                         </div>
@@ -363,12 +363,7 @@ class UpdateProfileForm extends Component {
                 weight: profile.weight,
                 workout_location: profile.workoutLocation,
                 about_me: profile.aboutMe,
-            }
-            if (profile.goals && profile.goals.length > 0) {
-                profile.goals.map((goal, index) => {
-                    this.setState({ [goal]: true });
-                    formData[goal] = true;
-                });
+                primary_goal: (profile.goal) ? profile.goal.name : null,
             }
             dispatch(initialize('update_profile_details_form', formData));
             dispatch(hidePageLoader());
@@ -380,16 +375,9 @@ class UpdateProfileForm extends Component {
         }
     }
 
-
     handleChangeDob = (date) => {
         this.props.change('dob', date);
         this.setState({ dob: date });
-    }
-
-    handleCheckClick = (name) => {
-        var newState = !this.state[name];
-        this.props.change(name, newState);
-        this.setState({ [name]: newState });
     }
 
     handleChangeTextEditor = (editorText) => {
@@ -400,31 +388,17 @@ class UpdateProfileForm extends Component {
 
 const handleSubmit = (data, dispatch, props) => {
     const { handleSaveActionFlag } = props;
-    var userGoalsArr = [];
-    var goalsArr = [
-        GOAL_GAIN_MUSCLE,
-        GOAL_GAIN_FLEXIBILITY,
-        GOAL_LOSE_FAT,
-        GOAL_GAIN_STRENGTH,
-        GOAL_GAIN_POWER,
-        GOAL_INCREASE_ENDURANCE,
-    ];
-    goalsArr.map((goal, i) => {
-        if (data[goal]) {
-            userGoalsArr.push(goal);
-        }
-    });
     var formData = {
         firstName: capitalizeFirstLetter(data.first_name),
         lastName: (data.last_name) ? capitalizeFirstLetter(data.last_name) : '',
         mobileNumber: (data.mobile_no) ? data.mobile_no : '',
         gender: (data.gender) ? data.gender : GENDER_MALE,
         dateOfBirth: (data.dob) ? data.dob : '',
-        goals: userGoalsArr,
+        goal: (data.primary_goal) ? data.primary_goal : null,
         aboutMe: (data.about_me) ? data.about_me : '',
         height: (data.height) ? data.height : 0,
         weight: (data.weight) ? data.weight : 0,
-        workoutLocation: (data.workout_location) ? data.workout_location : WORKOUT_LOCATION_HOME,
+        workoutLocation: (data.workout_location) ? data.workout_location : WORKOUT_LOCATION_GYM,
     };
     handleSaveActionFlag(true);
     dispatch(showPageLoader());
@@ -509,28 +483,6 @@ class DateField extends Component {
                 {meta.touched &&
                     ((meta.error && <span className={errorClass}>{meta.error}</span>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))
                 }
-            </div>
-        );
-    }
-}
-
-class CheckField extends Component {
-    render() {
-        const {
-            input,
-            wrapperClass,
-            title,
-            checked,
-            handleClick,
-        } = this.props;
-        return (
-            <div className={wrapperClass} onClick={() => handleClick(input.name)}>
-                <input
-                    {...input}
-                    type="checkbox"
-                    checked={checked}
-                />
-                <label>{title}</label>
             </div>
         );
     }

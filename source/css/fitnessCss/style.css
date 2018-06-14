@@ -1446,3 +1446,15 @@ ul.text-right.pager {text-align: right;}
 .margin_minus .personal-goal-2 a i {font-size: 18px;color: #fff;}
 .add-personal-goal-modal .progress-popup-body .form-group .Select .Select-control .Select-input {line-height: 60px;}
 .pager li.disabled a {background: #f8f8f8 !important;cursor: not-allowed !important;pointer-events: initial !important;}
+
+.custom_radio [type="radio"]:not(:checked),
+.custom_radio [type="radio"]:checked {position: absolute;left: -9999px;}
+.custom_radio [type="radio"]:not(:checked) + label, .custom_radio [type="radio"]:checked + label {position: relative;padding-left: 30px;cursor: pointer;width: 100%;height: 22px;}
+.custom_radio [type="radio"]:not(:checked) + label:before,
+.custom_radio [type="radio"]:checked + label:before {content: '';position: absolute;left: 0;top: 0;width: 22px;height: 22px;border: 2px solid #eee;background: #fff;box-shadow: none;}
+.custom_radio [type="radio"]:not(:checked) + label:after,
+.custom_radio [type="radio"]:checked + label:after {content: '';position: absolute;top: 4px;left: 4px;line-height: 0.8;transition: all .2s;width: 14px;height: 14px;background: linear-gradient(123.28deg, #46E9C5 0%, #3FFBFC 100%);}
+.custom_radio [type="radio"]:not(:checked) + label:after {opacity: 0;transform: scale(0);}
+.custom_radio [type="radio"]:checked + label:after {opacity: 1;transform: scale(1);}
+.personal-dtl ul li.checl_login .input-wrap .form-group.reset_link {display: flex;width: 60%;}
+.custom_radio [type="radio"]:checked + label:after {opacity: 1;transform: scale(1);}
