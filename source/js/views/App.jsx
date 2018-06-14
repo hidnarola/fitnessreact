@@ -45,7 +45,7 @@ import BadgeTasks from './Admin/BadgeTasks';
 import { ToastContainer } from "react-toastify";
 import NutritionPreferences from '../components/Nutrition/NutritionPreferences'
 import { publicPath, routeCodes } from '../constants/routes';
-import { SESSION_EXPIRED_URL_TYPE } from '../constants/consts';
+import { SESSION_EXPIRED_URL_TYPE, LOCALSTORAGE_ACCESS_TOKEN_KEY } from '../constants/consts';
 import { FaCircleONotch } from "react-icons/lib/fa";
 import FitnessTests from './Admin/FitnessTests';
 import NutritionRecipeDetails from '../components/Nutrition/NutritionRecipeDetails';
@@ -56,10 +56,19 @@ import { NavLink } from "react-router-dom";
 import UpdateProfile from './UpdateProfile';
 import { toggleSideMenu } from '../helpers/funs';
 import Auth from '../auth/Auth';
+import SocketDemo from './SocketDemo';
 
 const auth = new Auth();
 
 class App extends Component {
+
+    componentWillMount() {
+        let token = localStorage.getItem(LOCALSTORAGE_ACCESS_TOKEN_KEY);
+        if (token) {
+            console.log('App.js mounted => ', token);
+        }
+    }
+
     render() {
         const {
             showPageLoader,
@@ -73,6 +82,7 @@ class App extends Component {
                 <Router history={history}>
                     <ScrollToTop>
                         <Switch>
+                            <Route exact path={`${routeCodes.HOME}socket`} component={SocketDemo} />
                             <Route exact path={routeCodes.HOME} component={Login} />
                             <Route exact path={`${publicPath}${SESSION_EXPIRED_URL_TYPE}`} component={Login} />
                             <Route path={routeCodes.REGISTERUSER} component={RegisterUser} />
