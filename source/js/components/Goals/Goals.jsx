@@ -6,13 +6,14 @@ import AddPersonalGoal from './AddPersonalGoal';
 import { addUserPersonalGoalRequest, getUserPersonalGoalRequest, deleteUserPersonalGoalRequest } from '../../actions/userPersonalGoals';
 import { reset } from "redux-form";
 import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
-import { ts, te } from '../../helpers/funs';
+import { ts, te, capitalizeFirstLetter } from '../../helpers/funs';
 import { GOALS_DETAILS, MEASUREMENT_UNITS, SECONDARY_GOALS } from '../../constants/consts';
 import { Pager } from "react-bootstrap";
 import DeletePersonalGoalConfirmation from '../Admin/Common/DeleteConfirmation';
 import DeleteSecondaryGoalConfirmation from '../Admin/Common/DeleteConfirmation';
 import AddSecondaryGoal from './AddSecondaryGoal';
 import { addUserSecondaryGoalRequest, getUserSecondaryGoalRequest, deleteUserSecondaryGoalRequest } from '../../actions/userSecondaryGoals';
+import { getUserPrimaryGoalRequest } from '../../actions/userPrimaryGoals';
 
 class Goals extends Component {
     constructor(props) {
@@ -40,6 +41,9 @@ class Goals extends Component {
             selectedSecondaryGoalId: null,
             deleteSecondaryGoalActionInit: false,
             remainingSecondaryGoals: SECONDARY_GOALS,
+
+            selectPrimaryGoalActionInit: false,
+            primaryGoal: null,
         }
     }
 
@@ -51,6 +55,7 @@ class Goals extends Component {
         } = this.state;
         this.requestPersonalGoals(personalGoalDisplayCompleted, personalGoalStart, personalGoalOffset);
         this.requestSecondaryGoals();
+        this.requestPrimaryGoals();
     }
 
     render() {
@@ -68,6 +73,7 @@ class Goals extends Component {
             secondaryGoals,
             showDeleteSecondaryGoalModal,
             remainingSecondaryGoals,
+            primaryGoal,
         } = this.state;
         return (
             <div className="fitness-goals">
@@ -97,47 +103,48 @@ class Goals extends Component {
                             <div className="whitebox-head">
                                 <h3 className="title-h3">Your Primary Goal</h3>
                             </div>
-                            <div className="whitebox-body goal-content d-flex">
-                                <div className="part-l">
-                                    <div className="goal-head d-flex">
-                                        <h3>Lose Fat</h3>
-                                        <a href="" className="ml-auto">
-                                            <span>Edit Goal</span>
-                                            <i className="icon-settings"></i>
-                                        </a>
+                            {primaryGoal && Object.keys(primaryGoal).length > 0 &&
+                                <div className="whitebox-body goal-content d-flex">
+                                    <div className="part-l">
+                                        <div className="goal-head d-flex">
+                                            <h3>{capitalizeFirstLetter(primaryGoal.name.replace('_', ' '))}</h3>
+                                        </div>
+                                        <div className="goal-body">
+                                            <ul className="d-flex goal-info">
+                                                <li>
+                                                    <h4>At start</h4>
+                                                    <p>{primaryGoal.start}
+                                                        <small>{capitalizeFirstLetter(primaryGoal.name.replace('_', ' '))}</small>
+                                                    </p>
+                                                </li>
+                                                <li>
+                                                    <h4>Current</h4>
+                                                    <p>0
+                                                            <small>{capitalizeFirstLetter(primaryGoal.name.replace('_', ' '))}</small>
+                                                    </p>
+                                                </li>
+                                                <li>
+                                                    <h4>Target</h4>
+                                                    <p>0%
+                                                            <small>{capitalizeFirstLetter(primaryGoal.name.replace('_', ' '))}</small>
+                                                    </p>
+                                                </li>
+                                            </ul>
+                                        </div>
                                     </div>
-                                    <div className="goal-body">
-                                        <ul className="d-flex goal-info">
-                                            <li>
-                                                <h4>At start</h4>
-                                                <p>20%
-                                                    <small>Body Fat</small>
-                                                </p>
-                                            </li>
-                                            <li>
-                                                <h4>Current</h4>
-                                                <p>16%
-                                                    <small>Body Fat</small>
-                                                </p>
-                                            </li>
-                                            <li>
-                                                <h4>Target</h4>
-                                                <p>12%
-                                                    <small>Body Fat</small>
-                                                </p>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div className="part-r">
-                                    <div className="goal-head d-flex">
-                                        <h3>Your Body Fat</h3>
-                                    </div>
-                                    <div className="goal-body">
-                                        <img src="images/bodyfat-graph.png" alt="" />
+                                    <div className="part-r">
+                                        <div className="goal-head d-flex">
+                                            <h3>{capitalizeFirstLetter(primaryGoal.name.replace('_', ' '))} score</h3>
+                                        </div>
+                                        <div className="goal-body">
+                                            <img src="images/bodyfat-graph.png" alt="" />
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            }
+                            {((!primaryGoal) || Object.keys(primaryGoal).length <= 0) &&
+                                <span>No goal found</span>
+                            }
                         </div>
                         {secondaryGoals && secondaryGoals.length > 0 &&
                             <div className="white-box space-btm-20">
@@ -278,6 +285,8 @@ class Goals extends Component {
             secondaryGoalLoading,
             secondaryGoalError,
             secondaryGoals,
+            primaryGoalLoading,
+            primaryGoal,
         } = this.props;
         const {
             savePersonalGoalActionInit,
@@ -289,6 +298,7 @@ class Goals extends Component {
             saveSecondaryGoalActionInit,
             personalGoalStart,
             deleteSecondaryGoalActionInit,
+            selectPrimaryGoalActionInit,
         } = this.state;
         if (selectPersonalGoalActionInit && !personalGoalLoading) {
             this.setState({
@@ -310,6 +320,12 @@ class Goals extends Component {
                 selectSecondaryGoalActionInit: false,
                 secondaryGoals,
                 remainingSecondaryGoals,
+            });
+        }
+        if (selectPrimaryGoalActionInit && !primaryGoalLoading) {
+            this.setState({
+                selectPrimaryGoalActionInit: false,
+                primaryGoal,
             });
         }
         if (savePersonalGoalActionInit && !personalGoalLoading) {
@@ -377,6 +393,14 @@ class Goals extends Component {
         } = this.props;
         this.setState({ selectSecondaryGoalActionInit: true });
         dispatch(getUserSecondaryGoalRequest());
+    }
+
+    requestPrimaryGoals = () => {
+        const {
+            dispatch,
+        } = this.props;
+        this.setState({ selectPrimaryGoalActionInit: true });
+        dispatch(getUserPrimaryGoalRequest());
     }
 
     turnPage = (action) => {
@@ -486,7 +510,7 @@ class Goals extends Component {
 }
 
 const mapStateToProps = (state) => {
-    const { userPersonalGoals, userSecondaryGoals } = state;
+    const { userPersonalGoals, userSecondaryGoals, userPrimaryGoals } = state;
     return {
         personalGoalLoading: userPersonalGoals.get('loading'),
         personalGoals: userPersonalGoals.get('goals'),
@@ -495,6 +519,8 @@ const mapStateToProps = (state) => {
         secondaryGoalLoading: userSecondaryGoals.get('loading'),
         secondaryGoals: userSecondaryGoals.get('goals'),
         secondaryGoalError: userSecondaryGoals.get('error'),
+        primaryGoal: userPrimaryGoals.get('goal'),
+        primaryGoalLoading: userPrimaryGoals.get('loading'),
     }
 }
 

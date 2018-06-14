@@ -3,7 +3,7 @@ import { extraUserHeaders } from '../helpers/funs';
 
 const requestUrl = 'user/primary_goal';
 
-function getUserSecondaryGoals() {
+function getUserPrimaryGoals() {
     let headers = extraUserHeaders();
     var options = {
         method: 'GET',
@@ -14,5 +14,5 @@ function getUserSecondaryGoals() {
 }
 
 export default {
-    getUserSecondaryGoals,
+    getUserPrimaryGoals,
 }
