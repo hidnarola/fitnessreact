@@ -1,13 +1,23 @@
 import { Map } from "immutable";
 import jwtDecode from 'jwt-decode';
 import jwt from "jwt-simple";
-import { SET_LOGGED_USER_FROM_LOCALSTORAGE } from "../actions/user";
-import { LOCALSTORAGE_ID_TOKEN_KEY, LOCALSTORAGE_USERNAME_KEY, LOCALSTORAGE_USER_DETAILS_KEY, FITASSIST_USER_DETAILS_TOKEN_KEY } from "../constants/consts";
+import {
+    SET_LOGGED_USER_FROM_LOCALSTORAGE,
+    OPEN_SOCKET,
+    CLOSE_SOCKET
+} from "../actions/user";
+import {
+    LOCALSTORAGE_ID_TOKEN_KEY,
+    LOCALSTORAGE_USERNAME_KEY,
+    LOCALSTORAGE_USER_DETAILS_KEY,
+    FITASSIST_USER_DETAILS_TOKEN_KEY
+} from "../constants/consts";
 
 const initialState = Map({
     loading: false,
     error: null,
     loggedUserData: null,
+    socket: null,
 });
 
 const actionsMap = {
@@ -38,7 +48,19 @@ const actionsMap = {
             error: null,
             loggedUserData: userData,
         }));
-    }
+    },
+    [OPEN_SOCKET]: (state, action) => {
+        var newState = {
+            socket: null,
+        }
+        if (action.socket) {
+            newState.socket = action.socket;
+        }
+        return state.merge(Map(newState));
+    },
+    [CLOSE_SOCKET]: (state, action) => {
+        return state.merge(Map({ socket: null }));
+    },
 };
 
 export default function reducer(state = initialState, action = {}) {

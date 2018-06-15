@@ -20,7 +20,11 @@ class AddPersonalGoal extends Component {
                 var unitObj = _.find(MEASUREMENT_UNITS, ['key', unitsKey]);
                 if (unitObj) {
                     this.units = unitObj.value;
-                    nextProps.change('unit', null);
+                    if (this.units.length > 0) {
+                        nextProps.change('unit', this.units[0]);
+                    } else {
+                        nextProps.change('unit', null);
+                    }
                 } else {
                     this.units = [];
                     nextProps.change('unit', null);
@@ -75,6 +79,7 @@ class AddPersonalGoal extends Component {
                                             options={GOALS_DETAILS}
                                             placeholder="Task"
                                             validate={requiredReactSelect}
+                                            errorClass="help-block"
                                         />
                                     </div>
                                     <div className="col-md-4 pull-left">
@@ -82,10 +87,14 @@ class AddPersonalGoal extends Component {
                                             name="target"
                                             type="number"
                                             wrapperClass="form-group"
-                                            className="form-control"
+                                            className="form-control remove-spinner"
                                             component={InputField}
                                             placeholder="Target"
                                             validate={required}
+                                            errorClass="help-block"
+                                            properties={{
+                                                min: 0
+                                            }}
                                         />
                                     </div>
                                     <div className="col-md-4 pull-left">
@@ -95,7 +104,9 @@ class AddPersonalGoal extends Component {
                                             className="form-control"
                                             component={SelectField_ReactSelect}
                                             options={this.units}
+                                            placeholder="Unit"
                                             validate={requiredReactSelect}
+                                            errorClass="help-block"
                                         />
                                     </div>
                                 </div>

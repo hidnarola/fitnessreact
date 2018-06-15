@@ -45,7 +45,7 @@ import BadgeTasks from './Admin/BadgeTasks';
 import { ToastContainer } from "react-toastify";
 import NutritionPreferences from '../components/Nutrition/NutritionPreferences'
 import { publicPath, routeCodes } from '../constants/routes';
-import { SESSION_EXPIRED_URL_TYPE, LOCALSTORAGE_ACCESS_TOKEN_KEY } from '../constants/consts';
+import { SESSION_EXPIRED_URL_TYPE, LOCALSTORAGE_ACCESS_TOKEN_KEY, SERVER_BASE_URL } from '../constants/consts';
 import { FaCircleONotch } from "react-icons/lib/fa";
 import FitnessTests from './Admin/FitnessTests';
 import NutritionRecipeDetails from '../components/Nutrition/NutritionRecipeDetails';
@@ -57,15 +57,25 @@ import UpdateProfile from './UpdateProfile';
 import { toggleSideMenu } from '../helpers/funs';
 import Auth from '../auth/Auth';
 import SocketDemo from './SocketDemo';
+import socketClient from "socket.io-client";
+import { openSocket, closeSocket } from '../actions/user';
+import { receiveNotification } from '../socket';
 
 const auth = new Auth();
 
 class App extends Component {
 
     componentWillMount() {
+        const {
+            dispatch
+        } = this.props;
         let token = localStorage.getItem(LOCALSTORAGE_ACCESS_TOKEN_KEY);
         if (token) {
-            // console.log('App.js mounted => ', token);
+            // const socket = socketClient(SERVER_BASE_URL);
+            // dispatch(openSocket(socket));
+            // receiveNotification(socket, (data) => {
+            //     console.log('In app js => ', data);
+            // });
         }
     }
 
@@ -210,6 +220,7 @@ class App extends Component {
         toggleSideMenu('user-right-menu', false);
         auth.logout();
     }
+
 }
 
 const mapStateToProps = (state) => {

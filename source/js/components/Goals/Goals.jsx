@@ -8,12 +8,14 @@ import { reset } from "redux-form";
 import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
 import { ts, te, capitalizeFirstLetter } from '../../helpers/funs';
 import { GOALS_DETAILS, MEASUREMENT_UNITS, SECONDARY_GOALS } from '../../constants/consts';
-import { Pager } from "react-bootstrap";
 import DeletePersonalGoalConfirmation from '../Admin/Common/DeleteConfirmation';
 import DeleteSecondaryGoalConfirmation from '../Admin/Common/DeleteConfirmation';
 import AddSecondaryGoal from './AddSecondaryGoal';
 import { addUserSecondaryGoalRequest, getUserSecondaryGoalRequest, deleteUserSecondaryGoalRequest } from '../../actions/userSecondaryGoals';
 import { getUserPrimaryGoalRequest } from '../../actions/userPrimaryGoals';
+import { NavLink } from "react-router-dom";
+import { routeCodes } from '../../constants/routes';
+import ReactPaginate from 'react-paginate';
 
 class Goals extends Component {
     constructor(props) {
@@ -63,11 +65,9 @@ class Goals extends Component {
             showAddPersonalGoal,
             savePersonalGoalError,
             personalGoals,
-            personalGoalStart,
             personalGoalOffset,
             totalPersonalGoals,
             showDeletePersonalGoalModal,
-            selectPersonalGoalActionInit,
             showAddSecondaryGoal,
             saveSecondaryGoalError,
             secondaryGoals,
@@ -75,6 +75,14 @@ class Goals extends Component {
             remainingSecondaryGoals,
             primaryGoal,
         } = this.state;
+
+        var personalGoalPages = [];
+        for (let i = 0; i < (Math.round(totalPersonalGoals / personalGoalOffset)); i++) {
+            personalGoalPages.push({
+                page: (i * personalGoalOffset),
+                label: (i + 1)
+            });
+        }
         return (
             <div className="fitness-goals">
                 <FitnessHeader />
@@ -143,7 +151,10 @@ class Goals extends Component {
                                 </div>
                             }
                             {((!primaryGoal) || Object.keys(primaryGoal).length <= 0) &&
-                                <span>No goal found</span>
+                                <div>
+                                    <h4>No goal found</h4>
+                                    <p>Please go to <NavLink to={routeCodes.UPDATE_PROFILE}>Profile Page</NavLink> to set primary goal.</p>
+                                </div>
                             }
                         </div>
                         {secondaryGoals && secondaryGoals.length > 0 &&
@@ -235,11 +246,18 @@ class Goals extends Component {
                                         })
                                     }
                                 </div>
-                                <Pager className="text-right">
-                                    <Pager.Item href="javascript:void(0)" onClick={() => this.turnPage('prev')} disabled={(personalGoalStart <= 0) || selectPersonalGoalActionInit}>Previous</Pager.Item>
-                                    {' '}
-                                    <Pager.Item href="javascript:void(0)" onClick={() => this.turnPage('next')} disabled={((personalGoalStart + personalGoalOffset) >= totalPersonalGoals) || selectPersonalGoalActionInit}>Next</Pager.Item>
-                                </Pager>
+                                <ReactPaginate
+                                    previousLabel={"previous"}
+                                    nextLabel={"next"}
+                                    breakLabel={<a href="javascript:void(0)">...</a>}
+                                    breakClassName={"break-me"}
+                                    pageCount={personalGoalPages.length}
+                                    marginPagesDisplayed={2}
+                                    pageRangeDisplayed={4}
+                                    onPageChange={this.turnPage}
+                                    containerClassName={"pagination pull-right noselect"}
+                                    subContainerClassName={"pages pagination"}
+                                    activeClassName={"active"} />
                             </div>
                         }
                     </div>
@@ -403,17 +421,9 @@ class Goals extends Component {
         dispatch(getUserPrimaryGoalRequest());
     }
 
-    turnPage = (action) => {
-        const {
-            personalGoalDisplayCompleted,
-            personalGoalStart,
-            personalGoalOffset,
-        } = this.state;
-        if (action === 'next') {
-            var newStart = personalGoalStart + personalGoalOffset;
-        } else {
-            var newStart = personalGoalStart - personalGoalOffset;
-        }
+    turnPage = ({ selected }) => {
+        const { personalGoalDisplayCompleted, personalGoalOffset } = this.state;
+        var newStart = (selected * personalGoalOffset);
         this.setState({ personalGoalStart: newStart });
         this.requestPersonalGoals(personalGoalDisplayCompleted, newStart, personalGoalOffset);
     }

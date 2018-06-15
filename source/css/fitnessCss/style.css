@@ -1458,3 +1458,11 @@ ul.text-right.pager {text-align: right;}
 .custom_radio [type="radio"]:checked + label:after {opacity: 1;transform: scale(1);}
 .personal-dtl ul li.checl_login .input-wrap .form-group.reset_link {display: flex;width: 60%;}
 .custom_radio [type="radio"]:checked + label:after {opacity: 1;transform: scale(1);}
+.add-personal-goal-modal .has-error .Select-control,
+.add-personal-goal-modal .progress-popup-body .has-error input.form-control {border: 1px solid #a94442 !important;}
+
+.pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover, .pagination>.active>span, .pagination>.active>span:focus, .pagination>.active>span:hover {background: linear-gradient(123.28deg, #46E9C5 0%, #3FFBFC 100%);border-color: #dddddd;font-weight: 600;}
+.pagination>li>a, .pagination>li>span {color: #000000;}
+.pagination>.disabled>a, .pagination>.disabled>a:focus, .pagination>.disabled>a:hover, .pagination>.disabled>span, .pagination>.disabled>span:focus, .pagination>.disabled>span:hover {background-color: #ddd;}
+.pagination>li>a:focus, .pagination>li>a:hover, .pagination>li>span:focus, .pagination>li>span:hover {color: #000000;}
+.noselect {-webkit-touch-callout: none;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;}

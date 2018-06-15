@@ -9,7 +9,7 @@ import { SERVER_BASE_URL } from '../constants/consts';
 import noImg from 'img/common/no-img.png'
 
 export const InputField = (props) => {
-    const { label, input, meta, wrapperClass, className, labelClass, placeholder, errorClass, type, disabled } = props;
+    const { label, input, meta, wrapperClass, className, labelClass, placeholder, errorClass, type, disabled, properties } = props;
     return (
         <div
             className={
@@ -23,6 +23,7 @@ export const InputField = (props) => {
                 disabled={disabled ? disabled : false}
                 className={className}
                 placeholder={placeholder}
+                {...properties}
             />
             {meta.touched &&
                 ((meta.error && <div className={errorClass}>{meta.error}</div>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))

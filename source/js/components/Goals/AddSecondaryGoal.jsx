@@ -53,6 +53,7 @@ class AddSecondaryGoal extends Component {
                                             options={goals}
                                             placeholder="Task"
                                             validate={requiredReactSelect}
+                                            errorClass="help-block"
                                         />
                                     </div>
                                 </div>

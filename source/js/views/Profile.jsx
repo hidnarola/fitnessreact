@@ -450,6 +450,7 @@ class Profile extends Component {
                 te(requestAcceptError[0]);
             } else {
                 ts('Friend request accepted!');
+                // emit socket for sending notification
             }
             this.setForceUpdateChildComponents(true);
         }
