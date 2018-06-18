@@ -4,6 +4,10 @@ export const GET_USER_UNREAD_NOTIFICATIONS_REQUEST = 'GET_USER_UNREAD_NOTIFICATI
 export const GET_USER_UNREAD_NOTIFICATIONS_SUCCESS = 'GET_USER_UNREAD_NOTIFICATIONS_SUCCESS';
 export const GET_USER_UNREAD_NOTIFICATIONS_ERROR = 'GET_USER_UNREAD_NOTIFICATIONS_ERROR';
 
+export const READ_ONE_USER_NOTIFICATION_REQUEST = 'READ_ONE_USER_NOTIFICATION_REQUEST';
+export const READ_ONE_USER_NOTIFICATION_SUCCESS = 'READ_ONE_USER_NOTIFICATION_SUCCESS';
+export const READ_ONE_USER_NOTIFICATION_ERROR = 'READ_ONE_USER_NOTIFICATION_ERROR';
+
 export function setUserNotificationCount(count) {
     return {
         type: SET_USER_NOTIFICATION_COUNT,
@@ -26,7 +30,28 @@ export function getUserUnreadNotificationsSuccess(data) {
 
 export function getUserUnreadNotificationsError(error) {
     return {
-        type: GET_USER_UNREAD_NOTIFICATIONS_SUCCESS,
+        type: GET_USER_UNREAD_NOTIFICATIONS_ERROR,
+        error,
+    }
+}
+
+export function readOneUserNotificationRequest(_id) {
+    return {
+        type: READ_ONE_USER_NOTIFICATION_REQUEST,
+        _id,
+    }
+}
+
+export function readOneUserNotificationSuccess(data) {
+    return {
+        type: READ_ONE_USER_NOTIFICATION_SUCCESS,
+        data,
+    }
+}
+
+export function readOneUserNotificationError(error) {
+    return {
+        type: READ_ONE_USER_NOTIFICATION_ERROR,
         error,
     }
 }

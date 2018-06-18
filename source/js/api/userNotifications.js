@@ -1,4 +1,4 @@
-import { fetchResource } from '.';
+import { fetchResource, putFormData } from '.';
 import { extraUserHeaders } from '../helpers/funs';
 
 const requestUrl = 'user/notification';
@@ -13,6 +13,13 @@ function getUserUnreadNotifications() {
     return fetchResource(requestUrl, options);
 }
 
+function putReadOneUserNotification(_id) {
+    let headers = extraUserHeaders();
+    return putFormData(requestUrl + '/' + _id, {}, headers);
+}
+
+
 export default {
     getUserUnreadNotifications,
+    putReadOneUserNotification,
 }

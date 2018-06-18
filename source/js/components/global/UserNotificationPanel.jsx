@@ -1,60 +1,149 @@
 import React, { Component } from 'react';
-import { toggleSideMenu } from '../../helpers/funs';
+import { connect } from 'react-redux';
+import { NavLink } from 'react-router-dom';
+import { toggleSideMenu, getToken } from '../../helpers/funs';
 import { Scrollbars } from 'react-custom-scrollbars';
+import ReactHtmlParser from "react-html-parser";
+import noProfileImg from 'img/common/no-profile-img.png'
+import { routeCodes } from '../../constants/routes';
+import { readOneUserNotificationRequest } from '../../actions/userNotifications';
 
 class UserNotificationPanel extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            readOneNotificationActionInit: false,
+        }
+    }
+
     render() {
+        const {
+            loading,
+            notifications,
+            error,
+        } = this.props;
         return (
-            <div id="user-notification-panel" class="notifications-wrap">
-                <div class="notification-bg"></div>
-                <div class="notifications">
-                    <div class="notifications-head">
-                        <h3><i class="icon-notifications"></i> <small>Notifications</small></h3>
-                        <a href="javascript:void(0)" onClick={() => toggleSideMenu('user-notification-panel', false)}><i class="icon-close"></i></a>
+            <div id="user-notification-panel" className="notifications-wrap">
+                <div className="notification-bg"></div>
+                <div className="notifications">
+                    <div className="notifications-head">
+                        <h3><i className="icon-notifications"></i> <small>Notifications</small></h3>
+                        <a href="javascript:void(0)" onClick={() => toggleSideMenu('user-notification-panel', false)}><i className="icon-close"></i></a>
                     </div>
-                    <div class="notification-option">
-                        <a href=""><small>Settings</small> <i class="icon-settings"></i> </a>
+                    <div className="notification-option">
+                        <a href=""><small>Settings</small> <i className="icon-settings"></i> </a>
                         <a href=""><small>Mark as read</small> </a>
                     </div>
-                    <Scrollbars autoHide style={{ height: 500 }}>
-                        <div class="notifications-body" id="notification-box" >
-                            <div class="notifications-box">
-                                <span><img src="images/img-02.jpg" alt="" /></span>
-                                <h4><strong>Jeremiah Coleman</strong> <small> posted on your Fithub.</small></h4>
+                    {notifications && notifications.length > 0 &&
+                        <Scrollbars autoHide style={{ height: 500 }}>
+                            <div className="notifications-body" id="notification-box">
+                                {
+                                    notifications.map((noti, index) => {
+                                        return (
+                                            <NotificationCard
+                                                key={index}
+                                                notification={noti}
+                                                readOneNotificaion={this.handleReadOneNotification}
+                                            />
+                                        )
+                                    })
+                                }
                             </div>
-                            <div class="notifications-box">
-                                <span><img src="images/img-02.jpg" alt="" /></span>
-                                <h4><strong>Jeremiah Coleman</strong> <small> posted on your Fithub.</small></h4>
-                            </div>
-                            <div class="notifications-box">
-                                <span><img src="images/img-02.jpg" alt="" /></span>
-                                <h4><strong>Jeremiah Coleman</strong> <small> posted on your Fithub.</small></h4>
-                            </div>
-                            <div class="notifications-box">
-                                <span><img src="images/img-02.jpg" alt="" /></span>
-                                <h4><strong>Jeremiah Coleman</strong> <small> posted on your Fithub.</small></h4>
-                            </div>
-                            <div class="notifications-box">
-                                <span><img src="images/img-02.jpg" alt="" /></span>
-                                <h4><strong>Jeremiah Coleman</strong> <small> posted on your Fithub.</small></h4>
-                            </div>
-                            <div class="notifications-box">
-                                <span><img src="images/img-02.jpg" alt="" /></span>
-                                <h4><strong>Jeremiah Coleman</strong> <small> posted on your Fithub.</small></h4>
-                            </div>
-                            <div class="notifications-box">
-                                <span><img src="images/img-02.jpg" alt="" /></span>
-                                <h4><strong>Jeremiah Coleman</strong> <small> posted on your Fithub.</small></h4>
-                            </div>
-                        </div>
-                    </Scrollbars>
-                    <div class="notifications-btm">
+                        </Scrollbars>
+                    }
+                    <div className="notifications-btm">
                         <a href="">See All</a>
                     </div>
                 </div>
             </div>
         );
     }
+
+    componentDidUpdate() {
+        const { loading, socket } = this.props;
+        const { readOneNotificationActionInit } = this.state;
+        if (readOneNotificationActionInit && !loading) {
+            this.setState({ readOneNotificationActionInit: false });
+            socket.emit('user_notifications_count', getToken());
+        }
+    }
+
+    handleReadOneNotification = (_id) => {
+        const { dispatch } = this.props;
+        this.setState({
+            readOneNotificationActionInit: true,
+        });
+        dispatch(readOneUserNotificationRequest(_id));
+    }
 }
 
-export default UserNotificationPanel;
+const mapStateToProps = (state) => {
+    const { user, userNotifications } = state;
+    return {
+        socket: user.get('socket'),
+        loading: userNotifications.get('loading'),
+        notifications: userNotifications.get('notifications'),
+        error: userNotifications.get('error'),
+    };
+}
+
+export default connect(
+    mapStateToProps,
+)(UserNotificationPanel);
+
+class NotificationCard extends Component {
+    render() {
+        const {
+            notification,
+            readOneNotificaion,
+        } = this.props;
+        var type = notification.type;
+        switch (type) {
+            case 'friend_request_approved':
+                var msg = '';
+                var sender = notification.sender;
+                msg = `<strong>${sender.firstName} ${(sender.lastName) ? sender.lastName : ''}</strong>`;
+                msg += `<small>approved your request</small>`;
+                return (
+                    <NavLink
+                        to={`${routeCodes.PROFILE}/${sender.username}`}
+                        onClick={() => {
+                            readOneNotificaion(notification._id);
+                            toggleSideMenu('user-notification-panel', false)
+                        }}
+                    >
+                        <div className="notifications-box">
+                            <span>
+                                <img
+                                    src={sender.avatar}
+                                    className="avatar"
+                                    onError={(e) => {
+                                        e.target.src = noProfileImg
+                                    }}
+                                />
+                            </span>
+                            <h4>{ReactHtmlParser(msg)}</h4>
+                        </div>
+                    </NavLink>
+                )
+            default:
+                if (notification.body) {
+                    return (
+                        <div className="notifications-box">
+                            <span>
+                                <img
+                                    src={SERVER_BASE_URL + sender.avatar}
+                                    onError={(e) => {
+                                        e.target.src = noProfileImg
+                                    }}
+                                />
+                            </span>
+                            <h4><small>{notification.body}</small></h4>
+                        </div>
+                    );
+                } else {
+                    return null;
+                }
+        }
+    }
+}

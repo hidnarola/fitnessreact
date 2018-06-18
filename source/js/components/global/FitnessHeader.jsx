@@ -6,22 +6,18 @@ import FaSearch from 'react-icons/lib/fa/search';
 import FaNoti from 'react-icons/lib/md/notifications-none';
 import FaMenu from 'react-icons/lib/md/menu';
 import FaMail from 'react-icons/lib/md/markunread';
-import { FaSignOut } from 'react-icons/lib/fa'
-import { logout } from '../../actions/login';
 import { withRouter } from 'react-router-dom';
 import Auth from '../../auth/Auth';
 import { setLoggedUserFromLocalStorage } from '../../actions/user';
 import noProfileImg from 'img/common/no-profile-img.png';
-import ReactTooltip from "react-tooltip";
 import Autosuggest from "react-autosuggest";
 import _ from "lodash";
 import { getUserSearchRequest, resetUserSearch, handleChangeUserSearchFor } from '../../actions/userSearch';
-import $ from "jquery";
 import { toggleSideMenu, getToken } from '../../helpers/funs';
 import AutosuggestHighlightMatch from 'autosuggest-highlight/match';
 import AutosuggestHighlightParse from 'autosuggest-highlight/parse';
 import cns from "classnames";
-import { receiveUserNotificationCount } from '../../socket';
+import { getUserUnreadNotificationsRequest } from '../../actions/userNotifications';
 
 const auth = new Auth();
 
@@ -40,12 +36,6 @@ class FitnessHeader extends Component {
         dispatch(setLoggedUserFromLocalStorage());
         if (socket) {
             socket.emit('user_notifications_count', getToken());
-            // socket.on('receive_user_notification_count', (data) => {
-            //     console.log(data);
-            // });
-            // receiveUserNotificationCount(socket, getToken(), (data) => {
-            //     console.log('In Header with data => ', data);
-            // });
         }
     }
 
@@ -54,6 +44,7 @@ class FitnessHeader extends Component {
             loggedUserData,
             searchValue,
             notificationCount,
+            dispatch,
         } = this.props;
         const {
             searchSuggestions,
@@ -119,6 +110,7 @@ class FitnessHeader extends Component {
                         </div>
                         <div className="header-alert">
                             <a href="javascript:void(0)" onClick={() => {
+                                dispatch(getUserUnreadNotificationsRequest());
                                 toggleSideMenu('user-notification-panel', true);
                             }}>
                                 <FaNoti /> {notificationCount}
