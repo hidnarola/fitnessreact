@@ -8,6 +8,10 @@ export const READ_ONE_USER_NOTIFICATION_REQUEST = 'READ_ONE_USER_NOTIFICATION_RE
 export const READ_ONE_USER_NOTIFICATION_SUCCESS = 'READ_ONE_USER_NOTIFICATION_SUCCESS';
 export const READ_ONE_USER_NOTIFICATION_ERROR = 'READ_ONE_USER_NOTIFICATION_ERROR';
 
+export const READ_ALL_USER_NOTIFICATION_REQUEST = 'READ_ALL_USER_NOTIFICATION_REQUEST';
+export const READ_ALL_USER_NOTIFICATION_SUCCESS = 'READ_ALL_USER_NOTIFICATION_SUCCESS';
+export const READ_ALL_USER_NOTIFICATION_ERROR = 'READ_ALL_USER_NOTIFICATION_ERROR';
+
 export function setUserNotificationCount(count) {
     return {
         type: SET_USER_NOTIFICATION_COUNT,
@@ -52,6 +56,26 @@ export function readOneUserNotificationSuccess(data) {
 export function readOneUserNotificationError(error) {
     return {
         type: READ_ONE_USER_NOTIFICATION_ERROR,
+        error,
+    }
+}
+
+export function readAllUserNotificationRequest() {
+    return {
+        type: READ_ALL_USER_NOTIFICATION_REQUEST,
+    }
+}
+
+export function readAllUserNotificationSuccess(data) {
+    return {
+        type: READ_ALL_USER_NOTIFICATION_SUCCESS,
+        data,
+    }
+}
+
+export function readAllUserNotificationError(error) {
+    return {
+        type: READ_ALL_USER_NOTIFICATION_ERROR,
         error,
     }
 }

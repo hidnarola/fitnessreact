@@ -85,12 +85,8 @@ class BadgeSave extends Component {
             status: (data.status) ? data.status.value : null,
         }
         if (timeType === TIME_TYPE_TIME_WINDOW) {
-            requestData.duration = {
-                start: data.duration.start,
-                end: data.duration.end,
-            }
-        } else {
-            requestData.duration = null;
+            requestData.duration = data.duration;
+            requestData.timeWindowType = data.time_window_type.value;
         }
         this.setState({ saveActionInit: true });
         dispatch(showPageLoader());

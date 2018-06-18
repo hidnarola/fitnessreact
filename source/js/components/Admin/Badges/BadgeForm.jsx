@@ -13,7 +13,8 @@ import {
     STATUS_ACTIVE,
     STATUS_INACTIVE,
     STATUS_ACTIVE_STR,
-    STATUS_INACTIVE_STR
+    STATUS_INACTIVE_STR,
+    TIME_WINDOW_TYPES
 } from '../../../constants/consts';
 import { capitalizeFirstLetter } from '../../../helpers/funs';
 import DateRangePicker from 'react-daterange-picker';
@@ -37,8 +38,6 @@ class BadgeForm extends Component {
         this.state = {
             incompleteDescription: '',
             completeDescription: '',
-            timeDateRange: null,
-            timeDateRangeState: null,
             timeType: '',
             selectOneActionInit: false,
         }
@@ -75,7 +74,7 @@ class BadgeForm extends Component {
     }
 
     render() {
-        const { incompleteDescription, completeDescription, timeDateRange, timeType } = this.state;
+        const { incompleteDescription, completeDescription, timeType } = this.state;
         const { handleSubmit } = this.props;
         return (
             <div className="badge-form-data">
@@ -188,19 +187,32 @@ class BadgeForm extends Component {
                                 onChange={(val) => this.setState({ timeType: val.value })}
                             />
                             {timeType && timeType === TIME_TYPE_TIME_WINDOW &&
-                                <div className="form-group">
-                                    <label className="control-label display_block">Select Dates</label>
-                                    <div className="badges-timed-date-range-wrapper">
-                                        <DateRangePicker
-                                            name="duration"
-                                            firstOfWeek={1}
-                                            numberOfCalendars={2}
-                                            selectionType='range'
-                                            value={timeDateRange}
-                                            onSelect={this.handleTimeDateRange}
-                                        />
-                                    </div>
-                                </div>
+                                <Field
+                                    name="time_window_type"
+                                    label="Duration Type"
+                                    labelClass="control-label display_block"
+                                    wrapperClass="form-group"
+                                    placeholder="Duration Type"
+                                    component={SelectField_ReactSelect}
+                                    options={TIME_WINDOW_TYPES}
+                                    errorClass="help-block"
+                                    validate={[requiredReactSelectStatus]}
+                                />
+                            }
+                            {timeType && timeType === TIME_TYPE_TIME_WINDOW &&
+                                <Field
+                                    name="duration"
+                                    type="number"
+                                    className="form-control"
+                                    label="Duration"
+                                    labelClass="control-label display_block"
+                                    wrapperClass="form-group"
+                                    placeholder="Duration"
+                                    component={InputField}
+                                    errorClass="help-block"
+                                    warningClass=""
+                                    validate={[required]}
+                                />
                             }
                             <div className="col-md-12 mb-20 clear-both text-center">
                                 <div className="stepbox-b stepbox-b-center">
@@ -247,13 +259,10 @@ class BadgeForm extends Component {
                 }
                 var timeTypeObj = _.find(timeTypeOptions, ['value', badge.timeType]);
                 var duration = null;
+                var timeWindowType = null;
                 if (badge.timeType === TIME_TYPE_TIME_WINDOW) {
-                    if (badge.duration && badge.duration.start && badge.duration.end) {
-                        duration = moment.range(
-                            moment(badge.duration.start),
-                            moment(badge.duration.end),
-                        )
-                    }
+                    timeWindowType = _.find(TIME_WINDOW_TYPES, ['value', badge.timeWindowType]);
+                    duration = badge.duration;
                 }
                 var badgeStatusObj = _.find(statusOptions, ['value', badge.status]);
                 var formData = {
@@ -266,14 +275,14 @@ class BadgeForm extends Component {
                     completeDescription: badge.descriptionCompleted,
                     time_type: timeTypeObj ? timeTypeObj : null,
                     duration: duration,
+                    time_window_type: (timeWindowType && timeWindowType.value) ? timeWindowType.value : null,
                     status: (badgeStatusObj) ? badgeStatusObj : null,
                 }
                 dispatch(initialize('badgeSaveForm', formData));
                 this.setState({
                     incompleteDescription: badge.descriptionInCompleted,
                     completeDescription: badge.descriptionCompleted,
-                    timeType: timeTypeObj ? timeTypeObj.value : '',
-                    timeDateRange: duration,
+                    timeType: timeTypeObj.value,
                 });
             }
         }
@@ -283,14 +292,6 @@ class BadgeForm extends Component {
     handleEditorChange = (name, editorText) => {
         this.props.change(name, editorText);
         this.setState({ [name]: editorText });
-    }
-
-    handleTimeDateRange = (range, state) => {
-        this.props.change('duration', range);
-        this.setState({
-            timeDateRange: range,
-            timeDateRangeState: state
-        });
     }
     // ----End Methods----
 }

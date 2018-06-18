@@ -6,7 +6,10 @@ import {
     GET_USER_UNREAD_NOTIFICATIONS_ERROR,
     READ_ONE_USER_NOTIFICATION_REQUEST,
     READ_ONE_USER_NOTIFICATION_SUCCESS,
-    READ_ONE_USER_NOTIFICATION_ERROR
+    READ_ONE_USER_NOTIFICATION_ERROR,
+    READ_ALL_USER_NOTIFICATION_REQUEST,
+    READ_ALL_USER_NOTIFICATION_SUCCESS,
+    READ_ALL_USER_NOTIFICATION_ERROR
 } from "../actions/userNotifications";
 import { VALIDATION_FAILURE_STATUS } from "../constants/consts";
 import { generateValidationErrorMsgArr } from "../helpers/funs";
@@ -73,6 +76,36 @@ const actionMap = {
         return state.merge(Map(newState));
     },
     [READ_ONE_USER_NOTIFICATION_ERROR]: (state, action) => {
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
+        }
+        return state.merge(Map({
+            loading: false,
+            error: error,
+        }));
+    },
+    [READ_ALL_USER_NOTIFICATION_REQUEST]: (state, action) => {
+        return state.merge(Map({
+            loading: true,
+            error: [],
+        }));
+    },
+    [READ_ALL_USER_NOTIFICATION_SUCCESS]: (state, action) => {
+        var newState = {
+            loading: false,
+        };
+        if (action.data.status !== 1) {
+            var msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
+            newState.error = [msg];
+        }
+        return state.merge(Map(newState));
+    },
+    [READ_ALL_USER_NOTIFICATION_ERROR]: (state, action) => {
         let error = [];
         if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
             error = generateValidationErrorMsgArr(action.error.response.message);

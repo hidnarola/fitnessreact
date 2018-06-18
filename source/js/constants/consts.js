@@ -363,10 +363,10 @@ export const BADGES_TASKS = [
     { value: "reps_total", label: "Reps Total", unitKey: MEASUREMENT_UNIT_KEY_COUNT },
     { value: "reps_average", label: "Reps Average", unitKey: MEASUREMENT_UNIT_KEY_COUNT },
     { value: "reps_most", label: "Reps Most", unitKey: MEASUREMENT_UNIT_KEY_COUNT },
-    { value: "sets_least", label: "Sets Least", unitKey: MEASUREMENT_UNIT_KEY_COUNT},
-    { value: "sets_total", label: "Sets Total", unitKey: MEASUREMENT_UNIT_KEY_COUNT},
-    { value: "sets_average", label: "Sets Average", unitKey: MEASUREMENT_UNIT_KEY_COUNT},
-    { value: "sets_most", label: "Sets Most", unitKey: MEASUREMENT_UNIT_KEY_COUNT},
+    { value: "sets_least", label: "Sets Least", unitKey: MEASUREMENT_UNIT_KEY_COUNT },
+    { value: "sets_total", label: "Sets Total", unitKey: MEASUREMENT_UNIT_KEY_COUNT },
+    { value: "sets_average", label: "Sets Average", unitKey: MEASUREMENT_UNIT_KEY_COUNT },
+    { value: "sets_most", label: "Sets Most", unitKey: MEASUREMENT_UNIT_KEY_COUNT },
     { value: "running_distance_total", label: "Running Distance Total", unitKey: MEASUREMENT_UNIT_KEY_LARGE_DISTANCE },
     { value: "running_distance_average", label: "Running Distance Average", unitKey: MEASUREMENT_UNIT_KEY_LARGE_DISTANCE },
     { value: "running_distance_most", label: "Running Distance Most", unitKey: MEASUREMENT_UNIT_KEY_LARGE_DISTANCE },
@@ -490,4 +490,16 @@ export const BADGES_TASKS = [
     { value: "fiber_most", label: "Fiber Most", unitKey: MEASUREMENT_UNIT_KEY_LIGHT_MASS },
     { value: "fiber_least", label: "Fiber Least", unitKey: MEASUREMENT_UNIT_KEY_LIGHT_MASS },
     { value: "fiber_excess", label: "Fiber Excess", unitKey: MEASUREMENT_UNIT_KEY_LIGHT_MASS },
+]
+
+export const TIME_WINDOW_TYPE_DAY = 'day';
+export const TIME_WINDOW_TYPE_WEEK = 'week';
+export const TIME_WINDOW_TYPE_MONTH = 'month';
+export const TIME_WINDOW_TYPE_YEAR = 'year';
+
+export const TIME_WINDOW_TYPES = [
+    { value: TIME_WINDOW_TYPE_DAY, label: 'Day' },
+    { value: TIME_WINDOW_TYPE_WEEK, label: 'Week' },
+    { value: TIME_WINDOW_TYPE_MONTH, label: 'Month' },
+    { value: TIME_WINDOW_TYPE_YEAR, label: 'Year' },
 ]

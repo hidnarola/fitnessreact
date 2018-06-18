@@ -6,13 +6,13 @@ import { Scrollbars } from 'react-custom-scrollbars';
 import ReactHtmlParser from "react-html-parser";
 import noProfileImg from 'img/common/no-profile-img.png'
 import { routeCodes } from '../../constants/routes';
-import { readOneUserNotificationRequest } from '../../actions/userNotifications';
+import { readOneUserNotificationRequest, readAllUserNotificationRequest } from '../../actions/userNotifications';
 
 class UserNotificationPanel extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            readOneNotificationActionInit: false,
+            readNotificationActionInit: false,
         }
     }
 
@@ -31,9 +31,16 @@ class UserNotificationPanel extends Component {
                         <a href="javascript:void(0)" onClick={() => toggleSideMenu('user-notification-panel', false)}><i className="icon-close"></i></a>
                     </div>
                     <div className="notification-option">
-                        <a href=""><small>Settings</small> <i className="icon-settings"></i> </a>
-                        <a href=""><small>Mark as read</small> </a>
+                        <a href="javascript:void(0)"><small>Settings</small> <i className="icon-settings"></i></a>
+                        {notifications && notifications.length > 0 &&
+                            <a href="javascript:void(0)" onClick={this.handleMarkAll}><small>Mark as read</small></a>
+                        }
                     </div>
+                    {loading &&
+                        <div className="notifications-box">
+                            <h4><small>Loading...</small></h4>
+                        </div>
+                    }
                     {notifications && notifications.length > 0 &&
                         <Scrollbars autoHide style={{ height: 500 }}>
                             <div className="notifications-body" id="notification-box">
@@ -51,8 +58,13 @@ class UserNotificationPanel extends Component {
                             </div>
                         </Scrollbars>
                     }
+                    {(!notifications && !loading) || (notifications.length <= 0 && !loading) &&
+                        <div className="notifications-box">
+                            <h4><small>No recent notification</small></h4>
+                        </div>
+                    }
                     <div className="notifications-btm">
-                        <a href="">See All</a>
+                        <a href="javascript:void(0)">See All</a>
                     </div>
                 </div>
             </div>
@@ -61,9 +73,9 @@ class UserNotificationPanel extends Component {
 
     componentDidUpdate() {
         const { loading, socket } = this.props;
-        const { readOneNotificationActionInit } = this.state;
-        if (readOneNotificationActionInit && !loading) {
-            this.setState({ readOneNotificationActionInit: false });
+        const { readNotificationActionInit } = this.state;
+        if (readNotificationActionInit && !loading) {
+            this.setState({ readNotificationActionInit: false });
             socket.emit('user_notifications_count', getToken());
         }
     }
@@ -71,9 +83,18 @@ class UserNotificationPanel extends Component {
     handleReadOneNotification = (_id) => {
         const { dispatch } = this.props;
         this.setState({
-            readOneNotificationActionInit: true,
+            readNotificationActionInit: true,
         });
         dispatch(readOneUserNotificationRequest(_id));
+    }
+
+    handleMarkAll = () => {
+        const { dispatch } = this.props;
+        this.setState({
+            readNotificationActionInit: true,
+        });
+        dispatch(readAllUserNotificationRequest());
+        toggleSideMenu('user-notification-panel', false);
     }
 }
 
@@ -109,7 +130,7 @@ class NotificationCard extends Component {
                         to={`${routeCodes.PROFILE}/${sender.username}`}
                         onClick={() => {
                             readOneNotificaion(notification._id);
-                            toggleSideMenu('user-notification-panel', false)
+                            toggleSideMenu('user-notification-panel', false);
                         }}
                     >
                         <div className="notifications-box">

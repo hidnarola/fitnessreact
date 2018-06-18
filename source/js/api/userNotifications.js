@@ -18,8 +18,13 @@ function putReadOneUserNotification(_id) {
     return putFormData(requestUrl + '/' + _id, {}, headers);
 }
 
+function putReadAllUserNotification() {
+    let headers = extraUserHeaders();
+    return putFormData(requestUrl, {}, headers);
+}
 
 export default {
     getUserUnreadNotifications,
     putReadOneUserNotification,
+    putReadAllUserNotification,
 }
