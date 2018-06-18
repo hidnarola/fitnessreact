@@ -23,6 +23,11 @@ export function extraUserHeaders() {
     return headers;
 }
 
+export function getToken() {
+    const token = localStorage.getItem(LOCALSTORAGE_ACCESS_TOKEN_KEY);
+    return token;
+}
+
 export function prepareDropdownOptionsData(data, valueKey, labelKey) {
     let ddData = _.mapValues(data, (o) => { return { value: o[valueKey], label: o[labelKey] } });
     return _.values(ddData);

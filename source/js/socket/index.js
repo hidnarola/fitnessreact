@@ -1,6 +1,5 @@
-export const receiveNotification = (socket, callback) => {
-    socket.on('receive_notification', (data) => {
-        console.log(data);
+export const receiveUserNotificationCount = (socket, callback) => {
+    socket.on('receive_user_notification_count', (data) => {
         callback(data);
     });
 }

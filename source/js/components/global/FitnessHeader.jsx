@@ -17,10 +17,11 @@ import Autosuggest from "react-autosuggest";
 import _ from "lodash";
 import { getUserSearchRequest, resetUserSearch, handleChangeUserSearchFor } from '../../actions/userSearch';
 import $ from "jquery";
-import { toggleSideMenu } from '../../helpers/funs';
+import { toggleSideMenu, getToken } from '../../helpers/funs';
 import AutosuggestHighlightMatch from 'autosuggest-highlight/match';
 import AutosuggestHighlightParse from 'autosuggest-highlight/parse';
 import cns from "classnames";
+import { receiveUserNotificationCount } from '../../socket';
 
 const auth = new Auth();
 
@@ -35,14 +36,24 @@ class FitnessHeader extends Component {
     }
 
     componentWillMount() {
-        const { dispatch } = this.props;
+        const { dispatch, socket } = this.props;
         dispatch(setLoggedUserFromLocalStorage());
+        if (socket) {
+            socket.emit('user_notifications_count', getToken());
+            // socket.on('receive_user_notification_count', (data) => {
+            //     console.log(data);
+            // });
+            // receiveUserNotificationCount(socket, getToken(), (data) => {
+            //     console.log('In Header with data => ', data);
+            // });
+        }
     }
 
     render() {
         const {
             loggedUserData,
             searchValue,
+            notificationCount,
         } = this.props;
         const {
             searchSuggestions,
@@ -107,8 +118,10 @@ class FitnessHeader extends Component {
                             }
                         </div>
                         <div className="header-alert">
-                            <a>
-                                <FaNoti />
+                            <a href="javascript:void(0)" onClick={() => {
+                                toggleSideMenu('user-notification-panel', true);
+                            }}>
+                                <FaNoti /> {notificationCount}
                             </a>
                         </div>
                         <div className="header-email">
@@ -254,12 +267,14 @@ class FitnessHeader extends Component {
 }
 
 const mapStateToProps = (state) => {
-    const { user, userSearch } = state;
+    const { user, userSearch, userNotifications } = state;
     return {
         loggedUserData: user.get('loggedUserData'),
+        socket: user.get('socket'),
         userSearchLoading: userSearch.get('loading'),
         searchValue: userSearch.get('searchValue'),
         searchSuggestions: userSearch.get('users'),
+        notificationCount: userNotifications.get('count'),
     }
 }
 

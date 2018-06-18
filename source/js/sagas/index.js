@@ -20,6 +20,7 @@ import userSecondaryGoals from 'sagas/userSecondaryGoals'
 import userPrimaryGoals from 'sagas/userPrimaryGoals'
 import userSearch from 'sagas/userSearch'
 import userGalleryPhotos from 'sagas/userGalleryPhotos'
+import userNotifications from 'sagas/userNotifications'
 import postLikes from 'sagas/postLikes'
 import postComments from 'sagas/postComments'
 import profile from 'sagas/profile';
@@ -61,6 +62,7 @@ export default function* rootSaga() {
     ...userPrimaryGoals,
     ...userSearch,
     ...userGalleryPhotos,
+    ...userNotifications,
     ...postLikes,
     ...postComments,
     ...profile,

@@ -22,6 +22,7 @@ import userSecondaryGoals from 'reducers/userSecondaryGoals';
 import userPrimaryGoals from 'reducers/userPrimaryGoals';
 import userSearch from 'reducers/userSearch';
 import userGalleryPhotos from 'reducers/userGalleryPhotos';
+import userNotifications from 'reducers/userNotifications';
 import postLikes from 'reducers/postLikes';
 import postComments from 'reducers/postComments';
 import profile from 'reducers/profile';
@@ -65,6 +66,7 @@ export default combineReducers({
     userPrimaryGoals,
     userSearch,
     userGalleryPhotos,
+    userNotifications,
     postLikes,
     postComments,
     profile,
