@@ -55,6 +55,7 @@ import { setUserNotificationCount } from '../actions/userNotifications';
 import UserRightMenu from '../components/global/UserRightMenu';
 import UserNotificationPanel from '../components/global/UserNotificationPanel';
 import Notifications from './Notifications';
+import UserMessagePanel from '../components/global/UserMessagePanel';
 
 const auth = new Auth();
 
@@ -172,6 +173,8 @@ class App extends Component {
                                 />
 
                                 <UserNotificationPanel />
+
+                                <UserMessagePanel />
                             </div>
                         }
                     </ScrollToTop>

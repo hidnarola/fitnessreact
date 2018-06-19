@@ -117,7 +117,7 @@ class FitnessHeader extends Component {
                             </a>
                         </div>
                         <div className="header-email">
-                            <a>
+                            <a href="javascript:void(0)" onClick={() => toggleSideMenu('user-message-panel', true)}>
                                 <FaMail />
                             </a>
                         </div>
