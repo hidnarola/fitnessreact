@@ -23,8 +23,19 @@ function putReadAllUserNotification() {
     return putFormData(requestUrl, {}, headers);
 }
 
+function getAllUserNotifications() {
+    let headers = extraUserHeaders();
+    var options = {
+        method: 'GET',
+        headers: headers,
+    }
+
+    return fetchResource(requestUrl, options);
+}
+
 export default {
     getUserUnreadNotifications,
     putReadOneUserNotification,
     putReadAllUserNotification,
+    getAllUserNotifications,
 }

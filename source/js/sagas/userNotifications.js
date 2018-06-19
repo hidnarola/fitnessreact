@@ -9,7 +9,10 @@ import {
     READ_ONE_USER_NOTIFICATION_REQUEST,
     readAllUserNotificationSuccess,
     readAllUserNotificationError,
-    READ_ALL_USER_NOTIFICATION_REQUEST
+    READ_ALL_USER_NOTIFICATION_REQUEST,
+    getAllUserNotificationSuccess,
+    getAllUserNotificationError,
+    GET_ALL_USER_NOTIFICATION_REQUEST
 } from '../actions/userNotifications';
 
 function getUserUnreadNotificationsData() {
@@ -46,10 +49,22 @@ function putReadAllUserNotificationData() {
     }
 }
 
+function getAllUserNotificationsData() {
+    return function* (action) {
+        try {
+            const data = yield call(() => api.getAllUserNotifications());
+            yield put(getAllUserNotificationSuccess(data));
+        } catch (error) {
+            yield put(getAllUserNotificationError(error));
+        }
+    }
+}
+
 export function* watchUserUnreadNotificationsData() {
     yield takeLatest(GET_USER_UNREAD_NOTIFICATIONS_REQUEST, getUserUnreadNotificationsData());
     yield takeLatest(READ_ONE_USER_NOTIFICATION_REQUEST, putReadOneUserNotificationData());
     yield takeLatest(READ_ALL_USER_NOTIFICATION_REQUEST, putReadAllUserNotificationData());
+    yield takeLatest(GET_ALL_USER_NOTIFICATION_REQUEST, getAllUserNotificationsData());
 }
 
 export default [

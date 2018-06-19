@@ -56,7 +56,8 @@ export const routeCodes = {
     //Calendar Routes
     CALENDAR: `${publicPath}calendar`,
 
-    GOALS: `${publicPath}goals`
-
+    GOALS: `${publicPath}goals`,
+    
+    ALL_NOTIFICATIONS: `${publicPath}notifications`
 
 };

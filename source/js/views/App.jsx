@@ -1,20 +1,14 @@
 import React, { Component } from 'react';
 // import { BrowserRouter as Router, Route, Link, Redirect, Switch, withRouter } from "react-router-dom";
-import { Router, Route, Link, Redirect, Switch, withRouter } from "react-router-dom";
-import PropTypes from 'prop-types';
+import { Router, Route, Switch } from "react-router-dom";
 import { connect } from 'react-redux';
-import { getPeople } from 'actions/people';
 import { hot } from 'react-hot-loader';
 import ScrollToTop from 'components/global/ScrollToTop';
-import FitnessHeader from 'components/global/FitnessHeader';
-import FitnessNav from 'components/global/FitnessNav';
-import Stats from 'components/Stats/Stats';
 import NutritionShopping from 'components/Nutrition/NutritionShopping';
 import NutritionMeal from 'components/Nutrition/NutritionMeal';
 import Goals from 'components/Goals/Goals';
 import Receip from '../components/Receip/Receip';
 import Calendar from 'components/Calendar/Calendar';
-import Home from 'views/Home';
 import People from 'views/People';
 import NotFound from 'views/NotFound';
 import StatsPage from 'views/StatsPage';
@@ -51,18 +45,16 @@ import FitnessTests from './Admin/FitnessTests';
 import NutritionRecipeDetails from '../components/Nutrition/NutritionRecipeDetails';
 import cns from "classnames";
 import NutritionMealAdd from '../components/Nutrition/NutritionMealAdd';
-import { MenuItem } from "react-bootstrap";
-import { NavLink } from "react-router-dom";
 import UpdateProfile from './UpdateProfile';
 import { toggleSideMenu, getToken } from '../helpers/funs';
 import Auth from '../auth/Auth';
-import SocketDemo from './SocketDemo';
 import socketClient from "socket.io-client";
 import { openSocket, closeSocket } from '../actions/user';
 import { receiveUserNotificationCount } from '../socket';
 import { setUserNotificationCount } from '../actions/userNotifications';
 import UserRightMenu from '../components/global/UserRightMenu';
 import UserNotificationPanel from '../components/global/UserNotificationPanel';
+import Notifications from './Notifications';
 
 const auth = new Auth();
 
@@ -97,7 +89,6 @@ class App extends Component {
                 <Router history={history}>
                     <ScrollToTop>
                         <Switch>
-                            <Route exact path={`${routeCodes.HOME}socket`} component={SocketDemo} />
                             <Route exact path={routeCodes.HOME} component={Login} />
                             <Route exact path={`${publicPath}${SESSION_EXPIRED_URL_TYPE}`} component={Login} />
                             <Route path={routeCodes.REGISTERUSER} component={RegisterUser} />
@@ -130,6 +121,8 @@ class App extends Component {
                             <PrivateRoute path={routeCodes.RECEIP} component={Receip} />
 
                             <PrivateRoute path={routeCodes.USERS} component={FrontEndUsersList} />
+
+                            <PrivateRoute path={routeCodes.ALL_NOTIFICATIONS} component={Notifications} />
 
                             <Route exact path={adminRootRoute} component={AdminLogin} />
                             <Route exact path={`${adminRootRoute}/${SESSION_EXPIRED_URL_TYPE}`} component={AdminLogin} />

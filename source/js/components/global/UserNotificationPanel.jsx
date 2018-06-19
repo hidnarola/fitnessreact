@@ -64,7 +64,7 @@ class UserNotificationPanel extends Component {
                         </div>
                     }
                     <div className="notifications-btm">
-                        <a href="javascript:void(0)">See All</a>
+                        <NavLink to={routeCodes.ALL_NOTIFICATIONS} onClick={() => toggleSideMenu('user-notification-panel', false)}>See All</NavLink>
                     </div>
                 </div>
             </div>

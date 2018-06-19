@@ -12,6 +12,10 @@ export const READ_ALL_USER_NOTIFICATION_REQUEST = 'READ_ALL_USER_NOTIFICATION_RE
 export const READ_ALL_USER_NOTIFICATION_SUCCESS = 'READ_ALL_USER_NOTIFICATION_SUCCESS';
 export const READ_ALL_USER_NOTIFICATION_ERROR = 'READ_ALL_USER_NOTIFICATION_ERROR';
 
+export const GET_ALL_USER_NOTIFICATION_REQUEST = 'GET_ALL_USER_NOTIFICATION_REQUEST';
+export const GET_ALL_USER_NOTIFICATION_SUCCESS = 'GET_ALL_USER_NOTIFICATION_SUCCESS';
+export const GET_ALL_USER_NOTIFICATION_ERROR = 'GET_ALL_USER_NOTIFICATION_ERROR';
+
 export function setUserNotificationCount(count) {
     return {
         type: SET_USER_NOTIFICATION_COUNT,
@@ -76,6 +80,26 @@ export function readAllUserNotificationSuccess(data) {
 export function readAllUserNotificationError(error) {
     return {
         type: READ_ALL_USER_NOTIFICATION_ERROR,
+        error,
+    }
+}
+
+export function getAllUserNotificationRequest() {
+    return {
+        type: GET_ALL_USER_NOTIFICATION_REQUEST,
+    }
+}
+
+export function getAllUserNotificationSuccess(data) {
+    return {
+        type: GET_ALL_USER_NOTIFICATION_SUCCESS,
+        data,
+    }
+}
+
+export function getAllUserNotificationError(error) {
+    return {
+        type: GET_ALL_USER_NOTIFICATION_ERROR,
         error,
     }
 }
