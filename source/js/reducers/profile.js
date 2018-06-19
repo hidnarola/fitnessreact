@@ -15,6 +15,12 @@ import {
     SAVE_LOGGED_USER_PROFILE_PHOTO_REQUEST,
     SAVE_LOGGED_USER_PROFILE_PHOTO_SUCCESS,
     SAVE_LOGGED_USER_PROFILE_PHOTO_ERROR,
+    GET_LOGGED_USER_PROFILE_SETTINGS_REQUEST,
+    GET_LOGGED_USER_PROFILE_SETTINGS_SUCCESS,
+    GET_LOGGED_USER_PROFILE_SETTINGS_ERROR,
+    SAVE_LOGGED_USER_PROFILE_SETTINGS_REQUEST,
+    SAVE_LOGGED_USER_PROFILE_SETTINGS_SUCCESS,
+    SAVE_LOGGED_USER_PROFILE_SETTINGS_ERROR,
 } from "../actions/profile";
 import { VALIDATION_FAILURE_STATUS } from "../constants/consts";
 import { generateValidationErrorMsgArr } from "../helpers/funs";
@@ -23,6 +29,9 @@ const initialState = Map({
     loading: false,
     error: [],
     profile: null,
+    settingsLoading: false,
+    settings: null,
+    settingsError: [],
 });
 
 const actionMap = {
@@ -89,6 +98,42 @@ const actionMap = {
             error: error,
         }));
     },
+    [GET_LOGGED_USER_PROFILE_SETTINGS_REQUEST]: (state, action) => {
+        return state.merge(Map({
+            settingsLoading: true,
+            settings: null,
+            settingsError: [],
+        }));
+    },
+    [GET_LOGGED_USER_PROFILE_SETTINGS_SUCCESS]: (state, action) => {
+        var newState = {
+            settingsLoading: false,
+        };
+        if (action.data.status === 1) {
+            newState.settings = action.data.user_settings;
+        } else {
+            if (action.data.message && action.data.message !== '') {
+                newState.settingsError = [action.data.message];
+            } else {
+                newState.settingsError = ['Something went wrong! please try again later.'];
+            }
+        }
+        return state.merge(Map(newState));
+    },
+    [GET_LOGGED_USER_PROFILE_SETTINGS_ERROR]: (state, action) => {
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
+        }
+        return state.merge(Map({
+            settingsLoading: false,
+            settingsError: error,
+        }));
+    },
     [SAVE_ABOUT_PROFILE_DETAILS_REQUEST]: (state, action) => {
         return state.merge(Map({
             loading: true,
@@ -149,6 +194,42 @@ const actionMap = {
         return state.merge(Map({
             loading: false,
             error: error,
+        }));
+    },
+    [SAVE_LOGGED_USER_PROFILE_SETTINGS_REQUEST]: (state, action) => {
+        return state.merge(Map({
+            settingsLoading: true,
+            settings: null,
+            settingsError: [],
+        }));
+    },
+    [SAVE_LOGGED_USER_PROFILE_SETTINGS_SUCCESS]: (state, action) => {
+        var newState = {
+            settingsLoading: false,
+        };
+        if (action.data.status === 1) {
+            newState.settings = action.data.user;
+        } else {
+            if (action.data.message && action.data.message !== '') {
+                newState.settingsError = [action.data.message];
+            } else {
+                newState.settingsError = ['Something went wrong! please try again later.'];
+            }
+        }
+        return state.merge(Map(newState));
+    },
+    [SAVE_LOGGED_USER_PROFILE_SETTINGS_ERROR]: (state, action) => {
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
+        }
+        return state.merge(Map({
+            settingsLoading: false,
+            settingsError: error,
         }));
     },
     [SAVE_LOGGED_USER_PROFILE_PHOTO_REQUEST]: (state, action) => {

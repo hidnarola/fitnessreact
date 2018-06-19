@@ -13,6 +13,17 @@ function getLoggedUserProfileDetails() {
     return fetchResource(requestUrl, options);
 }
 
+
+function getLoggedUserProfileSettings() {
+    let headers = extraUserHeaders();
+    var options = {
+        method: 'GET',
+        headers: headers,
+    }
+
+    return fetchResource(requestUrl + '/preferences', options);
+}
+
 function getProfileDetails(username) {
     let headers = extraUserHeaders();
     var options = {
@@ -33,6 +44,11 @@ function saveLoggedUserProfileDetails(formData) {
     return putFormData(requestUrl, formData, headers);
 }
 
+function saveLoggedUserProfileSettings(formData) {
+    let headers = extraUserHeaders();
+    return putFormData(requestUrl + '/preferences', formData, headers);
+}
+
 function saveLoggedUserProfilePhoto(requestData) {
     let headers = extraUserHeaders();
     return putFormData(requestUrl + '/photo', requestData, headers);
@@ -40,8 +56,10 @@ function saveLoggedUserProfilePhoto(requestData) {
 
 export default {
     getLoggedUserProfileDetails,
+    getLoggedUserProfileSettings,
     getProfileDetails,
     saveAboutProfileDetails,
     saveLoggedUserProfileDetails,
+    saveLoggedUserProfileSettings,
     saveLoggedUserProfilePhoto,
 }

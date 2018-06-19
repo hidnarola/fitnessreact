@@ -56,6 +56,7 @@ import UserRightMenu from '../components/global/UserRightMenu';
 import UserNotificationPanel from '../components/global/UserNotificationPanel';
 import Notifications from './Notifications';
 import UserMessagePanel from '../components/global/UserMessagePanel';
+import ProfileSettings from './ProfileSettings';
 
 const auth = new Auth();
 
@@ -101,6 +102,7 @@ class App extends Component {
 
                             <PrivateRoute path={`${routeCodes.PROFILE}/:username`} component={ProfilePage} />
                             <PrivateRoute path={routeCodes.UPDATE_PROFILE} component={UpdateProfile} />
+                            <PrivateRoute path={routeCodes.PROFILE_SETTINGS} component={ProfileSettings} />
 
                             <PrivateRoute path={routeCodes.BODY} component={Body} />
 

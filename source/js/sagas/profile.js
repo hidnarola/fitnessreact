@@ -15,6 +15,12 @@ import {
     saveLoggedUserProfilePhotoSuccess,
     saveLoggedUserProfilePhotoError,
     SAVE_LOGGED_USER_PROFILE_PHOTO_REQUEST,
+    getLoggedUserProfileSettingsSuccess,
+    getLoggedUserProfileSettingsError,
+    GET_LOGGED_USER_PROFILE_SETTINGS_REQUEST,
+    saveLoggedUserProfileSettingsSuccess,
+    saveLoggedUserProfileSettingsError,
+    SAVE_LOGGED_USER_PROFILE_SETTINGS_REQUEST,
 } from '../actions/profile';
 
 import api from 'api/profile';
@@ -26,6 +32,17 @@ function fetchLoggedUserProfileDetailsData() {
             yield put(getLoggedUserProfileDetailsSuccess(data));
         } catch (error) {
             yield put(getLoggedUserProfileDetailsError(error));
+        }
+    }
+}
+
+function fetchLoggedUserProfileSettingsData() {
+    return function* (action) {
+        try {
+            const data = yield call(() => api.getLoggedUserProfileSettings());
+            yield put(getLoggedUserProfileSettingsSuccess(data));
+        } catch (error) {
+            yield put(getLoggedUserProfileSettingsError(error));
         }
     }
 }
@@ -66,6 +83,18 @@ function updateLoggedUserProfileDetailsData() {
     }
 }
 
+function updateLoggedUserProfileSettingsData() {
+    return function* (action) {
+        try {
+            var formData = action.formData;
+            const data = yield call(() => api.saveLoggedUserProfileSettings(formData));
+            yield put(saveLoggedUserProfileSettingsSuccess(data));
+        } catch (error) {
+            yield put(saveLoggedUserProfileSettingsError(error));
+        }
+    }
+}
+
 function updateLoggedUserProfilePhotoData() {
     return function* (action) {
         try {
@@ -83,7 +112,9 @@ export function* watchProfileDetailsData() {
     yield takeLatest(GET_PROFILE_DETAILS_REQUEST, fetchProfileDetailsData());
     yield takeLatest(SAVE_ABOUT_PROFILE_DETAILS_REQUEST, updateAboutProfileDetailsData());
     yield takeLatest(SAVE_LOGGED_USER_PROFILE_DETAILS_REQUEST, updateLoggedUserProfileDetailsData());
+    yield takeLatest(SAVE_LOGGED_USER_PROFILE_SETTINGS_REQUEST, updateLoggedUserProfileSettingsData());
     yield takeLatest(SAVE_LOGGED_USER_PROFILE_PHOTO_REQUEST, updateLoggedUserProfilePhotoData());
+    yield takeLatest(GET_LOGGED_USER_PROFILE_SETTINGS_REQUEST, fetchLoggedUserProfileSettingsData());
 }
 
 export default [

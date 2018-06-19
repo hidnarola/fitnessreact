@@ -28,6 +28,7 @@ export const routeCodes = {
     PROFILEPHOTOS: `${publicPath}profile/{username}/photos`,
     PROFILEFRIENDS: `${publicPath}profile/{username}/friends`,
     UPDATE_PROFILE: `${publicPath}update_profile`,
+    PROFILE_SETTINGS: `${publicPath}profile_settings`,
 
     // Recipe Routes
     RECEIP: `${publicPath}receip`,
