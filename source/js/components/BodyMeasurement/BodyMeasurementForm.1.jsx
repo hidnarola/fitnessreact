@@ -15,11 +15,9 @@ import { convertUnits } from '../../helpers/funs';
 class BodyMeasurementForm extends Component {
     constructor(props) {
         super(props);
-        var logDate =new Date();
-        logDate.setHours(0, 0, 0, 0);
         this.state = {
             selectActionInit: false,
-            logDate,
+            logDate: new Date(),
         }
     }
 

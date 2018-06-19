@@ -94,7 +94,8 @@ class BodyMeasurement extends Component {
         const { dispatch } = this.props;
         this.setState({ saveActionInit: true });
         let measurementData = {
-            logDate: data.log_date.toUTCString(),
+            // logDate: data.log_date.toUTCString(),
+            logDate: moment.utc(data.log_date).toDate(),
             neck: data.neck,
             shoulders: data.shoulders,
             chest: data.chest,

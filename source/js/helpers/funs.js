@@ -1,5 +1,15 @@
 import React, { Component } from "react";
-import { LOCALSTORAGE_ACCESS_TOKEN_KEY } from "../constants/consts";
+import {
+    LOCALSTORAGE_ACCESS_TOKEN_KEY,
+    MEASUREMENT_UNIT_INCH,
+    MEASUREMENT_UNIT_CENTIMETER,
+    MEASUREMENT_UNIT_METER,
+    MEASUREMENT_UNIT_FEET,
+    MEASUREMENT_UNIT_POUND,
+    MEASUREMENT_UNIT_GRAM,
+    MEASUREMENT_UNIT_MILIGRAM,
+    MEASUREMENT_UNIT_KILOGRAM
+} from "../constants/consts";
 import _ from 'lodash';
 import moment from "moment";
 import { AUTH_CONFIG } from "../auth/auth0-variables";
@@ -129,4 +139,91 @@ export function toggleSideMenu(id, show) {
     } else {
         $(`#${id}`).toggle({ direction: "right" });
     }
+}
+
+export function convertUnits(from, to, value) {
+    var result = value;
+    switch (from) {
+        case MEASUREMENT_UNIT_INCH:
+            switch (to) {
+                case MEASUREMENT_UNIT_CENTIMETER:
+                    result = value * 2.54;
+                    break;
+                case MEASUREMENT_UNIT_METER:
+                    result = value * 0.0254;
+                    break;
+                case MEASUREMENT_UNIT_FEET:
+                    result = value * 0.0833333;
+                    break;
+            }
+            break;
+        case MEASUREMENT_UNIT_CENTIMETER:
+            switch (to) {
+                case MEASUREMENT_UNIT_INCH:
+                    result = value * 0.393701;
+                    break;
+                case MEASUREMENT_UNIT_METER:
+                    result = value * 0.01;
+                    break;
+                case MEASUREMENT_UNIT_FEET:
+                    result = value * 0.0328084;
+                    break;
+            }
+            break;
+        case MEASUREMENT_UNIT_METER:
+            switch (to) {
+                case MEASUREMENT_UNIT_INCH:
+                    result = value * 39.3701;
+                    break;
+                case MEASUREMENT_UNIT_CENTIMETER:
+                    result = value * 100;
+                    break;
+                case MEASUREMENT_UNIT_FEET:
+                    result = value * 3.28084;
+                    break;
+            }
+            break;
+        case MEASUREMENT_UNIT_FEET:
+            switch (to) {
+                case MEASUREMENT_UNIT_INCH:
+                    result = value * 12;
+                    break;
+                case MEASUREMENT_UNIT_CENTIMETER:
+                    result = value * 30.48;
+                    break;
+                case MEASUREMENT_UNIT_METER:
+                    result = value * 0.3048;
+                    break;
+            }
+            break;
+        case MEASUREMENT_UNIT_GRAM:
+            switch (to) {
+                case MEASUREMENT_UNIT_MILIGRAM:
+                    result = value * 1000;
+                    break;
+            }
+            break;
+        case MEASUREMENT_UNIT_MILIGRAM:
+            switch (to) {
+                case MEASUREMENT_UNIT_GRAM:
+                    result = value * 0.001;
+                    break;
+            }
+            break;
+        case MEASUREMENT_UNIT_KILOGRAM:
+            switch (to) {
+                case MEASUREMENT_UNIT_POUND:
+                    result = value * 2.20462;
+                    break;
+            }
+            break;
+        case MEASUREMENT_UNIT_POUND:
+            switch (to) {
+                case MEASUREMENT_UNIT_KILOGRAM:
+                    result = value * 0.453592;
+                    break;
+            }
+            break;
+    }
+    return result;
 }

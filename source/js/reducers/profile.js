@@ -199,7 +199,6 @@ const actionMap = {
     [SAVE_LOGGED_USER_PROFILE_SETTINGS_REQUEST]: (state, action) => {
         return state.merge(Map({
             settingsLoading: true,
-            settings: null,
             settingsError: [],
         }));
     },
@@ -207,9 +206,7 @@ const actionMap = {
         var newState = {
             settingsLoading: false,
         };
-        if (action.data.status === 1) {
-            newState.settings = action.data.user;
-        } else {
+        if (action.data.status !== 1) {
             if (action.data.message && action.data.message !== '') {
                 newState.settingsError = [action.data.message];
             } else {
