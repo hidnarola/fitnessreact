@@ -10,7 +10,7 @@ function getUserUnreadNotifications() {
         headers: headers,
     }
 
-    return fetchResource(requestUrl, options);
+    return fetchResource(requestUrl + '/0', options);
 }
 
 function putReadOneUserNotification(_id) {

@@ -22,6 +22,9 @@ const initialState = Map({
     loading: false,
     error: [],
     notifications: [],
+    allLoading: false,
+    allNotifications: [],
+    allError: [],
 });
 
 const actionMap = {
@@ -124,20 +127,20 @@ const actionMap = {
     },
     [GET_ALL_USER_NOTIFICATION_REQUEST]: (state, action) => {
         return state.merge(Map({
-            loading: true,
-            notifications: [],
-            error: [],
+            allLoading: true,
+            allNotifications: [],
+            allError: [],
         }));
     },
     [GET_ALL_USER_NOTIFICATION_SUCCESS]: (state, action) => {
         var newState = {
-            loading: false,
+            allLoading: false,
         };
         if (action.data.status === 1) {
-            newState.notifications = action.data.notifications;
+            newState.allNotifications = action.data.notifications;
         } else {
             var msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
-            newState.error = [msg];
+            newState.allError = [msg];
         }
         return state.merge(Map(newState));
     },
@@ -151,8 +154,8 @@ const actionMap = {
             error = ['Something went wrong! please try again later'];
         }
         return state.merge(Map({
-            loading: false,
-            error: error,
+            allLoading: false,
+            allError: error,
         }));
     },
 }

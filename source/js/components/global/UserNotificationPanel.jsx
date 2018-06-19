@@ -3,10 +3,9 @@ import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { toggleSideMenu, getToken } from '../../helpers/funs';
 import { Scrollbars } from 'react-custom-scrollbars';
-import ReactHtmlParser from "react-html-parser";
-import noProfileImg from 'img/common/no-profile-img.png'
 import { routeCodes } from '../../constants/routes';
 import { readOneUserNotificationRequest, readAllUserNotificationRequest } from '../../actions/userNotifications';
+import NotificationCard from './NotificationCard';
 
 class UserNotificationPanel extends Component {
     constructor(props) {
@@ -51,6 +50,7 @@ class UserNotificationPanel extends Component {
                                                 key={index}
                                                 notification={noti}
                                                 readOneNotificaion={this.handleReadOneNotification}
+                                                closeNotificationPanel={true}
                                             />
                                         )
                                     })
@@ -111,60 +111,3 @@ const mapStateToProps = (state) => {
 export default connect(
     mapStateToProps,
 )(UserNotificationPanel);
-
-class NotificationCard extends Component {
-    render() {
-        const {
-            notification,
-            readOneNotificaion,
-        } = this.props;
-        var type = notification.type;
-        switch (type) {
-            case 'friend_request_approved':
-                var msg = '';
-                var sender = notification.sender;
-                msg = `<strong>${sender.firstName} ${(sender.lastName) ? sender.lastName : ''}</strong>`;
-                msg += `<small>approved your request</small>`;
-                return (
-                    <NavLink
-                        to={`${routeCodes.PROFILE}/${sender.username}`}
-                        onClick={() => {
-                            readOneNotificaion(notification._id);
-                            toggleSideMenu('user-notification-panel', false);
-                        }}
-                    >
-                        <div className="notifications-box">
-                            <span>
-                                <img
-                                    src={sender.avatar}
-                                    className="avatar"
-                                    onError={(e) => {
-                                        e.target.src = noProfileImg
-                                    }}
-                                />
-                            </span>
-                            <h4>{ReactHtmlParser(msg)}</h4>
-                        </div>
-                    </NavLink>
-                )
-            default:
-                if (notification.body) {
-                    return (
-                        <div className="notifications-box">
-                            <span>
-                                <img
-                                    src={SERVER_BASE_URL + sender.avatar}
-                                    onError={(e) => {
-                                        e.target.src = noProfileImg
-                                    }}
-                                />
-                            </span>
-                            <h4><small>{notification.body}</small></h4>
-                        </div>
-                    );
-                } else {
-                    return null;
-                }
-        }
-    }
-}

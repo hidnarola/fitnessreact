@@ -1466,3 +1466,5 @@ ul.text-right.pager {text-align: right;}
 .pagination>.disabled>a, .pagination>.disabled>a:focus, .pagination>.disabled>a:hover, .pagination>.disabled>span, .pagination>.disabled>span:focus, .pagination>.disabled>span:hover {background-color: #ddd;}
 .pagination>li>a:focus, .pagination>li>a:hover, .pagination>li>span:focus, .pagination>li>span:hover {color: #000000;}
 .noselect {-webkit-touch-callout: none;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;}
+
+.notifications-box.un-seen-notification {background: linear-gradient(123.28deg, #adecec 0%, #e2fff9 100%);}
