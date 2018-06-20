@@ -16,6 +16,8 @@ import {
     ACCESS_LEVEL_PUBLIC_STR,
     ACCESS_LEVEL_FRIENDS_STR,
     ACCESS_LEVEL_PRIVATE_STR,
+    ACCESS_LEVEL_NONE,
+    ACCESS_LEVEL_NONE_STR,
 } from '../../constants/consts';
 import { getLoggedUserProfileSettingsRequest, saveLoggedUserProfileSettingsRequest } from '../../actions/profile';
 import { ts } from '../../helpers/funs';
@@ -45,6 +47,11 @@ class ProfileSettingsForm extends Component {
             { value: ACCESS_LEVEL_PUBLIC, label: ACCESS_LEVEL_PUBLIC_STR },
             { value: ACCESS_LEVEL_FRIENDS, label: ACCESS_LEVEL_FRIENDS_STR },
             { value: ACCESS_LEVEL_PRIVATE, label: ACCESS_LEVEL_PRIVATE_STR },
+        ];
+        this.accessLevelOptions2 = [
+            { value: ACCESS_LEVEL_PUBLIC, label: ACCESS_LEVEL_PUBLIC_STR },
+            { value: ACCESS_LEVEL_FRIENDS, label: ACCESS_LEVEL_FRIENDS_STR },
+            { value: ACCESS_LEVEL_NONE, label: ACCESS_LEVEL_NONE_STR },
         ];
     }
 
@@ -157,7 +164,7 @@ class ProfileSettingsForm extends Component {
                                                 wrapperClass="input-wrap"
                                                 placeholder="Who can message you?"
                                                 component={SelectField}
-                                                options={this.accessLevelOptions}
+                                                options={this.accessLevelOptions2}
                                                 errorClass="help-block"
                                                 validate={[requiredReactSelect]}
                                             />
@@ -171,7 +178,7 @@ class ProfileSettingsForm extends Component {
                                                 wrapperClass="input-wrap"
                                                 placeholder="Who can send you friend request?"
                                                 component={SelectField}
-                                                options={this.accessLevelOptions}
+                                                options={this.accessLevelOptions2}
                                                 errorClass="help-block"
                                                 validate={[requiredReactSelect]}
                                             />
@@ -204,8 +211,8 @@ class ProfileSettingsForm extends Component {
             var bodyMeasurementObj = _.find(this.bodyMeasurementOptions, ['value', settings.bodyMeasurement]);
             var postObj = _.find(this.accessLevelOptions, ['value', settings.postAccessibility.toString()]);
             var commentObj = _.find(this.accessLevelOptions, ['value', settings.commentAccessibility.toString()]);
-            var messageObj = _.find(this.accessLevelOptions, ['value', settings.messageAccessibility.toString()]);
-            var friendObj = _.find(this.accessLevelOptions, ['value', settings.friendRequestAccessibility.toString()]);
+            var messageObj = _.find(this.accessLevelOptions2, ['value', settings.messageAccessibility.toString()]);
+            var friendObj = _.find(this.accessLevelOptions2, ['value', settings.friendRequestAccessibility.toString()]);
             var formData = {
                 distance: (distanceObj) ? distanceObj : null,
                 weight: (weightObj) ? weightObj : null,

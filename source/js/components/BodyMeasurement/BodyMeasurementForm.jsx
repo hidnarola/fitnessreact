@@ -9,7 +9,7 @@ import { required } from '../../formValidation/validationRules';
 import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
 import { getUserBodyMeasurementRequest, getUserBodyMeasurementLogDatesRequest } from '../../actions/userBodyMeasurement';
 import { getLoggedUserProfileSettingsRequest } from '../../actions/profile';
-import { MEASUREMENT_UNIT_CENTIMETER, MEASUREMENT_UNIT_KILOGRAM } from '../../constants/consts';
+import { MEASUREMENT_UNIT_CENTIMETER, MEASUREMENT_UNIT_KILOGRAM, MEASUREMENT_UNIT_GRAM } from '../../constants/consts';
 import { convertUnits } from '../../helpers/funs';
 
 class BodyMeasurementForm extends Component {
@@ -274,7 +274,7 @@ class BodyMeasurementForm extends Component {
                     hips: convertUnits(MEASUREMENT_UNIT_CENTIMETER, bodyUnit, measurement.hips).toFixed(2),
                     thigh: convertUnits(MEASUREMENT_UNIT_CENTIMETER, bodyUnit, measurement.thigh).toFixed(2),
                     calf: convertUnits(MEASUREMENT_UNIT_CENTIMETER, bodyUnit, measurement.calf).toFixed(2),
-                    weight: convertUnits(MEASUREMENT_UNIT_KILOGRAM, weightUnit, measurement.weight).toFixed(2),
+                    weight: convertUnits(MEASUREMENT_UNIT_GRAM, weightUnit, measurement.weight).toFixed(2),
                     height: convertUnits(MEASUREMENT_UNIT_CENTIMETER, bodyUnit, measurement.height).toFixed(2),
                     log_date: new Date(measurement.logDate),
                 }

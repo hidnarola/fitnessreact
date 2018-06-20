@@ -201,6 +201,9 @@ export function convertUnits(from, to, value) {
                 case MEASUREMENT_UNIT_MILIGRAM:
                     result = value * 1000;
                     break;
+                case MEASUREMENT_UNIT_KILOGRAM:
+                    result = value * 0.001;
+                    break;
             }
             break;
         case MEASUREMENT_UNIT_MILIGRAM:
@@ -214,6 +217,9 @@ export function convertUnits(from, to, value) {
             switch (to) {
                 case MEASUREMENT_UNIT_POUND:
                     result = value * 2.20462;
+                    break;
+                case MEASUREMENT_UNIT_GRAM:
+                    result = value * 1000;
                     break;
             }
             break;

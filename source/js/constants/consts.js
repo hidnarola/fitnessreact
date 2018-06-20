@@ -20,10 +20,10 @@ if (window.location.port) {
 baseUrl += '/';
 
 export const BASE_URL = baseUrl;
-// export const SERVER_BASE_URL = 'http://' + window.location.hostname + ':3300/';
+export const SERVER_BASE_URL = 'http://' + window.location.hostname + ':3300/';
 
 // amit's system url of api
-export const SERVER_BASE_URL = 'http://192.168.100.19:3300/';
+// export const SERVER_BASE_URL = 'http://192.168.100.19:3300/';
 
 export const EXERCISE_MECHANICS_COMPOUND = 'compound';
 export const EXERCISE_MECHANICS_ISOLATION = 'isolation';
@@ -162,10 +162,14 @@ export const RECIPE_API_SEARCH_URL = `https://api.edamam.com/search?app_id=${REC
 export const ACCESS_LEVEL_PRIVATE = '1';
 export const ACCESS_LEVEL_FRIENDS = '2';
 export const ACCESS_LEVEL_PUBLIC = '3';
+export const ACCESS_LEVEL_FRIENDS_OF_FRIENDS = '4';
+export const ACCESS_LEVEL_NONE = '5';
 
 export const ACCESS_LEVEL_PRIVATE_STR = 'Only Me';
 export const ACCESS_LEVEL_FRIENDS_STR = 'Friends';
 export const ACCESS_LEVEL_PUBLIC_STR = 'Public';
+export const ACCESS_LEVEL_FRIENDS_OF_FRIENDS_STR = 'Friends Of Friends';
+export const ACCESS_LEVEL_NONE_STR = 'No one';
 
 export const POST_TYPE_TIMELINE = 'timeline';
 export const POST_TYPE_GALLERY = 'gallery';
