@@ -12,13 +12,17 @@ import {
     GOAL_GAIN_POWER,
     GOAL_INCREASE_ENDURANCE,
     GENDER_MALE,
-    GENDER_FEMALE
+    GENDER_FEMALE,
+    MEASUREMENT_UNIT_CENTIMETER,
+    MEASUREMENT_UNIT_KILOGRAM,
+    MEASUREMENT_UNIT_GRAM
 } from '../../constants/consts';
-import { capitalizeFirstLetter, ts } from '../../helpers/funs';
+import { capitalizeFirstLetter, ts, convertUnits } from '../../helpers/funs';
 import ReactQuill from 'react-quill';
 import {
     getLoggedUserProfileDetailsRequest,
-    saveLoggedUserProfileDetailsRequest
+    saveLoggedUserProfileDetailsRequest,
+    getLoggedUserProfileSettingsRequest
 } from '../../actions/profile';
 import moment from "moment";
 import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
@@ -36,18 +40,22 @@ class UpdateProfileForm extends Component {
             selectActionInit: false,
             dob: null,
             aboutMe: '',
+            weightUnit: MEASUREMENT_UNIT_GRAM,
+            heightUnit: MEASUREMENT_UNIT_CENTIMETER,
         }
     }
 
     componentWillMount() {
         const { dispatch } = this.props;
-        this.setState({ selectActionInit: true });
         dispatch(showPageLoader());
+        this.setState({ selectActionInit: true });
         dispatch(getLoggedUserProfileDetailsRequest());
+        dispatch(getLoggedUserProfileSettingsRequest());
     }
 
     render() {
         const { handleSubmit } = this.props;
+        const { weightUnit, heightUnit } = this.state;
         return (
             <div className="update-profile-details-form col-md-12 no-padding">
                 <form id="form1" onSubmit={handleSubmit}>
@@ -160,7 +168,12 @@ class UpdateProfileForm extends Component {
                                                 errorClass="help-block"
                                                 type="number"
                                                 component={InputField}
-                                                units={(<label>FT</label>)}
+                                                units={(<label>{heightUnit.toUpperCase()}</label>)}
+                                            />
+                                            <Field
+                                                type="hidden"
+                                                component="input"
+                                                name="heightUnit"
                                             />
                                         </div>
                                     </li>
@@ -175,7 +188,12 @@ class UpdateProfileForm extends Component {
                                                 type="number"
                                                 placeholder="Kg"
                                                 component={InputField}
-                                                units={(<label>KG</label>)}
+                                                units={(<label>{weightUnit.toUpperCase()}</label>)}
+                                            />
+                                            <Field
+                                                type="hidden"
+                                                component="input"
+                                                name="weightUnit"
                                             />
                                         </div>
                                     </li>
@@ -335,7 +353,7 @@ class UpdateProfileForm extends Component {
         );
     }
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps, prevState) {
         const {
             selectActionInit,
         } = this.state;
@@ -345,6 +363,8 @@ class UpdateProfileForm extends Component {
             dispatch,
             saveActionInit,
             handleSaveActionFlag,
+            profileSettings,
+            settingsLoading,
         } = this.props;
         if (selectActionInit && !loading) {
             this.setState({ selectActionInit: false });
@@ -359,8 +379,10 @@ class UpdateProfileForm extends Component {
                 mobile_no: profile.mobileNumber,
                 gender: profile.gender,
                 dob: dob,
-                height: profile.height,
-                weight: profile.weight,
+                height: profile.height.toFixed(2),
+                weight: profile.weight.toFixed(2),
+                heightUnit: this.state.heightUnit,
+                weightUnit: this.state.weightUnit,
                 workout_location: profile.workoutLocation,
                 about_me: profile.aboutMe,
                 primary_goal: (profile.goal) ? profile.goal.name : null,
@@ -372,6 +394,24 @@ class UpdateProfileForm extends Component {
             dispatch(getLoggedUserProfileDetailsRequest());
             ts('Profile details updated successfully.');
             handleSaveActionFlag(false);
+        }
+        if (!settingsLoading && !loading && ((prevProps.profile !== profile) || (prevProps.profileSettings !== profileSettings))) {
+            var heightUnit = this.state.heightUnit;
+            var weightUnit = this.state.weightUnit;
+            if (profileSettings) {
+                heightUnit = (profileSettings.bodyMeasurement) ? profileSettings.bodyMeasurement : MEASUREMENT_UNIT_CENTIMETER;
+                weightUnit = (profileSettings.weight) ? profileSettings.weight : MEASUREMENT_UNIT_KILOGRAM;
+                var height = convertUnits(MEASUREMENT_UNIT_CENTIMETER, heightUnit, profile.height).toFixed(2);
+                var weight = convertUnits(MEASUREMENT_UNIT_GRAM, weightUnit, profile.weight).toFixed(2);
+                this.props.change('height', height);
+                this.props.change('heightUnit', heightUnit);
+                this.props.change('weight', weight);
+                this.props.change('weightUnit', weightUnit);
+            }
+            this.setState({
+                heightUnit,
+                weightUnit,
+            });
         }
     }
 
@@ -388,6 +428,8 @@ class UpdateProfileForm extends Component {
 
 const handleSubmit = (data, dispatch, props) => {
     const { handleSaveActionFlag } = props;
+    var heightUnit = data.heightUnit;
+    var weightUnit = data.weightUnit;
     var formData = {
         firstName: capitalizeFirstLetter(data.first_name),
         lastName: (data.last_name) ? capitalizeFirstLetter(data.last_name) : '',
@@ -396,8 +438,8 @@ const handleSubmit = (data, dispatch, props) => {
         dateOfBirth: (data.dob) ? data.dob : '',
         goal: (data.primary_goal) ? data.primary_goal : null,
         aboutMe: (data.about_me) ? data.about_me : '',
-        height: (data.height) ? data.height : 0,
-        weight: (data.weight) ? data.weight : 0,
+        height: (data.height) ? convertUnits(heightUnit, MEASUREMENT_UNIT_CENTIMETER, data.height) : 0,
+        weight: (data.weight) ? convertUnits(weightUnit, MEASUREMENT_UNIT_GRAM, data.weight) : 0,
         workoutLocation: (data.workout_location) ? data.workout_location : WORKOUT_LOCATION_GYM,
     };
     handleSaveActionFlag(true);
@@ -414,7 +456,9 @@ const mapStateToProps = (state) => {
     const { profile } = state;
     return {
         loading: profile.get('loading'),
-        profile: profile.get('profile')
+        profile: profile.get('profile'),
+        profileSettings: profile.get('settings'),
+        settingsLoading: profile.get('loading'),
     };
 }
 
