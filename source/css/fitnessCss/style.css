@@ -954,7 +954,7 @@ display:-webkit-box; display:-webkit-flex; display:-ms-flex; display:flex; flex-
 display:-webkit-box; display:-webkit-flex; display:-ms-flex; display:flex; justify-content:center; flex-direction:column;}
 .notifications-box h4 small{color:#282828; font-size:12px; font-weight:500;
 display:-webkit-box; display:-webkit-flex; display:-ms-flex; display:flex; justify-content:center; flex-direction:column;}
-.notifications-btm a{background-color:#F8F9F9; border-radius:80px; color:#898989; font-size:14px; font-weight:500;  padding:15px; line-height:20px;
+.notifications-btm a, .messenger-btm a{background-color:#F8F9F9; border-radius:80px; color:#898989; font-size:14px; font-weight:500;  padding:15px; line-height:20px;
 display:-webkit-box; display:-webkit-flex; display:-ms-flex; display:flex; justify-content:center; flex-direction:row; }
 
 .notifications .mCS-3d-dark.mCSB_scrollTools .mCSB_draggerRail, 
@@ -982,9 +982,11 @@ margin-left:auto; display:-webkit-box; display:-webkit-flex; display:-ms-flex; d
 .messenger-option p{margin:0; padding:0; text-align:center; color:#282828; font-size:12px; font-weight:300;	line-height:17px;}
 
 .messenger-body{height:calc(100% - 300px); margin:0 0 30px;}
-.messenger-box{display:-webkit-box; display:-webkit-flex; display:-ms-flex; display:flex; margin:0 0 20px;}
+/* .messenger-box{display:-webkit-box; display:-webkit-flex; display:-ms-flex; display:flex; margin:0 0 20px;} */
+.messenger-box{display:-webkit-box; display:-webkit-flex; display:-ms-flex; display:flex; margin:0 0 20px;padding: 10px;border-radius: 5px;background: #f9fafa;}
 .messenger-box span{width:58px;height:58px; border-radius:5px; margin-right:24px; display:-webkit-box; display:-webkit-flex; display:-ms-flex; display:flex; justify-content:center; flex-direction:column;}
-.messenger-box span img{max-width:100%; min-width:58px; height:58px; border-radius:5px;}
+/* .messenger-box span img{max-width:100%; min-width:58px; height:58px; border-radius:5px;} */
+.messenger-box span img{max-width:100%; min-width:58px; height:58px;}
 .messenger-box h4{ display:-webkit-box; display:-webkit-flex; display:-ms-flex; display:flex; justify-content:center; flex-direction:column; margin:0; padding:0;}
 .messenger-box h4 strong{color:#282828; font-size:14px; font-weight:700; line-height:20px; margin-right:8px;}
 .messenger-box h4 small{color:#282828; font-size:12px; font-weight:500;}
@@ -1467,4 +1469,4 @@ ul.text-right.pager {text-align: right;}
 .pagination>li>a:focus, .pagination>li>a:hover, .pagination>li>span:focus, .pagination>li>span:hover {color: #000000;}
 .noselect {-webkit-touch-callout: none;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;}
 
-.notifications-box.un-seen-notification {background: linear-gradient(123.28deg, #adecec 0%, #e2fff9 100%);}
+.notifications-box.un-seen-notification, .messenger-box.un-seen-message {background: linear-gradient(123.28deg, #adecec 0%, #e2fff9 100%);}

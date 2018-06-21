@@ -8,7 +8,9 @@ import {
     MEASUREMENT_UNIT_POUND,
     MEASUREMENT_UNIT_GRAM,
     MEASUREMENT_UNIT_MILIGRAM,
-    MEASUREMENT_UNIT_KILOGRAM
+    MEASUREMENT_UNIT_KILOGRAM,
+    LOCALSTORAGE_USER_DETAILS_KEY,
+    FITASSIST_USER_DETAILS_TOKEN_KEY
 } from "../constants/consts";
 import _ from 'lodash';
 import moment from "moment";
@@ -16,6 +18,7 @@ import { AUTH_CONFIG } from "../auth/auth0-variables";
 import { toast } from "react-toastify";
 import { FaCheck, FaFrownO } from 'react-icons/lib/fa';
 import $ from 'jquery';
+import jwt from "jwt-simple";
 
 export function extraHeaders() {
     const token = localStorage.getItem(LOCALSTORAGE_ACCESS_TOKEN_KEY);
@@ -36,6 +39,11 @@ export function extraUserHeaders() {
 export function getToken() {
     const token = localStorage.getItem(LOCALSTORAGE_ACCESS_TOKEN_KEY);
     return token;
+}
+
+export function getLocalhostUserDetails() {
+    const encryptedDetails = localStorage.getItem(LOCALSTORAGE_USER_DETAILS_KEY);
+    return jwt.decode(encryptedDetails, FITASSIST_USER_DETAILS_TOKEN_KEY);
 }
 
 export function prepareDropdownOptionsData(data, valueKey, labelKey) {

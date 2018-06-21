@@ -58,7 +58,8 @@ export const routeCodes = {
     CALENDAR: `${publicPath}calendar`,
 
     GOALS: `${publicPath}goals`,
-    
-    ALL_NOTIFICATIONS: `${publicPath}notifications`
+
+    ALL_NOTIFICATIONS: `${publicPath}notifications`,
+    MESSENGER: `${publicPath}messenger`,
 
 };

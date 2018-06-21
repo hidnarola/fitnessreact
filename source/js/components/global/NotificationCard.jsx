@@ -13,10 +13,10 @@ class NotificationCard extends Component {
         } = this.props;
         var type = notification.type;
         var isSeen = notification.isSeen;
+        var sender = notification.sender;
         switch (type) {
             case 'friend_request_approved':
                 var msg = '';
-                var sender = notification.sender;
                 msg = `<strong>${sender.firstName} ${(sender.lastName) ? sender.lastName : ''}</strong>`;
                 msg += `<small>approved your request</small>`;
                 return (
@@ -44,7 +44,8 @@ class NotificationCard extends Component {
                         <div className={cns("notifications-box", { 'un-seen-notification': !isSeen })}>
                             <span>
                                 <img
-                                    src={SERVER_BASE_URL + sender.avatar}
+                                    src={sender.avatar}
+                                    className="avatar"
                                     onError={(e) => {
                                         e.target.src = noProfileImg
                                     }}

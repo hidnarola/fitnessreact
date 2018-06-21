@@ -18,6 +18,7 @@ import AutosuggestHighlightMatch from 'autosuggest-highlight/match';
 import AutosuggestHighlightParse from 'autosuggest-highlight/parse';
 import cns from "classnames";
 import { getUserUnreadNotificationsRequest } from '../../actions/userNotifications';
+import { getUserMessageChannelRequest } from '../../actions/userMessages';
 
 const auth = new Auth();
 
@@ -45,6 +46,7 @@ class FitnessHeader extends Component {
             searchValue,
             notificationCount,
             dispatch,
+            socket,
         } = this.props;
         const {
             searchSuggestions,
@@ -117,7 +119,7 @@ class FitnessHeader extends Component {
                             </a>
                         </div>
                         <div className="header-email">
-                            <a href="javascript:void(0)" onClick={() => toggleSideMenu('user-message-panel', true)}>
+                            <a href="javascript:void(0)" onClick={this.handleMessagePanel}>
                                 <FaMail />
                             </a>
                         </div>
@@ -254,6 +256,20 @@ class FitnessHeader extends Component {
                 </NavLink>
             );
         }
+    }
+
+    handleMessagePanel = () => {
+        const { socket, dispatch } = this.props;
+        if (socket) {
+            var requestData = {
+                token: getToken(),
+                start: 0,
+                limit: 5,
+            }
+            dispatch(getUserMessageChannelRequest('messages_panel'));
+            socket.emit('request_users_conversation_channels', requestData);
+        }
+        toggleSideMenu('user-message-panel', true);
     }
     //#endregion
 }

@@ -50,13 +50,15 @@ import { toggleSideMenu, getToken } from '../helpers/funs';
 import Auth from '../auth/Auth';
 import socketClient from "socket.io-client";
 import { openSocket, closeSocket } from '../actions/user';
-import { receiveUserNotificationCount } from '../socket';
+import { receiveUserNotificationCount, receiveUsersConversationChannels } from '../socket';
 import { setUserNotificationCount } from '../actions/userNotifications';
 import UserRightMenu from '../components/global/UserRightMenu';
 import UserNotificationPanel from '../components/global/UserNotificationPanel';
 import Notifications from './Notifications';
 import UserMessagePanel from '../components/global/UserMessagePanel';
 import ProfileSettings from './ProfileSettings';
+import { getUserMessageChannelSuccess } from '../actions/userMessages';
+import Messenger from './Messenger';
 
 const auth = new Auth();
 
@@ -75,6 +77,7 @@ class App extends Component {
                 var count = data.count;
                 dispatch(setUserNotificationCount(count));
             });
+            receiveUsersConversationChannels(socket, this.handleUsersConversationChannnels);
         }
     }
 
@@ -126,6 +129,7 @@ class App extends Component {
                             <PrivateRoute path={routeCodes.USERS} component={FrontEndUsersList} />
 
                             <PrivateRoute path={routeCodes.ALL_NOTIFICATIONS} component={Notifications} />
+                            <PrivateRoute path={routeCodes.MESSENGER} component={Messenger} />
 
                             <Route exact path={adminRootRoute} component={AdminLogin} />
                             <Route exact path={`${adminRootRoute}/${SESSION_EXPIRED_URL_TYPE}`} component={AdminLogin} />
@@ -188,6 +192,11 @@ class App extends Component {
     handleLogout = () => {
         toggleSideMenu('user-right-menu', false);
         auth.logout();
+    }
+
+    handleUsersConversationChannnels = (data) => {
+        const { dispatch } = this.props;
+        dispatch(getUserMessageChannelSuccess(data));
     }
 
 }
