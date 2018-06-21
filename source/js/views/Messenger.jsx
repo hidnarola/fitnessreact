@@ -6,6 +6,9 @@ import { getToken } from '../helpers/funs';
 import { getUserMessageChannelRequest } from '../actions/userMessages';
 import InfiniteScroll from "react-infinite-scroller";
 import { FaCircleONotch } from "react-icons/lib/fa";
+import _ from "lodash";
+import { NavLink } from "react-router-dom";
+import cns from "classnames";
 
 class Messenger extends Component {
     constructor(props) {
@@ -21,7 +24,11 @@ class Messenger extends Component {
     render() {
         const {
             hasMore,
+            channels,
         } = this.state;
+        const {
+            loggedUserData,
+        } = this.props;
         return (
             <div className='stat-page'>
                 <FitnessHeader />
@@ -48,9 +55,22 @@ class Messenger extends Component {
                                             </div>
                                         }
                                     >
-
                                         <div className="data">
-
+                                            {channels && channels.length > 0 &&
+                                                <div className="">
+                                                    {
+                                                        channels.map((channel, index) => {
+                                                            return (
+                                                                <ChannelMessageCard
+                                                                    key={index}
+                                                                    channel={channel}
+                                                                    loggedUserData={loggedUserData}
+                                                                />
+                                                            )
+                                                        })
+                                                    }
+                                                </div>
+                                            }
                                         </div>
                                     </InfiniteScroll>
                                 </div>
@@ -63,8 +83,22 @@ class Messenger extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        console.log('prevProps => ', prevProps);
-        console.log('this.props => ', this.props);
+        const {
+            loading,
+            channels,
+        } = this.props;
+        const {
+            start,
+            limit,
+        } = this.state;
+        if (!loading && prevProps.channels !== channels) {
+            if (channels && channels.length > 0) {
+                var newChannelsState = _.concat(this.state.channels, channels);
+                this.setState({ start: (start + limit), channels: newChannelsState, hasMore: true });
+            } else {
+                this.setState({ hasMore: false });
+            }
+        }
     }
 
     loadMore = () => {
@@ -73,6 +107,7 @@ class Messenger extends Component {
             limit,
         } = this.state;
         const {
+            loading,
             socket,
             dispatch,
         } = this.props;
@@ -82,9 +117,11 @@ class Messenger extends Component {
                 start,
                 limit,
             }
-            dispatch(getUserMessageChannelRequest('messenger'));
-            socket.emit('request_users_conversation_channels', requestData);
-            this.setState({ hasMore: false });
+            if (!loading) {
+                dispatch(getUserMessageChannelRequest('messenger'));
+                socket.emit('request_users_conversation_channels', requestData);
+                this.setState({ hasMore: false });
+            }
         } else {
             // redirect to an error page
         }
@@ -99,9 +136,49 @@ const mapStateToProps = (state) => {
         loading: userMessages.get('channelLoading'),
         channels: userMessages.get('channels'),
         error: userMessages.get('channelError'),
+        loggedUserData: user.get('loggedUserData'),
     };
 }
 
 export default connect(
     mapStateToProps,
 )(Messenger);
+
+class ChannelMessageCard extends Component {
+    render() {
+        const { channel, loggedUserData } = this.props;
+        var message = channel.conversation.message;
+        var isSeen = channel.conversation.isSeen;
+        var channelFor = null;
+        if (channel.userData && channel.userData.authUserId !== loggedUserData.authId) {
+            channelFor = channel.userData;
+        } else if (channel.friendData && channel.friendData.authUserId !== loggedUserData.authId) {
+            channelFor = channel.friendData;
+        }
+        if (channelFor) {
+            return (
+                <NavLink
+                    to={''}
+                >
+                    <div className={cns("messenger-box", { 'un-seen-message': !isSeen })}>
+                        <span>
+                            <img
+                                src={channelFor.avatar}
+                                className="avatar"
+                                onError={(e) => {
+                                    e.target.src = noProfileImg
+                                }}
+                            />
+                        </span>
+                        <h4>
+                            <strong>{`${channelFor.firstName} ${(channelFor.lastName) ? channelFor.lastName : ''}`}</strong>
+                            <small>{message}</small>
+                        </h4>
+                    </div>
+                </NavLink>
+            );
+        } else {
+            return null;
+        }
+    }
+}
