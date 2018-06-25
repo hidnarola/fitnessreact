@@ -50,15 +50,17 @@ import { toggleSideMenu, getToken } from '../helpers/funs';
 import Auth from '../auth/Auth';
 import socketClient from "socket.io-client";
 import { openSocket, closeSocket } from '../actions/user';
-import { receiveUserNotificationCount, receiveUsersConversationChannels } from '../socket';
+import { receiveUserNotificationCount, receiveUsersConversationChannels, receiveUsersConversationByChannel } from '../socket';
 import { setUserNotificationCount } from '../actions/userNotifications';
 import UserRightMenu from '../components/global/UserRightMenu';
 import UserNotificationPanel from '../components/global/UserNotificationPanel';
 import Notifications from './Notifications';
 import UserMessagePanel from '../components/global/UserMessagePanel';
 import ProfileSettings from './ProfileSettings';
-import { getUserMessageChannelSuccess } from '../actions/userMessages';
+import { getUserMessageChannelSuccess, openUserChatWindowSuccess } from '../actions/userMessages';
 import Messenger from './Messenger';
+import $ from "jquery";
+import UserChatWindow from '../components/global/UserChatWindow';
 
 const auth = new Auth();
 
@@ -78,6 +80,7 @@ class App extends Component {
                 dispatch(setUserNotificationCount(count));
             });
             receiveUsersConversationChannels(socket, this.handleUsersConversationChannnels);
+            receiveUsersConversationByChannel(socket, this.handleUsersConversationByChannel);
         }
     }
 
@@ -85,7 +88,9 @@ class App extends Component {
         const {
             showPageLoader,
             loggedUserData,
+            chatWindows,
         } = this.props;
+        var chatWindowKeys = Object.keys(chatWindows);
         return (
             <div className="appWrapper">
                 <div id="loader" className={cns({ 'display_none': !showPageLoader })}>
@@ -181,6 +186,24 @@ class App extends Component {
                                 <UserNotificationPanel />
 
                                 <UserMessagePanel />
+
+                                {chatWindows && chatWindowKeys.length > 0 &&
+                                    chatWindowKeys.map((key, index) => {
+                                        var chatWindowWidth = $('.small-chat-window-wrapper').width();
+                                        var right = (chatWindowWidth) ? ((chatWindowWidth + 10) * index) : 0;
+                                        var style = { right };
+                                        var chatWindow = chatWindows[key];
+                                        var userDetails = chatWindow.userDetails;
+                                        return (
+                                            <UserChatWindow
+                                                key={key}
+                                                channelId={key}
+                                                userDetails={userDetails}
+                                                style={style}
+                                            />
+                                        );
+                                    })
+                                }
                             </div>
                         }
                     </ScrollToTop>
@@ -199,13 +222,19 @@ class App extends Component {
         dispatch(getUserMessageChannelSuccess(data));
     }
 
+    handleUsersConversationByChannel = (data) => {
+        const { dispatch } = this.props;
+        dispatch(openUserChatWindowSuccess(data));
+    }
+
 }
 
 const mapStateToProps = (state) => {
-    const { pageLoader, user } = state;
+    const { pageLoader, user, userMessages } = state;
     return {
         showPageLoader: pageLoader.get("loading"),
         loggedUserData: user.get('loggedUserData'),
+        chatWindows: userMessages.get('chatWindows'),
     };
 }
 

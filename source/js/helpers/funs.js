@@ -149,6 +149,10 @@ export function toggleSideMenu(id, show) {
     }
 }
 
+export function toggleSmallChatWindow(id) {
+    $(`#${id}`).slideToggle(300, 'swing');
+}
+
 export function convertUnits(from, to, value) {
     var result = value;
     switch (from) {

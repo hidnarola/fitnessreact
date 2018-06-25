@@ -3,7 +3,11 @@ import {
     GET_USER_MESSAGE_CHANNEL_REQUEST,
     GET_USER_MESSAGE_CHANNEL_SUCCESS,
     GET_USER_MESSAGE_CHANNEL_ERROR,
+    OPEN_USER_CHAT_WINDOW_REQUEST,
+    OPEN_USER_CHAT_WINDOW_SUCCESS,
+    OPEN_USER_CHAT_WINDOW_ERROR,
 } from "../actions/userMessages";
+import _ from "lodash";
 
 const initialState = Map({
     panelChannelLoading: false,
@@ -13,6 +17,7 @@ const initialState = Map({
     channels: [],
     channelError: [],
     setStateFor: '',
+    chatWindows: {},
 });
 
 const actionMap = {
@@ -55,6 +60,53 @@ const actionMap = {
         var setStateFor = state.get('setStateFor');
         var customState = handleSetStateFor(setStateFor, newState, state);
         return state.merge(Map(customState));
+    },
+    [OPEN_USER_CHAT_WINDOW_REQUEST]: (state, action) => {
+        var chatWindows = Object.assign({}, state.get('chatWindows'));
+        var userDetails = action.userDetails;
+        var channelId = action.channelId;
+        var isWindowOpen = chatWindows.hasOwnProperty(channelId);
+        if (!isWindowOpen) {
+            var obj = {
+                loading: true,
+                userDetails,
+                messages: [],
+            };
+            chatWindows[channelId] = obj;
+        }
+        return state.merge(Map({
+            chatWindows,
+        }));
+    },
+    [OPEN_USER_CHAT_WINDOW_SUCCESS]: (state, action) => {
+        var chatWindows = Object.assign({}, state.get('chatWindows'));
+        if (action.data.status === 1) {
+            var channel = action.data.channel;
+            if (channel) {
+                var channelId = channel._id;
+                var chatWindow = chatWindows.get(channelId);
+                var messages = chatWindow.get('messages');
+                var newMessages = channel.messages;
+                var allMessages = _.concat(messages, newMessages);
+                var obj = {
+                    loading: false,
+                    userDetails,
+                    messages: allMessages,
+                };
+                chatWindows.set(channelId, obj);
+            }
+        } else {
+
+        }
+        return state.merge(Map({
+            chatWindows,
+        }));
+    },
+    [OPEN_USER_CHAT_WINDOW_ERROR]: (state, action) => {
+        var chatWindows = Object.assign({}, state.get('chatWindows'));
+        return state.merge(Map({
+            chatWindows,
+        }));
     },
 }
 

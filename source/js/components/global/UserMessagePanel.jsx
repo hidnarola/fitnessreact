@@ -5,6 +5,7 @@ import { toggleSideMenu } from '../../helpers/funs';
 import noProfileImg from 'img/common/no-profile-img.png'
 import cns from "classnames";
 import { routeCodes } from '../../constants/routes';
+import { openUserChatWindowRequest } from '../../actions/userMessages';
 
 class UserMessagePanel extends Component {
     render() {
@@ -34,6 +35,7 @@ class UserMessagePanel extends Component {
                                                 key={index}
                                                 channel={channel}
                                                 loggedUserData={loggedUserData}
+                                                handleOpenChatWindow={this.handleOpenChatWindow}
                                             />
                                         )
                                     })
@@ -52,6 +54,18 @@ class UserMessagePanel extends Component {
             </div>
         );
     }
+
+    handleOpenChatWindow = (userDetails, channelId) => {
+        const { dispatch, socket } = this.props;
+        dispatch(openUserChatWindowRequest(userDetails, channelId));
+        var requestData = {
+            channelId,
+            start: 0,
+            limit: 10,
+        }
+        socket.emit('get_user_conversation_by_channel', requestData);
+        toggleSideMenu('user-message-panel', false);
+    }
 }
 
 const mapStateToProps = (state) => {
@@ -61,6 +75,7 @@ const mapStateToProps = (state) => {
         panelChannels: userMessages.get('panelChannels'),
         panelChannelError: userMessages.get('panelChannelError'),
         loggedUserData: user.get('loggedUserData'),
+        socket: user.get('socket'),
     };
 }
 
@@ -70,7 +85,7 @@ export default connect(
 
 class ChannelMessageCard extends Component {
     render() {
-        const { channel, loggedUserData } = this.props;
+        const { channel, loggedUserData, handleOpenChatWindow } = this.props;
         var message = channel.conversation.message;
         var isSeen = channel.conversation.isSeen;
         var channelFor = null;
@@ -81,9 +96,9 @@ class ChannelMessageCard extends Component {
         }
         if (channelFor) {
             return (
-                <NavLink
-                    to={''}
-                >
+                <a href="javascript:void(0)" onClick={() => {
+                    handleOpenChatWindow(channelFor, channel._id);
+                }}>
                     <div className={cns("messenger-box", { 'un-seen-message': !isSeen })}>
                         <span>
                             <img
@@ -99,7 +114,7 @@ class ChannelMessageCard extends Component {
                             <small>{message}</small>
                         </h4>
                     </div>
-                </NavLink>
+                </a>
             );
         } else {
             return null;

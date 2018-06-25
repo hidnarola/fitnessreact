@@ -8,4 +8,10 @@ export const receiveUsersConversationChannels = (socket, callback) => {
     socket.on('receive_users_conversation_channel', (data) => {
         callback(data);
     });
-} 
+}
+
+export const receiveUsersConversationByChannel = (socket, callback) => {
+    socket.on('receive_users_conversation_by_channel', (data) => {
+        callback(data);
+    });
+}
