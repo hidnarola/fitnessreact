@@ -3,15 +3,16 @@ import { toggleSmallChatWindow } from '../../helpers/funs';
 
 class UserChatWindow extends Component {
     render() {
-        const { channelId, userDetails, style } = this.props;
+        const { channelId, userDetails, loadingMessages, messages, style, closeWindow } = this.props;
         return (
             <div className="small-chat-window-wrapper" style={style}>
                 <header className="clearfix" onClick={() => toggleSmallChatWindow(`live-chat-chat_${channelId}`)}>
-                    <a href="#" className="chat-close">x</a>
+                    <a href="javascript:void(0)" onClick={() => closeWindow(channelId)} className="chat-close">x</a>
                     <h4>{userDetails.firstName + ' ' + userDetails.lastName}</h4>
                     <span className="chat-message-counter">3</span>
                 </header>
                 <div id={`live-chat-chat_${channelId}`} className="chat">
+                    {console.log('messages => ', messages)}
                     <div className="chat-history">
                         <div className="chat-message clearfix">
                             <img src="" alt="" width="32" height="32" />

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { NavLink } from "react-router-dom";
-import { toggleSideMenu } from '../../helpers/funs';
+import { toggleSideMenu, getToken } from '../../helpers/funs';
 import noProfileImg from 'img/common/no-profile-img.png'
 import cns from "classnames";
 import { routeCodes } from '../../constants/routes';
@@ -59,10 +59,12 @@ class UserMessagePanel extends Component {
         const { dispatch, socket } = this.props;
         dispatch(openUserChatWindowRequest(userDetails, channelId));
         var requestData = {
-            channelId,
+            token: getToken(),
+            channel_id: channelId,
             start: 0,
             limit: 10,
         }
+        console.log('Before emit ---------------------------');
         socket.emit('get_user_conversation_by_channel', requestData);
         toggleSideMenu('user-message-panel', false);
     }

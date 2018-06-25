@@ -57,7 +57,7 @@ import UserNotificationPanel from '../components/global/UserNotificationPanel';
 import Notifications from './Notifications';
 import UserMessagePanel from '../components/global/UserMessagePanel';
 import ProfileSettings from './ProfileSettings';
-import { getUserMessageChannelSuccess, openUserChatWindowSuccess } from '../actions/userMessages';
+import { getUserMessageChannelSuccess, openUserChatWindowSuccess, closeUserChatWindow } from '../actions/userMessages';
 import Messenger from './Messenger';
 import $ from "jquery";
 import UserChatWindow from '../components/global/UserChatWindow';
@@ -194,12 +194,17 @@ class App extends Component {
                                         var style = { right };
                                         var chatWindow = chatWindows[key];
                                         var userDetails = chatWindow.userDetails;
+                                        var loadingMessages = chatWindow.loading;
+                                        var messages = chatWindow.messages;
                                         return (
                                             <UserChatWindow
                                                 key={key}
                                                 channelId={key}
                                                 userDetails={userDetails}
                                                 style={style}
+                                                closeWindow={this.handleCloseUserChatWindow}
+                                                messages={messages}
+                                                loadingMessages={loadingMessages}
                                             />
                                         );
                                     })
@@ -224,7 +229,13 @@ class App extends Component {
 
     handleUsersConversationByChannel = (data) => {
         const { dispatch } = this.props;
+        console.log(data);
         dispatch(openUserChatWindowSuccess(data));
+    }
+
+    handleCloseUserChatWindow = (channelId) => {
+        const { dispatch } = this.props;
+        dispatch(closeUserChatWindow(channelId));
     }
 
 }
