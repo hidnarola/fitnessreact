@@ -55,7 +55,7 @@ class UserChatWindow extends Component {
                                             <div className="chat-message-content clearfix">
                                                 <span className="chat-time">{dt}</span>
                                                 <h5>{msg.fullName}</h5>
-                                                <p>{ReactHtmlParser(msg.message)}</p>
+                                                <p>{(msg.message)}</p>
                                             </div>
                                         </div>
                                         <hr />
@@ -101,10 +101,10 @@ class UserChatWindow extends Component {
         elem.scroll(() => {
             window.clearInterval(this.scrollBottomInterval);
             this.scrollBottomInterval = null;
-            if (elem.scrollTop() + elem.innerHeight() >= elem[0].scrollHeight) {
+            if (elem.scrollTop() + elem.innerHeight() >= elem[0].scrollHeight && this.scrollBottomInterval == null) {
                 this.scrollBottomInterval = window.setInterval(() => {
                     scrollBottom(`#chat-history_${channelId}`, 'slow');
-                }, 1000);
+                }, 1500);
             }
         });
     }
