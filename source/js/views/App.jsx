@@ -46,18 +46,18 @@ import NutritionRecipeDetails from '../components/Nutrition/NutritionRecipeDetai
 import cns from "classnames";
 import NutritionMealAdd from '../components/Nutrition/NutritionMealAdd';
 import UpdateProfile from './UpdateProfile';
-import { toggleSideMenu, getToken } from '../helpers/funs';
+import { toggleSideMenu, getToken, scrollBottom } from '../helpers/funs';
 import Auth from '../auth/Auth';
 import socketClient from "socket.io-client";
 import { openSocket, closeSocket } from '../actions/user';
-import { receiveUserNotificationCount, receiveUsersConversationChannels, receiveUsersConversationByChannel } from '../socket';
+import { receiveUserNotificationCount, receiveUsersConversationChannels, receiveUsersConversationByChannel, receiveSentNewMessageResponse, receiveNewMessage } from '../socket';
 import { setUserNotificationCount } from '../actions/userNotifications';
 import UserRightMenu from '../components/global/UserRightMenu';
 import UserNotificationPanel from '../components/global/UserNotificationPanel';
 import Notifications from './Notifications';
 import UserMessagePanel from '../components/global/UserMessagePanel';
 import ProfileSettings from './ProfileSettings';
-import { getUserMessageChannelSuccess, openUserChatWindowSuccess, closeUserChatWindow } from '../actions/userMessages';
+import { getUserMessageChannelSuccess, openUserChatWindowSuccess, closeUserChatWindow, sendNewMessageRequest, sendNewMessageSuccess, receiveNewMessageResponse } from '../actions/userMessages';
 import Messenger from './Messenger';
 import $ from "jquery";
 import UserChatWindow from '../components/global/UserChatWindow';
@@ -81,6 +81,8 @@ class App extends Component {
             });
             receiveUsersConversationChannels(socket, this.handleUsersConversationChannnels);
             receiveUsersConversationByChannel(socket, this.handleUsersConversationByChannel);
+            receiveSentNewMessageResponse(socket, this.handleSentNewMessageResponse);
+            receiveNewMessage(socket, this.handleReceiveNewMessage);
         }
     }
 
@@ -205,6 +207,7 @@ class App extends Component {
                                                 closeWindow={this.handleCloseUserChatWindow}
                                                 messages={messages}
                                                 loadingMessages={loadingMessages}
+                                                handleSendButton={this.handleSendButton}
                                             />
                                         );
                                     })
@@ -229,13 +232,31 @@ class App extends Component {
 
     handleUsersConversationByChannel = (data) => {
         const { dispatch } = this.props;
-        console.log(data);
         dispatch(openUserChatWindowSuccess(data));
     }
 
     handleCloseUserChatWindow = (channelId) => {
         const { dispatch } = this.props;
         dispatch(closeUserChatWindow(channelId));
+    }
+
+    handleSentNewMessageResponse = (data) => {
+        const { dispatch } = this.props;
+        dispatch(sendNewMessageSuccess(data));
+    }
+
+    handleSendButton = (data) => {
+        const { loggedUserData, socket } = this.props;
+        var requestData = Object.assign({}, data);
+        data['loggedUser'] = loggedUserData.userDetails;
+        const { dispatch } = this.props;
+        dispatch(sendNewMessageRequest(data));
+        socket.emit('send_new_message', requestData);
+    }
+
+    handleReceiveNewMessage = (data) => {
+        const { dispatch } = this.props;
+        dispatch(receiveNewMessageResponse(data));
     }
 
 }
@@ -245,6 +266,7 @@ const mapStateToProps = (state) => {
     return {
         showPageLoader: pageLoader.get("loading"),
         loggedUserData: user.get('loggedUserData'),
+        socket: user.get('socket'),
         chatWindows: userMessages.get('chatWindows'),
     };
 }

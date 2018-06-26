@@ -7,6 +7,10 @@ import {
     OPEN_USER_CHAT_WINDOW_SUCCESS,
     OPEN_USER_CHAT_WINDOW_ERROR,
     CLOSE_USER_CHAT_WINDOW,
+    SEND_NEW_MESSAGE_REQUEST,
+    SEND_NEW_MESSAGE_SUCCESS,
+    SEND_NEW_MESSAGE_ERROR,
+    RECEIVE_NEW_MESSAGE,
 } from "../actions/userMessages";
 import _ from "lodash";
 
@@ -66,26 +70,21 @@ const actionMap = {
         var chatWindows = Object.assign({}, state.get('chatWindows'));
         var userDetails = action.userDetails;
         var channelId = action.channelId;
-        var isWindowOpen = chatWindows.hasOwnProperty(channelId);
-        if (!isWindowOpen) {
-            var obj = {
-                loading: true,
-                userDetails,
-                messages: [],
-            };
-            chatWindows[channelId] = obj;
-        }
+        var obj = {
+            loading: true,
+            userDetails,
+            messages: [],
+        };
+        chatWindows[channelId] = obj;
         return state.merge(Map({
             chatWindows,
         }));
     },
     [OPEN_USER_CHAT_WINDOW_SUCCESS]: (state, action) => {
-        console.log('heere');
         var chatWindows = Object.assign({}, state.get('chatWindows'));
         if (action.data.status === 1) {
             var channel = action.data.channel;
-            console.log('channel => ', channel);
-            if (channel) {
+            if (channel && Object.keys(channel).length > 0) {
                 var channelId = channel._id;
                 var chatWindow = chatWindows[channelId];
                 var messages = chatWindow['messages'];
@@ -118,6 +117,82 @@ const actionMap = {
         var isWindowOpen = chatWindows.hasOwnProperty(channelId);
         if (isWindowOpen) {
             delete chatWindows[channelId];
+        }
+        return state.merge(Map({
+            chatWindows,
+        }));
+    },
+    [SEND_NEW_MESSAGE_REQUEST]: (state, action) => {
+        var chatWindows = Object.assign({}, state.get('chatWindows'));
+        var data = action.data;
+        var channelId = data.channelId;
+        var isWindowOpen = chatWindows.hasOwnProperty(channelId);
+        if (isWindowOpen) {
+            var loggedUser = data.loggedUser;
+            var message = data.message;
+            var createdAt = data.createdAt;
+            var timestamp = data.timestamp;
+            var msgs = chatWindows[channelId].messages;
+            var newMsg = {
+                _id: null,
+                isSeen: 0,
+                message: message,
+                createdAt: createdAt,
+                fullName: `${loggedUser.firstName} ${(loggedUser.lastName) ? loggedUser.lastName : ''}`,
+                authUserId: loggedUser.authUserId,
+                username: loggedUser.username,
+                avatar: loggedUser.avatar,
+                flag: 'sent',
+                timestamp: timestamp,
+                isLoading: true,
+            }
+            msgs.push(newMsg);
+            chatWindows[channelId].messages = msgs;
+        }
+        return state.merge(Map({
+            chatWindows,
+        }));
+    },
+    [SEND_NEW_MESSAGE_SUCCESS]: (state, action) => {
+        var chatWindows = Object.assign({}, state.get('chatWindows'));
+        if (action.data.status === 1) {
+            var channel = action.data.channel;
+            if (channel && Object.keys(channel).length > 0) {
+                var channelId = channel._id;
+                var chatWindow = chatWindows[channelId];
+                var messages = chatWindow['messages'];
+                var metadata = channel.metadata;
+                var timestamp = metadata.timestamp;
+                var localAppendedMsgIndex = _.findIndex(messages, ['timestamp', timestamp]);
+                if (localAppendedMsgIndex >= 0) {
+                    messages.splice(localAppendedMsgIndex, 1, channel.message);
+                }
+            }
+        } else {
+
+        }
+        return state.merge(Map({
+            chatWindows,
+        }));
+    },
+    [SEND_NEW_MESSAGE_ERROR]: (state, action) => {
+        var chatWindows = Object.assign({}, state.get('chatWindows'));
+        return state.merge(Map({
+            chatWindows,
+        }));
+    },
+    [RECEIVE_NEW_MESSAGE]: (state, action) => {
+        var chatWindows = Object.assign({}, state.get('chatWindows'));
+        if (action.data.status === 1) {
+            var channel = action.data.channel;
+            if (channel && Object.keys(channel).length > 0) {
+                var channelId = channel._id;
+                var chatWindow = chatWindows[channelId];
+                var messages = chatWindow['messages'];
+                messages.push(channel.message);
+            }
+        } else {
+
         }
         return state.merge(Map({
             chatWindows,

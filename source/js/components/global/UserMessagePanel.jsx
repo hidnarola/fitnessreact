@@ -64,7 +64,6 @@ class UserMessagePanel extends Component {
             start: 0,
             limit: 10,
         }
-        console.log('Before emit ---------------------------');
         socket.emit('get_user_conversation_by_channel', requestData);
         toggleSideMenu('user-message-panel', false);
     }

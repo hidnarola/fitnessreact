@@ -141,6 +141,12 @@ export function focusToControl(divId) {
     $('html, body, document, window').animate({ scrollTop: divOffsetTop }, 'slow');
 }
 
+export function scrollBottom(divId, animateSpeed = 'fast') {
+    var scrollHeight = $(divId).prop('scrollHeight');
+    scrollHeight += 130;
+    $(divId).animate({ scrollTop: scrollHeight }, animateSpeed);
+}
+
 export function toggleSideMenu(id, show) {
     if (show) {
         $(`#${id}`).toggle({ direction: "left" });

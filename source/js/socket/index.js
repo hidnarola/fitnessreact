@@ -15,3 +15,15 @@ export const receiveUsersConversationByChannel = (socket, callback) => {
         callback(data);
     });
 }
+
+export const receiveSentNewMessageResponse = (socket, callback) => {
+    socket.on('receive_sent_new_message_response', (data) => {
+        callback(data);
+    });
+}
+
+export const receiveNewMessage = (socket, callback) => {
+    socket.on('receive_new_message', (data) => {
+        callback(data);
+    });
+}

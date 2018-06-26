@@ -6,6 +6,12 @@ export const OPEN_USER_CHAT_WINDOW_REQUEST = 'OPEN_USER_CHAT_WINDOW_REQUEST';
 export const OPEN_USER_CHAT_WINDOW_SUCCESS = 'OPEN_USER_CHAT_WINDOW_SUCCESS';
 export const OPEN_USER_CHAT_WINDOW_ERROR = 'OPEN_USER_CHAT_WINDOW_ERROR';
 
+export const SEND_NEW_MESSAGE_REQUEST = 'SEND_NEW_MESSAGE_REQUEST';
+export const SEND_NEW_MESSAGE_SUCCESS = 'SEND_NEW_MESSAGE_SUCCESS';
+export const SEND_NEW_MESSAGE_ERROR = 'SEND_NEW_MESSAGE_ERROR';
+
+export const RECEIVE_NEW_MESSAGE = 'RECEIVE_NEW_MESSAGE';
+
 export const CLOSE_USER_CHAT_WINDOW = 'CLOSE_USER_CHAT_WINDOW';
 
 export function getUserMessageChannelRequest(setStateFor = 'messenger') {
@@ -55,5 +61,33 @@ export function closeUserChatWindow(channelId) {
     return {
         type: CLOSE_USER_CHAT_WINDOW,
         channelId,
+    }
+}
+
+export function sendNewMessageRequest(data) {
+    return {
+        type: SEND_NEW_MESSAGE_REQUEST,
+        data,
+    }
+}
+
+export function sendNewMessageSuccess(data) {
+    return {
+        type: SEND_NEW_MESSAGE_SUCCESS,
+        data,
+    }
+}
+
+export function sendNewMessageError(error) {
+    return {
+        type: SEND_NEW_MESSAGE_ERROR,
+        error,
+    }
+}
+
+export function receiveNewMessageResponse(data) {
+    return {
+        type: RECEIVE_NEW_MESSAGE,
+        data,
     }
 }
