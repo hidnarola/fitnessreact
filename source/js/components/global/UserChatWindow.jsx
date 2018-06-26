@@ -86,7 +86,8 @@ class UserChatWindow extends Component {
 
     componentDidUpdate(prevProps, prevState) {
         const {
-            loadingMessages
+            loadingMessages,
+            channelId,
         } = this.props;
         if (loadingMessages !== prevProps.loadingMessages && !loadingMessages) {
             scrollBottom(`#chat-history_${channelId}`, 'slow');
@@ -103,7 +104,7 @@ class UserChatWindow extends Component {
             if (elem.scrollTop() + elem.innerHeight() >= elem[0].scrollHeight) {
                 this.scrollBottomInterval = window.setInterval(() => {
                     scrollBottom(`#chat-history_${channelId}`, 'slow');
-                }, 500);
+                }, 1000);
             }
         });
     }
