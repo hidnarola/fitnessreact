@@ -196,6 +196,7 @@ class App extends Component {
                                         var style = { right };
                                         var chatWindow = chatWindows[key];
                                         var userDetails = chatWindow.userDetails;
+                                        var isTyping = (typeof chatWindow.isTyping !== 'undefined') ? chatWindow.isTyping : false;
                                         var loadingMessages = chatWindow.loading;
                                         var messages = chatWindow.messages;
                                         return (
@@ -203,6 +204,7 @@ class App extends Component {
                                                 key={key}
                                                 channelId={key}
                                                 userDetails={userDetails}
+                                                isTyping={isTyping}
                                                 style={style}
                                                 closeWindow={this.handleCloseUserChatWindow}
                                                 messages={messages}
@@ -269,11 +271,13 @@ class App extends Component {
 
     handleStartTyping = (data) => {
         const { socket } = this.props;
+        console.log('Start Emited');
         socket.emit('request_typing_start', data);
     }
 
     handleStopTyping = (data) => {
         const { socket } = this.props;
+        console.log('Stop Emited');
         socket.emit('request_typing_stop', data);
     }
 

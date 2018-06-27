@@ -24,6 +24,7 @@ class UserChatWindow extends Component {
             messages,
             style,
             closeWindow,
+            isTyping,
         } = this.props;
         const {
             newMsg,
@@ -69,7 +70,9 @@ class UserChatWindow extends Component {
                             <p>No messages found...</p>
                         }
                     </div>
-                    <p className="chat-feedback">Your partner is typing…</p>
+                    {isTyping &&
+                        <p className="chat-feedback">Your partner is typing…</p>
+                    }
                     <div className="p-10">
                         <fieldset>
                             <input type="text" name='newMsg' value={newMsg} onChange={this.handleChange} placeholder="Type your message…" autoFocus={true} />
