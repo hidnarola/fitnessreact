@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React,{ Component } from 'react';
 import ActivityFeed from 'components/Dashboard/ActivityFeed';
 
 import TodaysWorkout from 'components/Dashboard/TodaysWorkout';
@@ -12,18 +12,17 @@ import WeeksCalories from 'components/Dashboard/WeeksCalories';
 import FitnessHeader from 'components/global/FitnessHeader';
 import FitnessNav from 'components/global/FitnessNav';
 
-import { Button, Modal } from 'react-bootstrap';
+import {Button,Modal} from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 // import { getPeopleNew } from 'actions/people';
 import { getDashboardData } from '../actions/dashboard';
 import ModalPopUp from 'components/Dashboard/ModalPopUp';
-import { getToken } from '../helpers/funs';
 
-
-class Dashboard extends Component {
-
-    constructor(props) {
+  
+class Dashboard extends Component{
+  
+    constructor(props){
         super(props);
         this.showModal = this.showModal.bind(this);
     }
@@ -31,25 +30,20 @@ class Dashboard extends Component {
     componentWillMount() {
         const {
             dispatch,
-            allWidgets,
-            socket,
+            allWidgets
         } = this.props;
         dispatch(getDashboardData());
-        let token = getToken();
-        if (socket && token) {
-            socket.emit('join', token);
-        }
     }
 
     checkClick(e, notyId) {
         alert(notyId);
     }
 
-    showModal() {
+    showModal(){
         this.child.handleShow() // do stuff
     }
 
-    render() {
+    render(){
 
         const {
             loading,
@@ -57,10 +51,10 @@ class Dashboard extends Component {
             allWidgets
         } = this.props;
 
-        return (
+        return(
             <div className="fitness-dashboard">
-                <FitnessHeader />
-                <FitnessNav />
+                <FitnessHeader/>
+                <FitnessNav/>                                                
                 <section className="body-wrap">
                     <div className="body-head space-btm-45 d-flex justify-content-start">
                         <div className="body-head-l">
@@ -77,52 +71,48 @@ class Dashboard extends Component {
                                 Profile Completion
                             </a>
                         </div>
-                    </div>
+                    </div>                    
 
                     <div className="body-content row d-flex">
                         <div className="col-md-4">
-
-                            {this.props.loading ? ""
+                            
+                            {this.props.loading ? "" 
                                 : this.props.allWidgets.todayWorkOut ? <TodaysWorkout />
-                                    : ""}
-
-                            {this.props.loading ? ""
+                                : ""}
+                            
+                            {this.props.loading ? "" 
                                 : this.props.allWidgets.goalProgress ? <GoalProgress />
-                                    : ""}
+                                : ""}
 
-                            {this.props.loading ? ""
-                                : this.props.allWidgets.badges ? <Badges />
-                                    : ""}
-
+                            {this.props.loading ? "" 
+                                : this.props.allWidgets.badges ? <Badges/>
+                                : ""}
+                                
                         </div>
                         <div className="col-md-4">
 
-                            <NextMeal />
+                            <NextMeal/>
+                            
+                            <BodyFatLoss/>
 
-                            <BodyFatLoss />
-
-                            <WeeksCalories />
+                            <WeeksCalories/>                            
 
                         </div>
                         <div className="col-md-4">
-                            <ActivityFeed />
+                            <ActivityFeed/>
                         </div>
                     </div>
                 </section>
-                <ModalPopUp func={this.checkClick} onRef={ref => (this.child = ref)} />
+                <ModalPopUp  func={this.checkClick} onRef={ref => (this.child = ref)} />
             </div>
         );
     }
 }
 
-const mapStateToProps = (state) => {
-    const { dashboardnew, user } = state;
-    return {
-        error: dashboardnew.get('error'),
-        allWidgets: dashboardnew.get('allWidgets'),
-        loading: dashboardnew.get('loading'),
-        socket: user.get('socket'),
-    };
-};
+const mapStateToProps = state => ({
+    error: state.dashboardnew.get('error'),
+    allWidgets:state.dashboardnew.get('allWidgets'),
+    loading: state.dashboardnew.get('loading')    
+})
 
 export default connect(mapStateToProps)(Dashboard);

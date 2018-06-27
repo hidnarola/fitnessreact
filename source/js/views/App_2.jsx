@@ -70,17 +70,19 @@ class App extends Component {
         const {
             dispatch
         } = this.props;
-        const socket = socketClient(SERVER_BASE_URL);
-        dispatch(openSocket(socket));
-        receiveUserNotificationCount(socket, this.handleUserNotificationCount);
-        receiveUsersConversationChannels(socket, this.handleUsersConversationChannnels);
-        receiveUsersConversationByChannel(socket, this.handleUsersConversationByChannel);
-        receiveSentNewMessageResponse(socket, this.handleSentNewMessageResponse);
-        receiveNewMessage(socket, this.handleReceiveNewMessage);
-        // let token = localStorage.getItem(LOCALSTORAGE_ACCESS_TOKEN_KEY);
-        let token = getToken();
+        let token = localStorage.getItem(LOCALSTORAGE_ACCESS_TOKEN_KEY);
         if (token) {
-            socket.emit('join', token);
+            const socket = socketClient(SERVER_BASE_URL);
+            dispatch(openSocket(socket));
+            socket.emit('join', getToken());
+            receiveUserNotificationCount(socket, (data) => {
+                var count = data.count;
+                dispatch(setUserNotificationCount(count));
+            });
+            receiveUsersConversationChannels(socket, this.handleUsersConversationChannnels);
+            receiveUsersConversationByChannel(socket, this.handleUsersConversationByChannel);
+            receiveSentNewMessageResponse(socket, this.handleSentNewMessageResponse);
+            receiveNewMessage(socket, this.handleReceiveNewMessage);
         }
     }
 
@@ -221,12 +223,6 @@ class App extends Component {
     handleLogout = () => {
         toggleSideMenu('user-right-menu', false);
         auth.logout();
-    }
-
-    handleUserNotificationCount = (data) => {
-        const { dispatch } = this.props;
-        var count = data.count;
-        dispatch(setUserNotificationCount(count));
     }
 
     handleUsersConversationChannnels = (data) => {
