@@ -271,19 +271,17 @@ class App extends Component {
 
     handleStartTyping = (data) => {
         const { socket } = this.props;
-        console.log('Start Emited');
         socket.emit('request_typing_start', data);
     }
 
     handleStopTyping = (data) => {
         const { socket } = this.props;
-        console.log('Stop Emited');
         socket.emit('request_typing_stop', data);
     }
 
     handleMessageTypingResponse = (data) => {
         const { dispatch } = this.props;
-        dispatch(messageTypingResponse(data))
+        dispatch(messageTypingResponse(data));
     }
 
 }
