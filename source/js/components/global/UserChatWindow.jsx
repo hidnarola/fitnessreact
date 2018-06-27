@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { toggleSmallChatWindow, getToken, scrollBottom } from '../../helpers/funs';
-import ReactHtmlParser from "react-html-parser";
 import moment from "moment";
 import noProfileImg from 'img/common/no-profile-img.png';
 import $ from "jquery";
+import _ from "lodash";
 
 class UserChatWindow extends Component {
     constructor(props) {
@@ -12,6 +12,8 @@ class UserChatWindow extends Component {
             newMsg: '',
         }
         this.scrollBottomInterval = null;
+        this.messageTypingStopDebounce = _.debounce(this.handleTypeingStop, 1000);
+        this.messageTypingStart = false;
     }
 
     render() {
@@ -115,6 +117,35 @@ class UserChatWindow extends Component {
         this.setState({
             [name]: value,
         });
+        if (!this.messageTypingStart) {
+            this.messageTypingStart = true;
+            this.handleTypeingStart();
+        }
+        this.messageTypingStopDebounce.cancel;
+        this.messageTypingStopDebounce();
+    }
+
+    handleTypeingStart = () => {
+        const { handleStartTyping, userDetails, channelId } = this.props;
+        if (handleStartTyping) {
+            var data = {
+                friendId: userDetails.authUserId,
+                channelId: channelId
+            }
+            handleStartTyping(data);
+        }
+    }
+
+    handleTypeingStop = () => {
+        const { handleStopTyping, userDetails, channelId } = this.props;
+        if (handleStopTyping) {
+            var data = {
+                friendId: userDetails.authUserId,
+                channelId: channelId
+            }
+            this.messageTypingStart = false;
+            handleStopTyping(data);
+        }
     }
 
     handleSend = () => {

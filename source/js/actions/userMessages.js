@@ -14,6 +14,8 @@ export const RECEIVE_NEW_MESSAGE = 'RECEIVE_NEW_MESSAGE';
 
 export const CLOSE_USER_CHAT_WINDOW = 'CLOSE_USER_CHAT_WINDOW';
 
+export const MESSAGE_TYPING_RESPONSE = 'MESSAGE_TYPING_RESPONSE';
+
 export function getUserMessageChannelRequest(setStateFor = 'messenger') {
     return {
         type: GET_USER_MESSAGE_CHANNEL_REQUEST,
@@ -88,6 +90,13 @@ export function sendNewMessageError(error) {
 export function receiveNewMessageResponse(data) {
     return {
         type: RECEIVE_NEW_MESSAGE,
+        data,
+    }
+}
+
+export function messageTypingResponse(data) {
+    return {
+        type: MESSAGE_TYPING_RESPONSE,
         data,
     }
 }

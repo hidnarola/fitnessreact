@@ -11,6 +11,7 @@ import {
     SEND_NEW_MESSAGE_SUCCESS,
     SEND_NEW_MESSAGE_ERROR,
     RECEIVE_NEW_MESSAGE,
+    MESSAGE_TYPING_RESPONSE,
 } from "../actions/userMessages";
 import _ from "lodash";
 
@@ -190,6 +191,23 @@ const actionMap = {
                 var chatWindow = chatWindows[channelId];
                 var messages = chatWindow['messages'];
                 messages.push(channel.message);
+            }
+        } else {
+
+        }
+        return state.merge(Map({
+            chatWindows,
+        }));
+    },
+    [MESSAGE_TYPING_RESPONSE]: (state, action) => {
+        var chatWindows = Object.assign({}, state.get('chatWindows'));
+        if (action.data.status === 1) {
+            var channel = action.data.channel;
+            if (channel && Object.keys(channel).length > 0) {
+                var channelId = channel._id;
+                var isTyping = channel.isTyping;
+                var chatWindow = chatWindows[channelId];
+                chatWindow.isTyping = isTyping;
             }
         } else {
 

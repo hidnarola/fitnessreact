@@ -27,3 +27,15 @@ export const receiveNewMessage = (socket, callback) => {
         callback(data);
     });
 }
+
+export const messageTypingStart = (socket, callback) => {
+    socket.on('message_typing_start', (data) => {
+        callback(data);
+    });
+}
+
+export const messageTypingStop = (socket, callback) => {
+    socket.on('message_typing_stop', (data) => {
+        callback(data);
+    });
+}

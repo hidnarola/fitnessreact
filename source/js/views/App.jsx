@@ -50,14 +50,14 @@ import { toggleSideMenu, getToken, scrollBottom } from '../helpers/funs';
 import Auth from '../auth/Auth';
 import socketClient from "socket.io-client";
 import { openSocket, closeSocket } from '../actions/user';
-import { receiveUserNotificationCount, receiveUsersConversationChannels, receiveUsersConversationByChannel, receiveSentNewMessageResponse, receiveNewMessage } from '../socket';
+import { receiveUserNotificationCount, receiveUsersConversationChannels, receiveUsersConversationByChannel, receiveSentNewMessageResponse, receiveNewMessage, messageTypingStart, messageTypingStop } from '../socket';
 import { setUserNotificationCount } from '../actions/userNotifications';
 import UserRightMenu from '../components/global/UserRightMenu';
 import UserNotificationPanel from '../components/global/UserNotificationPanel';
 import Notifications from './Notifications';
 import UserMessagePanel from '../components/global/UserMessagePanel';
 import ProfileSettings from './ProfileSettings';
-import { getUserMessageChannelSuccess, openUserChatWindowSuccess, closeUserChatWindow, sendNewMessageRequest, sendNewMessageSuccess, receiveNewMessageResponse } from '../actions/userMessages';
+import { getUserMessageChannelSuccess, openUserChatWindowSuccess, closeUserChatWindow, sendNewMessageRequest, sendNewMessageSuccess, receiveNewMessageResponse, messageTypingResponse } from '../actions/userMessages';
 import Messenger from './Messenger';
 import $ from "jquery";
 import UserChatWindow from '../components/global/UserChatWindow';
@@ -77,6 +77,8 @@ class App extends Component {
         receiveUsersConversationByChannel(socket, this.handleUsersConversationByChannel);
         receiveSentNewMessageResponse(socket, this.handleSentNewMessageResponse);
         receiveNewMessage(socket, this.handleReceiveNewMessage);
+        messageTypingStart(socket, this.handleMessageTypingResponse);
+        messageTypingStop(socket, this.handleMessageTypingResponse);
         // let token = localStorage.getItem(LOCALSTORAGE_ACCESS_TOKEN_KEY);
         let token = getToken();
         if (token) {
@@ -206,6 +208,8 @@ class App extends Component {
                                                 messages={messages}
                                                 loadingMessages={loadingMessages}
                                                 handleSendButton={this.handleSendButton}
+                                                handleStartTyping={this.handleStartTyping}
+                                                handleStopTyping={this.handleStopTyping}
                                             />
                                         );
                                     })
@@ -261,6 +265,21 @@ class App extends Component {
     handleReceiveNewMessage = (data) => {
         const { dispatch } = this.props;
         dispatch(receiveNewMessageResponse(data));
+    }
+
+    handleStartTyping = (data) => {
+        const { socket } = this.props;
+        socket.emit('request_typing_start', data);
+    }
+
+    handleStopTyping = (data) => {
+        const { socket } = this.props;
+        socket.emit('request_typing_stop', data);
+    }
+
+    handleMessageTypingResponse = (data) => {
+        const { dispatch } = this.props;
+        dispatch(messageTypingResponse(data))
     }
 
 }
