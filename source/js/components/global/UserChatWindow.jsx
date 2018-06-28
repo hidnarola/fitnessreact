@@ -3,6 +3,7 @@ import { toggleSmallChatWindow, getToken, scrollBottom } from '../../helpers/fun
 import moment from "moment";
 import noProfileImg from 'img/common/no-profile-img.png';
 import _ from "lodash";
+import $ from "jquery";
 
 class UserChatWindow extends Component {
     constructor(props) {
@@ -85,6 +86,10 @@ class UserChatWindow extends Component {
                 </div>
             </div>
         );
+    }
+
+    componentDidMount() {
+
     }
 
     componentDidUpdate(prevProps, prevState) {

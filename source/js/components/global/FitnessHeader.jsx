@@ -37,6 +37,7 @@ class FitnessHeader extends Component {
         dispatch(setLoggedUserFromLocalStorage());
         if (socket) {
             socket.emit('user_notifications_count', getToken());
+            socket.emit('user_messages_count', getToken());
         }
     }
 

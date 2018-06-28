@@ -4,6 +4,12 @@ export const receiveUserNotificationCount = (socket, callback) => {
     });
 }
 
+export const receiveUserMessagesCount = (socket, callback) => {
+    socket.on('receive_user_messages_count', (data) => {
+        callback(data);
+    });
+}
+
 export const receiveUsersConversationChannels = (socket, callback) => {
     socket.on('receive_users_conversation_channel', (data) => {
         callback(data);

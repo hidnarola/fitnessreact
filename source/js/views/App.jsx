@@ -50,14 +50,32 @@ import { toggleSideMenu, getToken, scrollBottom, slideToBottomOfChatWindow } fro
 import Auth from '../auth/Auth';
 import socketClient from "socket.io-client";
 import { openSocket, closeSocket } from '../actions/user';
-import { receiveUserNotificationCount, receiveUsersConversationChannels, receiveUsersConversationByChannel, receiveSentNewMessageResponse, receiveNewMessage, messageTypingStart, messageTypingStop } from '../socket';
+import {
+    receiveUserNotificationCount,
+    receiveUsersConversationChannels,
+    receiveUsersConversationByChannel,
+    receiveSentNewMessageResponse,
+    receiveNewMessage,
+    messageTypingStart,
+    messageTypingStop,
+    receiveUserMessagesCount
+} from '../socket';
 import { setUserNotificationCount } from '../actions/userNotifications';
 import UserRightMenu from '../components/global/UserRightMenu';
 import UserNotificationPanel from '../components/global/UserNotificationPanel';
 import Notifications from './Notifications';
 import UserMessagePanel from '../components/global/UserMessagePanel';
 import ProfileSettings from './ProfileSettings';
-import { getUserMessageChannelSuccess, openUserChatWindowSuccess, closeUserChatWindow, sendNewMessageRequest, sendNewMessageSuccess, receiveNewMessageResponse, messageTypingResponse, toggleChatWindowMinimize } from '../actions/userMessages';
+import {
+    getUserMessageChannelSuccess,
+    openUserChatWindowSuccess,
+    closeUserChatWindow,
+    sendNewMessageRequest,
+    sendNewMessageSuccess,
+    receiveNewMessageResponse,
+    messageTypingResponse,
+    toggleChatWindowMinimize
+} from '../actions/userMessages';
 import Messenger from './Messenger';
 import $ from "jquery";
 import UserChatWindow from '../components/global/UserChatWindow';
@@ -73,6 +91,7 @@ class App extends Component {
         const socket = socketClient(SERVER_BASE_URL);
         dispatch(openSocket(socket));
         receiveUserNotificationCount(socket, this.handleUserNotificationCount);
+        receiveUserMessagesCount(socket, this.handleUserMessagesCount);
         receiveUsersConversationChannels(socket, this.handleUsersConversationChannnels);
         receiveUsersConversationByChannel(socket, this.handleUsersConversationByChannel);
         receiveSentNewMessageResponse(socket, this.handleSentNewMessageResponse);
@@ -234,6 +253,14 @@ class App extends Component {
         const { dispatch } = this.props;
         var count = data.count;
         dispatch(setUserNotificationCount(count));
+    }
+
+    handleUserMessagesCount = (data) => {
+        console.log('data => ', data);
+
+        // const { dispatch } = this.props;
+        // var count = data.count;
+        // dispatch(setUserNotificationCount(count));
     }
 
     handleUsersConversationChannnels = (data) => {
