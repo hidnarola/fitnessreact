@@ -22,6 +22,7 @@ import ChangeProfilePhotoModal from '../components/Profile/ChangeProfilePhotoMod
 import jwt from "jwt-simple";
 import { setLoggedUserFromLocalStorage } from '../actions/user';
 import { FaCircleONotch } from "react-icons/lib/fa";
+import { getUserChannelRequest } from '../actions/userMessages';
 
 class Profile extends Component {
     constructor(props) {
@@ -96,6 +97,7 @@ class Profile extends Component {
             showChangeProfilePicModal,
             loadProfileActionInit,
         } = this.state;
+        const { requestChannelLoading } = this.props;
         return (
             <div className='stat-page'>
                 <FitnessHeader />
@@ -217,6 +219,18 @@ class Profile extends Component {
                                     }
                                     {profile.friendshipStatus === FRIENDSHIP_STATUS_UNKNOWN && (sendFriendRequestDisabled) &&
                                         <span>Friend request sending...</span>
+                                    }
+                                    {!requestChannelLoading &&
+                                        <a
+                                            href="javascript:void(0)"
+                                            className="add-friend-btn active"
+                                            onClick={this.handleRequestMessageChannel}
+                                        >
+                                            Send message <i className="icon-mail_outline"></i>
+                                        </a>
+                                    }
+                                    {requestChannelLoading &&
+                                        <span>Loading...</span>
                                     }
                                 </div>
                             }
@@ -624,12 +638,32 @@ class Profile extends Component {
         dispatch(saveLoggedUserProfilePhotoRequest(formData));
         this.setState({ updateProfilePhotoActionInit: true });
     }
+
+    handleRequestMessageChannel = () => {
+        const { profile, loggedUserData, dispatch, socket } = this.props;
+        var profileId = '';
+        var userId = '';
+        if (profile && profile.authUserId) {
+            profileId = profile.authUserId;
+        }
+        if (loggedUserData && loggedUserData.userDetails && loggedUserData.userDetails.authUserId) {
+            userId = loggedUserData.userDetails.authUserId;
+        }
+        if (profileId && userId) {
+            dispatch(getUserChannelRequest());
+            var requestData = {
+                friendId,
+                userId,
+            };
+            socket.emit('get_channel_id', requestData);
+        }
+    }
     //#endregion
 
 }
 
 const mapStateToProps = (state) => {
-    const { profile, friends } = state;
+    const { profile, friends, user, userMessages } = state;
     return {
         profileLoading: profile.get('loading'),
         profile: profile.get('profile'),
@@ -639,6 +673,10 @@ const mapStateToProps = (state) => {
         requestCancelError: friends.get('requestCancelError'),
         requestAcceptLoading: friends.get('requestAcceptLoading'),
         requestAcceptError: friends.get('requestAcceptError'),
+        loggedUserData: user.get('loggedUserData'),
+        socket: user.get('socket'),
+        requestChannelLoading: userMessages.get('requestChannelLoading'),
+        requestChannelError: userMessages.get('requestChannelError'),
     }
 }
 

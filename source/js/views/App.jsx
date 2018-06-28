@@ -58,7 +58,8 @@ import {
     receiveNewMessage,
     messageTypingStart,
     messageTypingStop,
-    receiveUserMessagesCount
+    receiveUserMessagesCount,
+    receiveChannelId
 } from '../socket';
 import { setUserNotificationCount } from '../actions/userNotifications';
 import UserRightMenu from '../components/global/UserRightMenu';
@@ -75,7 +76,8 @@ import {
     receiveNewMessageResponse,
     messageTypingResponse,
     toggleChatWindowMinimize,
-    setUserMessagesCount
+    setUserMessagesCount,
+    getUserChannelSuccess
 } from '../actions/userMessages';
 import Messenger from './Messenger';
 import $ from "jquery";
@@ -99,6 +101,7 @@ class App extends Component {
         receiveNewMessage(socket, this.handleReceiveNewMessage);
         messageTypingStart(socket, this.handleMessageTypingResponse);
         messageTypingStop(socket, this.handleMessageTypingResponse);
+        receiveChannelId(socket, this.handleReceiveChannelId);
         // let token = localStorage.getItem(LOCALSTORAGE_ACCESS_TOKEN_KEY);
         let token = getToken();
         if (token) {
@@ -347,6 +350,11 @@ class App extends Component {
             socket.emit('user_messages_count', getToken());
             $(`#chat-history_${channelId}`).animate({ scrollTop: 1000000 }, 'slow');
         }
+    }
+
+    handleReceiveChannelId = (data) => {
+        const { dispatch } = this.props;
+        dispatch(getUserChannelSuccess(data));
     }
 
 }

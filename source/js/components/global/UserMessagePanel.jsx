@@ -22,9 +22,9 @@ class UserMessagePanel extends Component {
                         <h3><i className="icon-mail_outline"></i> <small>Messenger</small></h3>
                         <a href="javascript:void(0)" onClick={() => toggleSideMenu('user-message-panel', false)}><i className="icon-close"></i></a>
                     </div>
-                    <div className="messenger-option">
+                    {/* <div className="messenger-option">
                         <a href="">Start new chat</a>
-                    </div>
+                    </div> */}
                     <div className="messenger-body" id="messenger-box">
                         {!panelChannelLoading && panelChannels && panelChannels.length > 0 &&
                             <div className="">

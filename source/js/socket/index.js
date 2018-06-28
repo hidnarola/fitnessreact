@@ -45,3 +45,9 @@ export const messageTypingStop = (socket, callback) => {
         callback(data);
     });
 }
+
+export const receiveChannelId = (socket, callback) => {
+    socket.on('receive_channel_id', (data) => {
+        callback(data);
+    });
+}
