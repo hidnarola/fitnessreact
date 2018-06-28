@@ -18,6 +18,8 @@ export const MESSAGE_TYPING_RESPONSE = 'MESSAGE_TYPING_RESPONSE';
 
 export const TOGGLE_CHAT_WINDOW_MINIMIZE = 'TOGGLE_CHAT_WINDOW_MINIMIZE';
 
+export const SET_USER_MESSAGES_COUNT = 'SET_USER_MESSAGES_COUNT';
+
 export function getUserMessageChannelRequest(setStateFor = 'messenger') {
     return {
         type: GET_USER_MESSAGE_CHANNEL_REQUEST,
@@ -108,5 +110,12 @@ export function toggleChatWindowMinimize(channelId, minimize) {
         type: TOGGLE_CHAT_WINDOW_MINIMIZE,
         channelId,
         minimize,
+    }
+}
+
+export function setUserMessagesCount(count) {
+    return {
+        type: SET_USER_MESSAGES_COUNT,
+        count,
     }
 }

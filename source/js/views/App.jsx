@@ -74,7 +74,8 @@ import {
     sendNewMessageSuccess,
     receiveNewMessageResponse,
     messageTypingResponse,
-    toggleChatWindowMinimize
+    toggleChatWindowMinimize,
+    setUserMessagesCount
 } from '../actions/userMessages';
 import Messenger from './Messenger';
 import $ from "jquery";
@@ -256,11 +257,9 @@ class App extends Component {
     }
 
     handleUserMessagesCount = (data) => {
-        console.log('data => ', data);
-
-        // const { dispatch } = this.props;
-        // var count = data.count;
-        // dispatch(setUserNotificationCount(count));
+        const { dispatch } = this.props;
+        var count = data.count;
+        dispatch(setUserMessagesCount(count));
     }
 
     handleUsersConversationChannnels = (data) => {
@@ -312,7 +311,11 @@ class App extends Component {
                     }
                     socket.emit('mark_message_as_read', requestData);
                     slideToBottomOfChatWindow(channelId);
+                } else {
+                    socket.emit('user_messages_count', getToken());
                 }
+            } else {
+                socket.emit('user_messages_count', getToken());
             }
         }
     }
@@ -332,9 +335,18 @@ class App extends Component {
         dispatch(messageTypingResponse(data));
     }
 
-    handleToggleChatWindowMinimize = (channelId, minimize) => {
-        const { dispatch } = this.props;
+    handleToggleChatWindowMinimize = (channelId, friendId, minimize) => {
+        const { dispatch, socket } = this.props;
         dispatch(toggleChatWindowMinimize(channelId, minimize));
+        if (!minimize) {
+            var requestData = {
+                channelId: channelId,
+                friendId: friendId,
+            }
+            socket.emit('mark_message_as_read', requestData);
+            socket.emit('user_messages_count', getToken());
+            $(`#chat-history_${channelId}`).animate({ scrollTop: 1000000 }, 'slow');
+        }
     }
 
 }

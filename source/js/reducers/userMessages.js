@@ -13,6 +13,7 @@ import {
     RECEIVE_NEW_MESSAGE,
     MESSAGE_TYPING_RESPONSE,
     TOGGLE_CHAT_WINDOW_MINIMIZE,
+    SET_USER_MESSAGES_COUNT,
 } from "../actions/userMessages";
 import _ from "lodash";
 
@@ -25,6 +26,7 @@ const initialState = Map({
     channelError: [],
     setStateFor: '',
     chatWindows: {},
+    unreadMessagesCount: 0,
 });
 
 const actionMap = {
@@ -234,6 +236,11 @@ const actionMap = {
         }
         return state.merge(Map({
             chatWindows,
+        }));
+    },
+    [SET_USER_MESSAGES_COUNT]: (state, action) => {
+        return state.merge(Map({
+            unreadMessagesCount: action.count,
         }));
     },
 }

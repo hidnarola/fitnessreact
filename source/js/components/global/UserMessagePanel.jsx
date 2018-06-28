@@ -76,6 +76,7 @@ class UserMessagePanel extends Component {
             friendId: userDetails.authUserId,
         }
         socket.emit('mark_message_as_read', requestData);
+        socket.emit('user_messages_count', getToken());
     }
 }
 

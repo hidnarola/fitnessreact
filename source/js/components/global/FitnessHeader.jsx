@@ -46,8 +46,8 @@ class FitnessHeader extends Component {
             loggedUserData,
             searchValue,
             notificationCount,
+            messagesCount,
             dispatch,
-            socket,
         } = this.props;
         const {
             searchSuggestions,
@@ -116,12 +116,12 @@ class FitnessHeader extends Component {
                                 dispatch(getUserUnreadNotificationsRequest());
                                 toggleSideMenu('user-notification-panel', true);
                             }}>
-                                <FaNoti /> {notificationCount}
+                                <FaNoti /> {(notificationCount) ? notificationCount : ''}
                             </a>
                         </div>
                         <div className="header-email">
                             <a href="javascript:void(0)" onClick={this.handleMessagePanel}>
-                                <FaMail />
+                                <FaMail /> {(messagesCount) ? messagesCount : ''}
                             </a>
                         </div>
                         {/* <div className="header-logout header-icons">
@@ -276,7 +276,7 @@ class FitnessHeader extends Component {
 }
 
 const mapStateToProps = (state) => {
-    const { user, userSearch, userNotifications } = state;
+    const { user, userSearch, userNotifications, userMessages } = state;
     return {
         loggedUserData: user.get('loggedUserData'),
         socket: user.get('socket'),
@@ -284,6 +284,7 @@ const mapStateToProps = (state) => {
         searchValue: userSearch.get('searchValue'),
         searchSuggestions: userSearch.get('users'),
         notificationCount: userNotifications.get('count'),
+        messagesCount: userMessages.get('unreadMessagesCount'),
     }
 }
 
