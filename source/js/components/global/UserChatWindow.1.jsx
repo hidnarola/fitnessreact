@@ -11,9 +11,10 @@ class UserChatWindow extends Component {
         this.state = {
             newMsg: '',
         }
-        // this.scrollBottomInterval = null;
+        this.scrollBottomInterval = null;
         this.messageTypingStopDebounce = _.debounce(this.handleTypeingStop, 1000);
         this.messageTypingStart = false;
+        this.isMinimized = false;
     }
 
     render() {
@@ -25,13 +26,21 @@ class UserChatWindow extends Component {
             style,
             closeWindow,
             isTyping,
+            handleToggleChatWindowMinimize,
         } = this.props;
         const {
             newMsg,
         } = this.state;
         return (
             <div className="small-chat-window-wrapper" style={style}>
-                <header className="clearfix" onClick={() => toggleSmallChatWindow(`live-chat-chat_${channelId}`)}>
+                <header
+                    className="clearfix"
+                    onClick={() => {
+                        this.isMinimized = !this.isMinimized;
+                        handleToggleChatWindowMinimize(channelId, this.isMinimized);
+                        toggleSmallChatWindow(`live-chat-chat_${channelId}`);
+                    }}
+                >
                     <a href="javascript:void(0)" onClick={() => closeWindow(channelId)} className="chat-close">x</a>
                     <h4>{`${userDetails.firstName} ${(userDetails.lastName) ? userDetails.lastName : ''}`}</h4>
                     <span className="chat-message-counter">3</span>
@@ -100,19 +109,19 @@ class UserChatWindow extends Component {
     }
 
 
-    // componentDidMount = () => {
-    //     const { channelId } = this.props;
-    //     var elem = $(`#chat-history_${channelId}`);
-    //     elem.scroll(() => {
-    //         window.clearInterval(this.scrollBottomInterval);
-    //         this.scrollBottomInterval = null;
-    //         if (elem.scrollTop() + elem.innerHeight() >= elem[0].scrollHeight && this.scrollBottomInterval == null) {
-    //             this.scrollBottomInterval = window.setInterval(() => {
-    //                 scrollBottom(`#chat-history_${channelId}`, 'slow');
-    //             }, 1500);
-    //         }
-    //     });
-    // }
+    componentDidMount = () => {
+        const { channelId } = this.props;
+        var elem = $(`#chat-history_${channelId}`);
+        elem.scroll(() => {
+            window.clearInterval(this.scrollBottomInterval);
+            this.scrollBottomInterval = null;
+            if (elem.scrollTop() + elem.innerHeight() >= elem[0].scrollHeight && this.scrollBottomInterval == null) {
+                this.scrollBottomInterval = window.setInterval(() => {
+                    scrollBottom(`#chat-history_${channelId}`, 'slow');
+                }, 1500);
+            }
+        });
+    }
 
     handleChange = (e) => {
         var name = e.target.name;

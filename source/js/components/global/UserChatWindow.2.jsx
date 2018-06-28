@@ -11,7 +11,7 @@ class UserChatWindow extends Component {
         this.state = {
             newMsg: '',
         }
-        // this.scrollBottomInterval = null;
+        this.scrollBottomInterval = null;
         this.messageTypingStopDebounce = _.debounce(this.handleTypeingStop, 1000);
         this.messageTypingStart = false;
     }
@@ -100,19 +100,19 @@ class UserChatWindow extends Component {
     }
 
 
-    // componentDidMount = () => {
-    //     const { channelId } = this.props;
-    //     var elem = $(`#chat-history_${channelId}`);
-    //     elem.scroll(() => {
-    //         window.clearInterval(this.scrollBottomInterval);
-    //         this.scrollBottomInterval = null;
-    //         if (elem.scrollTop() + elem.innerHeight() >= elem[0].scrollHeight && this.scrollBottomInterval == null) {
-    //             this.scrollBottomInterval = window.setInterval(() => {
-    //                 scrollBottom(`#chat-history_${channelId}`, 'slow');
-    //             }, 1500);
-    //         }
-    //     });
-    // }
+    componentDidMount = () => {
+        const { channelId } = this.props;
+        var elem = $(`#chat-history_${channelId}`);
+        elem.scroll(() => {
+            window.clearInterval(this.scrollBottomInterval);
+            this.scrollBottomInterval = null;
+            if (elem.scrollTop() + elem.innerHeight() >= elem[0].scrollHeight && this.scrollBottomInterval == null) {
+                this.scrollBottomInterval = window.setInterval(() => {
+                    scrollBottom(`#chat-history_${channelId}`, 'slow');
+                }, 1500);
+            }
+        });
+    }
 
     handleChange = (e) => {
         var name = e.target.name;

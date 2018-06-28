@@ -46,7 +46,7 @@ import NutritionRecipeDetails from '../components/Nutrition/NutritionRecipeDetai
 import cns from "classnames";
 import NutritionMealAdd from '../components/Nutrition/NutritionMealAdd';
 import UpdateProfile from './UpdateProfile';
-import { toggleSideMenu, getToken, scrollBottom } from '../helpers/funs';
+import { toggleSideMenu, getToken, scrollBottom, slideToBottomOfChatWindow } from '../helpers/funs';
 import Auth from '../auth/Auth';
 import socketClient from "socket.io-client";
 import { openSocket, closeSocket } from '../actions/user';
@@ -57,7 +57,7 @@ import UserNotificationPanel from '../components/global/UserNotificationPanel';
 import Notifications from './Notifications';
 import UserMessagePanel from '../components/global/UserMessagePanel';
 import ProfileSettings from './ProfileSettings';
-import { getUserMessageChannelSuccess, openUserChatWindowSuccess, closeUserChatWindow, sendNewMessageRequest, sendNewMessageSuccess, receiveNewMessageResponse, messageTypingResponse } from '../actions/userMessages';
+import { getUserMessageChannelSuccess, openUserChatWindowSuccess, closeUserChatWindow, sendNewMessageRequest, sendNewMessageSuccess, receiveNewMessageResponse, messageTypingResponse, toggleChatWindowMinimize } from '../actions/userMessages';
 import Messenger from './Messenger';
 import $ from "jquery";
 import UserChatWindow from '../components/global/UserChatWindow';
@@ -212,6 +212,7 @@ class App extends Component {
                                                 handleSendButton={this.handleSendButton}
                                                 handleStartTyping={this.handleStartTyping}
                                                 handleStopTyping={this.handleStopTyping}
+                                                handleToggleChatWindowMinimize={this.handleToggleChatWindowMinimize}
                                             />
                                         );
                                     })
@@ -262,11 +263,31 @@ class App extends Component {
         const { dispatch } = this.props;
         dispatch(sendNewMessageRequest(data));
         socket.emit('send_new_message', requestData);
+        if (typeof data.channelId !== 'undefined') {
+            slideToBottomOfChatWindow(data.channelId);
+        }
     }
 
     handleReceiveNewMessage = (data) => {
-        const { dispatch } = this.props;
+        const { dispatch, socket, chatWindows } = this.props;
         dispatch(receiveNewMessageResponse(data));
+        if (data && data.channel) {
+            var channelId = data.channel._id;
+            var isWindowOpen = chatWindows.hasOwnProperty(channelId);
+            if (isWindowOpen) {
+                var chatWindow = chatWindows[channelId];
+                if (chatWindow && typeof chatWindow.isMinimized !== 'undefined' && !chatWindow.isMinimized) {
+                    var messageObj = data.channel.message;
+                    var friendId = messageObj.authUserId;
+                    var requestData = {
+                        channelId: channelId,
+                        friendId: friendId,
+                    }
+                    socket.emit('mark_message_as_read', requestData);
+                    slideToBottomOfChatWindow(channelId);
+                }
+            }
+        }
     }
 
     handleStartTyping = (data) => {
@@ -282,6 +303,11 @@ class App extends Component {
     handleMessageTypingResponse = (data) => {
         const { dispatch } = this.props;
         dispatch(messageTypingResponse(data));
+    }
+
+    handleToggleChatWindowMinimize = (channelId, minimize) => {
+        const { dispatch } = this.props;
+        dispatch(toggleChatWindowMinimize(channelId, minimize));
     }
 
 }

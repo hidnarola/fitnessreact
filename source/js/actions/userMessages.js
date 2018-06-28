@@ -16,6 +16,8 @@ export const CLOSE_USER_CHAT_WINDOW = 'CLOSE_USER_CHAT_WINDOW';
 
 export const MESSAGE_TYPING_RESPONSE = 'MESSAGE_TYPING_RESPONSE';
 
+export const TOGGLE_CHAT_WINDOW_MINIMIZE = 'TOGGLE_CHAT_WINDOW_MINIMIZE';
+
 export function getUserMessageChannelRequest(setStateFor = 'messenger') {
     return {
         type: GET_USER_MESSAGE_CHANNEL_REQUEST,
@@ -98,5 +100,13 @@ export function messageTypingResponse(data) {
     return {
         type: MESSAGE_TYPING_RESPONSE,
         data,
+    }
+}
+
+export function toggleChatWindowMinimize(channelId, minimize) {
+    return {
+        type: TOGGLE_CHAT_WINDOW_MINIMIZE,
+        channelId,
+        minimize,
     }
 }

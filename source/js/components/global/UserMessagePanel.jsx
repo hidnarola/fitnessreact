@@ -35,6 +35,7 @@ class UserMessagePanel extends Component {
                                                 key={index}
                                                 channel={channel}
                                                 loggedUserData={loggedUserData}
+                                                handleMessageSeen={this.handleMessageSeen}
                                                 handleOpenChatWindow={this.handleOpenChatWindow}
                                             />
                                         )
@@ -67,6 +68,15 @@ class UserMessagePanel extends Component {
         socket.emit('get_user_conversation_by_channel', requestData);
         toggleSideMenu('user-message-panel', false);
     }
+
+    handleMessageSeen = (userDetails, channelId) => {
+        const { socket } = this.props;
+        var requestData = {
+            channelId: channelId,
+            friendId: userDetails.authUserId,
+        }
+        socket.emit('mark_message_as_read', requestData);
+    }
 }
 
 const mapStateToProps = (state) => {
@@ -86,18 +96,22 @@ export default connect(
 
 class ChannelMessageCard extends Component {
     render() {
-        const { channel, loggedUserData, handleOpenChatWindow } = this.props;
+        const { channel, loggedUserData, handleOpenChatWindow, handleMessageSeen } = this.props;
         var message = channel.conversation.message;
-        var isSeen = channel.conversation.isSeen;
         var channelFor = null;
         if (channel.userData && channel.userData.authUserId !== loggedUserData.authId) {
             channelFor = channel.userData;
         } else if (channel.friendData && channel.friendData.authUserId !== loggedUserData.authId) {
             channelFor = channel.friendData;
         }
+        var isSeen = true;
+        if (channel.conversation.userId !== loggedUserData.authId && channel.conversation.isSeen === 0) {
+            isSeen = false;
+        }
         if (channelFor) {
             return (
                 <a href="javascript:void(0)" onClick={() => {
+                    handleMessageSeen(channelFor, channel._id);
                     handleOpenChatWindow(channelFor, channel._id);
                 }}>
                     <div className={cns("messenger-box", { 'un-seen-message': !isSeen })}>

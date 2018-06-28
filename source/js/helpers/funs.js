@@ -159,6 +159,16 @@ export function toggleSmallChatWindow(id) {
     $(`#${id}`).slideToggle(300, 'swing');
 }
 
+export function slideToBottomOfChatWindow(channelId) {
+    var elem = $(`#chat-history_${channelId}`);
+    // this is done because last child is added then we need to scroll so scroll hight increases so we need last child height also
+    var lastChildInnerHeight = elem.children().last().innerHeight();
+    lastChildInnerHeight += 16; // as inner div contains 16px margin;
+    if (elem.scrollTop() + elem.innerHeight() + lastChildInnerHeight >= elem[0].scrollHeight) {
+        scrollBottom(`#chat-history_${channelId}`, 'slow');
+    }
+}
+
 export function convertUnits(from, to, value) {
     var result = value;
     switch (from) {

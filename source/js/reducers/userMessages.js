@@ -12,6 +12,7 @@ import {
     SEND_NEW_MESSAGE_ERROR,
     RECEIVE_NEW_MESSAGE,
     MESSAGE_TYPING_RESPONSE,
+    TOGGLE_CHAT_WINDOW_MINIMIZE,
 } from "../actions/userMessages";
 import _ from "lodash";
 
@@ -75,6 +76,8 @@ const actionMap = {
             loading: true,
             userDetails,
             messages: [],
+            isMinimized: false,
+            isTyping: false,
         };
         chatWindows[channelId] = obj;
         return state.merge(Map({
@@ -96,6 +99,8 @@ const actionMap = {
                     loading: false,
                     userDetails,
                     messages: allMessages,
+                    isMinimized: false,
+                    isTyping: false,
                 };
                 chatWindows[channelId] = obj;
             }
@@ -189,8 +194,10 @@ const actionMap = {
             if (channel && Object.keys(channel).length > 0) {
                 var channelId = channel._id;
                 var chatWindow = chatWindows[channelId];
-                var messages = chatWindow['messages'];
-                messages.push(channel.message);
+                if (chatWindow) {
+                    var messages = chatWindow['messages'];
+                    messages.push(channel.message);
+                }
             }
         } else {
 
@@ -205,12 +212,25 @@ const actionMap = {
             var channel = action.data.channel;
             if (channel && Object.keys(channel).length > 0) {
                 var channelId = channel._id;
-                var isTyping = channel.isTyping;
+                var isTyping = (typeof channel.isTyping !== 'undefined') ? channel.isTyping : false;
                 var chatWindow = chatWindows[channelId];
-                chatWindow.isTyping = isTyping;
+                if (chatWindow) {
+                    chatWindow.isTyping = isTyping;
+                }
             }
         } else {
 
+        }
+        return state.merge(Map({
+            chatWindows,
+        }));
+    },
+    [TOGGLE_CHAT_WINDOW_MINIMIZE]: (state, action) => {
+        var chatWindows = Object.assign({}, state.get('chatWindows'));
+        var channelId = action.channelId;
+        var isWindowOpen = chatWindows.hasOwnProperty(channelId);
+        if (isWindowOpen) {
+            chatWindows[channelId].isMinimized = (typeof action.minimize !== 'undefined') ? action.minimize : false;
         }
         return state.merge(Map({
             chatWindows,
