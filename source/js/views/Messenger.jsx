@@ -148,12 +148,15 @@ class ChannelMessageCard extends Component {
     render() {
         const { channel, loggedUserData } = this.props;
         var message = channel.conversation.message;
-        var isSeen = channel.conversation.isSeen;
         var channelFor = null;
         if (channel.userData && channel.userData.authUserId !== loggedUserData.authId) {
             channelFor = channel.userData;
         } else if (channel.friendData && channel.friendData.authUserId !== loggedUserData.authId) {
             channelFor = channel.friendData;
+        }
+        var isSeen = true;
+        if (channel.conversation.userId !== loggedUserData.authId && channel.conversation.isSeen === 0) {
+            isSeen = false;
         }
         if (channelFor) {
             return (
