@@ -81,15 +81,14 @@ class UserChatWindow extends Component {
                         <p className="chat-feedback">{`${userDetails.firstName}`} is typing…</p>
                     }
                     <div className="p-10">
-                        <fieldset>
-                            <input type="text" name='newMsg' value={newMsg} onChange={this.handleChange} placeholder="Type your message…" autoFocus={true} />
-                            <button
-                                type="button"
-                                onClick={this.handleSend}
-                            >
-                                <i className="icon-send"></i>
-                            </button>
-                        </fieldset>
+                        <form method="POST" onSubmit={this.handleSend}>
+                            <fieldset>
+                                <input type="text" name='newMsg' value={newMsg} onChange={this.handleChange} placeholder="Type your message…" autoFocus={true} autoComplete="off" />
+                                <button type="submit">
+                                    <i className="icon-send"></i>
+                                </button>
+                            </fieldset>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -147,7 +146,8 @@ class UserChatWindow extends Component {
         }
     }
 
-    handleSend = () => {
+    handleSend = (e) => {
+        e.preventDefault();
         const {
             handleSendButton,
             userDetails,
@@ -166,6 +166,7 @@ class UserChatWindow extends Component {
         };
         handleSendButton(data);
         this.setState({ newMsg: '' });
+        scrollBottom(`#chat-history_${channelId}`, 'slow');
     }
 }
 

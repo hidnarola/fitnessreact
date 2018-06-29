@@ -1531,3 +1531,6 @@ ul.text-right.pager {text-align: right;}
 .small-chat-window-wrapper .chat-message-content {margin-left: 40px;}
 .small-chat-window-wrapper .chat-time { float: right; font-size: 10px;color: #9a9a9a;}
 .small-chat-window-wrapper .chat-feedback {font-style: italic; margin: 5px 0 0 0; text-align: center; }
+
+.small-chat-window-wrapper form fieldset button { background: transparent; border: 0; /* font-size: 10px; */ margin: 5px; padding: 0px; vertical-align: top; }
+.small-chat-window-wrapper form fieldset button i.icon-send { font-size: 20px; color: #777777; }

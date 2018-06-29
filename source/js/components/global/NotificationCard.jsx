@@ -19,7 +19,7 @@ class NotificationCard extends Component {
             case NOTIFICATION_TYPE_FRIEND_REQUEST_APPROVED:
                 var msg = '';
                 msg = `<strong>${sender.firstName} ${(sender.lastName) ? sender.lastName : ''}</strong>`;
-                msg += `<small>approved your request</small>`;
+                msg += `<small>approved your friend request</small>`;
                 return (
                     <NavLink
                         to={`${routeCodes.PROFILE}/${sender.username}`}
