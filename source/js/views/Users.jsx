@@ -51,7 +51,6 @@ class Users extends Component {
             allUsers,
             hasMoreData,
         } = this.state;
-        console.log('render state => ', allUsers);
         return (
             <div className="users-list-wrapper">
                 <FitnessHeader />

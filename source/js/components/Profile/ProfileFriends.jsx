@@ -14,6 +14,7 @@ import ProfilePendingFriendBlock from './ProfilePendingFriendBlock';
 import CancelFriendRequestModal from './CancelFriendRequestModal';
 import { ts } from '../../helpers/funs';
 import UnfriendRequestModal from './UnfriendRequestModal';
+import { getUserChannelRequest } from '../../actions/userMessages';
 
 class ProfileFriends extends Component {
     constructor(props) {
@@ -89,6 +90,7 @@ class ProfileFriends extends Component {
                                                     : false
                                             }
                                             handleShowRejectFriendRequest={this.handleShowRejectFriendRequest}
+                                            handleRequestMessageChannel={this.handleRequestMessageChannel}
                                         />
                                     </div>
                                 ))
@@ -116,6 +118,7 @@ class ProfileFriends extends Component {
                                             }
                                             handleShowUnfriendRequest={this.handleShowUnfriendRequest}
                                             friendshipStatus={profile.friendshipStatus}
+                                            handleRequestMessageChannel={this.handleRequestMessageChannel}
                                         />
                                     </div>
                                 ))
@@ -324,11 +327,31 @@ class ProfileFriends extends Component {
             selectedFriendshipId: null,
         });
     }
+
+    handleRequestMessageChannel = (profile) => {
+        const { loggedUserData, dispatch, socket } = this.props;
+        var profileId = '';
+        var userId = '';
+        if (profile && profile.authUserId) {
+            profileId = profile.authUserId;
+        }
+        if (loggedUserData && loggedUserData.userDetails && loggedUserData.userDetails.authUserId) {
+            userId = loggedUserData.userDetails.authUserId;
+        }
+        if (profileId && userId) {
+            dispatch(getUserChannelRequest());
+            var requestData = {
+                friendId: profileId,
+                userId,
+            };
+            socket.emit('get_channel_id', requestData);
+        }
+    }
     //#endregion
 }
 
 const mapStateToProps = (state) => {
-    const { friends } = state;
+    const { friends, user } = state;
     return {
         approvedLoading: friends.get('approvedLoading'),
         pendingLoading: friends.get('pendingLoading'),
@@ -338,6 +361,8 @@ const mapStateToProps = (state) => {
         requestAcceptError: friends.get('requestAcceptError'),
         requestCancelLoading: friends.get('requestCancelLoading'),
         requestCancelError: friends.get('requestCancelError'),
+        loggedUserData: user.get('loggedUserData'),
+        socket: user.get('socket'),
     }
 }
 

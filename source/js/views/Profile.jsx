@@ -652,7 +652,7 @@ class Profile extends Component {
         if (profileId && userId) {
             dispatch(getUserChannelRequest());
             var requestData = {
-                friendId,
+                friendId: profileId,
                 userId,
             };
             socket.emit('get_channel_id', requestData);
@@ -676,7 +676,6 @@ const mapStateToProps = (state) => {
         loggedUserData: user.get('loggedUserData'),
         socket: user.get('socket'),
         requestChannelLoading: userMessages.get('requestChannelLoading'),
-        requestChannelError: userMessages.get('requestChannelError'),
     }
 }
 

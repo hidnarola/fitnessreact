@@ -10,7 +10,8 @@ class ProfileFriendBlock extends Component {
             friend,
             handleShowUnfriendRequest,
             friendsActionDisabled,
-            friendshipStatus
+            friendshipStatus,
+            handleRequestMessageChannel,
         } = this.props;
         if (friend) {
             return (
@@ -48,6 +49,12 @@ class ProfileFriendBlock extends Component {
                                         Unfriend
                                     </a>
                                 }
+                                <a
+                                    href="javascript:void(0)"
+                                    onClick={() => handleRequestMessageChannel(friend)}
+                                >
+                                    Send Message
+                                </a>
                                 <i className="icon-check_circle"></i> Friends
                         </h6>
                         }

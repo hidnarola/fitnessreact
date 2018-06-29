@@ -77,7 +77,8 @@ import {
     messageTypingResponse,
     toggleChatWindowMinimize,
     setUserMessagesCount,
-    getUserChannelSuccess
+    getUserChannelResponse,
+    openUserChatWindowRequest
 } from '../actions/userMessages';
 import Messenger from './Messenger';
 import $ from "jquery";
@@ -353,8 +354,32 @@ class App extends Component {
     }
 
     handleReceiveChannelId = (data) => {
-        const { dispatch } = this.props;
-        dispatch(getUserChannelSuccess(data));
+        const { dispatch, socket, loggedUserData } = this.props;
+        dispatch(getUserChannelResponse());
+        var loggedUser = loggedUserData.userDetails;
+        var loggedUserId = loggedUser.authUserId;
+        if (data && typeof data.resp_data !== 'undefined' && typeof data.resp_data.channel !== 'undefined' && data.resp_data.channel) {
+            var channel = data.resp_data.channel;
+            var channelId = channel._id;
+            var userDetails = null;
+            var friendData = channel.friendData;
+            var userData = channel.userData;
+            if (typeof friendData !== 'undefined' && friendData && friendData.authUserId !== loggedUserId) {
+                userDetails = friendData;
+            } else if (typeof userData !== 'undefined' && userData && userData.authUserId !== loggedUserId) {
+                userDetails = userData;
+            }
+            if (channelId && userDetails) {
+                dispatch(openUserChatWindowRequest(userDetails, channelId));
+                var requestData = {
+                    token: getToken(),
+                    channel_id: channelId,
+                    start: 0,
+                    limit: 10,
+                }
+                socket.emit('get_user_conversation_by_channel', requestData);
+            }
+        }
     }
 
 }

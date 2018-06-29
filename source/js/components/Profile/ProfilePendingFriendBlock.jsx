@@ -10,6 +10,7 @@ class ProfilePendingFriendBlock extends Component {
             pendingFriendsActionDisabled,
             handleAcceptFriendRequest,
             handleShowRejectFriendRequest,
+            handleRequestMessageChannel,
         } = this.props;
         if (friend) {
             return (
@@ -55,7 +56,13 @@ class ProfilePendingFriendBlock extends Component {
                                     disabled={pendingFriendsActionDisabled}
                                 >
                                     Reject
-                            </a>
+                                </a>
+                                <a
+                                    href="javascript:void(0)"
+                                    onClick={() => handleRequestMessageChannel(friend)}
+                                >
+                                    Send Message
+                                </a>
                             </h6>
                         }
                         {pendingFriendsActionDisabled &&

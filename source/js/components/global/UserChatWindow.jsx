@@ -3,7 +3,6 @@ import { toggleSmallChatWindow, getToken, scrollBottom } from '../../helpers/fun
 import moment from "moment";
 import noProfileImg from 'img/common/no-profile-img.png';
 import _ from "lodash";
-import $ from "jquery";
 
 class UserChatWindow extends Component {
     constructor(props) {
@@ -65,7 +64,7 @@ class UserChatWindow extends Component {
                                             />
                                             <div className="chat-message-content clearfix">
                                                 <span className="chat-time">{dt}</span>
-                                                <h5>{msg.fullName}</h5>
+                                                <h5>{`${msg.firstName} ${(msg.lastName) ? msg.lastName : ''}`}</h5>
                                                 <p>{(msg.message)}</p>
                                             </div>
                                         </div>

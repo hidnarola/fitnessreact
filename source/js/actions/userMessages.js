@@ -21,8 +21,7 @@ export const TOGGLE_CHAT_WINDOW_MINIMIZE = 'TOGGLE_CHAT_WINDOW_MINIMIZE';
 export const SET_USER_MESSAGES_COUNT = 'SET_USER_MESSAGES_COUNT';
 
 export const GET_CHANNEL_REQUEST = 'GET_CHANNEL_REQUEST';
-export const GET_CHANNEL_SUCCESS = 'GET_CHANNEL_SUCCESS';
-export const GET_CHANNEL_ERROR = 'GET_CHANNEL_ERROR';
+export const GET_CHANNEL_RESPONSE = 'GET_CHANNEL_RESPONSE';
 
 export function getUserMessageChannelRequest(setStateFor = 'messenger') {
     return {
@@ -130,16 +129,8 @@ export function getUserChannelRequest() {
     }
 }
 
-export function getUserChannelSuccess(data) {
+export function getUserChannelResponse() {
     return {
-        type: GET_CHANNEL_SUCCESS,
-        data,
-    }
-}
-
-export function getUserChannelError(error) {
-    return {
-        type: GET_CHANNEL_ERROR,
-        error,
+        type: GET_CHANNEL_RESPONSE,
     }
 }

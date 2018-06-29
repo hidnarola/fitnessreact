@@ -15,8 +15,7 @@ import {
     TOGGLE_CHAT_WINDOW_MINIMIZE,
     SET_USER_MESSAGES_COUNT,
     GET_CHANNEL_REQUEST,
-    GET_CHANNEL_SUCCESS,
-    GET_CHANNEL_ERROR,
+    GET_CHANNEL_RESPONSE,
 } from "../actions/userMessages";
 import _ from "lodash";
 
@@ -31,8 +30,6 @@ const initialState = Map({
     chatWindows: {},
     unreadMessagesCount: 0,
     requestChannelLoading: false,
-    requestChannelId: null,
-    requestChannelError: [],
 });
 
 const actionMap = {
@@ -152,7 +149,8 @@ const actionMap = {
                 isSeen: 0,
                 message: message,
                 createdAt: createdAt,
-                fullName: `${loggedUser.firstName} ${(loggedUser.lastName) ? loggedUser.lastName : ''}`,
+                firstName: loggedUser.firstName,
+                lastName: (loggedUser.lastName) ? loggedUser.lastName : '',
                 authUserId: loggedUser.authUserId,
                 username: loggedUser.username,
                 avatar: loggedUser.avatar,
@@ -252,36 +250,12 @@ const actionMap = {
     [GET_CHANNEL_REQUEST]: (state, action) => {
         return state.merge(Map({
             requestChannelLoading: true,
-            requestChannelId: null,
-            requestChannelError: [],
         }));
     },
-    [GET_CHANNEL_SUCCESS]: (state, action) => {
-        var newState = {
+    [GET_CHANNEL_RESPONSE]: (state, action) => {
+        return state.merge(Map({
             requestChannelLoading: false,
-        };
-        if (action.data.status === 1) {
-            newState.requestChannelId = action.data.channelId;
-        } else {
-            var msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
-            newState.requestChannelError = [msg];
-        }
-        return state.merge(Map(newState));
-    },
-    [GET_CHANNEL_ERROR]: (state, action) => {
-        let error = [];
-        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
-            error = generateValidationErrorMsgArr(action.error.response.message);
-        } else if (action.error && action.error.message) {
-            error = [action.error.message];
-        } else {
-            error = ['Something went wrong! please try again later'];
-        }
-        var newState = {
-            requestChannelLoading: false,
-            requestChannelError: error,
-        }
-        return state.merge(Map(newState));
+        }));
     },
 }
 
