@@ -78,7 +78,7 @@ class UserChatWindow extends Component {
                         }
                     </div>
                     {isTyping &&
-                        <p className="chat-feedback">Your partner is typing…</p>
+                        <p className="chat-feedback">{`${userDetails.firstName}`} is typing…</p>
                     }
                     <div className="p-10">
                         <fieldset>
