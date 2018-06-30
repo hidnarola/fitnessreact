@@ -17,6 +17,7 @@
 @import 'round-slider/dist/roundslider.min.css';
 @import 'rc-time-picker/assets/index.css';
 @import 'cropperjs/dist/cropper.css';
+@import 'react-big-calendar/lib/css/react-big-calendar.css';
 /* @import 'jquery-ui-slider/jquery-ui.css'; */
 @import "fitnessCss/jquery-ui.css";
 
