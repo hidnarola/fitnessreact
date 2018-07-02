@@ -5,6 +5,9 @@ import FitnessNav from '../components/global/FitnessNav';
 import BigCalendar from 'react-big-calendar';
 import moment from "moment";
 import SweetAlert from "react-bootstrap-sweetalert";
+import { setSelectedSlotFromCalendar } from '../actions/userScheduleWorkouts';
+import { NavLink } from "react-router-dom";
+import { routeCodes } from '../constants/routes';
 
 BigCalendar.momentLocalizer(moment);
 
@@ -13,15 +16,20 @@ class ScheduleWorkout extends Component {
         super(props);
         this.state = {
             showSelectEventAlert: false,
-            selectedSlot: null,
         }
     }
 
     render() {
         const {
             showSelectEventAlert,
-            selectedSlot,
         } = this.state;
+        const {
+            selectedSlot,
+        } = this.props;
+        var selectedSlotStateDate = null;
+        if (selectedSlot) {
+            selectedSlotStateDate = selectedSlot.start;
+        }
         return (
             <div className="fitness-body">
                 <FitnessHeader />
@@ -110,7 +118,7 @@ class ScheduleWorkout extends Component {
                 </section>
                 <SweetAlert
                     type="default"
-                    title={`Select event for - ${moment(selectedSlot).format('MM/DD/YYYY')}`}
+                    title={`Select event for - ${(selectedSlotStateDate) ? moment(selectedSlotStateDate).format('MM/DD/YYYY') : ''}`}
                     onCancel={this.cancelSelectedSlotAction}
                     onConfirm={() => { }}
                     btnSize="sm"
@@ -128,25 +136,26 @@ class ScheduleWorkout extends Component {
     }
 
     onSelectSlot = (slotInfo) => {
-        console.log('slotInfo => ', slotInfo);
-        var startDate = slotInfo.start;
+        const { dispatch } = this.props;
         this.setState({
             showSelectEventAlert: true,
-            selectedSlot: startDate,
         });
+        dispatch(setSelectedSlotFromCalendar(slotInfo));
     }
 
     cancelSelectedSlotAction = () => {
+        const { dispatch } = this.props;
         this.setState({
             showSelectEventAlert: false,
-            selectedSlot: null,
         });
+        dispatch(setSelectedSlotFromCalendar(null));
     }
 }
 
 const mapStateToProps = (state) => {
+    const { userScheduleWorkouts } = state;
     return {
-
+        selectedSlot: userScheduleWorkouts.get('slotInfo'),
     };
 }
 
@@ -160,7 +169,12 @@ class SelectEventView extends Component {
             <div className="row">
                 <div className="col-md-12">
                     <div className="col-md-6 pull-left">
-                        <button type="button" className="btn btn-primary">Add Workout</button>
+                        <NavLink
+                            to={routeCodes.ADD_SCHEDULE_WORKOUT}
+                            className="btn btn-primary"
+                        >
+                            Add Workout
+                        </NavLink>
                     </div>
                     <div className="col-md-6 pull-left">
                         <button type="button" className="btn btn-primary">Make Rest Day</button>

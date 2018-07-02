@@ -84,6 +84,7 @@ import Messenger from './Messenger';
 import $ from "jquery";
 import UserChatWindow from '../components/global/UserChatWindow';
 import ScheduleWorkout from './ScheduleWorkout';
+import AddScheduleWorkout from '../components/ScheduleWorkout/AddScheduleWorkout';
 
 const auth = new Auth();
 
@@ -147,6 +148,7 @@ class App extends Component {
                             <PrivateRoute path={routeCodes.EXERCISEPREFERENCE} component={ExerciseSettings} />
                             
                             <PrivateRoute exact path={routeCodes.SCHEDULE_WORKOUT} component={ScheduleWorkout} />
+                            <PrivateRoute exact path={routeCodes.ADD_SCHEDULE_WORKOUT} component={AddScheduleWorkout} />
 
                             <PrivateRoute exact path={routeCodes.NUTRITION} component={NutritionMeal} />
                             <PrivateRoute exact path={routeCodes.NUTRITION_ADD} component={NutritionMealAdd} />
