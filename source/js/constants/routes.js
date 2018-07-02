@@ -46,6 +46,8 @@ export const routeCodes = {
     EXERCISEPREFERENCE: `${publicPath}exercise/preference`,
     EXERCISEEQP: `${publicPath}exercise/equipment`,
     EXERCISEFITNESS: `${publicPath}exercise/fitness`,
+    
+    SCHEDULE_WORKOUT: `${publicPath}schedule_workout`,
 
     // Nutrition Routes
     NUTRITION: `${publicPath}nutrition`,

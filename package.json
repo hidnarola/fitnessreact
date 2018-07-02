@@ -86,6 +86,7 @@
     "react-autosuggest": "^9.3.4",
     "react-big-calendar": "^0.19.2",
     "react-bootstrap": "^0.32.1",
+    "react-bootstrap-sweetalert": "^4.4.1",
     "react-calendar": "^2.13.2",
     "react-circular-progressbar": "^0.8.0",
     "react-cropper": "^1.0.1",

@@ -51,7 +51,6 @@ export default class FitnessNav extends Component {
                                 </NavLink>
                             </li>
 
-
                             <li>
                                 <NavLink
                                     activeClassName='active'
@@ -60,6 +59,17 @@ export default class FitnessNav extends Component {
                                 >
                                     <i className="icon-fitness_center"></i>
                                     <span>Exercise</span>
+                                </NavLink>
+                            </li>
+                            
+                            <li>
+                                <NavLink
+                                    activeClassName='active'
+                                    className='Menu-link'
+                                    to={routeCodes.SCHEDULE_WORKOUT}
+                                >
+                                    <i className="icon-fitness_center"></i>
+                                    <span>Workouts</span>
                                 </NavLink>
                             </li>
 

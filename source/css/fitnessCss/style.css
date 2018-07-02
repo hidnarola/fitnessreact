@@ -1534,3 +1534,8 @@ ul.text-right.pager {text-align: right;}
 
 .small-chat-window-wrapper form fieldset button { background: transparent; border: 0; /* font-size: 10px; */ margin: 5px; padding: 0px; vertical-align: top; }
 .small-chat-window-wrapper form fieldset button i.icon-send { font-size: 20px; color: #777777; }
+
+
+
+
+.workout-calender{flex: 1; -webkit-box-flex: 1; -ms-flex: 1;min-height: 580px;}
