@@ -496,3 +496,4 @@ export const NOTIFICATION_TYPE_COMMENT_POST = 'comment_post';
 export const SCHEDULED_WORKOUT_TYPE_EXERCISE = 'exercise';
 export const SCHEDULED_WORKOUT_TYPE_WARMUP = 'warmup';
 export const SCHEDULED_WORKOUT_TYPE_COOLDOWN = 'cooldown';
+export const SCHEDULED_WORKOUT_TYPE_RESTDAY = 'restday';

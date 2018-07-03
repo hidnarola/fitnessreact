@@ -8,12 +8,14 @@ import SweetAlert from "react-bootstrap-sweetalert";
 import {
     setSelectedSlotFromCalendar,
     getUsersWorkoutSchedulesRequest,
-    getExercisesNameRequest
+    getExercisesNameRequest,
+    addUsersWorkoutScheduleRequest
 } from '../actions/userScheduleWorkouts';
 import { NavLink } from "react-router-dom";
 import { routeCodes } from '../constants/routes';
 import _ from "lodash";
 import ReactHtmlParser from "react-html-parser";
+import { SCHEDULED_WORKOUT_TYPE_RESTDAY } from '../constants/consts';
 
 BigCalendar.momentLocalizer(moment);
 
@@ -95,7 +97,9 @@ class ScheduleWorkout extends Component {
                     showCancel={true}
                     closeOnClickOutside={false}
                 >
-                    <SelectEventView />
+                    <SelectEventView
+                        handleNewRestDay={this.handleNewRestDay}
+                    />
                 </SweetAlert>
 
             </div>
@@ -105,7 +109,9 @@ class ScheduleWorkout extends Component {
     componentDidUpdate(prevProps, prevState) {
         const {
             workouts,
+            workout,
             loading,
+            selectedSlot,
         } = this.props;
         if (!loading && prevProps.workouts !== workouts) {
             var newWorkouts = [];
@@ -125,6 +131,11 @@ class ScheduleWorkout extends Component {
                 }
             });
             this.setState({ workoutEvents: newWorkouts });
+        }
+        if (!loading && prevProps.workout !== workout) {
+            var startDay = moment(selectedSlot.start).startOf('day');
+            var date = moment.utc(startDay);
+            this.getWorkoutSchedulesByMonth(date);
         }
     }
 
@@ -158,6 +169,20 @@ class ScheduleWorkout extends Component {
         var day = moment.utc(momentDate);
         this.getWorkoutSchedulesByMonth(day);
     }
+
+    handleNewRestDay = () => {
+        const { selectedSlot, dispatch } = this.props;
+        var startDay = moment(selectedSlot.start).startOf('day');
+        var date = moment.utc(startDay);
+        var requestData = {
+            title: 'Rest Day',
+            description: '',
+            type: SCHEDULED_WORKOUT_TYPE_RESTDAY,
+            date: date,
+            exercises: [],
+        };
+        dispatch(addUsersWorkoutScheduleRequest(requestData));
+    }
 }
 
 const mapStateToProps = (state) => {
@@ -175,6 +200,7 @@ export default connect(
 
 class SelectEventView extends Component {
     render() {
+        const { handleNewRestDay } = this.props;
         return (
             <div className="row">
                 <div className="col-md-12">
@@ -187,7 +213,7 @@ class SelectEventView extends Component {
                         </NavLink>
                     </div>
                     <div className="col-md-6 pull-left">
-                        <button type="button" className="btn btn-primary">Make Rest Day</button>
+                        <button type="button" onClick={handleNewRestDay} className="btn btn-primary">Make Rest Day</button>
                     </div>
                     <div className="col-md-6 pull-left">
                         <button type="button" className="btn btn-primary">Assign Program</button>
