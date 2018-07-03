@@ -5,10 +5,9 @@ import FitnessNav from '../components/global/FitnessNav';
 import BigCalendar from 'react-big-calendar';
 import moment from "moment";
 import SweetAlert from "react-bootstrap-sweetalert";
-import { setSelectedSlotFromCalendar, getUsersWorkoutSchedulesRequest } from '../actions/userScheduleWorkouts';
+import { setSelectedSlotFromCalendar } from '../actions/userScheduleWorkouts';
 import { NavLink } from "react-router-dom";
 import { routeCodes } from '../constants/routes';
-import _ from "lodash";
 
 BigCalendar.momentLocalizer(moment);
 
@@ -17,19 +16,12 @@ class ScheduleWorkout extends Component {
         super(props);
         this.state = {
             showSelectEventAlert: false,
-            workoutEvents: [],
         }
-    }
-
-    componentWillMount() {
-        var today = moment().startOf('day').utc();
-        this.getWorkoutSchedulesByMonth(today);
     }
 
     render() {
         const {
             showSelectEventAlert,
-            workoutEvents,
         } = this.state;
         const {
             selectedSlot,
@@ -57,19 +49,67 @@ class ScheduleWorkout extends Component {
                                         selectable={true}
                                         defaultView={BigCalendar.Views.MONTH}
                                         className="workout-calender"
-                                        events={workoutEvents}
+                                        events={[
+                                            {
+                                                title: 'My first event',
+                                                start: new Date(),
+                                                end: new Date(),
+                                                allDay: true,
+                                            },
+                                            {
+                                                title: 'My first event',
+                                                start: new Date(),
+                                                end: new Date(),
+                                                allDay: true,
+                                            },
+                                            {
+                                                title: 'My first event',
+                                                start: new Date(),
+                                                end: new Date(),
+                                                allDay: true,
+                                            },
+                                            {
+                                                title: 'My first event',
+                                                start: new Date(),
+                                                end: new Date(),
+                                                allDay: true,
+                                            },
+                                            {
+                                                title: 'My first event',
+                                                start: new Date(),
+                                                end: new Date(),
+                                                allDay: true,
+                                            },
+                                            {
+                                                title: 'My first event',
+                                                start: new Date(),
+                                                end: new Date(),
+                                                allDay: true,
+                                            },
+                                            {
+                                                title: 'My first event',
+                                                start: new Date(),
+                                                end: new Date(),
+                                                allDay: true,
+                                            },
+                                            {
+                                                title: 'My first event',
+                                                start: new Date(),
+                                                end: new Date(),
+                                                allDay: true,
+                                            },
+                                        ]}
                                         onView={() => console.log('on View')}
                                         views={[BigCalendar.Views.MONTH]}
-                                        onNavigate={this.handleNavigation}
+                                        onNavigate={(date) => {
+                                            console.log('date => ', date);
+                                        }}
                                         onSelectEvent={(event) => {
                                             console.log('event => ', event);
                                         }}
                                         onSelectSlot={this.onSelectSlot}
                                         popup={true}
                                         popupOffset={50}
-                                        components={{
-                                            event: CustomEventCard,
-                                        }}
                                     />
                                 </div>
                             </div>
@@ -95,32 +135,6 @@ class ScheduleWorkout extends Component {
         );
     }
 
-    componentDidUpdate(prevProps, prevState) {
-        const {
-            workouts,
-            loading,
-        } = this.props;
-        if (!loading && prevProps.workouts !== workouts) {
-            var newWorkouts = [];
-            _.forEach(workouts, (workout, index) => {
-                if (workout._id && workout.exercises && workout.exercises.length > 0) {
-                    var newWorkout = {
-                        id: workout._id,
-                        title: (workout.title) ? workout.title : `Workout on ${workout.date}`,
-                        start: workout.date,
-                        end: workout.date,
-                        allDay: true,
-                        exercises: (workout.exercises && workout.exercises.length > 0) ? workout.exercises : [],
-                        meta: workout,
-                        description: (workout.description) ? workout.description : '',
-                    }
-                    newWorkouts.push(newWorkout);
-                }
-            });
-            this.setState({ workoutEvents: newWorkouts });
-        }
-    }
-
     onSelectSlot = (slotInfo) => {
         const { dispatch } = this.props;
         this.setState({
@@ -136,29 +150,12 @@ class ScheduleWorkout extends Component {
         });
         dispatch(setSelectedSlotFromCalendar(null));
     }
-
-    getWorkoutSchedulesByMonth = (date) => {
-        this.setState({ workoutEvents: [] });
-        const {
-            dispatch
-        } = this.props;
-        var requestObj = { date }
-        dispatch(getUsersWorkoutSchedulesRequest(requestObj));
-    }
-
-    handleNavigation = (date) => {
-        var momentDate = moment(date).startOf('day');
-        var day = moment.utc(momentDate);
-        this.getWorkoutSchedulesByMonth(day);
-    }
 }
 
 const mapStateToProps = (state) => {
     const { userScheduleWorkouts } = state;
     return {
         selectedSlot: userScheduleWorkouts.get('slotInfo'),
-        workouts: userScheduleWorkouts.get('workouts'),
-        loading: userScheduleWorkouts.get('loading'),
     };
 }
 
@@ -189,20 +186,6 @@ class SelectEventView extends Component {
                         <button type="button" className="btn btn-primary">Paste Workout</button>
                     </div>
                 </div>
-            </div>
-        );
-    }
-}
-
-class CustomEventCard extends Component {
-    render() {
-        const { event } = this.props;
-        return (
-            <div className="big-calendar-custom-month-event-view-card">
-                <h5>{event.title}</h5>
-                {event.description &&
-                    <p>{event.description}</p>
-                }
             </div>
         );
     }

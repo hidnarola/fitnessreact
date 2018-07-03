@@ -28,7 +28,7 @@ class WorkoutWarmupCard extends Component {
                                         validate={[requiredReactSelect]}
                                         errorClass="help-block"
                                     />
-                                    <button type="button" className="remove-workout-exercise-card-block-btn" onClick={() => fields.remove(index)}><i class="icon-close"></i></button>
+                                    <button type="button" className="remove-workout-exercise-card-block-btn" onClick={() => fields.remove(index)}><i className="icon-close"></i></button>
                                 </div>
                                 <div className="col-md-2">
                                     <Field
@@ -113,7 +113,7 @@ class WorkoutWarmupCard extends Component {
                     );
                 })}
                 <div className="add-workout-exercise-card-block-wrapper pull-right">
-                    <button type="button" class="green-blue-btn" onClick={() => fields.push()}>Add Warmups<i class="icon-control_point"></i></button>
+                    <button type="button" className="green-blue-btn" onClick={() => fields.push()}>Add Warmups<i className="icon-control_point"></i></button>
                 </div>
             </div>
         );

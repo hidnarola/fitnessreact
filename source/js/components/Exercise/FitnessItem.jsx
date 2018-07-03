@@ -87,7 +87,7 @@ class FitnessItem extends Component {
 
                                             <h5>{val.title}</h5>
                                             <span>
-                                                <div class="custom_checkbox_cstm">
+                                                <div className="custom_checkbox_cstm">
                                                 <input
                                                     type="checkbox"
                                                     id={`${item._id}_multiselect_${i}`}
@@ -128,7 +128,7 @@ class FitnessItem extends Component {
                                             <li key={i}>
 
 
-                                                <div class="custom_radio">
+                                                <div className="custom_radio">
                                                     <input
                                                         type="radio"
                                                         id={`${item._id}_a_or_b_${i}`}

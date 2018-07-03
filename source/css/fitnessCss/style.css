@@ -1557,3 +1557,8 @@ ul.text-right.pager {text-align: right;}
 .workout-exercise-card-wrapper.workout-exercise-card-for-exercise-wrapper h4 { float: left; margin: 0; padding: 0; position: relative; top: -30px; left: 0; background: #fff; min-width: 7%; text-align: center; }
 .workout-exercise-card-wrapper.workout-exercise-card-for-warmup-wrapper h4 { float: left; margin: 0; padding: 0; position: relative; top: -30px; left: 0; background: #fff; min-width: 8%; text-align: center; }
 .workout-exercise-card-wrapper.workout-exercise-card-for-cooldown-wrapper h4 { float: left; margin: 0; padding: 0; position: relative; top: -30px; left: 0; background: #fff; min-width: 9%; text-align: center; }
+
+
+.big-calendar-custom-month-event-view-card { padding: 10px; margin: 0; }
+.big-calendar-custom-month-event-view-card h5 { font-size: 16px; }
+.big-calendar-custom-month-event-view-card p { font-size: 12px; font-style: italic; }
