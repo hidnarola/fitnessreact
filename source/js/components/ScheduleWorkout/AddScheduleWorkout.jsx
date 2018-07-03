@@ -7,6 +7,7 @@ import { routeCodes } from '../../constants/routes';
 import AddScheduleWorkoutForm from './AddScheduleWorkoutForm';
 import { SCHEDULED_WORKOUT_TYPE_EXERCISE, SCHEDULED_WORKOUT_TYPE_WARMUP, SCHEDULED_WORKOUT_TYPE_COOLDOWN, MEASUREMENT_UNIT_KILOGRAM, MEASUREMENT_UNIT_KILOMETER } from '../../constants/consts';
 import _ from "lodash";
+import { addUsersWorkoutScheduleRequest } from '../../actions/userScheduleWorkouts';
 
 class AddScheduleWorkout extends Component {
     componentWillMount() {
@@ -52,8 +53,19 @@ class AddScheduleWorkout extends Component {
         return null;
     }
 
+    componentDidUpdate(prevProps, prevState) {
+        const {
+            loading,
+            workout,
+            history,
+        } = this.props;
+        if (!loading && workout && prevProps.workout !== workout) {
+            history.push(routeCodes.SCHEDULE_WORKOUT);
+        }
+    }
+
     handleSubmit = (data) => {
-        const { loggedUserData, selectedSlot } = this.props;
+        const { selectedSlot, dispatch } = this.props;
         var exercises = [];
         var sequence = 0;
         var warmups = (data.warmups && data.warmups.length > 0) ? data.warmups : [];
@@ -113,18 +125,19 @@ class AddScheduleWorkout extends Component {
             title: data.title,
             description: data.description,
             type: SCHEDULED_WORKOUT_TYPE_EXERCISE,
-            userId: loggedUserData.authId,
             date: date,
             exercises: exercises,
         };
+        dispatch(addUsersWorkoutScheduleRequest(requestData));
     }
 }
 
 const mapStateToProps = (state) => {
-    const { userScheduleWorkouts, user } = state;
+    const { userScheduleWorkouts } = state;
     return {
+        loading: userScheduleWorkouts.get('loading'),
+        workout: userScheduleWorkouts.get('workout'),
         selectedSlot: userScheduleWorkouts.get('slotInfo'),
-        loggedUserData: user.get('loggedUserData'),
     };
 }
 

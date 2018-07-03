@@ -13,6 +13,7 @@ import {
 import { NavLink } from "react-router-dom";
 import { routeCodes } from '../constants/routes';
 import _ from "lodash";
+import ReactHtmlParser from "react-html-parser";
 
 BigCalendar.momentLocalizer(moment);
 
@@ -112,7 +113,7 @@ class ScheduleWorkout extends Component {
                 if (workout._id && workout.exercises && workout.exercises.length > 0) {
                     var newWorkout = {
                         id: workout._id,
-                        title: (workout.title) ? workout.title : `Workout on ${workout.date}`,
+                        title: (workout.title) ? workout.title : `Workout on ${(workout.date) ? moment(workout.date).format('MM/DD/YYYY') : ''}`,
                         start: workout.date,
                         end: workout.date,
                         allDay: true,
@@ -206,9 +207,7 @@ class CustomEventCard extends Component {
         return (
             <div className="big-calendar-custom-month-event-view-card">
                 <h5>{event.title}</h5>
-                {event.description &&
-                    <p>{event.description}</p>
-                }
+                {event.description && ReactHtmlParser(event.description)}
             </div>
         );
     }
