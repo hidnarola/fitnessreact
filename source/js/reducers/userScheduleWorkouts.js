@@ -4,6 +4,9 @@ import {
     GET_USERS_WORKOUT_SCHEDULES_REQUEST,
     GET_USERS_WORKOUT_SCHEDULES_SUCCESS,
     GET_USERS_WORKOUT_SCHEDULES_ERROR,
+    GET_EXERCISES_NAME_REQUEST,
+    GET_EXERCISES_NAME_SUCCESS,
+    GET_EXERCISES_NAME_ERROR,
 } from "../actions/userScheduleWorkouts";
 import { VALIDATION_FAILURE_STATUS } from "../constants/consts";
 import { generateValidationErrorMsgArr } from "../helpers/funs";
@@ -13,6 +16,7 @@ const initialState = Map({
     loading: false,
     workouts: [],
     error: [],
+    exercises: [],
 });
 
 const actionMap = {
@@ -54,6 +58,23 @@ const actionMap = {
         return state.merge(Map({
             loading: false,
             error: error,
+        }));
+    },
+    [GET_EXERCISES_NAME_REQUEST]: (state, action) => {
+        return state.merge(Map({
+            exercises: [],
+        }));
+    },
+    [GET_EXERCISES_NAME_SUCCESS]: (state, action) => {
+        var newState = {};
+        if (action.data.status === 1) {
+            newState.exercises = action.data.exercises;
+        }
+        return state.merge(Map(newState));
+    },
+    [GET_EXERCISES_NAME_ERROR]: (state, action) => {
+        return state.merge(Map({
+            exercises: [],
         }));
     },
 }

@@ -8,6 +8,17 @@ function getUsersWorkoutSchedulesByMonths(requestData) {
     return postFormData(requestUrl + '/get_by_month', requestData, headers);
 }
 
+function getExercisesName() {
+    let headers = extraUserHeaders();
+    var options = {
+        method: 'GET',
+        headers: headers,
+    }
+
+    return fetchResource('user/exercise/names', options);
+}
+
 export default {
     getUsersWorkoutSchedulesByMonths,
+    getExercisesName,
 }
