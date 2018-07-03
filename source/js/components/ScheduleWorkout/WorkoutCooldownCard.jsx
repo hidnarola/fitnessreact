@@ -4,6 +4,24 @@ import { Field } from "redux-form";
 import { SelectField_ReactSelect, InputField } from '../../helpers/FormControlHelper';
 import { requiredReactSelect } from '../../formValidation/validationRules';
 import { prepareDropdownOptionsData } from '../../helpers/funs';
+import {
+    MEASUREMENT_UNIT_METER,
+    MEASUREMENT_UNIT_KILOMETER,
+    MEASUREMENT_UNIT_MILE,
+    MEASUREMENT_UNIT_KILOGRAM,
+    MEASUREMENT_UNIT_POUND
+} from '../../constants/consts';
+
+const distanceUnitsOptions = [
+    { value: MEASUREMENT_UNIT_KILOMETER, label: "Kilometers" },
+    { value: MEASUREMENT_UNIT_MILE, label: "Miles" },
+    { value: MEASUREMENT_UNIT_METER, label: "Meters" },
+]
+
+const weightUnitsOptions = [
+    { value: MEASUREMENT_UNIT_KILOGRAM, label: "Kilograms" },
+    { value: MEASUREMENT_UNIT_POUND, label: "Pounds" },
+]
 
 class WorkoutCooldownCard extends Component {
     render() {
@@ -22,7 +40,7 @@ class WorkoutCooldownCard extends Component {
                     return (
                         <div key={index} className="workout-exercise-card-block-wrapper">
                             <div className="row">
-                                <div className="col-md-12">
+                                <div className="col-md-8">
                                     <Field
                                         name={`${field}.exercise_id`}
                                         label="Exercise"
@@ -34,7 +52,6 @@ class WorkoutCooldownCard extends Component {
                                         validate={[requiredReactSelect]}
                                         errorClass="help-block"
                                     />
-                                    <button type="button" className="remove-workout-exercise-card-block-btn" onClick={() => fields.remove(index)}><i className="icon-close"></i></button>
                                 </div>
                                 <div className="col-md-2">
                                     <Field
@@ -61,19 +78,7 @@ class WorkoutCooldownCard extends Component {
                                         type="number"
                                         errorClass="help-block"
                                     />
-                                </div>
-                                <div className="col-md-2">
-                                    <Field
-                                        name={`${field}.distance`}
-                                        className="form-control"
-                                        label="Distance"
-                                        labelClass="control-label"
-                                        wrapperClass="form-group"
-                                        placeholder="Distance"
-                                        component={InputField}
-                                        type="number"
-                                        errorClass="help-block"
-                                    />
+                                    <button type="button" className="remove-workout-exercise-card-block-btn" onClick={() => fields.remove(index)} tabIndex="-1"><i className="icon-close"></i></button>
                                 </div>
                                 <div className="col-md-2">
                                     <Field
@@ -90,9 +95,48 @@ class WorkoutCooldownCard extends Component {
                                 </div>
                                 <div className="col-md-2">
                                     <Field
+                                        name={`${field}.weight_units`}
+                                        label="Weight Units"
+                                        labelClass="control-label"
+                                        wrapperClass="form-group"
+                                        placeholder="Weight Units"
+                                        component={SelectField_ReactSelect}
+                                        options={weightUnitsOptions}
+                                        validate={[requiredReactSelect]}
+                                        errorClass="help-block"
+                                    />
+                                </div>
+                                <div className="col-md-2">
+                                    <Field
+                                        name={`${field}.distance`}
+                                        className="form-control"
+                                        label="Distance"
+                                        labelClass="control-label"
+                                        wrapperClass="form-group"
+                                        placeholder="Distance"
+                                        component={InputField}
+                                        type="number"
+                                        errorClass="help-block"
+                                    />
+                                </div>
+                                <div className="col-md-2">
+                                    <Field
+                                        name={`${field}.distance_units`}
+                                        label="Distance Units"
+                                        labelClass="control-label"
+                                        wrapperClass="form-group"
+                                        placeholder="Distance Units"
+                                        component={SelectField_ReactSelect}
+                                        options={distanceUnitsOptions}
+                                        validate={[requiredReactSelect]}
+                                        errorClass="help-block"
+                                    />
+                                </div>
+                                <div className="col-md-2">
+                                    <Field
                                         name={`${field}.rest_time`}
                                         className="form-control"
-                                        label="Rest Time"
+                                        label="Rest Time (Mins)"
                                         labelClass="control-label"
                                         wrapperClass="form-group"
                                         placeholder="Rest Time"
@@ -105,7 +149,7 @@ class WorkoutCooldownCard extends Component {
                                     <Field
                                         name={`${field}.one_set_time`}
                                         className="form-control"
-                                        label="Time/Set."
+                                        label="Time/Set. (Mins)"
                                         labelClass="control-label"
                                         wrapperClass="form-group"
                                         placeholder="Time/Set"
@@ -119,7 +163,7 @@ class WorkoutCooldownCard extends Component {
                     );
                 })}
                 <div className="add-workout-exercise-card-block-wrapper pull-right">
-                    <button type="button" className="green-blue-btn" onClick={() => fields.push()}>Add Warmups<i className="icon-control_point"></i></button>
+                    <button type="button" className="green-blue-btn" onClick={() => fields.push()}>Add Cooldowns<i className="icon-control_point"></i></button>
                 </div>
             </div>
         );
