@@ -16,9 +16,10 @@ class AddScheduleWorkoutForm extends Component {
 
     render() {
         const { description } = this.state;
+        const { handleSubmit } = this.props;
         return (
             <div className="add-schedule-workout-form-wrapper">
-                <form onSubmit={() => console.log('')}>
+                <form onSubmit={handleSubmit}>
                     <div className="row">
                         <div className="col-md-12">
                             <Field
@@ -54,6 +55,9 @@ class AddScheduleWorkoutForm extends Component {
                                 name="cooldowns"
                                 component={WorkoutCooldownCard}
                             />
+                            <div className="add-workout-exercise-card-block-wrapper pull-right">
+                                <button type="submit" className="green-blue-btn">Save<i className="icon-control_point"></i></button>
+                            </div>
                         </div>
                     </div>
                 </form>

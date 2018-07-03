@@ -38,7 +38,7 @@ class AddScheduleWorkout extends Component {
                             <div className="col-md-12">
                                 <div className="white-box space-btm-20">
                                     <div className="whitebox-body profile-body">
-                                        <AddScheduleWorkoutForm />
+                                        <AddScheduleWorkoutForm onSubmit={this.handleSubmit} />
                                     </div>
                                 </div>
                             </div>
@@ -48,6 +48,10 @@ class AddScheduleWorkout extends Component {
             );
         }
         return null;
+    }
+
+    handleSubmit = (data) => {
+        console.log('data => ', data);
     }
 }
 

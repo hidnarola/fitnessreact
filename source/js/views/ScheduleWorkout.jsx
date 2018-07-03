@@ -5,7 +5,11 @@ import FitnessNav from '../components/global/FitnessNav';
 import BigCalendar from 'react-big-calendar';
 import moment from "moment";
 import SweetAlert from "react-bootstrap-sweetalert";
-import { setSelectedSlotFromCalendar, getUsersWorkoutSchedulesRequest } from '../actions/userScheduleWorkouts';
+import {
+    setSelectedSlotFromCalendar,
+    getUsersWorkoutSchedulesRequest,
+    getExercisesNameRequest
+} from '../actions/userScheduleWorkouts';
 import { NavLink } from "react-router-dom";
 import { routeCodes } from '../constants/routes';
 import _ from "lodash";
@@ -22,8 +26,10 @@ class ScheduleWorkout extends Component {
     }
 
     componentWillMount() {
+        const { dispatch } = this.props;
         var today = moment().startOf('day').utc();
         this.getWorkoutSchedulesByMonth(today);
+        dispatch(getExercisesNameRequest());
     }
 
     render() {

@@ -3,12 +3,18 @@ import { connect } from 'react-redux';
 import { Field } from "redux-form";
 import { SelectField_ReactSelect, InputField } from '../../helpers/FormControlHelper';
 import { requiredReactSelect } from '../../formValidation/validationRules';
+import { prepareDropdownOptionsData } from '../../helpers/funs';
 
 class WorkoutWarmupCard extends Component {
     render() {
         const {
             fields,
+            exercises,
         } = this.props;
+        var exerciseOptions = [];
+        if (exercises && exercises.length > 0) {
+            exerciseOptions = prepareDropdownOptionsData(exercises, '_id', 'name');
+        }
         return (
             <div className="workout-exercise-card-wrapper workout-exercise-card-for-warmup-wrapper">
                 <h4>Warm Ups {fields.length > 0 && `(${fields.length})`}</h4>
@@ -24,7 +30,7 @@ class WorkoutWarmupCard extends Component {
                                         wrapperClass="form-group"
                                         placeholder="Exercise"
                                         component={SelectField_ReactSelect}
-                                        options={[]}
+                                        options={exerciseOptions}
                                         validate={[requiredReactSelect]}
                                         errorClass="help-block"
                                     />
@@ -71,7 +77,7 @@ class WorkoutWarmupCard extends Component {
                                 </div>
                                 <div className="col-md-2">
                                     <Field
-                                        name={`${field}.Weight`}
+                                        name={`${field}.weight`}
                                         className="form-control"
                                         label="Weight"
                                         labelClass="control-label"
@@ -121,8 +127,9 @@ class WorkoutWarmupCard extends Component {
 }
 
 const mapStateToProps = (state) => {
+    const { userScheduleWorkouts } = state;
     return {
-
+        exercises: userScheduleWorkouts.get('exercises'),
     };
 }
 
