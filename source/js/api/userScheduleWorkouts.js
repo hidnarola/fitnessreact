@@ -18,7 +18,13 @@ function getExercisesName() {
     return fetchResource('user/exercise/names', options);
 }
 
+function addUsersWorkoutSchedule(requestData) {
+    let headers = extraUserHeaders();
+    return postFormData(requestUrl, requestData, headers);
+}
+
 export default {
     getUsersWorkoutSchedulesByMonths,
     getExercisesName,
+    addUsersWorkoutSchedule,
 }
