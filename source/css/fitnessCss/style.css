@@ -1550,6 +1550,10 @@ ul.text-right.pager {text-align: right;}
 .add-schedule-workout-form-wrapper .workout-exercise-card-wrapper .workout-exercise-card-block-wrapper .remove-workout-exercise-card-block-btn i.icon-close { font-size: 18px; color: #fff; }
 
 
-.add-workout-exercise-card-block-wrapper.pull-right { width: 100%; max-width: 280px; margin: 20px 0px 0 auto; }
-.add-workout-exercise-card-block-wrapper.pull-right button.green-blue-btn { margin: 0 0 20px; padding: 0 20px 0 30px; -webkit-transition: ease-in-out .5s; transition: ease-in-out .5s; display: block; width: 100%; text-align: left; }
+.add-workout-exercise-card-block-wrapper.pull-right { width: 100%; max-width: 280px; margin: 0; }
+.add-workout-exercise-card-block-wrapper.pull-right button.green-blue-btn { margin: 0; padding: 0 20px 0 30px; -webkit-transition: ease-in-out .5s; transition: ease-in-out .5s; display: block; width: 100%; text-align: left; }
 .add-workout-exercise-card-block-wrapper.pull-right button.green-blue-btn i.icon-control_point { float: right; line-height: 46px; width: 24px; font-size: 20px; overflow: hidden; }
+.add-schedule-workout-form-wrapper .workout-exercise-card-wrapper { padding: 20px; margin: 20px 0; border: 1px solid #ccc; border-radius: 5px; width: 100%; display: block; float: left; }
+.workout-exercise-card-wrapper.workout-exercise-card-for-exercise-wrapper h4 { float: left; margin: 0; padding: 0; position: relative; top: -30px; left: 0; background: #fff; min-width: 7%; text-align: center; }
+.workout-exercise-card-wrapper.workout-exercise-card-for-warmup-wrapper h4 { float: left; margin: 0; padding: 0; position: relative; top: -30px; left: 0; background: #fff; min-width: 8%; text-align: center; }
+.workout-exercise-card-wrapper.workout-exercise-card-for-cooldown-wrapper h4 { float: left; margin: 0; padding: 0; position: relative; top: -30px; left: 0; background: #fff; min-width: 9%; text-align: center; }

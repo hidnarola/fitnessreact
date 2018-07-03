@@ -4,14 +4,14 @@ import { Field } from "redux-form";
 import { SelectField_ReactSelect, InputField } from '../../helpers/FormControlHelper';
 import { requiredReactSelect } from '../../formValidation/validationRules';
 
-class WorkoutExerciseCard extends Component {
+class WorkoutWarmupCard extends Component {
     render() {
         const {
             fields,
         } = this.props;
         return (
-            <div className="workout-exercise-card-wrapper workout-exercise-card-for-exercise-wrapper">
-                <h4>Exercises {fields.length > 0 && `(${fields.length})`}</h4>
+            <div className="workout-exercise-card-wrapper workout-exercise-card-for-warmup-wrapper">
+                <h4>Warm Ups {fields.length > 0 && `(${fields.length})`}</h4>
                 {fields.map((field, index) => {
                     return (
                         <div key={index} className="workout-exercise-card-block-wrapper">
@@ -113,7 +113,7 @@ class WorkoutExerciseCard extends Component {
                     );
                 })}
                 <div className="add-workout-exercise-card-block-wrapper pull-right">
-                    <button type="button" class="green-blue-btn" onClick={() => fields.push()}>Add Exercises<i class="icon-control_point"></i></button>
+                    <button type="button" class="green-blue-btn" onClick={() => fields.push()}>Add Warmups<i class="icon-control_point"></i></button>
                 </div>
             </div>
         );
@@ -128,4 +128,4 @@ const mapStateToProps = (state) => {
 
 export default connect(
     mapStateToProps,
-)(WorkoutExerciseCard);
+)(WorkoutWarmupCard);

@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { Field, reduxForm, FieldArray } from "redux-form";
 import { InputField, EditorField } from '../../helpers/FormControlHelper';
 import WorkoutExerciseCard from './WorkoutExerciseCard';
+import WorkoutWarmupCard from './WorkoutWarmupCard';
+import WorkoutCooldownCard from './WorkoutCooldownCard';
 
 class AddScheduleWorkoutForm extends Component {
     constructor(props) {
@@ -41,8 +43,16 @@ class AddScheduleWorkoutForm extends Component {
                                 component={EditorField}
                             />
                             <FieldArray
+                                name="warmups"
+                                component={WorkoutWarmupCard}
+                            />
+                            <FieldArray
                                 name="exercises"
                                 component={WorkoutExerciseCard}
+                            />
+                            <FieldArray
+                                name="cooldowns"
+                                component={WorkoutCooldownCard}
                             />
                         </div>
                     </div>
