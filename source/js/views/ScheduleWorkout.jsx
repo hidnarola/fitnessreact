@@ -9,7 +9,8 @@ import {
     setSelectedSlotFromCalendar,
     getUsersWorkoutSchedulesRequest,
     getExercisesNameRequest,
-    addUsersWorkoutScheduleRequest
+    addUsersWorkoutScheduleRequest,
+    copyUserWorkoutSchedule
 } from '../actions/userScheduleWorkouts';
 import { NavLink } from "react-router-dom";
 import { routeCodes } from '../constants/routes';
@@ -99,6 +100,7 @@ class ScheduleWorkout extends Component {
                 >
                     <SelectEventView
                         handleNewRestDay={this.handleNewRestDay}
+                        handlePaste={this.handlePaste}
                     />
                 </SweetAlert>
 
@@ -126,6 +128,7 @@ class ScheduleWorkout extends Component {
                         exercises: (workout.exercises && workout.exercises.length > 0) ? workout.exercises : [],
                         meta: workout,
                         description: (workout.description) ? workout.description : '',
+                        handleCopy: () => this.handleCopy(workout),
                     }
                     newWorkouts.push(newWorkout);
                 }
@@ -183,6 +186,15 @@ class ScheduleWorkout extends Component {
         };
         dispatch(addUsersWorkoutScheduleRequest(requestData));
     }
+
+    handleCopy = (workout) => {
+        const { dispatch } = this.props;
+        dispatch(copyUserWorkoutSchedule(workout));
+    }
+
+    handlePaste = () => {
+
+    }
 }
 
 const mapStateToProps = (state) => {
@@ -200,7 +212,7 @@ export default connect(
 
 class SelectEventView extends Component {
     render() {
-        const { handleNewRestDay } = this.props;
+        const { handleNewRestDay, handlePaste } = this.props;
         return (
             <div className="row">
                 <div className="col-md-12">
@@ -219,7 +231,7 @@ class SelectEventView extends Component {
                         <button type="button" className="btn btn-primary">Assign Program</button>
                     </div>
                     <div className="col-md-6 pull-left">
-                        <button type="button" className="btn btn-primary">Paste Workout</button>
+                        <button type="button" onClick={handlePaste} className="btn btn-primary">Paste Workout</button>
                     </div>
                 </div>
             </div>
@@ -234,6 +246,7 @@ class CustomEventCard extends Component {
             <div className="big-calendar-custom-month-event-view-card">
                 <h5>{event.title}</h5>
                 {event.description && ReactHtmlParser(event.description)}
+                <a href="javascript:void(0)" onClick={event.handleCopy}>Copy</a>
             </div>
         );
     }
