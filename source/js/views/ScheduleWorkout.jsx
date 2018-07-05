@@ -11,7 +11,8 @@ import {
     getExercisesNameRequest,
     addUsersWorkoutScheduleRequest,
     copyUserWorkoutSchedule,
-    deleteUsersWorkoutScheduleRequest
+    deleteUsersWorkoutScheduleRequest,
+    viewUserWorkoutSchedule
 } from '../actions/userScheduleWorkouts';
 import { NavLink } from "react-router-dom";
 import { routeCodes } from '../constants/routes';
@@ -160,6 +161,7 @@ class ScheduleWorkout extends Component {
                     description: (workout.description) ? workout.description : '',
                     handleCopy: () => this.handleCopy(workout),
                     handleDelete: () => this.showDeleteConfirmation(workout._id, workout.date),
+                    handleViewWorkout: () => this.handleViewWorkout(workout),
                 }
                 newWorkouts.push(newWorkout);
             });
@@ -236,6 +238,11 @@ class ScheduleWorkout extends Component {
         const { dispatch } = this.props;
         dispatch(copyUserWorkoutSchedule(workout));
         ts('Workout copied!');
+    }
+
+    handleViewWorkout = (workout) => {
+        const { dispatch } = this.props;
+        dispatch(viewUserWorkoutSchedule(workout));
     }
 
     handlePaste = () => {
@@ -355,6 +362,7 @@ class CustomEventCard extends Component {
                 {event.description && ReactHtmlParser(event.description)}
                 <a href="javascript:void(0)" onClick={event.handleCopy}><FaCopy /></a>
                 <a href="javascript:void(0)" onClick={event.handleDelete}><FaTrash /></a>
+                <a href="javascript:void(0)" onClick={event.handleViewWorkout}>View</a>
             </div>
         );
     }

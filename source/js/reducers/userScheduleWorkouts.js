@@ -14,6 +14,7 @@ import {
     DELETE_USERS_WORKOUT_SCHEDULE_REQUEST,
     DELETE_USERS_WORKOUT_SCHEDULE_SUCCESS,
     DELETE_USERS_WORKOUT_SCHEDULE_ERROR,
+    VIEW_USER_WORKOUT_SCHEDULE,
 } from "../actions/userScheduleWorkouts";
 import { VALIDATION_FAILURE_STATUS } from "../constants/consts";
 import { generateValidationErrorMsgArr } from "../helpers/funs";
@@ -26,6 +27,7 @@ const initialState = Map({
     error: [],
     exercises: [],
     copiedWorkout: null,
+    viewWorkout: null,
 });
 
 const actionMap = {
@@ -152,6 +154,11 @@ const actionMap = {
         return state.merge(Map({
             loading: false,
             error: error,
+        }));
+    },
+    [VIEW_USER_WORKOUT_SCHEDULE]: (state, action) => {
+        return state.merge(Map({
+            viewWorkout: action.selectedData,
         }));
     },
 }
