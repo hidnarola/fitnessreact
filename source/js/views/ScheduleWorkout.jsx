@@ -16,7 +16,8 @@ import { NavLink } from "react-router-dom";
 import { routeCodes } from '../constants/routes';
 import _ from "lodash";
 import ReactHtmlParser from "react-html-parser";
-import { SCHEDULED_WORKOUT_TYPE_RESTDAY } from '../constants/consts';
+import { SCHEDULED_WORKOUT_TYPE_RESTDAY, SCHEDULED_WORKOUT_TYPE_EXERCISE, MEASUREMENT_UNIT_KILOGRAM, MEASUREMENT_UNIT_KILOMETER } from '../constants/consts';
+import { ts, te } from '../helpers/funs';
 
 BigCalendar.momentLocalizer(moment);
 
@@ -26,6 +27,7 @@ class ScheduleWorkout extends Component {
         this.state = {
             showSelectEventAlert: false,
             workoutEvents: [],
+            workoutPasteAction: false,
         }
     }
 
@@ -115,30 +117,37 @@ class ScheduleWorkout extends Component {
             loading,
             selectedSlot,
         } = this.props;
+        const {
+            workoutPasteAction,
+        } = this.state;
         if (!loading && prevProps.workouts !== workouts) {
             var newWorkouts = [];
             _.forEach(workouts, (workout, index) => {
-                if (workout._id && workout.exercises && workout.exercises.length > 0) {
-                    var newWorkout = {
-                        id: workout._id,
-                        title: (workout.title) ? workout.title : `Workout on ${(workout.date) ? moment(workout.date).format('MM/DD/YYYY') : ''}`,
-                        start: workout.date,
-                        end: workout.date,
-                        allDay: true,
-                        exercises: (workout.exercises && workout.exercises.length > 0) ? workout.exercises : [],
-                        meta: workout,
-                        description: (workout.description) ? workout.description : '',
-                        handleCopy: () => this.handleCopy(workout),
-                    }
-                    newWorkouts.push(newWorkout);
+                var newWorkout = {
+                    id: workout._id,
+                    title: (workout.title) ? workout.title : `Workout on ${(workout.date) ? moment(workout.date).format('MM/DD/YYYY') : ''}`,
+                    start: workout.date,
+                    end: workout.date,
+                    allDay: true,
+                    exercises: (workout.exercises && workout.exercises.length > 0) ? workout.exercises : [],
+                    exerciseType: (workout.type) ? workout.type : null,
+                    meta: workout,
+                    description: (workout.description) ? workout.description : '',
+                    handleCopy: () => this.handleCopy(workout),
                 }
+                newWorkouts.push(newWorkout);
             });
             this.setState({ workoutEvents: newWorkouts });
         }
-        if (!loading && prevProps.workout !== workout) {
+        if (!loading && workout && prevProps.workout !== workout) {
             var startDay = moment(selectedSlot.start).startOf('day');
             var date = moment.utc(startDay);
             this.getWorkoutSchedulesByMonth(date);
+            this.cancelSelectedSlotAction();
+            if (workoutPasteAction) {
+                ts('Workout pasted!');
+                this.setState({ workoutPasteAction: false });
+            }
         }
     }
 
@@ -190,10 +199,44 @@ class ScheduleWorkout extends Component {
     handleCopy = (workout) => {
         const { dispatch } = this.props;
         dispatch(copyUserWorkoutSchedule(workout));
+        ts('Workout copied!');
     }
 
     handlePaste = () => {
-
+        const { copiedWorkout, selectedSlot, dispatch } = this.props;
+        if (copiedWorkout) {
+            var exercises = [];
+            var copiedExercises = copiedWorkout.exercises;
+            _.forEach(copiedExercises, (exercise, index) => {
+                var exerciseObj = {
+                    exerciseId: exercise._id,
+                    type: exercise.type,
+                    reps: (exercise.reps) ? exercise.reps : null,
+                    sets: (exercise.sets) ? exercise.sets : null,
+                    weight: (exercise.weight) ? exercise.weight : null,
+                    weightUnits: (exercise.weightUnits) ? exercise.weightUnits : MEASUREMENT_UNIT_KILOGRAM,
+                    distance: (exercise.distance) ? exercise.distance : null,
+                    distanceUnits: (exercise.distanceUnits) ? exercise.distanceUnits : MEASUREMENT_UNIT_KILOMETER,
+                    restTime: (exercise.restTime) ? exercise.restTime : null,
+                    oneSetTime: (exercise.oneSetTimer) ? exercise.oneSetTimer : null,
+                    sequence: (exercise.sequence) ? exercise.sequence : null,
+                };
+                exercises.push(exerciseObj);
+            });
+            var startDay = moment(selectedSlot.start).startOf('day');
+            var date = moment.utc(startDay);
+            var requestData = {
+                title: copiedWorkout.title,
+                description: copiedWorkout.description,
+                type: SCHEDULED_WORKOUT_TYPE_EXERCISE,
+                date: date,
+                exercises: exercises,
+            };
+            dispatch(addUsersWorkoutScheduleRequest(requestData));
+            this.setState({ workoutPasteAction: true });
+        } else {
+            te('There is no workout copied!');
+        }
     }
 }
 
@@ -202,7 +245,9 @@ const mapStateToProps = (state) => {
     return {
         selectedSlot: userScheduleWorkouts.get('slotInfo'),
         workouts: userScheduleWorkouts.get('workouts'),
+        workout: userScheduleWorkouts.get('workout'),
         loading: userScheduleWorkouts.get('loading'),
+        copiedWorkout: userScheduleWorkouts.get('copiedWorkout'),
     };
 }
 
