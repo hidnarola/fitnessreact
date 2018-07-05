@@ -12,7 +12,6 @@ import {
     addUsersWorkoutScheduleRequest,
     copyUserWorkoutSchedule,
     deleteUsersWorkoutScheduleRequest,
-    viewUserWorkoutSchedule
 } from '../actions/userScheduleWorkouts';
 import { NavLink } from "react-router-dom";
 import { routeCodes } from '../constants/routes';
@@ -21,6 +20,7 @@ import ReactHtmlParser from "react-html-parser";
 import { SCHEDULED_WORKOUT_TYPE_RESTDAY, SCHEDULED_WORKOUT_TYPE_EXERCISE, MEASUREMENT_UNIT_KILOGRAM, MEASUREMENT_UNIT_KILOMETER } from '../constants/consts';
 import { ts, te } from '../helpers/funs';
 import { FaCopy, FaTrash } from 'react-icons/lib/fa'
+import ScheduleWorkoutDetailsModal from '../components/ScheduleWorkout/ScheduleWorkoutDetailsModal';
 
 BigCalendar.momentLocalizer(moment);
 
@@ -35,6 +35,8 @@ class ScheduleWorkout extends Component {
             selectedWorkoutId: null,
             selectedWorkoutDate: null,
             deleteWorkoutActionInit: false,
+            selectedWorkoutForView: null,
+            showWorkoutScheduleDetailsModal: false,
         }
     }
 
@@ -50,6 +52,8 @@ class ScheduleWorkout extends Component {
             showSelectEventAlert,
             workoutEvents,
             deleteWorkoutAlert,
+            showWorkoutScheduleDetailsModal,
+            selectedWorkoutForView,
         } = this.state;
         const {
             selectedSlot,
@@ -127,6 +131,12 @@ class ScheduleWorkout extends Component {
                 >
                     You will not be able to recover this file!
                 </SweetAlert>
+
+                <ScheduleWorkoutDetailsModal
+                    show={showWorkoutScheduleDetailsModal}
+                    handleClose={this.handleCloseWorkoutScheduleDetailsModal}
+                    workout={selectedWorkoutForView}
+                />
 
             </div>
         );
@@ -241,8 +251,17 @@ class ScheduleWorkout extends Component {
     }
 
     handleViewWorkout = (workout) => {
-        const { dispatch } = this.props;
-        dispatch(viewUserWorkoutSchedule(workout));
+        this.setState({
+            selectedWorkoutForView: workout,
+            showWorkoutScheduleDetailsModal: true,
+        });
+    }
+
+    handleCloseWorkoutScheduleDetailsModal = () => {
+        this.setState({
+            showWorkoutScheduleDetailsModal: false,
+            selectedWorkoutForView: null,
+        });
     }
 
     handlePaste = () => {
@@ -261,7 +280,7 @@ class ScheduleWorkout extends Component {
                     distance: (exercise.distance) ? exercise.distance : null,
                     distanceUnits: (exercise.distanceUnits) ? exercise.distanceUnits : MEASUREMENT_UNIT_KILOMETER,
                     restTime: (exercise.restTime) ? exercise.restTime : null,
-                    oneSetTime: (exercise.oneSetTimer) ? exercise.oneSetTimer : null,
+                    oneSetTimer: (exercise.oneSetTimer) ? exercise.oneSetTimer : null,
                     sequence: (exercise.sequence) ? exercise.sequence : null,
                 };
                 exercises.push(exerciseObj);

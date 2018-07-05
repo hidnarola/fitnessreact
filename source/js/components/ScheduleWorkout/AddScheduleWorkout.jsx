@@ -82,7 +82,7 @@ class AddScheduleWorkout extends Component {
                 distance: warmup.distance,
                 distanceUnits: (warmup.distance_units) ? warmup.distance_units.value : MEASUREMENT_UNIT_KILOMETER,
                 restTime: warmup.rest_time,
-                oneSetTime: warmup.one_set_time,
+                oneSetTimer: warmup.one_set_time,
                 sequence: sequence++,
             };
             exercises.push(exercise);
@@ -98,7 +98,7 @@ class AddScheduleWorkout extends Component {
                 distance: exercise.distance,
                 distanceUnits: (exercise.distance_units) ? exercise.distance_units.value : MEASUREMENT_UNIT_KILOMETER,
                 restTime: exercise.rest_time,
-                oneSetTime: exercise.one_set_time,
+                oneSetTimer: exercise.one_set_time,
                 sequence: sequence++,
             };
             exercises.push(exercise);
@@ -114,7 +114,7 @@ class AddScheduleWorkout extends Component {
                 distance: cooldown.distance,
                 distanceUnits: (cooldown.distance_units) ? cooldown.distance_units.value : MEASUREMENT_UNIT_KILOMETER,
                 restTime: cooldown.rest_time,
-                oneSetTime: cooldown.one_set_time,
+                oneSetTimer: cooldown.one_set_time,
                 sequence: sequence++,
             };
             exercises.push(exercise);
