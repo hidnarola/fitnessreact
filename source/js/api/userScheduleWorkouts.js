@@ -23,8 +23,19 @@ function addUsersWorkoutSchedule(requestData) {
     return postFormData(requestUrl, requestData, headers);
 }
 
+function deleteUsersWorkoutSchedule(_id) {
+    let headers = extraUserHeaders();
+    var options = {
+        method: 'DELETE',
+        headers: headers,
+    }
+
+    return fetchResource(requestUrl + '/' + _id, options);
+}
+
 export default {
     getUsersWorkoutSchedulesByMonths,
     getExercisesName,
     addUsersWorkoutSchedule,
+    deleteUsersWorkoutSchedule,
 }

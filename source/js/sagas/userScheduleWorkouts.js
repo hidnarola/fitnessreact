@@ -9,7 +9,10 @@ import {
     GET_EXERCISES_NAME_REQUEST,
     addUsersWorkoutScheduleSuccess,
     addUsersWorkoutScheduleError,
-    ADD_USERS_WORKOUT_SCHEDULE_REQUEST
+    ADD_USERS_WORKOUT_SCHEDULE_REQUEST,
+    deleteUsersWorkoutScheduleError,
+    deleteUsersWorkoutScheduleSuccess,
+    DELETE_USERS_WORKOUT_SCHEDULE_REQUEST
 } from '../actions/userScheduleWorkouts';
 
 function getUsersWorkoutSchedulesByMonthData() {
@@ -47,10 +50,23 @@ function addUsersWorkoutScheduleData() {
     }
 }
 
+function deleteUsersWorkoutScheduleData() {
+    return function* (action) {
+        try {
+            let _id = action._id;
+            const data = yield call(() => api.deleteUsersWorkoutSchedule(_id));
+            yield put(deleteUsersWorkoutScheduleSuccess(data));
+        } catch (error) {
+            yield put(deleteUsersWorkoutScheduleError(error));
+        }
+    }
+}
+
 export function* watchUsersWorkoutSchedulesData() {
     yield takeLatest(GET_USERS_WORKOUT_SCHEDULES_REQUEST, getUsersWorkoutSchedulesByMonthData());
     yield takeLatest(GET_EXERCISES_NAME_REQUEST, getExercisesName());
     yield takeLatest(ADD_USERS_WORKOUT_SCHEDULE_REQUEST, addUsersWorkoutScheduleData());
+    yield takeLatest(DELETE_USERS_WORKOUT_SCHEDULE_REQUEST, deleteUsersWorkoutScheduleData());
 }
 
 export default [

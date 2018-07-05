@@ -10,7 +10,8 @@ import {
     getUsersWorkoutSchedulesRequest,
     getExercisesNameRequest,
     addUsersWorkoutScheduleRequest,
-    copyUserWorkoutSchedule
+    copyUserWorkoutSchedule,
+    deleteUsersWorkoutScheduleRequest
 } from '../actions/userScheduleWorkouts';
 import { NavLink } from "react-router-dom";
 import { routeCodes } from '../constants/routes';
@@ -28,6 +29,10 @@ class ScheduleWorkout extends Component {
             showSelectEventAlert: false,
             workoutEvents: [],
             workoutPasteAction: false,
+            deleteWorkoutAlert: false,
+            selectedWorkoutId: null,
+            selectedWorkoutDate: null,
+            deleteWorkoutActionInit: false,
         }
     }
 
@@ -42,6 +47,7 @@ class ScheduleWorkout extends Component {
         const {
             showSelectEventAlert,
             workoutEvents,
+            deleteWorkoutAlert,
         } = this.state;
         const {
             selectedSlot,
@@ -106,6 +112,20 @@ class ScheduleWorkout extends Component {
                     />
                 </SweetAlert>
 
+                <SweetAlert
+                    show={deleteWorkoutAlert}
+                    warning
+                    showCancel
+                    confirmBtnText="Yes, delete it!"
+                    confirmBtnBsStyle="danger"
+                    cancelBtnBsStyle="default"
+                    title="Are you sure?"
+                    onConfirm={this.handleDeleteWorkoutSchedule}
+                    onCancel={this.handleCancelDelete}
+                >
+                    You will not be able to recover this file!
+                </SweetAlert>
+
             </div>
         );
     }
@@ -116,9 +136,13 @@ class ScheduleWorkout extends Component {
             workout,
             loading,
             selectedSlot,
+            error,
         } = this.props;
         const {
             workoutPasteAction,
+            deleteWorkoutActionInit,
+            selectedWorkoutDate,
+            selectedWorkoutId,
         } = this.state;
         if (!loading && prevProps.workouts !== workouts) {
             var newWorkouts = [];
@@ -134,6 +158,7 @@ class ScheduleWorkout extends Component {
                     meta: workout,
                     description: (workout.description) ? workout.description : '',
                     handleCopy: () => this.handleCopy(workout),
+                    handleDelete: () => this.showDeleteConfirmation(workout._id, workout.date),
                 }
                 newWorkouts.push(newWorkout);
             });
@@ -147,6 +172,16 @@ class ScheduleWorkout extends Component {
             if (workoutPasteAction) {
                 ts('Workout pasted!');
                 this.setState({ workoutPasteAction: false });
+            }
+        }
+        if (deleteWorkoutActionInit && selectedWorkoutId && !loading) {
+            this.setState({ deleteWorkoutActionInit: false, selectedWorkoutId: null, selectedWorkoutDate: null });
+            var startDay = moment(selectedWorkoutDate).startOf('day');
+            this.getWorkoutSchedulesByMonth(startDay);
+            if (error.length <= 0) {
+                ts('Workout deleted successfully!');
+            } else {
+                te('Cannot delete workout. Please try again later!');
             }
         }
     }
@@ -238,6 +273,31 @@ class ScheduleWorkout extends Component {
             te('There is no workout copied!');
         }
     }
+
+    showDeleteConfirmation = (id, date) => {
+        this.setState({
+            deleteWorkoutAlert: true,
+            selectedWorkoutId: id,
+            selectedWorkoutDate: date,
+        });
+    }
+
+    handleCancelDelete = () => {
+        this.setState({
+            deleteWorkoutAlert: false,
+            selectedWorkoutId: null,
+            selectedWorkoutDate: null,
+        });
+    }
+
+    handleDeleteWorkoutSchedule = () => {
+        const { dispatch } = this.props;
+        const { selectedWorkoutId } = this.state;
+        if (selectedWorkoutId) {
+            dispatch(deleteUsersWorkoutScheduleRequest(selectedWorkoutId));
+            this.setState({ deleteWorkoutAlert: false, deleteWorkoutActionInit: true });
+        }
+    }
 }
 
 const mapStateToProps = (state) => {
@@ -247,6 +307,7 @@ const mapStateToProps = (state) => {
         workouts: userScheduleWorkouts.get('workouts'),
         workout: userScheduleWorkouts.get('workout'),
         loading: userScheduleWorkouts.get('loading'),
+        error: userScheduleWorkouts.get('error'),
         copiedWorkout: userScheduleWorkouts.get('copiedWorkout'),
     };
 }
@@ -292,6 +353,7 @@ class CustomEventCard extends Component {
                 <h5>{event.title}</h5>
                 {event.description && ReactHtmlParser(event.description)}
                 <a href="javascript:void(0)" onClick={event.handleCopy}>Copy</a>
+                <a href="javascript:void(0)" onClick={event.handleDelete}>Delete</a>
             </div>
         );
     }
