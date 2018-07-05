@@ -10,6 +10,7 @@ import {
     ADD_USERS_WORKOUT_SCHEDULE_REQUEST,
     ADD_USERS_WORKOUT_SCHEDULE_SUCCESS,
     ADD_USERS_WORKOUT_SCHEDULE_ERROR,
+    COPY_USER_WORKOUT_SCHEDULE,
 } from "../actions/userScheduleWorkouts";
 import { VALIDATION_FAILURE_STATUS } from "../constants/consts";
 import { generateValidationErrorMsgArr } from "../helpers/funs";
@@ -21,6 +22,7 @@ const initialState = Map({
     workout: null,
     error: [],
     exercises: [],
+    copiedWorkout: null,
 });
 
 const actionMap = {
@@ -112,6 +114,11 @@ const actionMap = {
         return state.merge(Map({
             loading: false,
             error: error,
+        }));
+    },
+    [COPY_USER_WORKOUT_SCHEDULE]: (state, action) => {
+        return state.merge(Map({
+            copiedWorkout: action.selectedData,
         }));
     },
 }

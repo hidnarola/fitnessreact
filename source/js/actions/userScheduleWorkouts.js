@@ -12,6 +12,8 @@ export const ADD_USERS_WORKOUT_SCHEDULE_REQUEST = 'ADD_USERS_WORKOUT_SCHEDULE_RE
 export const ADD_USERS_WORKOUT_SCHEDULE_SUCCESS = 'ADD_USERS_WORKOUT_SCHEDULE_SUCCESS';
 export const ADD_USERS_WORKOUT_SCHEDULE_ERROR = 'ADD_USERS_WORKOUT_SCHEDULE_ERROR';
 
+export const COPY_USER_WORKOUT_SCHEDULE = 'COPY_USER_WORKOUT_SCHEDULE';
+
 export function setSelectedSlotFromCalendar(slotInfo = null) {
     return {
         type: SET_SELECTED_SLOT_FROM_CALENDAR,
@@ -78,5 +80,12 @@ export function addUsersWorkoutScheduleError(error) {
     return {
         type: ADD_USERS_WORKOUT_SCHEDULE_ERROR,
         error,
+    }
+}
+
+export function copyUserWorkoutSchedule(selectedData) {
+    return {
+        type: COPY_USER_WORKOUT_SCHEDULE,
+        selectedData,
     }
 }
