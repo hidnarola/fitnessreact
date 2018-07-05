@@ -375,14 +375,29 @@ class SelectEventView extends Component {
 class CustomEventCard extends Component {
     render() {
         const { event } = this.props;
+        const { isCompleted } = this.state;
         return (
             <div className="big-calendar-custom-month-event-view-card">
-                <h5>{event.title}</h5>
+                <div className="pull-left custom_check" onClick={this.handleCheckChange}>
+                    <input
+                        type="checkbox"
+                        id={`complete_workout_schedule_${event.id}`}
+                        name={`complete_workout_schedule_${event.id}`}
+                        checked={isCompleted}
+                    />
+                    <label><h5>{event.title}</h5></label>
+                </div>
+                {/* <h5>{event.title}</h5> */}
                 {event.description && ReactHtmlParser(event.description)}
                 <a href="javascript:void(0)" onClick={event.handleCopy}><FaCopy /></a>
                 <a href="javascript:void(0)" onClick={event.handleDelete}><FaTrash /></a>
                 <a href="javascript:void(0)" onClick={event.handleViewWorkout}>View</a>
             </div>
         );
+    }
+
+    handleCheckChange = () => {
+        console.log('sahil');
+        this.setState({ isCompleted: !this.state.isCompleted });
     }
 }
