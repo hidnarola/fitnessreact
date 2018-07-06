@@ -171,7 +171,7 @@ class ScheduleWorkout extends Component {
                     exerciseType: (workout.type) ? workout.type : null,
                     meta: workout,
                     description: (workout.description) ? workout.description : '',
-                    handleCopy: () => this.handleCopy(workout),
+                    handleCopy: () => this.handleCopy(workout._id),
                     handleDelete: () => this.showDeleteConfirmation(workout._id, workout.date),
                     handleViewWorkout: () => this.handleViewWorkout(workout._id),
                     handleCompleteWorkout: () => this.handleCompleteWorkout(workout._id),
@@ -247,10 +247,14 @@ class ScheduleWorkout extends Component {
         dispatch(addUsersWorkoutScheduleRequest(requestData));
     }
 
-    handleCopy = (workout) => {
+    handleCopy = (_id) => {
         const { dispatch } = this.props;
-        dispatch(copyUserWorkoutSchedule(workout));
-        ts('Workout copied!');
+        const { workoutEvents } = this.state;
+        var workout = _.find(workoutEvents, ['id', _id]);
+        if (workout) {
+            dispatch(copyUserWorkoutSchedule(workout.meta));
+            ts('Workout copied!');
+        }
     }
 
     handleViewWorkout = (_id) => {
@@ -278,7 +282,7 @@ class ScheduleWorkout extends Component {
             var copiedExercises = copiedWorkout.exercises;
             _.forEach(copiedExercises, (exercise, index) => {
                 var exerciseObj = {
-                    exerciseId: exercise._id,
+                    exerciseId: exercise.exercise._id,
                     type: exercise.type,
                     reps: (exercise.reps) ? exercise.reps : null,
                     sets: (exercise.sets) ? exercise.sets : null,
