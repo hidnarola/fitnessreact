@@ -18,6 +18,10 @@ export const DELETE_USERS_WORKOUT_SCHEDULE_REQUEST = 'DELETE_USERS_WORKOUT_SCHED
 export const DELETE_USERS_WORKOUT_SCHEDULE_SUCCESS = 'DELETE_USERS_WORKOUT_SCHEDULE_SUCCESS';
 export const DELETE_USERS_WORKOUT_SCHEDULE_ERROR = 'DELETE_USERS_WORKOUT_SCHEDULE_ERROR';
 
+export const CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_REQUEST = 'CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_REQUEST';
+export const CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_SUCCESS = 'CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_SUCCESS';
+export const CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_ERROR = 'CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_ERROR';
+
 export function setSelectedSlotFromCalendar(slotInfo = null) {
     return {
         type: SET_SELECTED_SLOT_FROM_CALENDAR,
@@ -111,6 +115,28 @@ export function deleteUsersWorkoutScheduleSuccess(data) {
 export function deleteUsersWorkoutScheduleError(error) {
     return {
         type: DELETE_USERS_WORKOUT_SCHEDULE_ERROR,
+        error,
+    }
+}
+
+export function changeUsersWorkoutScheduleCompleteRequest(_id, isCompleted) {
+    return {
+        type: CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_REQUEST,
+        _id,
+        isCompleted,
+    }
+}
+
+export function changeUsersWorkoutScheduleCompleteSuccess(data) {
+    return {
+        type: CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_SUCCESS,
+        data,
+    }
+}
+
+export function changeUsersWorkoutScheduleCompleteError(error) {
+    return {
+        type: CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_ERROR,
         error,
     }
 }

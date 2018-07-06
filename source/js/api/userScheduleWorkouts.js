@@ -1,4 +1,4 @@
-import { postFormData, fetchResource } from '.';
+import { postFormData, fetchResource, putFormData } from '.';
 import { extraUserHeaders } from '../helpers/funs';
 
 const requestUrl = 'user/user_workouts';
@@ -33,9 +33,19 @@ function deleteUsersWorkoutSchedule(_id) {
     return fetchResource(requestUrl + '/' + _id, options);
 }
 
+function changeUsersWorkoutScheduleComplete(_id, isCompleted) {
+    let headers = extraUserHeaders();
+    var requestData = {
+        parentId: _id,
+        isCompleted: isCompleted,
+    }
+    return putFormData(requestUrl + '/complete_all', requestData, headers);
+}
+
 export default {
     getUsersWorkoutSchedulesByMonths,
     getExercisesName,
     addUsersWorkoutSchedule,
     deleteUsersWorkoutSchedule,
+    changeUsersWorkoutScheduleComplete,
 }

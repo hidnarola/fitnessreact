@@ -12,6 +12,7 @@ import {
     addUsersWorkoutScheduleRequest,
     copyUserWorkoutSchedule,
     deleteUsersWorkoutScheduleRequest,
+    changeUsersWorkoutScheduleCompleteRequest,
 } from '../actions/userScheduleWorkouts';
 import { NavLink } from "react-router-dom";
 import { routeCodes } from '../constants/routes';
@@ -165,13 +166,15 @@ class ScheduleWorkout extends Component {
                     start: workout.date,
                     end: workout.date,
                     allDay: true,
+                    isCompleted: (workout.isCompleted) ? workout.isCompleted : 0,
                     exercises: (workout.exercises && workout.exercises.length > 0) ? workout.exercises : [],
                     exerciseType: (workout.type) ? workout.type : null,
                     meta: workout,
                     description: (workout.description) ? workout.description : '',
                     handleCopy: () => this.handleCopy(workout),
                     handleDelete: () => this.showDeleteConfirmation(workout._id, workout.date),
-                    handleViewWorkout: () => this.handleViewWorkout(workout),
+                    handleViewWorkout: () => this.handleViewWorkout(workout._id),
+                    handleCompleteWorkout: () => this.handleCompleteWorkout(workout._id),
                 }
                 newWorkouts.push(newWorkout);
             });
@@ -250,11 +253,15 @@ class ScheduleWorkout extends Component {
         ts('Workout copied!');
     }
 
-    handleViewWorkout = (workout) => {
-        this.setState({
-            selectedWorkoutForView: workout,
-            showWorkoutScheduleDetailsModal: true,
-        });
+    handleViewWorkout = (_id) => {
+        const { workoutEvents } = this.state;
+        var workout = _.find(workoutEvents, ['id', _id]);
+        if (workout) {
+            this.setState({
+                selectedWorkoutForView: workout.meta,
+                showWorkoutScheduleDetailsModal: true,
+            });
+        }
     }
 
     handleCloseWorkoutScheduleDetailsModal = () => {
@@ -325,6 +332,24 @@ class ScheduleWorkout extends Component {
             this.setState({ deleteWorkoutAlert: false, deleteWorkoutActionInit: true });
         }
     }
+
+    handleCompleteWorkout = (_id) => {
+        const { dispatch } = this.props;
+        const { workoutEvents } = this.state;
+        var workouts = Object.assign([], workoutEvents);
+        var selectedWorkout = _.find(workouts, ['id', _id]);
+        if (selectedWorkout) {
+            var isCompleted = (typeof selectedWorkout.isCompleted !== 'undefined') ? (selectedWorkout.isCompleted === 0) ? 1 : 0 : 1;
+            var workout = Object.assign({}, selectedWorkout);
+            workout.isCompleted = isCompleted;
+            var index = _.findIndex(workouts, ['id', _id]);
+            workouts[index] = workout;
+            this.setState({
+                workoutEvents: workouts,
+            });
+            dispatch(changeUsersWorkoutScheduleCompleteRequest(_id, isCompleted));
+        }
+    }
 }
 
 const mapStateToProps = (state) => {
@@ -375,15 +400,15 @@ class SelectEventView extends Component {
 class CustomEventCard extends Component {
     render() {
         const { event } = this.props;
-        const { isCompleted } = this.state;
         return (
             <div className="big-calendar-custom-month-event-view-card">
-                <div className="pull-left custom_check" onClick={this.handleCheckChange}>
+                <div className="pull-left custom_check" onClick={event.handleCompleteWorkout}>
                     <input
                         type="checkbox"
                         id={`complete_workout_schedule_${event.id}`}
                         name={`complete_workout_schedule_${event.id}`}
-                        checked={isCompleted}
+                        checked={event.isCompleted}
+                        onChange={() => { }}
                     />
                     <label><h5>{event.title}</h5></label>
                 </div>
@@ -394,10 +419,5 @@ class CustomEventCard extends Component {
                 <a href="javascript:void(0)" onClick={event.handleViewWorkout}>View</a>
             </div>
         );
-    }
-
-    handleCheckChange = () => {
-        console.log('sahil');
-        this.setState({ isCompleted: !this.state.isCompleted });
     }
 }
