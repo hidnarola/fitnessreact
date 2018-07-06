@@ -13,6 +13,7 @@ import {
     copyUserWorkoutSchedule,
     deleteUsersWorkoutScheduleRequest,
     changeUsersWorkoutScheduleCompleteRequest,
+    selectUsersWorkoutScheduleForEdit,
 } from '../actions/userScheduleWorkouts';
 import { NavLink } from "react-router-dom";
 import { routeCodes } from '../constants/routes';
@@ -175,6 +176,7 @@ class ScheduleWorkout extends Component {
                     handleDelete: () => this.showDeleteConfirmation(workout._id, workout.date),
                     handleViewWorkout: () => this.handleViewWorkout(workout._id),
                     handleCompleteWorkout: () => this.handleCompleteWorkout(workout._id),
+                    handleSelectWorkoutForEdit: () => this.handleSelectWorkoutForEdit(workout._id),
                 }
                 newWorkouts.push(newWorkout);
             });
@@ -354,6 +356,15 @@ class ScheduleWorkout extends Component {
             dispatch(changeUsersWorkoutScheduleCompleteRequest(_id, isCompleted));
         }
     }
+
+    handleSelectWorkoutForEdit = (_id) => {
+        const { workoutEvents } = this.state;
+        const { dispatch, history } = this.props;
+        var workout = _.find(workoutEvents, ['id', _id]);
+        if (workout) {
+            dispatch(selectUsersWorkoutScheduleForEdit(workout.meta));
+        }
+    }
 }
 
 const mapStateToProps = (state) => {
@@ -421,6 +432,7 @@ class CustomEventCard extends Component {
                 <a href="javascript:void(0)" onClick={event.handleCopy}><FaCopy /></a>
                 <a href="javascript:void(0)" onClick={event.handleDelete}><FaTrash /></a>
                 <a href="javascript:void(0)" onClick={event.handleViewWorkout}>View</a>
+                <a href="javascript:void(0)" onClick={event.handleSelectWorkoutForEdit}>Edit</a>
             </div>
         );
     }

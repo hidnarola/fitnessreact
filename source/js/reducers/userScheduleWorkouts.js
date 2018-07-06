@@ -17,6 +17,7 @@ import {
     CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_REQUEST,
     CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_SUCCESS,
     CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_ERROR,
+    SELECT_USERS_WORKOUT_SCHEDULE_FOR_EDIT,
 } from "../actions/userScheduleWorkouts";
 import { VALIDATION_FAILURE_STATUS } from "../constants/consts";
 import { generateValidationErrorMsgArr } from "../helpers/funs";
@@ -30,6 +31,7 @@ const initialState = Map({
     error: [],
     exercises: [],
     copiedWorkout: null,
+    selectedWorkoutForEdit: null,
 });
 
 const actionMap = {
@@ -193,6 +195,11 @@ const actionMap = {
         return state.merge(Map({
             loading: false,
             error: error,
+        }));
+    },
+    [SELECT_USERS_WORKOUT_SCHEDULE_FOR_EDIT]: (state, action) => {
+        return state.merge(Map({
+            selectedWorkoutForEdit: action.selectedData,
         }));
     },
 }

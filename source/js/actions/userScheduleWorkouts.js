@@ -22,6 +22,8 @@ export const CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_REQUEST = 'CHANGE_USERS_WORK
 export const CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_SUCCESS = 'CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_SUCCESS';
 export const CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_ERROR = 'CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_ERROR';
 
+export const SELECT_USERS_WORKOUT_SCHEDULE_FOR_EDIT = 'SELECT_USERS_WORKOUT_SCHEDULE_FOR_EDIT';
+
 export function setSelectedSlotFromCalendar(slotInfo = null) {
     return {
         type: SET_SELECTED_SLOT_FROM_CALENDAR,
@@ -138,5 +140,12 @@ export function changeUsersWorkoutScheduleCompleteError(error) {
     return {
         type: CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_ERROR,
         error,
+    }
+}
+
+export function selectUsersWorkoutScheduleForEdit(selectedData) {
+    return {
+        type: SELECT_USERS_WORKOUT_SCHEDULE_FOR_EDIT,
+        selectedData,
     }
 }
