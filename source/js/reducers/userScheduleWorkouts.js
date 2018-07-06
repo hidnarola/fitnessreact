@@ -18,6 +18,9 @@ import {
     CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_SUCCESS,
     CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_ERROR,
     SELECT_USERS_WORKOUT_SCHEDULE_FOR_EDIT,
+    CHANGE_USERS_WORKOUT_SCHEDULE_SUCCESS,
+    CHANGE_USERS_WORKOUT_SCHEDULE_ERROR,
+    CHANGE_USERS_WORKOUT_SCHEDULE_REQUEST,
 } from "../actions/userScheduleWorkouts";
 import { VALIDATION_FAILURE_STATUS } from "../constants/consts";
 import { generateValidationErrorMsgArr } from "../helpers/funs";
@@ -112,6 +115,39 @@ const actionMap = {
         return state.merge(Map(newState));
     },
     [ADD_USERS_WORKOUT_SCHEDULE_ERROR]: (state, action) => {
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
+        }
+        return state.merge(Map({
+            loading: false,
+            error: error,
+        }));
+    },
+    [CHANGE_USERS_WORKOUT_SCHEDULE_REQUEST]: (state, action) => {
+        return state.merge(Map({
+            loading: true,
+            workout: null,
+            error: [],
+        }));
+    },
+    [CHANGE_USERS_WORKOUT_SCHEDULE_SUCCESS]: (state, action) => {
+        var newState = {
+            loading: false,
+        };
+        if (action.data.status === 1) {
+            newState.workout = action.data.workout;
+        } else {
+            var msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
+            newState.error = [msg];
+        }
+        return state.merge(Map(newState));
+    },
+    [CHANGE_USERS_WORKOUT_SCHEDULE_ERROR]: (state, action) => {
         let error = [];
         if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
             error = generateValidationErrorMsgArr(action.error.response.message);
