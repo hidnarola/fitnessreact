@@ -139,12 +139,12 @@ h3.title-h3{padding:0;margin:0;display:block; color:#232B41; font-size:20px; fon
 .header-user a:hover{text-decoration:none;}
 
 .header-alert{padding:10px 0 0;margin:0 20px 0 0;}
-.header-alert a{color:#232B41; font-size: 20px; display:block;}
+.header-alert a{color:#232B41; font-size: 20px; display:block; position: relative;}
 .header-alert a i{line-height:30px;}
 .header-alert a:hover{text-decoration:none;}
 
 .header-email{padding:10px 0 0;margin:0 20px 0 0;}
-.header-email a{color:#232B41; font-size: 20px; display:block;}
+.header-email a{color:#232B41; font-size: 20px; display:block; position: relative;}
 .header-email a i{line-height:30px;}
 .header-email a:hover{text-decoration:none;}
 
@@ -1563,3 +1563,33 @@ ul.text-right.pager {text-align: right;}
 .big-calendar-custom-month-event-view-card h5 { font-size: 16px; }
 .big-calendar-custom-month-event-view-card p { font-size: 12px; font-style: italic; }
 .big-calendar-custom-month-event-view-card a{color: #44edd1;}
+
+
+.workout-calender .rbc-row-segment {padding:5px;}
+.workout-calender .rbc-event {padding: 0;background-color: #f6f1ff;border-radius: 0;color: #000;cursor: pointer;border: 1px solid #e7dbff;}
+.workout-calender .custom_check [type="checkbox"]:not(:checked) + label:before,
+.workout-calender .custom_check [type="checkbox"]:checked + label:before {width:16px; height:16px; border: 1px solid #ddd; background: #fff;}
+.workout-calender .custom_check [type="checkbox"]:not(:checked) + label,
+.workout-calender .custom_check [type="checkbox"]:checked + label {padding-left: 22px; height: auto; margin: 0;}
+.workout-calender .pull-left.custom_check{ float:none !important;}
+.workout-calender .big-calendar-custom-month-event-view-card h5 {font-size: 14px; line-height: 16px; display: block; text-overflow: ellipsis; height: 16px; overflow: hidden; width:100%; color:#6a3fbd; margin: 1px 0 0;}
+.workout-calender .big-calendar-custom-month-event-view-card p {font-size:12px; font-style: normal; white-space:initial; color: #666; font-size:12px; line-height:16px; padding: 0; margin:0px 0 15px 2px; overflow: hidden; height:48px;}
+.workout-calender .big-calendar-custom-month-event-view-card a {color:#716684; width: calc(25% - 4px); display: inline-block; line-height: 20px; padding: 2px 4px 6px; border: 0; background: #e2dbee; text-align: center; margin: 0 2px; vertical-align: top; }
+.workout-calender .custom_check [type="checkbox"]:not(:checked) + label:after, 
+.workout-calender .custom_check [type="checkbox"]:checked + label:after {width: 8px; height: 8px; background: #6a3fbd;}
+.workout-calender .rbc-month-view>.rbc-month-row{display:block; overflow:visible; height:auto; flex-wrap:wrap;}
+.workout-calender .big-calendar-custom-month-event-view-card.restday{ background:#e8fffb; border: 1px solid #c6fbf2;}
+.workout-calender .big-calendar-custom-month-event-view-card.restday a {background:#d6e6e3;}
+.workout-calender .rbc-header {padding: 10px 3px; background: #f4f0fc;}
+.rbc-selected-cell{background:#fff; }
+.popup-link-wrap{margin: 0 20px; border: 0; display: flex; flex-wrap: wrap;}
+.popup-link a, 
+.popup-link button{ margin:0; width:100%; background:linear-gradient(123.28deg, #46E9C5 0%, #3FFBFC 100%); border:0; color:#333; border-radius:0; text-transform:uppercase;
+padding:10px;}
+.popup-link {width: calc(50% - 10px); margin: 5px;}
+
+.popup-link a:hover, 
+.popup-link button:hover{ background:linear-gradient(123.28deg, #3FFBFC 0%, #46E9C5 100%); }
+
+.header-alert span{ width: 20px; height: 20px; background: linear-gradient(123.28deg, #46E9C5 0%, #3FFBFC 100%);  border-radius: 80px; display: block; font-size: 11px; position: absolute; top: -2px; right: -6px; text-align: center; line-height: 22px; color: #333;}
+.header-email span{width:20px; height: 20px; background:linear-gradient(148.66deg, #FF3366 0%, #FF339A 100%); border-radius: 80px; display: block; font-size: 11px; position: absolute; top: -2px; right: -6px; text-align: center; line-height: 22px; color: #333; }

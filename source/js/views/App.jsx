@@ -152,6 +152,8 @@ class App extends Component {
                             <PrivateRoute exact path={routeCodes.ADD_SCHEDULE_WORKOUT} component={AddScheduleWorkout} />
                             <PrivateRoute exact path={routeCodes.CHANGE_SCHEDULE_WORKOUT} component={ChangeScheduleWorkout} />
 
+                            <PrivateRoute exact path={routeCodes.PROGRAMS} component={ScheduleWorkout} />
+
                             <PrivateRoute exact path={routeCodes.NUTRITION} component={NutritionMeal} />
                             <PrivateRoute exact path={routeCodes.NUTRITION_ADD} component={NutritionMealAdd} />
                             <PrivateRoute path={`${routeCodes.NUTRITION_RECIPE_DETAILS}/:id`} component={NutritionRecipeDetails} />

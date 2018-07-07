@@ -21,8 +21,9 @@ import _ from "lodash";
 import ReactHtmlParser from "react-html-parser";
 import { SCHEDULED_WORKOUT_TYPE_RESTDAY, SCHEDULED_WORKOUT_TYPE_EXERCISE, MEASUREMENT_UNIT_KILOGRAM, MEASUREMENT_UNIT_KILOMETER } from '../constants/consts';
 import { ts, te } from '../helpers/funs';
-import { FaCopy, FaTrash } from 'react-icons/lib/fa'
+import { FaCopy, FaTrash, FaPencil, FaEye } from 'react-icons/lib/fa'
 import ScheduleWorkoutDetailsModal from '../components/ScheduleWorkout/ScheduleWorkoutDetailsModal';
+import cns from "classnames";
 
 BigCalendar.momentLocalizer(moment);
 
@@ -389,8 +390,8 @@ class SelectEventView extends Component {
         const { handleNewRestDay, handlePaste } = this.props;
         return (
             <div className="row">
-                <div className="col-md-12">
-                    <div className="col-md-6 pull-left">
+                <div className="popup-link-wrap">
+                    <div className="popup-link">
                         <NavLink
                             to={routeCodes.ADD_SCHEDULE_WORKOUT}
                             className="btn btn-primary"
@@ -398,13 +399,13 @@ class SelectEventView extends Component {
                             Add Workout
                         </NavLink>
                     </div>
-                    <div className="col-md-6 pull-left">
+                    <div className="popup-link">
                         <button type="button" onClick={handleNewRestDay} className="btn btn-primary">Make Rest Day</button>
                     </div>
-                    <div className="col-md-6 pull-left">
+                    <div className="popup-link">
                         <button type="button" className="btn btn-primary">Assign Program</button>
                     </div>
-                    <div className="col-md-6 pull-left">
+                    <div className="popup-link">
                         <button type="button" onClick={handlePaste} className="btn btn-primary">Paste Workout</button>
                     </div>
                 </div>
@@ -417,7 +418,7 @@ class CustomEventCard extends Component {
     render() {
         const { event } = this.props;
         return (
-            <div className="big-calendar-custom-month-event-view-card">
+            <div className={cns('big-calendar-custom-month-event-view-card', { 'restday': (event.exerciseType === SCHEDULED_WORKOUT_TYPE_RESTDAY) })}>
                 <div className="pull-left custom_check" onClick={event.handleCompleteWorkout}>
                     <input
                         type="checkbox"
@@ -432,8 +433,12 @@ class CustomEventCard extends Component {
                 {event.description && ReactHtmlParser(event.description)}
                 <a href="javascript:void(0)" onClick={event.handleCopy}><FaCopy /></a>
                 <a href="javascript:void(0)" onClick={event.handleDelete}><FaTrash /></a>
-                <a href="javascript:void(0)" onClick={event.handleViewWorkout}>View</a>
-                <a href="javascript:void(0)" onClick={event.handleSelectWorkoutForEdit}>Edit</a>
+                {(event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
+                    <a href="javascript:void(0)" onClick={event.handleViewWorkout}><FaEye /></a>
+                }
+                {(event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
+                    <a href="javascript:void(0)" onClick={event.handleSelectWorkoutForEdit}><FaPencil /></a>
+                }
             </div>
         );
     }

@@ -51,6 +51,8 @@ export const routeCodes = {
     ADD_SCHEDULE_WORKOUT: `${publicPath}schedule_workout/add`,
     CHANGE_SCHEDULE_WORKOUT: `${publicPath}schedule_workout/change`,
 
+    PROGRAMS: `${publicPath}programs`,
+
     // Nutrition Routes
     NUTRITION: `${publicPath}nutrition`,
     NUTRITION_ADD: `${publicPath}nutrition/add`,

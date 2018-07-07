@@ -116,12 +116,12 @@ class FitnessHeader extends Component {
                                 dispatch(getUserUnreadNotificationsRequest());
                                 toggleSideMenu('user-notification-panel', true);
                             }}>
-                                <FaNoti /> {(notificationCount) ? notificationCount : ''}
+                                <FaNoti /> <span>{(notificationCount) ? notificationCount : ''}</span>
                             </a>
                         </div>
                         <div className="header-email">
                             <a href="javascript:void(0)" onClick={this.handleMessagePanel}>
-                                <FaMail /> {(messagesCount) ? messagesCount : ''}
+                                <FaMail /> <span>{(messagesCount) ? messagesCount : ''}</span>
                             </a>
                         </div>
                         {/* <div className="header-logout header-icons">
