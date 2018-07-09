@@ -33,36 +33,42 @@ class Programs extends Component {
                     <div className="body-content d-flex row justify-content-start profilephoto-content">
                         <div className="col-md-12">
                             <div className="white-box space-btm-20">
-                                <div className="whitebox-body profile-body">
-                                    <table>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Description</th>
-                                            <th>Length</th>
-                                            <th>Actions</th>
-                                        </tr>
+                                <div className="whitebox-body profile-body programs-table-wrapper">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Description</th>
+                                                <th>Length</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
                                         {programs && programs.length > 0 &&
-                                            programs.map((program, index) => {
-                                                return (
-                                                    <tr>
-                                                        <td>{program.name}</td>
-                                                        <td>{program.description}</td>
-                                                        <td>0</td>
-                                                        <td>
-                                                            <ButtonToolbar>
-                                                                <DropdownButton title="Actions" pullRight id="dropdown-size-medium">
-                                                                    <MenuItem eventKey="1">
-                                                                        <FaPencil className="v-align-sub" /> Edit
-                                                                    </MenuItem>
-                                                                    <MenuItem eventKey="2">
-                                                                        <FaTrash className="v-align-sub" /> Delete
-                                                                    </MenuItem>
-                                                                </DropdownButton>
-                                                            </ButtonToolbar>
-                                                        </td>
-                                                    </tr>
-                                                )
-                                            })
+                                            <tbody>
+                                                {
+                                                    programs.map((program, index) => {
+                                                        return (
+                                                            <tr>
+                                                                <td>{program.name}</td>
+                                                                <td>{program.description}</td>
+                                                                <td>0</td>
+                                                                <td>
+                                                                    <ButtonToolbar>
+                                                                        <DropdownButton title="Actions" pullRight id="dropdown-size-medium">
+                                                                            <MenuItem eventKey="1">
+                                                                                <FaPencil className="v-align-sub" /> Edit
+                                                                            </MenuItem>
+                                                                            <MenuItem eventKey="2">
+                                                                                <FaTrash className="v-align-sub" /> Delete
+                                                                            </MenuItem>
+                                                                        </DropdownButton>
+                                                                    </ButtonToolbar>
+                                                                </td>
+                                                            </tr>
+                                                        )
+                                                    })
+                                                }
+                                            </tbody>
                                         }
                                     </table>
                                 </div>

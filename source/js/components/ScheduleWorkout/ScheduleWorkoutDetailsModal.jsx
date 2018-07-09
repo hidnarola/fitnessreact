@@ -9,7 +9,7 @@ class ScheduleWorkoutDetailsModal extends Component {
         if (workout) {
             var exercises = workout.exercises;
             return (
-                <div className="recipe-details-modal-wrapper">
+                <div className="recipe-details-modal-wrapper ">
                     <Modal show={show} bsSize="large" className="progress-popup recipe-details-modal-main">
                         <div className="progress-popup-head">
                             <button type="button" className="close-round" onClick={handleClose}>
@@ -28,31 +28,30 @@ class ScheduleWorkoutDetailsModal extends Component {
                                             </div>
                                         </div> */}
 
-                                        <div className="body-content row recipe column-wrap d-flex">
-                                            {workout.description && ReactHtmlParser(workout.description)}
-                                            <div className="row">
-                                                <div className="col-md-12">
-                                                    {exercises && exercises.length > 0 &&
-                                                        exercises.map((e, i) => {
-                                                            return (
-                                                                <div key={i}>
-                                                                    <ul>
-                                                                        <li>Exercise : {e.exercise.name}</li>
-                                                                        <li>Reps : {(e.reps) ? e.reps : null}</li>
-                                                                        <li>Sets : {(e.sets) ? e.sets : null}</li>
-                                                                        <li>Weight : {(e.weight) ? e.weight : null}</li>
-                                                                        <li>Distance : {(e.distance) ? e.distance : null}</li>
-                                                                        <li>Rest Time : {(e.restTime) ? e.restTime : null}</li>
-                                                                        <li>Time / Set : {e.oneSetTimer}</li>
-                                                                        <li>Completed : <input type="checkbox" /></li>
-                                                                    </ul>
-                                                                </div>
-                                                            )
-                                                        })
-                                                    }
-                                                </div>
+                                        <div className="body-content row recipe column-wrap d-flex popup-view">
+                                            <div className="p-wrap d-flex">
+                                                {workout.description && ReactHtmlParser(workout.description)}
+                                                <input type="checkbox" />
+                                            </div>    
+                                                {exercises && exercises.length > 0 &&
+                                                    exercises.map((e, i) => {
+                                                        return (
+                                                            <div className="view-wrap" key={i}>
+                                                                <ul>
+                                                                    <li className="col-md-9"><strong>Exercise :</strong> <span>{e.exercise.name}</span></li>
+                                                                    <li className="col-md-3"><strong>Reps :</strong> <span>{(e.reps) ? e.reps : null}</span></li>
+                                                                    <li className="col-md-2"><strong>Sets :</strong> <span>{(e.sets) ? e.sets : null}</span></li>
+                                                                    <li className="col-md-2"><strong>Weight :</strong> <span>{(e.weight) ? e.weight : null}</span></li>
+                                                                    <li className="col-md-2"><strong>Distance :</strong> <span>{(e.distance) ? e.distance : null}</span></li>
+                                                                    <li className="col-md-2"><strong>Rest Time :</strong> <span>{(e.restTime) ? e.restTime : null}</span></li>
+                                                                    <li className="col-md-2"><strong>Time / Set :</strong> <span>{e.oneSetTimer}</span></li>
+                                                                    <li className="col-md-2"><strong>Completed :</strong> <span><input type="checkbox" /></span></li>
+                                                                </ul>
+                                                            </div>
+                                                        )
+                                                    })
+                                                }
                                             </div>
-                                        </div>
                                     </section>
                                 </div>
                             </Scrollbars>
