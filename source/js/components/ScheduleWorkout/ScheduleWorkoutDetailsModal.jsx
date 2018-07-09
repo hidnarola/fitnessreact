@@ -5,6 +5,7 @@ import ReactHtmlParser from "react-html-parser";
 
 class ScheduleWorkoutDetailsModal extends Component {
     render() {
+        
         const { show, handleClose, workout } = this.props;
         if (workout) {
             var exercises = workout.exercises;

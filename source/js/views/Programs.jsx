@@ -34,7 +34,7 @@ class Programs extends Component {
                         <div className="col-md-12">
                             <div className="white-box space-btm-20">
                                 <div className="whitebox-body profile-body programs-table-wrapper">
-                                    <table class="table">
+                                    <table className="table">
                                         <thead>
                                             <tr>
                                                 <th>Name</th>

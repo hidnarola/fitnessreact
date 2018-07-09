@@ -291,7 +291,7 @@ class ScheduleWorkout extends Component {
         var date = moment.utc(startDay);
         var requestData = {
             title: 'Rest Day',
-            description: '',
+            description: '<p>Hey its rest day! Take total rest.</p>',
             type: SCHEDULED_WORKOUT_TYPE_RESTDAY,
             date: date,
             exercises: [],
@@ -344,7 +344,7 @@ class ScheduleWorkout extends Component {
                     distanceUnits: (exercise.distanceUnits) ? exercise.distanceUnits : MEASUREMENT_UNIT_KILOMETER,
                     restTime: (exercise.restTime) ? exercise.restTime : null,
                     oneSetTimer: (exercise.oneSetTimer) ? exercise.oneSetTimer : null,
-                    sequence: (exercise.sequence) ? exercise.sequence : null,
+                    sequence: (typeof exercise.sequence !== 'undefined') ? exercise.sequence : 0,
                 };
                 exercises.push(exerciseObj);
             });
@@ -510,28 +510,47 @@ class SelectEventView extends Component {
 class CustomEventCard extends Component {
     render() {
         const { event } = this.props;
+        let allowToMarkComplete = false;
+        let today = moment().utc();
+        let tomorrow = moment().subtract('1', 'day');
+        let eventDate = moment(event.start);
+        let titleClassName = '';
+        if (today > eventDate) {
+            if (event.isCompleted === 1) {
+                titleClassName = 'color-green';
+            } else if (event.isCompleted === 0 && tomorrow > eventDate) {
+                titleClassName = 'color-red';
+            }
+            allowToMarkComplete = true;
+        }
         return (
             <div className={cns('big-calendar-custom-month-event-view-card', { 'restday': (event.exerciseType === SCHEDULED_WORKOUT_TYPE_RESTDAY) })}>
                 <div className="pull-left custom_check" onClick={event.handleCompleteWorkout}>
-                    <input
-                        type="checkbox"
-                        id={`complete_workout_schedule_${event.id}`}
-                        name={`complete_workout_schedule_${event.id}`}
-                        checked={event.isCompleted}
-                        onChange={() => { }}
-                    />
-                    <label><h5>{event.title}</h5></label>
+                    {(event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE) && allowToMarkComplete &&
+                        <input
+                            type="checkbox"
+                            id={`complete_workout_schedule_${event.id}`}
+                            name={`complete_workout_schedule_${event.id}`}
+                            checked={event.isCompleted}
+                            onChange={() => { }}
+                        />
+                    }
+                    <label><h5 className={titleClassName}>{event.title}</h5></label>
                 </div>
                 {/* <h5>{event.title}</h5> */}
-                {event.description && ReactHtmlParser(event.description)}
-                <a href="javascript:void(0)" onClick={event.handleCopy}><FaCopy /></a>
-                <a href="javascript:void(0)" onClick={event.handleDelete}><FaTrash /></a>
+                {event.description &&
+                    <div className={titleClassName}>{ReactHtmlParser(event.description)}</div>
+                }
+                {(event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
+                    <a href="javascript:void(0)" onClick={event.handleCopy}><FaCopy /></a>
+                }
                 {(event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
                     <a href="javascript:void(0)" onClick={event.handleViewWorkout}><FaEye /></a>
                 }
                 {(event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
                     <a href="javascript:void(0)" onClick={event.handleSelectWorkoutForEdit}><FaPencil /></a>
                 }
+                <a href="javascript:void(0)" onClick={event.handleDelete}><FaTrash /></a>
             </div>
         );
     }

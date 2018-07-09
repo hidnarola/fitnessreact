@@ -1613,3 +1613,6 @@ ul.text-right.pager {text-align: right;}
 
 .programs-table-wrapper .table>tbody>tr>th:nth-child(4),
 .programs-table-wrapper .table>tbody>tr>td:nth-child(4){ width:10%;}
+
+.color-red, .color-red p{color:red !important;}
+.color-green, .color-green p{color:green !important;}
