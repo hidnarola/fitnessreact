@@ -14,16 +14,19 @@ import {
     deleteUsersWorkoutScheduleRequest,
     changeUsersWorkoutScheduleCompleteRequest,
     selectUsersWorkoutScheduleForEdit,
+    getProgramsNameRequest,
+    userAssignProgramRequest,
 } from '../actions/userScheduleWorkouts';
 import { NavLink } from "react-router-dom";
 import { routeCodes } from '../constants/routes';
 import _ from "lodash";
 import ReactHtmlParser from "react-html-parser";
 import { SCHEDULED_WORKOUT_TYPE_RESTDAY, SCHEDULED_WORKOUT_TYPE_EXERCISE, MEASUREMENT_UNIT_KILOGRAM, MEASUREMENT_UNIT_KILOMETER } from '../constants/consts';
-import { ts, te } from '../helpers/funs';
+import { ts, te, prepareDropdownOptionsData } from '../helpers/funs';
 import { FaCopy, FaTrash, FaPencil, FaEye } from 'react-icons/lib/fa'
 import ScheduleWorkoutDetailsModal from '../components/ScheduleWorkout/ScheduleWorkoutDetailsModal';
 import cns from "classnames";
+import Select from 'react-select';
 
 BigCalendar.momentLocalizer(moment);
 
@@ -40,6 +43,8 @@ class ScheduleWorkout extends Component {
             deleteWorkoutActionInit: false,
             selectedWorkoutForView: null,
             showWorkoutScheduleDetailsModal: false,
+            showProgramAssignAlert: false,
+            selectedProgramIdToAssign: null,
         }
     }
 
@@ -48,6 +53,7 @@ class ScheduleWorkout extends Component {
         var today = moment().startOf('day').utc();
         this.getWorkoutSchedulesByMonth(today);
         dispatch(getExercisesNameRequest());
+        dispatch(getProgramsNameRequest());
     }
 
     render() {
@@ -57,14 +63,18 @@ class ScheduleWorkout extends Component {
             deleteWorkoutAlert,
             showWorkoutScheduleDetailsModal,
             selectedWorkoutForView,
+            showProgramAssignAlert,
+            selectedProgramIdToAssign,
         } = this.state;
         const {
             selectedSlot,
+            programs,
         } = this.props;
         var selectedSlotStateDate = null;
         if (selectedSlot) {
             selectedSlotStateDate = selectedSlot.start;
         }
+        var programOptions = prepareDropdownOptionsData(programs, '_id', 'name');
         return (
             <div className="fitness-body">
                 <FitnessHeader />
@@ -118,6 +128,7 @@ class ScheduleWorkout extends Component {
                     <SelectEventView
                         handleNewRestDay={this.handleNewRestDay}
                         handlePaste={this.handlePaste}
+                        handleSelectProgramToAssign={this.handleSelectProgramToAssign}
                     />
                 </SweetAlert>
 
@@ -133,6 +144,31 @@ class ScheduleWorkout extends Component {
                     onCancel={this.handleCancelDelete}
                 >
                     You will not be able to recover this file!
+                </SweetAlert>
+
+                <SweetAlert
+                    type="default"
+                    title={`Select program start from - ${(selectedSlotStateDate) ? moment(selectedSlotStateDate).format('MM/DD/YYYY') : ''}`}
+                    onCancel={this.handleCancelProgramAssignAlert}
+                    onConfirm={this.handleAssignProgram}
+                    btnSize="sm"
+                    cancelBtnBsStyle="danger"
+                    confirmBtnBsStyle="success"
+                    show={showProgramAssignAlert}
+                    showConfirm={true}
+                    showCancel={true}
+                    closeOnClickOutside={false}
+                >
+                    <Select
+                        id="program_id"
+                        name="program_id"
+                        value={selectedProgramIdToAssign}
+                        options={programOptions}
+                        placeholder="Select Program"
+                        onChange={this.handleProgramAssignChange}
+                        multi={false}
+                        clearable={true}
+                    />
                 </SweetAlert>
 
                 <ScheduleWorkoutDetailsModal
@@ -152,6 +188,9 @@ class ScheduleWorkout extends Component {
             loading,
             selectedSlot,
             error,
+            assignProgramLoading,
+            assignProgram,
+            assignProgramError,
         } = this.props;
         const {
             workoutPasteAction,
@@ -201,6 +240,16 @@ class ScheduleWorkout extends Component {
                 ts('Workout deleted successfully!');
             } else {
                 te('Cannot delete workout. Please try again later!');
+            }
+        }
+        if (!assignProgramLoading && prevProps.assignProgram !== assignProgram) {
+            var startDay = moment(selectedSlot.start).startOf('day');
+            this.getWorkoutSchedulesByMonth(startDay);
+            this.handleCancelProgramAssignAlert();
+            if (assignProgramError && assignProgramError.length <= 0) {
+                ts('Program assigned successfully!');
+            } else {
+                te(assignProgramError[0]);
             }
         }
     }
@@ -367,6 +416,46 @@ class ScheduleWorkout extends Component {
             history.push(routeCodes.CHANGE_SCHEDULE_WORKOUT);
         }
     }
+
+    handleSelectProgramToAssign = () => {
+        this.setState({
+            showProgramAssignAlert: true,
+            showSelectEventAlert: false,
+        });
+    }
+
+    handleCancelProgramAssignAlert = () => {
+        const { dispatch } = this.props;
+        this.setState({
+            showProgramAssignAlert: false,
+            selectedProgramIdToAssign: null,
+        });
+        dispatch(setSelectedSlotFromCalendar(null));
+    }
+
+    handleProgramAssignChange = (value) => {
+        this.setState({
+            selectedProgramIdToAssign: value,
+        });
+    }
+
+    handleAssignProgram = () => {
+        const { selectedProgramIdToAssign } = this.state;
+        const {
+            selectedSlot,
+            dispatch,
+        } = this.props;
+        var date = (selectedSlot) ? selectedSlot.start : null;
+        var programId = (selectedProgramIdToAssign) ? selectedProgramIdToAssign.value : null;
+        if (date && programId) {
+            var requestData = {
+                programId,
+                date,
+            }
+            dispatch(userAssignProgramRequest(requestData));
+        }
+
+    }
 }
 
 const mapStateToProps = (state) => {
@@ -378,6 +467,10 @@ const mapStateToProps = (state) => {
         loading: userScheduleWorkouts.get('loading'),
         error: userScheduleWorkouts.get('error'),
         copiedWorkout: userScheduleWorkouts.get('copiedWorkout'),
+        programs: userScheduleWorkouts.get('programs'),
+        assignProgramLoading: userScheduleWorkouts.get('assignProgramLoading'),
+        assignProgram: userScheduleWorkouts.get('assignProgram'),
+        assignProgramError: userScheduleWorkouts.get('assignProgramError'),
     };
 }
 
@@ -387,7 +480,7 @@ export default connect(
 
 class SelectEventView extends Component {
     render() {
-        const { handleNewRestDay, handlePaste } = this.props;
+        const { handleNewRestDay, handlePaste, handleSelectProgramToAssign } = this.props;
         return (
             <div className="row">
                 <div className="popup-link-wrap">
@@ -403,7 +496,7 @@ class SelectEventView extends Component {
                         <button type="button" onClick={handleNewRestDay} className="btn btn-primary">Make Rest Day</button>
                     </div>
                     <div className="popup-link">
-                        <button type="button" className="btn btn-primary">Assign Program</button>
+                        <button type="button" onClick={handleSelectProgramToAssign} className="btn btn-primary">Assign Program</button>
                     </div>
                     <div className="popup-link">
                         <button type="button" onClick={handlePaste} className="btn btn-primary">Paste Workout</button>

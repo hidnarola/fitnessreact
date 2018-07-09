@@ -57,6 +57,12 @@ function getProgramsName() {
     return fetchResource('user/user_program/names', options);
 }
 
+function userAssignProgram(requestData) {
+    let headers = extraUserHeaders();
+    return postFormData(requestUrl + '/assign_program', requestData, headers);
+}
+
+
 export default {
     getUsersWorkoutSchedulesByMonths,
     getExercisesName,
@@ -65,4 +71,5 @@ export default {
     deleteUsersWorkoutSchedule,
     changeUsersWorkoutScheduleComplete,
     getProgramsName,
+    userAssignProgram,
 }

@@ -32,6 +32,10 @@ export const GET_PROGRAMS_NAME_REQUEST = 'GET_PROGRAMS_NAME_REQUEST';
 export const GET_PROGRAMS_NAME_SUCCESS = 'GET_PROGRAMS_NAME_SUCCESS';
 export const GET_PROGRAMS_NAME_ERROR = 'GET_PROGRAMS_NAME_ERROR';
 
+export const USER_ASSIGN_PROGRAM_REQUEST = 'USER_ASSIGN_PROGRAM_REQUEST';
+export const USER_ASSIGN_PROGRAM_SUCCESS = 'USER_ASSIGN_PROGRAM_SUCCESS';
+export const USER_ASSIGN_PROGRAM_ERROR = 'USER_ASSIGN_PROGRAM_ERROR';
+
 export function setSelectedSlotFromCalendar(slotInfo = null) {
     return {
         type: SET_SELECTED_SLOT_FROM_CALENDAR,
@@ -196,6 +200,27 @@ export function getProgramsNameSuccess(data) {
 export function getProgramsNameError(error) {
     return {
         type: GET_PROGRAMS_NAME_ERROR,
+        error,
+    }
+}
+
+export function userAssignProgramRequest(requestData) {
+    return {
+        type: USER_ASSIGN_PROGRAM_REQUEST,
+        requestData,
+    }
+}
+
+export function userAssignProgramSuccess(data) {
+    return {
+        type: USER_ASSIGN_PROGRAM_SUCCESS,
+        data,
+    }
+}
+
+export function userAssignProgramError(error) {
+    return {
+        type: USER_ASSIGN_PROGRAM_ERROR,
         error,
     }
 }
