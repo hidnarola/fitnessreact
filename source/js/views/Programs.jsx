@@ -3,6 +3,12 @@ import { connect } from 'react-redux';
 import FitnessHeader from '../components/global/FitnessHeader';
 import FitnessNav from '../components/global/FitnessNav';
 import { getUserProgramsRequest } from '../actions/userPrograms';
+import {
+    DropdownButton,
+    ButtonToolbar,
+    MenuItem
+} from "react-bootstrap";
+import { FaPencil, FaTrash } from 'react-icons/lib/fa';
 
 class Programs extends Component {
 
@@ -12,6 +18,7 @@ class Programs extends Component {
     }
 
     render() {
+        const { programs } = this.props;
         return (
             <div className="fitness-body">
                 <FitnessHeader />
@@ -27,7 +34,37 @@ class Programs extends Component {
                         <div className="col-md-12">
                             <div className="white-box space-btm-20">
                                 <div className="whitebox-body profile-body">
-
+                                    <table>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Description</th>
+                                            <th>Length</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                        {programs && programs.length > 0 &&
+                                            programs.map((program, index) => {
+                                                return (
+                                                    <tr>
+                                                        <td>{program.name}</td>
+                                                        <td>{program.description}</td>
+                                                        <td>0</td>
+                                                        <td>
+                                                            <ButtonToolbar>
+                                                                <DropdownButton title="Actions" pullRight id="dropdown-size-medium">
+                                                                    <MenuItem eventKey="1">
+                                                                        <FaPencil className="v-align-sub" /> Edit
+                                                                    </MenuItem>
+                                                                    <MenuItem eventKey="2">
+                                                                        <FaTrash className="v-align-sub" /> Delete
+                                                                    </MenuItem>
+                                                                </DropdownButton>
+                                                            </ButtonToolbar>
+                                                        </td>
+                                                    </tr>
+                                                )
+                                            })
+                                        }
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -40,8 +77,9 @@ class Programs extends Component {
 }
 
 const mapStateToProps = (state) => {
+    const { userPrograms } = state;
     return {
-
+        programs: userPrograms.get('programs'),
     };
 }
 
