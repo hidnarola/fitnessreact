@@ -1,7 +1,7 @@
 import { fetchResource } from ".";
 import { extraUserHeaders } from "../helpers/funs";
 
-const requestUrl = 'user/program';
+const requestUrl = 'user/user_program';
 
 function getUserPrograms() {
     var headers = extraUserHeaders();

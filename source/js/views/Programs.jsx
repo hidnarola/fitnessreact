@@ -2,8 +2,15 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import FitnessHeader from '../components/global/FitnessHeader';
 import FitnessNav from '../components/global/FitnessNav';
+import { getUserProgramsRequest } from '../actions/userPrograms';
 
 class Programs extends Component {
+
+    componentWillMount() {
+        const { dispatch } = this.props;
+        dispatch(getUserProgramsRequest());
+    }
+
     render() {
         return (
             <div className="fitness-body">

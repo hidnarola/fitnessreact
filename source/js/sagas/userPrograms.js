@@ -9,7 +9,7 @@ import {
 function getUserProgramsData() {
     return function* (action) {
         try {
-            const data = yield call(() => api.getUserPrograms(requestData));
+            const data = yield call(() => api.getUserPrograms());
             yield put(getUserProgramsSuccess(data));
         } catch (error) {
             yield put(getUserProgramsError(error));

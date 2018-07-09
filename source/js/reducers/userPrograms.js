@@ -14,14 +14,14 @@ const initialState = Map({
 });
 
 const actionMap = {
-    [GET_USER_PROGRAMS_REQUEST]: () => {
+    [GET_USER_PROGRAMS_REQUEST]: (state, action) => {
         return state.merge(Map({
             loading: true,
             programs: [],
             error: [],
         }));
     },
-    [GET_USER_PROGRAMS_SUCCESS]: () => {
+    [GET_USER_PROGRAMS_SUCCESS]: (state, action) => {
         var newState = {
             loading: false,
         };
@@ -33,7 +33,7 @@ const actionMap = {
         }
         return state.merge(Map(newState));
     },
-    [GET_USER_PROGRAMS_ERROR]: () => {
+    [GET_USER_PROGRAMS_ERROR]: (state, action) => {
         let error = [];
         if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
             error = generateValidationErrorMsgArr(action.error.response.message);
