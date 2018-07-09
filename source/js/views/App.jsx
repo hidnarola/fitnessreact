@@ -86,6 +86,7 @@ import UserChatWindow from '../components/global/UserChatWindow';
 import ScheduleWorkout from './ScheduleWorkout';
 import AddScheduleWorkout from '../components/ScheduleWorkout/AddScheduleWorkout';
 import ChangeScheduleWorkout from '../components/ScheduleWorkout/ChangeScheduleWorkout';
+import Programs from './Programs';
 
 const auth = new Auth();
 
@@ -152,7 +153,7 @@ class App extends Component {
                             <PrivateRoute exact path={routeCodes.ADD_SCHEDULE_WORKOUT} component={AddScheduleWorkout} />
                             <PrivateRoute exact path={routeCodes.CHANGE_SCHEDULE_WORKOUT} component={ChangeScheduleWorkout} />
 
-                            <PrivateRoute exact path={routeCodes.PROGRAMS} component={ScheduleWorkout} />
+                            <PrivateRoute exact path={routeCodes.PROGRAMS} component={Programs} />
 
                             <PrivateRoute exact path={routeCodes.NUTRITION} component={NutritionMeal} />
                             <PrivateRoute exact path={routeCodes.NUTRITION_ADD} component={NutritionMealAdd} />

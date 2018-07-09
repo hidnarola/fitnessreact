@@ -17,6 +17,7 @@ import userFitnessTests from 'reducers/userFitnessTests';
 import userShoppingList from 'reducers/userShoppingList';
 import userWorkouts from 'reducers/userWorkouts';
 import userScheduleWorkouts from 'reducers/userScheduleWorkouts';
+import userPrograms from 'reducers/userPrograms';
 import userTimeline from 'reducers/userTimeline';
 import userPersonalGoals from 'reducers/userPersonalGoals';
 import userSecondaryGoals from 'reducers/userSecondaryGoals';
@@ -63,6 +64,7 @@ export default combineReducers({
     userShoppingList,
     userWorkouts,
     userScheduleWorkouts,
+    userPrograms,
     userTimeline,
     userPersonalGoals,
     userSecondaryGoals,
