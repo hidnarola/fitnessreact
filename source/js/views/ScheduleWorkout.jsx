@@ -512,13 +512,13 @@ class CustomEventCard extends Component {
         const { event } = this.props;
         let allowToMarkComplete = false;
         let today = moment().utc();
-        let tomorrow = moment().subtract('1', 'day');
+        let yesturday = moment().subtract('1', 'day');
         let eventDate = moment(event.start);
         let titleClassName = '';
         if (today > eventDate) {
             if (event.isCompleted === 1) {
                 titleClassName = 'color-green';
-            } else if (event.isCompleted === 0 && tomorrow > eventDate) {
+            } else if (event.isCompleted === 0 && yesturday > eventDate && event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE) {
                 titleClassName = 'color-red';
             }
             allowToMarkComplete = true;
