@@ -28,6 +28,10 @@ export const CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_ERROR = 'CHANGE_USERS_WORKOU
 
 export const SELECT_USERS_WORKOUT_SCHEDULE_FOR_EDIT = 'SELECT_USERS_WORKOUT_SCHEDULE_FOR_EDIT';
 
+export const GET_PROGRAMS_NAME_REQUEST = 'GET_PROGRAMS_NAME_REQUEST';
+export const GET_PROGRAMS_NAME_SUCCESS = 'GET_PROGRAMS_NAME_SUCCESS';
+export const GET_PROGRAMS_NAME_ERROR = 'GET_PROGRAMS_NAME_ERROR';
+
 export function setSelectedSlotFromCalendar(slotInfo = null) {
     return {
         type: SET_SELECTED_SLOT_FROM_CALENDAR,
@@ -173,5 +177,25 @@ export function selectUsersWorkoutScheduleForEdit(selectedData) {
     return {
         type: SELECT_USERS_WORKOUT_SCHEDULE_FOR_EDIT,
         selectedData,
+    }
+}
+
+export function getProgramsNameRequest() {
+    return {
+        type: GET_PROGRAMS_NAME_REQUEST,
+    }
+}
+
+export function getProgramsNameSuccess(data) {
+    return {
+        type: GET_PROGRAMS_NAME_SUCCESS,
+        data,
+    }
+}
+
+export function getProgramsNameError(error) {
+    return {
+        type: GET_PROGRAMS_NAME_ERROR,
+        error,
     }
 }

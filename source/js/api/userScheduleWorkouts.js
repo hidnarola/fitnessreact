@@ -47,6 +47,16 @@ function changeUsersWorkoutScheduleComplete(_id, isCompleted) {
     return putFormData(requestUrl + '/complete_all', requestData, headers);
 }
 
+function getProgramsName() {
+    let headers = extraUserHeaders();
+    var options = {
+        method: 'GET',
+        headers: headers,
+    }
+
+    return fetchResource('user/user_program/names', options);
+}
+
 export default {
     getUsersWorkoutSchedulesByMonths,
     getExercisesName,
@@ -54,4 +64,5 @@ export default {
     changeUsersWorkoutSchedule,
     deleteUsersWorkoutSchedule,
     changeUsersWorkoutScheduleComplete,
+    getProgramsName,
 }

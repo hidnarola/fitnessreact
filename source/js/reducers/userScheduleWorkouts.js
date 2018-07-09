@@ -21,6 +21,9 @@ import {
     CHANGE_USERS_WORKOUT_SCHEDULE_SUCCESS,
     CHANGE_USERS_WORKOUT_SCHEDULE_ERROR,
     CHANGE_USERS_WORKOUT_SCHEDULE_REQUEST,
+    GET_PROGRAMS_NAME_REQUEST,
+    GET_PROGRAMS_NAME_SUCCESS,
+    GET_PROGRAMS_NAME_ERROR,
 } from "../actions/userScheduleWorkouts";
 import { VALIDATION_FAILURE_STATUS } from "../constants/consts";
 import { generateValidationErrorMsgArr } from "../helpers/funs";
@@ -33,6 +36,7 @@ const initialState = Map({
     workout: null,
     error: [],
     exercises: [],
+    programs: [],
     copiedWorkout: null,
     selectedWorkoutForEdit: null,
 });
@@ -93,6 +97,23 @@ const actionMap = {
     [GET_EXERCISES_NAME_ERROR]: (state, action) => {
         return state.merge(Map({
             exercises: [],
+        }));
+    },
+    [GET_PROGRAMS_NAME_REQUEST]: (state, action) => {
+        return state.merge(Map({
+            programs: [],
+        }));
+    },
+    [GET_PROGRAMS_NAME_SUCCESS]: (state, action) => {
+        var newState = {};
+        if (action.data.status === 1) {
+            newState.programs = action.data.programs;
+        }
+        return state.merge(Map(newState));
+    },
+    [GET_PROGRAMS_NAME_ERROR]: (state, action) => {
+        return state.merge(Map({
+            programs: [],
         }));
     },
     [ADD_USERS_WORKOUT_SCHEDULE_REQUEST]: (state, action) => {

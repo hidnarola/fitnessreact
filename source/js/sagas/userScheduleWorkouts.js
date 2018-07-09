@@ -18,7 +18,10 @@ import {
     CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_REQUEST,
     changeUsersWorkoutScheduleError,
     changeUsersWorkoutScheduleSuccess,
-    CHANGE_USERS_WORKOUT_SCHEDULE_REQUEST
+    CHANGE_USERS_WORKOUT_SCHEDULE_REQUEST,
+    getProgramsNameSuccess,
+    getProgramsNameError,
+    GET_PROGRAMS_NAME_REQUEST
 } from '../actions/userScheduleWorkouts';
 
 function getUsersWorkoutSchedulesByMonthData() {
@@ -40,6 +43,17 @@ function getExercisesName() {
             yield put(getExercisesNameSuccess(data));
         } catch (error) {
             yield put(getExercisesNameError(error));
+        }
+    }
+}
+
+function getProgramsName() {
+    return function* (action) {
+        try {
+            const data = yield call(() => api.getProgramsName());
+            yield put(getProgramsNameSuccess(data));
+        } catch (error) {
+            yield put(getProgramsNameError(error));
         }
     }
 }
@@ -101,6 +115,7 @@ export function* watchUsersWorkoutSchedulesData() {
     yield takeLatest(CHANGE_USERS_WORKOUT_SCHEDULE_REQUEST, changeUsersWorkoutScheduleData());
     yield takeLatest(DELETE_USERS_WORKOUT_SCHEDULE_REQUEST, deleteUsersWorkoutScheduleData());
     yield takeLatest(CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_REQUEST, changeUsersWorkoutScheduleCompleteData());
+    yield takeLatest(GET_PROGRAMS_NAME_REQUEST, getProgramsName());
 }
 
 export default [
