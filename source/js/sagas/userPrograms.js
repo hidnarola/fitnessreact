@@ -6,7 +6,10 @@ import {
     getUserProgramsError,
     ADD_USER_PROGRAM_MASTER_REQUEST,
     addUserProgramMasterSuccess,
-    addUserProgramMasterError
+    addUserProgramMasterError,
+    GET_USER_PROGRAM_REQUEST,
+    getUserProgramSuccess,
+    getUserProgramError
 } from "../actions/userPrograms";
 
 function getUserProgramsData() {
@@ -16,6 +19,18 @@ function getUserProgramsData() {
             yield put(getUserProgramsSuccess(data));
         } catch (error) {
             yield put(getUserProgramsError(error));
+        }
+    }
+}
+
+function getUserProgramData() {
+    return function* (action) {
+        try {
+            var _id = action._id;
+            const data = yield call(() => api.getUserProgram(_id));
+            yield put(getUserProgramSuccess(data));
+        } catch (error) {
+            yield put(getUserProgramError(error));
         }
     }
 }
@@ -34,6 +49,7 @@ function addUserProgramMasterData() {
 
 export function* watchUserProgramsData() {
     yield takeLatest(GET_USER_PROGRAMS_REQUEST, getUserProgramsData());
+    yield takeLatest(GET_USER_PROGRAM_REQUEST, getUserProgramData());
     yield takeLatest(ADD_USER_PROGRAM_MASTER_REQUEST, addUserProgramMasterData());
 }
 
