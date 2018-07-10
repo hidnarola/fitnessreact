@@ -26,8 +26,19 @@ function addUserProgramMaster(requestData) {
     return postFormData(requestUrl, requestData, headers);
 }
 
+function deleteUserProgram(_id) {
+    let headers = extraUserHeaders();
+    var options = {
+        method: 'DELETE',
+        headers: headers,
+    }
+
+    return fetchResource(requestUrl + '/' + _id, options);
+}
+
 export default {
     getUserPrograms,
     getUserProgram,
     addUserProgramMaster,
+    deleteUserProgram,
 }

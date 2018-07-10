@@ -10,6 +10,10 @@ export const GET_USER_PROGRAM_REQUEST = 'GET_USER_PROGRAM_REQUEST';
 export const GET_USER_PROGRAM_SUCCESS = 'GET_USER_PROGRAM_SUCCESS';
 export const GET_USER_PROGRAM_ERROR = 'GET_USER_PROGRAM_ERROR';
 
+export const DELETE_USER_PROGRAM_REQUEST = 'DELETE_USER_PROGRAM_REQUEST';
+export const DELETE_USER_PROGRAM_SUCCESS = 'DELETE_USER_PROGRAM_SUCCESS';
+export const DELETE_USER_PROGRAM_ERROR = 'DELETE_USER_PROGRAM_ERROR';
+
 export function getUserProgramsRequest() {
     return {
         type: GET_USER_PROGRAMS_REQUEST,
@@ -68,6 +72,27 @@ export function getUserProgramSuccess(data) {
 export function getUserProgramError(error) {
     return {
         type: GET_USER_PROGRAM_ERROR,
+        error
+    }
+}
+
+export function deleteUserProgramRequest(_id) {
+    return {
+        type: DELETE_USER_PROGRAM_REQUEST,
+        _id
+    }
+}
+
+export function deleteUserProgramSuccess(data) {
+    return {
+        type: DELETE_USER_PROGRAM_SUCCESS,
+        data,
+    }
+}
+
+export function deleteUserProgramError(error) {
+    return {
+        type: DELETE_USER_PROGRAM_ERROR,
         error
     }
 }

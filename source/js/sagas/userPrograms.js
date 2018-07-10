@@ -9,7 +9,10 @@ import {
     addUserProgramMasterError,
     GET_USER_PROGRAM_REQUEST,
     getUserProgramSuccess,
-    getUserProgramError
+    getUserProgramError,
+    deleteUserProgramSuccess,
+    deleteUserProgramError,
+    DELETE_USER_PROGRAM_REQUEST
 } from "../actions/userPrograms";
 
 function getUserProgramsData() {
@@ -47,10 +50,23 @@ function addUserProgramMasterData() {
     }
 }
 
+function deleteUserProgramData() {
+    return function* (action) {
+        try {
+            let _id = action._id;
+            const data = yield call(() => api.deleteUserProgram(_id));
+            yield put(deleteUserProgramSuccess(data));
+        } catch (error) {
+            yield put(deleteUserProgramError(error));
+        }
+    }
+}
+
 export function* watchUserProgramsData() {
     yield takeLatest(GET_USER_PROGRAMS_REQUEST, getUserProgramsData());
     yield takeLatest(GET_USER_PROGRAM_REQUEST, getUserProgramData());
     yield takeLatest(ADD_USER_PROGRAM_MASTER_REQUEST, addUserProgramMasterData());
+    yield takeLatest(DELETE_USER_PROGRAM_REQUEST, deleteUserProgramData());
 }
 
 export default [

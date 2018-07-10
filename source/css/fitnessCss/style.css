@@ -1622,3 +1622,7 @@ ul.text-right.pager {text-align: right;}
 .color-green, .color-green p{color:green !important;}
 
 .add-program-master-form-alert-form form {text-align: left;}
+
+.program-save-custom-days-wrapper .program-save-custom-days-row .program-save-custom-days-block { width: 14.28%; height: 100%; float: left; display: block; border: 1px solid #eee; padding: 3px 10px; }
+.program-save-custom-days-wrapper .program-save-custom-days-row .program-save-custom-days-block .program-save-custom-days-block-title { text-align: right; }
+.program-save-custom-days-wrapper .program-save-custom-days-row .program-save-custom-days-block .program-save-custom-days-block-content { width: 100%; min-height: 150px; }

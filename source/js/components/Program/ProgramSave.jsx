@@ -2,13 +2,24 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import FitnessHeader from '../global/FitnessHeader';
 import FitnessNav from '../global/FitnessNav';
+import { getUserProgramRequest } from '../../actions/userPrograms';
+import { routeCodes } from '../../constants/routes';
+import { te } from '../../helpers/funs';
 
 class ProgramSave extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            program: null,
+            workouts: [],
+        }
+    }
+
     componentWillMount() {
         const { match, dispatch } = this.props;
-        if(match && match.params && match.params.id){
+        if (match && match.params && match.params.id) {
             var _id = match.params.id;
-            // dispatch();
+            dispatch(getUserProgramRequest(_id));
         }
     }
 
@@ -29,6 +40,67 @@ class ProgramSave extends Component {
                             <div className="white-box space-btm-20">
                                 <div className="whitebox-body profile-body programs-table-wrapper">
 
+                                    <div className="program-save-custom-days-wrapper">
+                                        <div className="program-save-custom-days-row">
+                                            <div className="program-save-custom-days-block">
+                                                <div className="program-save-custom-days-block-title">
+                                                    Title 1
+                                                </div>
+                                                <div className="program-save-custom-days-block-content">
+                                                    Content
+                                                </div>
+                                            </div>
+                                            <div className="program-save-custom-days-block">
+                                                <div className="program-save-custom-days-block-title">
+                                                    Title 2
+                                                </div>
+                                                <div className="program-save-custom-days-block-content">
+                                                    Content
+                                                </div>
+                                            </div>
+                                            <div className="program-save-custom-days-block">
+                                                <div className="program-save-custom-days-block-title">
+                                                    Title 3
+                                                </div>
+                                                <div className="program-save-custom-days-block-content">
+                                                    Content
+                                                </div>
+                                            </div>
+                                            <div className="program-save-custom-days-block">
+                                                <div className="program-save-custom-days-block-title">
+                                                    Title 4
+                                                </div>
+                                                <div className="program-save-custom-days-block-content">
+                                                    Content
+                                                </div>
+                                            </div>
+                                            <div className="program-save-custom-days-block">
+                                                <div className="program-save-custom-days-block-title">
+                                                    Title 5
+                                                </div>
+                                                <div className="program-save-custom-days-block-content">
+                                                    Content
+                                                </div>
+                                            </div>
+                                            <div className="program-save-custom-days-block">
+                                                <div className="program-save-custom-days-block-title">
+                                                    Title 6
+                                                </div>
+                                                <div className="program-save-custom-days-block-content">
+                                                    Content
+                                                </div>
+                                            </div>
+                                            <div className="program-save-custom-days-block">
+                                                <div className="program-save-custom-days-block-title">
+                                                    Title 7
+                                                </div>
+                                                <div className="program-save-custom-days-block-content">
+                                                    Content
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -38,11 +110,36 @@ class ProgramSave extends Component {
             </div>
         );
     }
+
+    componentDidUpdate(prevProps, prevState) {
+        const { loading, program, error, history } = this.props;
+        if (!loading && error && error.length > 0) {
+            te(error[0]);
+            // history.push(routeCodes.PROGRAMS);
+        }
+        if (!loading && program && prevProps.program !== program) {
+            var prog = (program.program) ? program.program : null;
+            var works = (program.workouts) ? program.workouts : [];
+            if (prog) {
+                this.setState({
+                    program: prog,
+                    workouts: works,
+                });
+            } else {
+                te('Something went wrong! please try again later.');
+                // history.push(routeCodes.PROGRAMS);
+            }
+        }
+    }
+
 }
 
 const mapStateToProps = (state) => {
+    const { userPrograms } = state;
     return {
-
+        loading: userPrograms.get('loading'),
+        program: userPrograms.get('program'),
+        error: userPrograms.get('error'),
     };
 }
 
