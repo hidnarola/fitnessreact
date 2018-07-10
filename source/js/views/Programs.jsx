@@ -9,8 +9,18 @@ import {
     MenuItem
 } from "react-bootstrap";
 import { FaPencil, FaTrash } from 'react-icons/lib/fa';
+import SweetAlert from "react-bootstrap-sweetalert";
+import AddProgramMasterForm from '../components/Program/AddProgramMasterForm';
+import { submit } from "redux-form";
+import { routeCodes } from '../constants/routes';
 
 class Programs extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            showAddProgramAlert: false,
+        }
+    }
 
     componentWillMount() {
         const { dispatch } = this.props;
@@ -19,6 +29,9 @@ class Programs extends Component {
 
     render() {
         const { programs } = this.props;
+        const {
+            showAddProgramAlert,
+        } = this.state;
         return (
             <div className="fitness-body">
                 <FitnessHeader />
@@ -28,6 +41,12 @@ class Programs extends Component {
                         <div className="body-head-l">
                             <h2>Programs</h2>
                             <p>Your goal choice shapes how your fitness assistant will ceate your meal and exercise plans, it’s important that you set goals which are achieveable. Keep updating your profile and your fitness assistant will keep you on track and meeting the goals you’ve set out for yourself.</p>
+                        </div>
+                        <div className="body-head-r">
+                            <a href="javascript:void(0)" onClick={this.handleShowAddProgramAlert} className="pink-btn">
+                                <span>Add Program</span>
+                                <i className="icon-add_circle"></i>
+                            </a>
                         </div>
                     </div>
                     <div className="body-content d-flex row justify-content-start profilephoto-content">
@@ -48,14 +67,18 @@ class Programs extends Component {
                                                 {
                                                     programs.map((program, index) => {
                                                         return (
-                                                            <tr>
+                                                            <tr key={index}>
                                                                 <td>{program.name}</td>
                                                                 <td>{program.description}</td>
                                                                 <td>0</td>
                                                                 <td>
                                                                     <ButtonToolbar>
                                                                         <DropdownButton title="Actions" pullRight id="dropdown-size-medium">
-                                                                            <MenuItem eventKey="1">
+                                                                            <MenuItem
+                                                                                href={`${routeCodes.PROGRAM_SAVE}/${program._id}`}
+                                                                                eventKey="1"
+                                                                                onClick={(e) => this.handleEditNavigation(e, `${routeCodes.PROGRAM_SAVE}/${program._id}`)}
+                                                                            >
                                                                                 <FaPencil className="v-align-sub" /> Edit
                                                                             </MenuItem>
                                                                             <MenuItem eventKey="2">
@@ -77,8 +100,43 @@ class Programs extends Component {
                     </div>
                 </section>
 
+                <SweetAlert
+                    type="default"
+                    title={'Add Program'}
+                    onCancel={this.handleAddProgramCancel}
+                    onConfirm={this.handleAddProgramSubmit}
+                    btnSize="sm"
+                    cancelBtnBsStyle="danger"
+                    confirmBtnBsStyle="success"
+                    show={showAddProgramAlert}
+                    showConfirm={true}
+                    showCancel={true}
+                    closeOnClickOutside={false}
+                >
+                    <AddProgramMasterForm />
+                </SweetAlert>
+
             </div>
         );
+    }
+
+    handleShowAddProgramAlert = () => {
+        this.setState({ showAddProgramAlert: true });
+    }
+
+    handleAddProgramCancel = () => {
+        this.setState({ showAddProgramAlert: false });
+    }
+
+    handleAddProgramSubmit = () => {
+        const { dispatch } = this.props;
+        dispatch(submit('add_program_master_form'));
+    }
+
+    handleEditNavigation = (e, href) => {
+        const { history } = this.props;
+        e.preventDefault();
+        history.push(href);
     }
 }
 
