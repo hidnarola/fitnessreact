@@ -116,22 +116,20 @@ class FitnessHeader extends Component {
                                 dispatch(getUserUnreadNotificationsRequest());
                                 toggleSideMenu('user-notification-panel', true);
                             }}>
-                                <FaNoti /> <span>{(notificationCount) ? notificationCount : ''}</span>
+                                <FaNoti />
+                                {(typeof notificationCount !== 'undefined' && notificationCount > 0) &&
+                                    <span>{(notificationCount) ? notificationCount : ''}</span>
+                                }
                             </a>
                         </div>
                         <div className="header-email">
                             <a href="javascript:void(0)" onClick={this.handleMessagePanel}>
-                                <FaMail /> <span>{(messagesCount) ? messagesCount : ''}</span>
+                                <FaMail />
+                                {(typeof messagesCount !== 'undefined' && messagesCount > 0) &&
+                                    < span > {(messagesCount) ? messagesCount : ''}</span>
+                                }
                             </a>
                         </div>
-                        {/* <div className="header-logout header-icons">
-                            <a href="javascript:void(0)" onClick={this.handleLogout} data-tip data-for='logout'>
-                                <FaSignOut />
-                                <ReactTooltip id='logout' place="bottom" type="dark" effect="solid">
-                                    <span>Logout</span>
-                                </ReactTooltip>
-                            </a>
-                        </div> */}
                         <div className="header-nav">
                             <a href="javascript:void(0)" onClick={() => toggleSideMenu('user-right-menu', true)}>
                                 <FaMenu size={24} />
@@ -139,7 +137,7 @@ class FitnessHeader extends Component {
                         </div>
                     </div>
                 </header>
-            </div>
+            </div >
         );
     }
 
