@@ -12,6 +12,7 @@ class ProgramSave extends Component {
         this.state = {
             program: null,
             workouts: [],
+            totalDays: 7,
         }
     }
 
@@ -24,6 +25,7 @@ class ProgramSave extends Component {
     }
 
     render() {
+        const { program, totalDays } = this.state;
         return (
             <div className="fitness-body">
                 <FitnessHeader />
@@ -31,76 +33,23 @@ class ProgramSave extends Component {
                 <section className="body-wrap">
                     <div className="body-head d-flex justify-content-start">
                         <div className="body-head-l">
-                            <h2>Programs</h2>
-                            <p>Your goal choice shapes how your fitness assistant will ceate your meal and exercise plans, it’s important that you set goals which are achieveable. Keep updating your profile and your fitness assistant will keep you on track and meeting the goals you’ve set out for yourself.</p>
+                            <h2>{(program && program.name) ? program.name : ''}</h2>
+                            <p>{(program && program.description) ? program.description : ''}</p>
                         </div>
                     </div>
                     <div className="body-content d-flex row justify-content-start">
                         <div className="col-md-12">
                             <div className="white-box space-btm-20">
                                 <div className="whitebox-body profile-body programs-table-wrapper">
-
-                                    <div className="program-save-custom-days-wrapper">
-                                        <div className="program-save-custom-days-row">
-                                            <div className="program-save-custom-days-block">
-                                                <div className="program-save-custom-days-block-title">
-                                                    Title 1
-                                                </div>
-                                                <div className="program-save-custom-days-block-content">
-                                                    Content
-                                                </div>
-                                            </div>
-                                            <div className="program-save-custom-days-block">
-                                                <div className="program-save-custom-days-block-title">
-                                                    Title 2
-                                                </div>
-                                                <div className="program-save-custom-days-block-content">
-                                                    Content
-                                                </div>
-                                            </div>
-                                            <div className="program-save-custom-days-block">
-                                                <div className="program-save-custom-days-block-title">
-                                                    Title 3
-                                                </div>
-                                                <div className="program-save-custom-days-block-content">
-                                                    Content
-                                                </div>
-                                            </div>
-                                            <div className="program-save-custom-days-block">
-                                                <div className="program-save-custom-days-block-title">
-                                                    Title 4
-                                                </div>
-                                                <div className="program-save-custom-days-block-content">
-                                                    Content
-                                                </div>
-                                            </div>
-                                            <div className="program-save-custom-days-block">
-                                                <div className="program-save-custom-days-block-title">
-                                                    Title 5
-                                                </div>
-                                                <div className="program-save-custom-days-block-content">
-                                                    Content
-                                                </div>
-                                            </div>
-                                            <div className="program-save-custom-days-block">
-                                                <div className="program-save-custom-days-block-title">
-                                                    Title 6
-                                                </div>
-                                                <div className="program-save-custom-days-block-content">
-                                                    Content
-                                                </div>
-                                            </div>
-                                            <div className="program-save-custom-days-block">
-                                                <div className="program-save-custom-days-block-title">
-                                                    Title 7
-                                                </div>
-                                                <div className="program-save-custom-days-block-content">
-                                                    Content
-                                                </div>
-                                            </div>
+                                    <CustomDaysCalendarView
+                                        totalDays={totalDays}
+                                    />
+                                    <a href="javascript:void(0)" onClick={this.handleAddWeek}>Add Week</a>
+                                    {totalDays > 7 &&
+                                        <div>
+                                            | <a href="javascript:void(0)" onClick={this.handleDeleteWeek}>Delete Week</a>
                                         </div>
-                                    </div>
-
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -115,10 +64,10 @@ class ProgramSave extends Component {
         const { loading, program, error, history } = this.props;
         if (!loading && error && error.length > 0) {
             te(error[0]);
-            // history.push(routeCodes.PROGRAMS);
+            history.push(routeCodes.PROGRAMS);
         }
         if (!loading && program && prevProps.program !== program) {
-            var prog = (program.program) ? program.program : null;
+            var prog = (program.programDetails) ? program.programDetails : null;
             var works = (program.workouts) ? program.workouts : [];
             if (prog) {
                 this.setState({
@@ -127,9 +76,21 @@ class ProgramSave extends Component {
                 });
             } else {
                 te('Something went wrong! please try again later.');
-                // history.push(routeCodes.PROGRAMS);
+                history.push(routeCodes.PROGRAMS);
             }
         }
+    }
+
+    handleAddWeek = () => {
+        this.setState({
+            totalDays: (this.state.totalDays + 7)
+        });
+    }
+
+    handleDeleteWeek = () => {
+        this.setState({
+            totalDays: (this.state.totalDays - 7)
+        });
     }
 
 }
@@ -146,3 +107,52 @@ const mapStateToProps = (state) => {
 export default connect(
     mapStateToProps,
 )(ProgramSave);
+
+class CustomDaysCalendarView extends Component {
+    render() {
+        const { totalDays } = this.props;
+        var rows = (totalDays / 7);
+        var rowsObj = [];
+        for (let index = 1; index <= rows; index++) {
+            rowsObj.push(<CustomDaysCalendarRow rowNumber={index} key={index} />)
+        }
+        return (
+            <div className="program-save-custom-days-wrapper">
+                {rowsObj}
+            </div>
+        );
+    }
+}
+
+class CustomDaysCalendarRow extends Component {
+    render() {
+        const { rowNumber } = this.props;
+        var end = rowNumber * 7;
+        var start = end - (7 - 1);
+        var blockObj = [];
+        for (let index = start; index <= end; index++) {
+            blockObj.push(<CustomDaysCalendarBlock blockNumber={index} key={index} />)
+        }
+        return (
+            <div className="program-save-custom-days-row">
+                {blockObj}
+            </div>
+        );
+    }
+}
+
+class CustomDaysCalendarBlock extends Component {
+    render() {
+        const { blockNumber } = this.props;
+        return (
+            <div className="program-save-custom-days-block" onClick={() => console.log('blockNumber => ', blockNumber)}>
+                <div className="program-save-custom-days-block-title">
+                    Day {blockNumber}
+                </div>
+                <div className="program-save-custom-days-block-content">
+                    Content {blockNumber}
+                </div>
+            </div>
+        );
+    }
+}

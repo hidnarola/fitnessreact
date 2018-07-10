@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import FitnessHeader from '../components/global/FitnessHeader';
 import FitnessNav from '../components/global/FitnessNav';
-import { getUserProgramsRequest } from '../actions/userPrograms';
+import { getUserProgramsRequest, deleteUserProgramRequest } from '../actions/userPrograms';
 import {
     DropdownButton,
     ButtonToolbar,
@@ -13,12 +13,16 @@ import SweetAlert from "react-bootstrap-sweetalert";
 import AddProgramMasterForm from '../components/Program/AddProgramMasterForm';
 import { submit } from "redux-form";
 import { routeCodes } from '../constants/routes';
+import { te, ts } from '../helpers/funs';
 
 class Programs extends Component {
     constructor(props) {
         super(props);
         this.state = {
             showAddProgramAlert: false,
+            showDeleteProgramAlert: false,
+            deleteActionInit: false,
+            selectedProgramId: null,
         }
     }
 
@@ -31,6 +35,7 @@ class Programs extends Component {
         const { programs } = this.props;
         const {
             showAddProgramAlert,
+            showDeleteProgramAlert,
         } = this.state;
         return (
             <div className="fitness-body">
@@ -58,7 +63,7 @@ class Programs extends Component {
                                             <tr>
                                                 <th>Name</th>
                                                 <th>Description</th>
-                                                <th>Length</th>
+                                                <th>Days</th>
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
@@ -70,7 +75,7 @@ class Programs extends Component {
                                                             <tr key={index}>
                                                                 <td>{program.name}</td>
                                                                 <td>{program.description}</td>
-                                                                <td>0</td>
+                                                                <td>{program.totalDays}</td>
                                                                 <td>
                                                                     <ButtonToolbar>
                                                                         <DropdownButton title="Actions" pullRight id="dropdown-size-medium">
@@ -81,7 +86,10 @@ class Programs extends Component {
                                                                             >
                                                                                 <FaPencil className="v-align-sub" /> Edit
                                                                             </MenuItem>
-                                                                            <MenuItem eventKey="2">
+                                                                            <MenuItem
+                                                                                eventKey="2"
+                                                                                onClick={() => this.handleShowDeleteAlert(program._id)}
+                                                                            >
                                                                                 <FaTrash className="v-align-sub" /> Delete
                                                                             </MenuItem>
                                                                         </DropdownButton>
@@ -91,6 +99,13 @@ class Programs extends Component {
                                                         )
                                                     })
                                                 }
+                                            </tbody>
+                                        }
+                                        {programs && programs.length <= 0 &&
+                                            <tbody>
+                                                <tr>
+                                                    <td colSpan="4">No programs found</td>
+                                                </tr>
                                             </tbody>
                                         }
                                     </table>
@@ -116,9 +131,45 @@ class Programs extends Component {
                     <AddProgramMasterForm />
                 </SweetAlert>
 
+                <SweetAlert
+                    show={showDeleteProgramAlert}
+                    warning
+                    showCancel
+                    confirmBtnText="Yes, delete it!"
+                    confirmBtnBsStyle="danger"
+                    cancelBtnBsStyle="default"
+                    title="Are you sure?"
+                    onConfirm={this.handleDeleteProgram}
+                    onCancel={this.handleCancelDelete}
+                >
+                    You will not be able to recover this file!
+                </SweetAlert>
+
             </div>
         );
     }
+
+    componentDidUpdate(prevProps, prevState) {
+        const {
+            loading,
+            error,
+            dispatch,
+        } = this.props;
+        const {
+            deleteActionInit,
+        } = this.state;
+        if (!loading && deleteActionInit) {
+            this.setState({ deleteActionInit: false });
+            this.handleCancelDelete();
+            if (error && error.length <= 0) {
+                ts('Program deleted successfully!');
+                dispatch(getUserProgramsRequest());
+            } else {
+                te(error[0]);
+            }
+        }
+    }
+
 
     handleShowAddProgramAlert = () => {
         this.setState({ showAddProgramAlert: true });
@@ -138,12 +189,35 @@ class Programs extends Component {
         e.preventDefault();
         history.push(href);
     }
+
+    handleShowDeleteAlert = (_id) => {
+        this.setState({
+            showDeleteProgramAlert: true,
+            selectedProgramId: _id,
+        });
+    }
+
+    handleCancelDelete = () => {
+        this.setState({
+            showDeleteProgramAlert: false,
+            selectedProgramId: null,
+        });
+    }
+
+    handleDeleteProgram = () => {
+        const { dispatch } = this.props;
+        const { selectedProgramId } = this.state;
+        dispatch(deleteUserProgramRequest(selectedProgramId));
+        this.setState({ deleteActionInit: true });
+    }
 }
 
 const mapStateToProps = (state) => {
     const { userPrograms } = state;
     return {
+        loading: userPrograms.get('loading'),
         programs: userPrograms.get('programs'),
+        error: userPrograms.get('error'),
     };
 }
 

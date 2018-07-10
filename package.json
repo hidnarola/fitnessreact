@@ -94,6 +94,8 @@
     "react-date-range": "^1.0.0-alpha4",
     "react-datepicker": "^1.4.1",
     "react-daterange-picker": "^1.2.1",
+    "react-dnd": "^5.0.0",
+    "react-dnd-html5-backend": "^5.0.1",
     "react-dom": "^16.3.2",
     "react-dotdotdot": "^1.2.3",
     "react-dropzone": "^4.2.9",
