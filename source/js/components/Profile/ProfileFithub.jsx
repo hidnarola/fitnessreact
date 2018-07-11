@@ -243,10 +243,10 @@ class ProfileFithub extends Component {
                                     </a>
                                     {activeProfile && activeProfile.friendshipStatus === FRIENDSHIP_STATUS_SELF &&
                                         <Dropdown id="post_privacy">
-                                            <Dropdown.Toggle noCaret>
-                                                {postPrivacy === ACCESS_LEVEL_PUBLIC && <span><FaGlobe /> {ACCESS_LEVEL_PUBLIC_STR}</span>}
-                                                {postPrivacy === ACCESS_LEVEL_FRIENDS && <span><FaGroup /> {ACCESS_LEVEL_FRIENDS_STR}</span>}
-                                                {postPrivacy === ACCESS_LEVEL_PRIVATE && <span><FaLock /> {ACCESS_LEVEL_PRIVATE_STR}</span>}
+                                            <Dropdown.Toggle>
+                                                {postPrivacy === ACCESS_LEVEL_PUBLIC && <span><FaGlobe /><strong>{ACCESS_LEVEL_PUBLIC_STR}</strong></span>}
+                                                {postPrivacy === ACCESS_LEVEL_FRIENDS && <span><FaGroup /><strong>{ACCESS_LEVEL_FRIENDS_STR}</strong></span>}
+                                                {postPrivacy === ACCESS_LEVEL_PRIVATE && <span><FaLock /><strong>{ACCESS_LEVEL_PRIVATE_STR}</strong></span>}
                                             </Dropdown.Toggle>
                                             <Dropdown.Menu>
                                                 <MenuItem eventKey="3" onClick={() => this.handlePostPrivacy(ACCESS_LEVEL_PUBLIC)}><FaGlobe /> {ACCESS_LEVEL_PUBLIC_STR}</MenuItem>

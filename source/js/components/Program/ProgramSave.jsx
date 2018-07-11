@@ -2,9 +2,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import FitnessHeader from '../global/FitnessHeader';
 import FitnessNav from '../global/FitnessNav';
-import { getUserProgramRequest } from '../../actions/userPrograms';
+import { getUserProgramRequest, setSelectedDayForProgram } from '../../actions/userPrograms';
 import { routeCodes } from '../../constants/routes';
 import { te } from '../../helpers/funs';
+import _ from "lodash";
+import SweetAlert from "react-bootstrap-sweetalert";
+import { FaCopy, FaTrash, FaPencil, FaEye } from 'react-icons/lib/fa'
 
 class ProgramSave extends Component {
     constructor(props) {
@@ -13,6 +16,7 @@ class ProgramSave extends Component {
             program: null,
             workouts: [],
             totalDays: 7,
+            showSelectEventAlert: false,
         }
     }
 
@@ -25,7 +29,12 @@ class ProgramSave extends Component {
     }
 
     render() {
-        const { program, totalDays } = this.state;
+        const {
+            program,
+            totalDays,
+            workouts,
+            showSelectEventAlert,
+        } = this.state;
         return (
             <div className="fitness-body">
                 <FitnessHeader />
@@ -43,18 +52,39 @@ class ProgramSave extends Component {
                                 <div className="whitebox-body profile-body programs-table-wrapper">
                                     <CustomDaysCalendarView
                                         totalDays={totalDays}
+                                        workouts={workouts}
+                                        handleSelectDayAction={this.handleSelectDayAction}
                                     />
-                                    <a href="javascript:void(0)" onClick={this.handleAddWeek}>Add Week</a>
-                                    {totalDays > 7 &&
-                                        <div>
-                                            | <a href="javascript:void(0)" onClick={this.handleDeleteWeek}>Delete Week</a>
-                                        </div>
-                                    }
+                                    <div className="d-flex week-btn-btm">
+                                        <a href="javascript:void(0)" onClick={this.handleAddWeek}><i className="icon-add_box"></i> Add Week</a>
+                                        {totalDays > 7 &&
+                                            <a href="javascript:void(0)" onClick={this.handleDeleteWeek}><i className="icon-delete_forever"></i> Delete Week</a>
+                                        }
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </section>
+
+                <SweetAlert
+                    type="default"
+                    title={`Select event for - Day`}
+                    onCancel={() => { }}
+                    onConfirm={() => { }}
+                    btnSize="sm"
+                    cancelBtnBsStyle="danger"
+                    show={showSelectEventAlert}
+                    showConfirm={false}
+                    showCancel={true}
+                    closeOnClickOutside={false}
+                >
+                    {/* <SelectEventView
+                        handleNewRestDay={this.handleNewRestDay}
+                        handlePaste={this.handlePaste}
+                        handleSelectProgramToAssign={this.handleSelectProgramToAssign}
+                    /> */}
+                </SweetAlert>
 
             </div>
         );
@@ -69,10 +99,18 @@ class ProgramSave extends Component {
         if (!loading && program && prevProps.program !== program) {
             var prog = (program.programDetails) ? program.programDetails : null;
             var works = (program.workouts) ? program.workouts : [];
+            var lastDay = 1;
+            if (works && works.length > 0) {
+                lastDay = (works[(works.length - 1)].day);
+                lastDay++;
+            }
+            var getNumberOfWeek = Math.ceil(lastDay / 7);
+            var totalDaysToGenerate = (getNumberOfWeek * 7)
             if (prog) {
                 this.setState({
                     program: prog,
                     workouts: works,
+                    totalDays: totalDaysToGenerate,
                 });
             } else {
                 te('Something went wrong! please try again later.');
@@ -93,6 +131,14 @@ class ProgramSave extends Component {
         });
     }
 
+    handleSelectDayAction = (day) => {
+        // const { dispatch } = this.props;
+        // this.setState({
+        //     showSelectEventAlert: true,
+        // });
+        // dispatch(setSelectedDayForProgram(day));
+    }
+
 }
 
 const mapStateToProps = (state) => {
@@ -110,11 +156,22 @@ export default connect(
 
 class CustomDaysCalendarView extends Component {
     render() {
-        const { totalDays } = this.props;
+        const {
+            totalDays,
+            workouts,
+            handleSelectDayAction,
+        } = this.props;
         var rows = (totalDays / 7);
         var rowsObj = [];
         for (let index = 1; index <= rows; index++) {
-            rowsObj.push(<CustomDaysCalendarRow rowNumber={index} key={index} />)
+            rowsObj.push(
+                <CustomDaysCalendarRow
+                    rowNumber={index}
+                    key={index}
+                    workouts={workouts}
+                    handleSelectDayAction={handleSelectDayAction}
+                />
+            )
         }
         return (
             <div className="program-save-custom-days-wrapper">
@@ -126,12 +183,23 @@ class CustomDaysCalendarView extends Component {
 
 class CustomDaysCalendarRow extends Component {
     render() {
-        const { rowNumber } = this.props;
+        const {
+            rowNumber,
+            workouts,
+            handleSelectDayAction,
+        } = this.props;
         var end = rowNumber * 7;
         var start = end - (7 - 1);
         var blockObj = [];
         for (let index = start; index <= end; index++) {
-            blockObj.push(<CustomDaysCalendarBlock blockNumber={index} key={index} />)
+            blockObj.push(
+                <CustomDaysCalendarBlock
+                    blockNumber={index}
+                    key={index}
+                    workouts={workouts}
+                    handleSelectDayAction={handleSelectDayAction}
+                />
+            )
         }
         return (
             <div className="program-save-custom-days-row">
@@ -143,14 +211,49 @@ class CustomDaysCalendarRow extends Component {
 
 class CustomDaysCalendarBlock extends Component {
     render() {
-        const { blockNumber } = this.props;
+        const {
+            blockNumber,
+            workouts,
+            handleSelectDayAction,
+        } = this.props;
+        var findDay = (blockNumber - 1);
+        var events = _.filter(workouts, { 'day': findDay.toString() });
         return (
-            <div className="program-save-custom-days-block" onClick={() => console.log('blockNumber => ', blockNumber)}>
+            <div className="program-save-custom-days-block" onClick={() => handleSelectDayAction(blockNumber)}>
                 <div className="program-save-custom-days-block-title">
                     Day {blockNumber}
                 </div>
                 <div className="program-save-custom-days-block-content">
-                    Content {blockNumber}
+                    {events && events.length > 0 &&
+                        <div className="program-event-block-main-wrapper">
+                            {
+                                events.map((e, i) => {
+                                    return (
+                                        <div className="program-event-block-wrapper" key={i}>
+                                            <div className="program-event-block-title">
+                                                <div className="pull-left custom_check" onClick={() => { }}>
+                                                    <input
+                                                        type="checkbox"
+                                                        id={`complete_workout_schedule_${e._id}`}
+                                                        name={`complete_workout_schedule_${e._id}`}
+                                                        onChange={() => { }}
+                                                    />
+                                                    <label><h5 className="">{(e.title) ? e.title : ''}</h5></label>
+                                                </div>
+                                            </div>
+                                            <div className="program-event-block-content">
+                                                <p>{(e.description) ? e.description : ''}</p>
+                                                <a href="javascript:void(0)" ><FaCopy /></a>
+                                                <a href="javascript:void(0)" ><FaEye /></a>
+                                                <a href="javascript:void(0)" ><FaPencil /></a>
+                                                <a href="javascript:void(0)" ><FaTrash /></a>
+                                            </div>
+                                        </div>
+                                    );
+                                })
+                            }
+                        </div>
+                    }
                 </div>
             </div>
         );

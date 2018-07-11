@@ -11,7 +11,8 @@ import {
     GET_USER_PROGRAM_ERROR,
     DELETE_USER_PROGRAM_REQUEST,
     DELETE_USER_PROGRAM_SUCCESS,
-    DELETE_USER_PROGRAM_ERROR
+    DELETE_USER_PROGRAM_ERROR,
+    SET_SELECTED_DAY_FOR_PROGRAM
 } from "../actions/userPrograms";
 import { VALIDATION_FAILURE_STATUS } from "../constants/consts";
 import { generateValidationErrorMsgArr } from "../helpers/funs";
@@ -24,6 +25,7 @@ const initialState = Map({
     loadingMaster: false,
     programMaster: null,
     errorMaster: [],
+    selectedDay: null,
 });
 
 const actionMap = {
@@ -154,6 +156,11 @@ const actionMap = {
         return state.merge(Map({
             loading: false,
             error: error,
+        }));
+    },
+    [SET_SELECTED_DAY_FOR_PROGRAM]: (state, action) => {
+        return state.merge(Map({
+            selectedDay: action.day,
         }));
     },
 }

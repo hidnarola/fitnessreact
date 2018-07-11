@@ -21,36 +21,32 @@ class AddPostPhotoModal extends Component {
                         <h3 className="title-h3">New Post Photos</h3>
                     </div>
 
-                    <div className="progress-popup-body d-flex">
-                        <div className="gallery-popup-body-r">
-                            <div className="upload-gallery">
-                                {images && images.length > 0 &&
-                                    images.map((img, i) => {
-                                        return (
-                                            <span key={i}>
-                                                <div className="">
-                                                    <button type="button" className="btn btn-danger no-margin" onClick={() => handleRemovePostImags(i)}>Delete</button>
-                                                </div>
-                                                <img src={img.preview} alt="" />
-                                            </span>
-                                        )
-                                    })
-                                }
-                                <Dropzone
-                                    name="images"
-                                    className="no-padding"
-                                    accept={"image/jpeg, image/png, image/jpg, image/gif"}
-                                    onDrop={handleAddPostImages}
-                                    multiple={true}
-                                >
-                                    <span>
-                                        <i className="icon-add_a_photo"></i>
-                                    </span>
-                                </Dropzone>
-                            </div>
-                            <div className="gallery-post">
-                                <button type="button" onClick={handleClose}>Done</button>
-                            </div>
+                    <div className="progress-popup-body">
+                        <div className="upload-gallery">
+                            {images && images.length > 0 &&
+                                images.map((img, i) => {
+                                    return (
+                                        <span key={i}>
+                                            <img src={img.preview} alt="" />
+                                            <button type="button" className="btn btn-danger no-margin" onClick={() => handleRemovePostImags(i)}><i className="icon-delete_forever"></i></button>
+                                        </span>
+                                    )
+                                })
+                            }
+                            <Dropzone
+                                name="images"
+                                className="no-padding"
+                                accept={"image/jpeg, image/png, image/jpg, image/gif"}
+                                onDrop={handleAddPostImages}
+                                multiple={true}
+                            >
+                                <span>
+                                    <i className="icon-add_a_photo"></i>
+                                </span>
+                            </Dropzone>
+                        </div>
+                        <div className="gallery-post">
+                            <button type="button" onClick={handleClose}>Done</button>
                         </div>
                     </div>
                 </Modal>

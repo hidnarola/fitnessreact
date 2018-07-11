@@ -14,6 +14,8 @@ export const DELETE_USER_PROGRAM_REQUEST = 'DELETE_USER_PROGRAM_REQUEST';
 export const DELETE_USER_PROGRAM_SUCCESS = 'DELETE_USER_PROGRAM_SUCCESS';
 export const DELETE_USER_PROGRAM_ERROR = 'DELETE_USER_PROGRAM_ERROR';
 
+export const SET_SELECTED_DAY_FOR_PROGRAM = 'SET_SELECTED_DAY_FOR_PROGRAM';
+
 export function getUserProgramsRequest() {
     return {
         type: GET_USER_PROGRAMS_REQUEST,
@@ -94,5 +96,12 @@ export function deleteUserProgramError(error) {
     return {
         type: DELETE_USER_PROGRAM_ERROR,
         error
+    }
+}
+
+export function setSelectedDayForProgram(day = null) {
+    return {
+        type: SET_SELECTED_DAY_FOR_PROGRAM,
+        day
     }
 }
