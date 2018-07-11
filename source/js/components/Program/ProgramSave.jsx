@@ -2,15 +2,15 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import FitnessHeader from '../global/FitnessHeader';
 import FitnessNav from '../global/FitnessNav';
-import { getUserProgramRequest, setSelectedDayForProgram, addUsersProgramWorkoutScheduleRequest } from '../../actions/userPrograms';
+import { getUserProgramRequest, setSelectedDayForProgram, addUsersProgramWorkoutScheduleRequest, copyUserProgramWorkoutSchedule } from '../../actions/userPrograms';
 import { routeCodes } from '../../constants/routes';
-import { te } from '../../helpers/funs';
+import { te, ts } from '../../helpers/funs';
 import _ from "lodash";
 import SweetAlert from "react-bootstrap-sweetalert";
 import { FaCopy, FaTrash, FaPencil, FaEye } from 'react-icons/lib/fa'
 import { NavLink } from "react-router-dom";
 import { getExercisesNameRequest, getProgramsNameRequest } from '../../actions/userScheduleWorkouts';
-import { SCHEDULED_WORKOUT_TYPE_RESTDAY } from '../../constants/consts';
+import { SCHEDULED_WORKOUT_TYPE_RESTDAY, SCHEDULED_WORKOUT_TYPE_EXERCISE } from '../../constants/consts';
 import cns from "classnames";
 
 class ProgramSave extends Component {
@@ -21,6 +21,7 @@ class ProgramSave extends Component {
             workouts: [],
             totalDays: 7,
             showSelectEventAlert: false,
+            workoutPasteAction: false,
         }
     }
 
@@ -69,6 +70,7 @@ class ProgramSave extends Component {
                                         totalDays={totalDays}
                                         workouts={workouts}
                                         handleSelectDayAction={this.handleSelectDayAction}
+                                        handleCopy={this.handleCopy}
                                     />
                                     <div className="d-flex week-btn-btm">
                                         <a href="javascript:void(0)" onClick={this.handleAddWeek}><i className="icon-add_box"></i> Add Week</a>
@@ -97,6 +99,7 @@ class ProgramSave extends Component {
                     <SelectEventView
                         programId={(program) ? program._id : null}
                         handleNewRestDay={this.handleNewRestDay}
+                        handlePaste={this.handlePaste}
                     />
                 </SweetAlert>
 
@@ -112,6 +115,9 @@ class ProgramSave extends Component {
             history,
             workout,
         } = this.props;
+        const {
+            workoutPasteAction,
+        } = this.state;
         if (!loading && error && error.length > 0) {
             te(error[0]);
             history.push(routeCodes.PROGRAMS);
@@ -140,6 +146,10 @@ class ProgramSave extends Component {
         if (!loading && workout && prevProps.workout !== workout) {
             this.getProgramWorkoutSchedules();
             this.cancelSelectDayAction();
+            if (workoutPasteAction) {
+                ts('Workout pasted!');
+                this.setState({ workoutPasteAction: false });
+            }
         }
     }
 
@@ -178,13 +188,55 @@ class ProgramSave extends Component {
             var requestData = {
                 programId: match.params.id,
                 title: 'Rest Day',
-                description: '<p>Hey its rest day! Take total rest.</p>',
+                description: 'Hey its rest day! Take total rest.',
                 type: SCHEDULED_WORKOUT_TYPE_RESTDAY,
                 day: (selectedDay - 1),
                 exercises: [],
             };
         }
         dispatch(addUsersProgramWorkoutScheduleRequest(requestData));
+    }
+
+    handleCopy = (selectedEvent) => {
+        const { dispatch } = this.props;
+        dispatch(copyUserProgramWorkoutSchedule(selectedEvent));
+        ts('Workout copied!');
+    }
+
+    handlePaste = () => {
+        const { copiedWorkout, selectedDay, dispatch, match } = this.props;
+        if (copiedWorkout && match && match.params && match.params.id) {
+            var exercises = [];
+            var copiedExercises = copiedWorkout.exercises;
+            _.forEach(copiedExercises, (exercise, index) => {
+                var exerciseObj = {
+                    exerciseId: exercise.exercise._id,
+                    type: exercise.type,
+                    reps: (exercise.reps) ? exercise.reps : null,
+                    sets: (exercise.sets) ? exercise.sets : null,
+                    weight: (exercise.weight) ? exercise.weight : null,
+                    weightUnits: (exercise.weightUnits) ? exercise.weightUnits : MEASUREMENT_UNIT_KILOGRAM,
+                    distance: (exercise.distance) ? exercise.distance : null,
+                    distanceUnits: (exercise.distanceUnits) ? exercise.distanceUnits : MEASUREMENT_UNIT_KILOMETER,
+                    restTime: (exercise.restTime) ? exercise.restTime : null,
+                    oneSetTimer: (exercise.oneSetTimer) ? exercise.oneSetTimer : null,
+                    sequence: (typeof exercise.sequence !== 'undefined') ? exercise.sequence : 0,
+                };
+                exercises.push(exerciseObj);
+            });
+            var requestData = {
+                programId: match.params.id,
+                title: copiedWorkout.title,
+                description: copiedWorkout.description,
+                type: SCHEDULED_WORKOUT_TYPE_EXERCISE,
+                day: (selectedDay - 1),
+                exercises: exercises,
+            };
+            dispatch(addUsersProgramWorkoutScheduleRequest(requestData));
+            this.setState({ workoutPasteAction: true });
+        } else {
+            te('There is no workout copied!');
+        }
     }
 
 }
@@ -197,6 +249,7 @@ const mapStateToProps = (state) => {
         error: userPrograms.get('error'),
         selectedDay: userPrograms.get('selectedDay'),
         workout: userPrograms.get('workout'),
+        copiedWorkout: userPrograms.get('copiedWorkout'),
     };
 }
 
@@ -210,6 +263,7 @@ class CustomDaysCalendarView extends Component {
             totalDays,
             workouts,
             handleSelectDayAction,
+            handleCopy,
         } = this.props;
         var rows = (totalDays / 7);
         var rowsObj = [];
@@ -220,6 +274,7 @@ class CustomDaysCalendarView extends Component {
                     key={index}
                     workouts={workouts}
                     handleSelectDayAction={handleSelectDayAction}
+                    handleCopy={handleCopy}
                 />
             )
         }
@@ -237,6 +292,7 @@ class CustomDaysCalendarRow extends Component {
             rowNumber,
             workouts,
             handleSelectDayAction,
+            handleCopy,
         } = this.props;
         var end = rowNumber * 7;
         var start = end - (7 - 1);
@@ -248,6 +304,7 @@ class CustomDaysCalendarRow extends Component {
                     key={index}
                     workouts={workouts}
                     handleSelectDayAction={handleSelectDayAction}
+                    handleCopy={handleCopy}
                 />
             )
         }
@@ -265,6 +322,7 @@ class CustomDaysCalendarBlock extends Component {
             blockNumber,
             workouts,
             handleSelectDayAction,
+            handleCopy,
         } = this.props;
         var findDay = (blockNumber - 1);
         var events = _.filter(workouts, { 'day': findDay });
@@ -282,20 +340,20 @@ class CustomDaysCalendarBlock extends Component {
                                         <div className={cns('program-event-block-wrapper', { 'restday': (e.type === SCHEDULED_WORKOUT_TYPE_RESTDAY) })} key={i}>
                                             <div className="program-event-block-title">
                                                 <div className="pull-left custom_check" onClick={() => { }}>
-                                                    <input
-                                                        type="checkbox"
-                                                        id={`complete_workout_schedule_${e._id}`}
-                                                        name={`complete_workout_schedule_${e._id}`}
-                                                        onChange={() => { }}
-                                                    />
                                                     <label><h5 className="">{(e.title) ? e.title : ''}</h5></label>
                                                 </div>
                                             </div>
                                             <div className="program-event-block-content">
                                                 <p>{(e.description) ? e.description : ''}</p>
-                                                <a href="javascript:void(0)" ><FaCopy /></a>
-                                                <a href="javascript:void(0)" ><FaEye /></a>
-                                                <a href="javascript:void(0)" ><FaPencil /></a>
+                                                {(e.type === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
+                                                    <a href="javascript:void(0)" onClick={() => handleCopy(e)}><FaCopy /></a>
+                                                }
+                                                {(e.type === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
+                                                    <a href="javascript:void(0)" ><FaEye /></a>
+                                                }
+                                                {(e.type === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
+                                                    <a href="javascript:void(0)" ><FaPencil /></a>
+                                                }
                                                 <a href="javascript:void(0)" ><FaTrash /></a>
                                             </div>
                                         </div>
@@ -312,7 +370,11 @@ class CustomDaysCalendarBlock extends Component {
 
 class SelectEventView extends Component {
     render() {
-        const { programId, handleNewRestDay } = this.props;
+        const {
+            programId,
+            handleNewRestDay,
+            handlePaste,
+        } = this.props;
         return (
             <div className="program-select-event-view row">
                 <div className="popup-link-wrap">
@@ -328,7 +390,7 @@ class SelectEventView extends Component {
                         <button type="button" onClick={handleNewRestDay} className="btn btn-primary">Make Rest Day</button>
                     </div>
                     <div className="popup-link">
-                        <button type="button" className="btn btn-primary">Assign Program</button>
+                        <button type="button" onClick={handlePaste} className="btn btn-primary">Paste Workout</button>
                     </div>
                 </div>
             </div>

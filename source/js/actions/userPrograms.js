@@ -20,6 +20,8 @@ export const ADD_USERS_PROGRAM_WORKOUT_SCHEDULE_REQUEST = 'ADD_USERS_PROGRAM_WOR
 export const ADD_USERS_PROGRAM_WORKOUT_SCHEDULE_SUCCESS = 'ADD_USERS_PROGRAM_WORKOUT_SCHEDULE_SUCCESS';
 export const ADD_USERS_PROGRAM_WORKOUT_SCHEDULE_ERROR = 'ADD_USERS_PROGRAM_WORKOUT_SCHEDULE_ERROR';
 
+export const COPY_USER_PROGRAM_WORKOUT_SCHEDULE = 'COPY_USER_PROGRAM_WORKOUT_SCHEDULE';
+
 export function getUserProgramsRequest() {
     return {
         type: GET_USER_PROGRAMS_REQUEST,
@@ -128,5 +130,12 @@ export function addUsersProgramWorkoutScheduleError(error) {
     return {
         type: ADD_USERS_PROGRAM_WORKOUT_SCHEDULE_ERROR,
         error,
+    }
+}
+
+export function copyUserProgramWorkoutSchedule(selectedData) {
+    return {
+        type: COPY_USER_PROGRAM_WORKOUT_SCHEDULE,
+        selectedData,
     }
 }
