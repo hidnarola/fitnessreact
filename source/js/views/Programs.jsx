@@ -63,7 +63,7 @@ class Programs extends Component {
                                             <tr>
                                                 <th>Name</th>
                                                 <th>Description</th>
-                                                <th>Days</th>
+                                                <th>Workouts</th>
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
@@ -75,7 +75,7 @@ class Programs extends Component {
                                                             <tr key={index}>
                                                                 <td>{program.name}</td>
                                                                 <td>{program.description}</td>
-                                                                <td>{program.totalDays}</td>
+                                                                <td>{program.totalWorkouts}</td>
                                                                 <td>
                                                                     <ButtonToolbar>
                                                                         <DropdownButton title="Actions" pullRight id="dropdown-size-medium">

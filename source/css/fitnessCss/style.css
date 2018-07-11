@@ -1587,7 +1587,11 @@ ul.text-right.pager {text-align: right;}
 .rbc-selected-cell{background:#fff; }
 .popup-link-wrap{margin: 0 20px; border: 0; display: flex; flex-wrap: wrap;}
 .popup-link a, 
-.popup-link button{ margin:0; width:100%; background:transparent; border:0; color:#333; border-radius:2px; text-transform:uppercase;padding:10px;  border: 2px solid #C86DD7; color: #C86DD7;}
+.popup-link button,
+.popup-link a:active, 
+.popup-link button:active,
+.popup-link a:focus, 
+.popup-link button:focus{ margin:0; width:100%; background:transparent; border:0; color:#333; border-radius:2px; text-transform:uppercase;padding:10px;  border: 2px solid #C86DD7; color: #C86DD7;}
 .popup-link {width: calc(50% - 10px); margin: 5px;}
 .popup-link a:hover, 
 .popup-link button:hover{ background:linear-gradient(134.72deg, #3023AE 0%, #C86DD7 100%); color:#fff; border:0; padding:12px;}

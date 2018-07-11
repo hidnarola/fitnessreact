@@ -16,6 +16,10 @@ export const DELETE_USER_PROGRAM_ERROR = 'DELETE_USER_PROGRAM_ERROR';
 
 export const SET_SELECTED_DAY_FOR_PROGRAM = 'SET_SELECTED_DAY_FOR_PROGRAM';
 
+export const ADD_USERS_PROGRAM_WORKOUT_SCHEDULE_REQUEST = 'ADD_USERS_PROGRAM_WORKOUT_SCHEDULE_REQUEST';
+export const ADD_USERS_PROGRAM_WORKOUT_SCHEDULE_SUCCESS = 'ADD_USERS_PROGRAM_WORKOUT_SCHEDULE_SUCCESS';
+export const ADD_USERS_PROGRAM_WORKOUT_SCHEDULE_ERROR = 'ADD_USERS_PROGRAM_WORKOUT_SCHEDULE_ERROR';
+
 export function getUserProgramsRequest() {
     return {
         type: GET_USER_PROGRAMS_REQUEST,
@@ -103,5 +107,26 @@ export function setSelectedDayForProgram(day = null) {
     return {
         type: SET_SELECTED_DAY_FOR_PROGRAM,
         day
+    }
+}
+
+export function addUsersProgramWorkoutScheduleRequest(requestData) {
+    return {
+        type: ADD_USERS_PROGRAM_WORKOUT_SCHEDULE_REQUEST,
+        requestData,
+    }
+}
+
+export function addUsersProgramWorkoutScheduleSuccess(data) {
+    return {
+        type: ADD_USERS_PROGRAM_WORKOUT_SCHEDULE_SUCCESS,
+        data,
+    }
+}
+
+export function addUsersProgramWorkoutScheduleError(error) {
+    return {
+        type: ADD_USERS_PROGRAM_WORKOUT_SCHEDULE_ERROR,
+        error,
     }
 }

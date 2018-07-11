@@ -2,12 +2,16 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import FitnessHeader from '../global/FitnessHeader';
 import FitnessNav from '../global/FitnessNav';
-import { getUserProgramRequest, setSelectedDayForProgram } from '../../actions/userPrograms';
+import { getUserProgramRequest, setSelectedDayForProgram, addUsersProgramWorkoutScheduleRequest } from '../../actions/userPrograms';
 import { routeCodes } from '../../constants/routes';
 import { te } from '../../helpers/funs';
 import _ from "lodash";
 import SweetAlert from "react-bootstrap-sweetalert";
 import { FaCopy, FaTrash, FaPencil, FaEye } from 'react-icons/lib/fa'
+import { NavLink } from "react-router-dom";
+import { getExercisesNameRequest, getProgramsNameRequest } from '../../actions/userScheduleWorkouts';
+import { SCHEDULED_WORKOUT_TYPE_RESTDAY } from '../../constants/consts';
+import cns from "classnames";
 
 class ProgramSave extends Component {
     constructor(props) {
@@ -21,6 +25,13 @@ class ProgramSave extends Component {
     }
 
     componentWillMount() {
+        const { dispatch } = this.props;
+        this.getProgramWorkoutSchedules();
+        dispatch(getExercisesNameRequest());
+        dispatch(getProgramsNameRequest());
+    }
+
+    getProgramWorkoutSchedules = () => {
         const { match, dispatch } = this.props;
         if (match && match.params && match.params.id) {
             var _id = match.params.id;
@@ -35,6 +46,9 @@ class ProgramSave extends Component {
             workouts,
             showSelectEventAlert,
         } = this.state;
+        const {
+            selectedDay,
+        } = this.props;
         return (
             <div className="fitness-body">
                 <FitnessHeader />
@@ -51,6 +65,7 @@ class ProgramSave extends Component {
                             <div className="white-box space-btm-20">
                                 <div className="whitebox-body profile-body programs-table-wrapper">
                                     <CustomDaysCalendarView
+                                        programId={(program) ? program._id : null}
                                         totalDays={totalDays}
                                         workouts={workouts}
                                         handleSelectDayAction={this.handleSelectDayAction}
@@ -69,8 +84,8 @@ class ProgramSave extends Component {
 
                 <SweetAlert
                     type="default"
-                    title={`Select event for - Day`}
-                    onCancel={() => { }}
+                    title={`Select event for - Day ${selectedDay}`}
+                    onCancel={this.cancelSelectDayAction}
                     onConfirm={() => { }}
                     btnSize="sm"
                     cancelBtnBsStyle="danger"
@@ -79,11 +94,10 @@ class ProgramSave extends Component {
                     showCancel={true}
                     closeOnClickOutside={false}
                 >
-                    {/* <SelectEventView
+                    <SelectEventView
+                        programId={(program) ? program._id : null}
                         handleNewRestDay={this.handleNewRestDay}
-                        handlePaste={this.handlePaste}
-                        handleSelectProgramToAssign={this.handleSelectProgramToAssign}
-                    /> */}
+                    />
                 </SweetAlert>
 
             </div>
@@ -91,7 +105,13 @@ class ProgramSave extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        const { loading, program, error, history } = this.props;
+        const {
+            loading,
+            program,
+            error,
+            history,
+            workout,
+        } = this.props;
         if (!loading && error && error.length > 0) {
             te(error[0]);
             history.push(routeCodes.PROGRAMS);
@@ -117,6 +137,10 @@ class ProgramSave extends Component {
                 history.push(routeCodes.PROGRAMS);
             }
         }
+        if (!loading && workout && prevProps.workout !== workout) {
+            this.getProgramWorkoutSchedules();
+            this.cancelSelectDayAction();
+        }
     }
 
     handleAddWeek = () => {
@@ -132,11 +156,35 @@ class ProgramSave extends Component {
     }
 
     handleSelectDayAction = (day) => {
-        // const { dispatch } = this.props;
-        // this.setState({
-        //     showSelectEventAlert: true,
-        // });
-        // dispatch(setSelectedDayForProgram(day));
+        const { dispatch } = this.props;
+        this.setState({
+            showSelectEventAlert: true,
+        });
+        dispatch(setSelectedDayForProgram(day));
+    }
+
+    cancelSelectDayAction = () => {
+        const { dispatch } = this.props;
+        this.setState({
+            showSelectEventAlert: false,
+        });
+        dispatch(setSelectedDayForProgram(null));
+    }
+
+    handleNewRestDay = () => {
+        const { selectedDay, dispatch, match } = this.props;
+        if (match && match.params && match.params.id) {
+            var _id = match.params.id;
+            var requestData = {
+                programId: match.params.id,
+                title: 'Rest Day',
+                description: '<p>Hey its rest day! Take total rest.</p>',
+                type: SCHEDULED_WORKOUT_TYPE_RESTDAY,
+                day: (selectedDay - 1),
+                exercises: [],
+            };
+        }
+        dispatch(addUsersProgramWorkoutScheduleRequest(requestData));
     }
 
 }
@@ -147,6 +195,8 @@ const mapStateToProps = (state) => {
         loading: userPrograms.get('loading'),
         program: userPrograms.get('program'),
         error: userPrograms.get('error'),
+        selectedDay: userPrograms.get('selectedDay'),
+        workout: userPrograms.get('workout'),
     };
 }
 
@@ -217,7 +267,7 @@ class CustomDaysCalendarBlock extends Component {
             handleSelectDayAction,
         } = this.props;
         var findDay = (blockNumber - 1);
-        var events = _.filter(workouts, { 'day': findDay.toString() });
+        var events = _.filter(workouts, { 'day': findDay });
         return (
             <div className="program-save-custom-days-block" onClick={() => handleSelectDayAction(blockNumber)}>
                 <div className="program-save-custom-days-block-title">
@@ -229,7 +279,7 @@ class CustomDaysCalendarBlock extends Component {
                             {
                                 events.map((e, i) => {
                                     return (
-                                        <div className="program-event-block-wrapper" key={i}>
+                                        <div className={cns('program-event-block-wrapper', { 'restday': (e.type === SCHEDULED_WORKOUT_TYPE_RESTDAY) })} key={i}>
                                             <div className="program-event-block-title">
                                                 <div className="pull-left custom_check" onClick={() => { }}>
                                                     <input
@@ -254,6 +304,32 @@ class CustomDaysCalendarBlock extends Component {
                             }
                         </div>
                     }
+                </div>
+            </div>
+        );
+    }
+}
+
+class SelectEventView extends Component {
+    render() {
+        const { programId, handleNewRestDay } = this.props;
+        return (
+            <div className="program-select-event-view row">
+                <div className="popup-link-wrap">
+                    <div className="popup-link">
+                        <NavLink
+                            to={routeCodes.ADD_PROGRAM_SCHEDULE_WORKOUT.replace(':id', programId)}
+                            className="btn btn-primary"
+                        >
+                            Add Workout
+                        </NavLink>
+                    </div>
+                    <div className="popup-link">
+                        <button type="button" onClick={handleNewRestDay} className="btn btn-primary">Make Rest Day</button>
+                    </div>
+                    <div className="popup-link">
+                        <button type="button" className="btn btn-primary">Assign Program</button>
+                    </div>
                 </div>
             </div>
         );
