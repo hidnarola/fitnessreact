@@ -51,6 +51,8 @@ class ScheduleWorkout extends Component {
             deleteBulkActionInit: false,
             completeBulkActionAlert: false,
             completeBulkActionInit: false,
+            incompleteBulkActionAlert: false,
+            incompleteBulkActionInit: false,
         }
     }
 
@@ -73,6 +75,7 @@ class ScheduleWorkout extends Component {
             selectedProgramIdToAssign,
             deleteBulkActionAlert,
             completeBulkActionAlert,
+            incompleteBulkActionAlert,
         } = this.state;
         const {
             selectedSlot,
@@ -103,6 +106,7 @@ class ScheduleWorkout extends Component {
                                         <div>
                                             <a href="javascript:void(0)" onClick={() => this.setState({ deleteBulkActionAlert: true })}>({selectedEvents.length}) Delete Selected</a>
                                             <a href="javascript:void(0)" onClick={() => this.setState({ completeBulkActionAlert: true })}>({selectedEvents.length}) Complete</a>
+                                            <a href="javascript:void(0)" onClick={() => this.setState({ incompleteBulkActionAlert: true })}>({selectedEvents.length}) Incomplete</a>
                                         </div>
                                     }
                                     <BigCalendar
@@ -183,10 +187,24 @@ class ScheduleWorkout extends Component {
                     confirmBtnBsStyle="success"
                     cancelBtnBsStyle="default"
                     title="Are you sure?"
-                    onConfirm={this.handleCompleteBulkWorkoutSchedule}
+                    onConfirm={() => this.handleCompleteBulkWorkoutSchedule(1)}
                     onCancel={() => this.setState({ completeBulkActionAlert: false })}
                 >
                     This will mark all workouts as completed
+                </SweetAlert>
+
+                <SweetAlert
+                    show={incompleteBulkActionAlert}
+                    danger
+                    showCancel
+                    confirmBtnText="Yes, incomplete them!"
+                    confirmBtnBsStyle="danger"
+                    cancelBtnBsStyle="default"
+                    title="Are you sure?"
+                    onConfirm={() => this.handleCompleteBulkWorkoutSchedule(0)}
+                    onCancel={() => this.setState({ incompleteBulkActionAlert: false })}
+                >
+                    This will mark all workouts as incompleted
                 </SweetAlert>
 
                 <SweetAlert
@@ -242,6 +260,7 @@ class ScheduleWorkout extends Component {
             selectedWorkoutId,
             deleteBulkActionInit,
             completeBulkActionInit,
+            incompleteBulkActionInit,
         } = this.state;
         if (!loading && prevProps.workouts !== workouts) {
             var newWorkouts = [];
@@ -309,6 +328,18 @@ class ScheduleWorkout extends Component {
                 te('Cannot complete workouts. Please try again later!');
             }
         }
+
+        if (incompleteBulkActionInit && !loading) {
+            this.setState({ incompleteBulkActionInit: false });
+            var today = moment().startOf('day').utc();
+            this.getWorkoutSchedulesByMonth(today);
+            if (error.length <= 0) {
+                ts('Workouts incompleted successfully!');
+            } else {
+                te('Cannot incomplete workouts. Please try again later!');
+            }
+        }
+
         if (!assignProgramLoading && prevProps.assignProgram !== assignProgram) {
             var startDay = moment(selectedSlot.start).startOf('day');
             this.getWorkoutSchedulesByMonth(startDay);
@@ -552,17 +583,28 @@ class ScheduleWorkout extends Component {
         this.setState({ deleteBulkActionInit: true, deleteBulkActionAlert: false });
     }
 
-    handleCompleteBulkWorkoutSchedule = () => {
+    handleCompleteBulkWorkoutSchedule = (isCompleted) => {
         const { dispatch } = this.props;
         const { workoutEvents } = this.state;
         var selectedEvents = _.filter(workoutEvents, ['isSelectedForBulkAction', true]);
-        var selectedIds = _.map(selectedEvents, 'id');
+        let today = moment().utc();
+        var selectedIds = [];
+        _.forEach(selectedEvents, (obj) => {
+            let eventDate = moment(obj.start);
+            if (eventDate <= today) {
+                selectedIds.push(obj.id);
+            }
+        });
         var requestData = {
             exerciseIds: selectedIds,
-            isCompleted: 1,
+            isCompleted: isCompleted,
         };
         dispatch(completeUsersBulkWorkoutScheduleRequest(requestData));
-        this.setState({ completeBulkActionInit: true, completeBulkActionAlert: false });
+        if (isCompleted === 1) {
+            this.setState({ completeBulkActionInit: true, completeBulkActionAlert: false });
+        } else if (isCompleted === 0) {
+            this.setState({ incompleteBulkActionInit: true, incompleteBulkActionAlert: false });
+        }
     }
 }
 
