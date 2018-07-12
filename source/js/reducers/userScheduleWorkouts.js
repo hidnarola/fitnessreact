@@ -30,6 +30,9 @@ import {
     DELETE_USERS_BULK_WORKOUT_SCHEDULE_REQUEST,
     DELETE_USERS_BULK_WORKOUT_SCHEDULE_SUCCESS,
     DELETE_USERS_BULK_WORKOUT_SCHEDULE_ERROR,
+    COMPLETE_USERS_BULK_WORKOUT_SCHEDULE_REQUEST,
+    COMPLETE_USERS_BULK_WORKOUT_SCHEDULE_SUCCESS,
+    COMPLETE_USERS_BULK_WORKOUT_SCHEDULE_ERROR,
 } from "../actions/userScheduleWorkouts";
 import { VALIDATION_FAILURE_STATUS } from "../constants/consts";
 import { generateValidationErrorMsgArr } from "../helpers/funs";
@@ -243,6 +246,36 @@ const actionMap = {
         return state.merge(Map(newState));
     },
     [DELETE_USERS_BULK_WORKOUT_SCHEDULE_ERROR]: (state, action) => {
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
+        }
+        return state.merge(Map({
+            loading: false,
+            error: error,
+        }));
+    },
+    [COMPLETE_USERS_BULK_WORKOUT_SCHEDULE_REQUEST]: (state, action) => {
+        return state.merge(Map({
+            loading: true,
+            error: [],
+        }));
+    },
+    [COMPLETE_USERS_BULK_WORKOUT_SCHEDULE_SUCCESS]: (state, action) => {
+        var newState = {
+            loading: false,
+        };
+        if (action.data.status !== 1) {
+            var msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
+            newState.error = [msg];
+        }
+        return state.merge(Map(newState));
+    },
+    [COMPLETE_USERS_BULK_WORKOUT_SCHEDULE_ERROR]: (state, action) => {
         let error = [];
         if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
             error = generateValidationErrorMsgArr(action.error.response.message);
