@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import FitnessHeader from '../global/FitnessHeader';
 import FitnessNav from '../global/FitnessNav';
-import { getUserProgramRequest, setSelectedDayForProgram, addUsersProgramWorkoutScheduleRequest, copyUserProgramWorkoutSchedule } from '../../actions/userPrograms';
+import { getUserProgramRequest, setSelectedDayForProgram, addUsersProgramWorkoutScheduleRequest, copyUserProgramWorkoutSchedule, deleteUsersProgramWorkoutScheduleRequest } from '../../actions/userPrograms';
 import { routeCodes } from '../../constants/routes';
 import { te, ts } from '../../helpers/funs';
 import _ from "lodash";
@@ -22,6 +22,12 @@ class ProgramSave extends Component {
             totalDays: 7,
             showSelectEventAlert: false,
             workoutPasteAction: false,
+            deleteWorkoutAlert: false,
+            deleteWorkoutActionInit: false,
+            selectedWorkoutIdss: null,
+            deleteWeekAlert: false,
+            deleteWeekActionInit: false,
+            selectedWorkoutIds: [],
         }
     }
 
@@ -32,20 +38,14 @@ class ProgramSave extends Component {
         dispatch(getProgramsNameRequest());
     }
 
-    getProgramWorkoutSchedules = () => {
-        const { match, dispatch } = this.props;
-        if (match && match.params && match.params.id) {
-            var _id = match.params.id;
-            dispatch(getUserProgramRequest(_id));
-        }
-    }
-
     render() {
         const {
             program,
             totalDays,
             workouts,
             showSelectEventAlert,
+            deleteWorkoutAlert,
+            deleteWeekAlert,
         } = this.state;
         const {
             selectedDay,
@@ -71,11 +71,13 @@ class ProgramSave extends Component {
                                         workouts={workouts}
                                         handleSelectDayAction={this.handleSelectDayAction}
                                         handleCopy={this.handleCopy}
+                                        handleDelete={this.showDeleteConfirmation}
                                     />
                                     <div className="d-flex week-btn-btm">
                                         <a href="javascript:void(0)" onClick={this.handleAddWeek}><i className="icon-add_box"></i> Add Week</a>
                                         {totalDays > 7 &&
-                                            <a href="javascript:void(0)" onClick={this.handleDeleteWeek}><i className="icon-delete_forever"></i> Delete Week</a>
+                                            // <a href="javascript:void(0)" onClick={this.handleDeleteWeek}><i className="icon-delete_forever"></i> Delete Week</a>
+                                            <a href="javascript:void(0)" onClick={this.handleShowDeleteWeekAlert}><i className="icon-delete_forever"></i> Delete Week</a>
                                         }
                                     </div>
                                 </div>
@@ -103,6 +105,34 @@ class ProgramSave extends Component {
                     />
                 </SweetAlert>
 
+                <SweetAlert
+                    show={deleteWorkoutAlert}
+                    warning
+                    showCancel
+                    confirmBtnText="Yes, delete it!"
+                    confirmBtnBsStyle="danger"
+                    cancelBtnBsStyle="default"
+                    title="Are you sure?"
+                    onConfirm={this.handleDeleteWorkoutSchedule}
+                    onCancel={this.handleCancelDelete}
+                >
+                    You will not be able to recover this file!
+                </SweetAlert>
+
+                <SweetAlert
+                    show={deleteWeekAlert}
+                    warning
+                    showCancel
+                    confirmBtnText="Yes, delete it!"
+                    confirmBtnBsStyle="danger"
+                    cancelBtnBsStyle="default"
+                    title="Are you sure?"
+                    onConfirm={this.handleDeleteWeek}
+                    onCancel={this.handleCancelDeleteWeek}
+                >
+                    You will not be able to recover this file!
+                </SweetAlert>
+
             </div>
         );
     }
@@ -117,6 +147,9 @@ class ProgramSave extends Component {
         } = this.props;
         const {
             workoutPasteAction,
+            deleteWorkoutActionInit,
+            selectedWorkoutIds,
+            deleteWeekActionInit,
         } = this.state;
         if (!loading && error && error.length > 0) {
             te(error[0]);
@@ -131,7 +164,7 @@ class ProgramSave extends Component {
                 lastDay++;
             }
             var getNumberOfWeek = Math.ceil(lastDay / 7);
-            var totalDaysToGenerate = (getNumberOfWeek * 7)
+            var totalDaysToGenerate = (getNumberOfWeek * 7);
             if (prog) {
                 this.setState({
                     program: prog,
@@ -151,6 +184,32 @@ class ProgramSave extends Component {
                 this.setState({ workoutPasteAction: false });
             }
         }
+        if (deleteWorkoutActionInit && selectedWorkoutIds && selectedWorkoutIds.length > 0 && !loading) {
+            this.setState({ deleteWorkoutActionInit: false, selectedWorkoutIds: [] });
+            this.getProgramWorkoutSchedules();
+            if (error.length <= 0) {
+                ts('Workout deleted successfully!');
+            } else {
+                te('Cannot delete workout. Please try again later!');
+            }
+        }
+        if (deleteWeekActionInit && selectedWorkoutIds && selectedWorkoutIds.length > 0 && !loading) {
+            this.setState({ deleteWeekActionInit: false, selectedWorkoutIds: [] });
+            this.getProgramWorkoutSchedules();
+            if (error.length <= 0) {
+                ts('Week deleted successfully!');
+            } else {
+                te('Cannot delete week. Please try again later!');
+            }
+        }
+    }
+
+    getProgramWorkoutSchedules = () => {
+        const { match, dispatch } = this.props;
+        if (match && match.params && match.params.id) {
+            var _id = match.params.id;
+            dispatch(getUserProgramRequest(_id));
+        }
     }
 
     handleAddWeek = () => {
@@ -159,10 +218,45 @@ class ProgramSave extends Component {
         });
     }
 
-    handleDeleteWeek = () => {
+    handleShowDeleteWeekAlert = () => {
+        const { totalDays, workouts } = this.state;
+        var start = (totalDays - 7);
+        var end = totalDays;
+        var selectedWorkoutIds = [];
+        for (let day = start; day < end; day++) {
+            var filterWorkouts = _.filter(workouts, { 'day': day });
+            if (filterWorkouts && filterWorkouts.length > 0) {
+                _.forEach(filterWorkouts, (o, i) => {
+                    selectedWorkoutIds.push(o._id);
+                });
+            }
+        }
         this.setState({
-            totalDays: (this.state.totalDays - 7)
+            selectedWorkoutIds: selectedWorkoutIds,
+            deleteWeekAlert: true,
         });
+    }
+
+    handleCancelDeleteWeek = () => {
+        this.setState({
+            selectedWorkoutIds: [],
+            deleteWeekAlert: false,
+        });
+    }
+
+    handleDeleteWeek = () => {
+        const { dispatch } = this.props;
+        const { selectedWorkoutIds, totalDays } = this.state;
+        if (selectedWorkoutIds && selectedWorkoutIds.length > 0) {
+            var requestData = {
+                exercisesIds: selectedWorkoutIds,
+            }
+            dispatch(deleteUsersProgramWorkoutScheduleRequest(requestData));
+            this.setState({ deleteWeekAlert: false, deleteWeekActionInit: true });
+        } else {
+            this.setState({ deleteWeekAlert: false, selectedWorkoutIds: [], totalDays: (totalDays - 7) });
+            ts('Week deleted successfully!');
+        }
     }
 
     handleSelectDayAction = (day) => {
@@ -186,7 +280,7 @@ class ProgramSave extends Component {
         if (match && match.params && match.params.id) {
             var _id = match.params.id;
             var requestData = {
-                programId: match.params.id,
+                programId: _id,
                 title: 'Rest Day',
                 description: 'Hey its rest day! Take total rest.',
                 type: SCHEDULED_WORKOUT_TYPE_RESTDAY,
@@ -239,6 +333,32 @@ class ProgramSave extends Component {
         }
     }
 
+    showDeleteConfirmation = (_id) => {
+        var ids = [_id];
+        this.setState({
+            deleteWorkoutAlert: true,
+            selectedWorkoutIds: ids,
+        });
+    }
+
+    handleCancelDelete = () => {
+        this.setState({
+            deleteWorkoutAlert: false,
+            selectedWorkoutIds: null,
+        });
+    }
+
+    handleDeleteWorkoutSchedule = () => {
+        const { dispatch } = this.props;
+        const { selectedWorkoutIds } = this.state;
+        if (selectedWorkoutIds && selectedWorkoutIds.length > 0) {
+            var requestData = {
+                exercisesIds: selectedWorkoutIds,
+            }
+            dispatch(deleteUsersProgramWorkoutScheduleRequest(requestData));
+        }
+        this.setState({ deleteWorkoutAlert: false, deleteWorkoutActionInit: true });
+    }
 }
 
 const mapStateToProps = (state) => {
@@ -264,6 +384,7 @@ class CustomDaysCalendarView extends Component {
             workouts,
             handleSelectDayAction,
             handleCopy,
+            handleDelete,
         } = this.props;
         var rows = (totalDays / 7);
         var rowsObj = [];
@@ -275,6 +396,7 @@ class CustomDaysCalendarView extends Component {
                     workouts={workouts}
                     handleSelectDayAction={handleSelectDayAction}
                     handleCopy={handleCopy}
+                    handleDelete={handleDelete}
                 />
             )
         }
@@ -293,6 +415,7 @@ class CustomDaysCalendarRow extends Component {
             workouts,
             handleSelectDayAction,
             handleCopy,
+            handleDelete,
         } = this.props;
         var end = rowNumber * 7;
         var start = end - (7 - 1);
@@ -305,6 +428,7 @@ class CustomDaysCalendarRow extends Component {
                     workouts={workouts}
                     handleSelectDayAction={handleSelectDayAction}
                     handleCopy={handleCopy}
+                    handleDelete={handleDelete}
                 />
             )
         }
@@ -322,7 +446,6 @@ class CustomDaysCalendarBlock extends Component {
             blockNumber,
             workouts,
             handleSelectDayAction,
-            handleCopy,
         } = this.props;
         var findDay = (blockNumber - 1);
         var events = _.filter(workouts, { 'day': findDay });
@@ -346,7 +469,7 @@ class CustomDaysCalendarBlock extends Component {
                                             <div className="program-event-block-content">
                                                 <p>{(e.description) ? e.description : ''}</p>
                                                 {(e.type === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
-                                                    <a href="javascript:void(0)" onClick={() => handleCopy(e)}><FaCopy /></a>
+                                                    <a href="javascript:void(0)" onClick={(event) => this.handleCopyEvent(event, e)}><FaCopy /></a>
                                                 }
                                                 {(e.type === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
                                                     <a href="javascript:void(0)" ><FaEye /></a>
@@ -354,7 +477,7 @@ class CustomDaysCalendarBlock extends Component {
                                                 {(e.type === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
                                                     <a href="javascript:void(0)" ><FaPencil /></a>
                                                 }
-                                                <a href="javascript:void(0)" ><FaTrash /></a>
+                                                <a href="javascript:void(0)" onClick={(event) => this.handleDeleteEvent(event, e._id)}><FaTrash /></a>
                                             </div>
                                         </div>
                                     );
@@ -365,6 +488,18 @@ class CustomDaysCalendarBlock extends Component {
                 </div>
             </div>
         );
+    }
+
+    handleCopyEvent = (e, event) => {
+        const { handleCopy } = this.props;
+        e.stopPropagation();
+        handleCopy(event);
+    }
+
+    handleDeleteEvent = (e, _id) => {
+        const { handleDelete } = this.props;
+        e.stopPropagation();
+        handleDelete(_id);
     }
 }
 

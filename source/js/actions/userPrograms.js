@@ -22,6 +22,10 @@ export const ADD_USERS_PROGRAM_WORKOUT_SCHEDULE_ERROR = 'ADD_USERS_PROGRAM_WORKO
 
 export const COPY_USER_PROGRAM_WORKOUT_SCHEDULE = 'COPY_USER_PROGRAM_WORKOUT_SCHEDULE';
 
+export const DELETE_USERS_PROGRAM_WORKOUT_SCHEDULE_REQUEST = 'DELETE_USERS_PROGRAM_WORKOUT_SCHEDULE_REQUEST';
+export const DELETE_USERS_PROGRAM_WORKOUT_SCHEDULE_SUCCESS = 'DELETE_USERS_PROGRAM_WORKOUT_SCHEDULE_SUCCESS';
+export const DELETE_USERS_PROGRAM_WORKOUT_SCHEDULE_ERROR = 'DELETE_USERS_PROGRAM_WORKOUT_SCHEDULE_ERROR';
+
 export function getUserProgramsRequest() {
     return {
         type: GET_USER_PROGRAMS_REQUEST,
@@ -137,5 +141,26 @@ export function copyUserProgramWorkoutSchedule(selectedData) {
     return {
         type: COPY_USER_PROGRAM_WORKOUT_SCHEDULE,
         selectedData,
+    }
+}
+
+export function deleteUsersProgramWorkoutScheduleRequest(requestData) {
+    return {
+        type: DELETE_USERS_PROGRAM_WORKOUT_SCHEDULE_REQUEST,
+        requestData,
+    }
+}
+
+export function deleteUsersProgramWorkoutScheduleSuccess(data) {
+    return {
+        type: DELETE_USERS_PROGRAM_WORKOUT_SCHEDULE_SUCCESS,
+        data,
+    }
+}
+
+export function deleteUsersProgramWorkoutScheduleError(error) {
+    return {
+        type: DELETE_USERS_PROGRAM_WORKOUT_SCHEDULE_ERROR,
+        error,
     }
 }

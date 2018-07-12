@@ -15,7 +15,10 @@ import {
     DELETE_USER_PROGRAM_REQUEST,
     ADD_USERS_PROGRAM_WORKOUT_SCHEDULE_REQUEST,
     addUsersProgramWorkoutScheduleSuccess,
-    addUsersProgramWorkoutScheduleError
+    addUsersProgramWorkoutScheduleError,
+    DELETE_USERS_PROGRAM_WORKOUT_SCHEDULE_REQUEST,
+    deleteUsersProgramWorkoutScheduleSuccess,
+    deleteUsersProgramWorkoutScheduleError
 } from "../actions/userPrograms";
 
 function getUserProgramsData() {
@@ -77,12 +80,25 @@ function addUsersProgramWorkoutScheduleData() {
     }
 }
 
+function deleteUsersProgramWorkoutScheduleData() {
+    return function* (action) {
+        try {
+            let requestData = action.requestData;
+            const data = yield call(() => api.deleteUsersProgramWorkoutSchedule(requestData));
+            yield put(deleteUsersProgramWorkoutScheduleSuccess(data));
+        } catch (error) {
+            yield put(deleteUsersProgramWorkoutScheduleError(error));
+        }
+    }
+}
+
 export function* watchUserProgramsData() {
     yield takeLatest(GET_USER_PROGRAMS_REQUEST, getUserProgramsData());
     yield takeLatest(GET_USER_PROGRAM_REQUEST, getUserProgramData());
     yield takeLatest(ADD_USER_PROGRAM_MASTER_REQUEST, addUserProgramMasterData());
     yield takeLatest(DELETE_USER_PROGRAM_REQUEST, deleteUserProgramData());
     yield takeLatest(ADD_USERS_PROGRAM_WORKOUT_SCHEDULE_REQUEST, addUsersProgramWorkoutScheduleData());
+    yield takeLatest(DELETE_USERS_PROGRAM_WORKOUT_SCHEDULE_REQUEST, deleteUsersProgramWorkoutScheduleData());
 }
 
 export default [
