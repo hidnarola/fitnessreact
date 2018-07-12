@@ -16,6 +16,7 @@ import {
     selectUsersWorkoutScheduleForEdit,
     getProgramsNameRequest,
     userAssignProgramRequest,
+    deleteUsersBulkWorkoutScheduleRequest,
 } from '../actions/userScheduleWorkouts';
 import { NavLink } from "react-router-dom";
 import { routeCodes } from '../constants/routes';
@@ -45,6 +46,8 @@ class ScheduleWorkout extends Component {
             showWorkoutScheduleDetailsModal: false,
             showProgramAssignAlert: false,
             selectedProgramIdToAssign: null,
+            deleteBulkActionAlert: false,
+            deleteBulkActionInit: false,
         }
     }
 
@@ -65,6 +68,7 @@ class ScheduleWorkout extends Component {
             selectedWorkoutForView,
             showProgramAssignAlert,
             selectedProgramIdToAssign,
+            deleteBulkActionAlert,
         } = this.state;
         const {
             selectedSlot,
@@ -75,6 +79,7 @@ class ScheduleWorkout extends Component {
             selectedSlotStateDate = selectedSlot.start;
         }
         var programOptions = prepareDropdownOptionsData(programs, '_id', 'name');
+        var selectedEvents = _.filter(workoutEvents, ['isSelectedForBulkAction', true]);
         return (
             <div className="fitness-body">
                 <FitnessHeader />
@@ -90,6 +95,9 @@ class ScheduleWorkout extends Component {
                         <div className="col-md-12">
                             <div className="white-box space-btm-20">
                                 <div className="whitebox-body profile-body">
+                                    {selectedEvents && selectedEvents.length > 0 &&
+                                        <a href="javascript:void(0)" onClick={() => this.setState({ deleteBulkActionAlert: true })}>({selectedEvents.length}) Delete Selected</a>
+                                    }
                                     <BigCalendar
                                         selectable={true}
                                         defaultView={BigCalendar.Views.MONTH}
@@ -147,6 +155,20 @@ class ScheduleWorkout extends Component {
                 </SweetAlert>
 
                 <SweetAlert
+                    show={deleteBulkActionAlert}
+                    warning
+                    showCancel
+                    confirmBtnText="Yes, delete it!"
+                    confirmBtnBsStyle="danger"
+                    cancelBtnBsStyle="default"
+                    title="Are you sure?"
+                    onConfirm={this.handleDeleteBulkWorkoutSchedule}
+                    onCancel={() => this.setState({ deleteBulkActionAlert: false })}
+                >
+                    You will not be able to recover this file!
+                </SweetAlert>
+
+                <SweetAlert
                     type="default"
                     title={`Select program start from - ${(selectedSlotStateDate) ? moment(selectedSlotStateDate).format('MM/DD/YYYY') : ''}`}
                     onCancel={this.handleCancelProgramAssignAlert}
@@ -197,6 +219,7 @@ class ScheduleWorkout extends Component {
             deleteWorkoutActionInit,
             selectedWorkoutDate,
             selectedWorkoutId,
+            deleteBulkActionInit,
         } = this.state;
         if (!loading && prevProps.workouts !== workouts) {
             var newWorkouts = [];
@@ -212,10 +235,12 @@ class ScheduleWorkout extends Component {
                     exerciseType: (workout.type) ? workout.type : null,
                     meta: workout,
                     description: (workout.description) ? workout.description : '',
+                    isSelectedForBulkAction: false,
                     handleCopy: () => this.handleCopy(workout._id),
                     handleDelete: () => this.showDeleteConfirmation(workout._id, workout.date),
                     handleViewWorkout: () => this.handleViewWorkout(workout._id),
                     handleCompleteWorkout: () => this.handleCompleteWorkout(workout._id),
+                    handleSelectForBulkAction: () => this.handleSelectForBulkAction(workout._id),
                     handleSelectWorkoutForEdit: () => this.handleSelectWorkoutForEdit(workout._id),
                 }
                 newWorkouts.push(newWorkout);
@@ -240,6 +265,16 @@ class ScheduleWorkout extends Component {
                 ts('Workout deleted successfully!');
             } else {
                 te('Cannot delete workout. Please try again later!');
+            }
+        }
+        if (deleteBulkActionInit && !loading) {
+            this.setState({ deleteBulkActionInit: false });
+            var today = moment().startOf('day').utc();
+            this.getWorkoutSchedulesByMonth(today);
+            if (error.length <= 0) {
+                ts('Workouts deleted successfully!');
+            } else {
+                te('Cannot delete workouts. Please try again later!');
             }
         }
         if (!assignProgramLoading && prevProps.assignProgram !== assignProgram) {
@@ -291,7 +326,7 @@ class ScheduleWorkout extends Component {
         var date = moment.utc(startDay);
         var requestData = {
             title: 'Rest Day',
-            description: '<p>Hey its rest day! Take total rest.</p>',
+            description: 'Hey its rest day! Take total rest.',
             type: SCHEDULED_WORKOUT_TYPE_RESTDAY,
             date: date,
             exercises: [],
@@ -456,6 +491,34 @@ class ScheduleWorkout extends Component {
         }
 
     }
+
+    handleSelectForBulkAction = (_id) => {
+        const { workoutEvents } = this.state;
+        var workouts = Object.assign([], workoutEvents);
+        var selectedWorkout = _.find(workouts, ['id', _id]);
+        if (selectedWorkout) {
+            var isSelectedForBulkAction = (typeof selectedWorkout.isSelectedForBulkAction !== 'undefined') ? (selectedWorkout.isSelectedForBulkAction === false) ? true : false : true;
+            var workout = Object.assign({}, selectedWorkout);
+            workout.isSelectedForBulkAction = isSelectedForBulkAction;
+            var index = _.findIndex(workouts, ['id', _id]);
+            workouts[index] = workout;
+            this.setState({
+                workoutEvents: workouts,
+            });
+        }
+    }
+
+    handleDeleteBulkWorkoutSchedule = () => {
+        const { dispatch } = this.props;
+        const { workoutEvents } = this.state;
+        var selectedEvents = _.filter(workoutEvents, ['isSelectedForBulkAction', true]);
+        var selectedIds = _.map(selectedEvents, 'id');
+        var requestData = {
+            exerciseIds: selectedIds,
+        };
+        dispatch(deleteUsersBulkWorkoutScheduleRequest(requestData));
+        this.setState({ deleteBulkActionInit: true, deleteBulkActionAlert: false });
+    }
 }
 
 const mapStateToProps = (state) => {
@@ -510,7 +573,6 @@ class SelectEventView extends Component {
 class CustomEventCard extends Component {
     render() {
         const { event } = this.props;
-        let allowToMarkComplete = false;
         let today = moment().utc();
         let yesturday = moment().subtract('1', 'day');
         let eventDate = moment(event.start);
@@ -521,25 +583,21 @@ class CustomEventCard extends Component {
             } else if (event.isCompleted === 0 && yesturday > eventDate && event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE) {
                 titleClassName = 'color-red';
             }
-            allowToMarkComplete = true;
         }
         return (
             <div className={cns('big-calendar-custom-month-event-view-card', { 'restday': (event.exerciseType === SCHEDULED_WORKOUT_TYPE_RESTDAY) })}>
-                <div className="pull-left custom_check" onClick={event.handleCompleteWorkout}>
-                    {(event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE) && allowToMarkComplete &&
-                        <input
-                            type="checkbox"
-                            id={`complete_workout_schedule_${event.id}`}
-                            name={`complete_workout_schedule_${event.id}`}
-                            checked={event.isCompleted}
-                            onChange={() => { }}
-                        />
-                    }
+                <div className="pull-left custom_check" onClick={event.handleSelectForBulkAction}>
+                    <input
+                        type="checkbox"
+                        id={`complete_workout_schedule_${event.id}`}
+                        name={`complete_workout_schedule_${event.id}`}
+                        checked={event.isSelectedForBulkAction}
+                        onChange={() => { }}
+                    />
                     <label><h5 className={titleClassName}>{event.title}</h5></label>
                 </div>
-                {/* <h5>{event.title}</h5> */}
                 {event.description &&
-                    <div className={titleClassName}>{ReactHtmlParser(event.description)}</div>
+                    <div className={titleClassName}><p>{event.description}</p></div>
                 }
                 {(event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
                     <a href="javascript:void(0)" onClick={event.handleCopy}><FaCopy /></a>

@@ -22,6 +22,10 @@ export const DELETE_USERS_WORKOUT_SCHEDULE_REQUEST = 'DELETE_USERS_WORKOUT_SCHED
 export const DELETE_USERS_WORKOUT_SCHEDULE_SUCCESS = 'DELETE_USERS_WORKOUT_SCHEDULE_SUCCESS';
 export const DELETE_USERS_WORKOUT_SCHEDULE_ERROR = 'DELETE_USERS_WORKOUT_SCHEDULE_ERROR';
 
+export const DELETE_USERS_BULK_WORKOUT_SCHEDULE_REQUEST = 'DELETE_USERS_BULK_WORKOUT_SCHEDULE_REQUEST';
+export const DELETE_USERS_BULK_WORKOUT_SCHEDULE_SUCCESS = 'DELETE_USERS_BULK_WORKOUT_SCHEDULE_SUCCESS';
+export const DELETE_USERS_BULK_WORKOUT_SCHEDULE_ERROR = 'DELETE_USERS_BULK_WORKOUT_SCHEDULE_ERROR';
+
 export const CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_REQUEST = 'CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_REQUEST';
 export const CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_SUCCESS = 'CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_SUCCESS';
 export const CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_ERROR = 'CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_ERROR';
@@ -151,6 +155,27 @@ export function deleteUsersWorkoutScheduleSuccess(data) {
 export function deleteUsersWorkoutScheduleError(error) {
     return {
         type: DELETE_USERS_WORKOUT_SCHEDULE_ERROR,
+        error,
+    }
+}
+
+export function deleteUsersBulkWorkoutScheduleRequest(requestData) {
+    return {
+        type: DELETE_USERS_BULK_WORKOUT_SCHEDULE_REQUEST,
+        requestData,
+    }
+}
+
+export function deleteUsersBulkWorkoutScheduleSuccess(data) {
+    return {
+        type: DELETE_USERS_BULK_WORKOUT_SCHEDULE_SUCCESS,
+        data,
+    }
+}
+
+export function deleteUsersBulkWorkoutScheduleError(error) {
+    return {
+        type: DELETE_USERS_BULK_WORKOUT_SCHEDULE_ERROR,
         error,
     }
 }

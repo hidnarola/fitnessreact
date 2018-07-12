@@ -38,6 +38,11 @@ function deleteUsersWorkoutSchedule(_id) {
     return fetchResource(requestUrl + '/' + _id, options);
 }
 
+function deleteUsersBulkWorkoutSchedule(requestData) {
+    let headers = extraUserHeaders();
+    return postFormData(requestUrl + '/delete', requestData, headers);
+}
+
 function changeUsersWorkoutScheduleComplete(_id, isCompleted) {
     let headers = extraUserHeaders();
     var requestData = {
@@ -69,6 +74,7 @@ export default {
     addUsersWorkoutSchedule,
     changeUsersWorkoutSchedule,
     deleteUsersWorkoutSchedule,
+    deleteUsersBulkWorkoutSchedule,
     changeUsersWorkoutScheduleComplete,
     getProgramsName,
     userAssignProgram,
