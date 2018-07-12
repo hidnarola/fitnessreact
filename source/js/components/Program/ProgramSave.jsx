@@ -74,10 +74,9 @@ class ProgramSave extends Component {
                                         handleDelete={this.showDeleteConfirmation}
                                     />
                                     <div className="d-flex week-btn-btm">
-                                        <a href="javascript:void(0)" onClick={this.handleAddWeek}><i className="icon-add_box"></i> Add Week</a>
+                                        <a href="javascript:void(0)" className="program-save-add-week-btn" onClick={this.handleAddWeek}><i className="icon-add_box"></i> Add Week</a>
                                         {totalDays > 7 &&
-                                            // <a href="javascript:void(0)" onClick={this.handleDeleteWeek}><i className="icon-delete_forever"></i> Delete Week</a>
-                                            <a href="javascript:void(0)" onClick={this.handleShowDeleteWeekAlert}><i className="icon-delete_forever"></i> Delete Week</a>
+                                            <a href="javascript:void(0)" className="program-save-delete-week-btn" onClick={this.handleShowDeleteWeekAlert}><i className="icon-delete_forever"></i> Delete Week</a>
                                         }
                                     </div>
                                 </div>

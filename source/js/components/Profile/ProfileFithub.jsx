@@ -243,7 +243,7 @@ class ProfileFithub extends Component {
                                     </a>
                                     {activeProfile && activeProfile.friendshipStatus === FRIENDSHIP_STATUS_SELF &&
                                         <Dropdown id="post_privacy">
-                                            <Dropdown.Toggle>
+                                            <Dropdown.Toggle className="d-flex public-dropdown">
                                                 {postPrivacy === ACCESS_LEVEL_PUBLIC && <span><FaGlobe /><strong>{ACCESS_LEVEL_PUBLIC_STR}</strong></span>}
                                                 {postPrivacy === ACCESS_LEVEL_FRIENDS && <span><FaGroup /><strong>{ACCESS_LEVEL_FRIENDS_STR}</strong></span>}
                                                 {postPrivacy === ACCESS_LEVEL_PRIVATE && <span><FaLock /><strong>{ACCESS_LEVEL_PRIVATE_STR}</strong></span>}

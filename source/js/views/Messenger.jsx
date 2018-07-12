@@ -44,35 +44,106 @@ class Messenger extends Component {
                         <div className="col-md-12">
                             <div className="white-box space-btm-20">
                                 <div className="whitebox-body profile-body">
-                                    <InfiniteScroll
-                                        pageStart={0}
-                                        loadMore={this.loadMore}
-                                        hasMore={hasMore}
-                                        className="margin-top-30"
-                                        loader={
-                                            <div className="loader" key={0}>
-                                                <FaCircleONotch className="loader-spinner loader-spinner-icon" /> Loading ...
+                                    <div className="message-box-r d-flex">
+                                        <div className="message-l">
+                                            <div className="message-l-head">
+                                                <input type="text" placeholder="Search in Message" />
                                             </div>
-                                        }
-                                    >
-                                        <div className="data">
-                                            {channels && channels.length > 0 &&
-                                                <div className="">
-                                                    {
-                                                        channels.map((channel, index) => {
-                                                            return (
-                                                                <ChannelMessageCard
-                                                                    key={index}
-                                                                    channel={channel}
-                                                                    loggedUserData={loggedUserData}
-                                                                />
-                                                            )
-                                                        })
-                                                    }
-                                                </div>
-                                            }
+                                            <div className="message-l-body">
+                                                <ul>
+                                                    <li>
+                                                        <div className="message-user">
+                                                            <h3></h3>
+                                                            <h4>Employee Benefit Trust - Question</h4>
+                                                            <h5>Shanon Moore</h5>
+                                                            <h6>12 Jan</h6>
+                                                            <span><img src="images/ellipsis.png" alt="" /></span>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div className="message-user">
+                                                            <h3></h3>
+                                                            <h4>Help in Assessment</h4>
+                                                            <h5>James Cromwell</h5>
+                                                            <h6>12 Jan</h6>
+                                                            <span><img src="images/ellipsis.png" alt="" /></span>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div className="message-user">
+                                                            <h3></h3>
+                                                            <h4>Risk Transfer for X</h4>
+                                                            <h5>Sally Miles</h5>
+                                                            <h6>12 Jan</h6>
+                                                            <span><img src="images/ellipsis.png" alt="" /></span>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div className="message-user">
+                                                            <h3></h3>
+                                                            <h4>Hello!</h4>
+                                                            <h5>Lawrence Boyn</h5>
+                                                            <h6>12 Jan</h6>
+                                                            <span><img src="images/ellipsis.png" alt="" /></span>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div className="message-user">
+                                                            <h3></h3>
+                                                            <h4>Conference in New Jork</h4>
+                                                            <h5>Mark Scott</h5>
+                                                            <h6>12 Jan</h6>
+                                                            <span><img src="images/ellipsis.png" alt="" /></span>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
                                         </div>
-                                    </InfiniteScroll>
+                                        <div className="message-r">
+                                            <div className="message-r-head d-flex">
+                                                <h4 className="active"><span></span> James Cromwell</h4>
+                                                <i className=""></i>
+                                            </div>
+                                            <div className="message-r-body">
+                                                <div className="message-r-top">
+                                                    <ul>
+                                                        <li className="first-user">
+                                                            <div className="message-chat">
+                                                                <span></span>
+                                                                <h3>James Cromwell</h3>
+                                                                <h4>The specific terminal liability option provides three months of paid claim run-out protection on the specific</h4>
+                                                                <h5>8:50 AM</h5>
+                                                            </div>
+                                                        </li>
+                                                        <li className="secound-user">
+                                                            <div className="message-chat">
+                                                                <h4>Our Introduction to Self-Insurance includes information on how self-insurance works, considerations forbecoming self-insured, the advantages and disadvantages of self-insurance, how to limit risk and</h4>
+                                                                <h5>9:00 AM</h5>
+                                                            </div>
+                                                        </li>
+                                                        <li className="first-user">
+                                                            <div className="message-chat">
+                                                                <span></span>
+                                                                <h3>James Cromwell</h3>
+                                                                <h4>Our Introduction to Self-Insurance includes information on how self-insurance works, considerations for becoming self-insured, the advantages and disadvantages of self-insurance, how to limit risk and</h4>
+                                                                <h5>11:00 AM</h5>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div className="message-r-btm">
+                                                    <textarea>Write here…</textarea>
+                                                    <div className="message-r-btm-btm d-flex ">
+                                                        <div className="message-r-btm-btm-l">
+                                                            <i><img src="images/pin-icon.png" alt="" /></i>
+                                                            <i><img src="images/img-icon.png" alt="" /></i>
+                                                        </div>
+                                                        <button type="submit">Send <i></i></button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

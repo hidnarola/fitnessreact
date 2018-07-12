@@ -1665,7 +1665,64 @@ ul.text-right.pager {text-align: right;}
 .program-event-block-title h5{ line-height:16px; margin:0; padding:0;}
 
 .week-btn-btm{ margin:25px 0 0;}
-.week-btn-btm a{ color: #fff; display: inline-block; margin: 0; text-align: center; vertical-align: middle; padding:7px 10px 5px; border-radius:4px; line-height: 20px; white-space: nowrap;font-family: 'gt_walsheim_proregular'; font-weight:400; background:#ba66c8; }
-.week-btn-btm a:last-child{ margin-left:auto; background:#d9534f;}
+.week-btn-btm a{ color: #fff; display: inline-block; margin: 0; text-align: center; vertical-align: middle; padding:7px 10px 5px; border-radius:4px; line-height: 20px; white-space: nowrap;font-family: 'gt_walsheim_proregular'; font-weight:400; }
+a.program-save-add-week-btn{background:#ba66c8;}
+a.program-save-delete-week-btn{ margin-left:auto; background:#d9534f;}
 .week-btn-btm a i{ font-size:16px; line-height:18px; vertical-align:top;}
 .week-btn-btm a i:before{ vertical-align:top; }
+.how-training-btm button.public-dropdown{float:none; align-items: center; padding-left: 5px; width: 120px;}
+.public-dropdown{margin-right: 0px;}
+.public-dropdown span:first-child{vertical-align: top; width: 80%; display: flex;}
+.public-dropdown span svg{vertical-align: top; width: 34px; height: 18px; fill:#ddd;}
+.public-dropdown span strong{vertical-align:top; font-weight:400; line-height:18px; vertical-align: top; font-weight:500;}
+.public-dropdown.btn .caret {margin-left: auto;}
+.public-dropdown + .dropdown-menu{ min-width:130px;}
+.public-dropdown + .dropdown-menu>li>a{ font-size:14px; display:block; width:auto; text-align:left; padding:3px 10px; }
+.public-dropdown + .dropdown-menu>li>a svg{vertical-align: top !important;margin: 2px 5px 0 0;}
+.public-dropdown.btn-default:hover, .public-dropdown.btn-default.focus, .public-dropdown.btn-default:focus,
+.public-dropdown.btn-default.active, .public-dropdown.btn-default:active, .open>.public-dropdown.dropdown-toggle.btn-default{ background:#fff; border:1px solid #fff !important; border-left:2px solid #f9fafa !important; }
+.how-training-btm button.vertical-middle-r{background: linear-gradient(123.28deg, #46E9C5 0%, #3FFBFC 100%); color: #fff; font-weight: 500; text-transform: uppercase; font-size: 14px; line-height: 52px;  width: 100px; padding: 0 0 0 15px;}
+.how-training-btm button.vertical-middle-r:hover{background: linear-gradient(123.28deg, #3FFBFC 0%, #46E9C5 100%);}
+.how-training-btm button.vertical-middle-r:hover i,
+.how-training-btm button.vertical-middle-r i{ background:transparent; }
+
+.message-box-r{ width:100%; margin-left:auto;}
+.message-box-r{ border:2px solid #f4f7fa;}
+.message-l{width:calc(35% + 8px); margin:-2px -2px 0 -2px;}
+.message-l-head,
+.message-r-head{ margin:0; border:2px solid #e2e9f2;}
+/* .message-l-head{background:url(../images/srh-icon.png) no-repeat 12px 48%;} */
+.message-l-head input{ width:100%; padding:15px 15px 15px 40px; line-height:26px; color:rgba(153,153,153,.85); font-size:14px; font-weight:300; border:0; background:transparent;}
+.message-r-head h4{margin:0; padding:15px; line-height:26px; color:rgba(0,0,0,.4); font-weight:400; font-size:14px;}
+.message-r-head h4 span{background:#999; border-radius:80px; width:8px; height:8px; display:inline-block; vertical-align:middle; margin:0 4px 0 0;}
+.message-r-head h4.active span{background:#009a8d;}
+/* .message-r-head i{ background:url(../images/ellipsis.png) no-repeat 0 50%; margin-left:auto; padding:15px 20px; line-height:26px;} */
+.message-l-body{ border-right:2px solid #f4f7fa;}
+.message-l-body ul{ margin:0; padding:0; list-style:none; max-height:440px; overflow:auto;}
+.message-l-body ul li{ display:block; width:100%; border:transparent; border-bottom:2px solid #eff1f6; border-left:3px solid transparent; padding:22px 0; border-radius:0;}
+.message-l-body ul li:hover{background:#f7f7f7; border-left:3px solid #1d3b62; border-radius:0;}
+.message-user{ display:block; width:100%; padding:0 45px; position:relative;}
+.message-user h3{ margin:0; padding:0; position:absolute; top:50%; left:20px; background:#0084ff; width:7px; height:7px; border-radius:90px; transform:translateY(-50%);}
+.message-user h4{ margin:0 0 4px; padding:0; color:#385274; font-size:15px; font-weight:400; line-height:18px; display:block;display:block; white-space:nowrap; text-overflow:ellipsis; overflow:hidden; height:18px;}
+.message-user h5{ margin:0 0 4px; padding:0; color:rgba(0,0,0,.5); font-size:13px; font-weight:400; line-height:15px; display:block;}
+.message-user h6{ margin:0; padding:0; color:rgba(0,0,0,.3); font-size:11px; font-weight:500; line-height:13px; display:block;}
+.message-user span{ position:absolute; top:50%; right:10px; transform:translateY(-50%); }
+.message-r{width:65%;width:calc(67% + 6px); margin:-2px -2px 0 0; position:relative; padding:0 0 104px;}
+.message-r-btm{height:100px; border-top:1px solid #eff1f6; position:absolute; bottom:-2px; left:0; width:100%;}
+.message-r-btm textarea{ height:58px; border:0; background:transparent; padding:18px; color:rgba(153,153,153,.85); font-size:14px; font-weight:300; line-height:17px; width:100%;    vertical-align: top; resize:none}
+.message-r-btm-btm{background:#f7f7f7; border-top:1px solid #e4e4e4; height:39px; align-items:center; padding:0 0 0 20px}
+.message-r-btm-btm-l i{ margin:0 15px 0 0;}
+.message-r-btm-btm button{ background:#7292c0; border:2px solid #7292c0; color:#fff; font-size:14px; font-weight:500; line-height:31px; width:98px; border-radius:2px; margin:-1px -1px 0 auto; height:39px;}
+/* .message-r-btm-btm button i{background:url(../images/airoplan.png) no-repeat 0 0; display:inline-block; width:16px; height:16px; vertical-align:middle; margin-left:5px;} */
+.message-r-btm-btm button:hover{opacity:.8;}
+.message-r-top{max-height:340px; overflow:auto; padding:10px 0;}
+.message-r-top ul{ margin:0; padding:0; list-style:none;}
+.message-r-top ul li{ display:block; padding:0 20px 0;}
+.first-user .message-chat{ position:relative; padding:0 0 0 35px; max-width:70%;}
+.first-user span{ width:20px; height:20px; border-radius:90px; display:block; position:absolute; top:0; left:0; background:#647aa2;}
+.first-user h3{ margin:0; padding:0; font-size:12px; line-height:20px; font-weight:400; color:rgba(0,0,0,.5);}
+.first-user h4{ background:#f7f7f7; margin:0 0 5px; padding:10px; font-size:12px; line-height:16px; font-weight:400; color:rgba(0,0,0,.7); border-radius:6px;}
+.first-user h5{margin:0; padding:0; font-size:10px; line-height:14px; font-weight:400; color:rgba(153,153,153,.85);}
+.secound-user h4{ background:#e0e7f1; padding:10px; border-radius:6px; font-size:12px; color:rgba(0,0,0,.7); line-height:16px; }
+.secound-user h5{margin:0; padding:0; font-size:10px; line-height:14px; font-weight:400; color:rgba(153,153,153,.85);}
+.secound-user .message-chat{ position:relative; padding:0 0 0 35px; max-width:70%;    margin-left: auto;}
