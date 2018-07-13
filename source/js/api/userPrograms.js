@@ -1,4 +1,4 @@
-import { fetchResource, postFormData } from ".";
+import { fetchResource, postFormData, putFormData } from ".";
 import { extraUserHeaders } from "../helpers/funs";
 
 const requestUrl = 'user/user_program';
@@ -41,6 +41,11 @@ function addUsersProgramWorkoutSchedule(requestData) {
     return postFormData(requestUrl + '/exercises', requestData, headers);
 }
 
+function changeUsersProgramWorkoutSchedule(_id, requestData) {
+    let headers = extraUserHeaders();
+    return putFormData(requestUrl + '/exercises/' + _id, requestData, headers);
+}
+
 function deleteUsersProgramWorkoutSchedule(requestData) {
     let headers = extraUserHeaders();
     return postFormData(requestUrl + '/delete/exercises', requestData, headers);
@@ -52,5 +57,6 @@ export default {
     addUserProgramMaster,
     deleteUserProgram,
     addUsersProgramWorkoutSchedule,
+    changeUsersProgramWorkoutSchedule,
     deleteUsersProgramWorkoutSchedule,
 }

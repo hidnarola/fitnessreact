@@ -20,6 +20,10 @@ export const ADD_USERS_PROGRAM_WORKOUT_SCHEDULE_REQUEST = 'ADD_USERS_PROGRAM_WOR
 export const ADD_USERS_PROGRAM_WORKOUT_SCHEDULE_SUCCESS = 'ADD_USERS_PROGRAM_WORKOUT_SCHEDULE_SUCCESS';
 export const ADD_USERS_PROGRAM_WORKOUT_SCHEDULE_ERROR = 'ADD_USERS_PROGRAM_WORKOUT_SCHEDULE_ERROR';
 
+export const CHANGE_USERS_PROGRAM_WORKOUT_SCHEDULE_REQUEST = 'CHANGE_USERS_PROGRAM_WORKOUT_SCHEDULE_REQUEST';
+export const CHANGE_USERS_PROGRAM_WORKOUT_SCHEDULE_SUCCESS = 'CHANGE_USERS_PROGRAM_WORKOUT_SCHEDULE_SUCCESS';
+export const CHANGE_USERS_PROGRAM_WORKOUT_SCHEDULE_ERROR = 'CHANGE_USERS_PROGRAM_WORKOUT_SCHEDULE_ERROR';
+
 export const COPY_USER_PROGRAM_WORKOUT_SCHEDULE = 'COPY_USER_PROGRAM_WORKOUT_SCHEDULE';
 
 export const DELETE_USERS_PROGRAM_WORKOUT_SCHEDULE_REQUEST = 'DELETE_USERS_PROGRAM_WORKOUT_SCHEDULE_REQUEST';
@@ -66,6 +70,28 @@ export function addUserProgramMasterError(error) {
     return {
         type: ADD_USER_PROGRAM_MASTER_ERROR,
         error
+    }
+}
+
+export function changeUsersProgramWorkoutScheduleRequest(_id, requestData) {
+    return {
+        type: CHANGE_USERS_PROGRAM_WORKOUT_SCHEDULE_REQUEST,
+        _id,
+        requestData,
+    }
+}
+
+export function changeUsersProgramWorkoutScheduleSuccess(data) {
+    return {
+        type: CHANGE_USERS_PROGRAM_WORKOUT_SCHEDULE_SUCCESS,
+        data,
+    }
+}
+
+export function changeUsersProgramWorkoutScheduleError(error) {
+    return {
+        type: CHANGE_USERS_PROGRAM_WORKOUT_SCHEDULE_ERROR,
+        error,
     }
 }
 
