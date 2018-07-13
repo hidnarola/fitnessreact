@@ -26,6 +26,8 @@ export const DELETE_USERS_PROGRAM_WORKOUT_SCHEDULE_REQUEST = 'DELETE_USERS_PROGR
 export const DELETE_USERS_PROGRAM_WORKOUT_SCHEDULE_SUCCESS = 'DELETE_USERS_PROGRAM_WORKOUT_SCHEDULE_SUCCESS';
 export const DELETE_USERS_PROGRAM_WORKOUT_SCHEDULE_ERROR = 'DELETE_USERS_PROGRAM_WORKOUT_SCHEDULE_ERROR';
 
+export const SELECT_USERS_PROGRAM_WORKOUT_SCHEDULE_FOR_EDIT = 'SELECT_USERS_PROGRAM_WORKOUT_SCHEDULE_FOR_EDIT';
+
 export function getUserProgramsRequest() {
     return {
         type: GET_USER_PROGRAMS_REQUEST,
@@ -162,5 +164,12 @@ export function deleteUsersProgramWorkoutScheduleError(error) {
     return {
         type: DELETE_USERS_PROGRAM_WORKOUT_SCHEDULE_ERROR,
         error,
+    }
+}
+
+export function selectUsersProgramWorkoutScheduleForEdit(selectedData) {
+    return {
+        type: SELECT_USERS_PROGRAM_WORKOUT_SCHEDULE_FOR_EDIT,
+        selectedData,
     }
 }

@@ -810,9 +810,9 @@ font-size: 14px; font-weight: 700; line-height: 46px; background: #fff;}
 .material-switch > input[type="checkbox"] {display:none;}
 .material-switch > label {cursor:pointer; height:0px; position:relative; width:40px;}
 .material-switch > label::before { background:#eee; border-radius:8px; content: ''; height:12px; margin-top:-6px; position:absolute; opacity:1; transition: all 0.4s ease-in-out; width:40px;}
-.material-switch > label::after {background: linear-gradient(148.66deg, #FF3366 0%, #FF339A 100%); border-radius: 16px; content: ''; height:20px; left: -4px; margin-top:-10px; position:absolute; top:50%; transition:all 0.3s ease-in-out; width:20px;}
+.material-switch > label::after {background: #ccc; border-radius: 16px; content: ''; height:20px; left: -4px; margin-top:-10px; position:absolute; top:50%; transition:all 0.3s ease-in-out; width:20px;}
 .material-switch > input[type="checkbox"]:checked + label::before { background:#eee;}
-.material-switch > input[type="checkbox"]:checked + label::after { background: #ccc; left: 20px;}
+.material-switch > input[type="checkbox"]:checked + label::after { background: linear-gradient(148.66deg, #FF3366 0%, #FF339A 100%);left: 20px;}
 
 .workout-wrap{border-radius:3px; background-color:#fff;	border: 2px solid #F9FAFA; margin-bottom:20px;}
 .workout-head{border-radius:5px 0 0 5px;height:50px; display:-webkit-box; display:-webkit-flex; display:-ms-flex; display:flex;}
@@ -1564,28 +1564,39 @@ ul.text-right.pager {text-align: right;}
 .workout-exercise-card-wrapper.workout-exercise-card-for-warmup-wrapper h4 { float: left; margin: 0; padding: 0; position: relative; top: -30px; left: 0; background: #fff; min-width: 8%; text-align: center; }
 .workout-exercise-card-wrapper.workout-exercise-card-for-cooldown-wrapper h4 { float: left; margin: 0; padding: 0; position: relative; top: -30px; left: 0; background: #fff; min-width: 9%; text-align: center; }
 
-.big-calendar-custom-month-event-view-card { padding: 10px; margin: 0; }
+.big-calendar-custom-month-event-view-card { padding:0; margin: 0; }
 .big-calendar-custom-month-event-view-card h5 { font-size: 16px; }
 .big-calendar-custom-month-event-view-card p { font-size: 12px; font-style: italic; }
 .big-calendar-custom-month-event-view-card a{color: #44edd1;}
 
 .workout-calender .rbc-row-segment {padding:5px;}
-.workout-calender .rbc-event {padding: 0;background-color: #f6f1ff;border-radius: 0;color: #000;cursor: pointer;border: 1px solid #e7dbff;}
+.workout-calender .rbc-event {padding: 0;border-radius: 0;color: #000;cursor: pointer;    background: transparent;}
 .workout-calender .custom_check [type="checkbox"]:not(:checked) + label:before,
 .workout-calender .custom_check [type="checkbox"]:checked + label:before {width:16px; height:16px; border: 1px solid #ddd; background: #fff;}
 .workout-calender .custom_check [type="checkbox"]:not(:checked) + label,
 .workout-calender .custom_check [type="checkbox"]:checked + label {padding-left: 22px; height: auto; margin: 0;}
-.workout-calender .pull-left.custom_check{ float:none !important;}
-.workout-calender .big-calendar-custom-month-event-view-card h5 {font-size: 14px; line-height: 16px; display: block; text-overflow: ellipsis; height: 16px; overflow: hidden; width:100%; color:#6a3fbd; margin: 1px 0 0;}
-.workout-calender .big-calendar-custom-month-event-view-card p {font-size:12px; font-style: normal; white-space:initial; color: #666; font-size:12px; line-height:16px; padding: 0; margin:0px 0 15px 2px; overflow: hidden; height:48px;}
+.workout-calender .pull-left.custom_check{ float:none !important; background: #693fbd; padding: 10px; height: 38px;}
+.workout-calender .big-calendar-custom-month-event-view-card h5 { font-size:16px; line-height:18px; display:block; text-overflow:ellipsis; height:18px; overflow:hidden; width:100%; color:#fff; margin:0;}
+.workout-calender .big-calendar-custom-month-event-view-card p {font-style: normal; white-space: normal; color: #333 !important; font-size: 14px; line-height: 20px; padding: 0; margin: 0px 0 10px 0; overflow: hidden; height: 42px; word-break: break-all;}
 .workout-calender .big-calendar-custom-month-event-view-card a {color:#716684; width: calc(25% - 4px); display: inline-block; line-height: 20px; padding: 2px 4px 6px; border: 0; background: #e2dbee; text-align: center; margin: 0 2px; vertical-align: top; }
 .workout-calender .custom_check [type="checkbox"]:not(:checked) + label:after, 
-.workout-calender .custom_check [type="checkbox"]:checked + label:after {width: 8px; height: 8px; background: #6a3fbd;}
+.workout-calender .custom_check [type="checkbox"]:checked + label:after {width:10px; height: 10px; background: #6a3fbd; top: 3px; left: 3px;}
 .workout-calender .rbc-month-view>.rbc-month-row{display:flex; overflow:visible; height:auto; flex-wrap:wrap;flex: 1; min-height: 180px;}
-.workout-calender .big-calendar-custom-month-event-view-card.restday{ background:#e8fffb; border: 1px solid #c6fbf2;}
+.workout-calender .big-calendar-custom-month-event-view-card.restday .pull-left.custom_check{ background:#46E9C5;}
+.workout-calender .big-calendar-custom-month-event-view-card.restday .big-calendar-custom-month-event-view-card-body {background-color: #e3fdf7;}
+.workout-calender .big-calendar-custom-month-event-view-card.restday .custom_check [type="checkbox"]:not(:checked) + label:after, 
+.workout-calender .big-calendar-custom-month-event-view-card.restday .custom_check [type="checkbox"]:checked + label:after{background:#46E9C5;}
 .workout-calender .big-calendar-custom-month-event-view-card.restday a {background:#d6e6e3;}
 .workout-calender .rbc-header {padding: 10px 3px; background: #f4f0fc;}
 .workout-calender .rbc-month-view{flex:1}
+.big-calendar-custom-month-event-view-card-body{background-color:#f6f1ff; padding:10px;}
+.big-calendar-custom-month-event-view-card-footer .switch-wrap{ box-shadow:none; font-family:'gt_walsheim_proregular'; background:#fafafa; border-radius:0; padding:0 10px; line-height:36px;}
+.big-calendar-custom-month-event-view-card-footer .switch-wrap small {font-weight: 500;}
+.material-switch > label {width: 30px;}
+.material-switch > label::before {border-radius:80px; height:10px; margin-top:-5px; width:30px;}
+.material-switch > label::after {border-radius:46px; height:16px; right:-4px; margin-top:-8px; width:16px;}
+.workout-calender .custom_check [type="checkbox"]:not(:checked) + label:before, 
+.workout-calender .custom_check [type="checkbox"]:checked + label:before{ border:0;}
 
 .rbc-selected-cell{background:#fff; }
 .popup-link-wrap{margin: 0 20px; border: 0; display: flex; flex-wrap: wrap;}
@@ -1635,8 +1646,8 @@ ul.text-right.pager {text-align: right;}
 .programs-table-wrapper .table>tbody>tr>th:nth-child(4),
 .programs-table-wrapper .table>tbody>tr>td:nth-child(4){ width:10%;}
 
-.color-red, .color-red p{color:red !important;}
-.color-green, .color-green p{color:green !important;}
+.color-in-completed, .color-in-completed p{color:#ccc !important;}
+.color-completed, .color-completed p{color:#ff337a !important;}
 
 .add-program-master-form-alert-form form {text-align: left;}
 
@@ -1644,28 +1655,33 @@ ul.text-right.pager {text-align: right;}
 .program-save-custom-days-wrapper .program-save-custom-days-row .program-save-custom-days-block .program-save-custom-days-block-title { text-align: right; }
 .program-save-custom-days-wrapper .program-save-custom-days-row .program-save-custom-days-block .program-save-custom-days-block-content { width: 100%; min-height: 150px; }
 
-.program-event-block-wrapper{padding:10px;background-color: #f6f1ff;border-radius: 0;color: #000;cursor: pointer;border: 1px solid #e7dbff; margin:0;}
+.program-event-block-wrapper{border-radius: 0;color:#000;cursor:pointer; margin:0;}
 .program-event-block-wrapper + .program-event-block-wrapper{margin-top:10px}
-.program-event-block-title{ display:block; margin:0 0 5px;}
-.program-event-block-title .pull-left.custom_check{float: none !important;}
+.program-event-block-title{ display:block; }
+.program-event-block-title .pull-left.custom_check{  float: none !important; background: #693fbd; padding: 10px; height: 38px;}
+.restday .program-event-block-title .pull-left.custom_check{ background: #46E9C5;}
 .program-event-block-title .custom_check {font-size: 14px; line-height:16px; display: block; text-overflow: ellipsis; height:16px; overflow: hidden; width: 100%; color: #6a3fbd; margin:0;} 
 .program-save-custom-days-wrapper .program-save-custom-days-row .program-save-custom-days-block{ padding:5px;}
-.program-event-block-content p{font-size: 12px; font-style: normal; white-space: normal; white-space: initial; color: #666; font-size: 12px; line-height: 16px;padding: 0; margin: 0px 0 15px 2px; overflow:hidden; height: 48px;}
+.program-event-block-content p{    font-style: normal; white-space: normal; color: #333 !important; font-size: 14px; line-height: 20px; padding: 0; margin: 0px 0 10px 0; overflow: hidden; height: 42px; word-break: break-all;}
 .program-event-block-content a{color: #716684; width: calc(25% - 4px); display: inline-block; line-height: 20px; padding: 2px 4px 6px; border: 0; background: #e2dbee; text-align: center; margin: 0 2px; vertical-align: top;}
 .program-save-custom-days-row { display: -ms-flexbox; display: -webkit-box; display: flex; -ms-flex-direction: row; -webkit-box-orient: horizontal; -webkit-box-direction: normal; flex-direction: row; }
 .program-save-custom-days-wrapper{ border:1px solid #ddd;}
 .program-save-custom-days-block{border:0 !important;}
 .program-save-custom-days-block + .program-save-custom-days-block{border-left: 1px solid #DDD !important;}
 .program-save-custom-days-row + .program-save-custom-days-row{ border-top:1px solid #ddd;}
+.program-event-block-content{background-color: #f6f1ff;padding: 10px;}
+.restday .program-event-block-content{    background-color: #e3fdf7;}
 
-.program-event-block-wrapper.restday{background: #e8fffb; border: 1px solid #c6fbf2;}
 .program-event-block-wrapper.restday .program-event-block-content a{background: #d6e6e3;}
-
 .program-event-block-wrapper .custom_check [type="checkbox"]:not(:checked) + label:before,
-.program-event-block-wrapper .custom_check [type="checkbox"]:checked + label:before {width: 16px; height: 16px; border: 1px solid #ddd; background: #fff;}
+.program-event-block-wrapper .custom_check [type="checkbox"]:checked + label:before {width: 16px; height: 16px; border:0; background: #fff;}
+.program-event-block-wrapper .custom_check [type="checkbox"]:not(:checked) + label:after, 
+.program-event-block-wrapper .custom_check [type="checkbox"]:checked + label:after {width: 10px; height: 10px; background: #6a3fbd; top: 3px; left: 3px;}
 .program-event-block-wrapper .custom_check [type="checkbox"]:not(:checked) + label, 
 .program-event-block-wrapper .custom_check [type="checkbox"]:checked + label {padding-left: 24px;}
-.program-event-block-title h5{ line-height:16px; margin:0; padding:0;}
+.program-event-block-title h5{ font-size: 16px; line-height: 18px; display: block; text-overflow: ellipsis; height: 18px; overflow: hidden;width: 100%; color: #fff !important; margin: 0;}
+.program-event-block-wrapper.restday .custom_check [type="checkbox"]:not(:checked) + label:after, 
+.program-event-block-wrapper.restday .custom_check [type="checkbox"]:checked + label:after {background: #46E9C5;}
 
 .week-btn-btm{ margin:25px 0 0;}
 .week-btn-btm a{ color: #fff; display: inline-block; margin: 0; text-align: center; vertical-align: middle; padding:7px 10px 5px; border-radius:4px; line-height: 20px; white-space: nowrap;font-family: 'gt_walsheim_proregular'; font-weight:400; }

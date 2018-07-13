@@ -664,38 +664,61 @@ class CustomEventCard extends Component {
         let yesturday = moment().subtract('1', 'day');
         let eventDate = moment(event.start);
         let titleClassName = '';
+        let showCompleteSwitch = false;
         if (today > eventDate) {
             if (event.isCompleted === 1) {
-                titleClassName = 'color-green';
+                titleClassName = 'color-completed';
             } else if (event.isCompleted === 0 && yesturday > eventDate && event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE) {
-                titleClassName = 'color-red';
+                titleClassName = 'color-in-completed';
             }
+            showCompleteSwitch = true;
         }
         return (
             <div className={cns('big-calendar-custom-month-event-view-card', { 'restday': (event.exerciseType === SCHEDULED_WORKOUT_TYPE_RESTDAY) })}>
-                <div className="pull-left custom_check" onClick={event.handleSelectForBulkAction}>
-                    <input
-                        type="checkbox"
-                        id={`complete_workout_schedule_${event.id}`}
-                        name={`complete_workout_schedule_${event.id}`}
-                        checked={event.isSelectedForBulkAction}
-                        onChange={() => { }}
-                    />
-                    <label><h5 className={titleClassName}>{event.title}</h5></label>
+                <div className="big-calendar-custom-month-event-view-card-header">
+                    <div className="pull-left custom_check" onClick={event.handleSelectForBulkAction}>
+                        <input
+                            type="checkbox"
+                            id={`complete_workout_schedule_${event.id}`}
+                            name={`complete_workout_schedule_${event.id}`}
+                            checked={event.isSelectedForBulkAction}
+                            onChange={() => { }}
+                        />
+                        <label><h5 className={titleClassName}>{event.title}</h5></label>
+                    </div>
+                    <div className="big-calendar-custom-month-event-view-card-body">
+                        {event.description &&
+                            <div className={titleClassName}><p>{event.description}</p></div>
+                        }
+                        {(event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
+                            <a href="javascript:void(0)" onClick={event.handleCopy}><FaCopy /></a>
+                        }
+                        {(event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
+                            <a href="javascript:void(0)" onClick={event.handleViewWorkout}><FaEye /></a>
+                        }
+                        {(event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
+                            <a href="javascript:void(0)" onClick={event.handleSelectWorkoutForEdit}><FaPencil /></a>
+                        }
+                        <a href="javascript:void(0)" onClick={event.handleDelete}><FaTrash /></a>
+                    </div>
                 </div>
-                {event.description &&
-                    <div className={titleClassName}><p>{event.description}</p></div>
+                {event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE && showCompleteSwitch &&
+                    <div className="big-calendar-custom-month-event-view-card-footer">
+                        <div className="switch-wrap">
+                            <small>Workout Completed</small>
+                            <div className="material-switch" onClick={event.handleCompleteWorkout}>
+                                <input
+                                    id={`complete_switch_${event.id}`}
+                                    name={`complete_switch_${event.id}`}
+                                    checked={event.isCompleted}
+                                    onChange={() => { }}
+                                    type="checkbox"
+                                />
+                                <label htmlFor={`complete_switch_${event.id}`} className="label-default"></label>
+                            </div>
+                        </div>
+                    </div>
                 }
-                {(event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
-                    <a href="javascript:void(0)" onClick={event.handleCopy}><FaCopy /></a>
-                }
-                {(event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
-                    <a href="javascript:void(0)" onClick={event.handleViewWorkout}><FaEye /></a>
-                }
-                {(event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
-                    <a href="javascript:void(0)" onClick={event.handleSelectWorkoutForEdit}><FaPencil /></a>
-                }
-                <a href="javascript:void(0)" onClick={event.handleDelete}><FaTrash /></a>
             </div>
         );
     }

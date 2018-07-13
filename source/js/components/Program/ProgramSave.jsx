@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import FitnessHeader from '../global/FitnessHeader';
 import FitnessNav from '../global/FitnessNav';
-import { getUserProgramRequest, setSelectedDayForProgram, addUsersProgramWorkoutScheduleRequest, copyUserProgramWorkoutSchedule, deleteUsersProgramWorkoutScheduleRequest } from '../../actions/userPrograms';
+import { getUserProgramRequest, setSelectedDayForProgram, addUsersProgramWorkoutScheduleRequest, copyUserProgramWorkoutSchedule, deleteUsersProgramWorkoutScheduleRequest, selectUsersProgramWorkoutScheduleForEdit } from '../../actions/userPrograms';
 import { routeCodes } from '../../constants/routes';
 import { te, ts } from '../../helpers/funs';
 import _ from "lodash";
@@ -82,6 +82,7 @@ class ProgramSave extends Component {
                                         handleCopy={this.handleCopy}
                                         handleDelete={this.showDeleteConfirmation}
                                         handleSelectedForBulk={this.handleSelectedForBulk}
+                                        handleSelectWorkoutForEdit={this.handleSelectWorkoutForEdit}
                                     />
                                     <div className="d-flex week-btn-btm">
                                         <a href="javascript:void(0)" className="program-save-add-week-btn" onClick={this.handleAddWeek}><i className="icon-add_box"></i> Add Week</a>
@@ -423,6 +424,15 @@ class ProgramSave extends Component {
         dispatch(deleteUsersProgramWorkoutScheduleRequest(requestData));
         this.setState({ deleteBulkActionInit: true, deleteBulkActionAlert: false });
     }
+
+    handleSelectWorkoutForEdit = (selectedEvent) => {
+        const { dispatch, history, match } = this.props;
+        if (match && match.params && match.params.id) {
+            dispatch(selectUsersProgramWorkoutScheduleForEdit(selectedEvent));
+            var url = routeCodes.CHANGE_PROGRAM_SCHEDULE_WORKOUT.replace(':id', match.params.id);
+            history.push(url);
+        }
+    }
 }
 
 const mapStateToProps = (state) => {
@@ -450,6 +460,7 @@ class CustomDaysCalendarView extends Component {
             handleCopy,
             handleDelete,
             handleSelectedForBulk,
+            handleSelectWorkoutForEdit,
         } = this.props;
         var rows = (totalDays / 7);
         var rowsObj = [];
@@ -463,6 +474,7 @@ class CustomDaysCalendarView extends Component {
                     handleCopy={handleCopy}
                     handleDelete={handleDelete}
                     handleSelectedForBulk={handleSelectedForBulk}
+                    handleSelectWorkoutForEdit={handleSelectWorkoutForEdit}
                 />
             )
         }
@@ -483,6 +495,7 @@ class CustomDaysCalendarRow extends Component {
             handleCopy,
             handleDelete,
             handleSelectedForBulk,
+            handleSelectWorkoutForEdit,
         } = this.props;
         var end = rowNumber * 7;
         var start = end - (7 - 1);
@@ -497,6 +510,7 @@ class CustomDaysCalendarRow extends Component {
                     handleCopy={handleCopy}
                     handleDelete={handleDelete}
                     handleSelectedForBulk={handleSelectedForBulk}
+                    handleSelectWorkoutForEdit={handleSelectWorkoutForEdit}
                 />
             )
         }
@@ -550,7 +564,7 @@ class CustomDaysCalendarBlock extends Component {
                                                     <a href="javascript:void(0)" ><FaEye /></a>
                                                 }
                                                 {(e.type === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
-                                                    <a href="javascript:void(0)" ><FaPencil /></a>
+                                                    <a href="javascript:void(0)" onClick={(event) => this.handleEditEvent(event, e)} ><FaPencil /></a>
                                                 }
                                                 <a href="javascript:void(0)" onClick={(event) => this.handleDeleteEvent(event, e._id)}><FaTrash /></a>
                                             </div>
@@ -581,6 +595,12 @@ class CustomDaysCalendarBlock extends Component {
         const { handleSelectedForBulk } = this.props;
         e.stopPropagation();
         handleSelectedForBulk(_id);
+    }
+
+    handleEditEvent = (e, event) => {
+        const { handleSelectWorkoutForEdit } = this.props;
+        e.stopPropagation();
+        handleSelectWorkoutForEdit(event);
     }
 }
 

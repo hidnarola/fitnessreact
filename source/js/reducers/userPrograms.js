@@ -19,7 +19,8 @@ import {
     COPY_USER_PROGRAM_WORKOUT_SCHEDULE,
     DELETE_USERS_PROGRAM_WORKOUT_SCHEDULE_REQUEST,
     DELETE_USERS_PROGRAM_WORKOUT_SCHEDULE_SUCCESS,
-    DELETE_USERS_PROGRAM_WORKOUT_SCHEDULE_ERROR
+    DELETE_USERS_PROGRAM_WORKOUT_SCHEDULE_ERROR,
+    SELECT_USERS_PROGRAM_WORKOUT_SCHEDULE_FOR_EDIT
 } from "../actions/userPrograms";
 import { VALIDATION_FAILURE_STATUS } from "../constants/consts";
 import { generateValidationErrorMsgArr } from "../helpers/funs";
@@ -35,6 +36,7 @@ const initialState = Map({
     selectedDay: null,
     workout: null,
     copiedWorkout: null,
+    selectedWorkoutForEdit: null,
 });
 
 const actionMap = {
@@ -238,6 +240,11 @@ const actionMap = {
         return state.merge(Map({
             loading: false,
             error: error,
+        }));
+    },
+    [SELECT_USERS_PROGRAM_WORKOUT_SCHEDULE_FOR_EDIT]: (state, action) => {
+        return state.merge(Map({
+            selectedWorkoutForEdit: action.selectedData,
         }));
     },
 }
