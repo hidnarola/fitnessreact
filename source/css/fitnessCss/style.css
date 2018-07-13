@@ -1745,3 +1745,28 @@ a.program-save-delete-week-btn{ margin-left:auto; background:#d9534f;}
 .secound-user h4{ background:#e0e7f1; padding:10px; border-radius:6px; font-size:12px; color:rgba(0,0,0,.7); line-height:16px; }
 .secound-user h5{margin:0; padding:0; font-size:10px; line-height:14px; font-weight:400; color:rgba(153,153,153,.85);}
 .secound-user .message-chat{ position:relative; padding:0 0 0 35px; max-width:70%;    margin-left: auto;}
+
+
+
+
+
+
+.workout-schedule-calendar-bulk-action-footer-wrap { position: fixed; left: 0; bottom: 0; width: 100%; background: #f9fafa; text-align: center; }
+.workout-schedule-calendar-bulk-action-footer-wrap .outer-layer { margin: 15px 0 20px 0; }
+.workout-schedule-calendar-bulk-action-footer-wrap .outer-layer .inner-layer { display: -ms-flexbox; display: flex; -ms-flex-wrap: wrap; flex-wrap: wrap; margin-left: -20px; }
+.workout-schedule-calendar-bulk-action-footer-wrap .outer-layer .inner-layer .inner-layer-l { width: 50%; max-width: 50%; box-sizing: border-box; -ms-flex-positive: 1; flex-grow: 1; margin: 0; padding-left: 20px; display: -ms-flexbox; display: flex; -ms-flex-align: center; align-items: center; }
+.workout-schedule-calendar-bulk-action-footer-wrap .outer-layer .inner-layer .inner-layer-l ul { list-style-type: none; flex-grow: 1; margin: 0; padding: 0; display: -ms-flexbox; display: flex; -ms-flex-align: baseline; align-items: baseline; -ms-flex-align: center; align-items: center; -ms-flex-positive: 1; }
+.workout-schedule-calendar-bulk-action-footer-wrap .outer-layer .inner-layer .inner-layer-l ul li { margin-top: 0; display: block; -ms-flex-positive: 0; flex-grow: 0; margin-right: 20px; margin-bottom: 0; }
+.workout-schedule-calendar-bulk-action-footer-wrap .outer-layer .inner-layer .inner-layer-l ul li:last-child {margin-right: 0;margin-bottom: 0;}
+.workout-schedule-calendar-bulk-action-footer-wrap .outer-layer .inner-layer .inner-layer-l ul li .inner-layer-l-content { -ms-flex-align: center; align-items: center; display: -ms-flexbox; display: flex; }
+.workout-schedule-calendar-bulk-action-footer-wrap .outer-layer .inner-layer .inner-layer-l ul li .inner-layer-l-content .selected-count-badge { -ms-flex: 0 1 auto; flex: 0 1 auto; margin-right: 5px; }
+.workout-schedule-calendar-bulk-action-footer-wrap .outer-layer .inner-layer .inner-layer-l ul li .inner-layer-l-content .content { -ms-flex: 1; flex: 1; max-width: 100%; min-width: 0; }
+.workout-schedule-calendar-bulk-action-footer-wrap .outer-layer .inner-layer .inner-layer-l ul li .inner-layer-l-content .content p { margin-top: 0; margin-bottom: 0; }
+.workout-schedule-calendar-bulk-action-footer-wrap .outer-layer .inner-layer .inner-layer-l ul li .inner-layer-l-content .content p span { text-transform: uppercase; color: #000; }
+
+.workout-schedule-calendar-bulk-action-footer-wrap .outer-layer .inner-layer .inner-layer-r { width: 50%; max-width: 50%; }
+.workout-schedule-calendar-bulk-action-footer-wrap .outer-layer .inner-layer .inner-layer-r .content-wrapper { -ms-flex-align: start; align-items: flex-start; display: -ms-flexbox; display: flex; -ms-flex-wrap: wrap; flex-wrap: wrap; -ms-flex-align: center; align-items: center; }
+.workout-schedule-calendar-bulk-action-footer-wrap .outer-layer .inner-layer .inner-layer-r .content-wrapper ul { list-style-type: none; margin: 0; padding: 0; display: -ms-flexbox; display: flex; -ms-flex-align: baseline; align-items: baseline; min-width: 0; }
+.workout-schedule-calendar-bulk-action-footer-wrap .outer-layer .inner-layer .inner-layer-r .content-wrapper ul:first-child {-ms-flex-positive: 1;flex-grow: 1;}
+.workout-schedule-calendar-bulk-action-footer-wrap .outer-layer .inner-layer .inner-layer-r .content-wrapper ul li { margin-top: 0; display: block; -ms-flex-positive: 0; flex-grow: 0; margin-right: 20px; margin-bottom: 0; }
+.workout-schedule-calendar-bulk-action-footer-wrap .outer-layer .inner-layer .inner-layer-r .content-wrapper ul li a { color: #3e4248; cursor: pointer; text-decoration: none; transition: all .2s ease-in-out; }
