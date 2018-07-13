@@ -28,6 +28,8 @@ class ProgramSave extends Component {
             deleteWeekAlert: false,
             deleteWeekActionInit: false,
             selectedWorkoutIds: [],
+            deleteBulkActionAlert: false,
+            deleteBulkActionInit: false,
         }
     }
 
@@ -46,10 +48,12 @@ class ProgramSave extends Component {
             showSelectEventAlert,
             deleteWorkoutAlert,
             deleteWeekAlert,
+            deleteBulkActionAlert,
         } = this.state;
         const {
             selectedDay,
         } = this.props;
+        var selectedEvents = _.filter(workouts, ['isSelectedForBulkAction', true]);
         return (
             <div className="fitness-body">
                 <FitnessHeader />
@@ -65,6 +69,11 @@ class ProgramSave extends Component {
                         <div className="col-md-12">
                             <div className="white-box space-btm-20">
                                 <div className="whitebox-body profile-body programs-table-wrapper">
+                                    {selectedEvents && selectedEvents.length > 0 &&
+                                        <div>
+                                            <a href="javascript:void(0)" onClick={() => this.setState({ deleteBulkActionAlert: true })}>({selectedEvents.length}) Delete Selected</a>
+                                        </div>
+                                    }
                                     <CustomDaysCalendarView
                                         programId={(program) ? program._id : null}
                                         totalDays={totalDays}
@@ -72,6 +81,7 @@ class ProgramSave extends Component {
                                         handleSelectDayAction={this.handleSelectDayAction}
                                         handleCopy={this.handleCopy}
                                         handleDelete={this.showDeleteConfirmation}
+                                        handleSelectedForBulk={this.handleSelectedForBulk}
                                     />
                                     <div className="d-flex week-btn-btm">
                                         <a href="javascript:void(0)" className="program-save-add-week-btn" onClick={this.handleAddWeek}><i className="icon-add_box"></i> Add Week</a>
@@ -132,6 +142,20 @@ class ProgramSave extends Component {
                     You will not be able to recover this file!
                 </SweetAlert>
 
+                <SweetAlert
+                    show={deleteBulkActionAlert}
+                    warning
+                    showCancel
+                    confirmBtnText="Yes, delete it!"
+                    confirmBtnBsStyle="danger"
+                    cancelBtnBsStyle="default"
+                    title="Are you sure?"
+                    onConfirm={this.handleDeleteBulkWorkoutSchedule}
+                    onCancel={() => this.setState({ deleteBulkActionAlert: false })}
+                >
+                    You will not be able to recover this file!
+                </SweetAlert>
+
             </div>
         );
     }
@@ -149,6 +173,7 @@ class ProgramSave extends Component {
             deleteWorkoutActionInit,
             selectedWorkoutIds,
             deleteWeekActionInit,
+            deleteBulkActionInit,
         } = this.state;
         if (!loading && error && error.length > 0) {
             te(error[0]);
@@ -161,6 +186,9 @@ class ProgramSave extends Component {
             if (works && works.length > 0) {
                 lastDay = (works[(works.length - 1)].day);
                 lastDay++;
+                works = _.map(works, (w) => {
+                    return _.assignIn({}, w, { isSelectedForBulkAction: false });
+                });
             }
             var getNumberOfWeek = Math.ceil(lastDay / 7);
             var totalDaysToGenerate = (getNumberOfWeek * 7);
@@ -199,6 +227,15 @@ class ProgramSave extends Component {
                 ts('Week deleted successfully!');
             } else {
                 te('Cannot delete week. Please try again later!');
+            }
+        }
+        if (deleteBulkActionInit && !loading) {
+            this.setState({ deleteBulkActionInit: false });
+            this.getProgramWorkoutSchedules();
+            if (error.length <= 0) {
+                ts('Workouts deleted successfully!');
+            } else {
+                te('Cannot delete workouts. Please try again later!');
             }
         }
     }
@@ -358,6 +395,34 @@ class ProgramSave extends Component {
         }
         this.setState({ deleteWorkoutAlert: false, deleteWorkoutActionInit: true });
     }
+
+    handleSelectedForBulk = (_id) => {
+        const workoutEvents = this.state.workouts;
+        var workouts = Object.assign([], workoutEvents);
+        var selectedWorkout = _.find(workouts, ['_id', _id]);
+        if (selectedWorkout) {
+            var isSelectedForBulkAction = (typeof selectedWorkout.isSelectedForBulkAction !== 'undefined') ? (selectedWorkout.isSelectedForBulkAction === false) ? true : false : true;
+            var workout = Object.assign({}, selectedWorkout);
+            workout.isSelectedForBulkAction = isSelectedForBulkAction;
+            var index = _.findIndex(workouts, ['_id', _id]);
+            workouts[index] = workout;
+            this.setState({
+                workouts: workouts,
+            });
+        }
+    }
+
+    handleDeleteBulkWorkoutSchedule = () => {
+        const { dispatch } = this.props;
+        const workoutEvents = this.state.workouts;
+        var selectedEvents = _.filter(workoutEvents, ['isSelectedForBulkAction', true]);
+        var selectedIds = _.map(selectedEvents, '_id');
+        var requestData = {
+            exercisesIds: selectedIds,
+        }
+        dispatch(deleteUsersProgramWorkoutScheduleRequest(requestData));
+        this.setState({ deleteBulkActionInit: true, deleteBulkActionAlert: false });
+    }
 }
 
 const mapStateToProps = (state) => {
@@ -384,6 +449,7 @@ class CustomDaysCalendarView extends Component {
             handleSelectDayAction,
             handleCopy,
             handleDelete,
+            handleSelectedForBulk,
         } = this.props;
         var rows = (totalDays / 7);
         var rowsObj = [];
@@ -396,6 +462,7 @@ class CustomDaysCalendarView extends Component {
                     handleSelectDayAction={handleSelectDayAction}
                     handleCopy={handleCopy}
                     handleDelete={handleDelete}
+                    handleSelectedForBulk={handleSelectedForBulk}
                 />
             )
         }
@@ -415,6 +482,7 @@ class CustomDaysCalendarRow extends Component {
             handleSelectDayAction,
             handleCopy,
             handleDelete,
+            handleSelectedForBulk,
         } = this.props;
         var end = rowNumber * 7;
         var start = end - (7 - 1);
@@ -428,6 +496,7 @@ class CustomDaysCalendarRow extends Component {
                     handleSelectDayAction={handleSelectDayAction}
                     handleCopy={handleCopy}
                     handleDelete={handleDelete}
+                    handleSelectedForBulk={handleSelectedForBulk}
                 />
             )
         }
@@ -459,9 +528,16 @@ class CustomDaysCalendarBlock extends Component {
                             {
                                 events.map((e, i) => {
                                     return (
-                                        <div className={cns('program-event-block-wrapper', { 'restday': (e.type === SCHEDULED_WORKOUT_TYPE_RESTDAY) })} key={i}>
+                                        <div className={cns('program-event-block-wrapper', { 'restday': (e.type === SCHEDULED_WORKOUT_TYPE_RESTDAY) })} key={i} onClick={(e) => e.stopPropagation()}>
                                             <div className="program-event-block-title">
-                                                <div className="pull-left custom_check" onClick={() => { }}>
+                                                <div className="pull-left custom_check" onClick={(event) => this.handleCheckChange(event, e._id)}>
+                                                    <input
+                                                        type="checkbox"
+                                                        id={`complete_workout_schedule_${e._id}`}
+                                                        name={`complete_workout_schedule_${e._id}`}
+                                                        checked={e.isSelectedForBulkAction}
+                                                        onChange={() => { }}
+                                                    />
                                                     <label><h5 className="">{(e.title) ? e.title : ''}</h5></label>
                                                 </div>
                                             </div>
@@ -499,6 +575,12 @@ class CustomDaysCalendarBlock extends Component {
         const { handleDelete } = this.props;
         e.stopPropagation();
         handleDelete(_id);
+    }
+
+    handleCheckChange = (e, _id) => {
+        const { handleSelectedForBulk } = this.props;
+        e.stopPropagation();
+        handleSelectedForBulk(_id);
     }
 }
 

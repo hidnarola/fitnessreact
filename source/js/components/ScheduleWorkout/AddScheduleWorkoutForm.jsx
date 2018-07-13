@@ -1,21 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm, FieldArray } from "redux-form";
-import { InputField, EditorField } from '../../helpers/FormControlHelper';
+import { InputField, TextAreaField } from '../../helpers/FormControlHelper';
 import WorkoutExerciseCard from './WorkoutExerciseCard';
 import WorkoutWarmupCard from './WorkoutWarmupCard';
 import WorkoutCooldownCard from './WorkoutCooldownCard';
 
 class AddScheduleWorkoutForm extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            description: '',
-        }
-    }
-
     render() {
-        const { description } = this.state;
         const { handleSubmit } = this.props;
         return (
             <div className="add-schedule-workout-form-wrapper">
@@ -34,14 +26,12 @@ class AddScheduleWorkoutForm extends Component {
                             />
                             <Field
                                 name="description"
-                                value={description}
-                                handleChange={this.handleChangeTextEditor}
-                                className="editor-height-60"
+                                className="form-control resize-vertical min-height-80"
                                 label="Description"
                                 labelClass="control-label"
                                 wrapperClass="form-group"
                                 placeholder="Description"
-                                component={EditorField}
+                                component={TextAreaField}
                             />
                             <FieldArray
                                 name="warmups"
@@ -63,11 +53,6 @@ class AddScheduleWorkoutForm extends Component {
                 </form>
             </div>
         );
-    }
-
-    handleChangeTextEditor = (editorText) => {
-        this.props.change('description', editorText);
-        this.setState({ description: editorText });
     }
 }
 
