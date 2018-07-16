@@ -33,8 +33,6 @@ import Body from './Body';
 import { AUTH_CALLBACK_ROUTE } from '../auth/auth0-variables';
 import Callback from '../auth/callback/Callback';
 import history from '../config/history';
-import BadgeCategories from './Admin/BadgeCategories';
-import BadgeTasks from './Admin/BadgeTasks';
 import { ToastContainer } from "react-toastify";
 import NutritionPreferences from '../components/Nutrition/NutritionPreferences'
 import { publicPath, routeCodes } from '../constants/routes';
@@ -190,10 +188,6 @@ class App extends Component {
                             <AdminPrivateRoute path={adminRouteCodes.FITNESS_TESTS} component={FitnessTests} />
 
                             <AdminPrivateRoute path={adminRouteCodes.EQUIPMENTS} component={Equipments} />
-
-                            <AdminPrivateRoute path={adminRouteCodes.BADGE_CATEGORIES} component={BadgeCategories} />
-
-                            <AdminPrivateRoute path={adminRouteCodes.BADGE_TASKS} component={BadgeTasks} />
 
                             <AdminPrivateRoute path={adminRouteCodes.BADGES} component={AdminBadges} />
 
