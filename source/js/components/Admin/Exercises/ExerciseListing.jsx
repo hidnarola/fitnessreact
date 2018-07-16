@@ -9,8 +9,7 @@ import { FaPencil, FaTrash } from 'react-icons/lib/fa';
 import ReactTable from 'react-table';
 import { bodyPartListRequest } from '../../../actions/admin/bodyParts';
 import _ from 'lodash';
-import { exerciseTypeListRequest } from '../../../actions/admin/exerciseTypes';
-import { EXERCISE_MECHANICS_COMPOUND, EXERCISE_MECHANICS_ISOLATION, EXERCISE_DIFFICULTY_BEGINNER, EXERCISE_DIFFICULTY_INTERMEDIATE, EXERCISE_DIFFICULTY_EXPERT, exerciseMechanicsObj, exerciseDifficultyLevelObj } from '../../../constants/consts';
+import { EXERCISE_MECHANICS_COMPOUND, EXERCISE_MECHANICS_ISOLATION, EXERCISE_DIFFICULTY_BEGINNER, EXERCISE_DIFFICULTY_INTERMEDIATE, EXERCISE_DIFFICULTY_EXPERT, exerciseMechanicsObj, exerciseDifficultyLevelObj, EXE_CATS, EXE_SCATS } from '../../../constants/consts';
 import DeleteConfirmation from '../Common/DeleteConfirmation';
 
 const mechanicsOptions = [
@@ -84,7 +83,7 @@ class ExerciseListing extends Component {
     }
 
     render() {
-        const { bodyParts, exerciseTypes, filteredExercises } = this.props;
+        const { bodyParts, filteredExercises } = this.props;
         const { showDeleteModal, requestFilterInit, pages } = this.state;
         return (
             <div className="exercise-listing-wrapper">
@@ -118,6 +117,74 @@ class ExerciseListing extends Component {
                                                 Cell: (row) => {
                                                     return (
                                                         <div>{dateFormat(row.value, 'mm/dd/yyyy')}</div>
+                                                    );
+                                                }
+                                            },
+                                            {
+                                                Header: "Category",
+                                                accessor: "category",
+                                                id: "category",
+                                                Cell: (row) => {
+                                                    let cate = '-----';
+                                                    _.forEach(EXE_CATS, (o) => {
+                                                        if (o.value === row.value) {
+                                                            cate = o.label;
+                                                        }
+                                                    })
+                                                    return (
+                                                        <div className="category-wrapper">
+                                                            {cate}
+                                                        </div>
+                                                    );
+                                                },
+                                                Filter: ({ filter, onChange }) => {
+                                                    return (
+                                                        <select
+                                                            onChange={event => onChange(event.target.value)}
+                                                            className="width-100-per"
+                                                            value={filter ? filter.value : ""}
+                                                        >
+                                                            <option value="">All</option>
+                                                            {EXE_CATS && EXE_CATS.length > 0 &&
+                                                                EXE_CATS.map((obj, index) => (
+                                                                    <option key={index} value={obj.value}>{obj.label}</option>
+                                                                ))
+                                                            }
+                                                        </select>
+                                                    );
+                                                }
+                                            },
+                                            {
+                                                Header: "Sub Category",
+                                                accessor: "subCategory",
+                                                id: "subCategory",
+                                                Cell: (row) => {
+                                                    let cate = '-----';
+                                                    _.forEach(EXE_SCATS, (o) => {
+                                                        if (o.value === row.value) {
+                                                            cate = o.label;
+                                                        }
+                                                    })
+                                                    return (
+                                                        <div className="sub-category-wrapper">
+                                                            {cate}
+                                                        </div>
+                                                    );
+                                                },
+                                                Filter: ({ filter, onChange }) => {
+                                                    return (
+                                                        <select
+                                                            onChange={event => onChange(event.target.value)}
+                                                            className="width-100-per"
+                                                            value={filter ? filter.value : ""}
+                                                        >
+                                                            <option value="">All</option>
+                                                            {EXE_SCATS && EXE_SCATS.length > 0 &&
+                                                                EXE_SCATS.map((obj, index) => (
+                                                                    <option key={index} value={obj.value}>{obj.label}</option>
+                                                                ))
+                                                            }
+                                                        </select>
                                                     );
                                                 }
                                             },
@@ -259,23 +326,6 @@ class ExerciseListing extends Component {
                                                 }
                                             },
                                             {
-                                                Header: "Type",
-                                                accessor: "type",
-                                                id: "type.name",
-                                                Cell: (row) => {
-                                                    let type = '-----';
-                                                    let typeObj = _.find(exerciseTypes, ['_id', row.value._id]);
-                                                    if (typeObj && typeObj.name) {
-                                                        type = typeObj.name;
-                                                    }
-                                                    return (
-                                                        <div className="table-listing-type-wrapper">
-                                                            {type}
-                                                        </div>
-                                                    );
-                                                }
-                                            },
-                                            {
                                                 Header: "Actions",
                                                 accessor: "_id",
                                                 id: "_id",
@@ -338,7 +388,6 @@ class ExerciseListing extends Component {
     updateList = () => {
         const { dispatch } = this.props;
         dispatch(bodyPartListRequest());
-        dispatch(exerciseTypeListRequest());
     }
 
     confirmDelete = (_id) => {
@@ -368,7 +417,7 @@ class ExerciseListing extends Component {
 }
 
 const mapStateToProps = (state) => {
-    const { adminExercises, adminBodyParts, adminExerciseTypes } = state;
+    const { adminExercises, adminBodyParts } = state;
     return {
         loading: adminExercises.get('loading'),
         error: adminExercises.get('error'),
@@ -377,9 +426,6 @@ const mapStateToProps = (state) => {
         bodyPartsLoading: adminBodyParts.get('loading'),
         bodyPartsError: adminBodyParts.get('error'),
         bodyParts: adminBodyParts.get('bodyParts'),
-        exerciseTypesLoading: adminExerciseTypes.get('loading'),
-        exerciseTypesError: adminExerciseTypes.get('error'),
-        exerciseTypes: adminExerciseTypes.get('exerciseTypes'),
     }
 }
 

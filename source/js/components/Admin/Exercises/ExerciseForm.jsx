@@ -4,10 +4,9 @@ import { connect } from 'react-redux';
 import { FaTrash } from 'react-icons/lib/fa';
 import { showPageLoader, hidePageLoader } from '../../../actions/pageLoader';
 import { bodyPartListRequest } from '../../../actions/admin/bodyParts';
-import { exerciseTypeListRequest } from '../../../actions/admin/exerciseTypes';
 import { equipmentListRequest } from '../../../actions/admin/equipments';
 import { prepareDropdownOptionsData } from '../../../helpers/funs';
-import { reduxForm, Field, FieldArray } from 'redux-form';
+import { reduxForm, Field, FieldArray, formValueSelector } from 'redux-form';
 import {
     required,
     maxLength,
@@ -28,7 +27,9 @@ import {
     EXERCISE_DIFFICULTY_BEGINNER,
     EXERCISE_DIFFICULTY_INTERMEDIATE,
     EXERCISE_DIFFICULTY_EXPERT,
-    SERVER_BASE_URL
+    EXE_CATS,
+    EXE_CAT_SCAT,
+    EXE_SCATS,
 } from '../../../constants/consts';
 import ExerciseSteps from './ExerciseSteps';
 import { adminRouteCodes } from '../../../constants/adminRoutes';
@@ -60,7 +61,10 @@ class ExerciseForm extends Component {
             deletedImages: [],
             exerciseImages: [],
             description: '',
+            subCategories: [],
+            subCategoriesValidation: [],
         };
+        this.allowChangeSubCategory = false;
     }
 
     componentWillMount() {
@@ -70,7 +74,6 @@ class ExerciseForm extends Component {
         });
         dispatch(showPageLoader());
         dispatch(bodyPartListRequest());
-        dispatch(exerciseTypeListRequest());
         dispatch(equipmentListRequest());
         if (typeof match.params.id !== 'undefined') {
             this.setState({
@@ -81,16 +84,38 @@ class ExerciseForm extends Component {
     }
 
     render() {
-        const { bodyParts, equipments, exerciseTypes, handleSubmit } = this.props;
-        const { exerciseImages, showDeleteImageModel, description } = this.state;
+        const { bodyParts, equipments, handleSubmit } = this.props;
+        const { exerciseImages, showDeleteImageModel, description, subCategories, subCategoriesValidation } = this.state;
         const bodyPartsOptions = prepareDropdownOptionsData(bodyParts, '_id', 'bodypart');
         const equipmentsOptions = prepareDropdownOptionsData(equipments, '_id', 'name');
-        const exerciseTypesOptions = prepareDropdownOptionsData(exerciseTypes, '_id', 'name');
         return (
             <div className="exercise-form-data">
                 <form onSubmit={handleSubmit}>
                     <div className="row">
                         <div className="col-md-12">
+                            <Field
+                                name="category"
+                                label="Category"
+                                labelClass="control-label"
+                                wrapperClass="form-group"
+                                placeholder="Category"
+                                component={SelectField_ReactSelect}
+                                options={EXE_CATS}
+                                errorClass="help-block"
+                                validate={[requiredReactSelect]}
+                                onChange={this.handleCategoryChange}
+                            />
+                            <Field
+                                name="sub_category"
+                                label="Sub Category"
+                                labelClass="control-label"
+                                wrapperClass="form-group"
+                                placeholder="Sub Category"
+                                component={SelectField_ReactSelect}
+                                options={subCategories}
+                                errorClass="help-block"
+                                validate={subCategoriesValidation}
+                            />
                             <Field
                                 name="name"
                                 className="form-control"
@@ -146,17 +171,6 @@ class ExerciseForm extends Component {
                                 options={bodyPartsOptions}
                                 errorClass="help-block"
                                 validate={[requiredReactSelectMulti]}
-                            />
-                            <Field
-                                name="type"
-                                label="Type"
-                                labelClass="control-label"
-                                wrapperClass="form-group"
-                                placeholder="Type"
-                                component={SelectField_ReactSelect}
-                                options={exerciseTypesOptions}
-                                errorClass="help-block"
-                                validate={[requiredReactSelect]}
                             />
                             <Field
                                 name="mechanics"
@@ -234,12 +248,11 @@ class ExerciseForm extends Component {
         );
     }
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps) {
         const { initPageDataLoad, selectDataInit, deletedImages } = this.state;
         const {
             bodyPartsLoading,
             equipmentsLoading,
-            exerciseTypesLoading,
             loading,
             dispatch,
             match,
@@ -247,13 +260,12 @@ class ExerciseForm extends Component {
             exercise,
             bodyParts,
             equipments,
-            exerciseTypes
+            selectedCategory,
         } = this.props;
         if (typeof match.params.id !== 'undefined') {
-            if (selectDataInit && initPageDataLoad && !bodyPartsLoading && !equipmentsLoading && !exerciseTypesLoading && !loading) {
+            if (selectDataInit && initPageDataLoad && !bodyPartsLoading && !equipmentsLoading && !loading) {
                 const bodyPartsOptions = prepareDropdownOptionsData(bodyParts, '_id', 'bodypart');
                 const equipmentsOptions = prepareDropdownOptionsData(equipments, '_id', 'name');
-                const exerciseTypesOptions = prepareDropdownOptionsData(exerciseTypes, '_id', 'name');
                 this.setState({
                     selectDataInit: false,
                     initPageDataLoad: false,
@@ -284,13 +296,24 @@ class ExerciseForm extends Component {
                         name
                     }
                 });
+                let subCats = _.find(EXE_CAT_SCAT, ['key', exercise.category]);
+                let subCatsOptions = [];
+                if (subCats) {
+                    let validations = [];
+                    if (subCats.value.length > 0) {
+                        validations = [requiredReactSelect];
+                    }
+                    subCatsOptions = subCats.value;
+                    this.setState({ subCategories: subCats.value, subCategoriesValidation: validations });
+                }
                 let exerciseData = {
+                    category: _.find(EXE_CATS, (o) => { return (o.value === exercise.category) }),
+                    sub_category: _.find(subCatsOptions, (o) => { return (o.value === exercise.subCategory) }),
                     name: exercise.name,
                     description: exercise.description,
                     main_muscle: _.find(bodyPartsOptions, (o) => { return (o.value === exercise.mainMuscleGroup) }),
                     other_muscle: otherMuscle,
                     detailed_muscle: detailedMuscle,
-                    type: _.find(exerciseTypesOptions, (o) => { return (o.value === exercise.type) }),
                     mechanics: _.find(mechanicsOptions, (o) => { return (o.value === exercise.mechanics) }),
                     equipments: equips,
                     difficulty_level: _.find(difficultyLevelOptions, (o) => { return (o.value === exercise.difficltyLevel) }),
@@ -306,7 +329,7 @@ class ExerciseForm extends Component {
                 });
             }
         } else {
-            if (initPageDataLoad && !bodyPartsLoading && !equipmentsLoading && !exerciseTypesLoading) {
+            if (initPageDataLoad && !bodyPartsLoading && !equipmentsLoading) {
                 this.setState({
                     selectDataInit: false,
                     initPageDataLoad: false,
@@ -314,6 +337,22 @@ class ExerciseForm extends Component {
                 dispatch(hidePageLoader());
             }
         }
+        if (selectedCategory && prevProps.selectedCategory !== selectedCategory && this.allowChangeSubCategory) {
+            this.allowChangeSubCategory = false;
+            let subCats = _.find(EXE_CAT_SCAT, ['key', selectedCategory.value]);
+            if (subCats) {
+                let validations = [];
+                if (subCats.value.length > 0) {
+                    validations = [requiredReactSelect];
+                }
+                this.props.change('sub_category', '');
+                this.setState({ subCategories: subCats.value, subCategoriesValidation: validations });
+            }
+        }
+    }
+
+    handleCategoryChange = () => {
+        this.allowChangeSubCategory = true;
     }
 
     // ----Start Methods----
@@ -355,26 +394,26 @@ class ExerciseForm extends Component {
     // ----End Methods----
 }
 
+const exerciseSaveFormSelector = formValueSelector('exerciseSaveForm');
+
 ExerciseForm = reduxForm({
     form: 'exerciseSaveForm',
     multipartForm: true
 })(ExerciseForm)
 
 const mapStateToProps = (state) => {
-    const { adminBodyParts, adminEquipments, adminExerciseTypes, adminExercises } = state;
+    const { adminBodyParts, adminEquipments, adminExercises } = state;
     return {
         loading: adminExercises.get('loading'),
         bodyPartsLoading: adminBodyParts.get('loading'),
         equipmentsLoading: adminEquipments.get('loading'),
-        exerciseTypesLoading: adminExerciseTypes.get('loading'),
         error: adminExercises.get('error'),
         bodyPartsError: adminBodyParts.get('error'),
         equipmentsError: adminEquipments.get('error'),
-        exerciseTypesError: adminExerciseTypes.get('error'),
         exercise: adminExercises.get('exercise'),
         bodyParts: adminBodyParts.get('bodyParts'),
         equipments: adminEquipments.get('equipments'),
-        exerciseTypes: adminExerciseTypes.get('exerciseTypes'),
+        selectedCategory: exerciseSaveFormSelector(state, 'category'),
     };
 }
 

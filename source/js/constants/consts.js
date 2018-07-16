@@ -497,3 +497,186 @@ export const SCHEDULED_WORKOUT_TYPE_EXERCISE = 'exercise';
 export const SCHEDULED_WORKOUT_TYPE_WARMUP = 'warmup';
 export const SCHEDULED_WORKOUT_TYPE_COOLDOWN = 'cooldown';
 export const SCHEDULED_WORKOUT_TYPE_RESTDAY = 'restday';
+
+export const EXE_CAT_CARDIO = 'cardio';
+export const EXE_CAT_STRENGTH = 'strength';
+export const EXE_CAT_FLEXIBILITY = 'flexibility';
+export const EXE_CAT_BALANCE = 'balance';
+export const EXE_CAT_CARDIO_STR = 'Cardio';
+export const EXE_CAT_STRENGTH_STR = 'Strength';
+export const EXE_CAT_FLEXIBILITY_STR = 'Flexibility';
+export const EXE_CAT_BALANCE_STR = 'Balance';
+
+export const EXE_SCAT_RUNNING = 'running';
+export const EXE_SCAT_SWIMMING = 'swimming';
+export const EXE_SCAT_WALKING = 'walking';
+export const EXE_SCAT_CYCLING = 'cycling';
+export const EXE_SCAT_ROWING = 'rowing';
+export const EXE_SCAT_YOGA = 'yoga';
+export const EXE_SCAT_PILATES = 'pilates';
+export const EXE_SCAT_AEROBICS = 'aerobics';
+export const EXE_SCAT_BOXING = 'boxing';
+export const EXE_SCAT_MARTIAL_ARTS = 'martial_arts';
+export const EXE_SCAT_SKATING = 'skating';
+export const EXE_SCAT_OTHER = 'other';
+export const EXE_SCAT_ELLIPTICAL = 'elliptical';
+export const EXE_SCAT_STAIR_CLIMBER = 'stair_climber';
+export const EXE_SCAT_JUMPING_ROPE = 'jumping_rope';
+export const EXE_SCAT_SPRINTS = 'sprints';
+export const EXE_SCAT_BENCH_PRESS = 'bench_press';
+export const EXE_SCAT_DIPS = 'dips';
+export const EXE_SCAT_CLEANS = 'cleans';
+export const EXE_SCAT_DEADLIFT = 'deadlift';
+export const EXE_SCAT_SQUATS = 'squats';
+export const EXE_SCAT_PULLUPS = 'pullups';
+export const EXE_SCAT_SHOULDER_PRESS = 'shoulder_press';
+export const EXE_SCAT_BENT_OVER_ROW = 'bent_over_row';
+export const EXE_SCAT_BODYWEIGHT = 'bodyweight';
+export const EXE_SCAT_BICEP_CURLS = 'bicep_curls';
+export const EXE_SCAT_TRICEP_EXTENSION = 'tricep_extension';
+export const EXE_SCAT_PULL_DOWN = 'pull_down';
+export const EXE_SCAT_MACHINES = 'machines';
+export const EXE_SCAT_ISOMETRIC_STRETCHING = 'isometric_stretching';
+export const EXE_SCAT_ACTIVE_ISOLATED_STRETCHING = 'active_isolated_stretching';
+export const EXE_SCAT_BALLISTIC_STRETCHING = 'ballistic_stretching';
+export const EXE_SCAT_DYNAMIC_STRETCHING = 'dynamic_stretching';
+export const EXE_SCAT_PASSIVE_STRETCHING = 'passive_stretching';
+export const EXE_SCAT_STATIC_STRETCHING = 'static_stretching';
+
+export const EXE_SCAT_RUNNING_STR = 'Running';
+export const EXE_SCAT_SWIMMING_STR = 'Swimming';
+export const EXE_SCAT_WALKING_STR = 'Walking';
+export const EXE_SCAT_CYCLING_STR = 'Cycling';
+export const EXE_SCAT_ROWING_STR = 'Rowing';
+export const EXE_SCAT_YOGA_STR = 'Yoga';
+export const EXE_SCAT_PILATES_STR = 'Pilates';
+export const EXE_SCAT_AEROBICS_STR = 'Aerobics';
+export const EXE_SCAT_BOXING_STR = 'Boxing';
+export const EXE_SCAT_MARTIAL_ARTS_STR = 'Martial Arts';
+export const EXE_SCAT_SKATING_STR = 'Skating';
+export const EXE_SCAT_OTHER_STR = 'Other';
+export const EXE_SCAT_ELLIPTICAL_STR = 'Elliptical';
+export const EXE_SCAT_STAIR_CLIMBER_STR = 'Stair Climber';
+export const EXE_SCAT_JUMPING_ROPE_STR = 'Jumping Rope';
+export const EXE_SCAT_SPRINTS_STR = 'Sprints';
+export const EXE_SCAT_BENCH_PRESS_STR = 'Bench Press';
+export const EXE_SCAT_DIPS_STR = 'Dips';
+export const EXE_SCAT_CLEANS_STR = 'Cleans';
+export const EXE_SCAT_DEADLIFT_STR = 'Deadlift';
+export const EXE_SCAT_SQUATS_STR = 'Squats';
+export const EXE_SCAT_PULLUPS_STR = 'Pullups';
+export const EXE_SCAT_SHOULDER_PRESS_STR = 'Shoulder Press';
+export const EXE_SCAT_BENT_OVER_ROW_STR = 'Bent Over Row';
+export const EXE_SCAT_BODYWEIGHT_STR = 'Bodyweight';
+export const EXE_SCAT_BICEP_CURLS_STR = 'Bicep Curls';
+export const EXE_SCAT_TRICEP_EXTENSION_STR = 'Tricep Extension';
+export const EXE_SCAT_PULL_DOWN_STR = 'Pull down';
+export const EXE_SCAT_MACHINES_STR = 'Machines';
+export const EXE_SCAT_ISOMETRIC_STRETCHING_STR = 'Isometric Stretching';
+export const EXE_SCAT_ACTIVE_ISOLATED_STRETCHING_STR = 'Active Isolated Stretching';
+export const EXE_SCAT_BALLISTIC_STRETCHING_STR = 'Ballistic Stretching';
+export const EXE_SCAT_DYNAMIC_STRETCHING_STR = 'Dynamic Stretching';
+export const EXE_SCAT_PASSIVE_STRETCHING_STR = 'Passive Stretching';
+export const EXE_SCAT_STATIC_STRETCHING_STR = 'Static Stretching';
+
+export const EXE_CATS = [
+    { value: EXE_CAT_CARDIO, label: EXE_CAT_CARDIO_STR },
+    { value: EXE_CAT_STRENGTH, label: EXE_CAT_STRENGTH_STR },
+    { value: EXE_CAT_FLEXIBILITY, label: EXE_CAT_FLEXIBILITY_STR },
+    { value: EXE_CAT_BALANCE, label: EXE_CAT_BALANCE_STR },
+];
+
+export const EXE_SCATS = [
+    { value: EXE_SCAT_RUNNING, label: EXE_SCAT_RUNNING_STR },
+    { value: EXE_SCAT_SWIMMING, label: EXE_SCAT_SWIMMING_STR },
+    { value: EXE_SCAT_WALKING, label: EXE_SCAT_WALKING_STR },
+    { value: EXE_SCAT_CYCLING, label: EXE_SCAT_CYCLING_STR },
+    { value: EXE_SCAT_ROWING, label: EXE_SCAT_ROWING_STR },
+    { value: EXE_SCAT_YOGA, label: EXE_SCAT_YOGA_STR },
+    { value: EXE_SCAT_PILATES, label: EXE_SCAT_PILATES_STR },
+    { value: EXE_SCAT_AEROBICS, label: EXE_SCAT_AEROBICS_STR },
+    { value: EXE_SCAT_BOXING, label: EXE_SCAT_BOXING_STR },
+    { value: EXE_SCAT_MARTIAL_ARTS, label: EXE_SCAT_MARTIAL_ARTS_STR },
+    { value: EXE_SCAT_SKATING, label: EXE_SCAT_SKATING_STR },
+    { value: EXE_SCAT_OTHER, label: EXE_SCAT_OTHER_STR },
+    { value: EXE_SCAT_ELLIPTICAL, label: EXE_SCAT_ELLIPTICAL_STR },
+    { value: EXE_SCAT_STAIR_CLIMBER, label: EXE_SCAT_STAIR_CLIMBER_STR },
+    { value: EXE_SCAT_JUMPING_ROPE, label: EXE_SCAT_JUMPING_ROPE_STR },
+    { value: EXE_SCAT_SPRINTS, label: EXE_SCAT_SPRINTS_STR },
+    { value: EXE_SCAT_BENCH_PRESS, label: EXE_SCAT_BENCH_PRESS_STR },
+    { value: EXE_SCAT_DIPS, label: EXE_SCAT_DIPS_STR },
+    { value: EXE_SCAT_CLEANS, label: EXE_SCAT_CLEANS_STR },
+    { value: EXE_SCAT_DEADLIFT, label: EXE_SCAT_DEADLIFT_STR },
+    { value: EXE_SCAT_SQUATS, label: EXE_SCAT_SQUATS_STR },
+    { value: EXE_SCAT_PULLUPS, label: EXE_SCAT_PULLUPS_STR },
+    { value: EXE_SCAT_SHOULDER_PRESS, label: EXE_SCAT_SHOULDER_PRESS_STR },
+    { value: EXE_SCAT_BENT_OVER_ROW, label: EXE_SCAT_BENT_OVER_ROW_STR },
+    { value: EXE_SCAT_BODYWEIGHT, label: EXE_SCAT_BODYWEIGHT_STR },
+    { value: EXE_SCAT_BICEP_CURLS, label: EXE_SCAT_BICEP_CURLS_STR },
+    { value: EXE_SCAT_TRICEP_EXTENSION, label: EXE_SCAT_TRICEP_EXTENSION_STR },
+    { value: EXE_SCAT_PULL_DOWN, label: EXE_SCAT_PULL_DOWN_STR },
+    { value: EXE_SCAT_MACHINES, label: EXE_SCAT_MACHINES_STR },
+    { value: EXE_SCAT_ISOMETRIC_STRETCHING, label: EXE_SCAT_ISOMETRIC_STRETCHING_STR },
+    { value: EXE_SCAT_ACTIVE_ISOLATED_STRETCHING, label: EXE_SCAT_ACTIVE_ISOLATED_STRETCHING_STR },
+    { value: EXE_SCAT_BALLISTIC_STRETCHING, label: EXE_SCAT_BALLISTIC_STRETCHING_STR },
+    { value: EXE_SCAT_DYNAMIC_STRETCHING, label: EXE_SCAT_DYNAMIC_STRETCHING_STR },
+    { value: EXE_SCAT_PASSIVE_STRETCHING, label: EXE_SCAT_PASSIVE_STRETCHING_STR },
+    { value: EXE_SCAT_STATIC_STRETCHING, label: EXE_SCAT_STATIC_STRETCHING_STR },
+];
+
+export const EXE_CAT_SCAT = [
+    {
+        key: EXE_CAT_CARDIO,
+        value: [
+            { value: EXE_SCAT_RUNNING, label: EXE_SCAT_RUNNING_STR },
+            { value: EXE_SCAT_SWIMMING, label: EXE_SCAT_SWIMMING_STR },
+            { value: EXE_SCAT_WALKING, label: EXE_SCAT_WALKING_STR },
+            { value: EXE_SCAT_CYCLING, label: EXE_SCAT_CYCLING_STR },
+            { value: EXE_SCAT_ROWING, label: EXE_SCAT_ROWING_STR },
+            { value: EXE_SCAT_YOGA, label: EXE_SCAT_YOGA_STR },
+            { value: EXE_SCAT_PILATES, label: EXE_SCAT_PILATES_STR },
+            { value: EXE_SCAT_AEROBICS, label: EXE_SCAT_AEROBICS_STR },
+            { value: EXE_SCAT_BOXING, label: EXE_SCAT_BOXING_STR },
+            { value: EXE_SCAT_MARTIAL_ARTS, label: EXE_SCAT_MARTIAL_ARTS_STR },
+            { value: EXE_SCAT_SKATING, label: EXE_SCAT_SKATING_STR },
+            { value: EXE_SCAT_OTHER, label: EXE_SCAT_OTHER_STR },
+            { value: EXE_SCAT_ELLIPTICAL, label: EXE_SCAT_ELLIPTICAL_STR },
+            { value: EXE_SCAT_STAIR_CLIMBER, label: EXE_SCAT_STAIR_CLIMBER_STR },
+            { value: EXE_SCAT_JUMPING_ROPE, label: EXE_SCAT_JUMPING_ROPE_STR },
+            { value: EXE_SCAT_SPRINTS, label: EXE_SCAT_SPRINTS_STR },
+        ],
+    },
+    {
+        key: EXE_CAT_STRENGTH,
+        value: [
+            { value: EXE_SCAT_BENCH_PRESS, label: EXE_SCAT_BENCH_PRESS_STR },
+            { value: EXE_SCAT_DIPS, label: EXE_SCAT_DIPS_STR },
+            { value: EXE_SCAT_CLEANS, label: EXE_SCAT_CLEANS_STR },
+            { value: EXE_SCAT_DEADLIFT, label: EXE_SCAT_DEADLIFT_STR },
+            { value: EXE_SCAT_SQUATS, label: EXE_SCAT_SQUATS_STR },
+            { value: EXE_SCAT_PULLUPS, label: EXE_SCAT_PULLUPS_STR },
+            { value: EXE_SCAT_SHOULDER_PRESS, label: EXE_SCAT_SHOULDER_PRESS_STR },
+            { value: EXE_SCAT_BENT_OVER_ROW, label: EXE_SCAT_BENT_OVER_ROW_STR },
+            { value: EXE_SCAT_BODYWEIGHT, label: EXE_SCAT_BODYWEIGHT_STR },
+            { value: EXE_SCAT_BICEP_CURLS, label: EXE_SCAT_BICEP_CURLS_STR },
+            { value: EXE_SCAT_TRICEP_EXTENSION, label: EXE_SCAT_TRICEP_EXTENSION_STR },
+            { value: EXE_SCAT_PULL_DOWN, label: EXE_SCAT_PULL_DOWN_STR },
+            { value: EXE_SCAT_MACHINES, label: EXE_SCAT_MACHINES_STR },
+        ],
+    },
+    {
+        key: EXE_CAT_FLEXIBILITY,
+        value: [
+            { value: EXE_SCAT_ISOMETRIC_STRETCHING, label: EXE_SCAT_ISOMETRIC_STRETCHING_STR },
+            { value: EXE_SCAT_ACTIVE_ISOLATED_STRETCHING, label: EXE_SCAT_ACTIVE_ISOLATED_STRETCHING_STR },
+            { value: EXE_SCAT_BALLISTIC_STRETCHING, label: EXE_SCAT_BALLISTIC_STRETCHING_STR },
+            { value: EXE_SCAT_DYNAMIC_STRETCHING, label: EXE_SCAT_DYNAMIC_STRETCHING_STR },
+            { value: EXE_SCAT_PASSIVE_STRETCHING, label: EXE_SCAT_PASSIVE_STRETCHING_STR },
+            { value: EXE_SCAT_STATIC_STRETCHING, label: EXE_SCAT_STATIC_STRETCHING_STR },
+        ],
+    },
+    {
+        key: EXE_CAT_BALANCE,
+        value: [],
+    },
+];
