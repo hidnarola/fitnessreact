@@ -41,15 +41,6 @@ export default class AdminNav extends Component {
                             <NavLink
                                 activeClassName='active'
                                 className='Menu-link'
-                                to={adminRouteCodes.EXERCISE_TYPE}
-                            >
-                                <span>Exercise Type</span>
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink
-                                activeClassName='active'
-                                className='Menu-link'
                                 to={adminRouteCodes.EXERCISE}
                             >
                                 <FaGavel className={cns('fs-28')} />

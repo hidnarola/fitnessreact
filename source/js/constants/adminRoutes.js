@@ -10,8 +10,6 @@ export const adminRouteCodes = {
     USERS: `${adminRootRoute}users`,
     USERS_SAVE: `${adminRootRoute}users/save`,
 
-    EXERCISE_TYPE: `${adminRootRoute}exercise_type`,
-
     EXERCISE: `${adminRootRoute}exercise`,
     EXERCISE_SAVE: `${adminRootRoute}exercise/save`,
 

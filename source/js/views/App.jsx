@@ -32,7 +32,6 @@ import Equipments from './Admin/Equipments';
 import Body from './Body';
 import { AUTH_CALLBACK_ROUTE } from '../auth/auth0-variables';
 import Callback from '../auth/callback/Callback';
-import ExerciseTypes from './Admin/ExerciseTypes';
 import history from '../config/history';
 import BadgeCategories from './Admin/BadgeCategories';
 import BadgeTasks from './Admin/BadgeTasks';
@@ -185,8 +184,6 @@ class App extends Component {
 
                             <AdminPrivateRoute exact path={adminRouteCodes.USERS} component={Users} />
                             <AdminPrivateRoute path={`${adminRouteCodes.USERS_SAVE}/:id`} component={Users} />
-
-                            <AdminPrivateRoute path={adminRouteCodes.EXERCISE_TYPE} component={ExerciseTypes} />
 
                             <AdminPrivateRoute path={adminRouteCodes.EXERCISE} component={Exercises} />
 
