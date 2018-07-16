@@ -103,10 +103,23 @@ class ScheduleWorkout extends Component {
                             <div className="white-box space-btm-20">
                                 <div className="whitebox-body profile-body">
                                     {selectedEvents && selectedEvents.length > 0 &&
-                                        <div>
-                                            <a href="javascript:void(0)" onClick={() => this.setState({ deleteBulkActionAlert: true })}>({selectedEvents.length}) Delete Selected</a>
-                                            <a href="javascript:void(0)" onClick={() => this.setState({ completeBulkActionAlert: true })}>({selectedEvents.length}) Complete</a>
-                                            <a href="javascript:void(0)" onClick={() => this.setState({ incompleteBulkActionAlert: true })}>({selectedEvents.length}) Incomplete</a>
+                                        <div className="fixed-btm-bar d-flex">
+                                            <div className="fixed-btm-bar-l d-flex">
+                                                <div className="custom_check">
+                                                    <input
+                                                        type="checkbox"
+                                                        id={'test'}
+                                                        name={'test'}
+                                                    />
+                                                    <label for="test">Select All</label>
+                                                </div>
+                                                <div class="count-leadeboard bg-pink">{selectedEvents.length}</div>
+                                            </div>
+                                            <div className="fixed-btm-bar-c">
+                                                <a href="javascript:void(0)" onClick={() => this.setState({ deleteBulkActionAlert: true })}><i className="icon-delete_forever"></i> </a>
+                                                <a href="javascript:void(0)" onClick={() => this.setState({ completeBulkActionAlert: true })}><i className="icon-check_circle"></i></a>
+                                                <a href="javascript:void(0)" onClick={() => this.setState({ incompleteBulkActionAlert: true })}><i className="icon-cancel"></i></a>
+                                            </div>
                                         </div>
                                     }
                                     <BigCalendar

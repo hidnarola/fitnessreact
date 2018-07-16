@@ -2,16 +2,17 @@ import React, { Component } from 'react';
 import { Modal } from 'react-bootstrap';
 import { Scrollbars } from 'react-custom-scrollbars';
 import ReactHtmlParser from "react-html-parser";
+import noImg from 'img/common/no-img.png'
 
 class ScheduleWorkoutDetailsModal extends Component {
     render() {
-        
+
         const { show, handleClose, workout } = this.props;
         if (workout) {
             var exercises = workout.exercises;
             return (
-                <div className="recipe-details-modal-wrapper ">
-                    <Modal show={show} bsSize="large" className="progress-popup recipe-details-modal-main">
+                <div className="exercise-details-modal-wrapper">
+                    <Modal show={show} bsSize="large" className="progress-popup exercise-details-modal-main">
                         <div className="progress-popup-head">
                             <button type="button" className="close-round" onClick={handleClose}>
                                 <span aria-hidden="true">&times;</span>
@@ -21,38 +22,44 @@ class ScheduleWorkoutDetailsModal extends Component {
 
                         <div className="progress-popup-body d-flex" style={{ height: 530 }}>
                             <Scrollbars autoHide>
-                                <div className="col-md-12 width-100-per" style={{ height: "100%" }}>
+                                <div className="width-100-per" style={{ height: "100%" }}>
                                     <section className="body-wrap">
-                                        {/* <div className="body-head d-flex justify-content-start">
-                                            <div className="body-head-l">
-                                            <h2>Title</h2>
-                                            </div>
-                                        </div> */}
-
-                                        <div className="body-content row recipe column-wrap d-flex popup-view">
-                                            <div className="p-wrap d-flex">
+                                        <div className="body-content recipe popup-view">
+                                            <div className="p-wrap">
                                                 {workout.description && ReactHtmlParser(workout.description)}
                                                 <input type="checkbox" />
-                                            </div>    
-                                                {exercises && exercises.length > 0 &&
-                                                    exercises.map((e, i) => {
-                                                        return (
-                                                            <div className="view-wrap" key={i}>
-                                                                <ul>
-                                                                    <li className="col-md-9"><strong>Exercise :</strong> <span>{e.exercise.name}</span></li>
-                                                                    <li className="col-md-3"><strong>Reps :</strong> <span>{(e.reps) ? e.reps : null}</span></li>
-                                                                    <li className="col-md-2"><strong>Sets :</strong> <span>{(e.sets) ? e.sets : null}</span></li>
-                                                                    <li className="col-md-2"><strong>Weight :</strong> <span>{(e.weight) ? e.weight : null}</span></li>
-                                                                    <li className="col-md-2"><strong>Distance :</strong> <span>{(e.distance) ? e.distance : null}</span></li>
-                                                                    <li className="col-md-2"><strong>Rest Time :</strong> <span>{(e.restTime) ? e.restTime : null}</span></li>
-                                                                    <li className="col-md-2"><strong>Time / Set :</strong> <span>{e.oneSetTimer}</span></li>
-                                                                    <li className="col-md-2"><strong>Completed :</strong> <span><input type="checkbox" /></span></li>
-                                                                </ul>
-                                                            </div>
-                                                        )
-                                                    })
-                                                }
                                             </div>
+                                            <div className="view-wrap" >
+                                                <table className="table">
+                                                    {exercises && exercises.length > 0 &&
+                                                        exercises.map((e, i) => {
+                                                            return (
+                                                                <tr key={i}>
+                                                                    <td>
+                                                                        <img
+                                                                            src={''}
+                                                                            alt="Image" className="exercise-table-img"
+                                                                            onError={(e) => {
+                                                                                e.target.src = noImg
+                                                                            }}
+                                                                        />
+                                                                    </td>
+                                                                    <td className="exercise-name-td"><span>{e.exercise.name}</span></td>
+                                                                    <td><span>4-12 Reps</span></td>
+                                                                    <td><span>4 Sets</span></td>
+                                                                    <td><span>40-60 kg</span></td>
+                                                                    <td><span>4-5 miles</span></td>
+                                                                    <td><span>40 Seconds Rest</span></td>
+                                                                    <td><span>2 Seconds Rest</span></td>
+                                                                    <td><span className="horizantly-ellipsis">...</span></td>
+                                                                    <td className="close-td"><a href="javascript:void(0)"><i className="icon-cancel"></i></a></td>
+                                                                </tr>
+                                                            )
+                                                        })
+                                                    }
+                                                </table>
+                                            </div>
+                                        </div>
                                     </section>
                                 </div>
                             </Scrollbars>

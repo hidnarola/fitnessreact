@@ -1746,12 +1746,7 @@ a.program-save-delete-week-btn{ margin-left:auto; background:#d9534f;}
 .secound-user h5{margin:0; padding:0; font-size:10px; line-height:14px; font-weight:400; color:rgba(153,153,153,.85);}
 .secound-user .message-chat{ position:relative; padding:0 0 0 35px; max-width:70%;    margin-left: auto;}
 
-
-
-
-
-
-.workout-schedule-calendar-bulk-action-footer-wrap { position: fixed; left: 0; bottom: 0; width: 100%; background: #f9fafa; text-align: center; }
+/* .workout-schedule-calendar-bulk-action-footer-wrap { position: fixed; left: 0; bottom: 0; width: 100%; background: #f9fafa; text-align: center; }
 .workout-schedule-calendar-bulk-action-footer-wrap .outer-layer { margin: 15px 0 20px 0; }
 .workout-schedule-calendar-bulk-action-footer-wrap .outer-layer .inner-layer { display: -ms-flexbox; display: flex; -ms-flex-wrap: wrap; flex-wrap: wrap; margin-left: -20px; }
 .workout-schedule-calendar-bulk-action-footer-wrap .outer-layer .inner-layer .inner-layer-l { width: 50%; max-width: 50%; box-sizing: border-box; -ms-flex-positive: 1; flex-grow: 1; margin: 0; padding-left: 20px; display: -ms-flexbox; display: flex; -ms-flex-align: center; align-items: center; }
@@ -1769,4 +1764,50 @@ a.program-save-delete-week-btn{ margin-left:auto; background:#d9534f;}
 .workout-schedule-calendar-bulk-action-footer-wrap .outer-layer .inner-layer .inner-layer-r .content-wrapper ul { list-style-type: none; margin: 0; padding: 0; display: -ms-flexbox; display: flex; -ms-flex-align: baseline; align-items: baseline; min-width: 0; }
 .workout-schedule-calendar-bulk-action-footer-wrap .outer-layer .inner-layer .inner-layer-r .content-wrapper ul:first-child {-ms-flex-positive: 1;flex-grow: 1;}
 .workout-schedule-calendar-bulk-action-footer-wrap .outer-layer .inner-layer .inner-layer-r .content-wrapper ul li { margin-top: 0; display: block; -ms-flex-positive: 0; flex-grow: 0; margin-right: 20px; margin-bottom: 0; }
-.workout-schedule-calendar-bulk-action-footer-wrap .outer-layer .inner-layer .inner-layer-r .content-wrapper ul li a { color: #3e4248; cursor: pointer; text-decoration: none; transition: all .2s ease-in-out; }
+.workout-schedule-calendar-bulk-action-footer-wrap .outer-layer .inner-layer .inner-layer-r .content-wrapper ul li a { color: #3e4248; cursor: pointer; text-decoration: none; transition: all .2s ease-in-out; } */
+
+.progress-popup.exercise-details-modal-main .modal-content{ padding:0;}
+.progress-popup.exercise-details-modal-main .progress-popup-head{ background:#693fbd; margin:0;}
+.progress-popup.exercise-details-modal-main .progress-popup-head{ padding:20px 25px;}
+.progress-popup.exercise-details-modal-main .progress-popup-head>h3{ font-size:20px; color:#fff; line-height:100%; display:block; margin:0;}
+.progress-popup.exercise-details-modal-main .progress-popup-head .close-round {top: -20px;right: -20px;}
+.progress-popup.exercise-details-modal-main .body-wrap{ padding:20px;}
+.view-wrap{ background:rgba(0, 0, 0, .02); padding:0; border:0; margin:0;}
+.view-wrap table.table{table-layout:fixed;}
+.view-wrap h4{font-size:20px; color:#1A2032; line-height:100%; display:block; font-weight:700;}
+.view-wrap span{ font-size:14px; color:#1A2032; line-height:20px; font-family:'gt_walsheim_proregular';}
+.view-wrap td{ padding:15px; text-align:center;}
+.view-wrap td img{ max-width:100%;}
+.view-wrap td + td + td{ background:#fff;border:10px solid #fafafa; }
+.view-wrap td:nth-child(1){ width:8%; padding:15px 0 15px 15px;}
+.view-wrap td:nth-child(2){width:21%; padding:15px 10px 15px 10px; text-align:left;word-break:break-all;}
+.view-wrap td:nth-child(3),
+.view-wrap td:nth-child(4),
+.view-wrap td:nth-child(5),
+.view-wrap td:nth-child(6)
+.view-wrap td:nth-child(7),
+.view-wrap td:nth-child(8){ width:10%;}
+.view-wrap td:nth-child(9){ width:6%;}
+.view-wrap td:nth-child(10){ width:5%; padding:15px 0}
+.exercise-table-img { width:80px;}
+span.horizantly-ellipsis{font-size:28px; top:-5px; position:relative;}
+td.close-td a{ color:#FF3366;}
+td.close-td a i{ font-size:20px;}
+.exercise-name-td{font-size:14px; color:#1A2032; line-height:20px; font-family:'gt_walsheim_proregular';}
+.progress-popup.exercise-details-modal-main .p-wrap{ font-size:13px; margin: 0 0 20px;}
+
+.workout-calender>.rbc-toolbar{position:relative; line-height:32px;}
+.workout-calender>.rbc-toolbar>.rbc-btn-group{position:absolute; right:0; bottom:0;}
+
+.fixed-btm-bar{position: fixed; bottom:0; left:0; width: 100%; background: #fff; color: #232B41; padding: 20px; text-align: center; z-index: 10; box-shadow: 0 0 20px 0 rgba(0,0,0,.1);    align-items: center;}
+.fixed-btm-bar .custom_check [type="checkbox"]:not(:checked) + label:after,
+.fixed-btm-bar .custom_check [type="checkbox"]:checked + label:after{background: #693fbd;}
+.fixed-btm-bar .custom_check label{ margin:0; line-height:24px;}
+.fixed-btm-bar-l{ width:50%; text-align: center; justify-content:center;}
+.fixed-btm-bar-l .custom_check{ margin:0 15px 0 0;}
+.fixed-btm-bar-l a{ line-height:22px; margin:0 15px 0 0;}
+
+.fixed-btm-bar-c{ width:50%; justify-content:center; text-align:center;}
+.fixed-btm-bar-c a{ color:#232B41;line-height:22px; margin:0 0 0 5px; }
+.fixed-btm-bar-c a i{font-size:22px; line-height:22px; vertical-align:middle;}
+.fixed-btm-bar-l .bg-pink.count-leadeboard { position: relative; top: 0; left: 0; }
