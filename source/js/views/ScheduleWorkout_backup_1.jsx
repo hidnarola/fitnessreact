@@ -22,14 +22,13 @@ import {
 import { NavLink } from "react-router-dom";
 import { routeCodes } from '../constants/routes';
 import _ from "lodash";
+import ReactHtmlParser from "react-html-parser";
 import { SCHEDULED_WORKOUT_TYPE_RESTDAY, SCHEDULED_WORKOUT_TYPE_EXERCISE, MEASUREMENT_UNIT_KILOGRAM, MEASUREMENT_UNIT_KILOMETER } from '../constants/consts';
 import { ts, te, prepareDropdownOptionsData } from '../helpers/funs';
 import { FaCopy, FaTrash, FaPencil, FaEye } from 'react-icons/lib/fa'
 import ScheduleWorkoutDetailsModal from '../components/ScheduleWorkout/ScheduleWorkoutDetailsModal';
 import cns from "classnames";
 import Select from 'react-select';
-import AddWorkoutTitleForm from '../components/ScheduleWorkout/AddWorkoutTitleForm';
-import { submit } from "redux-form";
 
 BigCalendar.momentLocalizer(moment);
 
@@ -54,7 +53,6 @@ class ScheduleWorkout extends Component {
             completeBulkActionInit: false,
             incompleteBulkActionAlert: false,
             incompleteBulkActionInit: false,
-            showAddWorkoutTitleAlert: false,
         }
     }
 
@@ -62,7 +60,7 @@ class ScheduleWorkout extends Component {
         const { dispatch } = this.props;
         var today = moment().startOf('day').utc();
         this.getWorkoutSchedulesByMonth(today);
-        // dispatch(getExercisesNameRequest());
+        dispatch(getExercisesNameRequest());
         dispatch(getProgramsNameRequest());
     }
 
@@ -78,7 +76,6 @@ class ScheduleWorkout extends Component {
             deleteBulkActionAlert,
             completeBulkActionAlert,
             incompleteBulkActionAlert,
-            showAddWorkoutTitleAlert,
         } = this.state;
         const {
             selectedSlot,
@@ -161,7 +158,6 @@ class ScheduleWorkout extends Component {
                     closeOnClickOutside={false}
                 >
                     <SelectEventView
-                        handleAddWorkout={this.handleAddWorkout}
                         handleNewRestDay={this.handleNewRestDay}
                         handlePaste={this.handlePaste}
                         handleSelectProgramToAssign={this.handleSelectProgramToAssign}
@@ -247,22 +243,6 @@ class ScheduleWorkout extends Component {
                         multi={false}
                         clearable={true}
                     />
-                </SweetAlert>
-
-                <SweetAlert
-                    type="default"
-                    title={`Add workout for - ${(selectedSlotStateDate) ? moment(selectedSlotStateDate).format('MM/DD/YYYY') : ''}`}
-                    onCancel={this.handleAddWorkoutTitleCancel}
-                    onConfirm={this.handleAddWorkoutTitleSubmit}
-                    btnSize="sm"
-                    cancelBtnBsStyle="danger"
-                    confirmBtnBsStyle="success"
-                    show={showAddWorkoutTitleAlert}
-                    showConfirm={true}
-                    showCancel={true}
-                    closeOnClickOutside={false}
-                >
-                    <AddWorkoutTitleForm />
                 </SweetAlert>
 
                 <ScheduleWorkoutDetailsModal
@@ -639,27 +619,6 @@ class ScheduleWorkout extends Component {
             this.setState({ incompleteBulkActionInit: true, incompleteBulkActionAlert: false });
         }
     }
-
-    handleAddWorkout = () => {
-        this.setState({
-            showSelectEventAlert: false,
-            showAddWorkoutTitleAlert: true,
-        });
-    }
-
-    handleAddWorkoutTitleCancel = () => {
-        const { dispatch } = this.props;
-        this.setState({
-            showSelectEventAlert: false,
-            showAddWorkoutTitleAlert: false,
-        });
-        dispatch(setSelectedSlotFromCalendar(null));
-    }
-
-    handleAddWorkoutTitleSubmit = () => {
-        const { dispatch } = this.props;
-        dispatch(submit('add_workout_title_form'));
-    }
 }
 
 const mapStateToProps = (state) => {
@@ -684,12 +643,17 @@ export default connect(
 
 class SelectEventView extends Component {
     render() {
-        const { handleAddWorkout, handleNewRestDay, handlePaste, handleSelectProgramToAssign } = this.props;
+        const { handleNewRestDay, handlePaste, handleSelectProgramToAssign } = this.props;
         return (
             <div className="row">
                 <div className="popup-link-wrap">
                     <div className="popup-link">
-                        <button type="button" onClick={handleAddWorkout} className="btn btn-primary">Add Workout</button>
+                        <NavLink
+                            to={routeCodes.ADD_SCHEDULE_WORKOUT}
+                            className="btn btn-primary"
+                        >
+                            Add Workout
+                        </NavLink>
                     </div>
                     <div className="popup-link">
                         <button type="button" onClick={handleNewRestDay} className="btn btn-primary">Make Rest Day</button>

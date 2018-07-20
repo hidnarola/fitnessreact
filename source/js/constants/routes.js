@@ -48,7 +48,7 @@ export const routeCodes = {
     EXERCISEFITNESS: `${publicPath}exercise/fitness`,
 
     SCHEDULE_WORKOUT: `${publicPath}schedule_workout`,
-    ADD_SCHEDULE_WORKOUT: `${publicPath}schedule_workout/add`,
+    ADD_SCHEDULE_WORKOUT: `${publicPath}schedule_workout/add/:id`,
     CHANGE_SCHEDULE_WORKOUT: `${publicPath}schedule_workout/change`,
     
     PROGRAMS: `${publicPath}programs`,

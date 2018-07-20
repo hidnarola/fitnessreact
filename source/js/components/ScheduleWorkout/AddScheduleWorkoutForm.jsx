@@ -1,64 +1,71 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Field, reduxForm, FieldArray } from "redux-form";
-import { InputField, TextAreaField } from '../../helpers/FormControlHelper';
-import WorkoutExerciseCard from './WorkoutExerciseCard';
-import WorkoutWarmupCard from './WorkoutWarmupCard';
-import WorkoutCooldownCard from './WorkoutCooldownCard';
+import { Field, reduxForm, FieldArray, formValueSelector } from "redux-form";
+import {
+    SCHEDULED_WORKOUT_TYPE_EXERCISE,
+    SCHEDULED_WORKOUT_TYPE_SUPERSET,
+    SCHEDULED_WORKOUT_TYPE_CIRCUIT,
+} from '../../constants/consts';
+import WorkoutTypeSingleCard from './WorkoutTypeSingleCard';
+import WorkoutTypeSupersetCard from './WorkoutTypeSupersetCard';
+import WorkoutTypeCircuitCard from './WorkoutTypeCircuitCard';
 
 class AddScheduleWorkoutForm extends Component {
     render() {
-        const { handleSubmit } = this.props;
+        const {
+            handleSubmit,
+            selectedWorkoutType,
+        } = this.props;
         return (
-            <div className="add-schedule-workout-form-wrapper">
+            <div className="add-workout-form">
                 <form onSubmit={handleSubmit}>
-                    <div className="row">
-                        <div className="col-md-12">
-                            <Field
-                                name="title"
-                                className="form-control"
-                                label="Title"
-                                labelClass="control-label"
-                                wrapperClass="form-group"
-                                placeholder="Title"
-                                component={InputField}
-                                errorClass="help-block"
-                            />
-                            <Field
-                                name="description"
-                                className="form-control resize-vertical min-height-80"
-                                label="Description"
-                                labelClass="control-label"
-                                wrapperClass="form-group"
-                                placeholder="Description"
-                                component={TextAreaField}
-                            />
+                    <div className="select-workout-type-wrapper">
+                        <strong>Add Exercise</strong>
+                        <Field
+                            id="workout_type"
+                            name="workout_type"
+                            component={WorkoutTypeSelection}
+                        />
+                        {selectedWorkoutType && selectedWorkoutType === SCHEDULED_WORKOUT_TYPE_EXERCISE &&
                             <FieldArray
-                                name="warmups"
-                                component={WorkoutWarmupCard}
+                                name="workout_single"
+                                component={WorkoutTypeSingleCard}
+                                rerenderOnEveryChange={true}
                             />
+                        }
+                        {selectedWorkoutType && selectedWorkoutType === SCHEDULED_WORKOUT_TYPE_SUPERSET &&
                             <FieldArray
-                                name="exercises"
-                                component={WorkoutExerciseCard}
+                                name="workout_superset"
+                                component={WorkoutTypeSupersetCard}
+                                rerenderOnEveryChange={true}
                             />
+                        }
+                        {selectedWorkoutType && selectedWorkoutType === SCHEDULED_WORKOUT_TYPE_CIRCUIT &&
                             <FieldArray
-                                name="cooldowns"
-                                component={WorkoutCooldownCard}
+                                name="workout_circuit"
+                                component={WorkoutTypeCircuitCard}
+                                rerenderOnEveryChange={true}
                             />
-                            <div className="add-workout-exercise-card-block-wrapper pull-right">
-                                <button type="submit" className="green-blue-btn">Save<i className="icon-control_point"></i></button>
-                            </div>
-                        </div>
+                        }
                     </div>
+                    <button type="submit" className="">Save</button>
                 </form>
             </div>
         );
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
+const selector = formValueSelector('add_schedule_workout_form');
 
+const mapStateToProps = (state) => {
+    const { userScheduleWorkouts } = state;
+    return {
+        selectedWorkoutType: selector(state, 'workout_type'),
+        selectedSingleExerciseObj: selector(state, 'single_exercise_id'),
+        singleAdvanceView: selector(state, 'single_advance_view'),
+        singleSets: selector(state, 'single_sets'),
+        exercises: userScheduleWorkouts.get('exercises'),
+        exerciseMeasurements: userScheduleWorkouts.get('exerciseMeasurements'),
     };
 }
 
@@ -69,3 +76,43 @@ AddScheduleWorkoutForm = reduxForm({
 export default connect(
     mapStateToProps,
 )(AddScheduleWorkoutForm);
+
+const WorkoutTypeSelection = (props) => {
+    const {
+        input,
+    } = props;
+    return (
+        <div className="workout-type-radios">
+            <ul>
+                <li>
+                    <input
+                        type="radio"
+                        {...input}
+                        id="workout_type_single"
+                        value={SCHEDULED_WORKOUT_TYPE_EXERCISE}
+                    />
+                    <label htmlFor="workout_type_single">Single</label>
+                </li>
+                <li>
+                    <input
+                        type="radio"
+                        {...input}
+                        id="workout_type_superset"
+                        value={SCHEDULED_WORKOUT_TYPE_SUPERSET}
+                    />
+                    <label htmlFor="workout_type_superset">Superset</label>
+                </li>
+                <li>
+                    <input
+                        type="radio"
+                        {...input}
+                        id="workout_type_circuit"
+                        value={SCHEDULED_WORKOUT_TYPE_CIRCUIT}
+                    />
+                    <label htmlFor="workout_type_circuit">Circuit</label>
+                </li>
+            </ul>
+
+        </div>
+    );
+}

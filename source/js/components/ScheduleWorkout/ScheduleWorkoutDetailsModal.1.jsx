@@ -29,23 +29,10 @@ class ScheduleWorkoutDetailsModal extends Component {
                                                 <input type="checkbox" />
                                             </div>
                                             <div className="view-wrap" >
-                                                <table class="table">
+                                                <table className="table">
                                                     {exercises && exercises.length > 0 &&
                                                         exercises.map((e, i) => {
                                                             return (
-                                                                <tr key={i}>
-                                                                    <td>
-                                                                        <img src={e.exercise.image} />
-                                                                        <span>{e.exercise.name}</span>
-                                                                    </td>
-                                                                    <td><span>{(e.reps) ? e.reps : null}</span></td>
-                                                                    <td><span>{(e.sets) ? e.sets : null}</span></td>
-                                                                    <td><span>{(e.weight) ? e.weight : null}</span></td>
-                                                                    <td><span>{(e.distance) ? e.distance : null}</span></td>
-                                                                    <td><span>{(e.restTime) ? e.restTime : null}</span></td>
-                                                                    <td><span>{e.oneSetTimer}</span></td>
-                                                                    <td> <span><input type="checkbox" /></span></td>
-                                                                </tr>
                                                                 <tr key={i}>
                                                                     <td>
                                                                         <img src={e.exercise.image} />

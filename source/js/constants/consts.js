@@ -20,10 +20,10 @@ if (window.location.port) {
 baseUrl += '/';
 
 export const BASE_URL = baseUrl;
-export const SERVER_BASE_URL = 'http://' + window.location.hostname + ':3300/';
+// export const SERVER_BASE_URL = 'http://' + window.location.hostname + ':3300/';
 
 // amit's system url of api
-// export const SERVER_BASE_URL = 'http://192.168.100.19:3300/';
+export const SERVER_BASE_URL = 'http://192.168.100.19:3300/';
 
 export const EXERCISE_MECHANICS_COMPOUND = 'compound';
 export const EXERCISE_MECHANICS_ISOLATION = 'isolation';
@@ -191,17 +191,26 @@ export const MEASUREMENT_UNIT_KEY_LARGE_DISTANCE = 'large_distance';
 export const MEASUREMENT_UNIT_PERCENTAGE = 'percentage';
 export const MEASUREMENT_UNIT_KCAL = 'kcal';
 export const MEASUREMENT_UNIT_NUMBER = 'number';
-export const MEASUREMENT_UNIT_MINUTE = 'minute';
 export const MEASUREMENT_UNIT_GRAM = 'g';
 export const MEASUREMENT_UNIT_MILIGRAM = 'mg';
 export const MEASUREMENT_UNIT_KILOGRAM = 'kg';
 export const MEASUREMENT_UNIT_POUND = 'lb';
-export const MEASUREMENT_UNIT_INCH = 'inch';
+export const MEASUREMENT_UNIT_INCH = 'in';
 export const MEASUREMENT_UNIT_CENTIMETER = 'cm';
 export const MEASUREMENT_UNIT_METER = 'meter';
 export const MEASUREMENT_UNIT_FEET = 'feet';
 export const MEASUREMENT_UNIT_KILOMETER = 'km';
 export const MEASUREMENT_UNIT_MILE = 'mile';
+export const MEASUREMENT_UNIT_SECONDS = 'second';
+export const MEASUREMENT_UNIT_MINUTES = 'minute';
+export const MEASUREMENT_UNIT_HOURS = 'hour';
+export const MEASUREMENT_UNIT_REPS = 'reps';
+export const MEASUREMENT_UNIT_EFFORT = 'effort';
+export const MEASUREMENT_UNIT_KMPH = 'kmph';
+export const MEASUREMENT_UNIT_MPH = 'mph';
+export const MEASUREMENT_UNIT_ONE_RM = 'one_rm';
+export const MEASUREMENT_UNIT_REP_TIME = 'rep_time';
+export const MEASUREMENT_UNIT_SET_TIME = 'set_time';
 
 export const GOALS_DETAILS = [
     { value: 'weight_gain', label: 'Gain Weight', unitsKey: MEASUREMENT_UNIT_KEY_HEAVY_MASS },
@@ -279,7 +288,7 @@ export const MEASUREMENT_UNITS = [
     {
         key: MEASUREMENT_UNIT_KEY_TIME,
         value: [
-            { value: MEASUREMENT_UNIT_MINUTE, label: "Minutes" },
+            { value: MEASUREMENT_UNIT_MINUTES, label: "Minutes" },
         ],
     },
     {
@@ -538,6 +547,7 @@ export const EXE_SCAT_BICEP_CURLS = 'bicep_curls';
 export const EXE_SCAT_TRICEP_EXTENSION = 'tricep_extension';
 export const EXE_SCAT_PULL_DOWN = 'pull_down';
 export const EXE_SCAT_MACHINES = 'machines';
+export const EXE_SCAT_STRONG_MAN = 'strong_man';
 export const EXE_SCAT_ISOMETRIC_STRETCHING = 'isometric_stretching';
 export const EXE_SCAT_ACTIVE_ISOLATED_STRETCHING = 'active_isolated_stretching';
 export const EXE_SCAT_BALLISTIC_STRETCHING = 'ballistic_stretching';
@@ -574,6 +584,7 @@ export const EXE_SCAT_BICEP_CURLS_STR = 'Bicep Curls';
 export const EXE_SCAT_TRICEP_EXTENSION_STR = 'Tricep Extension';
 export const EXE_SCAT_PULL_DOWN_STR = 'Pull down';
 export const EXE_SCAT_MACHINES_STR = 'Machines';
+export const EXE_SCAT_STRONG_MAN_STR = 'Strong Man';
 export const EXE_SCAT_ISOMETRIC_STRETCHING_STR = 'Isometric Stretching';
 export const EXE_SCAT_ACTIVE_ISOLATED_STRETCHING_STR = 'Active Isolated Stretching';
 export const EXE_SCAT_BALLISTIC_STRETCHING_STR = 'Ballistic Stretching';
@@ -618,6 +629,7 @@ export const EXE_SCATS = [
     { value: EXE_SCAT_TRICEP_EXTENSION, label: EXE_SCAT_TRICEP_EXTENSION_STR },
     { value: EXE_SCAT_PULL_DOWN, label: EXE_SCAT_PULL_DOWN_STR },
     { value: EXE_SCAT_MACHINES, label: EXE_SCAT_MACHINES_STR },
+    { value: EXE_SCAT_STRONG_MAN, label: EXE_SCAT_STRONG_MAN_STR },
     { value: EXE_SCAT_ISOMETRIC_STRETCHING, label: EXE_SCAT_ISOMETRIC_STRETCHING_STR },
     { value: EXE_SCAT_ACTIVE_ISOLATED_STRETCHING, label: EXE_SCAT_ACTIVE_ISOLATED_STRETCHING_STR },
     { value: EXE_SCAT_BALLISTIC_STRETCHING, label: EXE_SCAT_BALLISTIC_STRETCHING_STR },
@@ -664,6 +676,7 @@ export const EXE_CAT_SCAT = [
             { value: EXE_SCAT_TRICEP_EXTENSION, label: EXE_SCAT_TRICEP_EXTENSION_STR },
             { value: EXE_SCAT_PULL_DOWN, label: EXE_SCAT_PULL_DOWN_STR },
             { value: EXE_SCAT_MACHINES, label: EXE_SCAT_MACHINES_STR },
+            { value: EXE_SCAT_STRONG_MAN, label: EXE_SCAT_STRONG_MAN_STR },
         ],
     },
     {
@@ -681,4 +694,28 @@ export const EXE_CAT_SCAT = [
         key: EXE_CAT_BALANCE,
         value: [],
     },
+];
+
+export const EXE_MEASUREMENT_UNITS = [
+    { value: MEASUREMENT_UNIT_SECONDS, label: 'Seconds' },
+    { value: MEASUREMENT_UNIT_MINUTES, label: 'Minutes' },
+    { value: MEASUREMENT_UNIT_HOURS, label: 'Hours' },
+    { value: MEASUREMENT_UNIT_METER, label: 'Meter' },
+    { value: MEASUREMENT_UNIT_FEET, label: 'Foot' },
+    { value: MEASUREMENT_UNIT_KILOMETER, label: 'KM' },
+    { value: MEASUREMENT_UNIT_MILE, label: 'Mile' },
+    { value: MEASUREMENT_UNIT_REPS, label: 'Reps' },
+    { value: MEASUREMENT_UNIT_EFFORT, label: 'Effort' },
+    { value: MEASUREMENT_UNIT_KMPH, label: 'KMPH' },
+    { value: MEASUREMENT_UNIT_MPH, label: 'MPH' },
+    { value: MEASUREMENT_UNIT_POUND, label: 'LB' },
+    { value: MEASUREMENT_UNIT_KILOGRAM, label: 'KG' },
+    { value: MEASUREMENT_UNIT_ONE_RM, label: '% of 1rm' },
+    { value: MEASUREMENT_UNIT_REP_TIME, label: 'Rep Time' },
+    { value: MEASUREMENT_UNIT_SET_TIME, label: 'Set Time' },
+];
+
+export const EXE_REST_TIME_UNITS = [
+    { value: MEASUREMENT_UNIT_SECONDS, label: 'Seconds' },
+    { value: MEASUREMENT_UNIT_MINUTES, label: 'Minutes' },
 ];

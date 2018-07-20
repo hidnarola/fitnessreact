@@ -1,31 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Field } from "redux-form";
-import { SelectField_ReactSelect, InputField } from '../../helpers/FormControlHelper';
+import { Field, FieldArray } from "redux-form";
+import { SelectField_ReactSelect } from '../../helpers/FormControlHelper';
 import { requiredReactSelect } from '../../formValidation/validationRules';
 import { prepareDropdownOptionsData } from '../../helpers/funs';
 import {
-    MEASUREMENT_UNIT_METER,
-    MEASUREMENT_UNIT_KILOMETER,
-    MEASUREMENT_UNIT_MILE,
-    MEASUREMENT_UNIT_KILOGRAM,
-    MEASUREMENT_UNIT_POUND,
     SCHEDULED_WORKOUT_TYPE_EXERCISE,
     SCHEDULED_WORKOUT_TYPE_SUPERSET,
     SCHEDULED_WORKOUT_TYPE_CIRCUIT
 } from '../../constants/consts';
 import { ButtonToolbar, Dropdown, MenuItem } from "react-bootstrap";
-
-const distanceUnitsOptions = [
-    { value: MEASUREMENT_UNIT_KILOMETER, label: "Kilometers" },
-    { value: MEASUREMENT_UNIT_MILE, label: "Miles" },
-    { value: MEASUREMENT_UNIT_METER, label: "Meters" },
-]
-
-const weightUnitsOptions = [
-    { value: MEASUREMENT_UNIT_KILOGRAM, label: "Kilograms" },
-    { value: MEASUREMENT_UNIT_POUND, label: "Pounds" },
-]
+import WorkoutExerciseSetsDetailsCard from './WorkoutExerciseSetsDetailsCard';
+import WorkoutExerciseCuicuitCard from './WorkoutExerciseCuicuitCard';
 
 class WorkoutExerciseCard extends Component {
     render() {
@@ -43,13 +29,11 @@ class WorkoutExerciseCard extends Component {
                 {fields.map((field, index) => {
                     let fieldData = fields.get(index);
                     let selectedType = fieldData.selectedType;
-                    console.log('fieldData => ',fieldData);
-                    
                     if (selectedType === SCHEDULED_WORKOUT_TYPE_EXERCISE) {
                         return (
                             <div key={index} className="workout-exercise-card-block-wrapper">
                                 <div className="row">
-                                    <div className="col-md-8">
+                                    <div className="col-md-10">
                                         <Field
                                             name={`${field}.exercise_id`}
                                             label="Exercise"
@@ -63,117 +47,73 @@ class WorkoutExerciseCard extends Component {
                                         />
                                     </div>
                                     <div className="col-md-2">
-                                        <Field
-                                            name={`${field}.reps`}
-                                            className="form-control"
-                                            label="Reps."
-                                            labelClass="control-label"
-                                            wrapperClass="form-group"
-                                            placeholder="Reps."
-                                            component={InputField}
-                                            type="number"
-                                            errorClass="help-block"
-                                        />
-                                    </div>
-                                    <div className="col-md-2">
-                                        <Field
-                                            name={`${field}.sets`}
-                                            className="form-control"
-                                            label="Sets."
-                                            labelClass="control-label"
-                                            wrapperClass="form-group"
-                                            placeholder="Sets."
-                                            component={InputField}
-                                            type="number"
-                                            errorClass="help-block"
-                                        />
                                         <button type="button" className="remove-workout-exercise-card-block-btn" onClick={() => fields.remove(index)} tabIndex="-1"><i className="icon-close"></i></button>
                                     </div>
-                                    <div className="col-md-2">
-                                        <Field
-                                            name={`${field}.weight`}
-                                            className="form-control"
-                                            label="Weight"
-                                            labelClass="control-label"
-                                            wrapperClass="form-group"
-                                            placeholder="Weight"
-                                            component={InputField}
-                                            type="number"
-                                            errorClass="help-block"
-                                        />
-                                    </div>
-                                    <div className="col-md-2">
-                                        <Field
-                                            name={`${field}.weight_units`}
-                                            label="Weight Units"
-                                            labelClass="control-label"
-                                            wrapperClass="form-group"
-                                            placeholder="Weight Units"
-                                            component={SelectField_ReactSelect}
-                                            options={weightUnitsOptions}
-                                            validate={[requiredReactSelect]}
-                                            errorClass="help-block"
-                                        />
-                                    </div>
-                                    <div className="col-md-2">
-                                        <Field
-                                            name={`${field}.distance`}
-                                            className="form-control"
-                                            label="Distance"
-                                            labelClass="control-label"
-                                            wrapperClass="form-group"
-                                            placeholder="Distance"
-                                            component={InputField}
-                                            type="number"
-                                            errorClass="help-block"
-                                        />
-                                    </div>
-                                    <div className="col-md-2">
-                                        <Field
-                                            name={`${field}.distance_units`}
-                                            label="Distance Units"
-                                            labelClass="control-label"
-                                            wrapperClass="form-group"
-                                            placeholder="Distance Units"
-                                            component={SelectField_ReactSelect}
-                                            options={distanceUnitsOptions}
-                                            validate={[requiredReactSelect]}
-                                            errorClass="help-block"
-                                        />
-                                    </div>
-                                    <div className="col-md-2">
-                                        <Field
-                                            name={`${field}.rest_time`}
-                                            className="form-control"
-                                            label="Rest Time (Mins)"
-                                            labelClass="control-label"
-                                            wrapperClass="form-group"
-                                            placeholder="Rest Time"
-                                            component={InputField}
-                                            type="number"
-                                            errorClass="help-block"
-                                        />
-                                    </div>
-                                    <div className="col-md-2">
-                                        <Field
-                                            name={`${field}.one_set_time`}
-                                            className="form-control"
-                                            label="Time/Set. (Mins)"
-                                            labelClass="control-label"
-                                            wrapperClass="form-group"
-                                            placeholder="Time/Set"
-                                            component={InputField}
-                                            type="number"
-                                            errorClass="help-block"
-                                        />
-                                    </div>
+                                    <FieldArray
+                                        name={`${field}.sets_details`}
+                                        component={WorkoutExerciseSetsDetailsCard}
+                                    />
                                 </div>
                             </div>
                         );
-                    } else if(selectedType === SCHEDULED_WORKOUT_TYPE_SUPERSET){
-                        return null;
-                    } else if(selectedType === SCHEDULED_WORKOUT_TYPE_CIRCUIT){
-                        return null;
+                    } else if (selectedType === SCHEDULED_WORKOUT_TYPE_SUPERSET) {
+                        return (
+                            <div key={index} className="workout-exercise-card-block-wrapper">
+                                <div className="row">
+                                    <div className="col-md-10">
+                                        <Field
+                                            name={`${field}.superset_exercise_id_1`}
+                                            label="Exercise"
+                                            labelClass="control-label"
+                                            wrapperClass="form-group"
+                                            placeholder="Exercise"
+                                            component={SelectField_ReactSelect}
+                                            options={exerciseOptions}
+                                            validate={[requiredReactSelect]}
+                                            errorClass="help-block"
+                                        />
+                                    </div>
+                                    <div className="col-md-2">
+                                        <button type="button" className="remove-workout-exercise-card-block-btn" onClick={() => fields.remove(index)} tabIndex="-1"><i className="icon-close"></i></button>
+                                    </div>
+                                    <FieldArray
+                                        name={`${field}.superset_sets_details_1`}
+                                        component={WorkoutExerciseSetsDetailsCard}
+                                    />
+                                </div>
+                                <div className="row">
+                                    <div className="col-md-10">
+                                        <Field
+                                            name={`${field}.superset_exercise_id_2`}
+                                            label="Exercise"
+                                            labelClass="control-label"
+                                            wrapperClass="form-group"
+                                            placeholder="Exercise"
+                                            component={SelectField_ReactSelect}
+                                            options={exerciseOptions}
+                                            validate={[requiredReactSelect]}
+                                            errorClass="help-block"
+                                        />
+                                    </div>
+                                    <FieldArray
+                                        name={`${field}.superset_sets_details_2`}
+                                        component={WorkoutExerciseSetsDetailsCard}
+                                    />
+                                </div>
+                            </div>
+                        );
+                    } else if (selectedType === SCHEDULED_WORKOUT_TYPE_CIRCUIT) {
+                        return (
+                            <div key={index} className="workout-exercise-card-block-wrapper">
+                                <FieldArray
+                                    name={`${field}.circuit`}
+                                    component={WorkoutExerciseCuicuitCard}
+                                />
+                                <div className="col-md-2">
+                                    <button type="button" className="remove-workout-exercise-card-block-btn" onClick={() => fields.remove(index)} tabIndex="-1"><i className="icon-close"></i></button>
+                                </div>
+                            </div>
+                        );
                     } else {
                         return null;
                     }
@@ -183,9 +123,45 @@ class WorkoutExerciseCard extends Component {
                         <Dropdown id="add-workout-plan-exercises">
                             <Dropdown.Toggle noCaret>Exercise <i className="icon-add_circle"></i></Dropdown.Toggle>
                             <Dropdown.Menu className="super-colors">
-                                <MenuItem eventKey="1" onClick={() => fields.push({ selectedType: SCHEDULED_WORKOUT_TYPE_EXERCISE })}>Exercise</MenuItem>
-                                <MenuItem eventKey="3" onClick={() => fields.push({ selectedType: SCHEDULED_WORKOUT_TYPE_SUPERSET })}>Superset</MenuItem>
-                                <MenuItem eventKey="2" onClick={() => fields.push({ selectedType: SCHEDULED_WORKOUT_TYPE_CIRCUIT })}>Circuit</MenuItem>
+                                <MenuItem
+                                    eventKey="1"
+                                    onClick={() => {
+                                        let obj = {
+                                            selectedType: SCHEDULED_WORKOUT_TYPE_EXERCISE,
+                                            differSets: false,
+                                            showDifferSets: false,
+                                        }
+                                        fields.push(obj);
+                                    }}
+                                >
+                                    Exercise
+                                </MenuItem>
+                                <MenuItem
+                                    eventKey="2"
+                                    onClick={() => {
+                                        let obj = {
+                                            selectedType: SCHEDULED_WORKOUT_TYPE_SUPERSET,
+                                            differSets: false,
+                                            showDifferSets: false,
+                                        }
+                                        fields.push(obj);
+                                    }}
+                                >
+                                    Superset
+                                </MenuItem>
+                                <MenuItem
+                                    eventKey="3"
+                                    onClick={() => {
+                                        let obj = {
+                                            selectedType: SCHEDULED_WORKOUT_TYPE_CIRCUIT,
+                                            differSets: false,
+                                            showDifferSets: false,
+                                        }
+                                        fields.push(obj);
+                                    }}
+                                >
+                                    Circuit
+                                </MenuItem>
                             </Dropdown.Menu>
                         </Dropdown>
                     </ButtonToolbar>

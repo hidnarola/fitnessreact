@@ -10,7 +10,8 @@ import {
     MEASUREMENT_UNIT_MILIGRAM,
     MEASUREMENT_UNIT_KILOGRAM,
     LOCALSTORAGE_USER_DETAILS_KEY,
-    FITASSIST_USER_DETAILS_TOKEN_KEY
+    FITASSIST_USER_DETAILS_TOKEN_KEY,
+    EXE_MEASUREMENT_UNITS
 } from "../constants/consts";
 import _ from 'lodash';
 import moment from "moment";
@@ -266,4 +267,28 @@ export function convertUnits(from, to, value) {
             break;
     }
     return result;
+}
+
+export function prepareExerciseOptions(exercises) {
+    let options = [];
+    _.forEach(exercises, (o, i) => {
+        options.push({
+            value: o._id,
+            label: o.name,
+            cat: o.category,
+            subCat: o.subCategory,
+        });
+    });
+    return options;
+}
+
+export function prepareFieldsOptions(fieldData) {
+    let options = [];
+    _.forEach(fieldData, (o, i) => {
+        let obj = _.find(EXE_MEASUREMENT_UNITS, ['value', o]);
+        if (obj) {
+            options.push(obj);
+        }
+    });
+    return options;
 }

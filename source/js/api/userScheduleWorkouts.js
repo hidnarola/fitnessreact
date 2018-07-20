@@ -18,9 +18,29 @@ function getExercisesName() {
     return fetchResource('user/exercise/names', options);
 }
 
+function getExerciseMeasurement() {
+    let headers = extraUserHeaders();
+    var options = {
+        method: 'GET',
+        headers: headers,
+    }
+
+    return fetchResource('user/exercise_measurements', options);
+}
+
+function getUsersWorkoutSchedule(_id) {
+    let headers = extraUserHeaders();
+    var options = {
+        method: 'GET',
+        headers: headers,
+    }
+
+    return fetchResource(requestUrl + '/' + _id, options);
+}
+
 function addUsersWorkoutSchedule(requestData) {
     let headers = extraUserHeaders();
-    return postFormData(requestUrl, requestData, headers);
+    return postFormData(requestUrl + '/workout', requestData, headers);
 }
 
 function changeUsersWorkoutSchedule(_id, requestData) {
@@ -72,10 +92,16 @@ function userAssignProgram(requestData) {
     return postFormData(requestUrl + '/assign_program', requestData, headers);
 }
 
+function addUserWorkoutTitle(requestData) {
+    let headers = extraUserHeaders();
+    return postFormData(requestUrl + '/day', requestData, headers);
+}
 
 export default {
     getUsersWorkoutSchedulesByMonths,
     getExercisesName,
+    getExerciseMeasurement,
+    getUsersWorkoutSchedule,
     addUsersWorkoutSchedule,
     changeUsersWorkoutSchedule,
     deleteUsersWorkoutSchedule,
@@ -84,4 +110,5 @@ export default {
     changeUsersWorkoutScheduleComplete,
     getProgramsName,
     userAssignProgram,
+    addUserWorkoutTitle,
 }

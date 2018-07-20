@@ -30,7 +30,16 @@ import {
     DELETE_USERS_BULK_WORKOUT_SCHEDULE_REQUEST,
     completeUsersBulkWorkoutScheduleSuccess,
     completeUsersBulkWorkoutScheduleError,
-    COMPLETE_USERS_BULK_WORKOUT_SCHEDULE_REQUEST
+    COMPLETE_USERS_BULK_WORKOUT_SCHEDULE_REQUEST,
+    addUserWorkoutTitleSuccess,
+    addUserWorkoutTitleError,
+    ADD_USER_WORKOUT_TITLE_REQUEST,
+    getUsersWorkoutScheduleError,
+    getUsersWorkoutScheduleSuccess,
+    GET_USERS_WORKOUT_SCHEDULE_REQUEST,
+    getExerciseMeasurementSuccess,
+    getExerciseMeasurementError,
+    GET_EXERCISE_MEASUREMENT_REQUEST
 } from '../actions/userScheduleWorkouts';
 
 function getUsersWorkoutSchedulesByMonthData() {
@@ -41,6 +50,18 @@ function getUsersWorkoutSchedulesByMonthData() {
             yield put(getUsersWorkoutSchedulesSuccess(data));
         } catch (error) {
             yield put(getUsersWorkoutSchedulesError(error));
+        }
+    }
+}
+
+function getUsersWorkoutScheduleData() {
+    return function* (action) {
+        try {
+            let _id = action._id;
+            const data = yield call(() => api.getUsersWorkoutSchedule(_id));
+            yield put(getUsersWorkoutScheduleSuccess(data));
+        } catch (error) {
+            yield put(getUsersWorkoutScheduleError(error));
         }
     }
 }
@@ -153,8 +174,32 @@ function userAssignProgramData() {
     }
 }
 
+function addUserWorkoutTitleData() {
+    return function* (action) {
+        try {
+            let requestData = action.requestData;
+            const data = yield call(() => api.addUserWorkoutTitle(requestData));
+            yield put(addUserWorkoutTitleSuccess(data));
+        } catch (error) {
+            yield put(addUserWorkoutTitleError(error));
+        }
+    }
+}
+
+function getExerciseMeasurementData() {
+    return function* (action) {
+        try {
+            const data = yield call(() => api.getExerciseMeasurement());
+            yield put(getExerciseMeasurementSuccess(data));
+        } catch (error) {
+            yield put(getExerciseMeasurementError(error));
+        }
+    }
+}
+
 export function* watchUsersWorkoutSchedulesData() {
     yield takeLatest(GET_USERS_WORKOUT_SCHEDULES_REQUEST, getUsersWorkoutSchedulesByMonthData());
+    yield takeLatest(GET_USERS_WORKOUT_SCHEDULE_REQUEST, getUsersWorkoutScheduleData());
     yield takeLatest(GET_EXERCISES_NAME_REQUEST, getExercisesName());
     yield takeLatest(ADD_USERS_WORKOUT_SCHEDULE_REQUEST, addUsersWorkoutScheduleData());
     yield takeLatest(CHANGE_USERS_WORKOUT_SCHEDULE_REQUEST, changeUsersWorkoutScheduleData());
@@ -164,6 +209,8 @@ export function* watchUsersWorkoutSchedulesData() {
     yield takeLatest(CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_REQUEST, changeUsersWorkoutScheduleCompleteData());
     yield takeLatest(GET_PROGRAMS_NAME_REQUEST, getProgramsName());
     yield takeLatest(USER_ASSIGN_PROGRAM_REQUEST, userAssignProgramData());
+    yield takeLatest(ADD_USER_WORKOUT_TITLE_REQUEST, addUserWorkoutTitleData());
+    yield takeLatest(GET_EXERCISE_MEASUREMENT_REQUEST, getExerciseMeasurementData());
 }
 
 export default [

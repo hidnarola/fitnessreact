@@ -1,8 +1,14 @@
+import { SCHEDULED_WORKOUT_TYPE_WARMUP } from "../constants/consts";
+
 export const SET_SELECTED_SLOT_FROM_CALENDAR = 'SET_SELECTED_SLOT_FROM_CALENDAR';
 
 export const GET_USERS_WORKOUT_SCHEDULES_REQUEST = 'GET_USERS_WORKOUT_SCHEDULES_REQUEST';
 export const GET_USERS_WORKOUT_SCHEDULES_SUCCESS = 'GET_USERS_WORKOUT_SCHEDULES_SUCCESS';
 export const GET_USERS_WORKOUT_SCHEDULES_ERROR = 'GET_USERS_WORKOUT_SCHEDULES_ERROR';
+
+export const GET_USERS_WORKOUT_SCHEDULE_REQUEST = 'GET_USERS_WORKOUT_SCHEDULE_REQUEST';
+export const GET_USERS_WORKOUT_SCHEDULE_SUCCESS = 'GET_USERS_WORKOUT_SCHEDULE_SUCCESS';
+export const GET_USERS_WORKOUT_SCHEDULE_ERROR = 'GET_USERS_WORKOUT_SCHEDULE_ERROR';
 
 export const GET_EXERCISES_NAME_REQUEST = 'GET_EXERCISES_NAME_REQUEST';
 export const GET_EXERCISES_NAME_SUCCESS = 'GET_EXERCISES_NAME_SUCCESS';
@@ -48,6 +54,16 @@ export const USER_ASSIGN_PROGRAM_REQUEST = 'USER_ASSIGN_PROGRAM_REQUEST';
 export const USER_ASSIGN_PROGRAM_SUCCESS = 'USER_ASSIGN_PROGRAM_SUCCESS';
 export const USER_ASSIGN_PROGRAM_ERROR = 'USER_ASSIGN_PROGRAM_ERROR';
 
+export const ADD_USER_WORKOUT_TITLE_REQUEST = 'ADD_USER_WORKOUT_TITLE_REQUEST';
+export const ADD_USER_WORKOUT_TITLE_SUCCESS = 'ADD_USER_WORKOUT_TITLE_SUCCESS';
+export const ADD_USER_WORKOUT_TITLE_ERROR = 'ADD_USER_WORKOUT_TITLE_ERROR';
+
+export const CHANGE_WORKOUT_MAIN_TYPE = 'CHANGE_WORKOUT_MAIN_TYPE';
+
+export const GET_EXERCISE_MEASUREMENT_REQUEST = 'GET_EXERCISE_MEASUREMENT_REQUEST';
+export const GET_EXERCISE_MEASUREMENT_SUCCESS = 'GET_EXERCISE_MEASUREMENT_SUCCESS';
+export const GET_EXERCISE_MEASUREMENT_ERROR = 'GET_EXERCISE_MEASUREMENT_ERROR';
+
 export function setSelectedSlotFromCalendar(slotInfo = null) {
     return {
         type: SET_SELECTED_SLOT_FROM_CALENDAR,
@@ -72,6 +88,27 @@ export function getUsersWorkoutSchedulesSuccess(data) {
 export function getUsersWorkoutSchedulesError(error) {
     return {
         type: GET_USERS_WORKOUT_SCHEDULES_ERROR,
+        error,
+    }
+}
+
+export function getUsersWorkoutScheduleRequest(_id) {
+    return {
+        type: GET_USERS_WORKOUT_SCHEDULE_REQUEST,
+        _id,
+    }
+}
+
+export function getUsersWorkoutScheduleSuccess(data) {
+    return {
+        type: GET_USERS_WORKOUT_SCHEDULE_SUCCESS,
+        data,
+    }
+}
+
+export function getUsersWorkoutScheduleError(error) {
+    return {
+        type: GET_USERS_WORKOUT_SCHEDULE_ERROR,
         error,
     }
 }
@@ -275,6 +312,54 @@ export function userAssignProgramSuccess(data) {
 export function userAssignProgramError(error) {
     return {
         type: USER_ASSIGN_PROGRAM_ERROR,
+        error,
+    }
+}
+
+export function addUserWorkoutTitleRequest(requestData) {
+    return {
+        type: ADD_USER_WORKOUT_TITLE_REQUEST,
+        requestData,
+    }
+}
+
+export function addUserWorkoutTitleSuccess(data) {
+    return {
+        type: ADD_USER_WORKOUT_TITLE_SUCCESS,
+        data,
+    }
+}
+
+export function addUserWorkoutTitleError(error) {
+    return {
+        type: ADD_USER_WORKOUT_TITLE_ERROR,
+        error
+    }
+}
+
+export function changeWorkoutMainType(mainType = SCHEDULED_WORKOUT_TYPE_WARMUP) {
+    return {
+        type: CHANGE_WORKOUT_MAIN_TYPE,
+        mainType
+    }
+}
+
+export function getExerciseMeasurementRequest() {
+    return {
+        type: GET_EXERCISE_MEASUREMENT_REQUEST,
+    }
+}
+
+export function getExerciseMeasurementSuccess(data) {
+    return {
+        type: GET_EXERCISE_MEASUREMENT_SUCCESS,
+        data,
+    }
+}
+
+export function getExerciseMeasurementError(error) {
+    return {
+        type: GET_EXERCISE_MEASUREMENT_ERROR,
         error,
     }
 }
