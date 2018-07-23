@@ -524,7 +524,7 @@ class ScheduleWorkout extends Component {
         var workout = _.find(workoutEvents, ['id', _id]);
         if (workout) {
             dispatch(selectUsersWorkoutScheduleForEdit(workout.meta));
-            history.push(routeCodes.CHANGE_SCHEDULE_WORKOUT);
+            // history.push(routeCodes.CHANGE_SCHEDULE_WORKOUT);
         }
     }
 

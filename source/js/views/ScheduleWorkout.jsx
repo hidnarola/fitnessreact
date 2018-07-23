@@ -315,7 +315,6 @@ class ScheduleWorkout extends Component {
                     handleViewWorkout: () => this.handleViewWorkout(workout._id),
                     handleCompleteWorkout: () => this.handleCompleteWorkout(workout._id),
                     handleSelectForBulkAction: () => this.handleSelectForBulkAction(workout._id),
-                    handleSelectWorkoutForEdit: () => this.handleSelectWorkoutForEdit(workout._id),
                 }
                 newWorkouts.push(newWorkout);
             });
@@ -538,16 +537,6 @@ class ScheduleWorkout extends Component {
         }
     }
 
-    handleSelectWorkoutForEdit = (_id) => {
-        const { workoutEvents } = this.state;
-        const { dispatch, history } = this.props;
-        var workout = _.find(workoutEvents, ['id', _id]);
-        if (workout) {
-            dispatch(selectUsersWorkoutScheduleForEdit(workout.meta));
-            history.push(routeCodes.CHANGE_SCHEDULE_WORKOUT);
-        }
-    }
-
     handleSelectProgramToAssign = () => {
         this.setState({
             showProgramAssignAlert: true,
@@ -746,7 +735,7 @@ class CustomEventCard extends Component {
                             <a href="javascript:void(0)" onClick={event.handleViewWorkout}><FaEye /></a>
                         }
                         {(event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
-                            <a href="javascript:void(0)" onClick={event.handleSelectWorkoutForEdit}><FaPencil /></a>
+                            <NavLink to={routeCodes.SAVE_SCHEDULE_WORKOUT.replace(':id', event.id)}><FaPencil /></NavLink>
                         }
                         <a href="javascript:void(0)" onClick={event.handleDelete}><FaTrash /></a>
                     </div>

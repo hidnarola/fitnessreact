@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import FitnessHeader from '../global/FitnessHeader';
 import FitnessNav from '../global/FitnessNav';
 import { routeCodes } from '../../constants/routes';
-import AddScheduleWorkoutForm from '../ScheduleWorkout/AddScheduleWorkoutForm';
+import SaveScheduleWorkoutForm from '../ScheduleWorkout/SaveScheduleWorkoutForm';
 import {
     SCHEDULED_WORKOUT_TYPE_EXERCISE,
     SCHEDULED_WORKOUT_TYPE_WARMUP,
@@ -46,7 +46,7 @@ class AddProgramScheduleWorkout extends Component {
                         <div className="col-md-12">
                             <div className="white-box space-btm-20">
                                 <div className="whitebox-body profile-body">
-                                    <AddScheduleWorkoutForm onSubmit={this.handleSubmit} />
+                                    <SaveScheduleWorkoutForm onSubmit={this.handleSubmit} />
                                 </div>
                             </div>
                         </div>

@@ -81,7 +81,7 @@ import Messenger from './Messenger';
 import $ from "jquery";
 import UserChatWindow from '../components/global/UserChatWindow';
 import ScheduleWorkout from './ScheduleWorkout';
-import AddScheduleWorkout from '../components/ScheduleWorkout/AddScheduleWorkout';
+import SaveScheduleWorkout from '../components/ScheduleWorkout/SaveScheduleWorkout';
 import ChangeScheduleWorkout from '../components/ScheduleWorkout/ChangeScheduleWorkout';
 import Programs from './Programs';
 import ProgramSave from '../components/Program/ProgramSave';
@@ -150,8 +150,7 @@ class App extends Component {
                             <PrivateRoute path={routeCodes.EXERCISEPREFERENCE} component={ExerciseSettings} />
 
                             <PrivateRoute exact path={routeCodes.SCHEDULE_WORKOUT} component={ScheduleWorkout} />
-                            <PrivateRoute exact path={routeCodes.ADD_SCHEDULE_WORKOUT} component={AddScheduleWorkout} />
-                            <PrivateRoute exact path={routeCodes.CHANGE_SCHEDULE_WORKOUT} component={ChangeScheduleWorkout} />
+                            <PrivateRoute exact path={routeCodes.SAVE_SCHEDULE_WORKOUT} component={SaveScheduleWorkout} />
 
                             <PrivateRoute exact path={routeCodes.PROGRAMS} component={Programs} />
                             <PrivateRoute exact path={`${routeCodes.PROGRAM_SAVE}/:id`} component={ProgramSave} />

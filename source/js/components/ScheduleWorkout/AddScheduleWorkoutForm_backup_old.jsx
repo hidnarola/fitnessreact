@@ -64,7 +64,7 @@ const mapStateToProps = (state) => {
 }
 
 AddScheduleWorkoutForm = reduxForm({
-    form: 'add_schedule_workout_form',
+    form: 'save_schedule_workout_form',
 })(AddScheduleWorkoutForm);
 
 export default connect(

@@ -212,7 +212,7 @@ class WorkoutTypeCircuitCard extends Component {
     }
 }
 
-const selector = formValueSelector('add_schedule_workout_form');
+const selector = formValueSelector('save_schedule_workout_form');
 
 const mapStateToProps = (state) => {
     const { userScheduleWorkouts } = state;

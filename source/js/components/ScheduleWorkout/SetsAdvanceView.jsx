@@ -146,7 +146,6 @@ class SetsAdvanceView extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        console.log('here');
         if (typeof this.props.totalSets !== 'undefined') {
             this.props.fields.removeAll();
             for (let index = 0; index < this.props.totalSets; index++) {

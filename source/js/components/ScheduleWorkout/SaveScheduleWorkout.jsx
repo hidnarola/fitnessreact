@@ -21,11 +21,11 @@ import {
     SCHEDULED_WORKOUT_TYPE_CIRCUIT,
     MEASUREMENT_UNIT_SECONDS
 } from '../../constants/consts';
-import AddScheduleWorkoutForm from './AddScheduleWorkoutForm';
+import SaveScheduleWorkoutForm from './SaveScheduleWorkoutForm';
 import cns from "classnames";
 import WorkoutExercisesView from './WorkoutExercisesView';
 
-class AddScheduleWorkout extends Component {
+class SaveScheduleWorkout extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -57,7 +57,7 @@ class AddScheduleWorkout extends Component {
                     <section className="body-wrap">
                         <div className="body-head d-flex justify-content-start">
                             <div className="body-head-l">
-                                <h2>{`Add Workout on ${moment(workout.date).format('MM/DD/YYYY')}`}</h2>
+                                <h2>{`Save Workout on ${moment(workout.date).format('MM/DD/YYYY')}`}</h2>
                                 <p>Your goal choice shapes how your fitness assistant will ceate your meal and exercise plans, it’s important that you set goals which are achieveable. Keep updating your profile and your fitness assistant will keep you on track and meeting the goals you’ve set out for yourself.</p>
                             </div>
                         </div>
@@ -100,7 +100,7 @@ class AddScheduleWorkout extends Component {
                                                     />
                                                 }
                                                 <div className="add-workout-form-wrapper">
-                                                    <AddScheduleWorkoutForm onSubmit={this.handleSubmit} />
+                                                    <SaveScheduleWorkoutForm onSubmit={this.handleSubmit} />
                                                 </div>
                                             </div>
                                         }
@@ -559,4 +559,4 @@ const mapStateToProps = (state) => {
 
 export default connect(
     mapStateToProps,
-)(AddScheduleWorkout);
+)(SaveScheduleWorkout);

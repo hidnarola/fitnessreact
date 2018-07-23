@@ -10,7 +10,7 @@ import WorkoutTypeSingleCard from './WorkoutTypeSingleCard';
 import WorkoutTypeSupersetCard from './WorkoutTypeSupersetCard';
 import WorkoutTypeCircuitCard from './WorkoutTypeCircuitCard';
 
-class AddScheduleWorkoutForm extends Component {
+class SaveScheduleWorkoutForm extends Component {
     render() {
         const {
             handleSubmit,
@@ -68,7 +68,7 @@ const workoutValidation = (values) => {
     return errors
 }
 
-const selector = formValueSelector('add_schedule_workout_form');
+const selector = formValueSelector('save_schedule_workout_form');
 
 const mapStateToProps = (state) => {
     const { userScheduleWorkouts } = state;
@@ -82,14 +82,14 @@ const mapStateToProps = (state) => {
     };
 }
 
-AddScheduleWorkoutForm = reduxForm({
-    form: 'add_schedule_workout_form',
+SaveScheduleWorkoutForm = reduxForm({
+    form: 'save_schedule_workout_form',
     // validate: workoutValidation,
-})(AddScheduleWorkoutForm);
+})(SaveScheduleWorkoutForm);
 
 export default connect(
     mapStateToProps,
-)(AddScheduleWorkoutForm);
+)(SaveScheduleWorkoutForm);
 
 const WorkoutTypeSelection = (props) => {
     const {
