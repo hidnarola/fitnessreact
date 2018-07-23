@@ -43,6 +43,9 @@ import {
     GET_EXERCISE_MEASUREMENT_REQUEST,
     GET_EXERCISE_MEASUREMENT_SUCCESS,
     GET_EXERCISE_MEASUREMENT_ERROR,
+    UPDATE_USER_WORKOUT_TITLE_REQUEST,
+    UPDATE_USER_WORKOUT_TITLE_SUCCESS,
+    UPDATE_USER_WORKOUT_TITLE_ERROR,
 } from "../actions/userScheduleWorkouts";
 import { VALIDATION_FAILURE_STATUS, SCHEDULED_WORKOUT_TYPE_WARMUP } from "../constants/consts";
 import { generateValidationErrorMsgArr } from "../helpers/funs";
@@ -431,6 +434,36 @@ const actionMap = {
         return state.merge(Map(newState));
     },
     [ADD_USER_WORKOUT_TITLE_ERROR]: (state, action) => {
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
+        }
+        return state.merge(Map({
+            loadingTitle: false,
+            errorTitle: error,
+        }));
+    },
+    [UPDATE_USER_WORKOUT_TITLE_REQUEST]: (state, action) => {
+        return state.merge(Map({
+            loadingTitle: false,
+            errorTitle: [],
+        }));
+    },
+    [UPDATE_USER_WORKOUT_TITLE_SUCCESS]: (state, action) => {
+        var newState = {
+            loadingTitle: false,
+        };
+        if (action.data.status !== 1) {
+            var msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
+            newState.errorTitle = [msg];
+        }
+        return state.merge(Map(newState));
+    },
+    [UPDATE_USER_WORKOUT_TITLE_ERROR]: (state, action) => {
         let error = [];
         if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
             error = generateValidationErrorMsgArr(action.error.response.message);

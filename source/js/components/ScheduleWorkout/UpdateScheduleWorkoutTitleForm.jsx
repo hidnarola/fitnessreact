@@ -26,7 +26,7 @@ class UpdateScheduleWorkoutTitleForm extends Component {
                     />
                     <div className="update-schedule-workout-title-form-btn">
                         <button type="button" className="">Save</button>
-                    </div>    
+                    </div>
                 </form>
             </div>
         );
@@ -70,6 +70,7 @@ const TextAreaField = (props) => {
                 {...input}
                 className={className}
                 placeholder={placeholder}
+                onChange={(e) => input.onChange(e.target.value)}
             />
             {meta.touched &&
                 ((meta.error && <div className={errorClass}>{meta.error}</div>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))
@@ -94,6 +95,7 @@ const InputField = (props) => {
                 placeholder={placeholder}
                 {...properties}
                 autoComplete="off"
+                onChange={(e) => input.onChange(e.target.value)}
             />
             {meta.touched &&
                 ((meta.error && <div className={errorClass}>{meta.error}</div>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))

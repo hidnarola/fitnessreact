@@ -6,7 +6,8 @@ import {
     changeWorkoutMainType,
     getExercisesNameRequest,
     getExerciseMeasurementRequest,
-    addUsersWorkoutScheduleRequest
+    addUsersWorkoutScheduleRequest,
+    updateUserWorkoutTitleRequest
 } from '../../actions/userScheduleWorkouts';
 import { routeCodes } from '../../constants/routes';
 import { te, prepareFieldsOptions, ts } from '../../helpers/funs';
@@ -32,6 +33,7 @@ class SaveScheduleWorkout extends Component {
         this.state = {
             loadWorkoutInit: false,
             saveWorkoutActionInit: false,
+            updateTitleActionInit: false,
         }
     }
 
@@ -67,7 +69,7 @@ class SaveScheduleWorkout extends Component {
                             <div className="col-md-12">
                                 <div className="white-box space-btm-20">
                                     <div className="whitebox-body profile-body">
-                                        <UpdateScheduleWorkoutTitleForm />
+                                        <UpdateScheduleWorkoutTitleForm onSubmit={this.handleTitleChangeSubmit} />
                                     </div>
                                 </div>
                             </div>
@@ -87,9 +89,6 @@ class SaveScheduleWorkout extends Component {
                                                     <WorkoutExercisesView
                                                         exercises={workout.warmup}
                                                     />
-                                                    // <WorkoutExercisesView
-                                                    //     exercises={workout.exercises}
-                                                    // />
                                                 }
                                                 {selectedWorkoutMainType === SCHEDULED_WORKOUT_TYPE_EXERCISE &&
                                                     <WorkoutExercisesView
@@ -123,10 +122,13 @@ class SaveScheduleWorkout extends Component {
             error,
             history,
             dispatch,
+            loadingTitle,
+            errorTitle,
         } = this.props;
         const {
             loadWorkoutInit,
             saveWorkoutActionInit,
+            updateTitleActionInit,
         } = this.state;
         if (loadWorkoutInit && !loading && workout && Object.keys(workout).length <= 0) {
             this.setState({ loadWorkoutInit: false });
@@ -145,6 +147,26 @@ class SaveScheduleWorkout extends Component {
                 ts('Workout saved successfully!');
             }
             dispatch(reset('save_schedule_workout_form'));
+        }
+        if (updateTitleActionInit && !loadingTitle) {
+            this.setState({ updateTitleActionInit: false });
+            if (errorTitle && errorTitle.length > 0) {
+                te(errorTitle[0]);
+            } else {
+                ts('Updated!');
+            }
+        }
+    }
+
+    handleTitleChangeSubmit = (data) => {
+        const { match, dispatch } = this.props;
+        if (match && match.params && match.params.id) {
+            let requestData = {
+                title: data.title,
+                description: data.description,
+            }
+            this.setState({ updateTitleActionInit: true });
+            dispatch(updateUserWorkoutTitleRequest(match.params.id, requestData));
         }
     }
 
@@ -568,6 +590,8 @@ const mapStateToProps = (state) => {
         error: userScheduleWorkouts.get('error'),
         selectedWorkoutMainType: userScheduleWorkouts.get('selectedWorkoutMainType'),
         exerciseMeasurements: userScheduleWorkouts.get('exerciseMeasurements'),
+        loadingTitle: userScheduleWorkouts.get('loadingTitle'),
+        errorTitle: userScheduleWorkouts.get('errorTitle'),
     };
 }
 

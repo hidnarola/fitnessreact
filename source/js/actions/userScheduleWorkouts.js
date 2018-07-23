@@ -58,6 +58,10 @@ export const ADD_USER_WORKOUT_TITLE_REQUEST = 'ADD_USER_WORKOUT_TITLE_REQUEST';
 export const ADD_USER_WORKOUT_TITLE_SUCCESS = 'ADD_USER_WORKOUT_TITLE_SUCCESS';
 export const ADD_USER_WORKOUT_TITLE_ERROR = 'ADD_USER_WORKOUT_TITLE_ERROR';
 
+export const UPDATE_USER_WORKOUT_TITLE_REQUEST = 'UPDATE_USER_WORKOUT_TITLE_REQUEST';
+export const UPDATE_USER_WORKOUT_TITLE_SUCCESS = 'UPDATE_USER_WORKOUT_TITLE_SUCCESS';
+export const UPDATE_USER_WORKOUT_TITLE_ERROR = 'UPDATE_USER_WORKOUT_TITLE_ERROR';
+
 export const CHANGE_WORKOUT_MAIN_TYPE = 'CHANGE_WORKOUT_MAIN_TYPE';
 
 export const GET_EXERCISE_MEASUREMENT_REQUEST = 'GET_EXERCISE_MEASUREMENT_REQUEST';
@@ -333,6 +337,28 @@ export function addUserWorkoutTitleSuccess(data) {
 export function addUserWorkoutTitleError(error) {
     return {
         type: ADD_USER_WORKOUT_TITLE_ERROR,
+        error
+    }
+}
+
+export function updateUserWorkoutTitleRequest(_id, requestData) {
+    return {
+        type: UPDATE_USER_WORKOUT_TITLE_REQUEST,
+        requestData,
+        _id,
+    }
+}
+
+export function updateUserWorkoutTitleSuccess(data) {
+    return {
+        type: UPDATE_USER_WORKOUT_TITLE_SUCCESS,
+        data,
+    }
+}
+
+export function updateUserWorkoutTitleError(error) {
+    return {
+        type: UPDATE_USER_WORKOUT_TITLE_ERROR,
         error
     }
 }

@@ -97,6 +97,11 @@ function addUserWorkoutTitle(requestData) {
     return postFormData(requestUrl + '/day', requestData, headers);
 }
 
+function updateUserWorkoutTitle(_id, requestData) {
+    let headers = extraUserHeaders();
+    return putFormData(requestUrl + '/' + _id, requestData, headers);
+}
+
 export default {
     getUsersWorkoutSchedulesByMonths,
     getExercisesName,
@@ -111,4 +116,5 @@ export default {
     getProgramsName,
     userAssignProgram,
     addUserWorkoutTitle,
+    updateUserWorkoutTitle,
 }
