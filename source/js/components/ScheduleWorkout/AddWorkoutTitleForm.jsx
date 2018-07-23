@@ -40,7 +40,7 @@ class AddWorkoutTitleForm extends Component {
         if (!loadingTitle && workoutTitle && prevProps.workoutTitle !== workoutTitle) {
             if (errorTitle && errorTitle.length <= 0) {
                 var _id = workoutTitle._id;
-                let url = routeCodes.ADD_SCHEDULE_WORKOUT.replace(':id', _id);
+                let url = routeCodes.SAVE_SCHEDULE_WORKOUT.replace(':id', _id);
                 history.push(url);
             } else {
                 te(errorTitle[0]);
@@ -80,7 +80,6 @@ const handleSubmit = (data, dispatch, props) => {
         type: SCHEDULED_WORKOUT_TYPE_EXERCISE,
         date: date,
     }
-    console.log('requestData => ', requestData);
     props.dispatch(addUserWorkoutTitleRequest(requestData));
 }
 

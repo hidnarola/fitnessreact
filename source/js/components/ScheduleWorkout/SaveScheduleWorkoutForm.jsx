@@ -100,31 +100,31 @@ const WorkoutTypeSelection = (props) => {
         <div className="workout-type-radios">
             <ul className="radiobox">
                 <li>
-                    <input
-                        type="radio"
-                        {...input}
+                    <Field
                         id="workout_type_single"
                         name={input.name}
+                        component="input"
+                        type="radio"
                         value={SCHEDULED_WORKOUT_TYPE_EXERCISE}
                     />
                     <label htmlFor="workout_type_single">Single</label>
                 </li>
                 <li>
-                    <input
-                        type="radio"
-                        {...input}
+                    <Field
                         id="workout_type_superset"
                         name={input.name}
+                        component="input"
+                        type="radio"
                         value={SCHEDULED_WORKOUT_TYPE_SUPERSET}
                     />
                     <label htmlFor="workout_type_superset">Superset</label>
                 </li>
                 <li>
-                    <input
-                        type="radio"
-                        {...input}
+                    <Field
                         id="workout_type_circuit"
                         name={input.name}
+                        component="input"
+                        type="radio"
                         value={SCHEDULED_WORKOUT_TYPE_CIRCUIT}
                     />
                     <label htmlFor="workout_type_circuit">Circuit</label>

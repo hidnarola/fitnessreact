@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { initialize, reset } from 'redux-form';
 import {
     getUsersWorkoutScheduleRequest,
     changeWorkoutMainType,
@@ -8,7 +9,7 @@ import {
     addUsersWorkoutScheduleRequest
 } from '../../actions/userScheduleWorkouts';
 import { routeCodes } from '../../constants/routes';
-import { te, prepareFieldsOptions } from '../../helpers/funs';
+import { te, prepareFieldsOptions, ts } from '../../helpers/funs';
 import FitnessHeader from '../global/FitnessHeader';
 import FitnessNav from '../global/FitnessNav';
 import moment from "moment";
@@ -30,6 +31,7 @@ class SaveScheduleWorkout extends Component {
         super(props);
         this.state = {
             loadWorkoutInit: false,
+            saveWorkoutActionInit: false,
         }
     }
 
@@ -119,10 +121,12 @@ class SaveScheduleWorkout extends Component {
             workout,
             loading,
             error,
-            history
+            history,
+            dispatch,
         } = this.props;
         const {
             loadWorkoutInit,
+            saveWorkoutActionInit,
         } = this.state;
         if (loadWorkoutInit && !loading && workout && Object.keys(workout).length <= 0) {
             this.setState({ loadWorkoutInit: false });
@@ -132,6 +136,15 @@ class SaveScheduleWorkout extends Component {
             this.setState({ loadWorkoutInit: false });
             te(error[0]);
             history.push(routeCodes.SCHEDULE_WORKOUT);
+        }
+        if (saveWorkoutActionInit && !loading) {
+            this.setState({ saveWorkoutActionInit: false });
+            if (error && error.length > 0) {
+                te(error[0]);
+            } else {
+                ts('Workout saved successfully!');
+            }
+            dispatch(reset('save_schedule_workout_form'));
         }
     }
 
@@ -147,6 +160,7 @@ class SaveScheduleWorkout extends Component {
             requestData = this.prepareRequestDataForCircuitWorkout(data);
         }
         dispatch(addUsersWorkoutScheduleRequest(requestData));
+        this.setState({ saveWorkoutActionInit: true });
     }
 
     handleWorkoutMainTypeChange = (mainType) => {
