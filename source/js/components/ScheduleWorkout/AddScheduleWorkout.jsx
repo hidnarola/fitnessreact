@@ -22,6 +22,8 @@ import {
     MEASUREMENT_UNIT_SECONDS
 } from '../../constants/consts';
 import AddScheduleWorkoutForm from './AddScheduleWorkoutForm';
+import cns from "classnames";
+import WorkoutExercisesView from './WorkoutExercisesView';
 
 class AddScheduleWorkout extends Component {
     constructor(props) {
@@ -72,27 +74,30 @@ class AddScheduleWorkout extends Component {
                                     <div className="whitebox-body profile-body">
                                         <div className="workout-main-types-wrapper">
                                             <ul>
-                                                <li><a href="javascript:void(0)" className="" onClick={() => this.handleWorkoutMainTypeChange(SCHEDULED_WORKOUT_TYPE_WARMUP)}>Warmup</a></li>
-                                                <li><a href="javascript:void(0)" className="" onClick={() => this.handleWorkoutMainTypeChange(SCHEDULED_WORKOUT_TYPE_EXERCISE)}>Workout</a></li>
-                                                <li><a href="javascript:void(0)" className="" onClick={() => this.handleWorkoutMainTypeChange(SCHEDULED_WORKOUT_TYPE_COOLDOWN)}>Cooldown</a></li>
+                                                <li className={cns({ 'active': (selectedWorkoutMainType === SCHEDULED_WORKOUT_TYPE_WARMUP) })}><a href="javascript:void(0)" className="" onClick={() => this.handleWorkoutMainTypeChange(SCHEDULED_WORKOUT_TYPE_WARMUP)}>Warmup</a></li>
+                                                <li className={cns({ 'active': (selectedWorkoutMainType === SCHEDULED_WORKOUT_TYPE_EXERCISE) })}><a href="javascript:void(0)" className="" onClick={() => this.handleWorkoutMainTypeChange(SCHEDULED_WORKOUT_TYPE_EXERCISE)}>Workout</a></li>
+                                                <li className={cns({ 'active': (selectedWorkoutMainType === SCHEDULED_WORKOUT_TYPE_COOLDOWN) })}><a href="javascript:void(0)" className="" onClick={() => this.handleWorkoutMainTypeChange(SCHEDULED_WORKOUT_TYPE_COOLDOWN)}>Cooldown</a></li>
                                             </ul>
                                         </div>
                                         {selectedWorkoutMainType &&
                                             <div className="workout-main-types-view-wrapper">
                                                 {selectedWorkoutMainType === SCHEDULED_WORKOUT_TYPE_WARMUP &&
-                                                    <div className="workout-main-type-warmup">
-                                                        warmup
-                                                    </div>
+                                                    <WorkoutExercisesView
+                                                        exercises={workout.warmup}
+                                                    />
+                                                    // <WorkoutExercisesView
+                                                    //     exercises={workout.exercises}
+                                                    // />
                                                 }
                                                 {selectedWorkoutMainType === SCHEDULED_WORKOUT_TYPE_EXERCISE &&
-                                                    <div className="workout-main-type-exercise">
-                                                        exercise
-                                                    </div>
+                                                    <WorkoutExercisesView
+                                                        exercises={workout.exercise}
+                                                    />
                                                 }
                                                 {selectedWorkoutMainType === SCHEDULED_WORKOUT_TYPE_COOLDOWN &&
-                                                    <div className="workout-main-type-cooldown">
-                                                        cooldown
-                                                    </div>
+                                                    <WorkoutExercisesView
+                                                        exercises={workout.cooldown}
+                                                    />
                                                 }
                                                 <div className="add-workout-form-wrapper">
                                                     <AddScheduleWorkoutForm onSubmit={this.handleSubmit} />

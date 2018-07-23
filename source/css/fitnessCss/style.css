@@ -1811,3 +1811,66 @@ td.close-td a i{ font-size:20px;}
 .fixed-btm-bar-c a{ color:#232B41;line-height:22px; margin:0 0 0 5px; }
 .fixed-btm-bar-c a i{font-size:22px; line-height:22px; vertical-align:middle;}
 .fixed-btm-bar-l .bg-pink.count-leadeboard { position: relative; top: 0; left: 0; }
+.update-schedule-workout-title-form-btn{text-align:center;}
+.update-schedule-workout-title-form-btn button{border-radius:25px; color:#fff; font-family: gt_walsheim_proregular; font-size: 14px; font-weight:700; line-height:40px; background:linear-gradient(123.28deg, #46E9C5 0%, #3FFBFC 100%); border:0; min-width:130px; margin:0 auto;}
+.update-schedule-workout-title-form-btn button:hover{background:linear-gradient(123.28deg, #3FFBFC 0%, #46E9C5 100%);}
+
+.workout-main-types-wrapper{ text-align:center; margin:0 0 30px;}
+.workout-main-types-wrapper ul{ margin:0; list-style:none;}
+.workout-main-types-wrapper ul li{ display:inline-block; vertical-align:top; margin:0 10px; }
+.workout-main-types-wrapper ul li a{color:#1A2032; font-family: gt_walsheim_proregular; font-size:15px; font-weight:700; line-height:50px; background:#fff; border:0; min-width:150px; margin:0 auto; box-shadow:0 1px 4px 0 rgba(0, 0, 0, .1); display:block; border-radius:80px; }
+.workout-main-types-wrapper ul li.active a,
+.workout-main-types-wrapper ul li:hover a{ background:linear-gradient(148.66deg, #FF3366 0%, #FF339A 100%); color:#fff; }
+.select-workout-type-wrapper{background: #f9fafa; padding:15px;}
+.select-workout-type-wrapper strong{ display:inline-block; vertical-align:top; line-height:40px; margin-right:15px;  }
+.select-workout-type-wrapper .workout-type-radios{ display:inline-block; vertical-align:top; }
+.select-workout-type-wrapper .workout-type-radios ul{ list-style:none; margin:0; padding:0;}
+.select-workout-type-wrapper .workout-type-radios ul li{ position:relative; display:inline-block; vertical-align:top; margin:0 15px 0 0;}
+
+.radiobox input[type=radio]{display: none;}
+.radiobox label:before {content: ""; display: inline-block; width: 16px; height: 16px; margin-right: 10px; position: absolute; left: 0; bottom: 1px; background-color: #aaa;}
+.radiobox input[type=radio]:checked + label:before { content: "\2022"; color: #f3f3f3; font-size: 30px; text-align: center; line-height: 18px;}
+
+.workout-type-radios ul li label {display:inline-block; max-width:100%; font-weight:700; width:100%; padding:10px 50px; z-index:10; position:relative; border-radius:2px;}
+.workout-type-radios .radiobox label:before {content: ""; display: inline-block; width: 100%; height: 100%;   position: absolute;  left: 0; top: 0; background-color: #fff;  z-index: -1; border-radius:4px; }
+.workout-type-radios .radiobox input[type=radio]:checked + label:before {content:''; background:linear-gradient(123.28deg, #46E9C5 0%, #3FFBFC 100%);}
+.workout-type-radios .radiobox input[type=radio]:checked + label{ color:#fff;}
+.workout-type-card-block{margin: 10px 0 0; background:#fff; padding:20px; }
+.workout-type-card-wrapper ul{list-style:none; margin:0; padding:0;}
+.workout-type-card-wrapper ul li { display:inline-block; vertical-align:top; margin:0 15px 0 0;}
+.workout-type-card-wrapper ul li > div{ border:1px solid #eee;display:inline-block; vertical-align:top;}
+.workout-type-card-wrapper ul li > div > input{ max-width:100px; border: 0; padding: 5px 10px 4px 10px; line-height: 20px; font-size: 14px;}
+.workout-type-card-wrapper ul li > div > select{ background:#eee; border: 0; padding: 6px 5px 5px 5px; font-size: 12px; line-height: 20px; height:29px;}
+.workout-type-card-wrapper ul li > div > input[max='12'] {width: 100px; max-width: 100px;}
+
+                           
+.single-exercise-selest .form-group { margin-bottom:0;}
+.single-exercise-switch .switch-wrap{ background:transparent; box-shadow:none; line-height:34px; }
+.single-exercise-switch .switch-wrap small{font-family:'gt_walsheim_proregular';}
+.single-exercise-switch .material-switch > input[type="checkbox"]:checked + label::after{background:linear-gradient(123.28deg, #46E9C5 0%, #3FFBFC 100%); }
+.workout-type-card-block-top{ margin-bottom:15px;}
+
+.sets-advance-view-block{ margin:0 0 10px; background: #eee; padding:10px 40px 10px 10px; position: relative;}
+.sets-advance-view-block label{ display:inline-block; vertical-align:top; line-height:29px; margin:0 15px 0 0;}
+.sets-advance-view-block>div{ display:inline-block; vertical-align:top;}
+.sets-advance-view-block>div input{ border:0; line-height:19px; padding:5px; }
+.sets-advance-view-block>div select{ border:0; line-height:19px; padding:5px; margin:0 15px 0 0; height:29px; background:#eee; font-size:12px; border:1px solid #fff;}
+.sets-advance-view-block-btn button{ background:#eee; border: 0; padding:7px 20px 6px 40px; line-height: 18px; font-size: 13px; vertical-align: middle; position: relative;}
+.sets-advance-view-block-btn button i{font-size:16px; line-height:17px; position:absolute; top:50%; transform:translateY(-50%);  left:17px; height: 17px; vertical-align: middle; margin-top: -1px;}
+.sets-advance-view-cBtn{background:transparent; border: 0; position: absolute; right:10px; top:50%; transform:translateY(-50%); margin-top:-1px; width:29px;}
+.sets-advance-view-cBtn i{line-height:29px; font-size:18px; color:#FF3366;}
+.add-workout-form-btm-btn{ background: linear-gradient(123.28deg, #46E9C5 0%, #3FFBFC 100%); border: 0; padding: 7px 40px; color: #fff; line-height: 20px;border-radius: 3px; margin: 10px 0; float: right;}
+.workout-type-card-block + .workout-type-card-block{ margin-top:15px;} 
+.multiple-sets-header label{ display:inline-block; vertical-align:top; margin:0 15px 0 0;line-height: 29px;}
+.multiple-sets-header>div{ display:inline-block; vertical-align:top; line-height: 29px;}
+.multiple-sets-header>div input[max="12"]{width:100px; max-width:100px; margin:0 20px 0 0;}
+.multiple-sets-header>div input{padding:5px 10px 4px 10px; line-height:29px; height:29px; border:1px solid #eee;} 
+.multiple-sets-header>div select{background:#eee; border:0; padding: 6px 5px 5px 5px; font-size: 12px; line-height: 20px; height: 29px }
+
+.workout-circuit-add-exercise-btn{margin: 15px 0 0; background: #fff; padding: 20px;}
+.workout-circuit-add-exercise-btn button{ background:#eee; border: 0; padding:7px 20px 6px 40px; line-height: 18px; font-size: 13px; vertical-align: middle; position: relative;}
+.workout-circuit-add-exercise-btn button i{font-size:16px; line-height:17px; position:absolute; top:50%; transform:translateY(-50%);  left:17px; height: 17px; vertical-align: middle; margin-top: -1px;}
+
+.pos-relative{position: relative !important;}
+.workout-type-circuit-card-cBtn {border-radius: 80px; background: linear-gradient(148.66deg, #FF3366 0%, #FF339A 100%); -webkit-box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .1); box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .1); width: 25px; height: 25px; text-align: center; border: 0; position: absolute; top: -10px; right: -10px; z-index: 1; line-height: 29px;}
+.workout-type-circuit-card-cBtn i{font-size: 16px; color: #fff;}

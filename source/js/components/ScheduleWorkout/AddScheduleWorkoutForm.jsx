@@ -48,11 +48,24 @@ class AddScheduleWorkoutForm extends Component {
                             />
                         }
                     </div>
-                    <button type="submit" className="">Save</button>
+                    <button type="submit" className="add-workout-form-btm-btn">Save</button>
                 </form>
             </div>
         );
     }
+}
+
+const workoutValidation = (values) => {
+    const errors = {}
+    if (!values.workout_type) {
+        errors.workout_type = 'Please select any one type of workout!'
+    }
+    if (values.workout_type && values.workout_type === SCHEDULED_WORKOUT_TYPE_EXERCISE) {
+        if (!values.workout_single[0].exercise_id) {
+            errors.workout_single[0].exercise_id = 'Exercise is required!';
+        }
+    }
+    return errors
 }
 
 const selector = formValueSelector('add_schedule_workout_form');
@@ -71,6 +84,7 @@ const mapStateToProps = (state) => {
 
 AddScheduleWorkoutForm = reduxForm({
     form: 'add_schedule_workout_form',
+    // validate: workoutValidation,
 })(AddScheduleWorkoutForm);
 
 export default connect(
@@ -80,15 +94,17 @@ export default connect(
 const WorkoutTypeSelection = (props) => {
     const {
         input,
+        meta,
     } = props;
     return (
         <div className="workout-type-radios">
-            <ul>
+            <ul className="radiobox">
                 <li>
                     <input
                         type="radio"
                         {...input}
                         id="workout_type_single"
+                        name={input.name}
                         value={SCHEDULED_WORKOUT_TYPE_EXERCISE}
                     />
                     <label htmlFor="workout_type_single">Single</label>
@@ -98,6 +114,7 @@ const WorkoutTypeSelection = (props) => {
                         type="radio"
                         {...input}
                         id="workout_type_superset"
+                        name={input.name}
                         value={SCHEDULED_WORKOUT_TYPE_SUPERSET}
                     />
                     <label htmlFor="workout_type_superset">Superset</label>
@@ -107,12 +124,15 @@ const WorkoutTypeSelection = (props) => {
                         type="radio"
                         {...input}
                         id="workout_type_circuit"
+                        name={input.name}
                         value={SCHEDULED_WORKOUT_TYPE_CIRCUIT}
                     />
                     <label htmlFor="workout_type_circuit">Circuit</label>
                 </li>
             </ul>
-
+            {meta.touched &&
+                (meta.error && <span>{meta.error}</span>)
+            }
         </div>
     );
 }

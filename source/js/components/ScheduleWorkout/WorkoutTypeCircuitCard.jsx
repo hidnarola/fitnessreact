@@ -27,36 +27,38 @@ class WorkoutTypeCircuitCard extends Component {
         var exerciseOptions = prepareExerciseOptions(exercises);
         return (
             <div className="workout-type-card-wrapper">
-                <div className="row">
-                    <div className="col-md-1">
-                        <Field
-                            id={`circuit_sets`}
-                            name={`circuit_sets`}
-                            component={WorkoutInputField}
-                            placeholder="Sets"
-                            type="number"
-                            min={1}
-                            max={12}
-                        />
-                    </div>
+                <div className="workout-type-card-block multiple-sets-header">
+                    <label>Circuit Sets</label>
+                    <Field
+                        id={`circuit_sets`}
+                        name={`circuit_sets`}
+                        component={WorkoutInputField}
+                        placeholder="Sets"
+                        type="number"
+                        min={1}
+                        max={12}
+                    />
                     {typeof circuitSets !== 'undefined' && circuitSets > 1 &&
-                        <div className="col-md-1">
-                            <Field
-                                id={`circuit_rest_time`}
-                                name={`circuit_rest_time`}
-                                component={WorkoutInputField}
-                                placeholder="Rest Time"
-                                type="number"
-                                min={0}
-                            />
-                            <Field
-                                id={`circuit_rest_time_unit`}
-                                name={`circuit_rest_time_unit`}
-                                component={WorkoutDropdownField}
-                                options={EXE_REST_TIME_UNITS}
-                                tabIndex={-1}
-                            />
-                        </div>
+                        <label>Rest Between Sets</label>
+                    }
+                    {typeof circuitSets !== 'undefined' && circuitSets > 1 &&
+                        <Field
+                            id={`circuit_rest_time`}
+                            name={`circuit_rest_time`}
+                            component={WorkoutInputField}
+                            placeholder="Rest Time"
+                            type="number"
+                            min={0}
+                        />
+                    }
+                    {typeof circuitSets !== 'undefined' && circuitSets > 1 &&
+                        <Field
+                            id={`circuit_rest_time_unit`}
+                            name={`circuit_rest_time_unit`}
+                            component={WorkoutDropdownField}
+                            options={EXE_REST_TIME_UNITS}
+                            tabIndex={-1}
+                        />
                     }
                 </div>
                 {fields.map((field, index) => {
@@ -89,10 +91,10 @@ class WorkoutTypeCircuitCard extends Component {
                         }
                     }
                     return (
-                        <div key={index} className="workout-type-card-block">
-                            Exercise # {(index + 1)}
-                            <div className="row">
-                                <div className="col-md-10">
+                        <div key={index} className="workout-type-card-block pos-relative">
+                            {/* <strong>Exercise # {(index + 1)}</strong> */}
+                            <div className="row workout-type-card-block-top">
+                                <div className="col-md-10 single-exercise-selest">
                                     <Field
                                         name={`${field}.exercise_id`}
                                         wrapperClass="form-group"
@@ -101,7 +103,7 @@ class WorkoutTypeCircuitCard extends Component {
                                         options={exerciseOptions}
                                     />
                                 </div>
-                                <div className="col-md-2">
+                                <div className="col-md-2 single-exercise-switch">
                                     <Field
                                         id={`${field}.advance_view`}
                                         name={`${field}.advance_view`}
@@ -115,75 +117,78 @@ class WorkoutTypeCircuitCard extends Component {
                                 <div className="">
                                     {!advanceView &&
                                         <div className="workout-normal-view">
-                                            <div className="row">
-                                                {field1Options && field1Options.length > 0 &&
-                                                    <div className="col-md-1">
-                                                        <Field
-                                                            id={`${field}.field1_value`}
-                                                            name={`${field}.field1_value`}
-                                                            component={WorkoutInputField}
-                                                            placeholder=""
-                                                            type="number"
-                                                            min={1}
-                                                        />
-                                                        <Field
-                                                            id={`${field}.field1_unit`}
-                                                            name={`${field}.field1_unit`}
-                                                            component={WorkoutDropdownField}
-                                                            options={field1Options}
-                                                            tabIndex={-1}
-                                                        />
-                                                    </div>
-                                                }
-                                                {field2Options && field2Options.length > 0 &&
-                                                    <div className="col-md-1">
-                                                        <Field
-                                                            id={`${field}.field2_value`}
-                                                            name={`${field}.field2_value`}
-                                                            component={WorkoutInputField}
-                                                            placeholder=""
-                                                            type="number"
-                                                            min={1}
-                                                        />
-                                                        <Field
-                                                            id={`${field}.field2_unit`}
-                                                            name={`${field}.field2_unit`}
-                                                            component={WorkoutDropdownField}
-                                                            options={field2Options}
-                                                            tabIndex={-1}
-                                                        />
-                                                    </div>
-                                                }
-                                                {field3Options && field3Options.length > 0 &&
-                                                    <div className="col-md-1">
-                                                        <Field
-                                                            id={`${field}.field3_value`}
-                                                            name={`${field}.field3_value`}
-                                                            component={WorkoutInputField}
-                                                            placeholder=""
-                                                            type="number"
-                                                            min={1}
-                                                        />
-                                                        <Field
-                                                            id={`${field}.field3_unit`}
-                                                            name={`${field}.field3_unit`}
-                                                            component={WorkoutDropdownField}
-                                                            options={field3Options}
-                                                            tabIndex={-1}
-                                                        />
-                                                    </div>
-                                                }
+                                            <div className="">
+                                                <ul>
+                                                    {field1Options && field1Options.length > 0 &&
+                                                        <li>
+                                                            <Field
+                                                                id={`${field}.field1_value`}
+                                                                name={`${field}.field1_value`}
+                                                                component={WorkoutInputField}
+                                                                placeholder=""
+                                                                type="number"
+                                                                min={1}
+                                                            />
+                                                            <Field
+                                                                id={`${field}.field1_unit`}
+                                                                name={`${field}.field1_unit`}
+                                                                component={WorkoutDropdownField}
+                                                                options={field1Options}
+                                                                tabIndex={-1}
+                                                            />
+                                                        </li>
+                                                    }
+                                                    {field2Options && field2Options.length > 0 &&
+                                                        <li>
+                                                            <Field
+                                                                id={`${field}.field2_value`}
+                                                                name={`${field}.field2_value`}
+                                                                component={WorkoutInputField}
+                                                                placeholder=""
+                                                                type="number"
+                                                                min={1}
+                                                            />
+                                                            <Field
+                                                                id={`${field}.field2_unit`}
+                                                                name={`${field}.field2_unit`}
+                                                                component={WorkoutDropdownField}
+                                                                options={field2Options}
+                                                                tabIndex={-1}
+                                                            />
+                                                        </li>
+                                                    }
+                                                    {field3Options && field3Options.length > 0 &&
+                                                        <li>
+                                                            <Field
+                                                                id={`${field}.field3_value`}
+                                                                name={`${field}.field3_value`}
+                                                                component={WorkoutInputField}
+                                                                placeholder=""
+                                                                type="number"
+                                                                min={1}
+                                                            />
+                                                            <Field
+                                                                id={`${field}.field3_unit`}
+                                                                name={`${field}.field3_unit`}
+                                                                component={WorkoutDropdownField}
+                                                                options={field3Options}
+                                                                tabIndex={-1}
+                                                            />
+                                                        </li>
+                                                    }
+                                                </ul>
                                             </div>
                                         </div>
                                     }
                                     {advanceView &&
                                         <div className="workout-advance-view">
-                                            <div className="row">
+                                            <div className="">
                                                 <FieldArray
                                                     id={`${field}.advance_details`}
                                                     name={`${field}.advance_details`}
                                                     component={SetsAdvanceView}
                                                     totalSets={circuitSets}
+                                                    allowAddRemoveSets={false}
                                                     selectedSingleExerciseObj={selectedExerciseObj}
                                                     exerciseMeasurements={exerciseMeasurements}
                                                     workoutType={SCHEDULED_WORKOUT_TYPE_CIRCUIT}
@@ -194,13 +199,13 @@ class WorkoutTypeCircuitCard extends Component {
                                 </div>
                             }
                             {index > 0 &&
-                                <button type="button" className="workout-type-single-card-cBtn" onClick={() => fields.remove(index)} tabIndex={-1}><i className="icon-cancel"></i></button>
+                                <button type="button" className="workout-type-circuit-card-cBtn" onClick={() => fields.remove(index)} tabIndex={-1}><i className="icon-close"></i></button>
                             }
                         </div>
                     );
                 })}
-                <div className="pull-right">
-                    <button type="button" className="" onClick={() => fields.push()}>Add<i className="icon-control_point"></i></button>
+                <div className="workout-circuit-add-exercise-btn">
+                    <button type="button" className="" onClick={() => fields.push()}>Add Another Exercise<i className="icon-control_point"></i></button>
                 </div>
             </div>
         );

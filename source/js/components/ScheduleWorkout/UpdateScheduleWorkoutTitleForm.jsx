@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Field, reduxForm } from "redux-form";
+import { connect } from 'react-redux';
+import { Field, reduxForm, initialize } from "redux-form";
 import { required } from '../../formValidation/validationRules';
 
 class UpdateScheduleWorkoutTitleForm extends Component {
@@ -23,18 +24,39 @@ class UpdateScheduleWorkoutTitleForm extends Component {
                         placeholder="Description"
                         component={TextAreaField}
                     />
-                    <button type="button" className="">Save</button>
+                    <div className="update-schedule-workout-title-form-btn">
+                        <button type="button" className="">Save</button>
+                    </div>    
                 </form>
             </div>
         );
     }
+
+    componentDidUpdate(prevProps, prevState) {
+        const { workout, dispatch } = this.props;
+        var formData = {
+            title: workout.title,
+            description: workout.description,
+        }
+        dispatch(initialize('update_schedule_workout_title_form', formData));
+    }
+
 }
 
 UpdateScheduleWorkoutTitleForm = reduxForm({
     form: 'update_schedule_workout_title_form',
 })(UpdateScheduleWorkoutTitleForm);
 
-export default UpdateScheduleWorkoutTitleForm;
+const mapStateToProps = (state) => {
+    const { userScheduleWorkouts } = state;
+    return {
+        workout: userScheduleWorkouts.get('workout'),
+    };
+}
+
+export default connect(
+    mapStateToProps
+)(UpdateScheduleWorkoutTitleForm);
 
 const TextAreaField = (props) => {
     const { input, meta, wrapperClass, className, placeholder, errorClass } = props;

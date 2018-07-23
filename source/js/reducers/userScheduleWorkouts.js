@@ -179,7 +179,6 @@ const actionMap = {
     [ADD_USERS_WORKOUT_SCHEDULE_REQUEST]: (state, action) => {
         return state.merge(Map({
             loading: true,
-            workout: null,
             error: [],
         }));
     },

@@ -10,7 +10,13 @@ class SetsAdvanceView extends Component {
     constructor(props) {
         super(props);
         props.fields.removeAll();
-        props.fields.push({});
+        if (props.allowAddRemoveSets) {
+            props.fields.push({});
+        } else if (props.totalSets) {
+            for (let index = 0; index < props.totalSets; index++) {
+                props.fields.push({});
+            }
+        }
     }
 
     render() {
@@ -18,7 +24,7 @@ class SetsAdvanceView extends Component {
             fields,
             selectedSingleExerciseObj,
             exerciseMeasurements,
-            totalSets,
+            allowAddRemoveSets,
             workoutType,
         } = this.props;
         let selectedExerciseMeasurementObj = null;
@@ -47,7 +53,7 @@ class SetsAdvanceView extends Component {
                 {fields.map((field, index) => {
                     return (
                         <div key={index} className="sets-advance-view-block">
-                            Set #{(index + 1)}
+                            <label>Set {(index + 1)}</label>
                             {index > 0 && (workoutType && workoutType === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
                                 <Field
                                     id={`${field}.rest_time`}
@@ -68,71 +74,71 @@ class SetsAdvanceView extends Component {
                                 />
                             }
                             {field1Options && field1Options.length > 0 &&
-                                <div>
-                                    <Field
-                                        id={`${field}.field1_value`}
-                                        name={`${field}.field1_value`}
-                                        component={WorkoutInputField}
-                                        placeholder=""
-                                        type="number"
-                                        min={0}
-                                    />
-                                    <Field
-                                        id={`${field}.field1_unit`}
-                                        name={`${field}.field1_unit`}
-                                        component={WorkoutDropdownField}
-                                        options={field1Options}
-                                        tabIndex={-1}
-                                    />
-                                </div>
+                                <Field
+                                    id={`${field}.field1_value`}
+                                    name={`${field}.field1_value`}
+                                    component={WorkoutInputField}
+                                    placeholder=""
+                                    type="number"
+                                    min={0}
+                                />
+                            }
+                            {field1Options && field1Options.length > 0 &&
+                                <Field
+                                    id={`${field}.field1_unit`}
+                                    name={`${field}.field1_unit`}
+                                    component={WorkoutDropdownField}
+                                    options={field1Options}
+                                    tabIndex={-1}
+                                />
                             }
                             {field2Options && field2Options.length > 0 &&
-                                <div>
-                                    <Field
-                                        id={`${field}.field2_value`}
-                                        name={`${field}.field2_value`}
-                                        component={WorkoutInputField}
-                                        placeholder=""
-                                        type="number"
-                                        min={0}
-                                    />
-                                    <Field
-                                        id={`${field}.field2_unit`}
-                                        name={`${field}.field2_unit`}
-                                        component={WorkoutDropdownField}
-                                        options={field2Options}
-                                        tabIndex={-1}
-                                    />
-                                </div>
+                                <Field
+                                    id={`${field}.field2_value`}
+                                    name={`${field}.field2_value`}
+                                    component={WorkoutInputField}
+                                    placeholder=""
+                                    type="number"
+                                    min={0}
+                                />
+                            }
+                            {field2Options && field2Options.length > 0 &&
+                                <Field
+                                    id={`${field}.field2_unit`}
+                                    name={`${field}.field2_unit`}
+                                    component={WorkoutDropdownField}
+                                    options={field2Options}
+                                    tabIndex={-1}
+                                />
                             }
                             {field3Options && field3Options.length > 0 &&
-                                <div>
-                                    <Field
-                                        id={`${field}.field3_value`}
-                                        name={`${field}.field3_value`}
-                                        component={WorkoutInputField}
-                                        placeholder=""
-                                        type="number"
-                                        min={0}
-                                    />
-                                    <Field
-                                        id={`${field}.field3_unit`}
-                                        name={`${field}.field3_unit`}
-                                        component={WorkoutDropdownField}
-                                        options={field3Options}
-                                        tabIndex={-1}
-                                    />
-                                </div>
+                                <Field
+                                    id={`${field}.field3_value`}
+                                    name={`${field}.field3_value`}
+                                    component={WorkoutInputField}
+                                    placeholder=""
+                                    type="number"
+                                    min={0}
+                                />
                             }
-                            {(index > 0) && (typeof totalSets === 'undefined' || totalSets === null || totalSets <= 0) &&
+                            {field3Options && field3Options.length > 0 &&
+                                <Field
+                                    id={`${field}.field3_unit`}
+                                    name={`${field}.field3_unit`}
+                                    component={WorkoutDropdownField}
+                                    options={field3Options}
+                                    tabIndex={-1}
+                                />
+                            }
+                            {(index > 0) && (allowAddRemoveSets) &&
                                 <button type="button" className="sets-advance-view-cBtn" onClick={() => fields.remove(index)} tabIndex={-1}><i className="icon-cancel"></i></button>
                             }
                         </div>
                     );
                 })}
-                {(typeof totalSets === 'undefined' || totalSets === null || totalSets <= 0) && (fields && fields.length <= 12) &&
-                    <div className="pull-right">
-                        <button type="button" className="" onClick={() => fields.push()}>Add Set<i className="icon-control_point"></i></button>
+                {(allowAddRemoveSets) && (fields && fields.length <= 12) &&
+                    <div className="sets-advance-view-block-btn">
+                        <button type="button" className="" onClick={() => fields.push()}>Add Another Set<i className="icon-control_point"></i></button>
                     </div>
                 }
             </div>
@@ -140,6 +146,7 @@ class SetsAdvanceView extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
+        console.log('here');
         if (typeof this.props.totalSets !== 'undefined') {
             this.props.fields.removeAll();
             for (let index = 0; index < this.props.totalSets; index++) {
