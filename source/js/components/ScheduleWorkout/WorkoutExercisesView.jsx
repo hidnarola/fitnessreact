@@ -10,8 +10,17 @@ import {
 } from '../../constants/consts';
 import noImg from 'img/common/no-img.png'
 import _ from "lodash";
+import { deleteUserWholeExerciseRequest } from '../../actions/userScheduleWorkouts';
+import { te, ts } from '../../helpers/funs';
 
 class WorkoutExercisesView extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            deleteWholeExeInit: false,
+        }
+    }
+
     render() {
         const {
             exercises,
@@ -26,16 +35,22 @@ class WorkoutExercisesView extends Component {
                                     {o.subType === SCHEDULED_WORKOUT_TYPE_EXERCISE &&
                                         <WorkoutExerciseSingleView
                                             exercise={o.exercises[0]}
+                                            exerciseObj={o}
+                                            handleWholeExeDelete={this.handleWholeExeDelete}
                                         />
                                     }
                                     {o.subType === SCHEDULED_WORKOUT_TYPE_SUPERSET &&
                                         <WorkoutExerciseSupersetView
                                             exercises={o.exercises}
+                                            exerciseObj={o}
+                                            handleWholeExeDelete={this.handleWholeExeDelete}
                                         />
                                     }
                                     {o.subType === SCHEDULED_WORKOUT_TYPE_CIRCUIT &&
                                         <WorkoutExerciseCircuitView
                                             exercises={o.exercises}
+                                            exerciseObj={o}
+                                            handleWholeExeDelete={this.handleWholeExeDelete}
                                         />
                                     }
                                 </li>
@@ -46,11 +61,37 @@ class WorkoutExercisesView extends Component {
             </div>
         );
     }
+
+    componentDidUpdate(prevProps, prevState) {
+        const { deleteWholeExeInit } = this.state;
+        const { loading, error } = this.props;
+        if (deleteWholeExeInit && !loading) {
+            this.setState({ deleteWholeExeInit: false });
+            if (error && error.length > 0) {
+                te(error[0]);
+            } else {
+                ts('Deleted');
+            }
+        }
+    }
+
+
+    handleWholeExeDelete = (exerciseObj) => {
+        const { dispatch } = this.props;
+        let requestData = {
+            exerciseIds: [exerciseObj._id],
+            parentId: exerciseObj.userWorkoutsId,
+        };
+        this.setState({ deleteWholeExeInit: true });
+        dispatch(deleteUserWholeExerciseRequest(requestData));
+    }
 }
 
 const mapStateToProps = (state) => {
+    const { userScheduleWorkouts } = state;
     return {
-
+        loading: userScheduleWorkouts.get('loading'),
+        error: userScheduleWorkouts.get('error'),
     };
 }
 
@@ -60,7 +101,11 @@ export default connect(
 
 class WorkoutExerciseSingleView extends Component {
     render() {
-        const { exercise } = this.props;
+        const {
+            exercise,
+            exerciseObj,
+            handleWholeExeDelete,
+        } = this.props;
         return (
             <div className="workout-exercise-head-view d-flex">
                 <div className="workout-exercise-head-view-l">
@@ -108,7 +153,7 @@ class WorkoutExerciseSingleView extends Component {
                             }
                             <div className="workout-exercise-head-view-actions"><h5>...</h5></div>
                             <div className="workout-exercise-head-view-cancel">
-                                <button type="button">
+                                <button type="button" onClick={() => handleWholeExeDelete(exerciseObj)}>
                                     <i className="icon-cancel"></i>
                                 </button>
                             </div>
@@ -176,7 +221,7 @@ class WorkoutExerciseSingleView extends Component {
                             }
                             <div className="workout-exercise-head-view-actions"><h5>...</h5></div>
                             <div className="workout-exercise-head-view-cancel">
-                                <button type="button">
+                                <button type="button" onClick={() => handleWholeExeDelete(exerciseObj)}>
                                     <i className="icon-cancel"></i>
                                 </button>
                             </div>
@@ -190,7 +235,11 @@ class WorkoutExerciseSingleView extends Component {
 
 class WorkoutExerciseSupersetView extends Component {
     render() {
-        const { exercises } = this.props;
+        const {
+            exercises,
+            handleWholeExeDelete,
+            exerciseObj,
+        } = this.props;
         return (
             <div className="workout-exercise-head-view-wrapper">
                 <div className="workout-exercise-head-view d-flex">
@@ -213,7 +262,7 @@ class WorkoutExerciseSupersetView extends Component {
                             }
                             <div className="workout-exercise-head-view-actions"><h5>...</h5></div>
                             <div className="workout-exercise-head-view-cancel">
-                                <button type="button">
+                                <button type="button" onClick={() => handleWholeExeDelete(exerciseObj)}>
                                     <i className="icon-cancel"></i>
                                 </button>
                             </div>
@@ -259,11 +308,6 @@ class WorkoutExerciseSupersetView extends Component {
                                                             </div>
                                                         }
                                                         <div className="workout-exercise-head-view-actions"><h5>...</h5></div>
-                                                        <div className="workout-exercise-head-view-cancel">
-                                                            <button type="button">
-                                                                <i className="icon-cancel"></i>
-                                                            </button>
-                                                        </div>
                                                     </div>
                                                 }
                                                 {exercise.differentSets === 1 &&
@@ -308,11 +352,6 @@ class WorkoutExerciseSupersetView extends Component {
                                                             </div>
                                                         }
                                                         <div className="workout-exercise-head-view-actions"><h5>...</h5></div>
-                                                        <div className="workout-exercise-head-view-cancel">
-                                                            <button type="button">
-                                                                <i className="icon-cancel"></i>
-                                                            </button>
-                                                        </div>
                                                     </div>
                                                 }
                                             </div>
@@ -330,7 +369,11 @@ class WorkoutExerciseSupersetView extends Component {
 
 class WorkoutExerciseCircuitView extends Component {
     render() {
-        const { exercises } = this.props;
+        const {
+            exercises,
+            handleWholeExeDelete,
+            exerciseObj,
+        } = this.props;
         return (
             <div className="workout-exercise-head-view-wrapper">
                 <div className="workout-exercise-head-view d-flex">
@@ -353,7 +396,7 @@ class WorkoutExerciseCircuitView extends Component {
                             }
                             <div className="workout-exercise-head-view-actions"><h5>...</h5></div>
                             <div className="workout-exercise-head-view-cancel">
-                                <button type="button">
+                                <button type="button" onClick={() => handleWholeExeDelete(exerciseObj)}>
                                     <i className="icon-cancel"></i>
                                 </button>
                             </div>

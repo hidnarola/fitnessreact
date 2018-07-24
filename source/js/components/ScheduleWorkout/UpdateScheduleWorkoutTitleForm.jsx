@@ -4,10 +4,22 @@ import { Field, reduxForm, initialize } from "redux-form";
 import { required } from '../../formValidation/validationRules';
 
 class UpdateScheduleWorkoutTitleForm extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            loadFormData: false,
+        }
+    }
+
+    componentWillMount() {
+        this.setState({ loadFormData: true });
+    }
+
     render() {
+        const { handleSubmit } = this.props;
         return (
             <div className="update-schedule-workout-title-form">
-                <form>
+                <form onSubmit={handleSubmit}>
                     <Field
                         name="title"
                         className="form-control"
@@ -25,7 +37,7 @@ class UpdateScheduleWorkoutTitleForm extends Component {
                         component={TextAreaField}
                     />
                     <div className="update-schedule-workout-title-form-btn">
-                        <button type="button" className="">Save</button>
+                        <button type="submit" className="">Save</button>
                     </div>
                 </form>
             </div>
@@ -34,13 +46,16 @@ class UpdateScheduleWorkoutTitleForm extends Component {
 
     componentDidUpdate(prevProps, prevState) {
         const { workout, dispatch } = this.props;
-        var formData = {
-            title: workout.title,
-            description: workout.description,
+        const { loadFormData } = this.state;
+        if (loadFormData) {
+            var formData = {
+                title: workout.title,
+                description: workout.description,
+            }
+            this.setState({ loadFormData: false });
+            dispatch(initialize('update_schedule_workout_title_form', formData));
         }
-        dispatch(initialize('update_schedule_workout_title_form', formData));
     }
-
 }
 
 UpdateScheduleWorkoutTitleForm = reduxForm({
@@ -70,7 +85,6 @@ const TextAreaField = (props) => {
                 {...input}
                 className={className}
                 placeholder={placeholder}
-                onChange={(e) => input.onChange(e.target.value)}
             />
             {meta.touched &&
                 ((meta.error && <div className={errorClass}>{meta.error}</div>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))
@@ -95,7 +109,6 @@ const InputField = (props) => {
                 placeholder={placeholder}
                 {...properties}
                 autoComplete="off"
-                onChange={(e) => input.onChange(e.target.value)}
             />
             {meta.touched &&
                 ((meta.error && <div className={errorClass}>{meta.error}</div>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))

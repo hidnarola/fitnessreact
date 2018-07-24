@@ -46,6 +46,9 @@ import {
     UPDATE_USER_WORKOUT_TITLE_REQUEST,
     UPDATE_USER_WORKOUT_TITLE_SUCCESS,
     UPDATE_USER_WORKOUT_TITLE_ERROR,
+    DELETE_USER_WHOLE_EXERCISE_REQUEST,
+    DELETE_USER_WHOLE_EXERCISE_SUCCESS,
+    DELETE_USER_WHOLE_EXERCISE_ERROR,
 } from "../actions/userScheduleWorkouts";
 import { VALIDATION_FAILURE_STATUS, SCHEDULED_WORKOUT_TYPE_WARMUP } from "../constants/consts";
 import { generateValidationErrorMsgArr } from "../helpers/funs";
@@ -497,6 +500,38 @@ const actionMap = {
     [GET_EXERCISE_MEASUREMENT_ERROR]: (state, action) => {
         return state.merge(Map({
             exerciseMeasurements: [],
+        }));
+    },
+    [DELETE_USER_WHOLE_EXERCISE_REQUEST]: (state, action) => {
+        return state.merge(Map({
+            loading: false,
+            error: [],
+        }));
+    },
+    [DELETE_USER_WHOLE_EXERCISE_SUCCESS]: (state, action) => {
+        var newState = {
+            loading: false,
+        };
+        if (action.data.status === 1) {
+            newState.workout = action.data.workouts;
+        } else {
+            var msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
+            newState.error = [msg];
+        }
+        return state.merge(Map(newState));
+    },
+    [DELETE_USER_WHOLE_EXERCISE_ERROR]: (state, action) => {
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
+        }
+        return state.merge(Map({
+            loading: false,
+            error: error,
         }));
     },
 }

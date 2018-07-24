@@ -102,6 +102,11 @@ function updateUserWorkoutTitle(_id, requestData) {
     return putFormData(requestUrl + '/' + _id, requestData, headers);
 }
 
+function deleteUserWholeExercise(requestData) {
+    let headers = extraUserHeaders();
+    return postFormData(requestUrl + '/delete', requestData, headers);
+}
+
 export default {
     getUsersWorkoutSchedulesByMonths,
     getExercisesName,
@@ -117,4 +122,5 @@ export default {
     userAssignProgram,
     addUserWorkoutTitle,
     updateUserWorkoutTitle,
+    deleteUserWholeExercise,
 }

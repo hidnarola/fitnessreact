@@ -15,6 +15,7 @@ class SaveScheduleWorkoutForm extends Component {
         const {
             handleSubmit,
             selectedWorkoutType,
+            reset,
         } = this.props;
         return (
             <div className="add-workout-form">
@@ -49,6 +50,7 @@ class SaveScheduleWorkoutForm extends Component {
                         }
                     </div>
                     <button type="submit" className="add-workout-form-btm-btn">Save</button>
+                    <button type="button" className="add-workout-form-btm-btn" onClick={reset}>Reset</button>
                 </form>
             </div>
         );
