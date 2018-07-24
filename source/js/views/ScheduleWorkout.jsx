@@ -460,35 +460,36 @@ class ScheduleWorkout extends Component {
     handlePaste = () => {
         const { copiedWorkout, selectedSlot, dispatch } = this.props;
         if (copiedWorkout) {
-            var exercises = [];
-            var copiedExercises = copiedWorkout.exercises;
-            _.forEach(copiedExercises, (exercise, index) => {
-                var exerciseObj = {
-                    exerciseId: exercise.exercise._id,
-                    type: exercise.type,
-                    reps: (exercise.reps) ? exercise.reps : null,
-                    sets: (exercise.sets) ? exercise.sets : null,
-                    weight: (exercise.weight) ? exercise.weight : null,
-                    weightUnits: (exercise.weightUnits) ? exercise.weightUnits : MEASUREMENT_UNIT_KILOGRAM,
-                    distance: (exercise.distance) ? exercise.distance : null,
-                    distanceUnits: (exercise.distanceUnits) ? exercise.distanceUnits : MEASUREMENT_UNIT_KILOMETER,
-                    restTime: (exercise.restTime) ? exercise.restTime : null,
-                    oneSetTimer: (exercise.oneSetTimer) ? exercise.oneSetTimer : null,
-                    sequence: (typeof exercise.sequence !== 'undefined') ? exercise.sequence : 0,
-                };
-                exercises.push(exerciseObj);
-            });
-            var startDay = moment(selectedSlot.start).startOf('day');
-            var date = moment.utc(startDay);
-            var requestData = {
-                title: copiedWorkout.title,
-                description: copiedWorkout.description,
-                type: SCHEDULED_WORKOUT_TYPE_EXERCISE,
-                date: date,
-                exercises: exercises,
-            };
-            dispatch(addUsersWorkoutScheduleRequest(requestData));
-            this.setState({ workoutPasteAction: true });
+            console.log('copiedWorkout => ', copiedWorkout);
+            // var exercises = [];
+            // var copiedExercises = copiedWorkout.exercises;
+            // _.forEach(copiedExercises, (exercise, index) => {
+            //     var exerciseObj = {
+            //         exerciseId: exercise.exercise._id,
+            //         type: exercise.type,
+            //         reps: (exercise.reps) ? exercise.reps : null,
+            //         sets: (exercise.sets) ? exercise.sets : null,
+            //         weight: (exercise.weight) ? exercise.weight : null,
+            //         weightUnits: (exercise.weightUnits) ? exercise.weightUnits : MEASUREMENT_UNIT_KILOGRAM,
+            //         distance: (exercise.distance) ? exercise.distance : null,
+            //         distanceUnits: (exercise.distanceUnits) ? exercise.distanceUnits : MEASUREMENT_UNIT_KILOMETER,
+            //         restTime: (exercise.restTime) ? exercise.restTime : null,
+            //         oneSetTimer: (exercise.oneSetTimer) ? exercise.oneSetTimer : null,
+            //         sequence: (typeof exercise.sequence !== 'undefined') ? exercise.sequence : 0,
+            //     };
+            //     exercises.push(exerciseObj);
+            // });
+            // var startDay = moment(selectedSlot.start).startOf('day');
+            // var date = moment.utc(startDay);
+            // var requestData = {
+            //     title: copiedWorkout.title,
+            //     description: copiedWorkout.description,
+            //     type: SCHEDULED_WORKOUT_TYPE_EXERCISE,
+            //     date: date,
+            //     exercises: exercises,
+            // };
+            // dispatch(addUsersWorkoutScheduleRequest(requestData));
+            // this.setState({ workoutPasteAction: true });
         } else {
             te('There is no workout copied!');
         }
