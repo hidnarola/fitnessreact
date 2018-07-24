@@ -45,7 +45,10 @@ import {
     UPDATE_USER_WORKOUT_TITLE_REQUEST,
     deleteUserWholeExerciseSuccess,
     deleteUserWholeExerciseError,
-    DELETE_USER_WHOLE_EXERCISE_REQUEST
+    DELETE_USER_WHOLE_EXERCISE_REQUEST,
+    DELETE_USER_SINGLE_EXERCISE_REQUEST,
+    deleteUserSingleExerciseSuccess,
+    deleteUserSingleExerciseError
 } from '../actions/userScheduleWorkouts';
 
 function getUsersWorkoutSchedulesByMonthData() {
@@ -228,6 +231,18 @@ function deleteUserWholeExerciseData() {
     }
 }
 
+function deleteUserSingleExerciseData() {
+    return function* (action) {
+        try {
+            let requestData = action.requestData;
+            const data = yield call(() => api.deleteUserSingleExercise(requestData));
+            yield put(deleteUserSingleExerciseSuccess(data));
+        } catch (error) {
+            yield put(deleteUserSingleExerciseError(error));
+        }
+    }
+}
+
 export function* watchUsersWorkoutSchedulesData() {
     yield takeLatest(GET_USERS_WORKOUT_SCHEDULES_REQUEST, getUsersWorkoutSchedulesByMonthData());
     yield takeLatest(GET_USERS_WORKOUT_SCHEDULE_REQUEST, getUsersWorkoutScheduleData());
@@ -244,6 +259,7 @@ export function* watchUsersWorkoutSchedulesData() {
     yield takeLatest(UPDATE_USER_WORKOUT_TITLE_REQUEST, updateUserWorkoutTitleData());
     yield takeLatest(GET_EXERCISE_MEASUREMENT_REQUEST, getExerciseMeasurementData());
     yield takeLatest(DELETE_USER_WHOLE_EXERCISE_REQUEST, deleteUserWholeExerciseData());
+    yield takeLatest(DELETE_USER_SINGLE_EXERCISE_REQUEST, deleteUserSingleExerciseData());
 }
 
 export default [

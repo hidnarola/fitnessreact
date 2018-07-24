@@ -36,6 +36,10 @@ export const DELETE_USER_WHOLE_EXERCISE_REQUEST = 'DELETE_USER_WHOLE_EXERCISE_RE
 export const DELETE_USER_WHOLE_EXERCISE_SUCCESS = 'DELETE_USER_WHOLE_EXERCISE_SUCCESS';
 export const DELETE_USER_WHOLE_EXERCISE_ERROR = 'DELETE_USER_WHOLE_EXERCISE_ERROR';
 
+export const DELETE_USER_SINGLE_EXERCISE_REQUEST = 'DELETE_USER_SINGLE_EXERCISE_REQUEST';
+export const DELETE_USER_SINGLE_EXERCISE_SUCCESS = 'DELETE_USER_SINGLE_EXERCISE_SUCCESS';
+export const DELETE_USER_SINGLE_EXERCISE_ERROR = 'DELETE_USER_SINGLE_EXERCISE_ERROR';
+
 export const COMPLETE_USERS_BULK_WORKOUT_SCHEDULE_REQUEST = 'COMPLETE_USERS_BULK_WORKOUT_SCHEDULE_REQUEST';
 export const COMPLETE_USERS_BULK_WORKOUT_SCHEDULE_SUCCESS = 'COMPLETE_USERS_BULK_WORKOUT_SCHEDULE_SUCCESS';
 export const COMPLETE_USERS_BULK_WORKOUT_SCHEDULE_ERROR = 'COMPLETE_USERS_BULK_WORKOUT_SCHEDULE_ERROR';
@@ -411,6 +415,27 @@ export function deleteUserWholeExerciseSuccess(data) {
 export function deleteUserWholeExerciseError(error) {
     return {
         type: DELETE_USER_WHOLE_EXERCISE_ERROR,
+        error,
+    }
+}
+
+export function deleteUserSingleExerciseRequest(requestData) {
+    return {
+        type: DELETE_USER_SINGLE_EXERCISE_REQUEST,
+        requestData,
+    }
+}
+
+export function deleteUserSingleExerciseSuccess(data) {
+    return {
+        type: DELETE_USER_SINGLE_EXERCISE_SUCCESS,
+        data,
+    }
+}
+
+export function deleteUserSingleExerciseError(error) {
+    return {
+        type: DELETE_USER_SINGLE_EXERCISE_ERROR,
         error,
     }
 }
