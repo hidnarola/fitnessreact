@@ -230,9 +230,7 @@ const actionMap = {
         var newState = {
             loading: false,
         };
-        if (action.data.status === 1) {
-            newState.workout = action.data.workouts;
-        } else {
+        if (action.data.status !== 1) {
             var msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
             newState.error = [msg];
         }

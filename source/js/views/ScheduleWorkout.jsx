@@ -321,14 +321,26 @@ class ScheduleWorkout extends Component {
             });
             this.setState({ workoutEvents: newWorkouts });
         }
-        if (!loading && workout && prevProps.workout !== workout) {
+        // if (!loading && workout && prevProps.workout !== workout) {
+        //     var startDay = moment(selectedSlot.start).startOf('day');
+        //     var date = moment.utc(startDay);
+        //     this.getWorkoutSchedulesByMonth(date);
+        //     this.cancelSelectedSlotAction();
+        //     if (workoutPasteAction) {
+        //         ts('Workout pasted!');
+        //         this.setState({ workoutPasteAction: false });
+        //     }
+        // }
+        if (workoutPasteAction && !loading) {
+            this.setState({ workoutPasteAction: false });
             var startDay = moment(selectedSlot.start).startOf('day');
             var date = moment.utc(startDay);
             this.getWorkoutSchedulesByMonth(date);
             this.cancelSelectedSlotAction();
-            if (workoutPasteAction) {
+            if (error && error.length > 0) {
+                te(error[0]);
+            } else {
                 ts('Workout pasted!');
-                this.setState({ workoutPasteAction: false });
             }
         }
         if (deleteWorkoutActionInit && selectedWorkoutId && !loading) {
