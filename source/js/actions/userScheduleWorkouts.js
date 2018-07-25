@@ -76,6 +76,10 @@ export const GET_EXERCISE_MEASUREMENT_REQUEST = 'GET_EXERCISE_MEASUREMENT_REQUES
 export const GET_EXERCISE_MEASUREMENT_SUCCESS = 'GET_EXERCISE_MEASUREMENT_SUCCESS';
 export const GET_EXERCISE_MEASUREMENT_ERROR = 'GET_EXERCISE_MEASUREMENT_ERROR';
 
+export const PASTE_USERS_WORKOUT_SCHEDULE_REQUEST = 'PASTE_USERS_WORKOUT_SCHEDULE_REQUEST';
+export const PASTE_USERS_WORKOUT_SCHEDULE_SUCCESS = 'PASTE_USERS_WORKOUT_SCHEDULE_SUCCESS';
+export const PASTE_USERS_WORKOUT_SCHEDULE_ERROR = 'PASTE_USERS_WORKOUT_SCHEDULE_ERROR';
+
 export function setSelectedSlotFromCalendar(slotInfo = null) {
     return {
         type: SET_SELECTED_SLOT_FROM_CALENDAR,
@@ -162,6 +166,27 @@ export function addUsersWorkoutScheduleSuccess(data) {
 export function addUsersWorkoutScheduleError(error) {
     return {
         type: ADD_USERS_WORKOUT_SCHEDULE_ERROR,
+        error,
+    }
+}
+
+export function pasteUsersWorkoutScheduleRequest(requestData) {
+    return {
+        type: PASTE_USERS_WORKOUT_SCHEDULE_REQUEST,
+        requestData,
+    }
+}
+
+export function pasteUsersWorkoutScheduleSuccess(data) {
+    return {
+        type: PASTE_USERS_WORKOUT_SCHEDULE_SUCCESS,
+        data,
+    }
+}
+
+export function pasteUsersWorkoutScheduleError(error) {
+    return {
+        type: PASTE_USERS_WORKOUT_SCHEDULE_ERROR,
         error,
     }
 }

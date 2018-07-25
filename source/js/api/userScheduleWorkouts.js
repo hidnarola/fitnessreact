@@ -43,6 +43,11 @@ function addUsersWorkoutSchedule(requestData) {
     return postFormData(requestUrl + '/workout', requestData, headers);
 }
 
+function pasteUsersWorkoutSchedule(requestData) {
+    let headers = extraUserHeaders();
+    return postFormData(requestUrl + '/copy', requestData, headers);
+}
+
 function changeUsersWorkoutSchedule(_id, requestData) {
     let headers = extraUserHeaders();
     return putFormData(requestUrl + '/' + _id, requestData, headers);
@@ -118,6 +123,7 @@ export default {
     getExerciseMeasurement,
     getUsersWorkoutSchedule,
     addUsersWorkoutSchedule,
+    pasteUsersWorkoutSchedule,
     changeUsersWorkoutSchedule,
     deleteUsersWorkoutSchedule,
     deleteUsersBulkWorkoutSchedule,

@@ -48,7 +48,10 @@ import {
     DELETE_USER_WHOLE_EXERCISE_REQUEST,
     DELETE_USER_SINGLE_EXERCISE_REQUEST,
     deleteUserSingleExerciseSuccess,
-    deleteUserSingleExerciseError
+    deleteUserSingleExerciseError,
+    pasteUsersWorkoutScheduleSuccess,
+    pasteUsersWorkoutScheduleError,
+    PASTE_USERS_WORKOUT_SCHEDULE_REQUEST
 } from '../actions/userScheduleWorkouts';
 
 function getUsersWorkoutSchedulesByMonthData() {
@@ -105,6 +108,18 @@ function addUsersWorkoutScheduleData() {
             yield put(addUsersWorkoutScheduleSuccess(data));
         } catch (error) {
             yield put(addUsersWorkoutScheduleError(error));
+        }
+    }
+}
+
+function pasteUsersWorkoutScheduleData() {
+    return function* (action) {
+        try {
+            let requestData = action.requestData;
+            const data = yield call(() => api.pasteUsersWorkoutSchedule(requestData));
+            yield put(pasteUsersWorkoutScheduleSuccess(data));
+        } catch (error) {
+            yield put(pasteUsersWorkoutScheduleError(error));
         }
     }
 }
@@ -248,6 +263,7 @@ export function* watchUsersWorkoutSchedulesData() {
     yield takeLatest(GET_USERS_WORKOUT_SCHEDULE_REQUEST, getUsersWorkoutScheduleData());
     yield takeLatest(GET_EXERCISES_NAME_REQUEST, getExercisesName());
     yield takeLatest(ADD_USERS_WORKOUT_SCHEDULE_REQUEST, addUsersWorkoutScheduleData());
+    yield takeLatest(PASTE_USERS_WORKOUT_SCHEDULE_REQUEST, pasteUsersWorkoutScheduleData());
     yield takeLatest(CHANGE_USERS_WORKOUT_SCHEDULE_REQUEST, changeUsersWorkoutScheduleData());
     yield takeLatest(DELETE_USERS_WORKOUT_SCHEDULE_REQUEST, deleteUsersWorkoutScheduleData());
     yield takeLatest(DELETE_USERS_BULK_WORKOUT_SCHEDULE_REQUEST, deleteUsersBulkWorkoutScheduleData());
