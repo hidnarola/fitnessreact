@@ -31,6 +31,7 @@ import cns from "classnames";
 import Select from 'react-select';
 import AddWorkoutTitleForm from '../components/ScheduleWorkout/AddWorkoutTitleForm';
 import { submit } from "redux-form";
+import ReactTooltip from "react-tooltip";
 
 BigCalendar.momentLocalizer(moment);
 
@@ -718,7 +719,7 @@ class CustomEventCard extends Component {
             showCompleteSwitch = true;
         }
         return (
-            <div className={cns('big-calendar-custom-month-event-view-card', { 'restday': (event.exerciseType === SCHEDULED_WORKOUT_TYPE_RESTDAY) })}>
+            <div className={cns('big-calendar-custom-month-event-view-card', { 'restday': (event.exerciseType === SCHEDULED_WORKOUT_TYPE_RESTDAY) })} title="">
                 <div className="big-calendar-custom-month-event-view-card-header">
                     <div className="pull-left custom_check" onClick={event.handleSelectForBulkAction}>
                         <input
@@ -735,15 +736,15 @@ class CustomEventCard extends Component {
                             <div className={titleClassName}><p>{event.description}</p></div>
                         }
                         {(event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
-                            <a href="javascript:void(0)" onClick={event.handleCopy}><FaCopy /></a>
+                            <a href="javascript:void(0)" data-tip="Copy" onClick={event.handleCopy} title=""><FaCopy /></a>
                         }
                         {(event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
-                            <a href="javascript:void(0)" onClick={event.handleViewWorkout}><FaEye /></a>
+                            <a href="javascript:void(0)" data-tip="Details" onClick={event.handleViewWorkout} title=""><FaEye /></a>
                         }
                         {(event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
-                            <NavLink to={routeCodes.SAVE_SCHEDULE_WORKOUT.replace(':id', event.id)}><FaPencil /></NavLink>
+                            <NavLink to={routeCodes.SAVE_SCHEDULE_WORKOUT.replace(':id', event.id)} data-tip="Change" title=""><FaPencil /></NavLink>
                         }
-                        <a href="javascript:void(0)" onClick={event.handleDelete}><FaTrash /></a>
+                        <a href="javascript:void(0)" data-tip="Delete" data-for="event-delete-tooltip" onClick={event.handleDelete} title=""><FaTrash /></a>
                     </div>
                 </div>
                 {event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE && showCompleteSwitch &&
@@ -763,6 +764,9 @@ class CustomEventCard extends Component {
                         </div>
                     </div>
                 }
+
+                <ReactTooltip place="top" type="dark" effect="solid" />
+                <ReactTooltip id='event-delete-tooltip' place="top" type="error" effect="solid" />
             </div>
         );
     }

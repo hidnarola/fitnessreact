@@ -1827,9 +1827,9 @@ td.close-td a i{ font-size:20px;}
 .select-workout-type-wrapper .workout-type-radios ul{ list-style:none; margin:0; padding:0;}
 .select-workout-type-wrapper .workout-type-radios ul li{ position:relative; display:inline-block; vertical-align:top; margin:0 15px 0 0;}
 
-.radiobox input[type=radio]{display: none;}
-.radiobox label:before {content: ""; display: inline-block; width: 16px; height: 16px; margin-right: 10px; position: absolute; left: 0; bottom: 1px; background-color: #aaa;}
-.radiobox input[type=radio]:checked + label:before { content: "\2022"; color: #f3f3f3; font-size: 30px; text-align: center; line-height: 18px;}
+.workout-type-radios .radiobox input[type=radio]{display: none;}
+.workout-type-radios .radiobox label:before {content: ""; display: inline-block; width: 16px; height: 16px; margin-right: 10px; position: absolute; left: 0; bottom: 1px; background-color: #aaa;}
+.workout-type-radios .radiobox input[type=radio]:checked + label:before { content: "\2022"; color: #f3f3f3; font-size: 30px; text-align: center; line-height: 18px;}
 
 .workout-type-radios ul li label {display:inline-block; max-width:100%; font-weight:700; width:100%; padding:10px 50px; z-index:10; position:relative; border-radius:2px;}
 .workout-type-radios .radiobox label:before {content: ""; display: inline-block; width: 100%; height: 100%;   position: absolute;  left: 0; top: 0; background-color: #fff;  z-index: -1; border-radius:4px; }
