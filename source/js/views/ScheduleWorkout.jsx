@@ -18,6 +18,7 @@ import {
     userAssignProgramRequest,
     deleteUsersBulkWorkoutScheduleRequest,
     completeUsersBulkWorkoutScheduleRequest,
+    pasteUsersWorkoutScheduleRequest,
 } from '../actions/userScheduleWorkouts';
 import { NavLink } from "react-router-dom";
 import { routeCodes } from '../constants/routes';
@@ -461,10 +462,10 @@ class ScheduleWorkout extends Component {
             var startDay = moment(selectedSlot.start).startOf('day');
             var date = moment.utc(startDay);
             var requestData = {
-                id: copiedWorkout,
+                exerciseId: copiedWorkout,
                 date: date,
             };
-            // dispatch(addUsersWorkoutScheduleRequest(requestData));
+            dispatch(pasteUsersWorkoutScheduleRequest(requestData));
             this.setState({ workoutPasteAction: true });
         } else {
             te('There is no workout copied!');
