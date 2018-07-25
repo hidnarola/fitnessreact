@@ -667,7 +667,7 @@ class WorkoutExerciseCircuitAdvanceView extends Component {
                                 <strong> - {exercise.setsDetails[(exercise.setsDetails.length - 1)].field1.value}</strong>
                             }
                             &nbsp;
-                        {exercise.setsDetails.length > 1 && exercise.setsDetails[(exercise.setsDetails.length - 1)].field1 &&
+                            {exercise.setsDetails.length > 1 && exercise.setsDetails[(exercise.setsDetails.length - 1)].field1 &&
                                 <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[(exercise.setsDetails.length - 1)].field1.unit]).label}</strong>
                             }
                         </div>
@@ -679,7 +679,7 @@ class WorkoutExerciseCircuitAdvanceView extends Component {
                                 <strong> - {exercise.setsDetails[(exercise.setsDetails.length - 1)].field2.value}</strong>
                             }
                             &nbsp;
-                        {exercise.setsDetails.length > 1 && exercise.setsDetails[(exercise.setsDetails.length - 1)].field2 &&
+                            {exercise.setsDetails.length > 1 && exercise.setsDetails[(exercise.setsDetails.length - 1)].field2 &&
                                 <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[(exercise.setsDetails.length - 1)].field2.unit]).label}</strong>
                             }
                         </div>
@@ -691,7 +691,7 @@ class WorkoutExerciseCircuitAdvanceView extends Component {
                                 <strong> - {exercise.setsDetails[(exercise.setsDetails.length - 1)].field3.value}</strong>
                             }
                             &nbsp;
-                        {exercise.setsDetails.length > 1 && exercise.setsDetails[(exercise.setsDetails.length - 1)].field3 &&
+                            {exercise.setsDetails.length > 1 && exercise.setsDetails[(exercise.setsDetails.length - 1)].field3 &&
                                 <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[(exercise.setsDetails.length - 1)].field3.unit]).label}</strong>
                             }
                         </div>
@@ -702,9 +702,7 @@ class WorkoutExerciseCircuitAdvanceView extends Component {
                         </button>
                     </div>
                     <div className="workout-exercise-head-toggle-actions">
-                        <button type="button" onClick={() => this.setState({ show: !show })}>
-                            ...
-                    </button>
+                        <button type="button" onClick={() => this.setState({ show: !show })}>...</button>
                     </div>
                     <div className="workout-exercise-head-view-cancel">
                         <button type="button" onClick={() => handleSingleExeDelete(exercise._id, exerciseObj)}>

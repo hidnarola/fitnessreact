@@ -136,7 +136,7 @@ class SetsAdvanceView extends Component {
                         </div>
                     );
                 })}
-                {(allowAddRemoveSets) && (fields && fields.length <= 12) &&
+                {(allowAddRemoveSets) && (fields && fields.length < 12) &&
                     <div className="sets-advance-view-block-btn">
                         <button type="button" className="" onClick={() => fields.push()}>Add Another Set<i className="icon-control_point"></i></button>
                     </div>
