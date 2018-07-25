@@ -73,14 +73,14 @@ function completeUsersBulkWorkoutSchedule(requestData) {
     return postFormData(requestUrl + '/bulk_complete', requestData, headers);
 }
 
-function changeUsersWorkoutScheduleComplete(_id, isCompleted) {
-    let headers = extraUserHeaders();
-    var requestData = {
-        parentId: _id,
-        isCompleted: isCompleted,
-    }
-    return putFormData(requestUrl + '/complete_all', requestData, headers);
-}
+// function changeUsersWorkoutScheduleComplete(_id, isCompleted) {
+//     let headers = extraUserHeaders();
+//     var requestData = {
+//         parentId: _id,
+//         isCompleted: isCompleted,
+//     }
+//     return putFormData(requestUrl + '/complete_all', requestData, headers);
+// }
 
 function getProgramsName() {
     let headers = extraUserHeaders();
@@ -128,7 +128,7 @@ export default {
     deleteUsersWorkoutSchedule,
     deleteUsersBulkWorkoutSchedule,
     completeUsersBulkWorkoutSchedule,
-    changeUsersWorkoutScheduleComplete,
+    // changeUsersWorkoutScheduleComplete,
     getProgramsName,
     userAssignProgram,
     addUserWorkoutTitle,

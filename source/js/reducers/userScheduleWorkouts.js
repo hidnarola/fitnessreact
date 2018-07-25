@@ -14,9 +14,9 @@ import {
     DELETE_USERS_WORKOUT_SCHEDULE_REQUEST,
     DELETE_USERS_WORKOUT_SCHEDULE_SUCCESS,
     DELETE_USERS_WORKOUT_SCHEDULE_ERROR,
-    CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_REQUEST,
-    CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_SUCCESS,
-    CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_ERROR,
+    // CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_REQUEST,
+    // CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_SUCCESS,
+    // CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_ERROR,
     SELECT_USERS_WORKOUT_SCHEDULE_FOR_EDIT,
     CHANGE_USERS_WORKOUT_SCHEDULE_SUCCESS,
     CHANGE_USERS_WORKOUT_SCHEDULE_ERROR,
@@ -378,43 +378,43 @@ const actionMap = {
             error: error,
         }));
     },
-    [CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_REQUEST]: (state, action) => {
-        return state.merge(Map({
-            loading: true,
-            error: [],
-        }));
-    },
-    [CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_SUCCESS]: (state, action) => {
-        var newState = {
-            loading: false,
-        };
-        if (action.data.status === 1) {
-            var workouts = state.get('workouts');
-            var workout = action.data.workouts;
-            var _id = workout._id;
-            var index = _.findIndex(workouts, ['_id', _id]);
-            workouts[index] = workout;
-            newState.workouts = workouts;
-        } else {
-            var msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
-            newState.error = [msg];
-        }
-        return state.merge(Map(newState));
-    },
-    [CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_ERROR]: (state, action) => {
-        let error = [];
-        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
-            error = generateValidationErrorMsgArr(action.error.response.message);
-        } else if (action.error && action.error.message) {
-            error = [action.error.message];
-        } else {
-            error = ['Something went wrong! please try again later'];
-        }
-        return state.merge(Map({
-            loading: false,
-            error: error,
-        }));
-    },
+    // [CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_REQUEST]: (state, action) => {
+    //     return state.merge(Map({
+    //         loading: true,
+    //         error: [],
+    //     }));
+    // },
+    // [CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_SUCCESS]: (state, action) => {
+    //     var newState = {
+    //         loading: false,
+    //     };
+    //     if (action.data.status === 1) {
+    //         var workouts = state.get('workouts');
+    //         var workout = action.data.workouts;
+    //         var _id = workout._id;
+    //         var index = _.findIndex(workouts, ['_id', _id]);
+    //         workouts[index] = workout;
+    //         newState.workouts = workouts;
+    //     } else {
+    //         var msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
+    //         newState.error = [msg];
+    //     }
+    //     return state.merge(Map(newState));
+    // },
+    // [CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_ERROR]: (state, action) => {
+    //     let error = [];
+    //     if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+    //         error = generateValidationErrorMsgArr(action.error.response.message);
+    //     } else if (action.error && action.error.message) {
+    //         error = [action.error.message];
+    //     } else {
+    //         error = ['Something went wrong! please try again later'];
+    //     }
+    //     return state.merge(Map({
+    //         loading: false,
+    //         error: error,
+    //     }));
+    // },
     [SELECT_USERS_WORKOUT_SCHEDULE_FOR_EDIT]: (state, action) => {
         return state.merge(Map({
             selectedWorkoutForEdit: action.selectedData,

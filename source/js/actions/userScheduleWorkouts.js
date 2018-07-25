@@ -48,9 +48,9 @@ export const INCOMPLETE_USERS_BULK_WORKOUT_SCHEDULE_REQUEST = 'INCOMPLETE_USERS_
 export const INCOMPLETE_USERS_BULK_WORKOUT_SCHEDULE_SUCCESS = 'INCOMPLETE_USERS_BULK_WORKOUT_SCHEDULE_SUCCESS';
 export const INCOMPLETE_USERS_BULK_WORKOUT_SCHEDULE_ERROR = 'INCOMPLETE_USERS_BULK_WORKOUT_SCHEDULE_ERROR';
 
-export const CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_REQUEST = 'CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_REQUEST';
-export const CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_SUCCESS = 'CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_SUCCESS';
-export const CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_ERROR = 'CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_ERROR';
+// export const CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_REQUEST = 'CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_REQUEST';
+// export const CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_SUCCESS = 'CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_SUCCESS';
+// export const CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_ERROR = 'CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_ERROR';
 
 export const SELECT_USERS_WORKOUT_SCHEDULE_FOR_EDIT = 'SELECT_USERS_WORKOUT_SCHEDULE_FOR_EDIT';
 
@@ -283,27 +283,27 @@ export function completeUsersBulkWorkoutScheduleError(error) {
     }
 }
 
-export function changeUsersWorkoutScheduleCompleteRequest(_id, isCompleted) {
-    return {
-        type: CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_REQUEST,
-        _id,
-        isCompleted,
-    }
-}
+// export function changeUsersWorkoutScheduleCompleteRequest(_id, isCompleted) {
+//     return {
+//         type: CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_REQUEST,
+//         _id,
+//         isCompleted,
+//     }
+// }
 
-export function changeUsersWorkoutScheduleCompleteSuccess(data) {
-    return {
-        type: CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_SUCCESS,
-        data,
-    }
-}
+// export function changeUsersWorkoutScheduleCompleteSuccess(data) {
+//     return {
+//         type: CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_SUCCESS,
+//         data,
+//     }
+// }
 
-export function changeUsersWorkoutScheduleCompleteError(error) {
-    return {
-        type: CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_ERROR,
-        error,
-    }
-}
+// export function changeUsersWorkoutScheduleCompleteError(error) {
+//     return {
+//         type: CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_ERROR,
+//         error,
+//     }
+// }
 
 export function selectUsersWorkoutScheduleForEdit(selectedData) {
     return {

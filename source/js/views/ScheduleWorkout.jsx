@@ -12,7 +12,7 @@ import {
     addUsersWorkoutScheduleRequest,
     copyUserWorkoutSchedule,
     deleteUsersWorkoutScheduleRequest,
-    changeUsersWorkoutScheduleCompleteRequest,
+    // changeUsersWorkoutScheduleCompleteRequest,
     selectUsersWorkoutScheduleForEdit,
     getProgramsNameRequest,
     userAssignProgramRequest,
@@ -56,6 +56,7 @@ class ScheduleWorkout extends Component {
             incompleteBulkActionAlert: false,
             incompleteBulkActionInit: false,
             showAddWorkoutTitleAlert: false,
+            completeWorkoutActionInit: false,
         }
     }
 
@@ -295,6 +296,7 @@ class ScheduleWorkout extends Component {
             deleteBulkActionInit,
             completeBulkActionInit,
             incompleteBulkActionInit,
+            completeWorkoutActionInit,
         } = this.state;
         if (!loading && prevProps.workouts !== workouts) {
             var newWorkouts = [];
@@ -363,6 +365,14 @@ class ScheduleWorkout extends Component {
                 te('Cannot delete workouts. Please try again later!');
             }
         }
+        if (completeWorkoutActionInit && !loading) {
+            this.setState({ completeWorkoutActionInit: false });
+            var today = moment().startOf('day').utc();
+            this.getWorkoutSchedulesByMonth(today);
+            if (error && error.length > 0) {
+                te('Cannot complete workout. Please try again later!');
+            }
+        }
         if (completeBulkActionInit && !loading) {
             this.setState({ completeBulkActionInit: false });
             var today = moment().startOf('day').utc();
@@ -414,7 +424,7 @@ class ScheduleWorkout extends Component {
     }
 
     getWorkoutSchedulesByMonth = (date) => {
-        this.setState({ workoutEvents: [] });
+        // this.setState({ workoutEvents: [] });
         const {
             dispatch
         } = this.props;
@@ -523,7 +533,13 @@ class ScheduleWorkout extends Component {
             this.setState({
                 workoutEvents: workouts,
             });
-            dispatch(changeUsersWorkoutScheduleCompleteRequest(_id, isCompleted));
+            var requestData = {
+                exerciseIds: [_id],
+                isCompleted: isCompleted,
+            };
+            this.setState({ completeWorkoutActionInit: true });
+            dispatch(completeUsersBulkWorkoutScheduleRequest(requestData));
+            // dispatch(changeUsersWorkoutScheduleCompleteRequest(_id, isCompleted));
         }
     }
 

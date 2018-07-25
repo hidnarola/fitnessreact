@@ -13,9 +13,9 @@ import {
     deleteUsersWorkoutScheduleError,
     deleteUsersWorkoutScheduleSuccess,
     DELETE_USERS_WORKOUT_SCHEDULE_REQUEST,
-    changeUsersWorkoutScheduleCompleteSuccess,
-    changeUsersWorkoutScheduleCompleteError,
-    CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_REQUEST,
+    // changeUsersWorkoutScheduleCompleteSuccess,
+    // changeUsersWorkoutScheduleCompleteError,
+    // CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_REQUEST,
     changeUsersWorkoutScheduleError,
     changeUsersWorkoutScheduleSuccess,
     CHANGE_USERS_WORKOUT_SCHEDULE_REQUEST,
@@ -173,18 +173,18 @@ function completeUsersBulkWorkoutScheduleData() {
     }
 }
 
-function changeUsersWorkoutScheduleCompleteData() {
-    return function* (action) {
-        try {
-            let _id = action._id;
-            let isCompleted = action.isCompleted;
-            const data = yield call(() => api.changeUsersWorkoutScheduleComplete(_id, isCompleted));
-            yield put(changeUsersWorkoutScheduleCompleteSuccess(data));
-        } catch (error) {
-            yield put(changeUsersWorkoutScheduleCompleteError(error));
-        }
-    }
-}
+// function changeUsersWorkoutScheduleCompleteData() {
+//     return function* (action) {
+//         try {
+//             let _id = action._id;
+//             let isCompleted = action.isCompleted;
+//             const data = yield call(() => api.changeUsersWorkoutScheduleComplete(_id, isCompleted));
+//             yield put(changeUsersWorkoutScheduleCompleteSuccess(data));
+//         } catch (error) {
+//             yield put(changeUsersWorkoutScheduleCompleteError(error));
+//         }
+//     }
+// }
 
 function userAssignProgramData() {
     return function* (action) {
@@ -268,7 +268,7 @@ export function* watchUsersWorkoutSchedulesData() {
     yield takeLatest(DELETE_USERS_WORKOUT_SCHEDULE_REQUEST, deleteUsersWorkoutScheduleData());
     yield takeLatest(DELETE_USERS_BULK_WORKOUT_SCHEDULE_REQUEST, deleteUsersBulkWorkoutScheduleData());
     yield takeLatest(COMPLETE_USERS_BULK_WORKOUT_SCHEDULE_REQUEST, completeUsersBulkWorkoutScheduleData());
-    yield takeLatest(CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_REQUEST, changeUsersWorkoutScheduleCompleteData());
+    // yield takeLatest(CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_REQUEST, changeUsersWorkoutScheduleCompleteData());
     yield takeLatest(GET_PROGRAMS_NAME_REQUEST, getProgramsName());
     yield takeLatest(USER_ASSIGN_PROGRAM_REQUEST, userAssignProgramData());
     yield takeLatest(ADD_USER_WORKOUT_TITLE_REQUEST, addUserWorkoutTitleData());
