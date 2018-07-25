@@ -19,6 +19,7 @@ import {
     deleteUsersBulkWorkoutScheduleRequest,
     completeUsersBulkWorkoutScheduleRequest,
     pasteUsersWorkoutScheduleRequest,
+    addUserWorkoutTitleRequest,
 } from '../actions/userScheduleWorkouts';
 import { NavLink } from "react-router-dom";
 import { routeCodes } from '../constants/routes';
@@ -58,6 +59,7 @@ class ScheduleWorkout extends Component {
             incompleteBulkActionInit: false,
             showAddWorkoutTitleAlert: false,
             completeWorkoutActionInit: false,
+            addRestDayInit: false,
         }
     }
 
@@ -288,6 +290,9 @@ class ScheduleWorkout extends Component {
             assignProgramLoading,
             assignProgram,
             assignProgramError,
+            loadingTitle,
+            workoutTitle,
+            errorTitle,
         } = this.props;
         const {
             workoutPasteAction,
@@ -298,6 +303,7 @@ class ScheduleWorkout extends Component {
             completeBulkActionInit,
             incompleteBulkActionInit,
             completeWorkoutActionInit,
+            addRestDayInit,
         } = this.state;
         if (!loading && prevProps.workouts !== workouts) {
             var newWorkouts = [];
@@ -406,6 +412,18 @@ class ScheduleWorkout extends Component {
                 te(assignProgramError[0]);
             }
         }
+        if (addRestDayInit && !loadingTitle && workoutTitle && prevProps.workoutTitle !== workoutTitle) {
+            this.setState({ addRestDayInit: false });
+            var startDay = moment(selectedSlot.start).startOf('day');
+            var date = moment.utc(startDay);
+            this.getWorkoutSchedulesByMonth(date);
+            this.cancelSelectedSlotAction();
+            if (errorTitle && errorTitle.length > 0) {
+                te(errorTitle[0]);
+            } else {
+                ts('Rest day added!');
+            }
+        }
     }
 
     onSelectSlot = (slotInfo) => {
@@ -450,7 +468,9 @@ class ScheduleWorkout extends Component {
             date: date,
             exercises: [],
         };
-        dispatch(addUsersWorkoutScheduleRequest(requestData));
+        this.setState({ addRestDayInit: true });
+        dispatch(addUserWorkoutTitleRequest(requestData));
+        // dispatch(addUsersWorkoutScheduleRequest(requestData));
     }
 
     handleCopy = (_id) => {
@@ -671,6 +691,9 @@ const mapStateToProps = (state) => {
         assignProgramLoading: userScheduleWorkouts.get('assignProgramLoading'),
         assignProgram: userScheduleWorkouts.get('assignProgram'),
         assignProgramError: userScheduleWorkouts.get('assignProgramError'),
+        loadingTitle: userScheduleWorkouts.get('loadingTitle'),
+        workoutTitle: userScheduleWorkouts.get('workoutTitle'),
+        errorTitle: userScheduleWorkouts.get('errorTitle'),
     };
 }
 
