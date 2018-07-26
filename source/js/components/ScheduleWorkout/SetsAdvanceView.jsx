@@ -5,6 +5,7 @@ import WorkoutDropdownField from './WorkoutDropdownField';
 import _ from "lodash";
 import { prepareFieldsOptions } from '../../helpers/funs';
 import { EXE_REST_TIME_UNITS, SCHEDULED_WORKOUT_TYPE_EXERCISE } from '../../constants/consts';
+import { required } from '../../formValidation/validationRules';
 
 class SetsAdvanceView extends Component {
     constructor(props) {
@@ -62,6 +63,7 @@ class SetsAdvanceView extends Component {
                                     placeholder=""
                                     type="number"
                                     min={0}
+                                    validate={[required]}
                                 />
                             }
                             {field1Options && field1Options.length > 0 &&
@@ -81,6 +83,7 @@ class SetsAdvanceView extends Component {
                                     placeholder=""
                                     type="number"
                                     min={0}
+                                    validate={[required]}
                                 />
                             }
                             {field2Options && field2Options.length > 0 &&
@@ -100,6 +103,7 @@ class SetsAdvanceView extends Component {
                                     placeholder=""
                                     type="number"
                                     min={0}
+                                    validate={[required]}
                                 />
                             }
                             {field3Options && field3Options.length > 0 &&
@@ -119,6 +123,7 @@ class SetsAdvanceView extends Component {
                                     placeholder="Rest Time"
                                     type="number"
                                     min={0}
+                                    validate={[required]}
                                 />
                             }
                             {index > 0 && (workoutType && workoutType === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&

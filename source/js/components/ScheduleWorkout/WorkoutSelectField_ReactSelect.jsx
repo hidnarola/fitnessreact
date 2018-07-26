@@ -24,7 +24,11 @@ class WorkoutSelectField_ReactSelect extends Component {
                     className={className}
                     placeholder={placeholder}
                     onChange={(value) => input.onChange(value)}
-                    onBlur={() => input.onBlur({ ...input.value })}
+                    onBlur={() => {
+                        if (input.value) {
+                            input.onBlur({ ...input.value });
+                        }
+                    }}
                     multi={false}
                     clearable={true}
                 />

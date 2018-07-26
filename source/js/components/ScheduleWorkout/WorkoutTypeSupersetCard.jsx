@@ -9,6 +9,7 @@ import WorkoutDropdownField from './WorkoutDropdownField';
 import SetsAdvanceView from './SetsAdvanceView';
 import { prepareExerciseOptions, prepareFieldsOptions } from '../../helpers/funs';
 import { EXE_REST_TIME_UNITS, SCHEDULED_WORKOUT_TYPE_SUPERSET } from '../../constants/consts';
+import { requiredReactSelect, required } from '../../formValidation/validationRules';
 
 class WorkoutTypeSupersetCard extends Component {
     constructor(props) {
@@ -38,6 +39,7 @@ class WorkoutTypeSupersetCard extends Component {
                         type="number"
                         min={1}
                         max={12}
+                        validate={[required]}
                     />
                     {typeof supersetSets !== 'undefined' && supersetSets > 1 &&
                         <label>Rest Between Sets</label>
@@ -50,6 +52,7 @@ class WorkoutTypeSupersetCard extends Component {
                             placeholder="Rest Time"
                             type="number"
                             min={0}
+                            validate={[required]}
                         />
                     }
                     {typeof supersetSets !== 'undefined' && supersetSets > 1 &&
@@ -101,6 +104,7 @@ class WorkoutTypeSupersetCard extends Component {
                                         placeholder="Exercise"
                                         component={WorkoutSelectField_ReactSelect}
                                         options={exerciseOptions}
+                                        validate={[requiredReactSelect]}
                                     />
                                 </div>
                                 <div className="col-md-2 single-exercise-switch">
@@ -128,6 +132,7 @@ class WorkoutTypeSupersetCard extends Component {
                                                                 placeholder=""
                                                                 type="number"
                                                                 min={1}
+                                                                validate={[required]}
                                                             />
                                                             <Field
                                                                 id={`${field}.field1_unit`}
@@ -147,6 +152,7 @@ class WorkoutTypeSupersetCard extends Component {
                                                                 placeholder=""
                                                                 type="number"
                                                                 min={1}
+                                                                validate={[required]}
                                                             />
                                                             <Field
                                                                 id={`${field}.field2_unit`}
@@ -166,6 +172,7 @@ class WorkoutTypeSupersetCard extends Component {
                                                                 placeholder=""
                                                                 type="number"
                                                                 min={1}
+                                                                validate={[required]}
                                                             />
                                                             <Field
                                                                 id={`${field}.field3_unit`}

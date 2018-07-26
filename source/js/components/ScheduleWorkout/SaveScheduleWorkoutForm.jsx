@@ -9,6 +9,7 @@ import {
 import WorkoutTypeSingleCard from './WorkoutTypeSingleCard';
 import WorkoutTypeSupersetCard from './WorkoutTypeSupersetCard';
 import WorkoutTypeCircuitCard from './WorkoutTypeCircuitCard';
+import { required } from '../../formValidation/validationRules';
 
 class SaveScheduleWorkoutForm extends Component {
     render() {
@@ -26,6 +27,7 @@ class SaveScheduleWorkoutForm extends Component {
                             id="workout_type"
                             name="workout_type"
                             component={WorkoutTypeSelection}
+                            validationRules={[required]}
                         />
                         {selectedWorkoutType && selectedWorkoutType === SCHEDULED_WORKOUT_TYPE_EXERCISE &&
                             <FieldArray
@@ -57,19 +59,6 @@ class SaveScheduleWorkoutForm extends Component {
     }
 }
 
-const workoutValidation = (values) => {
-    const errors = {}
-    if (!values.workout_type) {
-        errors.workout_type = 'Please select any one type of workout!'
-    }
-    if (values.workout_type && values.workout_type === SCHEDULED_WORKOUT_TYPE_EXERCISE) {
-        if (!values.workout_single[0].exercise_id) {
-            errors.workout_single[0].exercise_id = 'Exercise is required!';
-        }
-    }
-    return errors
-}
-
 const selector = formValueSelector('save_schedule_workout_form');
 
 const mapStateToProps = (state) => {
@@ -86,7 +75,6 @@ const mapStateToProps = (state) => {
 
 SaveScheduleWorkoutForm = reduxForm({
     form: 'save_schedule_workout_form',
-    // validate: workoutValidation,
 })(SaveScheduleWorkoutForm);
 
 export default connect(
@@ -97,6 +85,7 @@ const WorkoutTypeSelection = (props) => {
     const {
         input,
         meta,
+        validationRules,
     } = props;
     return (
         <div className="workout-type-radios">
@@ -108,6 +97,7 @@ const WorkoutTypeSelection = (props) => {
                         component="input"
                         type="radio"
                         value={SCHEDULED_WORKOUT_TYPE_EXERCISE}
+                        validate={validationRules}
                     />
                     <label htmlFor="workout_type_single">Single</label>
                 </li>
@@ -118,6 +108,7 @@ const WorkoutTypeSelection = (props) => {
                         component="input"
                         type="radio"
                         value={SCHEDULED_WORKOUT_TYPE_SUPERSET}
+                        validate={validationRules}
                     />
                     <label htmlFor="workout_type_superset">Superset</label>
                 </li>
@@ -128,6 +119,7 @@ const WorkoutTypeSelection = (props) => {
                         component="input"
                         type="radio"
                         value={SCHEDULED_WORKOUT_TYPE_CIRCUIT}
+                        validate={validationRules}
                     />
                     <label htmlFor="workout_type_circuit">Circuit</label>
                 </li>
@@ -137,4 +129,4 @@ const WorkoutTypeSelection = (props) => {
             }
         </div>
     );
-}
+}                                                                                                                                                                                           

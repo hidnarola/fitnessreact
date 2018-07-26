@@ -171,6 +171,7 @@ class SaveScheduleWorkout extends Component {
     }
 
     handleSubmit = (data) => {
+        return false;
         const { dispatch } = this.props;
         var workoutType = (data.workout_type) ? data.workout_type : null;
         let requestData = null;

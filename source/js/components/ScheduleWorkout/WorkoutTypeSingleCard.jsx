@@ -9,6 +9,7 @@ import WorkoutDropdownField from './WorkoutDropdownField';
 import SetsAdvanceView from './SetsAdvanceView';
 import { prepareExerciseOptions, prepareFieldsOptions } from '../../helpers/funs';
 import { EXE_REST_TIME_UNITS, SCHEDULED_WORKOUT_TYPE_EXERCISE } from '../../constants/consts';
+import { requiredReactSelect, required } from '../../formValidation/validationRules';
 
 class WorkoutTypeSingleCard extends Component {
     constructor(props) {
@@ -67,6 +68,7 @@ class WorkoutTypeSingleCard extends Component {
                                         placeholder="Exercise"
                                         component={WorkoutSelectField_ReactSelect}
                                         options={exerciseOptions}
+                                        validate={[requiredReactSelect]}
                                     />
                                 </div>
                                 <div className="col-md-2 single-exercise-switch">
@@ -94,6 +96,7 @@ class WorkoutTypeSingleCard extends Component {
                                                             type="number"
                                                             min={1}
                                                             max={12}
+                                                            validate={[required]}
                                                         />
                                                     </li>
                                                     {field1Options && field1Options.length > 0 &&
@@ -105,6 +108,7 @@ class WorkoutTypeSingleCard extends Component {
                                                                 placeholder=""
                                                                 type="number"
                                                                 min={1}
+                                                                validate={[required]}
                                                             />
                                                             <Field
                                                                 id={`${field}.field1_unit`}
@@ -124,6 +128,7 @@ class WorkoutTypeSingleCard extends Component {
                                                                 placeholder=""
                                                                 type="number"
                                                                 min={1}
+                                                                validate={[required]}
                                                             />
                                                             <Field
                                                                 id={`${field}.field2_unit`}
@@ -143,6 +148,7 @@ class WorkoutTypeSingleCard extends Component {
                                                                 placeholder=""
                                                                 type="number"
                                                                 min={1}
+                                                                validate={[required]}
                                                             />
                                                             <Field
                                                                 id={`${field}.field3_unit`}
@@ -162,6 +168,7 @@ class WorkoutTypeSingleCard extends Component {
                                                                 placeholder="Rest Time"
                                                                 type="number"
                                                                 min={0}
+                                                                validate={[required]}
                                                             />
                                                             <Field
                                                                 id={`${field}.rest_time_unit`}
