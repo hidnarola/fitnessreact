@@ -33,7 +33,6 @@ import Select from 'react-select';
 import AddWorkoutTitleForm from '../components/ScheduleWorkout/AddWorkoutTitleForm';
 import { submit } from "redux-form";
 import ReactTooltip from "react-tooltip";
-import { toggleChatWindowMinimize } from '../actions/userMessages';
 
 BigCalendar.momentLocalizer(moment);
 
@@ -61,15 +60,12 @@ class ScheduleWorkout extends Component {
             showAddWorkoutTitleAlert: false,
             completeWorkoutActionInit: false,
             addRestDayInit: false,
-            calendarViewDate: null,
-            selectAllChecked: false,
         }
     }
 
     componentWillMount() {
         const { dispatch } = this.props;
         var today = moment().startOf('day').utc();
-        this.setState({ calendarViewDate: today });
         this.getWorkoutSchedulesByMonth(today);
         // dispatch(getExercisesNameRequest());
         dispatch(getProgramsNameRequest());
@@ -88,7 +84,6 @@ class ScheduleWorkout extends Component {
             completeBulkActionAlert,
             incompleteBulkActionAlert,
             showAddWorkoutTitleAlert,
-            selectAllChecked,
         } = this.state;
         const {
             selectedSlot,
@@ -123,21 +118,16 @@ class ScheduleWorkout extends Component {
                                                         type="checkbox"
                                                         id={'select_all_workouts'}
                                                         name={'select_all_workouts'}
-                                                        checked={selectAllChecked}
-                                                        onChange={this.handleSelectAll}
                                                     />
                                                     <label htmlFor="select_all_workouts">Select All</label>
                                                 </div>
                                                 <div className="count-leadeboard bg-pink">{selectedEvents.length}</div>
                                             </div>
                                             <div className="fixed-btm-bar-c">
-                                                <a href="javascript:void(0)" data-for="event-bulk-delete-tooltip" data-tip="Delete" onClick={() => this.setState({ deleteBulkActionAlert: true })}><i className="icon-delete_forever"></i> </a>
-                                                <a href="javascript:void(0)" data-for="event-bulk-complete-tooltip" data-tip="Mark as complete" onClick={() => this.setState({ completeBulkActionAlert: true })}><i className="icon-check_circle"></i></a>
-                                                <a href="javascript:void(0)" data-for="event-bulk-incomplete-tooltip" data-tip="Mark as incomplete" onClick={() => this.setState({ incompleteBulkActionAlert: true })}><i className="icon-cancel"></i></a>
+                                                <a href="javascript:void(0)" onClick={() => this.setState({ deleteBulkActionAlert: true })}><i className="icon-delete_forever"></i> </a>
+                                                <a href="javascript:void(0)" onClick={() => this.setState({ completeBulkActionAlert: true })}><i className="icon-check_circle"></i></a>
+                                                <a href="javascript:void(0)" onClick={() => this.setState({ incompleteBulkActionAlert: true })}><i className="icon-cancel"></i></a>
                                             </div>
-                                            <ReactTooltip id='event-bulk-delete-tooltip' place="top" type="error" effect="solid" />
-                                            <ReactTooltip id='event-bulk-complete-tooltip' place="top" type="success" effect="solid" />
-                                            <ReactTooltip id='event-bulk-incomplete-tooltip' place="top" type="warning" effect="solid" />
                                         </div>
                                     }
                                     <BigCalendar
@@ -285,6 +275,7 @@ class ScheduleWorkout extends Component {
                     handleClose={this.handleCloseWorkoutScheduleDetailsModal}
                     workout={selectedWorkoutForView}
                 />
+
             </div>
         );
     }
@@ -352,7 +343,9 @@ class ScheduleWorkout extends Component {
         // }
         if (workoutPasteAction && !loading) {
             this.setState({ workoutPasteAction: false });
-            this.getWorkoutSchedulesByMonth();
+            var startDay = moment(selectedSlot.start).startOf('day');
+            var date = moment.utc(startDay);
+            this.getWorkoutSchedulesByMonth(date);
             this.cancelSelectedSlotAction();
             if (error && error.length > 0) {
                 te(error[0]);
@@ -362,7 +355,8 @@ class ScheduleWorkout extends Component {
         }
         if (deleteWorkoutActionInit && selectedWorkoutId && !loading) {
             this.setState({ deleteWorkoutActionInit: false, selectedWorkoutId: null, selectedWorkoutDate: null });
-            this.getWorkoutSchedulesByMonth();
+            var startDay = moment(selectedWorkoutDate).startOf('day');
+            this.getWorkoutSchedulesByMonth(startDay);
             if (error.length <= 0) {
                 ts('Workout deleted successfully!');
             } else {
@@ -371,7 +365,8 @@ class ScheduleWorkout extends Component {
         }
         if (deleteBulkActionInit && !loading) {
             this.setState({ deleteBulkActionInit: false });
-            this.getWorkoutSchedulesByMonth();
+            var today = moment().startOf('day').utc();
+            this.getWorkoutSchedulesByMonth(today);
             if (error.length <= 0) {
                 ts('Workouts deleted successfully!');
             } else {
@@ -380,14 +375,16 @@ class ScheduleWorkout extends Component {
         }
         if (completeWorkoutActionInit && !loading) {
             this.setState({ completeWorkoutActionInit: false });
-            this.getWorkoutSchedulesByMonth();
+            var today = moment().startOf('day').utc();
+            this.getWorkoutSchedulesByMonth(today);
             if (error && error.length > 0) {
                 te('Cannot complete workout. Please try again later!');
             }
         }
         if (completeBulkActionInit && !loading) {
             this.setState({ completeBulkActionInit: false });
-            this.getWorkoutSchedulesByMonth();
+            var today = moment().startOf('day').utc();
+            this.getWorkoutSchedulesByMonth(today);
             if (error.length <= 0) {
                 ts('Workouts completed successfully!');
             } else {
@@ -397,7 +394,8 @@ class ScheduleWorkout extends Component {
 
         if (incompleteBulkActionInit && !loading) {
             this.setState({ incompleteBulkActionInit: false });
-            this.getWorkoutSchedulesByMonth();
+            var today = moment().startOf('day').utc();
+            this.getWorkoutSchedulesByMonth(today);
             if (error.length <= 0) {
                 ts('Workouts incompleted successfully!');
             } else {
@@ -406,7 +404,8 @@ class ScheduleWorkout extends Component {
         }
 
         if (!assignProgramLoading && prevProps.assignProgram !== assignProgram) {
-            this.getWorkoutSchedulesByMonth();
+            var startDay = moment(selectedSlot.start).startOf('day');
+            this.getWorkoutSchedulesByMonth(startDay);
             this.handleCancelProgramAssignAlert();
             if (assignProgramError && assignProgramError.length <= 0) {
                 ts('Program assigned successfully!');
@@ -416,7 +415,9 @@ class ScheduleWorkout extends Component {
         }
         if (addRestDayInit && !loadingTitle && workoutTitle && prevProps.workoutTitle !== workoutTitle) {
             this.setState({ addRestDayInit: false });
-            this.getWorkoutSchedulesByMonth();
+            var startDay = moment(selectedSlot.start).startOf('day');
+            var date = moment.utc(startDay);
+            this.getWorkoutSchedulesByMonth(date);
             this.cancelSelectedSlotAction();
             if (errorTitle && errorTitle.length > 0) {
                 te(errorTitle[0]);
@@ -442,30 +443,18 @@ class ScheduleWorkout extends Component {
         dispatch(setSelectedSlotFromCalendar(null));
     }
 
-    getWorkoutSchedulesByMonth = (date = null) => {
+    getWorkoutSchedulesByMonth = (date) => {
         // this.setState({ workoutEvents: [] });
-        const { calendarViewDate } = this.state;
-        let _date = null;
-        if (date) {
-            _date = date;
-            this.setState({ calendarViewDate: _date });
-        } else if (calendarViewDate) {
-            _date = calendarViewDate;
-        } else {
-            _date = moment().startOf('day').utc();
-            this.setState({ calendarViewDate: _date });
-        }
         const {
             dispatch
         } = this.props;
-        var requestObj = { _date }
+        var requestObj = { date }
         dispatch(getUsersWorkoutSchedulesRequest(requestObj));
     }
 
     handleNavigation = (date) => {
         var momentDate = moment(date).startOf('day');
         var day = moment.utc(momentDate);
-        this.setState({ calendarViewDate: day });
         this.getWorkoutSchedulesByMonth(day);
     }
 
@@ -478,6 +467,7 @@ class ScheduleWorkout extends Component {
             description: 'Hey its rest day! Take total rest.',
             type: SCHEDULED_WORKOUT_TYPE_RESTDAY,
             date: date,
+            exercises: [],
         };
         this.setState({ addRestDayInit: true });
         dispatch(addUserWorkoutTitleRequest(requestData));
@@ -546,21 +536,17 @@ class ScheduleWorkout extends Component {
         const { dispatch } = this.props;
         const { selectedWorkoutId } = this.state;
         if (selectedWorkoutId) {
-            var requestData = {
-                exerciseIds: [selectedWorkoutId],
-            };
-            dispatch(deleteUsersBulkWorkoutScheduleRequest(requestData));
-            // dispatch(deleteUsersWorkoutScheduleRequest(selectedWorkoutId));
+            dispatch(deleteUsersWorkoutScheduleRequest(selectedWorkoutId));
             this.setState({ deleteWorkoutAlert: false, deleteWorkoutActionInit: true });
         }
     }
 
     handleCompleteWorkout = (_id) => {
-        const { dispatch, loading } = this.props;
+        const { dispatch } = this.props;
         const { workoutEvents } = this.state;
         var workouts = Object.assign([], workoutEvents);
         var selectedWorkout = _.find(workouts, ['id', _id]);
-        if (selectedWorkout && !loading) {
+        if (selectedWorkout) {
             var isCompleted = (typeof selectedWorkout.isCompleted !== 'undefined') ? (selectedWorkout.isCompleted === 0) ? 1 : 0 : 1;
             var workout = Object.assign({}, selectedWorkout);
             workout.isCompleted = isCompleted;
@@ -574,6 +560,7 @@ class ScheduleWorkout extends Component {
                 isCompleted: isCompleted,
             };
             this.setState({ completeWorkoutActionInit: true });
+            console.log('--------------------------------------------completed--------------------------------');
             dispatch(completeUsersBulkWorkoutScheduleRequest(requestData));
         }
     }
@@ -619,7 +606,7 @@ class ScheduleWorkout extends Component {
     }
 
     handleSelectForBulkAction = (_id) => {
-        const { workoutEvents, calendarViewDate } = this.state;
+        const { workoutEvents } = this.state;
         var workouts = Object.assign([], workoutEvents);
         var selectedWorkout = _.find(workouts, ['id', _id]);
         if (selectedWorkout) {
@@ -628,25 +615,8 @@ class ScheduleWorkout extends Component {
             workout.isSelectedForBulkAction = isSelectedForBulkAction;
             var index = _.findIndex(workouts, ['id', _id]);
             workouts[index] = workout;
-            let selectAllChecked = false;
-            let calendarViewMonth = calendarViewDate.format('M');
-            let totalEventDaysCount = 0;
-            let selectedEventDaysCount = 0;
-            _.forEach(workouts, (o, i) => {
-                let eventMonth = moment(o.start).format('M');
-                if (calendarViewMonth === eventMonth) {
-                    if(o.isSelectedForBulkAction){
-                        selectedEventDaysCount++;
-                    }
-                    totalEventDaysCount++;
-                }
-            });
-            if (selectedEventDaysCount >= totalEventDaysCount) {
-                selectAllChecked = true;
-            }
             this.setState({
                 workoutEvents: workouts,
-                selectAllChecked: selectAllChecked,
             });
         }
     }
@@ -706,22 +676,6 @@ class ScheduleWorkout extends Component {
     handleAddWorkoutTitleSubmit = () => {
         const { dispatch } = this.props;
         dispatch(submit('add_workout_title_form'));
-    }
-
-    handleSelectAll = (e) => {
-        const { workoutEvents, calendarViewDate } = this.state;
-        let selectStatus = e.target.checked;
-        let calendarViewMonth = calendarViewDate.format("M");
-        let newWorkouts = [];
-        _.forEach(workoutEvents, (o, i) => {
-            let eventMonth = moment(o.start).format('M');
-            let newObj = Object.assign({}, o);
-            if (calendarViewMonth === eventMonth) {
-                newObj.isSelectedForBulkAction = selectStatus;
-            }
-            newWorkouts.push(newObj);
-        });
-        this.setState({ workoutEvents: newWorkouts, selectAllChecked: selectStatus });
     }
 }
 

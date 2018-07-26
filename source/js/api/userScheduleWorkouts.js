@@ -53,19 +53,19 @@ function changeUsersWorkoutSchedule(_id, requestData) {
     return putFormData(requestUrl + '/' + _id, requestData, headers);
 }
 
-function deleteUsersWorkoutSchedule(_id) {
-    let headers = extraUserHeaders();
-    var options = {
-        method: 'DELETE',
-        headers: headers,
-    }
+// function deleteUsersWorkoutSchedule(_id) {
+//     let headers = extraUserHeaders();
+//     var options = {
+//         method: 'DELETE',
+//         headers: headers,
+//     }
 
-    return fetchResource(requestUrl + '/' + _id, options);
-}
+//     return fetchResource(requestUrl + '/' + _id, options);
+// }
 
 function deleteUsersBulkWorkoutSchedule(requestData) {
     let headers = extraUserHeaders();
-    return postFormData(requestUrl + '/delete', requestData, headers);
+    return postFormData(requestUrl + '/workout_delete', requestData, headers);
 }
 
 function completeUsersBulkWorkoutSchedule(requestData) {
@@ -125,7 +125,7 @@ export default {
     addUsersWorkoutSchedule,
     pasteUsersWorkoutSchedule,
     changeUsersWorkoutSchedule,
-    deleteUsersWorkoutSchedule,
+    // deleteUsersWorkoutSchedule,
     deleteUsersBulkWorkoutSchedule,
     completeUsersBulkWorkoutSchedule,
     // changeUsersWorkoutScheduleComplete,

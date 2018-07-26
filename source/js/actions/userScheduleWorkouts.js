@@ -24,9 +24,9 @@ export const CHANGE_USERS_WORKOUT_SCHEDULE_ERROR = 'CHANGE_USERS_WORKOUT_SCHEDUL
 
 export const COPY_USER_WORKOUT_SCHEDULE = 'COPY_USER_WORKOUT_SCHEDULE';
 
-export const DELETE_USERS_WORKOUT_SCHEDULE_REQUEST = 'DELETE_USERS_WORKOUT_SCHEDULE_REQUEST';
-export const DELETE_USERS_WORKOUT_SCHEDULE_SUCCESS = 'DELETE_USERS_WORKOUT_SCHEDULE_SUCCESS';
-export const DELETE_USERS_WORKOUT_SCHEDULE_ERROR = 'DELETE_USERS_WORKOUT_SCHEDULE_ERROR';
+// export const DELETE_USERS_WORKOUT_SCHEDULE_REQUEST = 'DELETE_USERS_WORKOUT_SCHEDULE_REQUEST';
+// export const DELETE_USERS_WORKOUT_SCHEDULE_SUCCESS = 'DELETE_USERS_WORKOUT_SCHEDULE_SUCCESS';
+// export const DELETE_USERS_WORKOUT_SCHEDULE_ERROR = 'DELETE_USERS_WORKOUT_SCHEDULE_ERROR';
 
 export const DELETE_USERS_BULK_WORKOUT_SCHEDULE_REQUEST = 'DELETE_USERS_BULK_WORKOUT_SCHEDULE_REQUEST';
 export const DELETE_USERS_BULK_WORKOUT_SCHEDULE_SUCCESS = 'DELETE_USERS_BULK_WORKOUT_SCHEDULE_SUCCESS';
@@ -220,26 +220,26 @@ export function copyUserWorkoutSchedule(selectedData) {
     }
 }
 
-export function deleteUsersWorkoutScheduleRequest(_id) {
-    return {
-        type: DELETE_USERS_WORKOUT_SCHEDULE_REQUEST,
-        _id,
-    }
-}
+// export function deleteUsersWorkoutScheduleRequest(_id) {
+//     return {
+//         type: DELETE_USERS_WORKOUT_SCHEDULE_REQUEST,
+//         _id,
+//     }
+// }
 
-export function deleteUsersWorkoutScheduleSuccess(data) {
-    return {
-        type: DELETE_USERS_WORKOUT_SCHEDULE_SUCCESS,
-        data,
-    }
-}
+// export function deleteUsersWorkoutScheduleSuccess(data) {
+//     return {
+//         type: DELETE_USERS_WORKOUT_SCHEDULE_SUCCESS,
+//         data,
+//     }
+// }
 
-export function deleteUsersWorkoutScheduleError(error) {
-    return {
-        type: DELETE_USERS_WORKOUT_SCHEDULE_ERROR,
-        error,
-    }
-}
+// export function deleteUsersWorkoutScheduleError(error) {
+//     return {
+//         type: DELETE_USERS_WORKOUT_SCHEDULE_ERROR,
+//         error,
+//     }
+// }
 
 export function deleteUsersBulkWorkoutScheduleRequest(requestData) {
     return {

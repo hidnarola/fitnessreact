@@ -54,25 +54,6 @@ class SetsAdvanceView extends Component {
                     return (
                         <div key={index} className="sets-advance-view-block">
                             <label>Set {(index + 1)}</label>
-                            {index > 0 && (workoutType && workoutType === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
-                                <Field
-                                    id={`${field}.rest_time`}
-                                    name={`${field}.rest_time`}
-                                    component={WorkoutInputField}
-                                    placeholder="Rest Time"
-                                    type="number"
-                                    min={0}
-                                />
-                            }
-                            {index > 0 && (workoutType && workoutType === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
-                                <Field
-                                    id={`${field}.rest_time_unit`}
-                                    name={`${field}.rest_time_unit`}
-                                    component={WorkoutDropdownField}
-                                    options={EXE_REST_TIME_UNITS}
-                                    tabIndex={-1}
-                                />
-                            }
                             {field1Options && field1Options.length > 0 &&
                                 <Field
                                     id={`${field}.field1_value`}
@@ -127,6 +108,25 @@ class SetsAdvanceView extends Component {
                                     name={`${field}.field3_unit`}
                                     component={WorkoutDropdownField}
                                     options={field3Options}
+                                    tabIndex={-1}
+                                />
+                            }
+                            {index > 0 && (workoutType && workoutType === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
+                                <Field
+                                    id={`${field}.rest_time`}
+                                    name={`${field}.rest_time`}
+                                    component={WorkoutInputField}
+                                    placeholder="Rest Time"
+                                    type="number"
+                                    min={0}
+                                />
+                            }
+                            {index > 0 && (workoutType && workoutType === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
+                                <Field
+                                    id={`${field}.rest_time_unit`}
+                                    name={`${field}.rest_time_unit`}
+                                    component={WorkoutDropdownField}
+                                    options={EXE_REST_TIME_UNITS}
                                     tabIndex={-1}
                                 />
                             }
