@@ -39,7 +39,6 @@ class WorkoutTypeSupersetCard extends Component {
                         type="number"
                         min={1}
                         max={12}
-                        validate={[required]}
                     />
                     {typeof supersetSets !== 'undefined' && supersetSets > 1 &&
                         <label>Rest Between Sets</label>
@@ -52,7 +51,6 @@ class WorkoutTypeSupersetCard extends Component {
                             placeholder="Rest Time"
                             type="number"
                             min={0}
-                            validate={[required]}
                         />
                     }
                     {typeof supersetSets !== 'undefined' && supersetSets > 1 &&
@@ -104,7 +102,6 @@ class WorkoutTypeSupersetCard extends Component {
                                         placeholder="Exercise"
                                         component={WorkoutSelectField_ReactSelect}
                                         options={exerciseOptions}
-                                        validate={[requiredReactSelect]}
                                     />
                                 </div>
                                 <div className="col-md-2 single-exercise-switch">
@@ -132,7 +129,6 @@ class WorkoutTypeSupersetCard extends Component {
                                                                 placeholder=""
                                                                 type="number"
                                                                 min={1}
-                                                                validate={[required]}
                                                             />
                                                             <Field
                                                                 id={`${field}.field1_unit`}
@@ -152,7 +148,6 @@ class WorkoutTypeSupersetCard extends Component {
                                                                 placeholder=""
                                                                 type="number"
                                                                 min={1}
-                                                                validate={[required]}
                                                             />
                                                             <Field
                                                                 id={`${field}.field2_unit`}
@@ -172,7 +167,6 @@ class WorkoutTypeSupersetCard extends Component {
                                                                 placeholder=""
                                                                 type="number"
                                                                 min={1}
-                                                                validate={[required]}
                                                             />
                                                             <Field
                                                                 id={`${field}.field3_unit`}
@@ -194,11 +188,11 @@ class WorkoutTypeSupersetCard extends Component {
                                                     id={`${field}.advance_details`}
                                                     name={`${field}.advance_details`}
                                                     component={SetsAdvanceView}
-                                                    totalSets={supersetSets}
                                                     allowAddRemoveSets={false}
                                                     selectedSingleExerciseObj={selectedExerciseObj}
                                                     exerciseMeasurements={exerciseMeasurements}
                                                     workoutType={SCHEDULED_WORKOUT_TYPE_SUPERSET}
+                                                    index={index}
                                                 />
                                             </div>
                                         </div>

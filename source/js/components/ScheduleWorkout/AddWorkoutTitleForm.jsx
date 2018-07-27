@@ -13,7 +13,7 @@ class AddWorkoutTitleForm extends Component {
     render() {
         return (
             <div className="add-workout-title-alert-form">
-                <form>
+                <form method="POST">
                     <Field
                         name="title"
                         className="form-control"

@@ -27,7 +27,6 @@ class SaveScheduleWorkoutForm extends Component {
                             id="workout_type"
                             name="workout_type"
                             component={WorkoutTypeSelection}
-                            validationRules={[required]}
                         />
                         {selectedWorkoutType && selectedWorkoutType === SCHEDULED_WORKOUT_TYPE_EXERCISE &&
                             <FieldArray
@@ -84,8 +83,7 @@ export default connect(
 const WorkoutTypeSelection = (props) => {
     const {
         input,
-        meta,
-        validationRules,
+        meta,        
     } = props;
     return (
         <div className="workout-type-radios">
@@ -97,7 +95,6 @@ const WorkoutTypeSelection = (props) => {
                         component="input"
                         type="radio"
                         value={SCHEDULED_WORKOUT_TYPE_EXERCISE}
-                        validate={validationRules}
                     />
                     <label htmlFor="workout_type_single">Single</label>
                 </li>
@@ -108,7 +105,6 @@ const WorkoutTypeSelection = (props) => {
                         component="input"
                         type="radio"
                         value={SCHEDULED_WORKOUT_TYPE_SUPERSET}
-                        validate={validationRules}
                     />
                     <label htmlFor="workout_type_superset">Superset</label>
                 </li>
@@ -119,7 +115,6 @@ const WorkoutTypeSelection = (props) => {
                         component="input"
                         type="radio"
                         value={SCHEDULED_WORKOUT_TYPE_CIRCUIT}
-                        validate={validationRules}
                     />
                     <label htmlFor="workout_type_circuit">Circuit</label>
                 </li>

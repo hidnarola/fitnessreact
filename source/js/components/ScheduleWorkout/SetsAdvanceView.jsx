@@ -1,21 +1,94 @@
 import React, { Component } from 'react';
-import { Field } from "redux-form";
+import { connect } from "react-redux";
+import { Field, formValueSelector } from "redux-form";
 import WorkoutInputField from './WorkoutInputField';
 import WorkoutDropdownField from './WorkoutDropdownField';
 import _ from "lodash";
 import { prepareFieldsOptions } from '../../helpers/funs';
-import { EXE_REST_TIME_UNITS, SCHEDULED_WORKOUT_TYPE_EXERCISE } from '../../constants/consts';
+import { EXE_REST_TIME_UNITS, SCHEDULED_WORKOUT_TYPE_EXERCISE, SCHEDULED_WORKOUT_TYPE_SUPERSET, SCHEDULED_WORKOUT_TYPE_CIRCUIT } from '../../constants/consts';
 import { required } from '../../formValidation/validationRules';
 
 class SetsAdvanceView extends Component {
     constructor(props) {
         super(props);
-        props.fields.removeAll();
-        if (props.allowAddRemoveSets) {
-            props.fields.push({});
-        } else if (props.totalSets) {
-            for (let index = 0; index < props.totalSets; index++) {
-                props.fields.push({});
+    }
+
+    componentWillMount() {
+        const {
+            workout_type,
+            workout_single,
+            workout_superset,
+            superset_sets,
+            workout_circuit,
+            circuit_sets,
+            fields,
+            index,
+        } = this.props;
+        if (workout_type === SCHEDULED_WORKOUT_TYPE_EXERCISE) {
+            if (workout_single && workout_single.length === 1 && workout_single[0].sets) {
+                fields.removeAll();
+                for (let i = 0; i < workout_single[0].sets; i++) {
+                    var obj = {};
+                    if (workout_single[0].field1_value) {
+                        obj.field1_value = workout_single[0].field1_value;
+                        obj.field1_unit = workout_single[0].field1_unit;
+                    }
+                    if (workout_single[0].field2_value) {
+                        obj.field2_value = workout_single[0].field2_value;
+                        obj.field2_unit = workout_single[0].field2_unit;
+                    }
+                    if (workout_single[0].field3_value) {
+                        obj.field3_value = workout_single[0].field3_value;
+                        obj.field3_unit = workout_single[0].field3_unit;
+                    }
+                    if (workout_single[0].rest_time && i > 0) {
+                        obj.rest_time = workout_single[0].rest_time;
+                        obj.rest_time = workout_single[0].rest_time;
+                    }
+                    fields.push(obj);
+                }
+            }
+        } else if (workout_type === SCHEDULED_WORKOUT_TYPE_SUPERSET) {
+            fields.removeAll();
+            if (workout_superset && superset_sets) {
+                var o = workout_superset[index];
+                for (let i = 0; i < superset_sets; i++) {
+                    var obj = {};
+                    if (o.field1_value) {
+                        obj.field1_value = o.field1_value;
+                        obj.field1_unit = o.field1_unit;
+                    }
+                    if (o.field2_value) {
+                        obj.field2_value = o.field2_value;
+                        obj.field2_unit = o.field2_unit;
+                    }
+                    if (o.field3_value) {
+                        obj.field3_value = o.field3_value;
+                        obj.field3_unit = o.field3_unit;
+                    }
+                    fields.push(obj);
+                }
+            }
+        } else if (workout_type === SCHEDULED_WORKOUT_TYPE_CIRCUIT) {
+            fields.removeAll();
+            if (workout_circuit && circuit_sets) {
+                var o = workout_circuit[index];
+                for (let i = 0; i < circuit_sets; i++) {
+                    var obj = {};
+                    if (o.field1_value) {
+                        obj.field1_value = o.field1_value;
+                        obj.field1_unit = o.field1_unit;
+                    }
+                    if (o.field2_value) {
+                        obj.field2_value = o.field2_value;
+                        obj.field2_unit = o.field2_unit;
+                    }
+                    if (o.field3_value) {
+                        obj.field3_value = o.field3_value;
+                        obj.field3_unit = o.field3_unit;
+                    }
+                    fields.push(obj);
+                }
             }
         }
     }
@@ -63,7 +136,6 @@ class SetsAdvanceView extends Component {
                                     placeholder=""
                                     type="number"
                                     min={0}
-                                    validate={[required]}
                                 />
                             }
                             {field1Options && field1Options.length > 0 &&
@@ -83,7 +155,6 @@ class SetsAdvanceView extends Component {
                                     placeholder=""
                                     type="number"
                                     min={0}
-                                    validate={[required]}
                                 />
                             }
                             {field2Options && field2Options.length > 0 &&
@@ -103,7 +174,6 @@ class SetsAdvanceView extends Component {
                                     placeholder=""
                                     type="number"
                                     min={0}
-                                    validate={[required]}
                                 />
                             }
                             {field3Options && field3Options.length > 0 &&
@@ -123,7 +193,6 @@ class SetsAdvanceView extends Component {
                                     placeholder="Rest Time"
                                     type="number"
                                     min={0}
-                                    validate={[required]}
                                 />
                             }
                             {index > 0 && (workoutType && workoutType === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
@@ -135,7 +204,7 @@ class SetsAdvanceView extends Component {
                                     tabIndex={-1}
                                 />
                             }
-                            {(index > 0) && (allowAddRemoveSets) &&
+                            {(allowAddRemoveSets) &&
                                 <button type="button" className="sets-advance-view-cBtn" onClick={() => fields.remove(index)} tabIndex={-1}><i className="icon-cancel"></i></button>
                             }
                         </div>
@@ -143,7 +212,7 @@ class SetsAdvanceView extends Component {
                 })}
                 {(allowAddRemoveSets) && (fields && fields.length < 12) &&
                     <div className="sets-advance-view-block-btn">
-                        <button type="button" className="" onClick={() => fields.push()}>Add Another Set<i className="icon-control_point"></i></button>
+                        <button type="button" className="" onClick={() => fields.push()}>Add Set<i className="icon-control_point"></i></button>
                     </div>
                 }
             </div>
@@ -151,13 +220,46 @@ class SetsAdvanceView extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if (typeof this.props.totalSets !== 'undefined') {
-            this.props.fields.removeAll();
-            for (let index = 0; index < this.props.totalSets; index++) {
-                this.props.fields.push({});
+        const { workout_type, superset_sets, circuit_sets, fields } = this.props;
+        if (workout_type === SCHEDULED_WORKOUT_TYPE_SUPERSET) {
+            if (superset_sets > fields.length) {
+                var diff = superset_sets - fields.length;
+                for (let i = 0; i < diff; i++) {
+                    fields.push({});
+                }
+            } else if (superset_sets < fields.length) {
+                var diff = fields.length - superset_sets;
+                for (let i = 0; i < diff; i++) {
+                    fields.pop();
+                }
+            }
+        } else if (workout_type === SCHEDULED_WORKOUT_TYPE_CIRCUIT) {
+            if (circuit_sets > fields.length) {
+                var diff = circuit_sets - fields.length;
+                for (let i = 0; i < diff; i++) {
+                    fields.push({});
+                }
+            } else if (circuit_sets < fields.length) {
+                var diff = fields.length - circuit_sets;
+                for (let i = 0; i < diff; i++) {
+                    fields.pop();
+                }
             }
         }
     }
 }
 
-export default SetsAdvanceView;
+const selector = formValueSelector('save_schedule_workout_form');
+
+const mapStateToProps = (state) => {
+    return {
+        workout_type: selector(state, 'workout_type'),
+        workout_single: selector(state, 'workout_single'),
+        workout_superset: selector(state, 'workout_superset'),
+        superset_sets: selector(state, 'superset_sets'),
+        workout_circuit: selector(state, 'workout_circuit'),
+        circuit_sets: selector(state, 'circuit_sets'),
+    };
+}
+
+export default connect(mapStateToProps)(SetsAdvanceView);
