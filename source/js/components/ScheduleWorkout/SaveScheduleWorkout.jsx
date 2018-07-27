@@ -250,7 +250,7 @@ class SaveScheduleWorkout extends Component {
                                 }
                             }
                             setDetails.push({
-                                restTime: (o.rest_time && i > 0) ? parseInt(o.rest_time) : 0,
+                                restTime: (o.rest_time && i < (sets - 1)) ? parseInt(o.rest_time) : 0,
                                 restTimeUnit: (o.rest_time_unit) ? o.rest_time_unit : MEASUREMENT_UNIT_SECONDS,
                                 field1: field1Obj,
                                 field2: field2Obj,
