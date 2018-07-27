@@ -31,8 +31,8 @@ class AddWorkoutTitleForm extends Component {
                         placeholder="Description"
                         component={TextAreaField}
                     />
-                    <button type="button" onClick={onCancel}>Cancel</button>
-                    <button type="submit">OK</button>
+                    <button type="button" onClick={onCancel} className="btn btn-sm btn-danger">Cancel</button>
+                    <button type="submit" className="btn btn-sm btn-success">OK</button>
                 </form>
             </div>
         );
