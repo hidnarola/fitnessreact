@@ -6,7 +6,10 @@ import WorkoutDropdownField from './WorkoutDropdownField';
 import _ from "lodash";
 import { prepareFieldsOptions } from '../../helpers/funs';
 import { EXE_REST_TIME_UNITS, SCHEDULED_WORKOUT_TYPE_EXERCISE, SCHEDULED_WORKOUT_TYPE_SUPERSET, SCHEDULED_WORKOUT_TYPE_CIRCUIT } from '../../constants/consts';
-import { required } from '../../formValidation/validationRules';
+import { required, min, max } from '../../formValidation/validationRules';
+
+const min0 = min(0);
+const min1 = min(1);
 
 class SetsAdvanceView extends Component {
     constructor(props) {
@@ -137,8 +140,7 @@ class SetsAdvanceView extends Component {
                                     component={WorkoutInputField}
                                     placeholder=""
                                     type="number"
-                                    min={0}
-                                    validate={[required]}
+                                    validate={[required, min1]}
                                 />
                             }
                             {field1Options && field1Options.length > 0 &&
@@ -157,8 +159,7 @@ class SetsAdvanceView extends Component {
                                     component={WorkoutInputField}
                                     placeholder=""
                                     type="number"
-                                    min={0}
-                                    validate={[required]}
+                                    validate={[required, min1]}
                                 />
                             }
                             {field2Options && field2Options.length > 0 &&
@@ -177,8 +178,7 @@ class SetsAdvanceView extends Component {
                                     component={WorkoutInputField}
                                     placeholder=""
                                     type="number"
-                                    min={0}
-                                    validate={[required]}
+                                    validate={[required, min1]}
                                 />
                             }
                             {field3Options && field3Options.length > 0 &&
@@ -197,8 +197,7 @@ class SetsAdvanceView extends Component {
                                     component={WorkoutInputField}
                                     placeholder="Rest Time"
                                     type="number"
-                                    min={0}
-                                    validate={[required]}
+                                    validate={[required, min0]}
                                 />
                             }
                             {index < (fields.length - 1) && (workoutType && workoutType === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
