@@ -11,9 +11,10 @@ import { addUserWorkoutTitleRequest } from '../../actions/userScheduleWorkouts';
 
 class AddWorkoutTitleForm extends Component {
     render() {
+        const { handleSubmit, onCancel } = this.props;
         return (
             <div className="add-workout-title-alert-form">
-                <form method="POST">
+                <form method="POST" onSubmit={handleSubmit}>
                     <Field
                         name="title"
                         className="form-control"
@@ -30,58 +31,19 @@ class AddWorkoutTitleForm extends Component {
                         placeholder="Description"
                         component={TextAreaField}
                     />
+                    <button type="button" onClick={onCancel}>Cancel</button>
+                    <button type="submit">OK</button>
                 </form>
             </div>
         );
     }
-
-    componentDidUpdate(prevProps, prevState) {
-        const { loadingTitle, workoutTitle, errorTitle, history } = this.props;
-        if (!loadingTitle && workoutTitle && prevProps.workoutTitle !== workoutTitle) {
-            if (errorTitle && errorTitle.length <= 0) {
-                var _id = workoutTitle._id;
-                let url = routeCodes.SAVE_SCHEDULE_WORKOUT.replace(':id', _id);
-                history.push(url);
-            } else {
-                te(errorTitle[0]);
-            }
-        }
-    }
-
 }
 
 AddWorkoutTitleForm = reduxForm({
     form: 'add_workout_title_form',
-    onSubmit: (data, dispatch, props) => handleSubmit(data, dispatch, props)
 })(AddWorkoutTitleForm)
 
-AddWorkoutTitleForm = withRouter(AddWorkoutTitleForm);
-
-const mapStateToProps = (state) => {
-    const { userScheduleWorkouts } = state;
-    return {
-        loadingTitle: userScheduleWorkouts.get('loadingTitle'),
-        workoutTitle: userScheduleWorkouts.get('workoutTitle'),
-        errorTitle: userScheduleWorkouts.get('errorTitle'),
-        selectedSlot: userScheduleWorkouts.get('slotInfo'),
-    };
-}
-
-export default connect(
-    mapStateToProps,
-)(AddWorkoutTitleForm);
-
-const handleSubmit = (data, dispatch, props) => {
-    var startDay = moment(props.selectedSlot.start).startOf('day');
-    var date = moment.utc(startDay);
-    var requestData = {
-        title: data.title,
-        description: (data.description) ? data.description : '',
-        type: SCHEDULED_WORKOUT_TYPE_EXERCISE,
-        date: date,
-    }
-    props.dispatch(addUserWorkoutTitleRequest(requestData));
-}
+export default connect()(AddWorkoutTitleForm);
 
 const TextAreaField = (props) => {
     const { input, meta, wrapperClass, className, placeholder, errorClass } = props;

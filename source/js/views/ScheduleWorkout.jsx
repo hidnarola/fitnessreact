@@ -60,6 +60,7 @@ class ScheduleWorkout extends Component {
             incompleteBulkActionInit: false,
             showAddWorkoutTitleAlert: false,
             completeWorkoutActionInit: false,
+            addWorkoutTitleInit: false,
             addRestDayInit: false,
             calendarViewDate: null,
             selectAllChecked: false,
@@ -267,17 +268,18 @@ class ScheduleWorkout extends Component {
                 <SweetAlert
                     type="default"
                     title={`Add workout for - ${(selectedSlotStateDate) ? moment(selectedSlotStateDate).format('MM/DD/YYYY') : ''}`}
-                    onCancel={this.handleAddWorkoutTitleCancel}
-                    onConfirm={this.handleAddWorkoutTitleSubmit}
                     btnSize="sm"
                     cancelBtnBsStyle="danger"
                     confirmBtnBsStyle="success"
                     show={showAddWorkoutTitleAlert}
-                    showConfirm={true}
-                    showCancel={true}
+                    showConfirm={false}
+                    showCancel={false}
                     closeOnClickOutside={false}
                 >
-                    <AddWorkoutTitleForm />
+                    <AddWorkoutTitleForm
+                        onSubmit={this.handleAddTitleSubmit}
+                        onCancel={this.handleAddWorkoutTitleCancel}
+                    />
                 </SweetAlert>
 
                 <ScheduleWorkoutDetailsModal
@@ -302,6 +304,7 @@ class ScheduleWorkout extends Component {
             loadingTitle,
             workoutTitle,
             errorTitle,
+            history,
         } = this.props;
         const {
             workoutPasteAction,
@@ -313,6 +316,7 @@ class ScheduleWorkout extends Component {
             incompleteBulkActionInit,
             completeWorkoutActionInit,
             addRestDayInit,
+            addWorkoutTitleInit,
             workoutEvents,
         } = this.state;
         if (!loading && prevProps.workouts !== workouts) {
@@ -422,6 +426,16 @@ class ScheduleWorkout extends Component {
                 te(errorTitle[0]);
             } else {
                 ts('Rest day added!');
+            }
+        }
+        if (addWorkoutTitleInit && !loadingTitle && workoutTitle && prevProps.workoutTitle !== workoutTitle) {
+            this.setState({ addWorkoutTitleInit: false });
+            if (errorTitle && errorTitle.length <= 0) {
+                var _id = workoutTitle._id;
+                let url = routeCodes.SAVE_SCHEDULE_WORKOUT.replace(':id', _id);
+                history.push(url);
+            } else {
+                te(errorTitle[0]);
             }
         }
     }
@@ -635,7 +649,7 @@ class ScheduleWorkout extends Component {
             _.forEach(workouts, (o, i) => {
                 let eventMonth = moment(o.start).format('M');
                 if (calendarViewMonth === eventMonth) {
-                    if(o.isSelectedForBulkAction){
+                    if (o.isSelectedForBulkAction) {
                         selectedEventDaysCount++;
                     }
                     totalEventDaysCount++;
@@ -703,11 +717,6 @@ class ScheduleWorkout extends Component {
         dispatch(setSelectedSlotFromCalendar(null));
     }
 
-    handleAddWorkoutTitleSubmit = () => {
-        const { dispatch } = this.props;
-        dispatch(submit('add_workout_title_form'));
-    }
-
     handleSelectAll = (e) => {
         const { workoutEvents, calendarViewDate } = this.state;
         let selectStatus = e.target.checked;
@@ -722,6 +731,20 @@ class ScheduleWorkout extends Component {
             newWorkouts.push(newObj);
         });
         this.setState({ workoutEvents: newWorkouts, selectAllChecked: selectStatus });
+    }
+
+    handleAddTitleSubmit = (data) => {
+        const { selectedSlot, dispatch } = this.props;
+        var startDay = moment(selectedSlot.start).startOf('day');
+        var date = moment.utc(startDay);
+        var requestData = {
+            title: data.title,
+            description: (data.description) ? data.description : '',
+            type: SCHEDULED_WORKOUT_TYPE_EXERCISE,
+            date: date,
+        }
+        this.setState({ addWorkoutTitleInit: true });
+        dispatch(addUserWorkoutTitleRequest(requestData));
     }
 }
 
