@@ -41,7 +41,7 @@ class SetsAdvanceView extends Component {
                         obj.field3_value = workout_single[0].field3_value;
                         obj.field3_unit = workout_single[0].field3_unit;
                     }
-                    if (workout_single[0].rest_time && i > 0) {
+                    if (workout_single[0].rest_time && i < (workout_single[0].sets - 1)) {
                         obj.rest_time = workout_single[0].rest_time;
                         obj.rest_time = workout_single[0].rest_time;
                     }
@@ -185,7 +185,7 @@ class SetsAdvanceView extends Component {
                                     tabIndex={-1}
                                 />
                             }
-                            {index > 0 && (workoutType && workoutType === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
+                            {index < (fields.length - 1) && (workoutType && workoutType === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
                                 <Field
                                     id={`${field}.rest_time`}
                                     name={`${field}.rest_time`}
@@ -195,7 +195,7 @@ class SetsAdvanceView extends Component {
                                     min={0}
                                 />
                             }
-                            {index > 0 && (workoutType && workoutType === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
+                            {index < (fields.length - 1) && (workoutType && workoutType === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
                                 <Field
                                     id={`${field}.rest_time_unit`}
                                     name={`${field}.rest_time_unit`}

@@ -58,6 +58,22 @@ class SaveScheduleWorkoutForm extends Component {
     }
 }
 
+const validateWorkout = (values) => {
+    var errors = {};
+    if (!values.workout_type) {
+        errors.workout_type = 'Field is required!';
+    }
+    if (values.workout_type && (!values.workout_single || !values.workout_single[0] || values.workout_single.length !== 1)) {
+        errors.workout_single
+    }
+    return errors
+}
+
+SaveScheduleWorkoutForm = reduxForm({
+    form: 'save_schedule_workout_form',
+    validate: validateWorkout,
+})(SaveScheduleWorkoutForm);
+
 const selector = formValueSelector('save_schedule_workout_form');
 
 const mapStateToProps = (state) => {
@@ -72,10 +88,6 @@ const mapStateToProps = (state) => {
     };
 }
 
-SaveScheduleWorkoutForm = reduxForm({
-    form: 'save_schedule_workout_form',
-})(SaveScheduleWorkoutForm);
-
 export default connect(
     mapStateToProps,
 )(SaveScheduleWorkoutForm);
@@ -83,7 +95,7 @@ export default connect(
 const WorkoutTypeSelection = (props) => {
     const {
         input,
-        meta,        
+        meta,
     } = props;
     return (
         <div className="workout-type-radios">
