@@ -268,6 +268,7 @@ class ScheduleWorkout extends Component {
                 <SweetAlert
                     type="default"
                     title={`Add workout for - ${(selectedSlotStateDate) ? moment(selectedSlotStateDate).format('MM/DD/YYYY') : ''}`}
+                    onConfirm={() => { }}
                     btnSize="sm"
                     cancelBtnBsStyle="danger"
                     confirmBtnBsStyle="success"
