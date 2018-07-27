@@ -25,8 +25,8 @@ class SetsAdvanceView extends Component {
             index,
         } = this.props;
         if (workout_type === SCHEDULED_WORKOUT_TYPE_EXERCISE) {
+            fields.removeAll();
             if (workout_single && workout_single.length === 1 && workout_single[0].sets) {
-                fields.removeAll();
                 for (let i = 0; i < workout_single[0].sets; i++) {
                     var obj = {};
                     if (workout_single[0].field1_value) {
@@ -47,6 +47,8 @@ class SetsAdvanceView extends Component {
                     }
                     fields.push(obj);
                 }
+            } else {
+                fields.push({});
             }
         } else if (workout_type === SCHEDULED_WORKOUT_TYPE_SUPERSET) {
             fields.removeAll();
@@ -136,6 +138,7 @@ class SetsAdvanceView extends Component {
                                     placeholder=""
                                     type="number"
                                     min={0}
+                                    validate={[required]}
                                 />
                             }
                             {field1Options && field1Options.length > 0 &&
@@ -155,6 +158,7 @@ class SetsAdvanceView extends Component {
                                     placeholder=""
                                     type="number"
                                     min={0}
+                                    validate={[required]}
                                 />
                             }
                             {field2Options && field2Options.length > 0 &&
@@ -174,6 +178,7 @@ class SetsAdvanceView extends Component {
                                     placeholder=""
                                     type="number"
                                     min={0}
+                                    validate={[required]}
                                 />
                             }
                             {field3Options && field3Options.length > 0 &&
@@ -193,6 +198,7 @@ class SetsAdvanceView extends Component {
                                     placeholder="Rest Time"
                                     type="number"
                                     min={0}
+                                    validate={[required]}
                                 />
                             }
                             {index < (fields.length - 1) && (workoutType && workoutType === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
@@ -204,7 +210,7 @@ class SetsAdvanceView extends Component {
                                     tabIndex={-1}
                                 />
                             }
-                            {(allowAddRemoveSets) &&
+                            {(index > 0) && (allowAddRemoveSets) &&
                                 <button type="button" className="sets-advance-view-cBtn" onClick={() => fields.remove(index)} tabIndex={-1}><i className="icon-cancel"></i></button>
                             }
                         </div>
