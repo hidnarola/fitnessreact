@@ -82,7 +82,6 @@ import $ from "jquery";
 import UserChatWindow from '../components/global/UserChatWindow';
 import ScheduleWorkout from './ScheduleWorkout';
 import SaveScheduleWorkout from '../components/ScheduleWorkout/SaveScheduleWorkout';
-import ChangeScheduleWorkout from '../components/ScheduleWorkout/ChangeScheduleWorkout';
 import Programs from './Programs';
 import ProgramSave from '../components/Program/ProgramSave';
 import AddProgramScheduleWorkout from '../components/Program/AddProgramScheduleWorkout';
@@ -107,7 +106,6 @@ class App extends Component {
         messageTypingStart(socket, this.handleMessageTypingResponse);
         messageTypingStop(socket, this.handleMessageTypingResponse);
         receiveChannelId(socket, this.handleReceiveChannelId);
-        // let token = localStorage.getItem(LOCALSTORAGE_ACCESS_TOKEN_KEY);
         let token = getToken();
         if (token) {
             socket.emit('join', token);

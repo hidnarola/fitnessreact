@@ -11,7 +11,6 @@ import {
     ADD_USERS_WORKOUT_SCHEDULE_SUCCESS,
     ADD_USERS_WORKOUT_SCHEDULE_ERROR,
     COPY_USER_WORKOUT_SCHEDULE,
-    SELECT_USERS_WORKOUT_SCHEDULE_FOR_EDIT,
     CHANGE_USERS_WORKOUT_SCHEDULE_SUCCESS,
     CHANGE_USERS_WORKOUT_SCHEDULE_ERROR,
     CHANGE_USERS_WORKOUT_SCHEDULE_REQUEST,
@@ -64,7 +63,6 @@ const initialState = Map({
     exercises: [],
     programs: [],
     copiedWorkout: null,
-    selectedWorkoutForEdit: null,
     assignProgramLoading: null,
     assignProgram: null,
     assignProgramError: [],
@@ -74,6 +72,7 @@ const initialState = Map({
     selectedWorkoutMainType: SCHEDULED_WORKOUT_TYPE_WARMUP,
     exerciseMeasurements: [],
     workoutFormAction: 'add',
+    selectedWorkoutIdForEdit: null,
 });
 
 const actionMap = {
@@ -344,11 +343,6 @@ const actionMap = {
             error: error,
         }));
     },
-    [SELECT_USERS_WORKOUT_SCHEDULE_FOR_EDIT]: (state, action) => {
-        return state.merge(Map({
-            selectedWorkoutForEdit: action.selectedData,
-        }));
-    },
     [USER_ASSIGN_PROGRAM_REQUEST]: (state, action) => {
         return state.merge(Map({
             assignProgramLoading: true,
@@ -534,6 +528,7 @@ const actionMap = {
     [CHANGE_USERS_WORKOUT_FORM_ACTION]: (state, action) => {
         return state.merge(Map({
             workoutFormAction: action.action,
+            selectedWorkoutIdForEdit: action._id,
         }));
     },
 }

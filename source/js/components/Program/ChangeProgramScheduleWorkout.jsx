@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import FitnessHeader from '../global/FitnessHeader';
 import FitnessNav from '../global/FitnessNav';
-import ChangeScheduleWorkoutForm from '../ScheduleWorkout/ChangeScheduleWorkoutForm';
 import {
     MEASUREMENT_UNIT_KILOMETER,
     MEASUREMENT_UNIT_METER,
@@ -103,7 +102,7 @@ class ChangeProgramScheduleWorkout extends Component {
                             <div className="col-md-12">
                                 <div className="white-box space-btm-20">
                                     <div className="whitebox-body profile-body">
-                                        <ChangeScheduleWorkoutForm onSubmit={this.handleSubmit} />
+                                        <h1>Under Construction</h1>
                                     </div>
                                 </div>
                             </div>

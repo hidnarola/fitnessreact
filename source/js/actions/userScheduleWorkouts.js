@@ -44,8 +44,6 @@ export const INCOMPLETE_USERS_BULK_WORKOUT_SCHEDULE_REQUEST = 'INCOMPLETE_USERS_
 export const INCOMPLETE_USERS_BULK_WORKOUT_SCHEDULE_SUCCESS = 'INCOMPLETE_USERS_BULK_WORKOUT_SCHEDULE_SUCCESS';
 export const INCOMPLETE_USERS_BULK_WORKOUT_SCHEDULE_ERROR = 'INCOMPLETE_USERS_BULK_WORKOUT_SCHEDULE_ERROR';
 
-export const SELECT_USERS_WORKOUT_SCHEDULE_FOR_EDIT = 'SELECT_USERS_WORKOUT_SCHEDULE_FOR_EDIT';
-
 export const GET_PROGRAMS_NAME_REQUEST = 'GET_PROGRAMS_NAME_REQUEST';
 export const GET_PROGRAMS_NAME_SUCCESS = 'GET_PROGRAMS_NAME_SUCCESS';
 export const GET_PROGRAMS_NAME_ERROR = 'GET_PROGRAMS_NAME_ERROR';
@@ -256,13 +254,6 @@ export function completeUsersBulkWorkoutScheduleError(error) {
     }
 }
 
-export function selectUsersWorkoutScheduleForEdit(selectedData) {
-    return {
-        type: SELECT_USERS_WORKOUT_SCHEDULE_FOR_EDIT,
-        selectedData,
-    }
-}
-
 export function getProgramsNameRequest() {
     return {
         type: GET_PROGRAMS_NAME_REQUEST,
@@ -416,9 +407,10 @@ export function deleteUserSingleExerciseError(error) {
     }
 }
 
-export function changeUsersWorkoutFormAction(action = 'add') {
+export function changeUsersWorkoutFormAction(action = 'add', _id = null) {
     return {
         type: CHANGE_USERS_WORKOUT_FORM_ACTION,
         action,
+        _id,
     }
 }

@@ -66,7 +66,7 @@ class SaveScheduleWorkoutForm extends Component {
 
     handleResetForm = () => {
         const { dispatch, reset } = this.props;
-        dispatch(changeUsersWorkoutFormAction('add'));
+        dispatch(changeUsersWorkoutFormAction('add', null));
         reset();
     }
 }

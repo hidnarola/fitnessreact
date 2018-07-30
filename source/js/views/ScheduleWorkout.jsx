@@ -8,12 +8,7 @@ import SweetAlert from "react-bootstrap-sweetalert";
 import {
     setSelectedSlotFromCalendar,
     getUsersWorkoutSchedulesRequest,
-    getExercisesNameRequest,
-    addUsersWorkoutScheduleRequest,
     copyUserWorkoutSchedule,
-    deleteUsersWorkoutScheduleRequest,
-    // changeUsersWorkoutScheduleCompleteRequest,
-    selectUsersWorkoutScheduleForEdit,
     getProgramsNameRequest,
     userAssignProgramRequest,
     deleteUsersBulkWorkoutScheduleRequest,
@@ -24,16 +19,13 @@ import {
 import { NavLink } from "react-router-dom";
 import { routeCodes } from '../constants/routes';
 import _ from "lodash";
-import { SCHEDULED_WORKOUT_TYPE_RESTDAY, SCHEDULED_WORKOUT_TYPE_EXERCISE, MEASUREMENT_UNIT_KILOGRAM, MEASUREMENT_UNIT_KILOMETER } from '../constants/consts';
+import { SCHEDULED_WORKOUT_TYPE_RESTDAY, SCHEDULED_WORKOUT_TYPE_EXERCISE } from '../constants/consts';
 import { ts, te, prepareDropdownOptionsData } from '../helpers/funs';
 import { FaCopy, FaTrash, FaPencil, FaEye } from 'react-icons/lib/fa'
-import ScheduleWorkoutDetailsModal from '../components/ScheduleWorkout/ScheduleWorkoutDetailsModal';
 import cns from "classnames";
 import Select from 'react-select';
 import AddWorkoutTitleForm from '../components/ScheduleWorkout/AddWorkoutTitleForm';
-import { submit } from "redux-form";
 import ReactTooltip from "react-tooltip";
-import { toggleChatWindowMinimize } from '../actions/userMessages';
 
 BigCalendar.momentLocalizer(moment);
 
@@ -48,8 +40,6 @@ class ScheduleWorkout extends Component {
             selectedWorkoutId: null,
             selectedWorkoutDate: null,
             deleteWorkoutActionInit: false,
-            selectedWorkoutForView: null,
-            showWorkoutScheduleDetailsModal: false,
             showProgramAssignAlert: false,
             selectedProgramIdToAssign: null,
             deleteBulkActionAlert: false,
@@ -81,8 +71,6 @@ class ScheduleWorkout extends Component {
             showSelectEventAlert,
             workoutEvents,
             deleteWorkoutAlert,
-            showWorkoutScheduleDetailsModal,
-            selectedWorkoutForView,
             showProgramAssignAlert,
             selectedProgramIdToAssign,
             deleteBulkActionAlert,
@@ -282,12 +270,6 @@ class ScheduleWorkout extends Component {
                         onCancel={this.handleAddWorkoutTitleCancel}
                     />
                 </SweetAlert>
-
-                <ScheduleWorkoutDetailsModal
-                    show={showWorkoutScheduleDetailsModal}
-                    handleClose={this.handleCloseWorkoutScheduleDetailsModal}
-                    workout={selectedWorkoutForView}
-                />
             </div>
         );
     }
@@ -337,7 +319,6 @@ class ScheduleWorkout extends Component {
                     isSelectedForBulkAction: false,
                     handleCopy: () => this.handleCopy(workout._id),
                     handleDelete: () => this.showDeleteConfirmation(workout._id, workout.date),
-                    handleViewWorkout: () => this.handleViewWorkout(workout._id),
                     handleCompleteWorkout: () => this.handleCompleteWorkout(workout._id),
                     handleSelectForBulkAction: () => this.handleSelectForBulkAction(workout._id),
                 }
@@ -345,16 +326,6 @@ class ScheduleWorkout extends Component {
             });
             this.setState({ workoutEvents: newWorkouts });
         }
-        // if (!loading && workout && prevProps.workout !== workout) {
-        //     var startDay = moment(selectedSlot.start).startOf('day');
-        //     var date = moment.utc(startDay);
-        //     this.getWorkoutSchedulesByMonth(date);
-        //     this.cancelSelectedSlotAction();
-        //     if (workoutPasteAction) {
-        //         ts('Workout pasted!');
-        //         this.setState({ workoutPasteAction: false });
-        //     }
-        // }
         if (workoutPasteAction && !loading) {
             this.setState({ workoutPasteAction: false });
             this.getWorkoutSchedulesByMonth();
@@ -458,7 +429,6 @@ class ScheduleWorkout extends Component {
     }
 
     getWorkoutSchedulesByMonth = (date = null) => {
-        // this.setState({ workoutEvents: [] });
         const { calendarViewDate } = this.state;
         let _date = null;
         if (date) {
@@ -496,7 +466,6 @@ class ScheduleWorkout extends Component {
         };
         this.setState({ addRestDayInit: true });
         dispatch(addUserWorkoutTitleRequest(requestData));
-        // dispatch(addUsersWorkoutScheduleRequest(requestData));
     }
 
     handleCopy = (_id) => {
@@ -505,24 +474,6 @@ class ScheduleWorkout extends Component {
             dispatch(copyUserWorkoutSchedule(_id));
             ts('Workout copied!');
         }
-    }
-
-    handleViewWorkout = (_id) => {
-        const { workoutEvents } = this.state;
-        var workout = _.find(workoutEvents, ['id', _id]);
-        if (workout) {
-            this.setState({
-                selectedWorkoutForView: workout.meta,
-                showWorkoutScheduleDetailsModal: true,
-            });
-        }
-    }
-
-    handleCloseWorkoutScheduleDetailsModal = () => {
-        this.setState({
-            showWorkoutScheduleDetailsModal: false,
-            selectedWorkoutForView: null,
-        });
     }
 
     handlePaste = () => {
@@ -565,7 +516,6 @@ class ScheduleWorkout extends Component {
                 exerciseIds: [selectedWorkoutId],
             };
             dispatch(deleteUsersBulkWorkoutScheduleRequest(requestData));
-            // dispatch(deleteUsersWorkoutScheduleRequest(selectedWorkoutId));
             this.setState({ deleteWorkoutAlert: false, deleteWorkoutActionInit: true });
         }
     }
@@ -833,7 +783,7 @@ class CustomEventCard extends Component {
                             <a href="javascript:void(0)" data-tip="Copy" onClick={event.handleCopy} title=""><FaCopy /></a>
                         }
                         {(event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
-                            <a href="javascript:void(0)" data-tip="Details" onClick={event.handleViewWorkout} title=""><FaEye /></a>
+                            <a href="javascript:void(0)" data-tip="Details" title=""><FaEye /></a>
                         }
                         {(event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
                             <NavLink to={routeCodes.SAVE_SCHEDULE_WORKOUT.replace(':id', event.id)} data-tip="Change" title=""><FaPencil /></NavLink>

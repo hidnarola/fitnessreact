@@ -116,7 +116,7 @@ class WorkoutExercisesView extends Component {
             }
             console.log('formData => ', formData);
             dispatch(initialize('save_schedule_workout_form', formData));
-            dispatch(changeUsersWorkoutFormAction('edit'));
+            dispatch(changeUsersWorkoutFormAction('edit', data._id));
         }
     }
 
