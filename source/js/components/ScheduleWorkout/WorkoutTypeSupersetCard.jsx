@@ -18,9 +18,11 @@ const max12 = max(12);
 class WorkoutTypeSupersetCard extends Component {
     constructor(props) {
         super(props);
-        props.fields.removeAll();
-        props.fields.push({});
-        props.fields.push({});
+        if (props.workoutFormAction === 'add') {
+            props.fields.removeAll();
+            props.fields.push({});
+            props.fields.push({});
+        }
     }
 
     render() {
@@ -219,6 +221,7 @@ const mapStateToProps = (state) => {
         supersetSets: selector(state, 'superset_sets'),
         exercises: userScheduleWorkouts.get('exercises'),
         exerciseMeasurements: userScheduleWorkouts.get('exerciseMeasurements'),
+        workoutFormAction: userScheduleWorkouts.get('workoutFormAction'),
     };
 }
 

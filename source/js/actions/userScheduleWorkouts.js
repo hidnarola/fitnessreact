@@ -24,10 +24,6 @@ export const CHANGE_USERS_WORKOUT_SCHEDULE_ERROR = 'CHANGE_USERS_WORKOUT_SCHEDUL
 
 export const COPY_USER_WORKOUT_SCHEDULE = 'COPY_USER_WORKOUT_SCHEDULE';
 
-// export const DELETE_USERS_WORKOUT_SCHEDULE_REQUEST = 'DELETE_USERS_WORKOUT_SCHEDULE_REQUEST';
-// export const DELETE_USERS_WORKOUT_SCHEDULE_SUCCESS = 'DELETE_USERS_WORKOUT_SCHEDULE_SUCCESS';
-// export const DELETE_USERS_WORKOUT_SCHEDULE_ERROR = 'DELETE_USERS_WORKOUT_SCHEDULE_ERROR';
-
 export const DELETE_USERS_BULK_WORKOUT_SCHEDULE_REQUEST = 'DELETE_USERS_BULK_WORKOUT_SCHEDULE_REQUEST';
 export const DELETE_USERS_BULK_WORKOUT_SCHEDULE_SUCCESS = 'DELETE_USERS_BULK_WORKOUT_SCHEDULE_SUCCESS';
 export const DELETE_USERS_BULK_WORKOUT_SCHEDULE_ERROR = 'DELETE_USERS_BULK_WORKOUT_SCHEDULE_ERROR';
@@ -47,10 +43,6 @@ export const COMPLETE_USERS_BULK_WORKOUT_SCHEDULE_ERROR = 'COMPLETE_USERS_BULK_W
 export const INCOMPLETE_USERS_BULK_WORKOUT_SCHEDULE_REQUEST = 'INCOMPLETE_USERS_BULK_WORKOUT_SCHEDULE_REQUEST';
 export const INCOMPLETE_USERS_BULK_WORKOUT_SCHEDULE_SUCCESS = 'INCOMPLETE_USERS_BULK_WORKOUT_SCHEDULE_SUCCESS';
 export const INCOMPLETE_USERS_BULK_WORKOUT_SCHEDULE_ERROR = 'INCOMPLETE_USERS_BULK_WORKOUT_SCHEDULE_ERROR';
-
-// export const CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_REQUEST = 'CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_REQUEST';
-// export const CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_SUCCESS = 'CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_SUCCESS';
-// export const CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_ERROR = 'CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_ERROR';
 
 export const SELECT_USERS_WORKOUT_SCHEDULE_FOR_EDIT = 'SELECT_USERS_WORKOUT_SCHEDULE_FOR_EDIT';
 
@@ -79,6 +71,8 @@ export const GET_EXERCISE_MEASUREMENT_ERROR = 'GET_EXERCISE_MEASUREMENT_ERROR';
 export const PASTE_USERS_WORKOUT_SCHEDULE_REQUEST = 'PASTE_USERS_WORKOUT_SCHEDULE_REQUEST';
 export const PASTE_USERS_WORKOUT_SCHEDULE_SUCCESS = 'PASTE_USERS_WORKOUT_SCHEDULE_SUCCESS';
 export const PASTE_USERS_WORKOUT_SCHEDULE_ERROR = 'PASTE_USERS_WORKOUT_SCHEDULE_ERROR';
+
+export const CHANGE_USERS_WORKOUT_FORM_ACTION = 'CHANGE_USERS_WORKOUT_FORM_ACTION';
 
 export function setSelectedSlotFromCalendar(slotInfo = null) {
     return {
@@ -220,27 +214,6 @@ export function copyUserWorkoutSchedule(selectedData) {
     }
 }
 
-// export function deleteUsersWorkoutScheduleRequest(_id) {
-//     return {
-//         type: DELETE_USERS_WORKOUT_SCHEDULE_REQUEST,
-//         _id,
-//     }
-// }
-
-// export function deleteUsersWorkoutScheduleSuccess(data) {
-//     return {
-//         type: DELETE_USERS_WORKOUT_SCHEDULE_SUCCESS,
-//         data,
-//     }
-// }
-
-// export function deleteUsersWorkoutScheduleError(error) {
-//     return {
-//         type: DELETE_USERS_WORKOUT_SCHEDULE_ERROR,
-//         error,
-//     }
-// }
-
 export function deleteUsersBulkWorkoutScheduleRequest(requestData) {
     return {
         type: DELETE_USERS_BULK_WORKOUT_SCHEDULE_REQUEST,
@@ -282,28 +255,6 @@ export function completeUsersBulkWorkoutScheduleError(error) {
         error,
     }
 }
-
-// export function changeUsersWorkoutScheduleCompleteRequest(_id, isCompleted) {
-//     return {
-//         type: CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_REQUEST,
-//         _id,
-//         isCompleted,
-//     }
-// }
-
-// export function changeUsersWorkoutScheduleCompleteSuccess(data) {
-//     return {
-//         type: CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_SUCCESS,
-//         data,
-//     }
-// }
-
-// export function changeUsersWorkoutScheduleCompleteError(error) {
-//     return {
-//         type: CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_ERROR,
-//         error,
-//     }
-// }
 
 export function selectUsersWorkoutScheduleForEdit(selectedData) {
     return {
@@ -462,5 +413,12 @@ export function deleteUserSingleExerciseError(error) {
     return {
         type: DELETE_USER_SINGLE_EXERCISE_ERROR,
         error,
+    }
+}
+
+export function changeUsersWorkoutFormAction(action = 'add') {
+    return {
+        type: CHANGE_USERS_WORKOUT_FORM_ACTION,
+        action,
     }
 }

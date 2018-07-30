@@ -43,7 +43,7 @@ class WorkoutAdvanceViewSwitch extends Component {
                     onConfirm={this.handleAlertWhileSwitchToNormalView}
                     onCancel={this.handleCloseAlertWhileSwitchToNormalView}
                 >
-                    You will loss the data and not be able to recover!
+                    You will loss the changes and not be able to recover!
                 </SweetAlert>
             </div>
         );

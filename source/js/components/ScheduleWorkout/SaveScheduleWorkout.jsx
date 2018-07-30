@@ -264,6 +264,7 @@ class SaveScheduleWorkout extends Component {
                             exercises: [
                                 {
                                     exerciseId: selectedExercise.value,
+                                    exerciseObj: selectedExercise,
                                     sets: parseInt(sets),
                                     differentSets: (advanceView) ? 1 : 0,
                                     setsDetails: setDetails,
@@ -303,6 +304,7 @@ class SaveScheduleWorkout extends Component {
                         exercises: [
                             {
                                 exerciseId: selectedExercise.value,
+                                exerciseObj: selectedExercise,
                                 sets: sets,
                                 restTime: restTime,
                                 restTimeUnit: restTimeUnit,
@@ -394,6 +396,7 @@ class SaveScheduleWorkout extends Component {
                             });
                             let exeObj = {
                                 exerciseId: selectedExercise.value,
+                                exerciseObj: selectedExercise,
                                 sets: sets,
                                 restTime: restTime,
                                 restTimeUnit: restTimeUnit,
@@ -426,6 +429,7 @@ class SaveScheduleWorkout extends Component {
                         }
                         let exeObj = {
                             exerciseId: selectedExercise.value,
+                            exerciseObj: selectedExercise,
                             sets: sets,
                             restTime: restTime,
                             restTimeUnit: restTimeUnit,
@@ -523,6 +527,7 @@ class SaveScheduleWorkout extends Component {
                             });
                             let exeObj = {
                                 exerciseId: selectedExercise.value,
+                                exerciseObj: selectedExercise,
                                 sets: sets,
                                 restTime: restTime,
                                 restTimeUnit: restTimeUnit,
@@ -555,6 +560,7 @@ class SaveScheduleWorkout extends Component {
                         }
                         let exeObj = {
                             exerciseId: selectedExercise.value,
+                            exerciseObj: selectedExercise,
                             sets: sets,
                             restTime: restTime,
                             restTimeUnit: restTimeUnit,

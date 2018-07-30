@@ -18,8 +18,10 @@ const max12 = max(12);
 class WorkoutTypeSingleCard extends Component {
     constructor(props) {
         super(props);
-        props.fields.removeAll();
-        props.fields.push({});
+        if (props.workoutFormAction === 'add') {
+            props.fields.removeAll();
+            props.fields.push({});
+        }
     }
 
     render() {
@@ -209,6 +211,7 @@ const mapStateToProps = (state) => {
     return {
         exercises: userScheduleWorkouts.get('exercises'),
         exerciseMeasurements: userScheduleWorkouts.get('exerciseMeasurements'),
+        workoutFormAction: userScheduleWorkouts.get('workoutFormAction'),
     };
 }
 

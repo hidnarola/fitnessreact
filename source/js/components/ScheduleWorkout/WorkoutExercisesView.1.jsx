@@ -12,7 +12,7 @@ import {
 import noImg from 'img/common/no-img.png'
 import _ from "lodash";
 import { deleteUserWholeExerciseRequest, deleteUserSingleExerciseRequest, changeUsersWorkoutFormAction } from '../../actions/userScheduleWorkouts';
-import { te, ts, prepareExerciseOptions } from '../../helpers/funs';
+import { te, ts } from '../../helpers/funs';
 import { FaPencil } from "react-icons/lib/fa";
 
 class WorkoutExercisesView extends Component {
@@ -109,256 +109,28 @@ class WorkoutExercisesView extends Component {
         if (data) {
             if (data.subType && data.subType === SCHEDULED_WORKOUT_TYPE_EXERCISE) {
                 formData = this.prepareFormDataForSingleExercise(data);
-            } else if (data.subType && data.subType === SCHEDULED_WORKOUT_TYPE_SUPERSET) {
-                formData = this.prepareFormDataForSupersetExercise(data);
-            } else if (data.subType && data.subType === SCHEDULED_WORKOUT_TYPE_CIRCUIT) {
-                formData = this.prepareFormDataForCircuitExercise(data);
             }
-            console.log('formData => ', formData);
             dispatch(initialize('save_schedule_workout_form', formData));
             dispatch(changeUsersWorkoutFormAction('edit'));
         }
     }
 
     prepareFormDataForSingleExercise = (data) => {
-        const { exercisesList } = this.props;
-        var exerciseOptions = prepareExerciseOptions(exercisesList);
+        const { exercises } = this.props;
         let formData = {};
         let exercise = null;
         console.log('data => ', data);
-        if (data.exercises && data.exercises.length === 1 && data.exercises[0]) {
+        if (data.exercise && data.exercise.length === 1 && data.exercise[0]) {
             exercise = data.exercises[0];
             var exerciseId = exercise.exercises._id;
-            var exerciseObj = _.find(exerciseOptions, ['value', exerciseId]);
-            if (exercise.differentSets) {
-                var setDetails = [];
-                _.forEach(exercise.setsDetails, (o, i) => {
-                    var detail = {}
-                    if (o.field1) {
-                        detail.field1_value = o.field1.value;
-                        detail.field1_unit = o.field1.unit;
-                    }
-                    if (o.field2) {
-                        detail.field2_value = o.field2.value;
-                        detail.field2_unit = o.field2.unit;
-                    }
-                    if (o.field3) {
-                        detail.field3_value = o.field3.value;
-                        detail.field3_unit = o.field3.unit;
-                    }
-                    if (o.restTime) {
-                        detail.rest_time = o.restTime;
-                        detail.rest_time_unit = o.restTimeUnit;
-                    }
-                    setDetails.push(detail);
-                });
-                var details = {
+            var exerciseObj = _.find(exercises, ['value', exerciseId]);
+            formData.workout_single = [
+                {
                     exercise_id: exerciseObj,
-                    advance_view: true,
-                    sets: exercise.sets,
-                    advance_details: setDetails,
                 }
-                formData.workout_single = [details];
-            } else {
-                var setData = exercise.setsDetails[0];
-                var details = {
-                    exercise_id: exerciseObj,
-                    advance_view: false,
-                    sets: exercise.sets,
-                }
-                if (setData.field1) {
-                    details.field1_value = setData.field1.value;
-                    details.field1_unit = setData.field1.unit;
-                }
-                if (setData.field2) {
-                    details.field2_value = setData.field2.value;
-                    details.field2_unit = setData.field2.unit;
-                }
-                if (setData.field3) {
-                    details.field3_value = setData.field3.value;
-                    details.field3_unit = setData.field3.unit;
-                }
-                if (exercise.restTime) {
-                    details.rest_time = exercise.restTime;
-                    details.rest_time_unit = exercise.restTimeUnit;
-                }
-                formData.workout_single = [details];
-            }
+            ];
             formData.workout_type = data.subType;
         }
-        console.log('formData => ', formData);
-        return formData;
-    }
-
-    prepareFormDataForSupersetExercise = (data) => {
-        const { exercisesList } = this.props;
-        var exerciseOptions = prepareExerciseOptions(exercisesList);
-        let formData = {};
-        console.log('data => ', data);
-        if (data.exercises) {
-            let exercisesDetails = [];
-            let superSetSets = null;
-            let superSetRestTime = null;
-            let superSetRestTimeUnit = null;
-            _.forEach(data.exercises, (exercise, index) => {
-                var exerciseId = exercise.exercises._id;
-                var exerciseObj = _.find(exerciseOptions, ['value', exerciseId]);
-                if (exercise.differentSets) {
-                    var setDetails = [];
-                    _.forEach(exercise.setsDetails, (o, i) => {
-                        var detail = {}
-                        if (o.field1) {
-                            detail.field1_value = o.field1.value;
-                            detail.field1_unit = o.field1.unit;
-                        }
-                        if (o.field2) {
-                            detail.field2_value = o.field2.value;
-                            detail.field2_unit = o.field2.unit;
-                        }
-                        if (o.field3) {
-                            detail.field3_value = o.field3.value;
-                            detail.field3_unit = o.field3.unit;
-                        }
-                        setDetails.push(detail);
-                    });
-                    if (!superSetSets && exercise.sets) {
-                        superSetSets = exercise.sets;
-                    }
-                    if (!superSetRestTime && exercise.restTime) {
-                        superSetRestTime = exercise.restTime;
-                        superSetRestTimeUnit = exercise.restTimeUnit;
-                    }
-                    var details = {
-                        exercise_id: exerciseObj,
-                        advance_view: true,
-                        advance_details: setDetails,
-                    }
-                    exercisesDetails.push(details);
-                } else {
-                    var setData = exercise.setsDetails[0];
-                    if (!superSetSets && exercise.sets) {
-                        superSetSets = exercise.sets;
-                    }
-                    if (!superSetRestTime && exercise.restTime) {
-                        superSetRestTime = exercise.restTime;
-                        superSetRestTimeUnit = exercise.restTimeUnit;
-                    }
-                    var details = {
-                        exercise_id: exerciseObj,
-                        advance_view: false,
-                    }
-                    if (setData.field1) {
-                        details.field1_value = setData.field1.value;
-                        details.field1_unit = setData.field1.unit;
-                    }
-                    if (setData.field2) {
-                        details.field2_value = setData.field2.value;
-                        details.field2_unit = setData.field2.unit;
-                    }
-                    if (setData.field3) {
-                        details.field3_value = setData.field3.value;
-                        details.field3_unit = setData.field3.unit;
-                    }
-                    exercisesDetails.push(details);
-                }
-            });
-            if (superSetSets) {
-                formData.superset_sets = superSetSets;
-            }
-            if (superSetRestTime) {
-                formData.superset_rest_time = superSetRestTime;
-                formData.superset_rest_time_unit = superSetRestTimeUnit;
-            }
-            formData.workout_superset = exercisesDetails;
-            formData.workout_type = data.subType;
-        }
-        console.log('formData => ', formData);
-        return formData;
-    }
-
-    prepareFormDataForCircuitExercise = (data) => {
-        const { exercisesList } = this.props;
-        var exerciseOptions = prepareExerciseOptions(exercisesList);
-        let formData = {};
-        console.log('data => ', data);
-        if (data.exercises) {
-            let exercisesDetails = [];
-            let circuitSets = null;
-            let circuitRestTime = null;
-            let circuitRestTimeUnit = null;
-            _.forEach(data.exercises, (exercise, index) => {
-                var exerciseId = exercise.exercises._id;
-                var exerciseObj = _.find(exerciseOptions, ['value', exerciseId]);
-                if (exercise.differentSets) {
-                    var setDetails = [];
-                    _.forEach(exercise.setsDetails, (o, i) => {
-                        var detail = {}
-                        if (o.field1) {
-                            detail.field1_value = o.field1.value;
-                            detail.field1_unit = o.field1.unit;
-                        }
-                        if (o.field2) {
-                            detail.field2_value = o.field2.value;
-                            detail.field2_unit = o.field2.unit;
-                        }
-                        if (o.field3) {
-                            detail.field3_value = o.field3.value;
-                            detail.field3_unit = o.field3.unit;
-                        }
-                        setDetails.push(detail);
-                    });
-                    if (!circuitSets && exercise.sets) {
-                        circuitSets = exercise.sets;
-                    }
-                    if (!circuitRestTime && exercise.restTime) {
-                        circuitRestTime = exercise.restTime;
-                        circuitRestTimeUnit = exercise.restTimeUnit;
-                    }
-                    var details = {
-                        exercise_id: exerciseObj,
-                        advance_view: true,
-                        advance_details: setDetails,
-                    }
-                    exercisesDetails.push(details);
-                } else {
-                    var setData = exercise.setsDetails[0];
-                    if (!circuitSets && exercise.sets) {
-                        circuitSets = exercise.sets;
-                    }
-                    if (!circuitRestTime && exercise.restTime) {
-                        circuitRestTime = exercise.restTime;
-                        circuitRestTimeUnit = exercise.restTimeUnit;
-                    }
-                    var details = {
-                        exercise_id: exerciseObj,
-                        advance_view: false,
-                    }
-                    if (setData.field1) {
-                        details.field1_value = setData.field1.value;
-                        details.field1_unit = setData.field1.unit;
-                    }
-                    if (setData.field2) {
-                        details.field2_value = setData.field2.value;
-                        details.field2_unit = setData.field2.unit;
-                    }
-                    if (setData.field3) {
-                        details.field3_value = setData.field3.value;
-                        details.field3_unit = setData.field3.unit;
-                    }
-                    exercisesDetails.push(details);
-                }
-            });
-            if (circuitSets) {
-                formData.circuit_sets = circuitSets;
-            }
-            if (circuitRestTime) {
-                formData.circuit_rest_time = circuitRestTime;
-                formData.circuit_rest_time_unit = circuitRestTimeUnit;
-            }
-            formData.workout_circuit = exercisesDetails;
-            formData.workout_type = data.subType;
-        }
-        console.log('formData => ', formData);
         return formData;
     }
 }
@@ -368,7 +140,7 @@ const mapStateToProps = (state) => {
     return {
         loading: userScheduleWorkouts.get('loading'),
         error: userScheduleWorkouts.get('error'),
-        exercisesList: userScheduleWorkouts.get('exercises'),
+        exercises: userScheduleWorkouts.get('exercises'),
     };
 }
 
@@ -446,7 +218,6 @@ class WorkoutExerciseSingleView extends Component {
                             exercise={exercise}
                             exerciseObj={exerciseObj}
                             handleWholeExeDelete={handleWholeExeDelete}
-                            handleFillFormForEdit={handleFillFormForEdit}
                         />
                     }
                 </div>
@@ -461,7 +232,6 @@ class WorkoutExerciseSupersetView extends Component {
             exercises,
             handleWholeExeDelete,
             exerciseObj,
-            handleFillFormForEdit,
         } = this.props;
         return (
             <div className="workout-exercise-head-view-wrapper">
@@ -484,7 +254,7 @@ class WorkoutExerciseSupersetView extends Component {
                                 </div>
                             }
                             <div className="workout-exercise-head-view-edit">
-                                <button type="button" onClick={() => handleFillFormForEdit(exerciseObj)}>
+                                <button type="button">
                                     <FaPencil />
                                 </button>
                             </div>
@@ -566,7 +336,6 @@ class WorkoutExerciseCircuitView extends Component {
             handleWholeExeDelete,
             handleSingleExeDelete,
             exerciseObj,
-            handleFillFormForEdit,
         } = this.props;
         return (
             <div className="workout-exercise-head-view-wrapper">
@@ -589,7 +358,7 @@ class WorkoutExerciseCircuitView extends Component {
                                 </div>
                             }
                             <div className="workout-exercise-head-view-edit">
-                                <button type="button" onClick={() => handleFillFormForEdit(exerciseObj)}>
+                                <button type="button">
                                     <FaPencil />
                                 </button>
                             </div>
@@ -684,7 +453,6 @@ class WorkoutExerciseSingleAdvanceView extends Component {
             exercise,
             handleWholeExeDelete,
             exerciseObj,
-            handleFillFormForEdit,
         } = this.props;
         const { show } = this.state;
         return (
@@ -754,7 +522,7 @@ class WorkoutExerciseSingleAdvanceView extends Component {
                         </div>
                     }
                     <div className="workout-exercise-head-view-edit">
-                        <button type="button" onClick={() => handleFillFormForEdit(exerciseObj)}>
+                        <button type="button">
                             <FaPencil />
                         </button>
                     </div>

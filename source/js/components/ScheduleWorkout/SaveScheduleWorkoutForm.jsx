@@ -10,19 +10,25 @@ import WorkoutTypeSingleCard from './WorkoutTypeSingleCard';
 import WorkoutTypeSupersetCard from './WorkoutTypeSupersetCard';
 import WorkoutTypeCircuitCard from './WorkoutTypeCircuitCard';
 import { required } from '../../formValidation/validationRules';
+import { changeUsersWorkoutFormAction } from '../../actions/userScheduleWorkouts';
 
 class SaveScheduleWorkoutForm extends Component {
     render() {
         const {
             handleSubmit,
             selectedWorkoutType,
-            reset,
+            workoutFormAction,
         } = this.props;
         return (
             <div className="add-workout-form">
                 <form onSubmit={handleSubmit}>
                     <div className="select-workout-type-wrapper">
-                        <strong>Add Exercise</strong>
+                        {workoutFormAction && workoutFormAction === 'add' &&
+                            <strong>Add Exercise</strong>
+                        }
+                        {workoutFormAction && workoutFormAction === 'edit' &&
+                            <strong>Update Exercise</strong>
+                        }
                         <Field
                             id="workout_type"
                             name="workout_type"
@@ -52,10 +58,16 @@ class SaveScheduleWorkoutForm extends Component {
                         }
                     </div>
                     <button type="submit" className="add-workout-form-btm-btn">Save</button>
-                    <button type="button" className="add-workout-form-btm-btn" onClick={reset}>Reset</button>
+                    <button type="button" className="add-workout-form-btm-btn" onClick={this.handleResetForm}>Reset</button>
                 </form>
             </div>
         );
+    }
+
+    handleResetForm = () => {
+        const { dispatch, reset } = this.props;
+        dispatch(changeUsersWorkoutFormAction('add'));
+        reset();
     }
 }
 
@@ -74,6 +86,7 @@ const mapStateToProps = (state) => {
         singleSets: selector(state, 'single_sets'),
         exercises: userScheduleWorkouts.get('exercises'),
         exerciseMeasurements: userScheduleWorkouts.get('exerciseMeasurements'),
+        workoutFormAction: userScheduleWorkouts.get('workoutFormAction'),
     };
 }
 

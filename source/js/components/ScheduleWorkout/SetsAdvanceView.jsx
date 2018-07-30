@@ -26,73 +26,76 @@ class SetsAdvanceView extends Component {
             circuit_sets,
             fields,
             index,
+            workoutFormAction,
         } = this.props;
-        if (workout_type === SCHEDULED_WORKOUT_TYPE_EXERCISE) {
-            fields.removeAll();
-            if (workout_single && workout_single.length === 1 && workout_single[0].sets) {
-                for (let i = 0; i < workout_single[0].sets; i++) {
-                    var obj = {};
-                    if (workout_single[0].field1_value) {
-                        obj.field1_value = workout_single[0].field1_value;
-                        obj.field1_unit = workout_single[0].field1_unit;
+        if (workoutFormAction === 'add') {
+            if (workout_type === SCHEDULED_WORKOUT_TYPE_EXERCISE) {
+                fields.removeAll();
+                if (workout_single && workout_single.length === 1 && workout_single[0].sets) {
+                    for (let i = 0; i < workout_single[0].sets; i++) {
+                        var obj = {};
+                        if (workout_single[0].field1_value) {
+                            obj.field1_value = workout_single[0].field1_value;
+                            obj.field1_unit = workout_single[0].field1_unit;
+                        }
+                        if (workout_single[0].field2_value) {
+                            obj.field2_value = workout_single[0].field2_value;
+                            obj.field2_unit = workout_single[0].field2_unit;
+                        }
+                        if (workout_single[0].field3_value) {
+                            obj.field3_value = workout_single[0].field3_value;
+                            obj.field3_unit = workout_single[0].field3_unit;
+                        }
+                        if (workout_single[0].rest_time && i < (workout_single[0].sets - 1)) {
+                            obj.rest_time = workout_single[0].rest_time;
+                            obj.rest_time = workout_single[0].rest_time;
+                        }
+                        fields.push(obj);
                     }
-                    if (workout_single[0].field2_value) {
-                        obj.field2_value = workout_single[0].field2_value;
-                        obj.field2_unit = workout_single[0].field2_unit;
-                    }
-                    if (workout_single[0].field3_value) {
-                        obj.field3_value = workout_single[0].field3_value;
-                        obj.field3_unit = workout_single[0].field3_unit;
-                    }
-                    if (workout_single[0].rest_time && i < (workout_single[0].sets - 1)) {
-                        obj.rest_time = workout_single[0].rest_time;
-                        obj.rest_time = workout_single[0].rest_time;
-                    }
-                    fields.push(obj);
+                } else {
+                    fields.push({});
                 }
-            } else {
-                fields.push({});
-            }
-        } else if (workout_type === SCHEDULED_WORKOUT_TYPE_SUPERSET) {
-            fields.removeAll();
-            if (workout_superset && superset_sets) {
-                var o = workout_superset[index];
-                for (let i = 0; i < superset_sets; i++) {
-                    var obj = {};
-                    if (o.field1_value) {
-                        obj.field1_value = o.field1_value;
-                        obj.field1_unit = o.field1_unit;
+            } else if (workout_type === SCHEDULED_WORKOUT_TYPE_SUPERSET) {
+                fields.removeAll();
+                if (workout_superset && superset_sets) {
+                    var o = workout_superset[index];
+                    for (let i = 0; i < superset_sets; i++) {
+                        var obj = {};
+                        if (o.field1_value) {
+                            obj.field1_value = o.field1_value;
+                            obj.field1_unit = o.field1_unit;
+                        }
+                        if (o.field2_value) {
+                            obj.field2_value = o.field2_value;
+                            obj.field2_unit = o.field2_unit;
+                        }
+                        if (o.field3_value) {
+                            obj.field3_value = o.field3_value;
+                            obj.field3_unit = o.field3_unit;
+                        }
+                        fields.push(obj);
                     }
-                    if (o.field2_value) {
-                        obj.field2_value = o.field2_value;
-                        obj.field2_unit = o.field2_unit;
-                    }
-                    if (o.field3_value) {
-                        obj.field3_value = o.field3_value;
-                        obj.field3_unit = o.field3_unit;
-                    }
-                    fields.push(obj);
                 }
-            }
-        } else if (workout_type === SCHEDULED_WORKOUT_TYPE_CIRCUIT) {
-            fields.removeAll();
-            if (workout_circuit && circuit_sets) {
-                var o = workout_circuit[index];
-                for (let i = 0; i < circuit_sets; i++) {
-                    var obj = {};
-                    if (o.field1_value) {
-                        obj.field1_value = o.field1_value;
-                        obj.field1_unit = o.field1_unit;
+            } else if (workout_type === SCHEDULED_WORKOUT_TYPE_CIRCUIT) {
+                fields.removeAll();
+                if (workout_circuit && circuit_sets) {
+                    var o = workout_circuit[index];
+                    for (let i = 0; i < circuit_sets; i++) {
+                        var obj = {};
+                        if (o.field1_value) {
+                            obj.field1_value = o.field1_value;
+                            obj.field1_unit = o.field1_unit;
+                        }
+                        if (o.field2_value) {
+                            obj.field2_value = o.field2_value;
+                            obj.field2_unit = o.field2_unit;
+                        }
+                        if (o.field3_value) {
+                            obj.field3_value = o.field3_value;
+                            obj.field3_unit = o.field3_unit;
+                        }
+                        fields.push(obj);
                     }
-                    if (o.field2_value) {
-                        obj.field2_value = o.field2_value;
-                        obj.field2_unit = o.field2_unit;
-                    }
-                    if (o.field3_value) {
-                        obj.field3_value = o.field3_value;
-                        obj.field3_unit = o.field3_unit;
-                    }
-                    fields.push(obj);
                 }
             }
         }
@@ -257,6 +260,7 @@ class SetsAdvanceView extends Component {
 const selector = formValueSelector('save_schedule_workout_form');
 
 const mapStateToProps = (state) => {
+    const { userScheduleWorkouts } = state;
     return {
         workout_type: selector(state, 'workout_type'),
         workout_single: selector(state, 'workout_single'),
@@ -264,6 +268,7 @@ const mapStateToProps = (state) => {
         superset_sets: selector(state, 'superset_sets'),
         workout_circuit: selector(state, 'workout_circuit'),
         circuit_sets: selector(state, 'circuit_sets'),
+        workoutFormAction: userScheduleWorkouts.get('workoutFormAction'),
     };
 }
 
