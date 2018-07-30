@@ -12,7 +12,7 @@ import {
 import noImg from 'img/common/no-img.png'
 import _ from "lodash";
 import { deleteUserWholeExerciseRequest, deleteUserSingleExerciseRequest, changeUsersWorkoutFormAction } from '../../actions/userScheduleWorkouts';
-import { te, ts, prepareExerciseOptions } from '../../helpers/funs';
+import { te, ts, prepareExerciseOptions, focusToControl } from '../../helpers/funs';
 import { FaPencil } from "react-icons/lib/fa";
 
 class WorkoutExercisesView extends Component {
@@ -114,9 +114,9 @@ class WorkoutExercisesView extends Component {
             } else if (data.subType && data.subType === SCHEDULED_WORKOUT_TYPE_CIRCUIT) {
                 formData = this.prepareFormDataForCircuitExercise(data);
             }
-            console.log('formData => ', formData);
-            dispatch(initialize('save_schedule_workout_form', formData));
-            dispatch(changeUsersWorkoutFormAction('edit', data._id));
+            focusToControl('#edit-workout-form');
+            dispatch(initialize('update_schedule_workout_form', formData));
+            dispatch(changeUsersWorkoutFormAction('edit', data));
         }
     }
 
@@ -125,30 +125,53 @@ class WorkoutExercisesView extends Component {
         var exerciseOptions = prepareExerciseOptions(exercisesList);
         let formData = {};
         let exercise = null;
-        console.log('data => ', data);
         if (data.exercises && data.exercises.length === 1 && data.exercises[0]) {
             exercise = data.exercises[0];
             var exerciseId = exercise.exercises._id;
             var exerciseObj = _.find(exerciseOptions, ['value', exerciseId]);
             if (exercise.differentSets) {
                 var setDetails = [];
+                var simpleViewField1Value = null;
+                var simpleViewField1Unit = null;
+                var simpleViewField2Value = null;
+                var simpleViewField2Unit = null;
+                var simpleViewField3Value = null;
+                var simpleViewField3Unit = null;
+                var simpleViewRestTime = null;
+                var simpleViewRestTimeUnit = null;
                 _.forEach(exercise.setsDetails, (o, i) => {
                     var detail = {}
                     if (o.field1) {
                         detail.field1_value = o.field1.value;
                         detail.field1_unit = o.field1.unit;
+                        if (!simpleViewField1Value) {
+                            simpleViewField1Value = o.field1.value;
+                            simpleViewField1Unit = o.field1.unit;
+                        }
                     }
                     if (o.field2) {
                         detail.field2_value = o.field2.value;
                         detail.field2_unit = o.field2.unit;
+                        if (!simpleViewField2Value) {
+                            simpleViewField2Value = o.field2.value;
+                            simpleViewField2Unit = o.field2.unit;
+                        }
                     }
                     if (o.field3) {
                         detail.field3_value = o.field3.value;
                         detail.field3_unit = o.field3.unit;
+                        if (!simpleViewField3Value) {
+                            simpleViewField3Value = o.field3.value;
+                            simpleViewField3Unit = o.field3.unit;
+                        }
                     }
                     if (o.restTime) {
                         detail.rest_time = o.restTime;
                         detail.rest_time_unit = o.restTimeUnit;
+                        if (!simpleViewRestTime) {
+                            simpleViewRestTime = o.restTime;
+                            simpleViewRestTimeUnit = o.restTimeUnit;
+                        }
                     }
                     setDetails.push(detail);
                 });
@@ -157,6 +180,22 @@ class WorkoutExercisesView extends Component {
                     advance_view: true,
                     sets: exercise.sets,
                     advance_details: setDetails,
+                }
+                if (simpleViewField1Value) {
+                    details.field1_value = simpleViewField1Value;
+                    details.field1_unit = simpleViewField1Unit;
+                }
+                if (simpleViewField2Value) {
+                    details.field2_value = simpleViewField2Value;
+                    details.field2_unit = simpleViewField2Unit;
+                }
+                if (simpleViewField3Value) {
+                    details.field3_value = simpleViewField3Value;
+                    details.field3_unit = simpleViewField3Unit;
+                }
+                if (simpleViewRestTime) {
+                    details.rest_time = simpleViewRestTime;
+                    details.rest_time_unit = simpleViewRestTimeUnit;
                 }
                 formData.workout_single = [details];
             } else {
@@ -184,9 +223,7 @@ class WorkoutExercisesView extends Component {
                 }
                 formData.workout_single = [details];
             }
-            formData.workout_type = data.subType;
         }
-        console.log('formData => ', formData);
         return formData;
     }
 
@@ -194,7 +231,6 @@ class WorkoutExercisesView extends Component {
         const { exercisesList } = this.props;
         var exerciseOptions = prepareExerciseOptions(exercisesList);
         let formData = {};
-        console.log('data => ', data);
         if (data.exercises) {
             let exercisesDetails = [];
             let superSetSets = null;
@@ -205,19 +241,37 @@ class WorkoutExercisesView extends Component {
                 var exerciseObj = _.find(exerciseOptions, ['value', exerciseId]);
                 if (exercise.differentSets) {
                     var setDetails = [];
+                    var simpleViewField1Value = null;
+                    var simpleViewField1Unit = null;
+                    var simpleViewField2Value = null;
+                    var simpleViewField2Unit = null;
+                    var simpleViewField3Value = null;
+                    var simpleViewField3Unit = null;
                     _.forEach(exercise.setsDetails, (o, i) => {
                         var detail = {}
                         if (o.field1) {
                             detail.field1_value = o.field1.value;
                             detail.field1_unit = o.field1.unit;
+                            if (!simpleViewField1Value) {
+                                simpleViewField1Value = o.field1.value;
+                                simpleViewField1Unit = o.field1.unit;
+                            }
                         }
                         if (o.field2) {
                             detail.field2_value = o.field2.value;
                             detail.field2_unit = o.field2.unit;
+                            if (!simpleViewField2Value) {
+                                simpleViewField2Value = o.field2.value;
+                                simpleViewField2Unit = o.field2.unit;
+                            }
                         }
                         if (o.field3) {
                             detail.field3_value = o.field3.value;
                             detail.field3_unit = o.field3.unit;
+                            if (!simpleViewField3Value) {
+                                simpleViewField3Value = o.field3.value;
+                                simpleViewField3Unit = o.field3.unit;
+                            }
                         }
                         setDetails.push(detail);
                     });
@@ -232,6 +286,18 @@ class WorkoutExercisesView extends Component {
                         exercise_id: exerciseObj,
                         advance_view: true,
                         advance_details: setDetails,
+                    }
+                    if (simpleViewField1Value) {
+                        details.field1_value = simpleViewField1Value;
+                        details.field1_unit = simpleViewField1Unit;
+                    }
+                    if (simpleViewField2Value) {
+                        details.field2_value = simpleViewField2Value;
+                        details.field2_unit = simpleViewField2Unit;
+                    }
+                    if (simpleViewField3Value) {
+                        details.field3_value = simpleViewField3Value;
+                        details.field3_unit = simpleViewField3Unit;
                     }
                     exercisesDetails.push(details);
                 } else {
@@ -270,9 +336,7 @@ class WorkoutExercisesView extends Component {
                 formData.superset_rest_time_unit = superSetRestTimeUnit;
             }
             formData.workout_superset = exercisesDetails;
-            formData.workout_type = data.subType;
         }
-        console.log('formData => ', formData);
         return formData;
     }
 
@@ -280,7 +344,6 @@ class WorkoutExercisesView extends Component {
         const { exercisesList } = this.props;
         var exerciseOptions = prepareExerciseOptions(exercisesList);
         let formData = {};
-        console.log('data => ', data);
         if (data.exercises) {
             let exercisesDetails = [];
             let circuitSets = null;
@@ -291,19 +354,37 @@ class WorkoutExercisesView extends Component {
                 var exerciseObj = _.find(exerciseOptions, ['value', exerciseId]);
                 if (exercise.differentSets) {
                     var setDetails = [];
+                    var simpleViewField1Value = null;
+                    var simpleViewField1Unit = null;
+                    var simpleViewField2Value = null;
+                    var simpleViewField2Unit = null;
+                    var simpleViewField3Value = null;
+                    var simpleViewField3Unit = null;
                     _.forEach(exercise.setsDetails, (o, i) => {
                         var detail = {}
                         if (o.field1) {
                             detail.field1_value = o.field1.value;
                             detail.field1_unit = o.field1.unit;
+                            if (!simpleViewField1Value) {
+                                simpleViewField1Value = o.field1.value;
+                                simpleViewField1Unit = o.field1.unit;
+                            }
                         }
                         if (o.field2) {
                             detail.field2_value = o.field2.value;
                             detail.field2_unit = o.field2.unit;
+                            if (!simpleViewField2Value) {
+                                simpleViewField2Value = o.field2.value;
+                                simpleViewField2Unit = o.field2.unit;
+                            }
                         }
                         if (o.field3) {
                             detail.field3_value = o.field3.value;
                             detail.field3_unit = o.field3.unit;
+                            if (!simpleViewField3Value) {
+                                simpleViewField3Value = o.field3.value;
+                                simpleViewField3Unit = o.field3.unit;
+                            }
                         }
                         setDetails.push(detail);
                     });
@@ -318,6 +399,18 @@ class WorkoutExercisesView extends Component {
                         exercise_id: exerciseObj,
                         advance_view: true,
                         advance_details: setDetails,
+                    }
+                    if (simpleViewField1Value) {
+                        details.field1_value = simpleViewField1Value;
+                        details.field1_unit = simpleViewField1Unit;
+                    }
+                    if (simpleViewField2Value) {
+                        details.field2_value = simpleViewField2Value;
+                        details.field2_unit = simpleViewField2Unit;
+                    }
+                    if (simpleViewField3Value) {
+                        details.field3_value = simpleViewField3Value;
+                        details.field3_unit = simpleViewField3Unit;
                     }
                     exercisesDetails.push(details);
                 } else {
@@ -356,9 +449,7 @@ class WorkoutExercisesView extends Component {
                 formData.circuit_rest_time_unit = circuitRestTimeUnit;
             }
             formData.workout_circuit = exercisesDetails;
-            formData.workout_type = data.subType;
         }
-        console.log('formData => ', formData);
         return formData;
     }
 }

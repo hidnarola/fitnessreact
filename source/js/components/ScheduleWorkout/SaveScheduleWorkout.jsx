@@ -7,7 +7,9 @@ import {
     getExercisesNameRequest,
     getExerciseMeasurementRequest,
     addUsersWorkoutScheduleRequest,
-    updateUserWorkoutTitleRequest
+    updateUserWorkoutTitleRequest,
+    changeUsersWorkoutFormAction,
+    updateUsersWorkoutScheduleRequest
 } from '../../actions/userScheduleWorkouts';
 import { routeCodes } from '../../constants/routes';
 import { te, prepareFieldsOptions, ts } from '../../helpers/funs';
@@ -26,6 +28,7 @@ import {
 import SaveScheduleWorkoutForm from './SaveScheduleWorkoutForm';
 import cns from "classnames";
 import WorkoutExercisesView from './WorkoutExercisesView';
+import UpdateScheduleWorkoutForm from './UpdateScheduleWorkoutForm';
 
 class SaveScheduleWorkout extends Component {
     constructor(props) {
@@ -34,6 +37,7 @@ class SaveScheduleWorkout extends Component {
             loadWorkoutInit: false,
             saveWorkoutActionInit: false,
             updateTitleActionInit: false,
+            updateWorkoutActionInit: false,
         }
     }
 
@@ -52,6 +56,7 @@ class SaveScheduleWorkout extends Component {
         const {
             workout,
             selectedWorkoutMainType,
+            workoutFormAction,
         } = this.props;
         return (
             <div className="fitness-body">
@@ -100,8 +105,17 @@ class SaveScheduleWorkout extends Component {
                                                         exercises={workout.cooldown}
                                                     />
                                                 }
-                                                <div className="add-workout-form-wrapper">
-                                                    <SaveScheduleWorkoutForm onSubmit={this.handleSubmit} />
+                                                {workoutFormAction && workoutFormAction === 'add' &&
+                                                    <div className="add-workout-form-wrapper">
+                                                        <SaveScheduleWorkoutForm onSubmit={this.handleSubmit} />
+                                                    </div>
+                                                }
+                                                <div id="edit-workout-form">
+                                                    {workoutFormAction && workoutFormAction === 'edit' &&
+                                                        <div className="add-workout-form-wrapper">
+                                                            <UpdateScheduleWorkoutForm onSubmit={this.handleUpdateSubmit} />
+                                                        </div>
+                                                    }
                                                 </div>
                                             </div>
                                         }
@@ -129,6 +143,7 @@ class SaveScheduleWorkout extends Component {
             loadWorkoutInit,
             saveWorkoutActionInit,
             updateTitleActionInit,
+            updateWorkoutActionInit,
         } = this.state;
         if (loadWorkoutInit && !loading && workout && Object.keys(workout).length <= 0) {
             this.setState({ loadWorkoutInit: false });
@@ -147,6 +162,16 @@ class SaveScheduleWorkout extends Component {
                 ts('Workout saved successfully!');
             }
             dispatch(reset('save_schedule_workout_form'));
+        }
+        if (updateWorkoutActionInit && !loading) {
+            this.setState({ updateWorkoutActionInit: false });
+            if (error && error.length > 0) {
+                te(error[0]);
+            } else {
+                ts('Workout updated successfully!');
+            }
+            dispatch(reset('update_schedule_workout_form'));
+            dispatch(changeUsersWorkoutFormAction('add', null));
         }
         if (updateTitleActionInit && !loadingTitle) {
             this.setState({ updateTitleActionInit: false });
@@ -183,6 +208,22 @@ class SaveScheduleWorkout extends Component {
         }
         dispatch(addUsersWorkoutScheduleRequest(requestData));
         this.setState({ saveWorkoutActionInit: true });
+    }
+
+    handleUpdateSubmit = (data) => {
+        const { dispatch, selectedWorkoutForEdit } = this.props;
+        var workoutType = (selectedWorkoutForEdit && selectedWorkoutForEdit.subType) ? selectedWorkoutForEdit.subType : null;
+        let requestData = null;
+        if (workoutType && workoutType === SCHEDULED_WORKOUT_TYPE_EXERCISE) {
+            requestData = this.prepareRequestDataForSingleWorkout(data);
+        } else if (workoutType && workoutType === SCHEDULED_WORKOUT_TYPE_SUPERSET) {
+            requestData = this.prepareRequestDataForSupersetWorkout(data);
+        } else if (workoutType && workoutType === SCHEDULED_WORKOUT_TYPE_CIRCUIT) {
+            requestData = this.prepareRequestDataForCircuitWorkout(data);
+        }
+        requestData._id = selectedWorkoutForEdit._id;
+        dispatch(updateUsersWorkoutScheduleRequest(requestData));
+        this.setState({ updateWorkoutActionInit: true });
     }
 
     handleWorkoutMainTypeChange = (mainType) => {
@@ -598,6 +639,8 @@ const mapStateToProps = (state) => {
         exerciseMeasurements: userScheduleWorkouts.get('exerciseMeasurements'),
         loadingTitle: userScheduleWorkouts.get('loadingTitle'),
         errorTitle: userScheduleWorkouts.get('errorTitle'),
+        workoutFormAction: userScheduleWorkouts.get('workoutFormAction'),
+        selectedWorkoutForEdit: userScheduleWorkouts.get('selectedWorkoutForEdit'),
     };
 }
 

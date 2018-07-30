@@ -43,6 +43,11 @@ function addUsersWorkoutSchedule(requestData) {
     return postFormData(requestUrl + '/workout', requestData, headers);
 }
 
+function updateUsersWorkoutSchedule(requestData) {
+    let headers = extraUserHeaders();
+    return putFormData(requestUrl + '/workout', requestData, headers);
+}
+
 function pasteUsersWorkoutSchedule(requestData) {
     let headers = extraUserHeaders();
     return postFormData(requestUrl + '/copy', requestData, headers);
@@ -53,16 +58,6 @@ function changeUsersWorkoutSchedule(_id, requestData) {
     return putFormData(requestUrl + '/' + _id, requestData, headers);
 }
 
-// function deleteUsersWorkoutSchedule(_id) {
-//     let headers = extraUserHeaders();
-//     var options = {
-//         method: 'DELETE',
-//         headers: headers,
-//     }
-
-//     return fetchResource(requestUrl + '/' + _id, options);
-// }
-
 function deleteUsersBulkWorkoutSchedule(requestData) {
     let headers = extraUserHeaders();
     return postFormData(requestUrl + '/workout_delete', requestData, headers);
@@ -72,15 +67,6 @@ function completeUsersBulkWorkoutSchedule(requestData) {
     let headers = extraUserHeaders();
     return postFormData(requestUrl + '/bulk_complete', requestData, headers);
 }
-
-// function changeUsersWorkoutScheduleComplete(_id, isCompleted) {
-//     let headers = extraUserHeaders();
-//     var requestData = {
-//         parentId: _id,
-//         isCompleted: isCompleted,
-//     }
-//     return putFormData(requestUrl + '/complete_all', requestData, headers);
-// }
 
 function getProgramsName() {
     let headers = extraUserHeaders();
@@ -123,12 +109,11 @@ export default {
     getExerciseMeasurement,
     getUsersWorkoutSchedule,
     addUsersWorkoutSchedule,
+    updateUsersWorkoutSchedule,
     pasteUsersWorkoutSchedule,
     changeUsersWorkoutSchedule,
-    // deleteUsersWorkoutSchedule,
     deleteUsersBulkWorkoutSchedule,
     completeUsersBulkWorkoutSchedule,
-    // changeUsersWorkoutScheduleComplete,
     getProgramsName,
     userAssignProgram,
     addUserWorkoutTitle,

@@ -10,12 +10,6 @@ import {
     addUsersWorkoutScheduleSuccess,
     addUsersWorkoutScheduleError,
     ADD_USERS_WORKOUT_SCHEDULE_REQUEST,
-    // deleteUsersWorkoutScheduleError,
-    // deleteUsersWorkoutScheduleSuccess,
-    // DELETE_USERS_WORKOUT_SCHEDULE_REQUEST,
-    // changeUsersWorkoutScheduleCompleteSuccess,
-    // changeUsersWorkoutScheduleCompleteError,
-    // CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_REQUEST,
     changeUsersWorkoutScheduleError,
     changeUsersWorkoutScheduleSuccess,
     CHANGE_USERS_WORKOUT_SCHEDULE_REQUEST,
@@ -51,7 +45,10 @@ import {
     deleteUserSingleExerciseError,
     pasteUsersWorkoutScheduleSuccess,
     pasteUsersWorkoutScheduleError,
-    PASTE_USERS_WORKOUT_SCHEDULE_REQUEST
+    PASTE_USERS_WORKOUT_SCHEDULE_REQUEST,
+    updateUsersWorkoutScheduleSuccess,
+    updateUsersWorkoutScheduleError,
+    UPDATE_USERS_WORKOUT_SCHEDULE_REQUEST
 } from '../actions/userScheduleWorkouts';
 
 function getUsersWorkoutSchedulesByMonthData() {
@@ -112,6 +109,18 @@ function addUsersWorkoutScheduleData() {
     }
 }
 
+function updateUsersWorkoutScheduleData() {
+    return function* (action) {
+        try {
+            let requestData = action.requestData;
+            const data = yield call(() => api.updateUsersWorkoutSchedule(requestData));
+            yield put(updateUsersWorkoutScheduleSuccess(data));
+        } catch (error) {
+            yield put(updateUsersWorkoutScheduleError(error));
+        }
+    }
+}
+
 function pasteUsersWorkoutScheduleData() {
     return function* (action) {
         try {
@@ -137,18 +146,6 @@ function changeUsersWorkoutScheduleData() {
     }
 }
 
-// function deleteUsersWorkoutScheduleData() {
-//     return function* (action) {
-//         try {
-//             let _id = action._id;
-//             const data = yield call(() => api.deleteUsersWorkoutSchedule(_id));
-//             yield put(deleteUsersWorkoutScheduleSuccess(data));
-//         } catch (error) {
-//             yield put(deleteUsersWorkoutScheduleError(error));
-//         }
-//     }
-// }
-
 function deleteUsersBulkWorkoutScheduleData() {
     return function* (action) {
         try {
@@ -172,19 +169,6 @@ function completeUsersBulkWorkoutScheduleData() {
         }
     }
 }
-
-// function changeUsersWorkoutScheduleCompleteData() {
-//     return function* (action) {
-//         try {
-//             let _id = action._id;
-//             let isCompleted = action.isCompleted;
-//             const data = yield call(() => api.changeUsersWorkoutScheduleComplete(_id, isCompleted));
-//             yield put(changeUsersWorkoutScheduleCompleteSuccess(data));
-//         } catch (error) {
-//             yield put(changeUsersWorkoutScheduleCompleteError(error));
-//         }
-//     }
-// }
 
 function userAssignProgramData() {
     return function* (action) {
@@ -263,12 +247,11 @@ export function* watchUsersWorkoutSchedulesData() {
     yield takeLatest(GET_USERS_WORKOUT_SCHEDULE_REQUEST, getUsersWorkoutScheduleData());
     yield takeLatest(GET_EXERCISES_NAME_REQUEST, getExercisesName());
     yield takeLatest(ADD_USERS_WORKOUT_SCHEDULE_REQUEST, addUsersWorkoutScheduleData());
+    yield takeLatest(UPDATE_USERS_WORKOUT_SCHEDULE_REQUEST, updateUsersWorkoutScheduleData());
     yield takeLatest(PASTE_USERS_WORKOUT_SCHEDULE_REQUEST, pasteUsersWorkoutScheduleData());
     yield takeLatest(CHANGE_USERS_WORKOUT_SCHEDULE_REQUEST, changeUsersWorkoutScheduleData());
-    // yield takeLatest(DELETE_USERS_WORKOUT_SCHEDULE_REQUEST, deleteUsersWorkoutScheduleData());
     yield takeLatest(DELETE_USERS_BULK_WORKOUT_SCHEDULE_REQUEST, deleteUsersBulkWorkoutScheduleData());
     yield takeLatest(COMPLETE_USERS_BULK_WORKOUT_SCHEDULE_REQUEST, completeUsersBulkWorkoutScheduleData());
-    // yield takeLatest(CHANGE_USERS_WORKOUT_SCHEDULE_COMPLETE_REQUEST, changeUsersWorkoutScheduleCompleteData());
     yield takeLatest(GET_PROGRAMS_NAME_REQUEST, getProgramsName());
     yield takeLatest(USER_ASSIGN_PROGRAM_REQUEST, userAssignProgramData());
     yield takeLatest(ADD_USER_WORKOUT_TITLE_REQUEST, addUserWorkoutTitleData());

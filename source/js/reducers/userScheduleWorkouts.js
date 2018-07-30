@@ -49,6 +49,9 @@ import {
     PASTE_USERS_WORKOUT_SCHEDULE_SUCCESS,
     PASTE_USERS_WORKOUT_SCHEDULE_ERROR,
     CHANGE_USERS_WORKOUT_FORM_ACTION,
+    UPDATE_USERS_WORKOUT_SCHEDULE_REQUEST,
+    UPDATE_USERS_WORKOUT_SCHEDULE_SUCCESS,
+    UPDATE_USERS_WORKOUT_SCHEDULE_ERROR,
 } from "../actions/userScheduleWorkouts";
 import { VALIDATION_FAILURE_STATUS, SCHEDULED_WORKOUT_TYPE_WARMUP } from "../constants/consts";
 import { generateValidationErrorMsgArr } from "../helpers/funs";
@@ -72,7 +75,7 @@ const initialState = Map({
     selectedWorkoutMainType: SCHEDULED_WORKOUT_TYPE_WARMUP,
     exerciseMeasurements: [],
     workoutFormAction: 'add',
-    selectedWorkoutIdForEdit: null,
+    selectedWorkoutForEdit: null,
 });
 
 const actionMap = {
@@ -202,6 +205,38 @@ const actionMap = {
         return state.merge(Map(newState));
     },
     [ADD_USERS_WORKOUT_SCHEDULE_ERROR]: (state, action) => {
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
+        }
+        return state.merge(Map({
+            loading: false,
+            error: error,
+        }));
+    },
+    [UPDATE_USERS_WORKOUT_SCHEDULE_REQUEST]: (state, action) => {
+        return state.merge(Map({
+            loading: true,
+            error: [],
+        }));
+    },
+    [UPDATE_USERS_WORKOUT_SCHEDULE_SUCCESS]: (state, action) => {
+        var newState = {
+            loading: false,
+        };
+        if (action.data.status === 1) {
+            newState.workout = action.data.workouts;
+        } else {
+            var msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
+            newState.error = [msg];
+        }
+        return state.merge(Map(newState));
+    },
+    [UPDATE_USERS_WORKOUT_SCHEDULE_ERROR]: (state, action) => {
         let error = [];
         if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
             error = generateValidationErrorMsgArr(action.error.response.message);
@@ -528,7 +563,7 @@ const actionMap = {
     [CHANGE_USERS_WORKOUT_FORM_ACTION]: (state, action) => {
         return state.merge(Map({
             workoutFormAction: action.action,
-            selectedWorkoutIdForEdit: action._id,
+            selectedWorkoutForEdit: action.data,
         }));
     },
 }

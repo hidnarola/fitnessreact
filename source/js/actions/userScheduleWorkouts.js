@@ -18,6 +18,10 @@ export const ADD_USERS_WORKOUT_SCHEDULE_REQUEST = 'ADD_USERS_WORKOUT_SCHEDULE_RE
 export const ADD_USERS_WORKOUT_SCHEDULE_SUCCESS = 'ADD_USERS_WORKOUT_SCHEDULE_SUCCESS';
 export const ADD_USERS_WORKOUT_SCHEDULE_ERROR = 'ADD_USERS_WORKOUT_SCHEDULE_ERROR';
 
+export const UPDATE_USERS_WORKOUT_SCHEDULE_REQUEST = 'UPDATE_USERS_WORKOUT_SCHEDULE_REQUEST';
+export const UPDATE_USERS_WORKOUT_SCHEDULE_SUCCESS = 'UPDATE_USERS_WORKOUT_SCHEDULE_SUCCESS';
+export const UPDATE_USERS_WORKOUT_SCHEDULE_ERROR = 'UPDATE_USERS_WORKOUT_SCHEDULE_ERROR';
+
 export const CHANGE_USERS_WORKOUT_SCHEDULE_REQUEST = 'CHANGE_USERS_WORKOUT_SCHEDULE_REQUEST';
 export const CHANGE_USERS_WORKOUT_SCHEDULE_SUCCESS = 'CHANGE_USERS_WORKOUT_SCHEDULE_SUCCESS';
 export const CHANGE_USERS_WORKOUT_SCHEDULE_ERROR = 'CHANGE_USERS_WORKOUT_SCHEDULE_ERROR';
@@ -158,6 +162,27 @@ export function addUsersWorkoutScheduleSuccess(data) {
 export function addUsersWorkoutScheduleError(error) {
     return {
         type: ADD_USERS_WORKOUT_SCHEDULE_ERROR,
+        error,
+    }
+}
+
+export function updateUsersWorkoutScheduleRequest(requestData) {
+    return {
+        type: UPDATE_USERS_WORKOUT_SCHEDULE_REQUEST,
+        requestData,
+    }
+}
+
+export function updateUsersWorkoutScheduleSuccess(data) {
+    return {
+        type: UPDATE_USERS_WORKOUT_SCHEDULE_SUCCESS,
+        data,
+    }
+}
+
+export function updateUsersWorkoutScheduleError(error) {
+    return {
+        type: UPDATE_USERS_WORKOUT_SCHEDULE_ERROR,
         error,
     }
 }
@@ -407,10 +432,10 @@ export function deleteUserSingleExerciseError(error) {
     }
 }
 
-export function changeUsersWorkoutFormAction(action = 'add', _id = null) {
+export function changeUsersWorkoutFormAction(action = 'add', data = null) {
     return {
         type: CHANGE_USERS_WORKOUT_FORM_ACTION,
         action,
-        _id,
+        data,
     }
 }
