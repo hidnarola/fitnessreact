@@ -17,18 +17,12 @@ class SaveScheduleWorkoutForm extends Component {
         const {
             handleSubmit,
             selectedWorkoutType,
-            workoutFormAction,
         } = this.props;
         return (
             <div className="add-workout-form">
                 <form onSubmit={handleSubmit}>
                     <div className="select-workout-type-wrapper">
-                        {workoutFormAction && workoutFormAction === 'add' &&
-                            <strong>Add Exercise</strong>
-                        }
-                        {workoutFormAction && workoutFormAction === 'edit' &&
-                            <strong>Update Exercise</strong>
-                        }
+                        <strong>Add Exercise</strong>
                         <Field
                             id="workout_type"
                             name="workout_type"
@@ -86,7 +80,6 @@ const mapStateToProps = (state) => {
         singleSets: selector(state, 'single_sets'),
         exercises: userScheduleWorkouts.get('exercises'),
         exerciseMeasurements: userScheduleWorkouts.get('exerciseMeasurements'),
-        workoutFormAction: userScheduleWorkouts.get('workoutFormAction'),
     };
 }
 

@@ -18,10 +18,8 @@ const max12 = max(12);
 class WorkoutTypeCircuitCard extends Component {
     constructor(props) {
         super(props);
-        if (props.workoutFormAction === 'add') {
-            props.fields.removeAll();
-            props.fields.push({});
-        }
+        props.fields.removeAll();
+        props.fields.push({});
     }
 
     render() {
@@ -227,7 +225,6 @@ const mapStateToProps = (state) => {
         circuitSets: selector(state, 'circuit_sets'),
         exercises: userScheduleWorkouts.get('exercises'),
         exerciseMeasurements: userScheduleWorkouts.get('exerciseMeasurements'),
-        workoutFormAction: userScheduleWorkouts.get('workoutFormAction'),
     };
 }
 
