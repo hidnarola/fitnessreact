@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Field, reduxForm } from "redux-form";
 import { required } from '../../formValidation/validationRules';
 
-class AddWorkoutTitleForm extends Component {
+class AddProgramWorkoutTitleForm extends Component {
     render() {
         const { handleSubmit, onCancel } = this.props;
         return (
@@ -33,11 +33,11 @@ class AddWorkoutTitleForm extends Component {
     }
 }
 
-AddWorkoutTitleForm = reduxForm({
-    form: 'add_workout_title_form',
-})(AddWorkoutTitleForm)
+AddProgramWorkoutTitleForm = reduxForm({
+    form: 'add_program_workout_title_form',
+})(AddProgramWorkoutTitleForm)
 
-export default connect()(AddWorkoutTitleForm);
+export default connect()(AddProgramWorkoutTitleForm);
 
 const TextAreaField = (props) => {
     const { input, meta, wrapperClass, className, placeholder, errorClass } = props;

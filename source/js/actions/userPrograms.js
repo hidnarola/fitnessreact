@@ -6,6 +6,10 @@ export const ADD_USER_PROGRAM_MASTER_REQUEST = 'ADD_USER_PROGRAM_MASTER_REQUEST'
 export const ADD_USER_PROGRAM_MASTER_SUCCESS = 'ADD_USER_PROGRAM_MASTER_SUCCESS';
 export const ADD_USER_PROGRAM_MASTER_ERROR = 'ADD_USER_PROGRAM_MASTER_ERROR';
 
+export const ADD_USER_PROGRAM_WORKOUT_TITLE_REQUEST = 'ADD_USER_PROGRAM_WORKOUT_TITLE_REQUEST';
+export const ADD_USER_PROGRAM_WORKOUT_TITLE_SUCCESS = 'ADD_USER_PROGRAM_WORKOUT_TITLE_SUCCESS';
+export const ADD_USER_PROGRAM_WORKOUT_TITLE_ERROR = 'ADD_USER_PROGRAM_WORKOUT_TITLE_ERROR';
+
 export const GET_USER_PROGRAM_REQUEST = 'GET_USER_PROGRAM_REQUEST';
 export const GET_USER_PROGRAM_SUCCESS = 'GET_USER_PROGRAM_SUCCESS';
 export const GET_USER_PROGRAM_ERROR = 'GET_USER_PROGRAM_ERROR';
@@ -69,6 +73,27 @@ export function addUserProgramMasterSuccess(data) {
 export function addUserProgramMasterError(error) {
     return {
         type: ADD_USER_PROGRAM_MASTER_ERROR,
+        error
+    }
+}
+
+export function addUserProgramWorkoutTitleRequest(requestData) {
+    return {
+        type: ADD_USER_PROGRAM_WORKOUT_TITLE_REQUEST,
+        requestData,
+    }
+}
+
+export function addUserProgramWorkoutTitleSuccess(data) {
+    return {
+        type: ADD_USER_PROGRAM_WORKOUT_TITLE_SUCCESS,
+        data,
+    }
+}
+
+export function addUserProgramWorkoutTitleError(error) {
+    return {
+        type: ADD_USER_PROGRAM_WORKOUT_TITLE_ERROR,
         error
     }
 }

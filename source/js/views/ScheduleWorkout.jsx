@@ -62,7 +62,6 @@ class ScheduleWorkout extends Component {
         var today = moment().startOf('day').utc();
         this.setState({ calendarViewDate: today });
         this.getWorkoutSchedulesByMonth(today);
-        // dispatch(getExercisesNameRequest());
         dispatch(getProgramsNameRequest());
     }
 

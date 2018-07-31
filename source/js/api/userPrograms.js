@@ -51,6 +51,11 @@ function deleteUsersProgramWorkoutSchedule(requestData) {
     return postFormData(requestUrl + '/delete/exercises', requestData, headers);
 }
 
+function addUserProgramWorkoutTitle(requestData) {
+    let headers = extraUserHeaders();
+    return postFormData(requestUrl + '/day', requestData, headers);
+}
+
 export default {
     getUserPrograms,
     getUserProgram,
@@ -59,4 +64,5 @@ export default {
     addUsersProgramWorkoutSchedule,
     changeUsersProgramWorkoutSchedule,
     deleteUsersProgramWorkoutSchedule,
+    addUserProgramWorkoutTitle,
 }

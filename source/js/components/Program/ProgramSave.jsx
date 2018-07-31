@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import FitnessHeader from '../global/FitnessHeader';
 import FitnessNav from '../global/FitnessNav';
-import { getUserProgramRequest, setSelectedDayForProgram, addUsersProgramWorkoutScheduleRequest, copyUserProgramWorkoutSchedule, deleteUsersProgramWorkoutScheduleRequest, selectUsersProgramWorkoutScheduleForEdit } from '../../actions/userPrograms';
+import { getUserProgramRequest, setSelectedDayForProgram, addUsersProgramWorkoutScheduleRequest, copyUserProgramWorkoutSchedule, deleteUsersProgramWorkoutScheduleRequest, selectUsersProgramWorkoutScheduleForEdit, addUserProgramWorkoutTitleRequest } from '../../actions/userPrograms';
 import { routeCodes } from '../../constants/routes';
 import { te, ts } from '../../helpers/funs';
 import _ from "lodash";
@@ -12,6 +12,7 @@ import { NavLink } from "react-router-dom";
 import { getExercisesNameRequest, getProgramsNameRequest } from '../../actions/userScheduleWorkouts';
 import { SCHEDULED_WORKOUT_TYPE_RESTDAY, SCHEDULED_WORKOUT_TYPE_EXERCISE } from '../../constants/consts';
 import cns from "classnames";
+import AddProgramWorkoutTitleForm from './AddProgramWorkoutTitleForm';
 
 class ProgramSave extends Component {
     constructor(props) {
@@ -30,6 +31,8 @@ class ProgramSave extends Component {
             selectedWorkoutIds: [],
             deleteBulkActionAlert: false,
             deleteBulkActionInit: false,
+            showAddWorkoutTitleAlert: false,
+            addWorkoutTitleInit: false,
         }
     }
 
@@ -49,6 +52,7 @@ class ProgramSave extends Component {
             deleteWorkoutAlert,
             deleteWeekAlert,
             deleteBulkActionAlert,
+            showAddWorkoutTitleAlert,
         } = this.state;
         const {
             selectedDay,
@@ -82,7 +86,6 @@ class ProgramSave extends Component {
                                         handleCopy={this.handleCopy}
                                         handleDelete={this.showDeleteConfirmation}
                                         handleSelectedForBulk={this.handleSelectedForBulk}
-                                        handleSelectWorkoutForEdit={this.handleSelectWorkoutForEdit}
                                     />
                                     <div className="d-flex week-btn-btm">
                                         <a href="javascript:void(0)" className="program-save-add-week-btn" onClick={this.handleAddWeek}><i className="icon-add_box"></i> Add Week</a>
@@ -109,7 +112,7 @@ class ProgramSave extends Component {
                     closeOnClickOutside={false}
                 >
                     <SelectEventView
-                        programId={(program) ? program._id : null}
+                        handleAddWorkout={this.handleAddWorkout}
                         handleNewRestDay={this.handleNewRestDay}
                         handlePaste={this.handlePaste}
                     />
@@ -157,6 +160,24 @@ class ProgramSave extends Component {
                     You will not be able to recover this file!
                 </SweetAlert>
 
+                <SweetAlert
+                    type="default"
+                    title={`Add workout for - Day ${selectedDay}`}
+                    onConfirm={() => { }}
+                    btnSize="sm"
+                    cancelBtnBsStyle="danger"
+                    confirmBtnBsStyle="success"
+                    show={showAddWorkoutTitleAlert}
+                    showConfirm={false}
+                    showCancel={false}
+                    closeOnClickOutside={false}
+                >
+                    <AddProgramWorkoutTitleForm
+                        onSubmit={this.handleAddTitleSubmit}
+                        onCancel={this.handleAddWorkoutTitleCancel}
+                    />
+                </SweetAlert>
+
             </div>
         );
     }
@@ -168,6 +189,10 @@ class ProgramSave extends Component {
             error,
             history,
             workout,
+            match,
+            loadingTitle,
+            workoutTitle,
+            errorTitle,
         } = this.props;
         const {
             workoutPasteAction,
@@ -175,6 +200,7 @@ class ProgramSave extends Component {
             selectedWorkoutIds,
             deleteWeekActionInit,
             deleteBulkActionInit,
+            addWorkoutTitleInit,
         } = this.state;
         if (!loading && error && error.length > 0) {
             te(error[0]);
@@ -237,6 +263,18 @@ class ProgramSave extends Component {
                 ts('Workouts deleted successfully!');
             } else {
                 te('Cannot delete workouts. Please try again later!');
+            }
+        }
+        if (addWorkoutTitleInit && !loadingTitle && workoutTitle && prevProps.workoutTitle !== workoutTitle) {
+            this.setState({ addWorkoutTitleInit: false });
+            if (errorTitle && errorTitle.length <= 0) {
+                var program_id = match.params.id;
+                var workout_id = workoutTitle._id;
+                let url = routeCodes.SAVE_PROGRAM_SCHEDULE_WORKOUT.replace(':id', program_id);
+                url = url.replace(':workout_id', workout_id);
+                history.push(url);
+            } else {
+                te(errorTitle[0]);
             }
         }
     }
@@ -425,13 +463,33 @@ class ProgramSave extends Component {
         this.setState({ deleteBulkActionInit: true, deleteBulkActionAlert: false });
     }
 
-    handleSelectWorkoutForEdit = (selectedEvent) => {
-        const { dispatch, history, match } = this.props;
-        if (match && match.params && match.params.id) {
-            dispatch(selectUsersProgramWorkoutScheduleForEdit(selectedEvent));
-            var url = routeCodes.CHANGE_PROGRAM_SCHEDULE_WORKOUT.replace(':id', match.params.id);
-            history.push(url);
+    handleAddWorkout = () => {
+        this.setState({
+            showSelectEventAlert: false,
+            showAddWorkoutTitleAlert: true,
+        });
+    }
+
+    handleAddWorkoutTitleCancel = () => {
+        const { dispatch } = this.props;
+        this.setState({
+            showSelectEventAlert: false,
+            showAddWorkoutTitleAlert: false,
+        });
+        dispatch(setSelectedDayForProgram(null));
+    }
+
+    handleAddTitleSubmit = (data) => {
+        const { selectedDay, dispatch, match } = this.props;
+        var requestData = {
+            programId: match.params.id,
+            title: data.title,
+            description: (data.description) ? data.description : '',
+            type: SCHEDULED_WORKOUT_TYPE_EXERCISE,
+            day: (selectedDay - 1),
         }
+        dispatch(addUserProgramWorkoutTitleRequest(requestData));
+        this.setState({ addWorkoutTitleInit: true });
     }
 }
 
@@ -444,6 +502,9 @@ const mapStateToProps = (state) => {
         selectedDay: userPrograms.get('selectedDay'),
         workout: userPrograms.get('workout'),
         copiedWorkout: userPrograms.get('copiedWorkout'),
+        loadingTitle: userPrograms.get('loadingTitle'),
+        workoutTitle: userPrograms.get('workoutTitle'),
+        errorTitle: userPrograms.get('errorTitle'),
     };
 }
 
@@ -460,7 +521,6 @@ class CustomDaysCalendarView extends Component {
             handleCopy,
             handleDelete,
             handleSelectedForBulk,
-            handleSelectWorkoutForEdit,
         } = this.props;
         var rows = (totalDays / 7);
         var rowsObj = [];
@@ -474,7 +534,6 @@ class CustomDaysCalendarView extends Component {
                     handleCopy={handleCopy}
                     handleDelete={handleDelete}
                     handleSelectedForBulk={handleSelectedForBulk}
-                    handleSelectWorkoutForEdit={handleSelectWorkoutForEdit}
                 />
             )
         }
@@ -495,7 +554,6 @@ class CustomDaysCalendarRow extends Component {
             handleCopy,
             handleDelete,
             handleSelectedForBulk,
-            handleSelectWorkoutForEdit,
         } = this.props;
         var end = rowNumber * 7;
         var start = end - (7 - 1);
@@ -510,7 +568,6 @@ class CustomDaysCalendarRow extends Component {
                     handleCopy={handleCopy}
                     handleDelete={handleDelete}
                     handleSelectedForBulk={handleSelectedForBulk}
-                    handleSelectWorkoutForEdit={handleSelectWorkoutForEdit}
                 />
             )
         }
@@ -561,10 +618,10 @@ class CustomDaysCalendarBlock extends Component {
                                                     <a href="javascript:void(0)" onClick={(event) => this.handleCopyEvent(event, e)}><FaCopy /></a>
                                                 }
                                                 {(e.type === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
-                                                    <a href="javascript:void(0)" ><FaEye /></a>
+                                                    <a href="javascript:void(0)"><FaEye /></a>
                                                 }
                                                 {(e.type === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
-                                                    <a href="javascript:void(0)" onClick={(event) => this.handleEditEvent(event, e)} ><FaPencil /></a>
+                                                    <a href="javascript:void(0)"><FaPencil /></a>
                                                 }
                                                 <a href="javascript:void(0)" onClick={(event) => this.handleDeleteEvent(event, e._id)}><FaTrash /></a>
                                             </div>
@@ -596,31 +653,20 @@ class CustomDaysCalendarBlock extends Component {
         e.stopPropagation();
         handleSelectedForBulk(_id);
     }
-
-    handleEditEvent = (e, event) => {
-        const { handleSelectWorkoutForEdit } = this.props;
-        e.stopPropagation();
-        handleSelectWorkoutForEdit(event);
-    }
 }
 
 class SelectEventView extends Component {
     render() {
         const {
-            programId,
             handleNewRestDay,
             handlePaste,
+            handleAddWorkout,
         } = this.props;
         return (
             <div className="program-select-event-view row">
                 <div className="popup-link-wrap">
                     <div className="popup-link">
-                        <NavLink
-                            to={routeCodes.ADD_PROGRAM_SCHEDULE_WORKOUT.replace(':id', programId)}
-                            className="btn btn-primary"
-                        >
-                            Add Workout
-                        </NavLink>
+                        <button type="button" onClick={handleAddWorkout} className="btn btn-primary">Add Workout</button>
                     </div>
                     <div className="popup-link">
                         <button type="button" onClick={handleNewRestDay} className="btn btn-primary">Make Rest Day</button>
