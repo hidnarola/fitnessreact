@@ -135,19 +135,11 @@ const actionMap = {
             loading: false,
         };
         if (action.data.status === 1) {
-            newState.workout = action.data.workouts;
-            if (action.data.workouts && action.data.workouts.warmup && action.data.workouts.warmup.length > 0) {
-                var lastIndex = action.data.workouts.warmup.length - 1;
-                newState.workoutWarmupSequence = (action.data.workouts.warmup[lastIndex].sequence) ? action.data.workouts.warmup[lastIndex].sequence : -1;
-            }
-            if (action.data.workouts && action.data.workouts.exercise && action.data.workouts.exercise.length > 0) {
-                var lastIndex = action.data.workouts.exercise.length - 1;
-                newState.workoutSequence = (action.data.workouts.exercise[lastIndex].sequence) ? action.data.workouts.exercise[lastIndex].sequence : -1;
-            }
-            if (action.data.workouts && action.data.workouts.cooldown && action.data.workouts.cooldown.length > 0) {
-                var lastIndex = action.data.workouts.cooldown.length - 1;
-                newState.workoutCooldownSequence = (action.data.workouts.cooldown[lastIndex].sequence) ? action.data.workouts.cooldown[lastIndex].sequence : -1;
-            }
+             var newSt = createNewStateForWorkout(action.data.workouts);
+            newState.workout = newSt.workout;
+            newState.workoutWarmupSequence = newSt.workoutWarmupSequence;
+            newState.workoutSequence = newSt.workoutSequence;
+            newState.workoutCooldownSequence = newSt.workoutCooldownSequence;
         } else {
             var msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
             newState.error = [msg];
@@ -213,19 +205,11 @@ const actionMap = {
             loading: false,
         };
         if (action.data.status === 1) {
-            newState.workout = action.data.workouts;
-            if (action.data.workouts && action.data.workouts.warmup && action.data.workouts.warmup.length > 0) {
-                var lastIndex = action.data.workouts.warmup.length - 1;
-                newState.workoutWarmupSequence = action.data.workouts.warmup[lastIndex].sequence;
-            }
-            if (action.data.workouts && action.data.workouts.exercise && action.data.workouts.exercise.length > 0) {
-                var lastIndex = action.data.workouts.exercise.length - 1;
-                newState.workoutSequence = action.data.workouts.exercise[lastIndex].sequence;
-            }
-            if (action.data.workouts && action.data.workouts.cooldown && action.data.workouts.cooldown.length > 0) {
-                var lastIndex = action.data.workouts.cooldown.length - 1;
-                newState.workoutCooldownSequence = action.data.workouts.cooldown[lastIndex].sequence;
-            }
+            var newSt = createNewStateForWorkout(action.data.workouts);
+            newState.workout = newSt.workout;
+            newState.workoutWarmupSequence = newSt.workoutWarmupSequence;
+            newState.workoutSequence = newSt.workoutSequence;
+            newState.workoutCooldownSequence = newSt.workoutCooldownSequence;
         } else {
             var msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
             newState.error = [msg];
@@ -257,19 +241,11 @@ const actionMap = {
             loading: false,
         };
         if (action.data.status === 1) {
-            newState.workout = action.data.workouts;
-            if (action.data.workouts && action.data.workouts.warmup && action.data.workouts.warmup.length > 0) {
-                var lastIndex = action.data.workouts.warmup.length - 1;
-                newState.workoutWarmupSequence = action.data.workouts.warmup[lastIndex].sequence;
-            }
-            if (action.data.workouts && action.data.workouts.exercise && action.data.workouts.exercise.length > 0) {
-                var lastIndex = action.data.workouts.exercise.length - 1;
-                newState.workoutSequence = action.data.workouts.exercise[lastIndex].sequence;
-            }
-            if (action.data.workouts && action.data.workouts.cooldown && action.data.workouts.cooldown.length > 0) {
-                var lastIndex = action.data.workouts.cooldown.length - 1;
-                newState.workoutCooldownSequence = action.data.workouts.cooldown[lastIndex].sequence;
-            }
+             var newSt = createNewStateForWorkout(action.data.workouts);
+            newState.workout = newSt.workout;
+            newState.workoutWarmupSequence = newSt.workoutWarmupSequence;
+            newState.workoutSequence = newSt.workoutSequence;
+            newState.workoutCooldownSequence = newSt.workoutCooldownSequence;
         } else {
             var msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
             newState.error = [msg];
@@ -552,19 +528,11 @@ const actionMap = {
             loading: false,
         };
         if (action.data.status === 1) {
-            newState.workout = action.data.workouts;
-            if (action.data.workouts && action.data.workouts.warmup && action.data.workouts.warmup.length > 0) {
-                var lastIndex = action.data.workouts.warmup.length - 1;
-                newState.workoutWarmupSequence = action.data.workouts.warmup[lastIndex].sequence;
-            }
-            if (action.data.workouts && action.data.workouts.exercise && action.data.workouts.exercise.length > 0) {
-                var lastIndex = action.data.workouts.exercise.length - 1;
-                newState.workoutSequence = action.data.workouts.exercise[lastIndex].sequence;
-            }
-            if (action.data.workouts && action.data.workouts.cooldown && action.data.workouts.cooldown.length > 0) {
-                var lastIndex = action.data.workouts.cooldown.length - 1;
-                newState.workoutCooldownSequence = action.data.workouts.cooldown[lastIndex].sequence;
-            }
+             var newSt = createNewStateForWorkout(action.data.workouts);
+            newState.workout = newSt.workout;
+            newState.workoutWarmupSequence = newSt.workoutWarmupSequence;
+            newState.workoutSequence = newSt.workoutSequence;
+            newState.workoutCooldownSequence = newSt.workoutCooldownSequence;
         } else {
             var msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
             newState.error = [msg];
@@ -596,19 +564,11 @@ const actionMap = {
             loading: false,
         };
         if (action.data.status === 1) {
-            newState.workout = action.data.workouts;
-            if (action.data.workouts && action.data.workouts.warmup && action.data.workouts.warmup.length > 0) {
-                var lastIndex = action.data.workouts.warmup.length - 1;
-                newState.workoutWarmupSequence = action.data.workouts.warmup[lastIndex].sequence;
-            }
-            if (action.data.workouts && action.data.workouts.exercise && action.data.workouts.exercise.length > 0) {
-                var lastIndex = action.data.workouts.exercise.length - 1;
-                newState.workoutSequence = action.data.workouts.exercise[lastIndex].sequence;
-            }
-            if (action.data.workouts && action.data.workouts.cooldown && action.data.workouts.cooldown.length > 0) {
-                var lastIndex = action.data.workouts.cooldown.length - 1;
-                newState.workoutCooldownSequence = action.data.workouts.cooldown[lastIndex].sequence;
-            }
+             var newSt = createNewStateForWorkout(action.data.workouts);
+            newState.workout = newSt.workout;
+            newState.workoutWarmupSequence = newSt.workoutWarmupSequence;
+            newState.workoutSequence = newSt.workoutSequence;
+            newState.workoutCooldownSequence = newSt.workoutCooldownSequence;
         } else {
             var msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
             newState.error = [msg];
@@ -640,4 +600,28 @@ const actionMap = {
 export default function reducer(state = initialState, action = {}) {
     const fn = actionMap[action.type];
     return fn ? fn(state, action) : state;
+}
+
+function createNewStateForWorkout(workouts) {
+    var newState = {};
+    newState.workout = workouts;
+    if (workouts && workouts.warmup && workouts.warmup.length > 0) {
+        var lastIndex = workouts.warmup.length - 1;
+        newState.workoutWarmupSequence = (typeof workouts.warmup[lastIndex].sequence !== 'undefined') ? workouts.warmup[lastIndex].sequence : -1;
+    } else {
+        newState.workoutWarmupSequence = -1;
+    }
+    if (workouts && workouts.exercise && workouts.exercise.length > 0) {
+        var lastIndex = workouts.exercise.length - 1;
+        newState.workoutSequence = (typeof workouts.exercise[lastIndex].sequence !== 'undefined') ? workouts.exercise[lastIndex].sequence : -1;
+    } else {
+        newState.workoutSequence = -1;
+    }
+    if (workouts && workouts.cooldown && workouts.cooldown.length > 0) {
+        var lastIndex = workouts.cooldown.length - 1;
+        newState.workoutCooldownSequence = (typeof workouts.cooldown[lastIndex].sequence !== 'undefined') ? workouts.cooldown[lastIndex].sequence : -1;
+    } else {
+        newState.workoutCooldownSequence = -1;
+    }
+    return newState;
 }

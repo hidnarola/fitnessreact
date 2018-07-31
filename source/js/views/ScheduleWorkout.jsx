@@ -173,7 +173,7 @@ class ScheduleWorkout extends Component {
 
                 <SweetAlert
                     show={deleteWorkoutAlert}
-                    warning
+                    danger
                     showCancel
                     confirmBtnText="Yes, delete it!"
                     confirmBtnBsStyle="danger"
@@ -187,7 +187,7 @@ class ScheduleWorkout extends Component {
 
                 <SweetAlert
                     show={deleteBulkActionAlert}
-                    warning
+                    danger
                     showCancel
                     confirmBtnText="Yes, delete it!"
                     confirmBtnBsStyle="danger"
@@ -215,10 +215,10 @@ class ScheduleWorkout extends Component {
 
                 <SweetAlert
                     show={incompleteBulkActionAlert}
-                    danger
+                    warning
                     showCancel
                     confirmBtnText="Yes, incomplete them!"
-                    confirmBtnBsStyle="danger"
+                    confirmBtnBsStyle="warning"
                     cancelBtnBsStyle="default"
                     title="Are you sure?"
                     onConfirm={() => this.handleCompleteBulkWorkoutSchedule(0)}
