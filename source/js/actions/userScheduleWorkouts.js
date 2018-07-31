@@ -65,6 +65,7 @@ export const UPDATE_USER_WORKOUT_TITLE_SUCCESS = 'UPDATE_USER_WORKOUT_TITLE_SUCC
 export const UPDATE_USER_WORKOUT_TITLE_ERROR = 'UPDATE_USER_WORKOUT_TITLE_ERROR';
 
 export const CHANGE_WORKOUT_MAIN_TYPE = 'CHANGE_WORKOUT_MAIN_TYPE';
+export const CHANGE_WORKOUT_MAIN_TYPE_DETAILS = 'CHANGE_WORKOUT_MAIN_TYPE_DETAILS';
 
 export const GET_EXERCISE_MEASUREMENT_REQUEST = 'GET_EXERCISE_MEASUREMENT_REQUEST';
 export const GET_EXERCISE_MEASUREMENT_SUCCESS = 'GET_EXERCISE_MEASUREMENT_SUCCESS';
@@ -366,6 +367,13 @@ export function updateUserWorkoutTitleError(error) {
 export function changeWorkoutMainType(mainType = SCHEDULED_WORKOUT_TYPE_WARMUP) {
     return {
         type: CHANGE_WORKOUT_MAIN_TYPE,
+        mainType
+    }
+}
+
+export function changeWorkoutMainTypeDetails(mainType = SCHEDULED_WORKOUT_TYPE_WARMUP) {
+    return {
+        type: CHANGE_WORKOUT_MAIN_TYPE_DETAILS,
         mainType
     }
 }

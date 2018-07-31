@@ -52,10 +52,10 @@ import {
     UPDATE_USERS_WORKOUT_SCHEDULE_REQUEST,
     UPDATE_USERS_WORKOUT_SCHEDULE_SUCCESS,
     UPDATE_USERS_WORKOUT_SCHEDULE_ERROR,
+    CHANGE_WORKOUT_MAIN_TYPE_DETAILS,
 } from "../actions/userScheduleWorkouts";
 import { VALIDATION_FAILURE_STATUS, SCHEDULED_WORKOUT_TYPE_WARMUP } from "../constants/consts";
 import { generateValidationErrorMsgArr } from "../helpers/funs";
-import _ from "lodash";
 
 const initialState = Map({
     slotInfo: null,
@@ -73,9 +73,13 @@ const initialState = Map({
     workoutTitle: null,
     errorTitle: [],
     selectedWorkoutMainType: SCHEDULED_WORKOUT_TYPE_WARMUP,
+    selectedWorkoutMainTypeDetails: SCHEDULED_WORKOUT_TYPE_WARMUP,
     exerciseMeasurements: [],
     workoutFormAction: 'add',
     selectedWorkoutForEdit: null,
+    workoutWarmupSequence: -1,
+    workoutSequence: -1,
+    workoutCooldownSequence: -1,
 });
 
 const actionMap = {
@@ -132,6 +136,18 @@ const actionMap = {
         };
         if (action.data.status === 1) {
             newState.workout = action.data.workouts;
+            if (action.data.workouts && action.data.workouts.warmup && action.data.workouts.warmup.length > 0) {
+                var lastIndex = action.data.workouts.warmup.length - 1;
+                newState.workoutWarmupSequence = (action.data.workouts.warmup[lastIndex].sequence) ? action.data.workouts.warmup[lastIndex].sequence : -1;
+            }
+            if (action.data.workouts && action.data.workouts.exercise && action.data.workouts.exercise.length > 0) {
+                var lastIndex = action.data.workouts.exercise.length - 1;
+                newState.workoutSequence = (action.data.workouts.exercise[lastIndex].sequence) ? action.data.workouts.exercise[lastIndex].sequence : -1;
+            }
+            if (action.data.workouts && action.data.workouts.cooldown && action.data.workouts.cooldown.length > 0) {
+                var lastIndex = action.data.workouts.cooldown.length - 1;
+                newState.workoutCooldownSequence = (action.data.workouts.cooldown[lastIndex].sequence) ? action.data.workouts.cooldown[lastIndex].sequence : -1;
+            }
         } else {
             var msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
             newState.error = [msg];
@@ -198,6 +214,18 @@ const actionMap = {
         };
         if (action.data.status === 1) {
             newState.workout = action.data.workouts;
+            if (action.data.workouts && action.data.workouts.warmup && action.data.workouts.warmup.length > 0) {
+                var lastIndex = action.data.workouts.warmup.length - 1;
+                newState.workoutWarmupSequence = action.data.workouts.warmup[lastIndex].sequence;
+            }
+            if (action.data.workouts && action.data.workouts.exercise && action.data.workouts.exercise.length > 0) {
+                var lastIndex = action.data.workouts.exercise.length - 1;
+                newState.workoutSequence = action.data.workouts.exercise[lastIndex].sequence;
+            }
+            if (action.data.workouts && action.data.workouts.cooldown && action.data.workouts.cooldown.length > 0) {
+                var lastIndex = action.data.workouts.cooldown.length - 1;
+                newState.workoutCooldownSequence = action.data.workouts.cooldown[lastIndex].sequence;
+            }
         } else {
             var msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
             newState.error = [msg];
@@ -230,6 +258,18 @@ const actionMap = {
         };
         if (action.data.status === 1) {
             newState.workout = action.data.workouts;
+            if (action.data.workouts && action.data.workouts.warmup && action.data.workouts.warmup.length > 0) {
+                var lastIndex = action.data.workouts.warmup.length - 1;
+                newState.workoutWarmupSequence = action.data.workouts.warmup[lastIndex].sequence;
+            }
+            if (action.data.workouts && action.data.workouts.exercise && action.data.workouts.exercise.length > 0) {
+                var lastIndex = action.data.workouts.exercise.length - 1;
+                newState.workoutSequence = action.data.workouts.exercise[lastIndex].sequence;
+            }
+            if (action.data.workouts && action.data.workouts.cooldown && action.data.workouts.cooldown.length > 0) {
+                var lastIndex = action.data.workouts.cooldown.length - 1;
+                newState.workoutCooldownSequence = action.data.workouts.cooldown[lastIndex].sequence;
+            }
         } else {
             var msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
             newState.error = [msg];
@@ -479,6 +519,11 @@ const actionMap = {
             selectedWorkoutMainType: action.mainType,
         }));
     },
+    [CHANGE_WORKOUT_MAIN_TYPE_DETAILS]: (state, action) => {
+        return state.merge(Map({
+            selectedWorkoutMainTypeDetails: action.mainType,
+        }));
+    },
     [GET_EXERCISE_MEASUREMENT_REQUEST]: (state, action) => {
         return state.merge(Map({
             exerciseMeasurements: [],
@@ -508,6 +553,18 @@ const actionMap = {
         };
         if (action.data.status === 1) {
             newState.workout = action.data.workouts;
+            if (action.data.workouts && action.data.workouts.warmup && action.data.workouts.warmup.length > 0) {
+                var lastIndex = action.data.workouts.warmup.length - 1;
+                newState.workoutWarmupSequence = action.data.workouts.warmup[lastIndex].sequence;
+            }
+            if (action.data.workouts && action.data.workouts.exercise && action.data.workouts.exercise.length > 0) {
+                var lastIndex = action.data.workouts.exercise.length - 1;
+                newState.workoutSequence = action.data.workouts.exercise[lastIndex].sequence;
+            }
+            if (action.data.workouts && action.data.workouts.cooldown && action.data.workouts.cooldown.length > 0) {
+                var lastIndex = action.data.workouts.cooldown.length - 1;
+                newState.workoutCooldownSequence = action.data.workouts.cooldown[lastIndex].sequence;
+            }
         } else {
             var msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
             newState.error = [msg];
@@ -540,6 +597,18 @@ const actionMap = {
         };
         if (action.data.status === 1) {
             newState.workout = action.data.workouts;
+            if (action.data.workouts && action.data.workouts.warmup && action.data.workouts.warmup.length > 0) {
+                var lastIndex = action.data.workouts.warmup.length - 1;
+                newState.workoutWarmupSequence = action.data.workouts.warmup[lastIndex].sequence;
+            }
+            if (action.data.workouts && action.data.workouts.exercise && action.data.workouts.exercise.length > 0) {
+                var lastIndex = action.data.workouts.exercise.length - 1;
+                newState.workoutSequence = action.data.workouts.exercise[lastIndex].sequence;
+            }
+            if (action.data.workouts && action.data.workouts.cooldown && action.data.workouts.cooldown.length > 0) {
+                var lastIndex = action.data.workouts.cooldown.length - 1;
+                newState.workoutCooldownSequence = action.data.workouts.cooldown[lastIndex].sequence;
+            }
         } else {
             var msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
             newState.error = [msg];

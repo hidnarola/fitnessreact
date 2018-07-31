@@ -85,6 +85,7 @@ import SaveScheduleWorkout from '../components/ScheduleWorkout/SaveScheduleWorko
 import Programs from './Programs';
 import ProgramSave from '../components/Program/ProgramSave';
 import AddProgramScheduleWorkout from '../components/Program/AddProgramScheduleWorkout';
+import ViewScheduleWorkout from '../components/ScheduleWorkout/ViewScheduleWorkout';
 
 const auth = new Auth();
 
@@ -148,6 +149,7 @@ class App extends Component {
 
                             <PrivateRoute exact path={routeCodes.SCHEDULE_WORKOUT} component={ScheduleWorkout} />
                             <PrivateRoute exact path={routeCodes.SAVE_SCHEDULE_WORKOUT} component={SaveScheduleWorkout} />
+                            <PrivateRoute exact path={routeCodes.VIEW_SCHEDULE_WORKOUT} component={ViewScheduleWorkout} />
 
                             <PrivateRoute exact path={routeCodes.PROGRAMS} component={Programs} />
                             <PrivateRoute exact path={`${routeCodes.PROGRAM_SAVE}/:id`} component={ProgramSave} />

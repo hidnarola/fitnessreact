@@ -196,7 +196,13 @@ class SaveScheduleWorkout extends Component {
     }
 
     handleSubmit = (data) => {
-        const { dispatch } = this.props;
+        const {
+            dispatch,
+            selectedWorkoutMainType,
+            workoutWarmupSequence,
+            workoutSequence,
+            workoutCooldownSequence,
+        } = this.props;
         var workoutType = (data.workout_type) ? data.workout_type : null;
         let requestData = null;
         if (workoutType && workoutType === SCHEDULED_WORKOUT_TYPE_EXERCISE) {
@@ -205,6 +211,13 @@ class SaveScheduleWorkout extends Component {
             requestData = this.prepareRequestDataForSupersetWorkout(data);
         } else if (workoutType && workoutType === SCHEDULED_WORKOUT_TYPE_CIRCUIT) {
             requestData = this.prepareRequestDataForCircuitWorkout(data);
+        }
+        if (selectedWorkoutMainType === SCHEDULED_WORKOUT_TYPE_WARMUP) {
+            requestData.sequence = (workoutWarmupSequence + 1);
+        } else if (selectedWorkoutMainType === SCHEDULED_WORKOUT_TYPE_EXERCISE) {
+            requestData.sequence = (workoutSequence + 1);
+        } else if (selectedWorkoutMainType === SCHEDULED_WORKOUT_TYPE_COOLDOWN) {
+            requestData.sequence = (workoutCooldownSequence + 1);
         }
         dispatch(addUsersWorkoutScheduleRequest(requestData));
         this.setState({ saveWorkoutActionInit: true });
@@ -641,6 +654,9 @@ const mapStateToProps = (state) => {
         errorTitle: userScheduleWorkouts.get('errorTitle'),
         workoutFormAction: userScheduleWorkouts.get('workoutFormAction'),
         selectedWorkoutForEdit: userScheduleWorkouts.get('selectedWorkoutForEdit'),
+        workoutWarmupSequence: userScheduleWorkouts.get('workoutWarmupSequence'),
+        workoutSequence: userScheduleWorkouts.get('workoutSequence'),
+        workoutCooldownSequence: userScheduleWorkouts.get('workoutCooldownSequence'),
     };
 }
 
