@@ -60,7 +60,7 @@ class ScheduleWorkout extends Component {
     componentWillMount() {
         const { dispatch } = this.props;
         var today = moment().startOf('day').utc();
-        this.setState({ calendarViewDate: today });
+        this.setState({ calendarViewDate: today.local() });
         this.getWorkoutSchedulesByMonth(today);
         dispatch(getProgramsNameRequest());
     }
@@ -133,12 +133,10 @@ class ScheduleWorkout extends Component {
                                         defaultView={BigCalendar.Views.MONTH}
                                         className="workout-calender"
                                         events={workoutEvents}
-                                        onView={() => console.log('on View')}
+                                        onView={() => { }}
                                         views={[BigCalendar.Views.MONTH]}
                                         onNavigate={this.handleNavigation}
-                                        onSelectEvent={(event) => {
-                                            console.log('event => ', event);
-                                        }}
+                                        onSelectEvent={(event) => { }}
                                         onSelectSlot={this.onSelectSlot}
                                         popup={true}
                                         popupOffset={50}
@@ -432,12 +430,12 @@ class ScheduleWorkout extends Component {
         let _date = null;
         if (date) {
             _date = date;
-            this.setState({ calendarViewDate: _date });
+            this.setState({ calendarViewDate: _date.local() });
         } else if (calendarViewDate) {
             _date = calendarViewDate;
         } else {
             _date = moment().startOf('day').utc();
-            this.setState({ calendarViewDate: _date });
+            this.setState({ calendarViewDate: _date.local() });
         }
         const {
             dispatch
@@ -449,7 +447,7 @@ class ScheduleWorkout extends Component {
     handleNavigation = (date) => {
         var momentDate = moment(date).startOf('day');
         var day = moment.utc(momentDate);
-        this.setState({ calendarViewDate: day });
+        this.setState({ calendarViewDate: day.local() });
         this.getWorkoutSchedulesByMonth(day);
     }
 

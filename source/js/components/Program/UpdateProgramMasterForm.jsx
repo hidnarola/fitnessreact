@@ -7,7 +7,7 @@ import { te } from '../../helpers/funs';
 import { withRouter } from "react-router-dom";
 import { routeCodes } from '../../constants/routes';
 
-class AddProgramMasterForm extends Component {
+class UpdateProgramMasterForm extends Component {
     render() {
         const { handleSubmit, onCancel } = this.props;
         return (
@@ -37,11 +37,11 @@ class AddProgramMasterForm extends Component {
     }
 }
 
-AddProgramMasterForm = reduxForm({
-    form: 'add_program_master_form',
-})(AddProgramMasterForm)
+UpdateProgramMasterForm = reduxForm({
+    form: 'update_program_title_form',
+})(UpdateProgramMasterForm)
 
-export default connect()(AddProgramMasterForm);
+export default connect()(UpdateProgramMasterForm);
 
 const TextAreaField = (props) => {
     const { input, meta, wrapperClass, className, placeholder, errorClass } = props;

@@ -38,6 +38,7 @@ class UpdateScheduleWorkoutForm extends Component {
                                 name="workout_single"
                                 component={WorkoutTypeSingleCardUpdate}
                                 rerenderOnEveryChange={true}
+                                selectedWorkoutForEdit={selectedWorkoutForEdit}
                             />
                         }
                         {selectedWorkoutForEdit && selectedWorkoutForEdit.subType === SCHEDULED_WORKOUT_TYPE_SUPERSET &&
@@ -45,6 +46,7 @@ class UpdateScheduleWorkoutForm extends Component {
                                 name="workout_superset"
                                 component={WorkoutTypeSupersetCardUpdate}
                                 rerenderOnEveryChange={true}
+                                selectedWorkoutForEdit={selectedWorkoutForEdit}
                             />
                         }
                         {selectedWorkoutForEdit && selectedWorkoutForEdit.subType === SCHEDULED_WORKOUT_TYPE_CIRCUIT &&
@@ -52,6 +54,7 @@ class UpdateScheduleWorkoutForm extends Component {
                                 name="workout_circuit"
                                 component={WorkoutTypeCircuitCardUpdate}
                                 rerenderOnEveryChange={true}
+                                selectedWorkoutForEdit={selectedWorkoutForEdit}
                             />
                         }
                     </div>
@@ -83,7 +86,6 @@ const mapStateToProps = (state) => {
         singleSets: selector(state, 'single_sets'),
         exercises: userScheduleWorkouts.get('exercises'),
         exerciseMeasurements: userScheduleWorkouts.get('exerciseMeasurements'),
-        selectedWorkoutForEdit: userScheduleWorkouts.get('selectedWorkoutForEdit'),
     };
 }
 

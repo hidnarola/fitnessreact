@@ -25,7 +25,8 @@ class WorkoutTypeSingleCardUpdate extends Component {
         const {
             fields,
             exercises,
-            exerciseMeasurements
+            exerciseMeasurements,
+            selectedWorkoutForEdit,
         } = this.props;
         var exerciseOptions = prepareExerciseOptions(exercises);
         return (
@@ -195,6 +196,7 @@ class WorkoutTypeSingleCardUpdate extends Component {
                                                 workoutType={SCHEDULED_WORKOUT_TYPE_EXERCISE}
                                                 overrideDbValues={this.advanceViewOverrideDbValues}
                                                 handleOverrideDbValues={(flag) => this.advanceViewOverrideDbValues = flag}
+                                                selectedWorkoutForEdit={selectedWorkoutForEdit}
                                             />
                                         </div>
                                     }

@@ -1,22 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { initialize, reset } from 'redux-form';
 import {
-    getUsersWorkoutScheduleRequest,
-    changeWorkoutMainType,
+    getUsersProgramWorkoutScheduleRequest,
+    changeProgramWorkoutMainType,
+    addUsersProgramWorkoutScheduleRequest,
+    updateUserProgramWorkoutTitleRequest,
+    updateUsersProgramWorkoutScheduleRequest,
+    changeUsersProgramWorkoutFormAction
+} from '../../actions/userPrograms';
+import {
     getExercisesNameRequest,
-    getExerciseMeasurementRequest,
-    addUsersWorkoutScheduleRequest,
-    updateUserWorkoutTitleRequest,
-    changeUsersWorkoutFormAction,
-    updateUsersWorkoutScheduleRequest
+    getExerciseMeasurementRequest
 } from '../../actions/userScheduleWorkouts';
-import { routeCodes } from '../../constants/routes';
-import { te, prepareFieldsOptions, ts } from '../../helpers/funs';
-import FitnessHeader from '../global/FitnessHeader';
-import FitnessNav from '../global/FitnessNav';
-import moment from "moment";
-import UpdateScheduleWorkoutTitleForm from './UpdateScheduleWorkoutTitleForm';
 import {
     SCHEDULED_WORKOUT_TYPE_WARMUP,
     SCHEDULED_WORKOUT_TYPE_EXERCISE,
@@ -25,12 +20,21 @@ import {
     SCHEDULED_WORKOUT_TYPE_CIRCUIT,
     MEASUREMENT_UNIT_SECONDS
 } from '../../constants/consts';
-import SaveScheduleWorkoutForm from './SaveScheduleWorkoutForm';
+import moment from "moment";
+import _ from "lodash";
 import cns from "classnames";
-import WorkoutExercisesView from './WorkoutExercisesView';
-import UpdateScheduleWorkoutForm from './UpdateScheduleWorkoutForm';
+import FitnessHeader from '../global/FitnessHeader';
+import FitnessNav from '../global/FitnessNav';
+import SaveScheduleProgramWorkoutForm from './SaveScheduleProgramWorkoutForm';
+import { prepareFieldsOptions, te, ts } from '../../helpers/funs';
+import { reset } from 'redux-form';
+import ProgramWorkoutExercisesView from './ProgramWorkoutExercisesView';
+import UpdateScheduleProgramWorkoutTitleForm from './UpdateScheduleProgramWorkoutTitleForm';
+import UpdateScheduleWorkoutForm from '../ScheduleWorkout/UpdateScheduleWorkoutForm';
+import { NavLink } from "react-router-dom";
+import { routeCodes } from '../../constants/routes';
 
-class SaveScheduleWorkout extends Component {
+class SaveScheduleProgramWorkout extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -43,9 +47,10 @@ class SaveScheduleWorkout extends Component {
 
     componentWillMount() {
         const { match, dispatch } = this.props;
-        if (match && match.params && match.params.id) {
+        if (match && match.params && match.params.id && match.params.workout_id) {
             let _id = match.params.id;
-            dispatch(getUsersWorkoutScheduleRequest(_id));
+            let workoutId = match.params.workout_id;
+            dispatch(getUsersProgramWorkoutScheduleRequest(workoutId));
             dispatch(getExercisesNameRequest());
             dispatch(getExerciseMeasurementRequest());
             this.setState({ loadWorkoutInit: true });
@@ -58,6 +63,7 @@ class SaveScheduleWorkout extends Component {
             selectedWorkoutMainType,
             workoutFormAction,
             selectedWorkoutForEdit,
+            match,
         } = this.props;
         return (
             <div className="fitness-body">
@@ -70,12 +76,19 @@ class SaveScheduleWorkout extends Component {
                                 <h2>{`Save Workout on ${moment(workout.date).format('MM/DD/YYYY')}`}</h2>
                                 <p>Your goal choice shapes how your fitness assistant will ceate your meal and exercise plans, it’s important that you set goals which are achieveable. Keep updating your profile and your fitness assistant will keep you on track and meeting the goals you’ve set out for yourself.</p>
                             </div>
+                            <div className="body-head-r">
+                                <NavLink
+                                    className='pink-btn'
+                                    to={`${routeCodes.PROGRAM_SAVE}/${match.params.id}`}>
+                                    <i className="icon-arrow_back"></i> Back
+                                </NavLink>
+                            </div>
                         </div>
                         <div className="body-content d-flex row justify-content-start profilephoto-content">
                             <div className="col-md-12">
                                 <div className="white-box space-btm-20">
                                     <div className="whitebox-body profile-body">
-                                        <UpdateScheduleWorkoutTitleForm onSubmit={this.handleTitleChangeSubmit} />
+                                        <UpdateScheduleProgramWorkoutTitleForm onSubmit={this.handleTitleChangeSubmit} />
                                     </div>
                                 </div>
                             </div>
@@ -92,31 +105,31 @@ class SaveScheduleWorkout extends Component {
                                         {selectedWorkoutMainType &&
                                             <div className="workout-main-types-view-wrapper">
                                                 {selectedWorkoutMainType === SCHEDULED_WORKOUT_TYPE_WARMUP &&
-                                                    <WorkoutExercisesView
+                                                    <ProgramWorkoutExercisesView
                                                         exercises={workout.warmup}
                                                     />
                                                 }
                                                 {selectedWorkoutMainType === SCHEDULED_WORKOUT_TYPE_EXERCISE &&
-                                                    <WorkoutExercisesView
+                                                    <ProgramWorkoutExercisesView
                                                         exercises={workout.exercise}
                                                     />
                                                 }
                                                 {selectedWorkoutMainType === SCHEDULED_WORKOUT_TYPE_COOLDOWN &&
-                                                    <WorkoutExercisesView
+                                                    <ProgramWorkoutExercisesView
                                                         exercises={workout.cooldown}
                                                     />
                                                 }
                                                 {workoutFormAction && workoutFormAction === 'add' &&
                                                     <div className="add-workout-form-wrapper">
-                                                        <SaveScheduleWorkoutForm onSubmit={this.handleSubmit} />
+                                                        <SaveScheduleProgramWorkoutForm onSubmit={this.handleSubmit} />
                                                     </div>
                                                 }
                                                 <div id="edit-workout-form">
                                                     {workoutFormAction && workoutFormAction === 'edit' &&
                                                         <div className="add-workout-form-wrapper">
                                                             <UpdateScheduleWorkoutForm
-                                                            onSubmit={this.handleUpdateSubmit}
-                                                            selectedWorkoutForEdit={selectedWorkoutForEdit}
+                                                                onSubmit={this.handleUpdateSubmit}
+                                                                selectedWorkoutForEdit={selectedWorkoutForEdit}
                                                             />
                                                         </div>
                                                     }
@@ -135,29 +148,17 @@ class SaveScheduleWorkout extends Component {
 
     componentDidUpdate(prevProps, prevState) {
         const {
-            workout,
             loading,
             error,
-            history,
-            dispatch,
             loadingTitle,
             errorTitle,
+            dispatch,
         } = this.props;
         const {
-            loadWorkoutInit,
             saveWorkoutActionInit,
             updateTitleActionInit,
             updateWorkoutActionInit,
         } = this.state;
-        if (loadWorkoutInit && !loading && workout && Object.keys(workout).length <= 0) {
-            this.setState({ loadWorkoutInit: false });
-            history.push(routeCodes.SCHEDULE_WORKOUT);
-        }
-        if (loadWorkoutInit && !loading && error && error.length > 0) {
-            this.setState({ loadWorkoutInit: false });
-            te(error[0]);
-            history.push(routeCodes.SCHEDULE_WORKOUT);
-        }
         if (saveWorkoutActionInit && !loading) {
             this.setState({ saveWorkoutActionInit: false });
             if (error && error.length > 0) {
@@ -175,7 +176,7 @@ class SaveScheduleWorkout extends Component {
                 ts('Workout updated successfully!');
             }
             dispatch(reset('update_schedule_workout_form'));
-            dispatch(changeUsersWorkoutFormAction('add', null));
+            dispatch(changeUsersProgramWorkoutFormAction('add', null));
         }
         if (updateTitleActionInit && !loadingTitle) {
             this.setState({ updateTitleActionInit: false });
@@ -187,15 +188,20 @@ class SaveScheduleWorkout extends Component {
         }
     }
 
+    handleWorkoutMainTypeChange = (mainType) => {
+        const { dispatch } = this.props;
+        dispatch(changeProgramWorkoutMainType(mainType));
+    }
+
     handleTitleChangeSubmit = (data) => {
         const { match, dispatch } = this.props;
-        if (match && match.params && match.params.id) {
+        if (match && match.params && match.params.workout_id) {
             let requestData = {
                 title: data.title,
                 description: data.description,
             }
             this.setState({ updateTitleActionInit: true });
-            dispatch(updateUserWorkoutTitleRequest(match.params.id, requestData));
+            dispatch(updateUserProgramWorkoutTitleRequest(match.params.workout_id, requestData));
         }
     }
 
@@ -223,7 +229,7 @@ class SaveScheduleWorkout extends Component {
         } else if (selectedWorkoutMainType === SCHEDULED_WORKOUT_TYPE_COOLDOWN) {
             requestData.sequence = (workoutCooldownSequence + 1);
         }
-        dispatch(addUsersWorkoutScheduleRequest(requestData));
+        dispatch(addUsersProgramWorkoutScheduleRequest(requestData));
         this.setState({ saveWorkoutActionInit: true });
     }
 
@@ -239,13 +245,8 @@ class SaveScheduleWorkout extends Component {
             requestData = this.prepareRequestDataForCircuitWorkout(data);
         }
         requestData._id = selectedWorkoutForEdit._id;
-        dispatch(updateUsersWorkoutScheduleRequest(requestData));
+        dispatch(updateUsersProgramWorkoutScheduleRequest(requestData));
         this.setState({ updateWorkoutActionInit: true });
-    }
-
-    handleWorkoutMainTypeChange = (mainType) => {
-        const { dispatch } = this.props;
-        dispatch(changeWorkoutMainType(mainType));
     }
 
     prepareRequestDataForSingleWorkout = (data) => {
@@ -647,23 +648,23 @@ class SaveScheduleWorkout extends Component {
 }
 
 const mapStateToProps = (state) => {
-    const { userScheduleWorkouts } = state;
+    const { userPrograms, userScheduleWorkouts } = state;
     return {
-        workout: userScheduleWorkouts.get('workout'),
-        loading: userScheduleWorkouts.get('loading'),
-        error: userScheduleWorkouts.get('error'),
-        selectedWorkoutMainType: userScheduleWorkouts.get('selectedWorkoutMainType'),
+        workout: userPrograms.get('workout'),
+        loading: userPrograms.get('loading'),
+        error: userPrograms.get('error'),
+        selectedWorkoutMainType: userPrograms.get('selectedWorkoutMainType'),
         exerciseMeasurements: userScheduleWorkouts.get('exerciseMeasurements'),
-        loadingTitle: userScheduleWorkouts.get('loadingTitle'),
-        errorTitle: userScheduleWorkouts.get('errorTitle'),
-        workoutFormAction: userScheduleWorkouts.get('workoutFormAction'),
-        selectedWorkoutForEdit: userScheduleWorkouts.get('selectedWorkoutForEdit'),
-        workoutWarmupSequence: userScheduleWorkouts.get('workoutWarmupSequence'),
-        workoutSequence: userScheduleWorkouts.get('workoutSequence'),
-        workoutCooldownSequence: userScheduleWorkouts.get('workoutCooldownSequence'),
+        loadingTitle: userPrograms.get('loadingTitle'),
+        errorTitle: userPrograms.get('errorTitle'),
+        selectedWorkoutForEdit: userPrograms.get('selectedWorkoutForEdit'),
+        workoutFormAction: userPrograms.get('workoutFormAction'),
+        workoutWarmupSequence: userPrograms.get('workoutWarmupSequence'),
+        workoutSequence: userPrograms.get('workoutSequence'),
+        workoutCooldownSequence: userPrograms.get('workoutCooldownSequence'),
     };
 }
 
 export default connect(
     mapStateToProps,
-)(SaveScheduleWorkout);
+)(SaveScheduleProgramWorkout);

@@ -410,7 +410,7 @@ class ProfileFithub extends Component {
                                                         {(likesStr || totalComments > 0) &&
                                                             <p>
                                                                 {likesStr &&
-                                                                    <a href="javascript:void(0)" onClick={console.log()}>{likesStr}</a>
+                                                                    <a href="javascript:void(0)" onClick={() => {}}>{likesStr}</a>
                                                                 }
                                                                 {totalComments > 0 &&
                                                                     <a href="javascript:void(0)" className="pull-right" onClick={() => this.handleShowPostDetailsModal(index)}>Comments {totalComments}</a>

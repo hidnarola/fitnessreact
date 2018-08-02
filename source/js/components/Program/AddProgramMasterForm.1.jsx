@@ -9,7 +9,7 @@ import { routeCodes } from '../../constants/routes';
 
 class AddProgramMasterForm extends Component {
     render() {
-        const { handleSubmit, onCancel } = this.props;
+        const { handleSubmit } = this.props;
         return (
             <div className="add-program-master-form-alert-form">
                 <form method="POST" onSubmit={handleSubmit}>
@@ -29,19 +29,55 @@ class AddProgramMasterForm extends Component {
                         placeholder="Description"
                         component={TextAreaField}
                     />
-                    <button type="button" onClick={onCancel} className="btn btn-sm btn-danger">Cancel</button>
+                    <button type="button" className="btn btn-sm btn-danger">Cancel</button>
                     <button type="submit" className="btn btn-sm btn-success">OK</button>
                 </form>
             </div>
         );
     }
+
+    componentDidUpdate(prevProps, prevState) {
+        const { loadingMaster, programMaster, errorMaster, history } = this.props;
+        if (!loadingMaster && programMaster && prevProps.programMaster !== programMaster) {
+            if (errorMaster && errorMaster.length <= 0) {
+                var _id = programMaster._id;
+                history.push(`${routeCodes.PROGRAM_SAVE}/${_id}`);
+            } else {
+                te(errorMaster[0]);
+            }
+        }
+    }
+
 }
 
 AddProgramMasterForm = reduxForm({
     form: 'add_program_master_form',
+    onSubmit: (data, dispatch, props) => handleSubmit(data, dispatch, props)
 })(AddProgramMasterForm)
 
-export default connect()(AddProgramMasterForm);
+AddProgramMasterForm = withRouter(AddProgramMasterForm);
+
+const mapStateToProps = (state) => {
+    const { userPrograms } = state;
+    return {
+        loadingMaster: userPrograms.get('loadingMaster'),
+        programMaster: userPrograms.get('programMaster'),
+        errorMaster: userPrograms.get('errorMaster'),
+    };
+}
+
+export default connect(
+    mapStateToProps,
+)(AddProgramMasterForm);
+
+const handleSubmit = (data, dispatch, props) => {
+    var requestData = {
+        name: data.title,
+        description: (data.description) ? data.description : '',
+        type: 'user',
+    }
+    props.dispatch(addUserProgramMasterRequest(requestData));
+}
 
 const TextAreaField = (props) => {
     const { input, meta, wrapperClass, className, placeholder, errorClass } = props;

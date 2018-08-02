@@ -96,7 +96,6 @@ class Users extends Component {
                                         <div className="row d-flex">
                                             {allUsers && allUsers.length > 0 &&
                                                 allUsers.map((u, i) => {
-                                                    console.log(u);
                                                     return (
                                                         <div className="col-md-4" key={i}>
                                                             <div className="friend-box vertical-middle-r">

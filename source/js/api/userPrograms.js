@@ -12,15 +12,6 @@ function getUserPrograms() {
     return fetchResource(requestUrl, options);
 }
 
-function getUserProgram(_id) {
-    var headers = extraUserHeaders();
-    var options = {
-        method: 'GET',
-        headers: headers,
-    }
-    return fetchResource(requestUrl + '/' + _id, options);
-}
-
 function addUserProgramMaster(requestData) {
     let headers = extraUserHeaders();
     return postFormData(requestUrl, requestData, headers);
@@ -36,14 +27,13 @@ function deleteUserProgram(_id) {
     return fetchResource(requestUrl + '/' + _id, options);
 }
 
-function addUsersProgramWorkoutSchedule(requestData) {
-    let headers = extraUserHeaders();
-    return postFormData(requestUrl + '/exercises', requestData, headers);
-}
-
-function changeUsersProgramWorkoutSchedule(_id, requestData) {
-    let headers = extraUserHeaders();
-    return putFormData(requestUrl + '/exercises/' + _id, requestData, headers);
+function getUserProgram(_id) {
+    var headers = extraUserHeaders();
+    var options = {
+        method: 'GET',
+        headers: headers,
+    }
+    return fetchResource(requestUrl + '/' + _id, options);
 }
 
 function deleteUsersProgramWorkoutSchedule(requestData) {
@@ -56,13 +46,64 @@ function addUserProgramWorkoutTitle(requestData) {
     return postFormData(requestUrl + '/day', requestData, headers);
 }
 
+function getUsersProgramWorkoutSchedule(_id) {
+    let headers = extraUserHeaders();
+    var options = {
+        method: 'GET',
+        headers: headers,
+    }
+
+    return fetchResource(requestUrl + '/workout/' + _id, options);
+}
+
+function addUsersProgramWorkoutSchedule(requestData) {
+    let headers = extraUserHeaders();
+    return postFormData(requestUrl + '/workout', requestData, headers);
+}
+
+function updateUserProgramWorkoutTitle(_id, requestData) {
+    let headers = extraUserHeaders();
+    return putFormData(requestUrl + '/day/' + _id, requestData, headers);
+}
+
+function updateUsersProgramWorkoutSchedule(requestData) {
+    let headers = extraUserHeaders();
+    return putFormData(requestUrl + '/workout', requestData, headers);
+}
+
+function deleteUserProgramSingleExercise(requestData) {
+    let headers = extraUserHeaders();
+    return postFormData(requestUrl + '/delete/exercise', requestData, headers);
+}
+
+function deleteUserProgramWholeExercise(requestData) {
+    let headers = extraUserHeaders();
+    return postFormData(requestUrl + '/delete', requestData, headers);
+}
+
+function pasteUsersProgramWorkoutSchedule(requestData) {
+    let headers = extraUserHeaders();
+    return postFormData(requestUrl + '/copy', requestData, headers);
+}
+
+function updateUsersProgramMaster(_id, requestData) {
+    let headers = extraUserHeaders();
+    return putFormData(requestUrl + '/' + _id, requestData, headers);
+}
+
 export default {
     getUserPrograms,
-    getUserProgram,
     addUserProgramMaster,
     deleteUserProgram,
-    addUsersProgramWorkoutSchedule,
-    changeUsersProgramWorkoutSchedule,
+    getUserProgram,
     deleteUsersProgramWorkoutSchedule,
     addUserProgramWorkoutTitle,
+    getUsersProgramWorkoutSchedule,
+    addUsersProgramWorkoutSchedule,
+    updateUserProgramWorkoutTitle,
+    updateUsersProgramWorkoutSchedule,
+    deleteUserProgramSingleExercise,
+    deleteUserProgramWholeExercise,
+    pasteUsersProgramWorkoutSchedule,
+    updateUsersProgramMaster,
 }

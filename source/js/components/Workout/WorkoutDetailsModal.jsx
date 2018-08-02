@@ -46,7 +46,6 @@ class WorkoutDetailsModal extends Component {
             equipmentsByCategory,
             exerciseTypes,
         } = this.props;
-        console.log(workout);
         if (workout) {
             var equipments = [];
             _.forEach(equipmentsByCategory, (o, i) => {

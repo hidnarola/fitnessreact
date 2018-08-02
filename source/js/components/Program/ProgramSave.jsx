@@ -2,17 +2,20 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import FitnessHeader from '../global/FitnessHeader';
 import FitnessNav from '../global/FitnessNav';
-import { getUserProgramRequest, setSelectedDayForProgram, addUsersProgramWorkoutScheduleRequest, copyUserProgramWorkoutSchedule, deleteUsersProgramWorkoutScheduleRequest, selectUsersProgramWorkoutScheduleForEdit, addUserProgramWorkoutTitleRequest } from '../../actions/userPrograms';
+import { getUserProgramRequest, setSelectedDayForProgram, addUsersProgramWorkoutScheduleRequest, copyUserProgramWorkoutSchedule, deleteUsersProgramWorkoutScheduleRequest, selectUsersProgramWorkoutScheduleForEdit, addUserProgramWorkoutTitleRequest, pasteUsersProgramWorkoutScheduleRequest, updateUserProgramMasterRequest } from '../../actions/userPrograms';
 import { routeCodes } from '../../constants/routes';
 import { te, ts } from '../../helpers/funs';
 import _ from "lodash";
 import SweetAlert from "react-bootstrap-sweetalert";
 import { FaCopy, FaTrash, FaPencil, FaEye } from 'react-icons/lib/fa'
-import { NavLink } from "react-router-dom";
-import { getExercisesNameRequest, getProgramsNameRequest } from '../../actions/userScheduleWorkouts';
+import { getProgramsNameRequest } from '../../actions/userScheduleWorkouts';
 import { SCHEDULED_WORKOUT_TYPE_RESTDAY, SCHEDULED_WORKOUT_TYPE_EXERCISE } from '../../constants/consts';
 import cns from "classnames";
 import AddProgramWorkoutTitleForm from './AddProgramWorkoutTitleForm';
+import { NavLink } from "react-router-dom";
+import ReactTooltip from "react-tooltip";
+import UpdateProgramMasterForm from './UpdateProgramMasterForm';
+import { initialize, reset } from "redux-form";
 
 class ProgramSave extends Component {
     constructor(props) {
@@ -33,13 +36,16 @@ class ProgramSave extends Component {
             deleteBulkActionInit: false,
             showAddWorkoutTitleAlert: false,
             addWorkoutTitleInit: false,
+            addRestDayInit: false,
+            selectAllChecked: false,
+            showUpdateProgramTitleAlert: false,
+            updateProgramTitleInit: false,
         }
     }
 
     componentWillMount() {
         const { dispatch } = this.props;
         this.getProgramWorkoutSchedules();
-        dispatch(getExercisesNameRequest());
         dispatch(getProgramsNameRequest());
     }
 
@@ -53,6 +59,8 @@ class ProgramSave extends Component {
             deleteWeekAlert,
             deleteBulkActionAlert,
             showAddWorkoutTitleAlert,
+            selectAllChecked,
+            showUpdateProgramTitleAlert,
         } = this.state;
         const {
             selectedDay,
@@ -66,6 +74,7 @@ class ProgramSave extends Component {
                     <div className="body-head d-flex justify-content-start">
                         <div className="body-head-l">
                             <h2>{(program && program.name) ? program.name : ''}</h2>
+                            <button type="button" onClick={this.handleShowUpdateProgramTitleAlert}><FaPencil /></button>
                             <p>{(program && program.description) ? program.description : ''}</p>
                         </div>
                     </div>
@@ -74,8 +83,24 @@ class ProgramSave extends Component {
                             <div className="white-box space-btm-20">
                                 <div className="whitebox-body profile-body programs-table-wrapper">
                                     {selectedEvents && selectedEvents.length > 0 &&
-                                        <div>
-                                            <a href="javascript:void(0)" onClick={() => this.setState({ deleteBulkActionAlert: true })}>({selectedEvents.length}) Delete Selected</a>
+                                        <div className="fixed-btm-bar d-flex">
+                                            <div className="fixed-btm-bar-l d-flex">
+                                                <div className="custom_check">
+                                                    <input
+                                                        type="checkbox"
+                                                        id={'select_all_workouts'}
+                                                        name={'select_all_workouts'}
+                                                        checked={selectAllChecked}
+                                                        onChange={this.handleSelectAll}
+                                                    />
+                                                    <label htmlFor="select_all_workouts">Select All</label>
+                                                </div>
+                                                <div className="count-leadeboard bg-pink">{selectedEvents.length}</div>
+                                            </div>
+                                            <div className="fixed-btm-bar-c">
+                                                <a href="javascript:void(0)" data-for="event-bulk-delete-tooltip" data-tip="Delete" onClick={() => this.setState({ deleteBulkActionAlert: true })}><i className="icon-delete_forever"></i> </a>
+                                            </div>
+                                            <ReactTooltip id='event-bulk-delete-tooltip' place="top" type="error" effect="solid" />
                                         </div>
                                     }
                                     <CustomDaysCalendarView
@@ -120,7 +145,7 @@ class ProgramSave extends Component {
 
                 <SweetAlert
                     show={deleteWorkoutAlert}
-                    warning
+                    danger
                     showCancel
                     confirmBtnText="Yes, delete it!"
                     confirmBtnBsStyle="danger"
@@ -134,7 +159,7 @@ class ProgramSave extends Component {
 
                 <SweetAlert
                     show={deleteWeekAlert}
-                    warning
+                    danger
                     showCancel
                     confirmBtnText="Yes, delete it!"
                     confirmBtnBsStyle="danger"
@@ -148,7 +173,7 @@ class ProgramSave extends Component {
 
                 <SweetAlert
                     show={deleteBulkActionAlert}
-                    warning
+                    danger
                     showCancel
                     confirmBtnText="Yes, delete it!"
                     confirmBtnBsStyle="danger"
@@ -178,6 +203,24 @@ class ProgramSave extends Component {
                     />
                 </SweetAlert>
 
+                <SweetAlert
+                    type="default"
+                    title=""
+                    onConfirm={() => { }}
+                    btnSize="sm"
+                    cancelBtnBsStyle="danger"
+                    confirmBtnBsStyle="success"
+                    show={showUpdateProgramTitleAlert}
+                    showConfirm={false}
+                    showCancel={false}
+                    closeOnClickOutside={false}
+                >
+                    <UpdateProgramMasterForm
+                        onSubmit={this.handleUpdateProgramTitle}
+                        onCancel={this.handleCloseUpdateProgramTitleAlert}
+                    />
+                </SweetAlert>
+
             </div>
         );
     }
@@ -188,7 +231,6 @@ class ProgramSave extends Component {
             program,
             error,
             history,
-            workout,
             match,
             loadingTitle,
             workoutTitle,
@@ -201,6 +243,8 @@ class ProgramSave extends Component {
             deleteWeekActionInit,
             deleteBulkActionInit,
             addWorkoutTitleInit,
+            addRestDayInit,
+            updateProgramTitleInit,
         } = this.state;
         if (!loading && error && error.length > 0) {
             te(error[0]);
@@ -230,12 +274,14 @@ class ProgramSave extends Component {
                 history.push(routeCodes.PROGRAMS);
             }
         }
-        if (!loading && workout && prevProps.workout !== workout) {
+        if (workoutPasteAction && !loading) {
+            this.setState({ workoutPasteAction: false });
             this.getProgramWorkoutSchedules();
             this.cancelSelectDayAction();
-            if (workoutPasteAction) {
+            if (error && error.length > 0) {
+                te(error[0]);
+            } else {
                 ts('Workout pasted!');
-                this.setState({ workoutPasteAction: false });
             }
         }
         if (deleteWorkoutActionInit && selectedWorkoutIds && selectedWorkoutIds.length > 0 && !loading) {
@@ -275,6 +321,25 @@ class ProgramSave extends Component {
                 history.push(url);
             } else {
                 te(errorTitle[0]);
+            }
+        }
+        if (addRestDayInit && !loadingTitle && workoutTitle && prevProps.workoutTitle !== workoutTitle) {
+            this.setState({ addRestDayInit: false });
+            this.getProgramWorkoutSchedules();
+            this.cancelSelectDayAction();
+            if (errorTitle && errorTitle.length > 0) {
+                te(errorTitle[0]);
+            } else {
+                ts('Rest day added!');
+            }
+        }
+        if (updateProgramTitleInit && !loading) {
+            this.setState({ updateProgramTitleInit: false });
+            this.handleCloseUpdateProgramTitleAlert();
+            if (error && error.length > 0) {
+                te(error[0]);
+            } else {
+                ts('Updated!');
             }
         }
     }
@@ -360,48 +425,28 @@ class ProgramSave extends Component {
                 description: 'Hey its rest day! Take total rest.',
                 type: SCHEDULED_WORKOUT_TYPE_RESTDAY,
                 day: (selectedDay - 1),
-                exercises: [],
             };
         }
-        dispatch(addUsersProgramWorkoutScheduleRequest(requestData));
+        dispatch(addUserProgramWorkoutTitleRequest(requestData));
+        this.setState({ addRestDayInit: true });
     }
 
-    handleCopy = (selectedEvent) => {
+    handleCopy = (_id) => {
         const { dispatch } = this.props;
-        dispatch(copyUserProgramWorkoutSchedule(selectedEvent));
-        ts('Workout copied!');
+        if (_id) {
+            dispatch(copyUserProgramWorkoutSchedule(_id));
+            ts('Workout copied!');
+        }
     }
 
     handlePaste = () => {
-        const { copiedWorkout, selectedDay, dispatch, match } = this.props;
-        if (copiedWorkout && match && match.params && match.params.id) {
-            var exercises = [];
-            var copiedExercises = copiedWorkout.exercises;
-            _.forEach(copiedExercises, (exercise, index) => {
-                var exerciseObj = {
-                    exerciseId: exercise.exercise._id,
-                    type: exercise.type,
-                    reps: (exercise.reps) ? exercise.reps : null,
-                    sets: (exercise.sets) ? exercise.sets : null,
-                    weight: (exercise.weight) ? exercise.weight : null,
-                    weightUnits: (exercise.weightUnits) ? exercise.weightUnits : MEASUREMENT_UNIT_KILOGRAM,
-                    distance: (exercise.distance) ? exercise.distance : null,
-                    distanceUnits: (exercise.distanceUnits) ? exercise.distanceUnits : MEASUREMENT_UNIT_KILOMETER,
-                    restTime: (exercise.restTime) ? exercise.restTime : null,
-                    oneSetTimer: (exercise.oneSetTimer) ? exercise.oneSetTimer : null,
-                    sequence: (typeof exercise.sequence !== 'undefined') ? exercise.sequence : 0,
-                };
-                exercises.push(exerciseObj);
-            });
+        const { copiedWorkout, selectedDay, dispatch } = this.props;
+        if (copiedWorkout) {
             var requestData = {
-                programId: match.params.id,
-                title: copiedWorkout.title,
-                description: copiedWorkout.description,
-                type: SCHEDULED_WORKOUT_TYPE_EXERCISE,
+                exerciseId: copiedWorkout,
                 day: (selectedDay - 1),
-                exercises: exercises,
             };
-            dispatch(addUsersProgramWorkoutScheduleRequest(requestData));
+            dispatch(pasteUsersProgramWorkoutScheduleRequest(requestData));
             this.setState({ workoutPasteAction: true });
         } else {
             te('There is no workout copied!');
@@ -445,8 +490,20 @@ class ProgramSave extends Component {
             workout.isSelectedForBulkAction = isSelectedForBulkAction;
             var index = _.findIndex(workouts, ['_id', _id]);
             workouts[index] = workout;
+            let selectAllChecked = false;
+            let totalEventDaysCount = workouts.length;
+            let selectedEventDaysCount = 0;
+            _.forEach(workouts, (o, i) => {
+                if (o.isSelectedForBulkAction) {
+                    selectedEventDaysCount++;
+                }
+            });
+            if (selectedEventDaysCount >= totalEventDaysCount) {
+                selectAllChecked = true;
+            }
             this.setState({
                 workouts: workouts,
+                selectAllChecked: selectAllChecked
             });
         }
     }
@@ -490,6 +547,45 @@ class ProgramSave extends Component {
         }
         dispatch(addUserProgramWorkoutTitleRequest(requestData));
         this.setState({ addWorkoutTitleInit: true });
+    }
+
+    handleSelectAll = (e) => {
+        const workoutEvents = this.state.workouts;
+        let selectStatus = e.target.checked;
+        let newWorkouts = [];
+        _.forEach(workoutEvents, (o, i) => {
+            let newObj = Object.assign({}, o);
+            newObj.isSelectedForBulkAction = selectStatus;
+            newWorkouts.push(newObj);
+        });
+        this.setState({ workouts: newWorkouts, selectAllChecked: selectStatus });
+    }
+
+    handleShowUpdateProgramTitleAlert = () => {
+        const { program, dispatch } = this.props;
+        var formData = {
+            title: program.programDetails.name,
+            description: program.programDetails.description,
+        }
+        dispatch(initialize('update_program_title_form', formData));
+        this.setState({ showUpdateProgramTitleAlert: true });
+    }
+
+    handleCloseUpdateProgramTitleAlert = () => {
+        const { dispatch } = this.props;
+        dispatch(reset('update_program_title_form'));
+        this.setState({ showUpdateProgramTitleAlert: false });
+    }
+
+    handleUpdateProgramTitle = (data) => {
+        const { dispatch, program } = this.props;
+        var requestData = {
+            name: (data.title) ? data.title : '',
+            description: (data.description) ? data.description : '',
+        }
+        var _id = program.programDetails._id;
+        dispatch(updateUserProgramMasterRequest(_id, requestData));
+        this.setState({ updateProgramTitleInit: true });
     }
 }
 
@@ -615,16 +711,18 @@ class CustomDaysCalendarBlock extends Component {
                                             <div className="program-event-block-content">
                                                 <p>{(e.description) ? e.description : ''}</p>
                                                 {(e.type === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
-                                                    <a href="javascript:void(0)" onClick={(event) => this.handleCopyEvent(event, e)}><FaCopy /></a>
+                                                    <a href="javascript:void(0)" data-tip="Copy" onClick={(event) => this.handleCopyEvent(event, e._id)}><FaCopy /></a>
                                                 }
                                                 {(e.type === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
-                                                    <a href="javascript:void(0)"><FaEye /></a>
+                                                    <NavLink to={routeCodes.VIEW_PROGRAM_SCHEDULE_WORKOUT.replace(':id', e.programId).replace(':workout_id', e._id)} data-tip="Details" title=""><FaEye /></NavLink>
                                                 }
                                                 {(e.type === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
-                                                    <a href="javascript:void(0)"><FaPencil /></a>
+                                                    <NavLink to={routeCodes.SAVE_PROGRAM_SCHEDULE_WORKOUT.replace(':id', e.programId).replace(':workout_id', e._id)} data-tip="Change" title=""><FaPencil /></NavLink>
                                                 }
-                                                <a href="javascript:void(0)" onClick={(event) => this.handleDeleteEvent(event, e._id)}><FaTrash /></a>
+                                                <a href="javascript:void(0)" data-tip="Delete" data-for="event-delete-tooltip" onClick={(event) => this.handleDeleteEvent(event, e._id)}><FaTrash /></a>
                                             </div>
+                                            <ReactTooltip place="top" type="dark" effect="solid" />
+                                            <ReactTooltip id='event-delete-tooltip' place="top" type="error" effect="solid" />
                                         </div>
                                     );
                                 })
@@ -636,10 +734,10 @@ class CustomDaysCalendarBlock extends Component {
         );
     }
 
-    handleCopyEvent = (e, event) => {
+    handleCopyEvent = (e, _id) => {
         const { handleCopy } = this.props;
         e.stopPropagation();
-        handleCopy(event);
+        handleCopy(_id);
     }
 
     handleDeleteEvent = (e, _id) => {

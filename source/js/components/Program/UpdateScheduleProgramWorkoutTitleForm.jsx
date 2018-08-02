@@ -1,18 +1,25 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Field, reduxForm } from "redux-form";
+import { Field, reduxForm, initialize } from "redux-form";
 import { required } from '../../formValidation/validationRules';
-import { addUserProgramMasterRequest } from '../../actions/userPrograms';
-import { te } from '../../helpers/funs';
-import { withRouter } from "react-router-dom";
-import { routeCodes } from '../../constants/routes';
 
-class AddProgramMasterForm extends Component {
+class UpdateScheduleProgramWorkoutTitleForm extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            loadFormData: false,
+        }
+    }
+
+    componentWillMount() {
+        this.setState({ loadFormData: true });
+    }
+
     render() {
-        const { handleSubmit, onCancel } = this.props;
+        const { handleSubmit } = this.props;
         return (
-            <div className="add-program-master-form-alert-form">
-                <form method="POST" onSubmit={handleSubmit}>
+            <div className="update-schedule-workout-title-form">
+                <form onSubmit={handleSubmit}>
                     <Field
                         name="title"
                         className="form-control"
@@ -24,24 +31,47 @@ class AddProgramMasterForm extends Component {
                     />
                     <Field
                         name="description"
-                        className="form-control"
+                        className="form-control resize-vertical min-height-80"
                         wrapperClass="form-group"
                         placeholder="Description"
                         component={TextAreaField}
                     />
-                    <button type="button" onClick={onCancel} className="btn btn-sm btn-danger">Cancel</button>
-                    <button type="submit" className="btn btn-sm btn-success">OK</button>
+                    <div className="update-schedule-workout-title-form-btn">
+                        <button type="submit" className="">Save</button>
+                    </div>
                 </form>
             </div>
         );
     }
+
+    componentDidUpdate(prevProps, prevState) {
+        const { workout, dispatch } = this.props;
+        const { loadFormData } = this.state;
+        if (loadFormData) {
+            var formData = {
+                title: workout.title,
+                description: workout.description,
+            }
+            this.setState({ loadFormData: false });
+            dispatch(initialize('update_schedule_workout_title_form', formData));
+        }
+    }
 }
 
-AddProgramMasterForm = reduxForm({
-    form: 'add_program_master_form',
-})(AddProgramMasterForm)
+UpdateScheduleProgramWorkoutTitleForm = reduxForm({
+    form: 'update_schedule_workout_title_form',
+})(UpdateScheduleProgramWorkoutTitleForm);
 
-export default connect()(AddProgramMasterForm);
+const mapStateToProps = (state) => {
+    const { userPrograms } = state;
+    return {
+        workout: userPrograms.get('workout'),
+    };
+}
+
+export default connect(
+    mapStateToProps
+)(UpdateScheduleProgramWorkoutTitleForm);
 
 const TextAreaField = (props) => {
     const { input, meta, wrapperClass, className, placeholder, errorClass } = props;

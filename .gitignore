@@ -1,6 +1,7 @@
 .DS_STORE
 node_modules
 build
+.idea
 .module-cache
 *.log*
 _nogit

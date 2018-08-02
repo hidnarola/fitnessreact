@@ -53,7 +53,8 @@ export const routeCodes = {
     
     PROGRAMS: `${publicPath}programs`,
     PROGRAM_SAVE: `${publicPath}programs/save`,
-    SAVE_PROGRAM_SCHEDULE_WORKOUT: `${publicPath}programs/save/:id/save/:workout_id`,
+    SAVE_PROGRAM_SCHEDULE_WORKOUT: `${publicPath}programs/save/:id/:workout_id`,
+    VIEW_PROGRAM_SCHEDULE_WORKOUT: `${publicPath}programs/details/:id/:workout_id`,
 
 
     // Nutrition Routes

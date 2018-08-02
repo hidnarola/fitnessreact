@@ -55,7 +55,7 @@ import {
     CHANGE_WORKOUT_MAIN_TYPE_DETAILS,
 } from "../actions/userScheduleWorkouts";
 import { VALIDATION_FAILURE_STATUS, SCHEDULED_WORKOUT_TYPE_WARMUP } from "../constants/consts";
-import { generateValidationErrorMsgArr } from "../helpers/funs";
+import { generateValidationErrorMsgArr, createNewStateForWorkout } from "../helpers/funs";
 
 const initialState = Map({
     slotInfo: null,
@@ -462,7 +462,7 @@ const actionMap = {
     },
     [UPDATE_USER_WORKOUT_TITLE_REQUEST]: (state, action) => {
         return state.merge(Map({
-            loadingTitle: false,
+            loadingTitle: true,
             errorTitle: [],
         }));
     },
@@ -600,28 +600,4 @@ const actionMap = {
 export default function reducer(state = initialState, action = {}) {
     const fn = actionMap[action.type];
     return fn ? fn(state, action) : state;
-}
-
-function createNewStateForWorkout(workouts) {
-    var newState = {};
-    newState.workout = workouts;
-    if (workouts && workouts.warmup && workouts.warmup.length > 0) {
-        var lastIndex = workouts.warmup.length - 1;
-        newState.workoutWarmupSequence = (typeof workouts.warmup[lastIndex].sequence !== 'undefined') ? workouts.warmup[lastIndex].sequence : -1;
-    } else {
-        newState.workoutWarmupSequence = -1;
-    }
-    if (workouts && workouts.exercise && workouts.exercise.length > 0) {
-        var lastIndex = workouts.exercise.length - 1;
-        newState.workoutSequence = (typeof workouts.exercise[lastIndex].sequence !== 'undefined') ? workouts.exercise[lastIndex].sequence : -1;
-    } else {
-        newState.workoutSequence = -1;
-    }
-    if (workouts && workouts.cooldown && workouts.cooldown.length > 0) {
-        var lastIndex = workouts.cooldown.length - 1;
-        newState.workoutCooldownSequence = (typeof workouts.cooldown[lastIndex].sequence !== 'undefined') ? workouts.cooldown[lastIndex].sequence : -1;
-    } else {
-        newState.workoutCooldownSequence = -1;
-    }
-    return newState;
 }

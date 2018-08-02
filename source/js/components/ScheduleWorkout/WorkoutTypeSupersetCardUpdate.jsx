@@ -27,6 +27,7 @@ class WorkoutTypeSupersetCardUpdate extends Component {
             exercises,
             exerciseMeasurements,
             supersetSets,
+            selectedWorkoutForEdit,
         } = this.props;
         var exerciseOptions = prepareExerciseOptions(exercises);
         return (
@@ -200,6 +201,7 @@ class WorkoutTypeSupersetCardUpdate extends Component {
                                                     index={index}
                                                     overrideDbValues={this.advanceViewOverrideDbValues}
                                                     handleOverrideDbValues={(flag) => this.advanceViewOverrideDbValues = flag}
+                                                    selectedWorkoutForEdit={selectedWorkoutForEdit}
                                                 />
                                             </div>
                                         </div>

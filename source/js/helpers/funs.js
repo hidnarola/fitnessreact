@@ -292,3 +292,27 @@ export function prepareFieldsOptions(fieldData) {
     });
     return options;
 }
+
+export function createNewStateForWorkout(workouts) {
+    var newState = {};
+    newState.workout = workouts;
+    if (workouts && workouts.warmup && workouts.warmup.length > 0) {
+        var lastIndex = workouts.warmup.length - 1;
+        newState.workoutWarmupSequence = (typeof workouts.warmup[lastIndex].sequence !== 'undefined') ? workouts.warmup[lastIndex].sequence : -1;
+    } else {
+        newState.workoutWarmupSequence = -1;
+    }
+    if (workouts && workouts.exercise && workouts.exercise.length > 0) {
+        var lastIndex = workouts.exercise.length - 1;
+        newState.workoutSequence = (typeof workouts.exercise[lastIndex].sequence !== 'undefined') ? workouts.exercise[lastIndex].sequence : -1;
+    } else {
+        newState.workoutSequence = -1;
+    }
+    if (workouts && workouts.cooldown && workouts.cooldown.length > 0) {
+        var lastIndex = workouts.cooldown.length - 1;
+        newState.workoutCooldownSequence = (typeof workouts.cooldown[lastIndex].sequence !== 'undefined') ? workouts.cooldown[lastIndex].sequence : -1;
+    } else {
+        newState.workoutCooldownSequence = -1;
+    }
+    return newState;
+}

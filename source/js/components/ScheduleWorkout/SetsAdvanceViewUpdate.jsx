@@ -271,14 +271,12 @@ class SetsAdvanceViewUpdate extends Component {
 const selector = formValueSelector('update_schedule_workout_form');
 
 const mapStateToProps = (state) => {
-    const { userScheduleWorkouts } = state;
     return {
         workout_single: selector(state, 'workout_single'),
         workout_superset: selector(state, 'workout_superset'),
         superset_sets: selector(state, 'superset_sets'),
         workout_circuit: selector(state, 'workout_circuit'),
         circuit_sets: selector(state, 'circuit_sets'),
-        selectedWorkoutForEdit: userScheduleWorkouts.get('selectedWorkoutForEdit'),
     };
 }
 

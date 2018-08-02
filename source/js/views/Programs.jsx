@@ -11,9 +11,9 @@ import {
 import { FaPencil, FaTrash } from 'react-icons/lib/fa';
 import SweetAlert from "react-bootstrap-sweetalert";
 import AddProgramMasterForm from '../components/Program/AddProgramMasterForm';
-import { submit } from "redux-form";
 import { routeCodes } from '../constants/routes';
 import { te, ts } from '../helpers/funs';
+import { addUserProgramMasterRequest } from '../actions/userPrograms_backup';
 
 class Programs extends Component {
     constructor(props) {
@@ -118,22 +118,24 @@ class Programs extends Component {
                 <SweetAlert
                     type="default"
                     title={'Add Program'}
-                    onCancel={this.handleAddProgramCancel}
-                    onConfirm={this.handleAddProgramSubmit}
+                    onConfirm={() => { }}
                     btnSize="sm"
                     cancelBtnBsStyle="danger"
                     confirmBtnBsStyle="success"
                     show={showAddProgramAlert}
-                    showConfirm={true}
-                    showCancel={true}
+                    showConfirm={false}
+                    showCancel={false}
                     closeOnClickOutside={false}
                 >
-                    <AddProgramMasterForm />
+                    <AddProgramMasterForm
+                        onSubmit={this.handleAddProgramSubmit}
+                        onCancel={this.handleAddProgramCancel}
+                    />
                 </SweetAlert>
 
                 <SweetAlert
                     show={showDeleteProgramAlert}
-                    warning
+                    danger
                     showCancel
                     confirmBtnText="Yes, delete it!"
                     confirmBtnBsStyle="danger"
@@ -154,6 +156,10 @@ class Programs extends Component {
             loading,
             error,
             dispatch,
+            loadingMaster,
+            programMaster,
+            errorMaster,
+            history,
         } = this.props;
         const {
             deleteActionInit,
@@ -168,6 +174,14 @@ class Programs extends Component {
                 te(error[0]);
             }
         }
+        if (!loadingMaster && programMaster && prevProps.programMaster !== programMaster) {
+            if (errorMaster && errorMaster.length <= 0) {
+                var _id = programMaster._id;
+                history.push(`${routeCodes.PROGRAM_SAVE}/${_id}`);
+            } else {
+                te(errorMaster[0]);
+            }
+        }
     }
 
 
@@ -179,9 +193,14 @@ class Programs extends Component {
         this.setState({ showAddProgramAlert: false });
     }
 
-    handleAddProgramSubmit = () => {
+    handleAddProgramSubmit = (data) => {
         const { dispatch } = this.props;
-        dispatch(submit('add_program_master_form'));
+        var requestData = {
+            name: data.title,
+            description: (data.description) ? data.description : '',
+            type: 'user',
+        }
+        dispatch(addUserProgramMasterRequest(requestData));
     }
 
     handleEditNavigation = (e, href) => {
@@ -218,6 +237,9 @@ const mapStateToProps = (state) => {
         loading: userPrograms.get('loading'),
         programs: userPrograms.get('programs'),
         error: userPrograms.get('error'),
+        loadingMaster: userPrograms.get('loadingMaster'),
+        programMaster: userPrograms.get('programMaster'),
+        errorMaster: userPrograms.get('errorMaster'),
     };
 }
 

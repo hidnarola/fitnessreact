@@ -27,6 +27,7 @@ class WorkoutTypeCircuitCardUpdate extends Component {
             exercises,
             exerciseMeasurements,
             circuitSets,
+            selectedWorkoutForEdit,
         } = this.props;
         var exerciseOptions = prepareExerciseOptions(exercises);
         return (
@@ -200,6 +201,7 @@ class WorkoutTypeCircuitCardUpdate extends Component {
                                                     index={index}
                                                     overrideDbValues={this.advanceViewOverrideDbValues}
                                                     handleOverrideDbValues={(flag) => this.advanceViewOverrideDbValues = flag}
+                                                    selectedWorkoutForEdit={selectedWorkoutForEdit}
                                                 />
                                             </div>
                                         </div>

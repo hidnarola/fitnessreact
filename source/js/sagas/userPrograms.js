@@ -1,31 +1,49 @@
 import { takeLatest, put, call } from 'redux-saga/effects';
 import api from 'api/userPrograms';
 import {
-    GET_USER_PROGRAMS_REQUEST,
+    getUsersProgramWorkoutScheduleSuccess,
+    getUsersProgramWorkoutScheduleError,
+    GET_USERS_PROGRAM_WORKOUT_SCHEDULE_REQUEST,
     getUserProgramsSuccess,
     getUserProgramsError,
-    ADD_USER_PROGRAM_MASTER_REQUEST,
+    GET_USER_PROGRAMS_REQUEST,
     addUserProgramMasterSuccess,
     addUserProgramMasterError,
-    GET_USER_PROGRAM_REQUEST,
-    getUserProgramSuccess,
-    getUserProgramError,
+    ADD_USER_PROGRAM_MASTER_REQUEST,
     deleteUserProgramSuccess,
     deleteUserProgramError,
     DELETE_USER_PROGRAM_REQUEST,
+    getUserProgramSuccess,
+    getUserProgramError,
+    GET_USER_PROGRAM_REQUEST,
+    deleteUsersProgramWorkoutScheduleSuccess,
+    deleteUsersProgramWorkoutScheduleError,
+    DELETE_USERS_PROGRAM_WORKOUT_SCHEDULE_REQUEST,
+    addUserProgramWorkoutTitleSuccess,
+    addUserProgramWorkoutTitleError,
+    ADD_USER_PROGRAM_WORKOUT_TITLE_REQUEST,
     ADD_USERS_PROGRAM_WORKOUT_SCHEDULE_REQUEST,
     addUsersProgramWorkoutScheduleSuccess,
     addUsersProgramWorkoutScheduleError,
-    DELETE_USERS_PROGRAM_WORKOUT_SCHEDULE_REQUEST,
-    deleteUsersProgramWorkoutScheduleSuccess,
-    deleteUsersProgramWorkoutScheduleError,
-    changeUsersProgramWorkoutScheduleError,
-    changeUsersProgramWorkoutScheduleSuccess,
-    CHANGE_USERS_PROGRAM_WORKOUT_SCHEDULE_REQUEST,
-    addUserProgramWorkoutTitleSuccess,
-    addUserProgramWorkoutTitleError,
-    ADD_USER_PROGRAM_WORKOUT_TITLE_REQUEST
-} from "../actions/userPrograms";
+    updateUserProgramWorkoutTitleSuccess,
+    updateUserProgramWorkoutTitleError,
+    UPDATE_USER_PROGRAM_WORKOUT_TITLE_REQUEST,
+    UPDATE_USERS_PROGRAM_WORKOUT_SCHEDULE_REQUEST,
+    updateUsersProgramWorkoutScheduleSuccess,
+    updateUsersProgramWorkoutScheduleError,
+    DELETE_USER_PROGRAM_SINGLE_EXERCISE_REQUEST,
+    deleteUserProgramSingleExerciseSuccess,
+    deleteUserProgramSingleExerciseError,
+    DELETE_USER_PROGRAM_WHOLE_EXERCISE_REQUEST,
+    deleteUserProgramWholeExerciseSuccess,
+    deleteUserProgramWholeExerciseError,
+    PASTE_USERS_PROGRAM_WORKOUT_SCHEDULE_REQUEST,
+    pasteUsersProgramWorkoutScheduleSuccess,
+    pasteUsersProgramWorkoutScheduleError,
+    UPDATE_USER_PROGRAM_MASTER_REQUEST,
+    updateUserProgramMasterSuccess,
+    updateUserProgramMasterError,
+} from '../actions/userPrograms';
 
 function getUserProgramsData() {
     return function* (action) {
@@ -34,18 +52,6 @@ function getUserProgramsData() {
             yield put(getUserProgramsSuccess(data));
         } catch (error) {
             yield put(getUserProgramsError(error));
-        }
-    }
-}
-
-function getUserProgramData() {
-    return function* (action) {
-        try {
-            var _id = action._id;
-            const data = yield call(() => api.getUserProgram(_id));
-            yield put(getUserProgramSuccess(data));
-        } catch (error) {
-            yield put(getUserProgramError(error));
         }
     }
 }
@@ -74,27 +80,14 @@ function deleteUserProgramData() {
     }
 }
 
-function addUsersProgramWorkoutScheduleData() {
+function getUserProgramData() {
     return function* (action) {
         try {
-            let requestData = action.requestData;
-            const data = yield call(() => api.addUsersProgramWorkoutSchedule(requestData));
-            yield put(addUsersProgramWorkoutScheduleSuccess(data));
+            var _id = action._id;
+            const data = yield call(() => api.getUserProgram(_id));
+            yield put(getUserProgramSuccess(data));
         } catch (error) {
-            yield put(addUsersProgramWorkoutScheduleError(error));
-        }
-    }
-}
-
-function changeUsersProgramWorkoutScheduleData() {
-    return function* (action) {
-        try {
-            let _id = action._id;
-            let requestData = action.requestData;
-            const data = yield call(() => api.changeUsersProgramWorkoutSchedule(_id, requestData));
-            yield put(changeUsersProgramWorkoutScheduleSuccess(data));
-        } catch (error) {
-            yield put(changeUsersProgramWorkoutScheduleError(error));
+            yield put(getUserProgramError(error));
         }
     }
 }
@@ -123,15 +116,119 @@ function addUserProgramWorkoutTitleData() {
     }
 }
 
+function getUsersProgramWorkoutScheduleData() {
+    return function* (action) {
+        try {
+            let _id = action._id;
+            const data = yield call(() => api.getUsersProgramWorkoutSchedule(_id));
+            yield put(getUsersProgramWorkoutScheduleSuccess(data));
+        } catch (error) {
+            yield put(getUsersProgramWorkoutScheduleError(error));
+        }
+    }
+}
+
+function addUsersProgramWorkoutScheduleData() {
+    return function* (action) {
+        try {
+            let requestData = action.requestData;
+            const data = yield call(() => api.addUsersProgramWorkoutSchedule(requestData));
+            yield put(addUsersProgramWorkoutScheduleSuccess(data));
+        } catch (error) {
+            yield put(addUsersProgramWorkoutScheduleError(error));
+        }
+    }
+}
+
+function updateUserProgramWorkoutTitleData() {
+    return function* (action) {
+        try {
+            let _id = action._id;
+            let requestData = action.requestData;
+            const data = yield call(() => api.updateUserProgramWorkoutTitle(_id, requestData));
+            yield put(updateUserProgramWorkoutTitleSuccess(data));
+        } catch (error) {
+            yield put(updateUserProgramWorkoutTitleError(error));
+        }
+    }
+}
+
+function updateUsersProgramWorkoutScheduleData() {
+    return function* (action) {
+        try {
+            let requestData = action.requestData;
+            const data = yield call(() => api.updateUsersProgramWorkoutSchedule(requestData));
+            yield put(updateUsersProgramWorkoutScheduleSuccess(data));
+        } catch (error) {
+            yield put(updateUsersProgramWorkoutScheduleError(error));
+        }
+    }
+}
+
+function deleteUserProgramSingleExerciseData() {
+    return function* (action) {
+        try {
+            let requestData = action.requestData;
+            const data = yield call(() => api.deleteUserProgramSingleExercise(requestData));
+            yield put(deleteUserProgramSingleExerciseSuccess(data));
+        } catch (error) {
+            yield put(deleteUserProgramSingleExerciseError(error));
+        }
+    }
+}
+
+function deleteUserProgramWholeExerciseData() {
+    return function* (action) {
+        try {
+            let requestData = action.requestData;
+            const data = yield call(() => api.deleteUserProgramWholeExercise(requestData));
+            yield put(deleteUserProgramWholeExerciseSuccess(data));
+        } catch (error) {
+            yield put(deleteUserProgramWholeExerciseError(error));
+        }
+    }
+}
+
+function pasteUsersProgramWorkoutScheduleData() {
+    return function* (action) {
+        try {
+            let requestData = action.requestData;
+            const data = yield call(() => api.pasteUsersProgramWorkoutSchedule(requestData));
+            yield put(pasteUsersProgramWorkoutScheduleSuccess(data));
+        } catch (error) {
+            yield put(pasteUsersProgramWorkoutScheduleError(error));
+        }
+    }
+}
+
+function updateUserProgramMasterData() {
+    return function* (action) {
+        try {
+            let _id = action._id;
+            let requestData = action.requestData;
+            const data = yield call(() => api.updateUsersProgramMaster(_id, requestData));
+            yield put(updateUserProgramMasterSuccess(data));
+        } catch (error) {
+            yield put(updateUserProgramMasterError(error));
+        }
+    }
+}
+
 export function* watchUserProgramsData() {
     yield takeLatest(GET_USER_PROGRAMS_REQUEST, getUserProgramsData());
-    yield takeLatest(GET_USER_PROGRAM_REQUEST, getUserProgramData());
     yield takeLatest(ADD_USER_PROGRAM_MASTER_REQUEST, addUserProgramMasterData());
     yield takeLatest(DELETE_USER_PROGRAM_REQUEST, deleteUserProgramData());
-    yield takeLatest(ADD_USERS_PROGRAM_WORKOUT_SCHEDULE_REQUEST, addUsersProgramWorkoutScheduleData());
-    yield takeLatest(CHANGE_USERS_PROGRAM_WORKOUT_SCHEDULE_REQUEST, changeUsersProgramWorkoutScheduleData());
+    yield takeLatest(GET_USER_PROGRAM_REQUEST, getUserProgramData());
     yield takeLatest(DELETE_USERS_PROGRAM_WORKOUT_SCHEDULE_REQUEST, deleteUsersProgramWorkoutScheduleData());
     yield takeLatest(ADD_USER_PROGRAM_WORKOUT_TITLE_REQUEST, addUserProgramWorkoutTitleData());
+    yield takeLatest(GET_USERS_PROGRAM_WORKOUT_SCHEDULE_REQUEST, getUsersProgramWorkoutScheduleData());
+    yield takeLatest(ADD_USERS_PROGRAM_WORKOUT_SCHEDULE_REQUEST, addUsersProgramWorkoutScheduleData());
+    yield takeLatest(UPDATE_USER_PROGRAM_WORKOUT_TITLE_REQUEST, updateUserProgramWorkoutTitleData());
+    yield takeLatest(UPDATE_USERS_PROGRAM_WORKOUT_SCHEDULE_REQUEST, updateUsersProgramWorkoutScheduleData());
+    yield takeLatest(DELETE_USER_PROGRAM_SINGLE_EXERCISE_REQUEST, deleteUserProgramSingleExerciseData());
+    yield takeLatest(DELETE_USER_PROGRAM_WHOLE_EXERCISE_REQUEST, deleteUserProgramWholeExerciseData());
+    yield takeLatest(PASTE_USERS_PROGRAM_WORKOUT_SCHEDULE_REQUEST, pasteUsersProgramWorkoutScheduleData());
+    yield takeLatest(UPDATE_USER_PROGRAM_MASTER_REQUEST, updateUserProgramMasterData());
 }
 
 export default [
