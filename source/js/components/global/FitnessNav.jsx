@@ -111,7 +111,7 @@ export default class FitnessNav extends Component {
                                     to={routeCodes.GOALS}
                                 >
                                     <FaGoal size={24} />
-                                    <span>Goals</span>
+                                    <span>Progress</span>
                                 </NavLink>
                             </li>
                         </ul>

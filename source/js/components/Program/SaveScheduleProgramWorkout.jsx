@@ -130,6 +130,7 @@ class SaveScheduleProgramWorkout extends Component {
                                                             <UpdateScheduleWorkoutForm
                                                                 onSubmit={this.handleUpdateSubmit}
                                                                 selectedWorkoutForEdit={selectedWorkoutForEdit}
+                                                                formOf="program"
                                                             />
                                                         </div>
                                                     }

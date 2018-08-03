@@ -10,6 +10,7 @@ import { changeUsersWorkoutFormAction } from '../../actions/userScheduleWorkouts
 import WorkoutTypeSingleCardUpdate from './WorkoutTypeSingleCardUpdate';
 import WorkoutTypeSupersetCardUpdate from './WorkoutTypeSupersetCardUpdate';
 import WorkoutTypeCircuitCardUpdate from './WorkoutTypeCircuitCardUpdate';
+import { changeUsersProgramWorkoutFormAction } from '../../actions/userPrograms';
 
 class UpdateScheduleWorkoutForm extends Component {
     render() {
@@ -58,16 +59,25 @@ class UpdateScheduleWorkoutForm extends Component {
                             />
                         }
                     </div>
-                    <button type="submit" className="add-workout-form-btm-btn">Save</button>
-                    <button type="button" className="add-workout-form-btm-btn" onClick={this.handleResetForm}>Reset</button>
+                    {selectedWorkoutForEdit && (selectedWorkoutForEdit.subType === SCHEDULED_WORKOUT_TYPE_EXERCISE || selectedWorkoutForEdit.subType === SCHEDULED_WORKOUT_TYPE_SUPERSET || selectedWorkoutForEdit.subType === SCHEDULED_WORKOUT_TYPE_CIRCUIT) &&
+                        <div>
+                            <button type="submit" className="add-workout-form-btm-btn">Save</button>
+                            <button type="button" className="add-workout-form-btm-btn" onClick={this.handleResetForm}>Reset</button>
+                        </div>
+                    }
                 </form>
             </div>
         );
     }
 
     handleResetForm = () => {
-        const { dispatch, reset } = this.props;
+        const { dispatch, reset, formOf } = this.props;
         dispatch(changeUsersWorkoutFormAction('add', null));
+        if (formOf && formOf === 'program') {
+            dispatch(changeUsersProgramWorkoutFormAction('add', null));
+        } else {
+            dispatch(changeUsersWorkoutFormAction('add', null));
+        }
         reset();
     }
 }

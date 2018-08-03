@@ -89,13 +89,6 @@ class SaveScheduleWorkoutForm extends Component {
         );
     }
 
-    // componentDidUpdate(prevProps, prevState) {
-    //     const { selectedWorkoutType } = this.props;
-    //     if (selectedWorkoutType && prevProps.selectedWorkoutType && prevProps.selectedWorkoutType !== selectedWorkoutType) {
-
-    //     }
-    // }
-
     handleResetForm = () => {
         const { dispatch, reset } = this.props;
         dispatch(changeUsersWorkoutFormAction('add', null));
@@ -103,12 +96,10 @@ class SaveScheduleWorkoutForm extends Component {
     }
 
     handleChange = (e) => {
-        const { selectedWorkoutType, dispatch } = this.props;
+        const { selectedWorkoutType } = this.props;
         if (selectedWorkoutType) {
             e.preventDefault();
             this.setState({ workoutTypeSelect: e.target.value, showDataLossAlert: true });
-        } else {
-            // dispatch(change('save_schedule_workout_form', 'workout_type', e.target.value));
         }
     }
 
@@ -131,14 +122,8 @@ SaveScheduleWorkoutForm = reduxForm({
 const selector = formValueSelector('save_schedule_workout_form');
 
 const mapStateToProps = (state) => {
-    const { userScheduleWorkouts } = state;
     return {
         selectedWorkoutType: selector(state, 'workout_type'),
-        selectedSingleExerciseObj: selector(state, 'single_exercise_id'),
-        singleAdvanceView: selector(state, 'single_advance_view'),
-        singleSets: selector(state, 'single_sets'),
-        exercises: userScheduleWorkouts.get('exercises'),
-        exerciseMeasurements: userScheduleWorkouts.get('exerciseMeasurements'),
     };
 }
 
