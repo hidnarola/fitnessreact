@@ -103,6 +103,11 @@ function deleteUserSingleExercise(requestData) {
     return postFormData(requestUrl + '/delete/exercise', requestData, headers);
 }
 
+function getUserWorkoutByDate(requestData) {
+    let headers = extraUserHeaders();
+    return postFormData(requestUrl + '/by_date', requestData, headers);
+}
+
 export default {
     getUsersWorkoutSchedulesByMonths,
     getExercisesName,
@@ -120,4 +125,5 @@ export default {
     updateUserWorkoutTitle,
     deleteUserWholeExercise,
     deleteUserSingleExercise,
+    getUserWorkoutByDate,
 }
