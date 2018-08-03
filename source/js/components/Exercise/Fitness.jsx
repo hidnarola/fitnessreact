@@ -1,11 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getUserFitnessTestsRequest, userFitnessTestsTextField, userFitnessTestsMaxRep, userFitnessTestsMultiselect, userFitnessTestsAOrB, saveUserFitnessTestsRequest } from '../../actions/userFitnessTests';
+import {
+    getUserFitnessTestsRequest,
+    userFitnessTestsTextField,
+    userFitnessTestsMaxRep,
+    userFitnessTestsMultiselect,
+    userFitnessTestsAOrB,
+    saveUserFitnessTestsRequest
+} from '../../actions/userFitnessTests';
 import { capitalizeFirstLetter, ts } from '../../helpers/funs';
-import noProfileImg from 'img/common/no-profile-img.png'
-import { SERVER_BASE_URL, FITNESS_TEST_FORMAT_MULTISELECT, FITNESS_TEST_FORMAT_MAX_REP, FITNESS_TEST_FORMAT_A_OR_B, FITNESS_TEST_FORMAT_TEXT_FIELD } from '../../constants/consts';
 import FitnessItem from './FitnessItem';
 import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
+import moment from "moment";
 
 class Fitness extends Component {
     constructor(props) {
@@ -20,8 +26,9 @@ class Fitness extends Component {
     componentWillMount() {
         const { dispatch } = this.props;
         this.setState({ selectActionInit: true });
+        var today = moment().startOf('day').utc();
         dispatch(showPageLoader());
-        dispatch(getUserFitnessTestsRequest());
+        dispatch(getUserFitnessTestsRequest(today));
     }
 
     render() {
@@ -100,6 +107,7 @@ class Fitness extends Component {
             dispatch,
             resetActionInit,
             setResetAction,
+            date,
         } = this.props;
         if (selectActionInit && !loading) {
             this.setState({
@@ -109,12 +117,20 @@ class Fitness extends Component {
             });
             dispatch(hidePageLoader());
         } else if (saveActionInit && !loading) {
-            dispatch(getUserFitnessTestsRequest());
+            var _date = date;
+            if (!_date) {
+                _date = moment().startOf('day').utc();
+            }
+            dispatch(getUserFitnessTestsRequest(_date));
             ts('Fitness test updated successfully!');
             this.setState({ selectActionInit: true });
             setSaveAction(false);
         } else if (resetActionInit && !loading) {
-            dispatch(getUserFitnessTestsRequest());
+            var _date = date;
+            if (!_date) {
+                _date = moment().startOf('day').utc();
+            }
+            dispatch(getUserFitnessTestsRequest(_date));
             ts('Fitness test reset successfully!');
             this.setState({ selectActionInit: true });
             setResetAction(false);
@@ -126,8 +142,10 @@ class Fitness extends Component {
             dispatch,
             syncedUserFitnessTests,
             setSaveAction,
+            date,
         } = this.props;
         var requestObj = {
+            date: date,
             user_test_exercises: syncedUserFitnessTests
         }
         dispatch(saveUserFitnessTestsRequest(requestObj));
@@ -164,6 +182,7 @@ const mapStateToProps = (state) => {
     const { userFitnessTests } = state;
     return {
         loading: userFitnessTests.get('loading'),
+        date: userFitnessTests.get('date'),
         fitnessTests: userFitnessTests.get('fitnessTests'),
         userFitnessTests: userFitnessTests.get('userFitnessTests'),
         syncedUserFitnessTests: userFitnessTests.get('syncedUserFitnessTests'),

@@ -3,13 +3,10 @@ import { extraUserHeaders } from '../helpers/funs';
 
 const requestUrl = 'user/test_exercise';
 
-function getUserFitnessTests() {
+function getUserFitnessTests(date) {
     let headers = extraUserHeaders();
-    var options = {
-        method: 'GET',
-        headers: headers,
-    }
-    return fetchResource(requestUrl, options);
+    var requestData = { date };
+    return postFormData(requestUrl + '/today', requestData, headers);
 }
 
 function saveUserFitnessTests(requestData) {
@@ -17,13 +14,10 @@ function saveUserFitnessTests(requestData) {
     return postFormData(requestUrl, requestData, headers);
 }
 
-function resetUserFitnessTests() {
+function resetUserFitnessTests(date) {
+    var requestData = { date };
     let headers = extraUserHeaders();
-    var options = {
-        method: 'DELETE',
-        headers: headers,
-    }
-    return fetchResource(requestUrl, options);
+    return postFormData(requestUrl + '/reset', requestData, headers);
 }
 
 export default {

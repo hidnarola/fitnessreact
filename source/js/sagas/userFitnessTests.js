@@ -15,7 +15,8 @@ import {
 function getUserFitnessTestsData() {
     return function* (action) {
         try {
-            const data = yield call(() => api.getUserFitnessTests());
+            var today = action.today;
+            const data = yield call(() => api.getUserFitnessTests(today));
             yield put(getUserFitnessTestsSuccess(data));
         } catch (error) {
             yield put(getUserFitnessTestsError(error));
@@ -38,7 +39,8 @@ function saveUserFitnessTestsData() {
 function resetUserFitnessTestsData() {
     return function* (action) {
         try {
-            const data = yield call(() => api.resetUserFitnessTests());
+            var date = action.date;
+            const data = yield call(() => api.resetUserFitnessTests(date));
             yield put(resetUserFitnessTestsSuccess(data));
         } catch (error) {
             yield put(resetUserFitnessTestsError(error));

@@ -169,7 +169,7 @@ class ExerciseSettings extends Component {
 
     handleReset = () => {
         const { resetActionFor } = this.state;
-        const { dispatch } = this.props;
+        const { dispatch, fitnessDate } = this.props;
         if (resetActionFor === 'userEquipmentsForm') {
             let requestObj = {
                 equipmentIds: []
@@ -180,7 +180,11 @@ class ExerciseSettings extends Component {
             dispatch(resetUserExercisePreferencesRequest());
             this.setResetAction(true);
         } else if (resetActionFor === 'userFitnessTests') {
-            dispatch(resetUserFitnessTestsRequest());
+            var _date = fitnessDate;
+            if (!_date) {
+                _date = moment().startOf('day').utc();
+            }
+            dispatch(resetUserFitnessTestsRequest(_date));
             this.setResetAction(true);
         }
         dispatch(showPageLoader());
@@ -201,4 +205,13 @@ class ExerciseSettings extends Component {
     }
 }
 
-export default connect()(ExerciseSettings)
+const mapStateToProps = (state) => {
+    const { userFitnessTests } = state;
+    return {
+        fitnessDate: userFitnessTests.get('date'),
+    };
+}
+
+export default connect(
+    mapStateToProps
+)(ExerciseSettings)

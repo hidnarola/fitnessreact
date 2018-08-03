@@ -15,9 +15,10 @@ export const USER_FITNESS_TESTS_MAX_REP_FIELD = 'USER_FITNESS_TESTS_MAX_REP_FIEL
 export const USER_FITNESS_TESTS_MULTISELECT_FIELD = 'USER_FITNESS_TESTS_MULTISELECT_FIELD';
 export const USER_FITNESS_TESTS_A_OR_B_FIELD = 'USER_FITNESS_TESTS_A_OR_B_FIELD';
 
-export function getUserFitnessTestsRequest() {
+export function getUserFitnessTestsRequest(today) {
     return {
         type: GET_USER_FITNESS_TESTS_REQUEST,
+        today,
     }
 }
 
@@ -56,9 +57,10 @@ export function saveUserFitnessTestsError(error) {
     }
 }
 
-export function resetUserFitnessTestsRequest() {
+export function resetUserFitnessTestsRequest(date) {
     return {
         type: RESET_USER_FITNESS_TESTS_REQUEST,
+        date,
     }
 }
 

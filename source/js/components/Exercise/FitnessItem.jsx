@@ -79,30 +79,31 @@ class FitnessItem extends Component {
                             {item.multiselect && item.multiselect.length > 0 &&
                                 item.multiselect.map((val, i) => {
                                     var userVal = false;
-                                    if (userValue.value && userValue.value.indexOf(i) >= 0) {
+                                    if (userValue.value === i) {
                                         userVal = true;
                                     }
                                     return (
                                         <div className="push-ups" key={i}>
-
                                             <h5>{val.title}</h5>
+                                                    <input
+                                                        type="radio"
+                                                        id={`${item._id}_multiselect_${i}`}
+                                                        name={`${item._id}_multiselect`}
+                                                        value={i}
+                                                        checked={userVal}
+                                                        onChange={(e) => handleMultiselectChange(item._id, e)}
+                                                    />
                                             <span>
                                                 <div className="custom_checkbox_cstm">
-                                                <input
-                                                    type="checkbox"
-                                                    id={`${item._id}_multiselect_${i}`}
-                                                    name={`${item._id}_multiselect_${i}`}
-                                                    value={i}
-                                                    checked={userVal}
-                                                    onChange={(e) => handleMultiselectChange(item._id, e)}
-                                                />
-                                                <label htmlFor={`${item._id}_multiselect_${i}`}><img
-                                                    src={SERVER_BASE_URL + val.image}
-                                                    alt="Image"
-                                                    onError={(e) => {
-                                                        e.target.src = noImg
-                                                    }}
-                                                /></label>
+                                                    <label htmlFor={`${item._id}_multiselect_${i}`}>
+                                                        <img
+                                                            src={SERVER_BASE_URL + val.image}
+                                                            alt="Image"
+                                                            onError={(e) => {
+                                                                e.target.src = noImg
+                                                            }}
+                                                        />
+                                                    </label>
                                                 </div>
                                             </span>
                                         </div>
@@ -126,8 +127,6 @@ class FitnessItem extends Component {
                                         }
                                         return (
                                             <li key={i}>
-
-
                                                 <div className="custom_radio">
                                                     <input
                                                         type="radio"

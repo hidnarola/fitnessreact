@@ -20,6 +20,7 @@ import _ from "lodash";
 
 const initialState = Map({
     loading: false,
+    date: null,
     error: [],
     fitnessTests: {},
     userFitnessTests: {},
@@ -30,6 +31,7 @@ const actionMap = {
     [GET_USER_FITNESS_TESTS_REQUEST]: (state, action) => {
         return state.merge(Map({
             loading: true,
+            date: action.today,
         }));
     },
     [GET_USER_FITNESS_TESTS_SUCCESS]: (state, action) => {
@@ -84,6 +86,7 @@ const actionMap = {
     [RESET_USER_FITNESS_TESTS_REQUEST]: (state, action) => {
         return state.merge(Map({
             loading: true,
+            date: action.date,
         }));
     },
     [RESET_USER_FITNESS_TESTS_SUCCESS]: (state, action) => {
@@ -123,15 +126,8 @@ const actionMap = {
     },
     [USER_FITNESS_TESTS_MULTISELECT_FIELD]: (state, action) => {
         var newSyncedUserFitnessTests = Object.assign({}, state.get('syncedUserFitnessTests'));
-        var multiSelectArr = newSyncedUserFitnessTests[action._id].value;
         var valueInt = parseInt(action.value);
-        var index = multiSelectArr.indexOf(valueInt);
-        if (index >= 0) {
-            multiSelectArr.splice(index, 1);
-        } else {
-            multiSelectArr.push(valueInt);
-        }
-        newSyncedUserFitnessTests[action._id].value = multiSelectArr;
+        newSyncedUserFitnessTests[action._id].value = valueInt;
         return state.merge(Map({
             syncedUserFitnessTests: newSyncedUserFitnessTests,
         }));
@@ -165,9 +161,7 @@ const syncUserFitnessTests = (fitnessTests, userFitnessTests) => {
                     value = userTest[data.format];
                 }
                 if (value === null) {
-                    if (data.format === FITNESS_TEST_FORMAT_MULTISELECT) {
-                        value = [];
-                    } else if (data.format === FITNESS_TEST_FORMAT_MAX_REP) {
+                    if (data.format === FITNESS_TEST_FORMAT_MAX_REP) {
                         var maxRepDefaultVal = {};
                         data.max_rep.map((rep, index) => {
                             maxRepDefaultVal[rep] = 0;
