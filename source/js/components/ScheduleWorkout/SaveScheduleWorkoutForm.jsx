@@ -11,13 +11,26 @@ import WorkoutTypeSupersetCard from './WorkoutTypeSupersetCard';
 import WorkoutTypeCircuitCard from './WorkoutTypeCircuitCard';
 import { required } from '../../formValidation/validationRules';
 import { changeUsersWorkoutFormAction } from '../../actions/userScheduleWorkouts';
+import { change } from "redux-form";
+import SweetAlert from "react-bootstrap-sweetalert";
 
 class SaveScheduleWorkoutForm extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            workoutTypeSelect: null,
+            showDataLossAlert: false,
+        };
+    }
+
     render() {
         const {
             handleSubmit,
             selectedWorkoutType,
         } = this.props;
+        const {
+            showDataLossAlert,
+        } = this.state;
         return (
             <div className="add-workout-form">
                 <form onSubmit={handleSubmit}>
@@ -28,6 +41,7 @@ class SaveScheduleWorkoutForm extends Component {
                             name="workout_type"
                             component={WorkoutTypeSelection}
                             validationRules={[required]}
+                            handleChange={this.handleChange}
                         />
                         {selectedWorkoutType && selectedWorkoutType === SCHEDULED_WORKOUT_TYPE_EXERCISE &&
                             <FieldArray
@@ -51,17 +65,62 @@ class SaveScheduleWorkoutForm extends Component {
                             />
                         }
                     </div>
-                    <button type="submit" className="add-workout-form-btm-btn">Save</button>
-                    <button type="button" className="add-workout-form-btm-btn" onClick={this.handleResetForm}>Reset</button>
+                    {selectedWorkoutType && (selectedWorkoutType === SCHEDULED_WORKOUT_TYPE_EXERCISE || selectedWorkoutType === SCHEDULED_WORKOUT_TYPE_SUPERSET || selectedWorkoutType === SCHEDULED_WORKOUT_TYPE_CIRCUIT) &&
+                        <div>
+                            <button type="submit" className="add-workout-form-btm-btn">Save</button>
+                            <button type="button" className="add-workout-form-btm-btn" onClick={this.handleResetForm}>Reset</button>
+                        </div>
+                    }
                 </form>
+                <SweetAlert
+                    show={showDataLossAlert}
+                    danger
+                    showCancel
+                    confirmBtnText="Yes, change it!"
+                    confirmBtnBsStyle="danger"
+                    cancelBtnBsStyle="default"
+                    title="Are you sure?"
+                    onConfirm={this.handleConfirmDataLossAlert}
+                    onCancel={this.handleCancelDataLossAlert}
+                >
+                    You will loss the changes and not be able to recover!
+                </SweetAlert>
             </div>
         );
     }
+
+    // componentDidUpdate(prevProps, prevState) {
+    //     const { selectedWorkoutType } = this.props;
+    //     if (selectedWorkoutType && prevProps.selectedWorkoutType && prevProps.selectedWorkoutType !== selectedWorkoutType) {
+
+    //     }
+    // }
 
     handleResetForm = () => {
         const { dispatch, reset } = this.props;
         dispatch(changeUsersWorkoutFormAction('add', null));
         reset();
+    }
+
+    handleChange = (e) => {
+        const { selectedWorkoutType, dispatch } = this.props;
+        if (selectedWorkoutType) {
+            e.preventDefault();
+            this.setState({ workoutTypeSelect: e.target.value, showDataLossAlert: true });
+        } else {
+            // dispatch(change('save_schedule_workout_form', 'workout_type', e.target.value));
+        }
+    }
+
+    handleConfirmDataLossAlert = () => {
+        const { dispatch } = this.props;
+        const { workoutTypeSelect } = this.state;
+        dispatch(change('save_schedule_workout_form', 'workout_type', workoutTypeSelect));
+        this.handleCancelDataLossAlert();
+    }
+
+    handleCancelDataLossAlert = () => {
+        this.setState({ workoutTypeSelect: null, showDataLossAlert: false });
     }
 }
 
@@ -92,6 +151,7 @@ const WorkoutTypeSelection = (props) => {
         input,
         meta,
         validationRules,
+        handleChange,
     } = props;
     return (
         <div className="workout-type-radios">
@@ -104,6 +164,7 @@ const WorkoutTypeSelection = (props) => {
                         type="radio"
                         value={SCHEDULED_WORKOUT_TYPE_EXERCISE}
                         validate={validationRules}
+                        onChange={handleChange}
                     />
                     <label htmlFor="workout_type_single">Single</label>
                 </li>
@@ -115,6 +176,7 @@ const WorkoutTypeSelection = (props) => {
                         type="radio"
                         value={SCHEDULED_WORKOUT_TYPE_SUPERSET}
                         validate={validationRules}
+                        onChange={handleChange}
                     />
                     <label htmlFor="workout_type_superset">Superset</label>
                 </li>
@@ -126,6 +188,7 @@ const WorkoutTypeSelection = (props) => {
                         type="radio"
                         value={SCHEDULED_WORKOUT_TYPE_CIRCUIT}
                         validate={validationRules}
+                        onChange={handleChange}
                     />
                     <label htmlFor="workout_type_circuit">Circuit</label>
                 </li>

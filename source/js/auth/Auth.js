@@ -35,7 +35,8 @@ export default class Auth {
           scope: 'openid profile email user_metadata app_metadata'
         }
       },
-      avatar: null
+      avatar: null,
+      autoclose:false,
     }
   );
 

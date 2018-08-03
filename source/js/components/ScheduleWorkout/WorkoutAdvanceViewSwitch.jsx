@@ -34,7 +34,7 @@ class WorkoutAdvanceViewSwitch extends Component {
                 </div>
                 <SweetAlert
                     show={showAlertWhileSwitchToNormalView}
-                    warning
+                    danger
                     showCancel
                     confirmBtnText="Yes, change it!"
                     confirmBtnBsStyle="danger"

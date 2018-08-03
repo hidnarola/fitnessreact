@@ -133,7 +133,8 @@ class App extends Component {
                             <Route path={routeCodes.REGISTERUSER} component={RegisterUser} />
 
                             <PrivateRoute path={routeCodes.PEOPLE} component={People} />
-                            <PrivateRoute path={routeCodes.DASHBOARD} component={Dashboard} />
+                            <Route path={routeCodes.DASHBOARD} component={Dashboard} />
+                            {/* <PrivateRoute path={routeCodes.DASHBOARD} component={Dashboard} /> */}
 
                             <PrivateRoute path={routeCodes.STATSPAGE} component={StatsPage} />
 

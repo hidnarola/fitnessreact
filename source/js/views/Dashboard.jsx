@@ -1,62 +1,22 @@
 import React, { Component } from 'react';
-import ActivityFeed from 'components/Dashboard/ActivityFeed';
-
-import TodaysWorkout from 'components/Dashboard/TodaysWorkout';
-import GoalProgress from 'components/Dashboard/GoalProgress';
-import Badges from 'components/Dashboard/Badges';
-
-import NextMeal from 'components/Dashboard/NextMeal';
-import BodyFatLoss from 'components/Dashboard/BodyFatLoss';
-import WeeksCalories from 'components/Dashboard/WeeksCalories';
-
 import FitnessHeader from 'components/global/FitnessHeader';
 import FitnessNav from 'components/global/FitnessNav';
-
-import { Button, Modal } from 'react-bootstrap';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-// import { getPeopleNew } from 'actions/people';
-import { getDashboardData } from '../actions/dashboard';
-import ModalPopUp from 'components/Dashboard/ModalPopUp';
 import { getToken } from '../helpers/funs';
 
 
 class Dashboard extends Component {
-
-    constructor(props) {
-        super(props);
-        this.showModal = this.showModal.bind(this);
-    }
-
     componentWillMount() {
         const {
-            dispatch,
-            allWidgets,
             socket,
         } = this.props;
-        dispatch(getDashboardData());
         let token = getToken();
         if (socket && token) {
             socket.emit('join', token);
         }
     }
 
-    checkClick(e, notyId) {
-        alert(notyId);
-    }
-
-    showModal() {
-        this.child.handleShow() // do stuff
-    }
-
     render() {
-
-        const {
-            loading,
-            error,
-            allWidgets
-        } = this.props;
-
         return (
             <div className="fitness-dashboard">
                 <FitnessHeader />
@@ -70,7 +30,7 @@ class Dashboard extends Component {
                                 on track and meeting the goals you’ve set out for yourself.</p>
                         </div>
                         <div className="body-head-r space-btm-20">
-                            <a onClick={this.showModal} className="white-btn for_cursor">
+                            <a className="white-btn for_cursor">
                                 Add Widget
                             </a>
                             <a className="pink-btn">
@@ -81,46 +41,28 @@ class Dashboard extends Component {
 
                     <div className="body-content row d-flex">
                         <div className="col-md-4">
-
-                            {this.props.loading ? ""
-                                : this.props.allWidgets.todayWorkOut ? <TodaysWorkout />
-                                    : ""}
-
-                            {this.props.loading ? ""
-                                : this.props.allWidgets.goalProgress ? <GoalProgress />
-                                    : ""}
-
-                            {this.props.loading ? ""
-                                : this.props.allWidgets.badges ? <Badges />
-                                    : ""}
-
+                            {/* <TodaysWorkout />
+                            <GoalProgress />
+                            <Badges /> */}
                         </div>
                         <div className="col-md-4">
-
-                            <NextMeal />
-
+                            {/* <NextMeal />
                             <BodyFatLoss />
-
-                            <WeeksCalories />
-
+                            <WeeksCalories /> */}
                         </div>
                         <div className="col-md-4">
-                            <ActivityFeed />
+                            {/* <ActivityFeed /> */}
                         </div>
                     </div>
                 </section>
-                <ModalPopUp func={this.checkClick} onRef={ref => (this.child = ref)} />
             </div>
         );
     }
 }
 
 const mapStateToProps = (state) => {
-    const { dashboardnew, user } = state;
+    const { user } = state;
     return {
-        error: dashboardnew.get('error'),
-        allWidgets: dashboardnew.get('allWidgets'),
-        loading: dashboardnew.get('loading'),
         socket: user.get('socket'),
     };
 };

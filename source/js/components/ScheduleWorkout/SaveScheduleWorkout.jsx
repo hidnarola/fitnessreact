@@ -115,8 +115,8 @@ class SaveScheduleWorkout extends Component {
                                                     {workoutFormAction && workoutFormAction === 'edit' &&
                                                         <div className="add-workout-form-wrapper">
                                                             <UpdateScheduleWorkoutForm
-                                                            onSubmit={this.handleUpdateSubmit}
-                                                            selectedWorkoutForEdit={selectedWorkoutForEdit}
+                                                                onSubmit={this.handleUpdateSubmit}
+                                                                selectedWorkoutForEdit={selectedWorkoutForEdit}
                                                             />
                                                         </div>
                                                     }

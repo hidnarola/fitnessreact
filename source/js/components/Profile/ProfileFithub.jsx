@@ -104,7 +104,7 @@ class ProfileFithub extends Component {
             <div className="row">
                 <div className="col-md-6">
                     <div className="add-widgets">
-                        <a href="javascript:void()" data-toggle="modal" data-target="#widget-popup">
+                        <a href="javascript:void(0)" data-toggle="modal" data-target="#widget-popup">
                             <span>Add Widgets</span>
                             <i className="icon-widgets"></i>
                         </a>

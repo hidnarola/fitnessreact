@@ -8,6 +8,32 @@ class Callback extends Component {
         super(props);
     }
 
+
+    componentWillMount() {
+        console.log('===========================================================================================');
+        console.log('componentWillMount');
+        console.log('props => ', this.props);
+        console.log('===========================================================================================');
+    }
+
+    componentWillUpdate(nextProps, nextState) {
+        console.log('===========================================================================================');
+        console.log('componentWillUpdate');
+        console.log('props => ', this.props);
+        console.log('===========================================================================================');
+    }
+    
+    componentDidUpdate(prevProps, prevState) {
+        console.log('===========================================================================================');
+        console.log('componentDidUpdate');
+        console.log('props => ', this.props);
+        console.log('===========================================================================================');
+        
+    }
+    
+    
+
+
     // componentWillMount() {
     //     this.handleAuthentication(this.props);
     // }
@@ -17,8 +43,8 @@ class Callback extends Component {
         return (
             <div className="auth0-callback-wrapper">
                 <h1>Loading...</h1>
-            </div>      
-            );
+            </div>
+        );
     }
 
     // Start funs
