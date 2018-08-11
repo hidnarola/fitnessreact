@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { initialize, reset } from 'redux-form';
 import {
@@ -9,10 +10,15 @@ import {
     addUsersWorkoutScheduleRequest,
     updateUserWorkoutTitleRequest,
     changeUsersWorkoutFormAction,
-    updateUsersWorkoutScheduleRequest
+    updateUsersWorkoutScheduleRequest,
+    getUserFirstWorkoutByDateRequest,
+    completeUsersBulkWorkoutScheduleRequest,
+    getUserWorkoutCalendarListRequest,
+    setTodaysWorkoutDate,
+    deleteUsersBulkWorkoutScheduleRequest
 } from '../../actions/userScheduleWorkouts';
 import { routeCodes } from '../../constants/routes';
-import { te, prepareFieldsOptions, ts } from '../../helpers/funs';
+import { te, prepareFieldsOptions, ts, convertUnits } from '../../helpers/funs';
 import FitnessHeader from '../global/FitnessHeader';
 import FitnessNav from '../global/FitnessNav';
 import moment from "moment";
@@ -23,21 +29,36 @@ import {
     SCHEDULED_WORKOUT_TYPE_COOLDOWN,
     SCHEDULED_WORKOUT_TYPE_SUPERSET,
     SCHEDULED_WORKOUT_TYPE_CIRCUIT,
-    MEASUREMENT_UNIT_SECONDS
+    MEASUREMENT_UNIT_SECONDS,
+    SCHEDULED_WORKOUT_TYPE_RESTDAY,
+    MEASUREMENT_UNIT_GRAM,
+    MEASUREMENT_UNIT_KILOGRAM
 } from '../../constants/consts';
 import SaveScheduleWorkoutForm from './SaveScheduleWorkoutForm';
 import cns from "classnames";
 import WorkoutExercisesView from './WorkoutExercisesView';
 import UpdateScheduleWorkoutForm from './UpdateScheduleWorkoutForm';
+import ReactCalender from 'react-calendar/dist/entry.nostyle';
+import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
+import SweetAlert from "react-bootstrap-sweetalert";
+import { getUserBodypartsRequest } from '../../actions/userBodyparts';
 
 class SaveScheduleWorkout extends Component {
     constructor(props) {
         super(props);
+        var logDate = new Date();
+        logDate.setHours(0, 0, 0, 0);
         this.state = {
             loadWorkoutInit: false,
             saveWorkoutActionInit: false,
             updateTitleActionInit: false,
             updateWorkoutActionInit: false,
+            logDate: logDate,
+            firstWorkoutIdInit: false,
+            completeWorkoutActionInit: false,
+            selectedWorkoutIdForDelete: null,
+            showWholeWorkoutDeleteAlert: false,
+            deleteWorkoutActionInit: false,
         }
     }
 
@@ -45,6 +66,7 @@ class SaveScheduleWorkout extends Component {
         const { match, dispatch } = this.props;
         if (match && match.params && match.params.id) {
             let _id = match.params.id;
+            dispatch(showPageLoader());
             dispatch(getUsersWorkoutScheduleRequest(_id));
             dispatch(getExercisesNameRequest());
             dispatch(getExerciseMeasurementRequest());
@@ -58,37 +80,59 @@ class SaveScheduleWorkout extends Component {
             selectedWorkoutMainType,
             workoutFormAction,
             selectedWorkoutForEdit,
+            workoutsList,
+            calendarList,
+            workoutStat,
         } = this.props;
+        const { logDate, showWholeWorkoutDeleteAlert } = this.state;
         return (
             <div className="fitness-body">
                 <FitnessHeader />
                 <FitnessNav />
-                {workout && Object.keys(workout).length > 0 &&
-                    <section className="body-wrap">
-                        <div className="body-head d-flex justify-content-start">
-                            <div className="body-head-l">
-                                <h2>{`Save Workout on ${moment(workout.date).format('MM/DD/YYYY')}`}</h2>
-                                <p>Your goal choice shapes how your fitness assistant will ceate your meal and exercise plans, it’s important that you set goals which are achieveable. Keep updating your profile and your fitness assistant will keep you on track and meeting the goals you’ve set out for yourself.</p>
-                            </div>
-                        </div>
-                        <div className="body-content d-flex row justify-content-start profilephoto-content">
-                            <div className="col-md-12">
-                                <div className="white-box space-btm-20">
-                                    <div className="whitebox-body profile-body">
-                                        <UpdateScheduleWorkoutTitleForm onSubmit={this.handleTitleChangeSubmit} />
-                                    </div>
+                <section className="body-wrap">
+                    <div className="body-head d-flex justify-content-start">
+                        <div className="body-head-l">
+                            {(workout && workout.date && workout.type && workout.type === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
+                                <h2>{`Workout - ${(workout && workout.date) ? moment(workout.date).format('DD/MM/YYYY') : 'DD/MM/YYYY'}`}</h2>
+                            }
+                            {(workout && workout.date && workout.type && workout.type === SCHEDULED_WORKOUT_TYPE_RESTDAY) &&
+                                <h2>{`${(workout.title) ? workout.title : 'Rest Day'}`}</h2>
+                            }
+                            {(workout && workout.date && workout.type && workout.type === SCHEDULED_WORKOUT_TYPE_RESTDAY) &&
+                                <p>{`${(workout.description) ? workout.description : 'Hey its rest day! Take total rest.'}`}</p>
+                            }
+                            {(!workout || !workout.date) &&
+                                <h2>{`Workout - DD/MM/YYYY`}</h2>
+                            }
+                            {workout && Object.keys(workout).length > 0 && workout.type && workout.type === SCHEDULED_WORKOUT_TYPE_EXERCISE &&
+                                <div className="body-head-l-btm">
+                                    <a href="javascript:void(0)" className={cns('white-btn', { 'active': (selectedWorkoutMainType === SCHEDULED_WORKOUT_TYPE_WARMUP) })} onClick={() => this.handleWorkoutMainTypeChange(SCHEDULED_WORKOUT_TYPE_WARMUP)}>Warmup</a>
+                                    <a href="javascript:void(0)" className={cns('white-btn', { 'active': (selectedWorkoutMainType === SCHEDULED_WORKOUT_TYPE_EXERCISE) })} onClick={() => this.handleWorkoutMainTypeChange(SCHEDULED_WORKOUT_TYPE_EXERCISE)}>Workout</a>
+                                    <a href="javascript:void(0)" className={cns('white-btn', { 'active': (selectedWorkoutMainType === SCHEDULED_WORKOUT_TYPE_COOLDOWN) })} onClick={() => this.handleWorkoutMainTypeChange(SCHEDULED_WORKOUT_TYPE_COOLDOWN)}>Cooldown</a>
                                 </div>
-                            </div>
-                            <div className="col-md-12">
-                                <div className="white-box space-btm-20">
+                            }
+                        </div>
+                        <div className="body-head-r">
+                            <NavLink
+                                activeClassName='pink-btn'
+                                className='green-blue-btn'
+                                to={routeCodes.EXERCISEFITNESS}
+                            >
+                                <span>Fitness Tests</span>
+                            </NavLink>
+                            <NavLink
+                                className="white-btn"
+                                to={routeCodes.PROGRAMS}
+                            >
+                                <span>Manage Programs</span>
+                            </NavLink>
+                        </div>
+                    </div>
+                    <div className="body-content d-flex row justify-content-start profilephoto-content">
+                        <div className="col-md-9">
+                            {workout && Object.keys(workout).length > 0 && workout.type && workout.type === SCHEDULED_WORKOUT_TYPE_EXERCISE &&
+                                <div className="">
                                     <div className="whitebox-body profile-body">
-                                        <div className="workout-main-types-wrapper">
-                                            <ul>
-                                                <li className={cns({ 'active': (selectedWorkoutMainType === SCHEDULED_WORKOUT_TYPE_WARMUP) })}><a href="javascript:void(0)" className="" onClick={() => this.handleWorkoutMainTypeChange(SCHEDULED_WORKOUT_TYPE_WARMUP)}>Warmup</a></li>
-                                                <li className={cns({ 'active': (selectedWorkoutMainType === SCHEDULED_WORKOUT_TYPE_EXERCISE) })}><a href="javascript:void(0)" className="" onClick={() => this.handleWorkoutMainTypeChange(SCHEDULED_WORKOUT_TYPE_EXERCISE)}>Workout</a></li>
-                                                <li className={cns({ 'active': (selectedWorkoutMainType === SCHEDULED_WORKOUT_TYPE_COOLDOWN) })}><a href="javascript:void(0)" className="" onClick={() => this.handleWorkoutMainTypeChange(SCHEDULED_WORKOUT_TYPE_COOLDOWN)}>Cooldown</a></li>
-                                            </ul>
-                                        </div>
                                         {selectedWorkoutMainType &&
                                             <div className="workout-main-types-view-wrapper">
                                                 {selectedWorkoutMainType === SCHEDULED_WORKOUT_TYPE_WARMUP &&
@@ -125,10 +169,125 @@ class SaveScheduleWorkout extends Component {
                                         }
                                     </div>
                                 </div>
-                            </div>
+                            }
                         </div>
-                    </section>
-                }
+
+                        <div className="col-md-3">
+                            {typeof workoutsList !== 'undefined' && workoutsList && workoutsList.length > 0 &&
+                                <div className="white-box space-btm-20 todays-workout-box-wrapper">
+                                    <div className="whitebox-head">
+                                        <h3 className="title-h3 size-14 text-c">Today's Workouts</h3>
+                                    </div>
+                                    <div className="whitebox-body text-c">
+                                        {workoutsList.map((o, i) => {
+                                            return (
+                                                <TodaysWorkoutListCard key={i} workout={o} handleCompleteWorkout={this.handleCompleteWorkout} handleWholeWorkoutDelete={this.handleShowWholeWorkoutDeleteAlert} />
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            }
+
+                            <div className="new-log-date-wrap log-date-wrap">
+                                <button type="button" onClick={this.handleGoToToday}>Go To Today</button>
+                                <ReactCalender
+                                    name="log_date"
+                                    onChange={this.onChangeLogDate}
+                                    onActiveDateChange={this.onActiveDateChange}
+                                    onClickMonth={this.onMonthClick}
+                                    value={logDate}
+                                    tileContent={({ date, view }) => {
+                                        if (view !== 'month') {
+                                            return '';
+                                        }
+                                        if (calendarList && calendarList.length > 0) {
+                                            return _.map(calendarList, (o, key) => {
+                                                let calDate = moment(date).format('YYYY-MM-DD');
+                                                let logDate = moment(o.date).format('YYYY-MM-DD');
+                                                if (calDate === logDate) {
+                                                    return (<span key={key} className="react-calendar__tile--highlight"></span>)
+                                                }
+                                                return '';
+                                            })
+                                        }
+                                    }}
+                                />
+                                <NavLink to={routeCodes.SCHEDULE_WORKOUT} className="new-log-date-wrap-view">View Calendar</NavLink>
+                            </div>
+
+                            {workout && Object.keys(workout).length > 0 && workout.type && workout.type === SCHEDULED_WORKOUT_TYPE_EXERCISE && workoutStat &&
+                                <div className="white-box space-btm-20 padding-20">
+                                    <div className="whitebox-head">
+                                        <h3 className="title-h3 size-14 text-c">Workout Stats</h3>
+                                    </div>
+                                    <div className="whitebox-body">
+                                        {typeof workoutStat.total_workout !== 'undefined' && workoutStat.total_workout > 0 &&
+                                            <div className="workout-status">
+                                                <div className="workoutstatus-top">
+                                                    <h4>Total Exercises</h4>
+                                                    <h5>{workoutStat.total_workout}</h5>
+                                                </div>
+                                            </div>
+                                        }
+                                        {typeof workoutStat.total_reps !== 'undefined' && workoutStat.total_reps > 0 &&
+                                            <div className="workout-status">
+                                                <div className="workoutstatus-top">
+                                                    <h4>Total Reps</h4>
+                                                    <h5>{workoutStat.total_reps}</h5>
+                                                </div>
+                                            </div>
+                                        }
+                                        {typeof workoutStat.total_sets !== 'undefined' && workoutStat.total_sets > 0 &&
+                                            <div className="workout-status">
+                                                <div className="workoutstatus-top">
+                                                    <h4>Total Sets</h4>
+                                                    <h5>{workoutStat.total_sets}</h5>
+                                                </div>
+                                            </div>
+                                        }
+                                        {typeof workoutStat.total_weight_lifted !== 'undefined' && workoutStat.total_weight_lifted > 0 &&
+                                            <div className="workout-status">
+                                                <div className="workoutstatus-top">
+                                                    <h4>Weight Lifted</h4>
+                                                    <h5>
+                                                        {convertUnits(MEASUREMENT_UNIT_GRAM, MEASUREMENT_UNIT_KILOGRAM, workoutStat.total_weight_lifted).toFixed(2)}
+                                                        {MEASUREMENT_UNIT_KILOGRAM}
+                                                    </h5>
+                                                </div>
+                                            </div>
+                                        }
+                                        {typeof workoutStat.muscle_work !== 'undefined' && workoutStat.muscle_work && workoutStat.muscle_work.length > 0 &&
+                                            <div className="workout-status">
+                                                <div className="workoutstatus-top">
+                                                    <h4>Muscles Worked</h4>
+                                                    <h5>{workoutStat.muscle_work.length}</h5>
+                                                </div>
+                                                <div className="workoutstatus-btm">
+                                                    <p>
+                                                        {workoutStat.muscle_work.join(', ')}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </section>
+                <SweetAlert
+                    show={showWholeWorkoutDeleteAlert}
+                    danger
+                    showCancel
+                    confirmBtnText="Yes, delete it!"
+                    confirmBtnBsStyle="danger"
+                    cancelBtnBsStyle="default"
+                    title="Are you sure?"
+                    onConfirm={this.handleDeleteWholeWorkoutSchedule}
+                    onCancel={this.handleCancelWholeWorkoutDeleteAlert}
+                >
+                    You will not be able to recover it!
+                </SweetAlert>
             </div>
         );
     }
@@ -142,16 +301,39 @@ class SaveScheduleWorkout extends Component {
             dispatch,
             loadingTitle,
             errorTitle,
+            match,
+            firstWorkoutLoading,
+            firstWorkoutError,
+            firstWorkoutId,
         } = this.props;
         const {
             loadWorkoutInit,
             saveWorkoutActionInit,
             updateTitleActionInit,
             updateWorkoutActionInit,
+            firstWorkoutIdInit,
+            completeWorkoutActionInit,
+            deleteWorkoutActionInit,
         } = this.state;
+        if (loadWorkoutInit && !loading) {
+            dispatch(hidePageLoader());
+        }
+        if (match && match.params && match.params.id && prevProps.match.params.id !== match.params.id) {
+            let _id = match.params.id;
+            dispatch(showPageLoader());
+            dispatch(getUsersWorkoutScheduleRequest(_id));
+            this.setState({ loadWorkoutInit: true });
+        }
         if (loadWorkoutInit && !loading && workout && Object.keys(workout).length <= 0) {
             this.setState({ loadWorkoutInit: false });
             history.push(routeCodes.SCHEDULE_WORKOUT);
+        } else if (loadWorkoutInit && !loading && workout && Object.keys(workout).length > 0) {
+            this.setState({ loadWorkoutInit: false });
+            if (workout.date) {
+                var logDate = new Date(workout.date);
+                logDate.setHours(0, 0, 0, 0);
+                this.setState({ logDate: logDate });
+            }
         }
         if (loadWorkoutInit && !loading && error && error.length > 0) {
             this.setState({ loadWorkoutInit: false });
@@ -165,6 +347,7 @@ class SaveScheduleWorkout extends Component {
             } else {
                 ts('Workout saved successfully!');
             }
+            dispatch(hidePageLoader());
             dispatch(reset('save_schedule_workout_form'));
         }
         if (updateWorkoutActionInit && !loading) {
@@ -174,6 +357,7 @@ class SaveScheduleWorkout extends Component {
             } else {
                 ts('Workout updated successfully!');
             }
+            dispatch(hidePageLoader());
             dispatch(reset('update_schedule_workout_form'));
             dispatch(changeUsersWorkoutFormAction('add', null));
         }
@@ -183,6 +367,33 @@ class SaveScheduleWorkout extends Component {
                 te(errorTitle[0]);
             } else {
                 ts('Updated!');
+            }
+        }
+        if (firstWorkoutIdInit && !firstWorkoutLoading) {
+            this.setState({ firstWorkoutIdInit: false });
+            if (firstWorkoutError && firstWorkoutError.length > 0) {
+                te(firstWorkoutError[0]);
+            } else if (firstWorkoutId) {
+                history.push(routeCodes.SAVE_SCHEDULE_WORKOUT.replace(':id', firstWorkoutId));
+            } else {
+                history.push(routeCodes.EXERCISE);
+            }
+            dispatch(hidePageLoader());
+        }
+        if (completeWorkoutActionInit && !loading) {
+            this.setState({ completeWorkoutActionInit: false });
+            if (error && error.length > 0) {
+                te(error[0]);
+            }
+        }
+        if (deleteWorkoutActionInit && !loading) {
+            this.setState({ deleteWorkoutActionInit: false });
+            this.handleCancelWholeWorkoutDeleteAlert();
+            if (error && error.length > 0) {
+                te('Cannot delete workout. Please try again later!');
+            } else {
+                ts('Workout deleted successfully!');
+                history.push(routeCodes.EXERCISE);
             }
         }
     }
@@ -223,6 +434,7 @@ class SaveScheduleWorkout extends Component {
         } else if (selectedWorkoutMainType === SCHEDULED_WORKOUT_TYPE_COOLDOWN) {
             requestData.sequence = (workoutCooldownSequence + 1);
         }
+        dispatch(showPageLoader());
         dispatch(addUsersWorkoutScheduleRequest(requestData));
         this.setState({ saveWorkoutActionInit: true });
     }
@@ -239,6 +451,7 @@ class SaveScheduleWorkout extends Component {
             requestData = this.prepareRequestDataForCircuitWorkout(data);
         }
         requestData._id = selectedWorkoutForEdit._id;
+        dispatch(showPageLoader());
         dispatch(updateUsersWorkoutScheduleRequest(requestData));
         this.setState({ updateWorkoutActionInit: true });
     }
@@ -644,10 +857,114 @@ class SaveScheduleWorkout extends Component {
         }
         return requestData;
     }
+
+    handleCompleteWorkout = (workout) => {
+        const { dispatch, loading } = this.props;
+        if (workout && workout._id && !loading) {
+            var isCompleted = (typeof workout.isCompleted !== 'undefined') ? (workout.isCompleted === 0) ? 1 : 0 : 1;
+            var requestData = {
+                exerciseIds: [workout._id],
+                isCompleted: isCompleted,
+            };
+            this.setState({ completeWorkoutActionInit: true });
+            dispatch(completeUsersBulkWorkoutScheduleRequest(requestData));
+        }
+    }
+
+    handleGoToToday = () => {
+        const { logDate } = this.state;
+        const { dispatch } = this.props;
+        var date = new Date();
+        date.setHours(0, 0, 0, 0);
+        if (moment(logDate).format('YYYY-MM-DD') !== moment(date).format('YYYY-MM-DD')) {
+            var _date = moment(date).startOf('day').utc();
+            var requestData = {
+                date: _date,
+            };
+            this.setState({ logDate: date, firstWorkoutIdInit: true });
+            dispatch(showPageLoader());
+            dispatch(setTodaysWorkoutDate(requestData.date));
+            dispatch(getUserFirstWorkoutByDateRequest(requestData));
+        }
+    }
+
+    onChangeLogDate = (date) => {
+        const { logDate } = this.state;
+        const { dispatch } = this.props;
+        if (moment(logDate).format('YYYY-MM-DD') !== moment(date).format('YYYY-MM-DD')) {
+            var _date = moment(date).startOf('day').utc();
+            var requestData = {
+                date: _date,
+            };
+            this.setState({ logDate: date, firstWorkoutIdInit: true });
+            dispatch(showPageLoader());
+            dispatch(setTodaysWorkoutDate(requestData.date));
+            dispatch(getUserFirstWorkoutByDateRequest(requestData));
+        }
+    }
+
+    onActiveDateChange = (obj) => {
+        const { dispatch } = this.props;
+        if (obj.view === "month") {
+            let date = obj.activeStartDate;
+            let now = new Date();
+            let requestData = {};
+            if (now.getMonth() === date.getMonth() && now.getFullYear() === date.getFullYear()) {
+                this.setState({ logDate: now });
+                requestData = {
+                    date: moment(now).startOf('day').utc(),
+                }
+            } else {
+                this.setState({ logDate: date });
+                requestData = {
+                    date: moment(date).startOf('day').utc(),
+                }
+            }
+            dispatch(getUserWorkoutCalendarListRequest(requestData));
+        }
+    }
+
+    onMonthClick = (date) => {
+        const { dispatch } = this.props;
+        let now = new Date();
+        let requestData = {};
+        if (now.getMonth() === date.getMonth() && now.getFullYear() === date.getFullYear()) {
+            this.setState({ logDate: now });
+            requestData = {
+                date: now,
+            }
+        } else {
+            this.setState({ logDate: date });
+            requestData = {
+                date: date,
+            }
+        }
+        dispatch(getUserWorkoutCalendarListRequest(requestData));
+    }
+
+    handleShowWholeWorkoutDeleteAlert = (_id) => {
+        this.setState({ selectedWorkoutIdForDelete: _id, showWholeWorkoutDeleteAlert: true });
+    }
+
+    handleCancelWholeWorkoutDeleteAlert = (_id) => {
+        this.setState({ selectedWorkoutIdForDelete: null, showWholeWorkoutDeleteAlert: false });
+    }
+
+    handleDeleteWholeWorkoutSchedule = () => {
+        const { dispatch } = this.props;
+        const { selectedWorkoutIdForDelete } = this.state;
+        if (selectedWorkoutIdForDelete) {
+            var requestData = {
+                exerciseIds: [selectedWorkoutIdForDelete],
+            };
+            dispatch(deleteUsersBulkWorkoutScheduleRequest(requestData));
+            this.setState({ deleteWorkoutActionInit: true });
+        }
+    }
 }
 
 const mapStateToProps = (state) => {
-    const { userScheduleWorkouts } = state;
+    const { userScheduleWorkouts, userBodyparts } = state;
     return {
         workout: userScheduleWorkouts.get('workout'),
         loading: userScheduleWorkouts.get('loading'),
@@ -661,9 +978,65 @@ const mapStateToProps = (state) => {
         workoutWarmupSequence: userScheduleWorkouts.get('workoutWarmupSequence'),
         workoutSequence: userScheduleWorkouts.get('workoutSequence'),
         workoutCooldownSequence: userScheduleWorkouts.get('workoutCooldownSequence'),
+        workoutsList: userScheduleWorkouts.get('workoutsList'),
+        calendarList: userScheduleWorkouts.get('calendarList'),
+        workoutStat: userScheduleWorkouts.get('workoutStat'),
+        firstWorkoutLoading: userScheduleWorkouts.get('firstWorkoutLoading'),
+        firstWorkoutId: userScheduleWorkouts.get('firstWorkoutId'),
+        firstWorkoutError: userScheduleWorkouts.get('firstWorkoutError'),
     };
 }
 
 export default connect(
     mapStateToProps,
 )(SaveScheduleWorkout);
+
+class TodaysWorkoutListCard extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            isCompleted: false,
+        }
+    }
+
+    componentWillMount() {
+        const { workout } = this.props;
+        if (workout && workout.isCompleted) {
+            this.setState({ isCompleted: (workout.isCompleted) ? true : false });
+        }
+    }
+
+    render() {
+        const {
+            workout,
+            handleCompleteWorkout,
+            handleWholeWorkoutDelete,
+        } = this.props;
+        const { isCompleted } = this.state;
+        var today = moment().utc();
+        var workoutDay = moment(workout.date);
+        return (
+            <div className="todays-workout-list-card">
+                <NavLink to={routeCodes.SAVE_SCHEDULE_WORKOUT.replace(':id', workout._id)}>{workout.title}</NavLink>
+                <button type="button" onClick={() => handleWholeWorkoutDelete(workout._id)}><i className="icon-cancel"></i></button>
+                {workoutDay <= today && workout.dayType && workout.dayType === SCHEDULED_WORKOUT_TYPE_EXERCISE &&
+                    <div className="switch-wrap">
+                        <small>Workout complete</small>
+                        <div className="material-switch">
+                            <input
+                                id={workout._id}
+                                type="checkbox"
+                                checked={isCompleted}
+                                onChange={() => {
+                                    this.setState({ isCompleted: !isCompleted });
+                                    handleCompleteWorkout(workout);
+                                }}
+                            />
+                            <label htmlFor={workout._id} className="label-default"></label>
+                        </div>
+                    </div>
+                }
+            </div>
+        );
+    }
+}

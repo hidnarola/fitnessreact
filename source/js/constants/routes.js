@@ -34,7 +34,6 @@ export const routeCodes = {
     RECEIP: `${publicPath}receip`,
 
     // Badges Pages
-    BADGES: `${publicPath}badges`,
     BADGESTRACKING: `${publicPath}badges/tracking`,
     BADGESINCOMPLETE: `${publicPath}badges/incomplete`,
     BADGESCOMPLETE: `${publicPath}badges/complete`,
@@ -46,15 +45,21 @@ export const routeCodes = {
     EXERCISEPREFERENCE: `${publicPath}exercise/preference`,
     EXERCISEEQP: `${publicPath}exercise/equipment`,
     EXERCISEFITNESS: `${publicPath}exercise/fitness`,
-
-    SCHEDULE_WORKOUT: `${publicPath}schedule_workout`,
-    SAVE_SCHEDULE_WORKOUT: `${publicPath}schedule_workout/save/:id`,
-    VIEW_SCHEDULE_WORKOUT: `${publicPath}schedule_workout/details/:id`,
     
-    PROGRAMS: `${publicPath}programs`,
-    PROGRAM_SAVE: `${publicPath}programs/save`,
-    SAVE_PROGRAM_SCHEDULE_WORKOUT: `${publicPath}programs/save/:id/:workout_id`,
-    VIEW_PROGRAM_SCHEDULE_WORKOUT: `${publicPath}programs/details/:id/:workout_id`,
+    SCHEDULE_WORKOUT: `${publicPath}exercise/schedule_workout`,
+    SAVE_SCHEDULE_WORKOUT: `${publicPath}exercise/schedule_workout/save/:id`,
+    VIEW_SCHEDULE_WORKOUT: `${publicPath}exercise/schedule_workout/details/:id`,
+    
+    PROGRAMS: `${publicPath}exercise/programs`,
+    PROGRAM_SAVE: `${publicPath}exercise/programs/save`,
+    SAVE_PROGRAM_SCHEDULE_WORKOUT: `${publicPath}exercise/programs/save/:id/:workout_id`,
+    VIEW_PROGRAM_SCHEDULE_WORKOUT: `${publicPath}exercise/programs/details/:id/:workout_id`,
+
+    
+    // PROGRAMS: `${publicPath}programs`,
+    // PROGRAM_SAVE: `${publicPath}programs/save`,
+    // SAVE_PROGRAM_SCHEDULE_WORKOUT: `${publicPath}programs/save/:id/:workout_id`,
+    // VIEW_PROGRAM_SCHEDULE_WORKOUT: `${publicPath}programs/details/:id/:workout_id`,
 
 
     // Nutrition Routes

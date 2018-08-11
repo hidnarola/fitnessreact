@@ -108,6 +108,16 @@ function getUserWorkoutByDate(requestData) {
     return postFormData(requestUrl + '/by_date', requestData, headers);
 }
 
+function getUserFirstWorkoutByDate(requestData) {
+    let headers = extraUserHeaders();
+    return postFormData(requestUrl + '/first_workout', requestData, headers);
+}
+
+function getUserWorkoutCalendarList(requestData) {
+    let headers = extraUserHeaders();
+    return postFormData(requestUrl + '/calendar_list', requestData, headers);
+}
+
 export default {
     getUsersWorkoutSchedulesByMonths,
     getExercisesName,
@@ -126,4 +136,6 @@ export default {
     deleteUserWholeExercise,
     deleteUserSingleExercise,
     getUserWorkoutByDate,
+    getUserFirstWorkoutByDate,
+    getUserWorkoutCalendarList,
 }

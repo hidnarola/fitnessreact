@@ -1,3 +1,5 @@
+import { required } from "../formValidation/validationRules";
+
 export const LOCALSTORAGE_ID_TOKEN_KEY = 'id_token';
 export const LOCALSTORAGE_ACCESS_TOKEN_KEY = 'access_token';
 export const LOCALSTORAGE_REFRESH_TOKEN_KEY = 'refreshToken';
@@ -72,7 +74,7 @@ export const RECIPE_TYPE_PALEO = 'paleo';
 export const RECIPE_TYPE_PASCATERIAN = 'pescaterian';
 
 export const GOAL_GAIN_MUSCLE = 'gain_muscle';
-export const GOAL_GAIN_FLEXIBILITY = 'gain_flexibility';
+export const GOAL_IMPROVE_MOBILITY = 'improve_mobility';
 export const GOAL_LOSE_FAT = 'lose_fat';
 export const GOAL_GAIN_STRENGTH = 'gain_strength';
 export const GOAL_GAIN_POWER = 'gain_power';
@@ -330,10 +332,9 @@ export const MEASUREMENT_UNITS = [
 
 export const SECONDARY_GOALS = [
     { value: GOAL_GAIN_MUSCLE, label: 'Gain Muscle' },
-    { value: GOAL_GAIN_FLEXIBILITY, label: 'Gain Flexibility' },
+    { value: GOAL_IMPROVE_MOBILITY, label: 'Improve Mobility' },
     { value: GOAL_LOSE_FAT, label: 'Lose Fat' },
     { value: GOAL_GAIN_STRENGTH, label: 'Gain Strength' },
-    { value: GOAL_GAIN_POWER, label: 'Gain Power' },
     { value: GOAL_INCREASE_ENDURANCE, label: 'Increase Endurance' },
 ]
 
@@ -697,22 +698,136 @@ export const EXE_CAT_SCAT = [
 ];
 
 export const EXE_MEASUREMENT_UNITS = [
-    { value: MEASUREMENT_UNIT_SECONDS, label: 'Seconds' },
-    { value: MEASUREMENT_UNIT_MINUTES, label: 'Minutes' },
-    { value: MEASUREMENT_UNIT_HOURS, label: 'Hours' },
-    { value: MEASUREMENT_UNIT_METER, label: 'Meter' },
-    { value: MEASUREMENT_UNIT_FEET, label: 'Foot' },
-    { value: MEASUREMENT_UNIT_KILOMETER, label: 'KM' },
-    { value: MEASUREMENT_UNIT_MILE, label: 'Mile' },
-    { value: MEASUREMENT_UNIT_REPS, label: 'Reps' },
-    { value: MEASUREMENT_UNIT_EFFORT, label: 'Effort' },
-    { value: MEASUREMENT_UNIT_KMPH, label: 'KMPH' },
-    { value: MEASUREMENT_UNIT_MPH, label: 'MPH' },
-    { value: MEASUREMENT_UNIT_POUND, label: 'LB' },
-    { value: MEASUREMENT_UNIT_KILOGRAM, label: 'KG' },
-    { value: MEASUREMENT_UNIT_ONE_RM, label: '% of 1rm' },
-    { value: MEASUREMENT_UNIT_REP_TIME, label: 'Rep Time' },
-    { value: MEASUREMENT_UNIT_SET_TIME, label: 'Set Time' },
+    {
+        value: MEASUREMENT_UNIT_SECONDS,
+        label: 'Seconds',
+        validation: [
+            { required: true },
+            { min: 0 },
+        ],
+    },
+    {
+        value: MEASUREMENT_UNIT_MINUTES,
+        label: 'Minutes',
+        validation: [
+            { required: true },
+            { min: 0 },
+        ],
+    },
+    {
+        value: MEASUREMENT_UNIT_HOURS,
+        label: 'Hours',
+        validation: [
+            { required: true },
+            { min: 0 },
+        ],
+    },
+    {
+        value: MEASUREMENT_UNIT_METER,
+        label: 'Meter',
+        validation: [
+            { required: true },
+            { min: 0 },
+        ],
+    },
+    {
+        value: MEASUREMENT_UNIT_FEET,
+        label: 'Foot',
+        validation: [
+            { required: true },
+            { min: 0 },
+        ],
+    },
+    {
+        value: MEASUREMENT_UNIT_KILOMETER,
+        label: 'KM',
+        validation: [
+            { required: true },
+            { min: 0 },
+        ],
+    },
+    {
+        value: MEASUREMENT_UNIT_MILE,
+        label: 'Mile',
+        validation: [
+            { required: true },
+            { min: 0 },
+        ],
+    },
+    {
+        value: MEASUREMENT_UNIT_REPS,
+        label: 'Reps',
+        validation: [
+            { required: true },
+            { min: 0 },
+        ],
+    },
+    {
+        value: MEASUREMENT_UNIT_EFFORT,
+        label: 'Effort',
+        validation: [
+            { required: true },
+            { min: 0 },
+            { max: 100 },
+        ],
+    },
+    {
+        value: MEASUREMENT_UNIT_KMPH,
+        label: 'KMPH',
+        validation: [
+            { required: true },
+            { min: 0 },
+        ],
+    },
+    {
+        value: MEASUREMENT_UNIT_MPH,
+        label: 'MPH',
+        validation: [
+            { required: true },
+            { min: 0 },
+        ],
+    },
+    {
+        value: MEASUREMENT_UNIT_POUND,
+        label: 'LB',
+        validation: [
+            { required: true },
+            { min: 0 },
+        ],
+    },
+    {
+        value: MEASUREMENT_UNIT_KILOGRAM,
+        label: 'KG',
+        validation: [
+            { required: true },
+            { min: 0 },
+        ],
+    },
+    {
+        value: MEASUREMENT_UNIT_ONE_RM,
+        label: '% of 1rm',
+        validation: [
+            { required: true },
+            { min: 0 },
+            { max: 100 },
+        ],
+    },
+    {
+        value: MEASUREMENT_UNIT_REP_TIME,
+        label: 'Rep Time',
+        validation: [
+            { required: true },
+            { min: 0 },
+        ],
+    },
+    {
+        value: MEASUREMENT_UNIT_SET_TIME,
+        label: 'Set Time',
+        validation: [
+            { required: true },
+            { min: 0 },
+        ],
+    },
 ];
 
 export const EXE_REST_TIME_UNITS = [

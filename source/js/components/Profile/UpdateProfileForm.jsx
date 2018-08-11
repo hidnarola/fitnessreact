@@ -6,16 +6,15 @@ import {
     WORKOUT_LOCATION_HOME,
     WORKOUT_LOCATION_GYM,
     GOAL_GAIN_MUSCLE,
-    GOAL_GAIN_FLEXIBILITY,
+    GOAL_IMPROVE_MOBILITY,
     GOAL_LOSE_FAT,
     GOAL_GAIN_STRENGTH,
-    GOAL_GAIN_POWER,
     GOAL_INCREASE_ENDURANCE,
     GENDER_MALE,
     GENDER_FEMALE,
     MEASUREMENT_UNIT_CENTIMETER,
     MEASUREMENT_UNIT_KILOGRAM,
-    MEASUREMENT_UNIT_GRAM
+    MEASUREMENT_UNIT_GRAM,
 } from '../../constants/consts';
 import { capitalizeFirstLetter, ts, convertUnits } from '../../helpers/funs';
 import ReactQuill from 'react-quill';
@@ -260,14 +259,14 @@ class UpdateProfileForm extends Component {
                                             </div>
                                             <div className="col-md-4">
                                                 <Field
-                                                    id={GOAL_GAIN_FLEXIBILITY}
+                                                    id={GOAL_IMPROVE_MOBILITY}
                                                     name="primary_goal"
                                                     wrapperClass="custom_radio mb-10"
                                                     errorClass="help-block"
                                                     type="radio"
                                                     component={InputField}
-                                                    units={(<label htmlFor={GOAL_GAIN_FLEXIBILITY}>{capitalizeFirstLetter(GOAL_GAIN_FLEXIBILITY.replace('_', ' '))}</label>)}
-                                                    value={GOAL_GAIN_FLEXIBILITY}
+                                                    units={(<label htmlFor={GOAL_IMPROVE_MOBILITY}>{capitalizeFirstLetter(GOAL_IMPROVE_MOBILITY.replace('_', ' '))}</label>)}
+                                                    value={GOAL_IMPROVE_MOBILITY}
                                                 />
                                             </div>
                                             <div className="col-md-4">
@@ -294,18 +293,7 @@ class UpdateProfileForm extends Component {
                                                     value={GOAL_GAIN_STRENGTH}
                                                 />
                                             </div>
-                                            <div className="col-md-4">
-                                                <Field
-                                                    id={GOAL_GAIN_POWER}
-                                                    name="primary_goal"
-                                                    wrapperClass="custom_radio mb-10"
-                                                    errorClass="help-block"
-                                                    type="radio"
-                                                    component={InputField}
-                                                    units={(<label htmlFor={GOAL_GAIN_POWER}>{capitalizeFirstLetter(GOAL_GAIN_POWER.replace('_', ' '))}</label>)}
-                                                    value={GOAL_GAIN_POWER}
-                                                />
-                                            </div>
+                                            
                                             <div className="col-md-4">
                                                 <Field
                                                     id={GOAL_INCREASE_ENDURANCE}

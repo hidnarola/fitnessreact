@@ -38,10 +38,9 @@ class ExerciseSettings extends Component {
                 <section className="body-wrap">
                     <div className="body-head d-flex justify-content-start">
                         <div className="body-head-l">
-                            <h2>Exercise Settings</h2>
-                            <div className="body-head-l-btm space-btm-20">
-
-
+                            <h2>Fitness Tests</h2>
+                            {/* {'Urls are commented as per client requirement and will uncommnet in future'} */}
+                            {/* <div className="body-head-l-btm space-btm-20">
                                 <NavLink
                                     activeClassName='pink-btn'
                                     className='white-btn'
@@ -68,8 +67,7 @@ class ExerciseSettings extends Component {
                                 >
                                     Preferences
                                 </NavLink>
-
-                            </div>
+                            </div> */}
                             <p>Each fitness test feeds directly into our algorithm - every test is used to identify the most efficient and
                                 effective structure of your training plan. Each test is designed to identify imbalances and weaknesses
                                 that may lead to increased risk of injury or decreased performance - now and in the future. This may

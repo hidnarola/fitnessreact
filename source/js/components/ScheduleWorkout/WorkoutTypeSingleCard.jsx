@@ -20,6 +20,9 @@ class WorkoutTypeSingleCard extends Component {
         super(props);
         props.fields.removeAll();
         props.fields.push({});
+        this.state = {
+
+        }
     }
 
     render() {
@@ -202,6 +205,15 @@ class WorkoutTypeSingleCard extends Component {
             </div>
         );
     }
+
+    componentDidUpdate(prevProps, prevState) {
+        const { fields } = this.props;
+        _.forEach(fields, (field, index) => {
+            var fieldData = fields.get(index);
+        });
+        console.log('prevProps => ', prevProps);
+    }
+
 }
 
 const mapStateToProps = (state) => {

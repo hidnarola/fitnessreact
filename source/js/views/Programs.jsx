@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import FitnessHeader from '../components/global/FitnessHeader';
 import FitnessNav from '../components/global/FitnessNav';
@@ -52,6 +53,13 @@ class Programs extends Component {
                                 <span>Add Program</span>
                                 <i className="icon-add_circle"></i>
                             </a>
+                            <NavLink
+                                className="white-btn"
+                                to={routeCodes.EXERCISE}
+                            >
+                                <span>Back</span>
+                                <i className="icon-arrow_back"></i>
+                            </NavLink>
                         </div>
                     </div>
                     <div className="body-content d-flex row justify-content-start profilephoto-content">

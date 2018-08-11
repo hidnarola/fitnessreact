@@ -24,10 +24,9 @@ import { adminRouteCodes } from '../../../constants/adminRoutes';
 import { capitalizeFirstLetter } from '../../../helpers/funs';
 import {
     GOAL_GAIN_MUSCLE,
-    GOAL_GAIN_FLEXIBILITY,
+    GOAL_IMPROVE_MOBILITY,
     GOAL_LOSE_FAT,
     GOAL_GAIN_STRENGTH,
-    GOAL_GAIN_POWER,
     GOAL_INCREASE_ENDURANCE,
     USER_STATUS_ACTIVE,
     USER_STATUS_INACTIVE,
@@ -41,10 +40,9 @@ import { showPageLoader } from '../../../actions/pageLoader';
 
 const goalOptions = [
     { value: GOAL_GAIN_MUSCLE, label: capitalizeFirstLetter(GOAL_GAIN_MUSCLE).replace('_', ' ') },
-    { value: GOAL_GAIN_FLEXIBILITY, label: capitalizeFirstLetter(GOAL_GAIN_FLEXIBILITY).replace('_', ' ') },
+    { value: GOAL_IMPROVE_MOBILITY, label: capitalizeFirstLetter(GOAL_IMPROVE_MOBILITY).replace('_', ' ') },
     { value: GOAL_LOSE_FAT, label: capitalizeFirstLetter(GOAL_LOSE_FAT).replace('_', ' ') },
     { value: GOAL_GAIN_STRENGTH, label: capitalizeFirstLetter(GOAL_GAIN_STRENGTH).replace('_', ' ') },
-    { value: GOAL_GAIN_POWER, label: capitalizeFirstLetter(GOAL_GAIN_POWER).replace('_', ' ') },
     { value: GOAL_INCREASE_ENDURANCE, label: capitalizeFirstLetter(GOAL_INCREASE_ENDURANCE).replace('_', ' ') },
 ];
 

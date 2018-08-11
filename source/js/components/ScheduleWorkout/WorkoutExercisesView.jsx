@@ -13,13 +13,22 @@ import noImg from 'img/common/no-img.png'
 import _ from "lodash";
 import { deleteUserWholeExerciseRequest, deleteUserSingleExerciseRequest, changeUsersWorkoutFormAction } from '../../actions/userScheduleWorkouts';
 import { te, ts, prepareExerciseOptions, focusToControl } from '../../helpers/funs';
-import { FaPencil } from "react-icons/lib/fa";
+import { FaPencil, FaTrash } from "react-icons/lib/fa";
+import { ButtonToolbar, Dropdown, MenuItem } from "react-bootstrap";
+import ReactHtmlParser from "react-html-parser";
+import SixDots from 'svg/six-dots.svg';
+import SweetAlert from "react-bootstrap-sweetalert";
+import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
 
 class WorkoutExercisesView extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            showDeleteAlert: false,
             deleteWholeExeInit: false,
+            deleteExeObj: null,
+            deleteExeId: null,
+            showDeleteSingleAlert: false,
         }
     }
 
@@ -27,6 +36,10 @@ class WorkoutExercisesView extends Component {
         const {
             exercises,
         } = this.props;
+        const {
+            showDeleteAlert,
+            showDeleteSingleAlert,
+        } = this.state;
         return (
             <div className="workout-exercises-view-wrapper">
                 <ul>
@@ -38,7 +51,7 @@ class WorkoutExercisesView extends Component {
                                         <WorkoutExerciseSingleView
                                             exercise={o.exercises[0]}
                                             exerciseObj={o}
-                                            handleWholeExeDelete={this.handleWholeExeDelete}
+                                            handleWholeExeDelete={this.handleShowExeDeleteAlert}
                                             handleFillFormForEdit={this.handleFillFormForEdit}
                                         />
                                     }
@@ -46,7 +59,7 @@ class WorkoutExercisesView extends Component {
                                         <WorkoutExerciseSupersetView
                                             exercises={o.exercises}
                                             exerciseObj={o}
-                                            handleWholeExeDelete={this.handleWholeExeDelete}
+                                            handleWholeExeDelete={this.handleShowExeDeleteAlert}
                                             handleFillFormForEdit={this.handleFillFormForEdit}
                                         />
                                     }
@@ -54,8 +67,8 @@ class WorkoutExercisesView extends Component {
                                         <WorkoutExerciseCircuitView
                                             exercises={o.exercises}
                                             exerciseObj={o}
-                                            handleWholeExeDelete={this.handleWholeExeDelete}
-                                            handleSingleExeDelete={this.handleSingleExeDelete}
+                                            handleWholeExeDelete={this.handleShowExeDeleteAlert}
+                                            handleSingleExeDelete={this.handleShowExeDeleteSingleAlert}
                                             handleFillFormForEdit={this.handleFillFormForEdit}
                                         />
                                     }
@@ -64,43 +77,92 @@ class WorkoutExercisesView extends Component {
                         })
                     }
                 </ul>
+                <SweetAlert
+                    show={showDeleteAlert}
+                    danger
+                    showCancel
+                    confirmBtnText="Yes, change it!"
+                    confirmBtnBsStyle="danger"
+                    cancelBtnBsStyle="default"
+                    title="Are you sure?"
+                    onConfirm={this.handleWholeExeDelete}
+                    onCancel={this.handleCloseExeDeleteAlert}
+                >
+                    You will loss the changes and not be able to recover!
+                </SweetAlert>
+
+                <SweetAlert
+                    show={showDeleteSingleAlert}
+                    danger
+                    showCancel
+                    confirmBtnText="Yes, change it!"
+                    confirmBtnBsStyle="danger"
+                    cancelBtnBsStyle="default"
+                    title="Are you sure?"
+                    onConfirm={this.handleSingleExeDelete}
+                    onCancel={this.handleCloseExeDeleteSingleAlert}
+                >
+                    You will loss the changes and not be able to recover!
+                </SweetAlert>
             </div>
         );
     }
 
     componentDidUpdate(prevProps, prevState) {
         const { deleteWholeExeInit } = this.state;
-        const { loading, error } = this.props;
+        const { loading, error, dispatch } = this.props;
         if (deleteWholeExeInit && !loading) {
             this.setState({ deleteWholeExeInit: false });
+            this.handleCloseExeDeleteAlert();
+            this.handleCloseExeDeleteSingleAlert();
             if (error && error.length > 0) {
                 te(error[0]);
             } else {
-                ts('Deleted');
+                ts('Deleted!');
             }
+            dispatch(hidePageLoader());
         }
     }
 
-
-    handleWholeExeDelete = (exerciseObj) => {
-        const { dispatch } = this.props;
-        let requestData = {
-            exerciseIds: [exerciseObj._id],
-            parentId: exerciseObj.userWorkoutsId,
-        };
-        this.setState({ deleteWholeExeInit: true });
-        dispatch(deleteUserWholeExerciseRequest(requestData));
+    handleShowExeDeleteAlert = (exerciseObj) => {
+        this.setState({ showDeleteAlert: true, deleteExeObj: exerciseObj });
     }
 
-    handleSingleExeDelete = (_id, exerciseObj) => {
+    handleCloseExeDeleteAlert = () => {
+        this.setState({ showDeleteAlert: false, deleteExeObj: null });
+    }
+
+    handleWholeExeDelete = () => {
         const { dispatch } = this.props;
+        const { deleteExeObj } = this.state;
         let requestData = {
-            subChildIds: [_id],
-            childId: exerciseObj._id,
-            parentId: exerciseObj.userWorkoutsId,
+            exerciseIds: [deleteExeObj._id],
+            parentId: deleteExeObj.userWorkoutsId,
         };
+        dispatch(showPageLoader());
+        dispatch(deleteUserWholeExerciseRequest(requestData));
         this.setState({ deleteWholeExeInit: true });
+    }
+
+    handleShowExeDeleteSingleAlert = (_id, exerciseObj) => {
+        this.setState({ showDeleteSingleAlert: true, deleteExeObj: exerciseObj, deleteExeId: _id });
+    }
+
+    handleCloseExeDeleteSingleAlert = () => {
+        this.setState({ showDeleteSingleAlert: false, deleteExeObj: null, deleteExeId: null });
+    }
+
+    handleSingleExeDelete = () => {
+        const { dispatch } = this.props;
+        const { deleteExeObj, deleteExeId } = this.state;
+        let requestData = {
+            subChildIds: [deleteExeId],
+            childId: deleteExeObj._id,
+            parentId: deleteExeObj.userWorkoutsId,
+        };
+        dispatch(showPageLoader());
         dispatch(deleteUserSingleExerciseRequest(requestData));
+        this.setState({ deleteWholeExeInit: true });
     }
 
     handleFillFormForEdit = (data) => {
@@ -468,6 +530,13 @@ export default connect(
 )(WorkoutExercisesView);
 
 class WorkoutExerciseSingleView extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            showAdvance: false,
+        }
+    }
+
     render() {
         const {
             exercise,
@@ -475,71 +544,77 @@ class WorkoutExerciseSingleView extends Component {
             handleWholeExeDelete,
             handleFillFormForEdit,
         } = this.props;
+        const { showAdvance } = this.state;
         return (
-            <div className="workout-exercise-head-view d-flex">
-                <div className="workout-exercise-head-view-l">
-                    <img
-                        src={SERVER_BASE_URL + exercise.exercises.images[0]}
-                        width="50"
-                        onError={(e) => {
-                            e.target.src = noImg
-                        }}
-                    />
-                    <strong>{exercise.exercises.name}</strong>
+            <div className="workout-exercise-view">
+                <div className="workout-exercise-head-view d-flex">
+                    <div className="workout-exercise-head-view-l">
+                        <button className="drag-drop-handler-button"><SixDots /></button>
+                        <strong>{exercise.exercises.name}</strong>
+                    </div>
+                    <div className="workout-exercise-head-view-r">
+                        {exercise.differentSets === 1 &&
+                            <ToggleAdvanceSwitch exercise={exercise} showAdvance={showAdvance} handleAdvanceViewChange={() => this.setState({ showAdvance: !showAdvance })} />
+                        }
+                        <ButtonToolbar>
+                            <Dropdown id={`workout-actions-${exercise._id}`} pullRight>
+                                <Dropdown.Toggle noCaret><i className="icon-more_horiz"></i></Dropdown.Toggle>
+                                <Dropdown.Menu>
+                                    <MenuItem eventKey="1" onClick={() => handleFillFormForEdit(exerciseObj)}><FaPencil /> Edit</MenuItem>
+                                    <MenuItem eventKey="2" onClick={() => handleWholeExeDelete(exerciseObj)}><FaTrash /> Delete</MenuItem>
+                                </Dropdown.Menu>
+                            </Dropdown>
+                        </ButtonToolbar>
+                    </div>
                 </div>
-                <div className="workout-exercise-head-view-r">
-                    {exercise.differentSets === 0 &&
-                        <div className="workout-exercise-head-view-data-row d-flex">
-                            {exercise.sets &&
-                                <div className="workout-exercise-head-view-data-col">
-                                    <strong>{exercise.sets}</strong>&nbsp;
-                                    <strong>{'Sets'}</strong>
-                                </div>
-                            }
-                            {typeof exercise.restTime !== 'undefined' &&
-                                <div className="workout-exercise-head-view-data-col">
-                                    <strong>{exercise.restTime}</strong>&nbsp;
-                                    <strong>{_.find(EXE_REST_TIME_UNITS, ['value', exercise.restTimeUnit]).label} Rest</strong>
-                                </div>
-                            }
-                            {exercise.setsDetails[0].field1 &&
-                                <div className="workout-exercise-head-view-data-col">
-                                    <strong>{exercise.setsDetails[0].field1.value}</strong>&nbsp;
-                                    <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[0].field1.unit]).label}</strong>
-                                </div>
-                            }
-                            {exercise.setsDetails[0].field2 &&
-                                <div className="workout-exercise-head-view-data-col">
-                                    <strong>{exercise.setsDetails[0].field2.value}</strong>&nbsp;
-                                    <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[0].field2.unit]).label}</strong>
-                                </div>
-                            }
-                            {exercise.setsDetails[0].field3 &&
-                                <div className="workout-exercise-head-view-data-col">
-                                    <strong>{exercise.setsDetails[0].field3.value}</strong>&nbsp;
-                                    <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[0].field3.unit]).label}</strong>
-                                </div>
-                            }
-                            <div className="workout-exercise-head-view-edit">
-                                <button type="button" onClick={() => handleFillFormForEdit(exerciseObj)}>
-                                    <FaPencil />
-                                </button>
-                            </div>
-                            <div className="workout-exercise-head-view-cancel">
-                                <button type="button" onClick={() => handleWholeExeDelete(exerciseObj)}>
-                                    <i className="icon-cancel"></i>
-                                </button>
-                            </div>
-                        </div>
-                    }
-                    {exercise.differentSets === 1 &&
-                        <WorkoutExerciseSingleAdvanceView
-                            exercise={exercise}
-                            exerciseObj={exerciseObj}
-                            handleWholeExeDelete={handleWholeExeDelete}
-                            handleFillFormForEdit={handleFillFormForEdit}
+                <div className="workout-exercise-body-view d-flex">
+                    <div className="workout-exercise-body-view-l">
+                        <img
+                            src={SERVER_BASE_URL + exercise.exercises.images[0]}
+                            onError={(e) => {
+                                e.target.src = noImg
+                            }}
                         />
-                    }
+                    </div>
+                    <div className="workout-exercise-body-view-r">
+                        <div className="workout-exercise-body-view-desc">
+                            {ReactHtmlParser(exercise.exercises.description)}
+                        </div>
+                        <div className="d-flex">
+                            {exercise.differentSets === 0 &&
+                                <div className="workout-exercise-head-view-data-row d-flex">
+                                    {exercise.sets &&
+                                        <div className="workout-exercise-head-view-data-col">
+                                            <strong>{'Sets'}</strong><strong>{exercise.sets}</strong>
+                                        </div>
+                                    }
+                                    {typeof exercise.restTime !== 'undefined' &&
+                                        <div className="workout-exercise-head-view-data-col">
+                                            <strong>{_.find(EXE_REST_TIME_UNITS, ['value', exercise.restTimeUnit]).label} Rest</strong><strong>{exercise.restTime}</strong>
+                                        </div>
+                                    }
+                                    {exercise.setsDetails[0].field1 &&
+                                        <div className="workout-exercise-head-view-data-col">
+                                            <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[0].field1.unit]).label}</strong><strong>{exercise.setsDetails[0].field1.value}</strong>
+                                        </div>
+                                    }
+                                    {exercise.setsDetails[0].field2 &&
+                                        <div className="workout-exercise-head-view-data-col">
+                                            <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[0].field2.unit]).label}</strong><strong>{exercise.setsDetails[0].field2.value}</strong>
+                                        </div>
+                                    }
+                                    {exercise.setsDetails[0].field3 &&
+                                        <div className="workout-exercise-head-view-data-col">
+                                            <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[0].field3.unit]).label}</strong><strong>{exercise.setsDetails[0].field3.value}</strong>
+                                        </div>
+                                    }
+                                </div>
+                            }
+                            {exercise.differentSets === 1 &&
+                                <WorkoutExerciseSingleAdvanceView exercise={exercise} showAdvance={showAdvance} />
+                            }
+                        </div>
+                    </div>
                 </div>
             </div>
         );
@@ -558,34 +633,33 @@ class WorkoutExerciseSupersetView extends Component {
             <div className="workout-exercise-head-view-wrapper">
                 <div className="workout-exercise-head-view d-flex">
                     <div className="workout-exercise-head-view-l">
+                        <button className="drag-drop-handler-button"><SixDots /></button>
                         <strong>{'Superset'}</strong>
                     </div>
                     <div className="workout-exercise-head-view-r">
                         <div className="workout-exercise-head-view-data-row d-flex">
                             {exercises[0].sets &&
                                 <div className="workout-exercise-head-view-data-col">
-                                    <strong>{exercises[0].sets}</strong>&nbsp;
-                                    <strong>{'Sets'}</strong>
+                                    <strong>{'Sets'}</strong><strong>{exercises[0].sets}</strong>
                                 </div>
                             }
                             {typeof exercises[0].restTime !== 'undefined' &&
                                 <div className="workout-exercise-head-view-data-col">
-                                    <strong>{exercises[0].restTime}</strong>&nbsp;
-                                    <strong>{_.find(EXE_REST_TIME_UNITS, ['value', exercises[0].restTimeUnit]).label} Rest</strong>
+                                    <strong>{_.find(EXE_REST_TIME_UNITS, ['value', exercises[0].restTimeUnit]).label} Rest</strong><strong>{exercises[0].restTime}</strong>
                                 </div>
                             }
-                            <div className="workout-exercise-head-view-edit">
-                                <button type="button" onClick={() => handleFillFormForEdit(exerciseObj)}>
-                                    <FaPencil />
-                                </button>
-                            </div>
-                            <div className="workout-exercise-head-view-cancel">
-                                <button type="button" onClick={() => handleWholeExeDelete(exerciseObj)}>
-                                    <i className="icon-cancel"></i>
-                                </button>
-                            </div>
                         </div>
+                        <ButtonToolbar>
+                            <Dropdown id={`workout-actions-${exercises[0]._id}`} pullRight>
+                                <Dropdown.Toggle noCaret><i className="icon-more_horiz"></i></Dropdown.Toggle>
+                                <Dropdown.Menu>
+                                    <MenuItem eventKey="1" onClick={() => handleFillFormForEdit(exerciseObj)}><FaPencil /> Edit</MenuItem>
+                                    <MenuItem eventKey="2" onClick={() => handleWholeExeDelete(exerciseObj)}><FaTrash /> Delete</MenuItem>
+                                </Dropdown.Menu>
+                            </Dropdown>
+                        </ButtonToolbar>
                     </div>
+
                 </div>
                 <ul className="workout-exercise-body-view-ul">
                     <li>
@@ -593,52 +667,7 @@ class WorkoutExerciseSupersetView extends Component {
                             {exercises && exercises.length > 0 &&
                                 exercises.map((exercise, index) => {
                                     return (
-                                        <div key={index} className="workout-exercise-body-view d-flex">
-                                            <div className="workout-exercise-head-view-l">
-                                                <img
-                                                    src={SERVER_BASE_URL + exercise.exercises.images[0]}
-                                                    width="50"
-                                                    onError={(e) => {
-                                                        e.target.src = noImg
-                                                    }}
-                                                />
-                                                <strong>{exercise.exercises.name}</strong>
-                                            </div>
-                                            <div className="workout-exercise-head-view-r">
-                                                {exercise.differentSets === 0 &&
-                                                    <div className="workout-exercise-body-view-data-row d-flex">
-                                                        {exercise.setsDetails[0].field1 &&
-                                                            <div className="workout-exercise-body-view-data-col">
-                                                                <strong>{exercise.setsDetails[0].field1.value}</strong>&nbsp;
-                                                                <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[0].field1.unit]).label}</strong>
-                                                            </div>
-                                                        }
-                                                        {exercise.setsDetails[0].field2 &&
-                                                            <div className="workout-exercise-body-view-data-col">
-                                                                <strong>{exercise.setsDetails[0].field2.value}</strong>&nbsp;
-                                                                <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[0].field2.unit]).label}</strong>
-                                                            </div>
-                                                        }
-                                                        {exercise.setsDetails[0].field3 &&
-                                                            <div className="workout-exercise-body-view-data-col">
-                                                                <strong>{exercise.setsDetails[0].field3.value}</strong>&nbsp;
-                                                                <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[0].field3.unit]).label}</strong>
-                                                            </div>
-                                                        }
-                                                        <div className="workout-exercise-head-view-edit">
-                                                            <button type="button">
-                                                                <FaPencil />
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                }
-                                                {exercise.differentSets === 1 &&
-                                                    <WorkoutExerciseSupersetAdvanceView
-                                                        exercise={exercise}
-                                                    />
-                                                }
-                                            </div>
-                                        </div>
+                                        <WorkoutExerciseSupersetNormalView key={index} exercise={exercise} />
                                     );
                                 })
                             }
@@ -663,33 +692,31 @@ class WorkoutExerciseCircuitView extends Component {
             <div className="workout-exercise-head-view-wrapper">
                 <div className="workout-exercise-head-view d-flex">
                     <div className="workout-exercise-head-view-l">
+                        <button className="drag-drop-handler-button"><SixDots /></button>
                         <strong>{'Circuit'}</strong>
                     </div>
                     <div className="workout-exercise-head-view-r">
                         <div className="workout-exercise-head-view-data-row d-flex">
                             {exercises[0].sets &&
                                 <div className="workout-exercise-head-view-data-col">
-                                    <strong>{exercises[0].sets}</strong>&nbsp;
-                                    <strong>{'Sets'}</strong>
+                                    <strong>{'Sets'}</strong><strong>{exercises[0].sets}</strong>
                                 </div>
                             }
                             {typeof exercises[0].restTime !== 'undefined' &&
                                 <div className="workout-exercise-head-view-data-col">
-                                    <strong>{exercises[0].restTime}</strong>&nbsp;
-                                    <strong>{_.find(EXE_REST_TIME_UNITS, ['value', exercises[0].restTimeUnit]).label} Rest</strong>
+                                    <strong>{_.find(EXE_REST_TIME_UNITS, ['value', exercises[0].restTimeUnit]).label} Rest</strong><strong>{exercises[0].restTime}</strong>
                                 </div>
                             }
-                            <div className="workout-exercise-head-view-edit">
-                                <button type="button" onClick={() => handleFillFormForEdit(exerciseObj)}>
-                                    <FaPencil />
-                                </button>
-                            </div>
-                            <div className="workout-exercise-head-view-cancel">
-                                <button type="button" onClick={() => handleWholeExeDelete(exerciseObj)}>
-                                    <i className="icon-cancel"></i>
-                                </button>
-                            </div>
                         </div>
+                        <ButtonToolbar>
+                            <Dropdown id={`workout-actions-${exercises[0]._id}`} pullRight>
+                                <Dropdown.Toggle noCaret><i className="icon-more_horiz"></i></Dropdown.Toggle>
+                                <Dropdown.Menu>
+                                    <MenuItem eventKey="1" onClick={() => handleFillFormForEdit(exerciseObj)}><FaPencil /> Edit</MenuItem>
+                                    <MenuItem eventKey="2" onClick={() => handleWholeExeDelete(exerciseObj)}><FaTrash /> Delete</MenuItem>
+                                </Dropdown.Menu>
+                            </Dropdown>
+                        </ButtonToolbar>
                     </div>
                 </div>
                 <ul className="workout-exercise-body-view-ul">
@@ -698,59 +725,7 @@ class WorkoutExerciseCircuitView extends Component {
                             {exercises && exercises.length > 0 &&
                                 exercises.map((exercise, index) => {
                                     return (
-                                        <div key={index} className="workout-exercise-body-view d-flex">
-                                            <div className="workout-exercise-head-view-l">
-                                                <img
-                                                    src={SERVER_BASE_URL + exercise.exercises.images[0]}
-                                                    width="50"
-                                                    onError={(e) => {
-                                                        e.target.src = noImg
-                                                    }}
-                                                />
-                                                <strong>{exercise.exercises.name}</strong>
-                                            </div>
-                                            <div className="workout-exercise-head-view-r">
-                                                {exercise.differentSets === 0 &&
-                                                    <div className="workout-exercise-body-view-data-row d-flex">
-                                                        {exercise.setsDetails[0].field1 &&
-                                                            <div className="workout-exercise-body-view-data-col">
-                                                                <strong>{exercise.setsDetails[0].field1.value}</strong>&nbsp;
-                                                                <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[0].field1.unit]).label}</strong>
-                                                            </div>
-                                                        }
-                                                        {exercise.setsDetails[0].field2 &&
-                                                            <div className="workout-exercise-body-view-data-col">
-                                                                <strong>{exercise.setsDetails[0].field2.value}</strong>&nbsp;
-                                                                <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[0].field2.unit]).label}</strong>
-                                                            </div>
-                                                        }
-                                                        {exercise.setsDetails[0].field3 &&
-                                                            <div className="workout-exercise-body-view-data-col">
-                                                                <strong>{exercise.setsDetails[0].field3.value}</strong>&nbsp;
-                                                                <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[0].field3.unit]).label}</strong>
-                                                            </div>
-                                                        }
-                                                        <div className="workout-exercise-head-view-edit">
-                                                            <button type="button">
-                                                                <FaPencil />
-                                                            </button>
-                                                        </div>
-                                                        <div className="workout-exercise-head-view-cancel">
-                                                            <button type="button" onClick={() => handleSingleExeDelete(exercise._id, exerciseObj)}>
-                                                                <i className="icon-cancel"></i>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                }
-                                                {exercise.differentSets === 1 &&
-                                                    <WorkoutExerciseCircuitAdvanceView
-                                                        exercise={exercise}
-                                                        exerciseObj={exerciseObj}
-                                                        handleSingleExeDelete={handleSingleExeDelete}
-                                                    />
-                                                }
-                                            </div>
-                                        </div>
+                                        <WorkoutExerciseCircuitNormalView key={index} exercise={exercise} exerciseObj={exerciseObj} handleSingleExeDelete={handleSingleExeDelete} />
                                     );
                                 })
                             }
@@ -762,105 +737,214 @@ class WorkoutExerciseCircuitView extends Component {
     }
 }
 
-class WorkoutExerciseSingleAdvanceView extends Component {
+class WorkoutExerciseSupersetNormalView extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            show: false,
+            showAdvance: false,
         }
     }
 
     render() {
-        const {
-            exercise,
-            handleWholeExeDelete,
-            exerciseObj,
-            handleFillFormForEdit,
-        } = this.props;
-        const { show } = this.state;
+        const { exercise } = this.props;
+        const { showAdvance } = this.state;
         return (
-            <div className="workout-exercise-head-view-data-row-inner">
-                <div className="workout-exercise-head-view-data-row d-flex">
-                    {exercise.sets &&
-                        <div className="workout-exercise-head-view-data-col">
-                            <strong>{exercise.sets}</strong>
-                            &nbsp;
-                        <strong>{'Sets'}</strong>
-                        </div>
-                    }
-                    {typeof exercise.setsDetails[0].restTime !== 'undefined' &&
-                        <div className="workout-exercise-head-view-data-col">
-                            <strong>{exercise.setsDetails[0].restTime}</strong>
-                            &nbsp;
-                        <strong>{_.find(EXE_REST_TIME_UNITS, ['value', exercise.setsDetails[0].restTimeUnit]).label}</strong>
-                            {exercise.setsDetails.length > 1 && typeof exercise.setsDetails[(exercise.setsDetails.length - 1)].restTime !== 'undefined' &&
-                                <strong> - {exercise.setsDetails[(exercise.setsDetails.length - 1)].restTime}</strong>
-                            }
-                            &nbsp;
-                        {exercise.setsDetails.length > 1 && typeof exercise.setsDetails[(exercise.setsDetails.length - 1)].restTimeUnit !== 'undefined' &&
-                                <strong>{_.find(EXE_REST_TIME_UNITS, ['value', exercise.setsDetails[(exercise.setsDetails.length - 1)].restTimeUnit]).label}</strong>
-                            } Rest
+            <div className="workout-exercise-body-view">
+                <div className="workout-exercise-body-head-view d-flex">
+                    <div className="workout-exercise-head-view-l">
+                        <strong>{exercise.exercises.name}</strong>
                     </div>
-                    }
-                    {exercise.setsDetails[0].field1 &&
-                        <div className="workout-exercise-head-view-data-col">
-                            <strong>{exercise.setsDetails[0].field1.value}</strong>
-                            &nbsp;
-                        <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[0].field1.unit]).label}</strong>
-                            {exercise.setsDetails.length > 1 && exercise.setsDetails[(exercise.setsDetails.length - 1)].field1 &&
-                                <strong> - {exercise.setsDetails[(exercise.setsDetails.length - 1)].field1.value}</strong>
-                            }
-                            &nbsp;
-                        {exercise.setsDetails.length > 1 && exercise.setsDetails[(exercise.setsDetails.length - 1)].field1 &&
-                                <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[(exercise.setsDetails.length - 1)].field1.unit]).label}</strong>
-                            }
-                        </div>
-                    }
-                    {exercise.setsDetails[0].field2 &&
-                        <div className="workout-exercise-head-view-data-col">
-                            <strong>{exercise.setsDetails[0].field2.value}</strong>
-                            &nbsp;
-                        <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[0].field2.unit]).label}</strong>
-                            {exercise.setsDetails.length > 1 && exercise.setsDetails[(exercise.setsDetails.length - 1)].field2 &&
-                                <strong> - {exercise.setsDetails[(exercise.setsDetails.length - 1)].field2.value}</strong>
-                            }
-                            &nbsp;
-                        {exercise.setsDetails.length > 1 && exercise.setsDetails[(exercise.setsDetails.length - 1)].field2 &&
-                                <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[(exercise.setsDetails.length - 1)].field2.unit]).label}</strong>
-                            }
-                        </div>
-                    }
-                    {exercise.setsDetails[0].field3 &&
-                        <div className="workout-exercise-head-view-data-col">
-                            <strong>{exercise.setsDetails[0].field3.value}</strong>
-                            &nbsp;
-                        <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[0].field3.unit]).label}</strong>
-                            {exercise.setsDetails.length > 1 && exercise.setsDetails[(exercise.setsDetails.length - 1)].field3 &&
-                                <strong> - {exercise.setsDetails[(exercise.setsDetails.length - 1)].field3.value}</strong>
-                            }
-                            &nbsp;
-                        {exercise.setsDetails.length > 1 && exercise.setsDetails[(exercise.setsDetails.length - 1)].field3 &&
-                                <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[(exercise.setsDetails.length - 1)].field3.unit]).label}</strong>
-                            }
-                        </div>
-                    }
-                    <div className="workout-exercise-head-view-edit">
-                        <button type="button" onClick={() => handleFillFormForEdit(exerciseObj)}>
-                            <FaPencil />
-                        </button>
-                    </div>
-                    <div className="workout-exercise-head-toggle-actions">
-                        <button type="button" onClick={() => this.setState({ show: !show })}>
-                            ...
-                    </button>
-                    </div>
-                    <div className="workout-exercise-head-view-cancel">
-                        <button type="button" onClick={() => handleWholeExeDelete(exerciseObj)}>
-                            <i className="icon-cancel"></i>
-                        </button>
+                    <div className="workout-exercise-head-view-r">
+                        {exercise.differentSets === 1 &&
+                            <ToggleAdvanceSwitch exercise={exercise} showAdvance={showAdvance} handleAdvanceViewChange={() => this.setState({ showAdvance: !showAdvance })} />
+                        }
                     </div>
                 </div>
-                {show &&
+                <div className="workout-exercise-body-content-view d-flex">
+                    <div className="workout-exercise-body-content-view-l">
+                        <img
+                            src={SERVER_BASE_URL + exercise.exercises.images[0]}
+                            onError={(e) => {
+                                e.target.src = noImg
+                            }}
+                        />
+                    </div>
+                    <div className="workout-exercise-body-content-view-r">
+                        <div className="workout-exercise-body-view-desc">
+                            {ReactHtmlParser(exercise.exercises.description)}
+                        </div>
+                        <div className="d-flex">
+                            {exercise.differentSets === 0 &&
+                                <div className="workout-exercise-body-view-data-row d-flex">
+                                    {exercise.setsDetails[0].field1 &&
+                                        <div className="workout-exercise-body-view-data-col">
+                                            <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[0].field1.unit]).label}</strong><strong>{exercise.setsDetails[0].field1.value}</strong>
+                                        </div>
+                                    }
+                                    {exercise.setsDetails[0].field2 &&
+                                        <div className="workout-exercise-body-view-data-col">
+                                            <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[0].field2.unit]).label}</strong><strong>{exercise.setsDetails[0].field2.value}</strong>
+                                        </div>
+                                    }
+                                    {exercise.setsDetails[0].field3 &&
+                                        <div className="workout-exercise-body-view-data-col">
+                                            <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[0].field3.unit]).label}</strong><strong>{exercise.setsDetails[0].field3.value}</strong>
+                                        </div>
+                                    }
+                                </div>
+                            }
+                            {exercise.differentSets === 1 &&
+                                <WorkoutExerciseSupersetAdvanceView exercise={exercise} showAdvance={showAdvance} />
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+}
+
+class WorkoutExerciseCircuitNormalView extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            showAdvance: false,
+        }
+    }
+
+    render() {
+        const { exercise, exerciseObj, handleSingleExeDelete } = this.props;
+        const { showAdvance } = this.state;
+        return (
+            <div className="workout-exercise-body-view">
+                <div className="workout-exercise-body-head-view d-flex">
+                    <div className="workout-exercise-head-view-l">
+                        <strong>{exercise.exercises.name}</strong>
+                    </div>
+
+                    <div className="workout-exercise-head-view-r">
+                        {exercise.differentSets === 1 &&
+                            <ToggleAdvanceSwitch exercise={exercise} showAdvance={showAdvance} handleAdvanceViewChange={() => this.setState({ showAdvance: !showAdvance })} />
+                        }
+                        <div className="workout-exercise-head-view-cancel">
+                            <button type="button" onClick={() => handleSingleExeDelete(exercise._id, exerciseObj)}>
+                                <i className="icon-cancel"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div className="workout-exercise-body-content-view d-flex">
+                    <div className="workout-exercise-body-content-view-l">
+                        <img
+                            src={SERVER_BASE_URL + exercise.exercises.images[0]}
+                            onError={(e) => {
+                                e.target.src = noImg
+                            }}
+                        />
+                    </div>
+                    <div className="workout-exercise-body-content-view-r">
+                        <div className="workout-exercise-body-view-desc">
+                            {ReactHtmlParser(exercise.exercises.description)}
+                        </div>
+                        <div className="d-flex">
+                            {exercise.differentSets === 0 &&
+                                <div className="workout-exercise-body-view-data-row d-flex">
+                                    {exercise.setsDetails[0].field1 &&
+                                        <div className="workout-exercise-body-view-data-col">
+                                            <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[0].field1.unit]).label}</strong><strong>{exercise.setsDetails[0].field1.value}</strong>
+                                        </div>
+                                    }
+                                    {exercise.setsDetails[0].field2 &&
+                                        <div className="workout-exercise-body-view-data-col">
+                                            <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[0].field2.unit]).label}</strong><strong>{exercise.setsDetails[0].field2.value}</strong>
+                                        </div>
+                                    }
+                                    {exercise.setsDetails[0].field3 &&
+                                        <div className="workout-exercise-body-view-data-col">
+                                            <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[0].field3.unit]).label}</strong><strong>{exercise.setsDetails[0].field3.value}</strong>
+                                        </div>
+                                    }
+                                </div>
+                            }
+                            {exercise.differentSets === 1 &&
+                                <WorkoutExerciseCircuitAdvanceView
+                                    exercise={exercise}
+                                    exerciseObj={exerciseObj}
+                                    handleSingleExeDelete={handleSingleExeDelete}
+                                    showAdvance={showAdvance}
+                                />
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+}
+
+class WorkoutExerciseSingleAdvanceView extends Component {
+    render() {
+        const {
+            exercise,
+            showAdvance,
+        } = this.props;
+        return (
+            <div className="workout-exercise-head-view-data-row-inner">
+                {!showAdvance &&
+                    <div className="workout-exercise-head-view-data-row d-flex">
+                        {exercise.sets &&
+                            <div className="workout-exercise-head-view-data-col">
+                                <strong>{'Sets'}</strong><strong>{exercise.sets}</strong>
+                            </div>
+                        }
+                        {typeof exercise.setsDetails[0].restTime !== 'undefined' &&
+                            <div className="workout-exercise-head-view-data-col">
+                                <strong>{_.find(EXE_REST_TIME_UNITS, ['value', exercise.setsDetails[0].restTimeUnit]).label} Rest</strong>
+                                <strong>
+                                    {exercise.setsDetails[0].restTime}
+                                    {exercise.setsDetails.length > 2 && typeof exercise.setsDetails[(exercise.setsDetails.length - 2)].restTime !== 'undefined' &&
+                                        ' - ' + exercise.setsDetails[(exercise.setsDetails.length - 2)].restTime
+                                    }
+                                </strong>
+                            </div>
+                        }
+                        {exercise.setsDetails[0].field1 &&
+                            <div className="workout-exercise-head-view-data-col">
+                                <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[0].field1.unit]).label}</strong>
+                                <strong>
+                                    {exercise.setsDetails[0].field1.value}
+                                    {exercise.setsDetails.length > 2 && exercise.setsDetails[(exercise.setsDetails.length - 2)].field1 &&
+                                        ' - ' + exercise.setsDetails[(exercise.setsDetails.length - 2)].field1.value
+                                    }
+                                </strong>
+                            </div>
+                        }
+                        {exercise.setsDetails[0].field2 &&
+                            <div className="workout-exercise-head-view-data-col">
+                                <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[0].field2.unit]).label}</strong>
+                                <strong>
+                                    {exercise.setsDetails[0].field2.value}
+                                    {exercise.setsDetails.length > 2 && exercise.setsDetails[(exercise.setsDetails.length - 2)].field2 &&
+                                        ' - ' + exercise.setsDetails[(exercise.setsDetails.length - 2)].field2.value
+                                    }
+                                </strong>
+                            </div>
+                        }
+                        {exercise.setsDetails[0].field3 &&
+                            <div className="workout-exercise-head-view-data-col">
+                                <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[0].field3.unit]).label}</strong><strong>{exercise.setsDetails[0].field3.value}</strong>
+                                {exercise.setsDetails.length > 2 && exercise.setsDetails[(exercise.setsDetails.length - 2)].field3 &&
+                                    <strong> - {_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[(exercise.setsDetails.length - 2)].field3.unit]).label}</strong>
+                                }
+
+                                {exercise.setsDetails.length > 2 && exercise.setsDetails[(exercise.setsDetails.length - 2)].field3 &&
+                                    <strong>{exercise.setsDetails[(exercise.setsDetails.length - 2)].field3.value}</strong>
+                                }
+                            </div>
+                        }
+                    </div>
+                }
+                {showAdvance &&
                     <div className="workout-exercise-head-view-data-row-ul">
                         <ul>
                             {exercise.setsDetails.map((o, i) => {
@@ -872,22 +956,22 @@ class WorkoutExerciseSingleAdvanceView extends Component {
                                             </div>
                                             {typeof o.restTime !== 'undefined' &&
                                                 <div className="workout-exercise-head-view-data-col">
-                                                    <strong>{o.restTime}</strong>&nbsp;<strong>{_.find(EXE_REST_TIME_UNITS, ['value', o.restTimeUnit]).label} Rest</strong>
+                                                    <strong>{_.find(EXE_REST_TIME_UNITS, ['value', o.restTimeUnit]).label} Rest</strong><strong>{o.restTime}</strong>
                                                 </div>
                                             }
                                             {o.field1 &&
                                                 <div className="workout-exercise-head-view-data-col">
-                                                    <strong>{o.field1.value}</strong>&nbsp;<strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', o.field1.unit]).label}</strong>
+                                                    <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', o.field1.unit]).label}</strong><strong>{o.field1.value}</strong>
                                                 </div>
                                             }
                                             {o.field2 &&
                                                 <div className="workout-exercise-head-view-data-col">
-                                                    <strong>{o.field2.value}</strong>&nbsp;<strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', o.field2.unit]).label}</strong>
+                                                    <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', o.field2.unit]).label}</strong><strong>{o.field2.value}</strong>
                                                 </div>
                                             }
                                             {o.field3 &&
                                                 <div className="workout-exercise-head-view-data-col">
-                                                    <strong>{o.field3.value}</strong>&nbsp;<strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', o.field3.unit]).label}</strong>
+                                                    <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', o.field3.unit]).label}</strong><strong>{o.field3.value}</strong>
                                                 </div>
                                             }
                                         </div>
@@ -903,69 +987,51 @@ class WorkoutExerciseSingleAdvanceView extends Component {
 }
 
 class WorkoutExerciseSupersetAdvanceView extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            show: false,
-        }
-    }
-
     render() {
         const {
             exercise,
+            showAdvance,
         } = this.props;
-        const { show } = this.state;
         return (
-            <div className="workout-exercise-head-view-data-row-inner">
-                <div className="workout-exercise-body-view-data-row d-flex">
-                    {exercise.setsDetails[0].field1 &&
-                        <div className="workout-exercise-body-view-data-col">
-                            <strong>{exercise.setsDetails[0].field1.value}</strong>&nbsp;<strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[0].field1.unit]).label}</strong>
-                            {exercise.setsDetails.length > 1 && exercise.setsDetails[(exercise.setsDetails.length - 1)].field1 &&
-                                <strong> - {exercise.setsDetails[(exercise.setsDetails.length - 1)].field1.value}</strong>
-                            }
-                            &nbsp;
-                        {exercise.setsDetails.length > 1 && exercise.setsDetails[(exercise.setsDetails.length - 1)].field1 &&
-                                <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[(exercise.setsDetails.length - 1)].field1.unit]).label}</strong>
-                            }
-                        </div>
-                    }
-                    {exercise.setsDetails[0].field2 &&
-                        <div className="workout-exercise-body-view-data-col">
-                            <strong>{exercise.setsDetails[0].field2.value}</strong>&nbsp;<strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[0].field2.unit]).label}</strong>
-                            {exercise.setsDetails.length > 1 && exercise.setsDetails[(exercise.setsDetails.length - 1)].field2 &&
-                                <strong> - {exercise.setsDetails[(exercise.setsDetails.length - 1)].field2.value}</strong>
-                            }
-                            &nbsp;
-                        {exercise.setsDetails.length > 1 && exercise.setsDetails[(exercise.setsDetails.length - 1)].field2 &&
-                                <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[(exercise.setsDetails.length - 1)].field2.unit]).label}</strong>
-                            }
-                        </div>
-                    }
-                    {exercise.setsDetails[0].field3 &&
-                        <div className="workout-exercise-body-view-data-col">
-                            <strong>{exercise.setsDetails[0].field3.value}</strong>&nbsp;<strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[0].field3.unit]).label}</strong>
-                            {exercise.setsDetails.length > 1 && exercise.setsDetails[(exercise.setsDetails.length - 1)].field3 &&
-                                <strong> - {exercise.setsDetails[(exercise.setsDetails.length - 1)].field3.value}</strong>
-                            }
-                            &nbsp;
-                        {exercise.setsDetails.length > 1 && exercise.setsDetails[(exercise.setsDetails.length - 1)].field3 &&
-                                <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[(exercise.setsDetails.length - 1)].field3.unit]).label}</strong>
-                            }
-                        </div>
-                    }
-                    <div className="workout-exercise-head-view-edit">
-                        <button type="button">
-                            <FaPencil />
-                        </button>
+            <div className="workout-exercise-head-view-data-row-inner ">
+                {!showAdvance &&
+                    <div className="workout-exercise-body-view-data-row d-flex">
+                        {exercise.setsDetails[0].field1 &&
+                            <div className="workout-exercise-body-view-data-col">
+                                <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[0].field1.unit]).label}</strong>
+                                <strong>
+                                    {exercise.setsDetails[0].field1.value}
+                                    {exercise.setsDetails.length > 2 && exercise.setsDetails[(exercise.setsDetails.length - 2)].field1 &&
+                                        ' - ' + exercise.setsDetails[(exercise.setsDetails.length - 2)].field1.value
+                                    }
+                                </strong>
+                            </div>
+                        }
+                        {exercise.setsDetails[0].field2 &&
+                            <div className="workout-exercise-body-view-data-col">
+                                <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[0].field2.unit]).label}</strong>
+                                <strong>
+                                    {exercise.setsDetails[0].field2.value}
+                                    {exercise.setsDetails.length > 2 && exercise.setsDetails[(exercise.setsDetails.length - 2)].field2 &&
+                                        ' - ' + exercise.setsDetails[(exercise.setsDetails.length - 2)].field2.value
+                                    }
+                                </strong>
+                            </div>
+                        }
+                        {exercise.setsDetails[0].field3 &&
+                            <div className="workout-exercise-body-view-data-col">
+                                <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[0].field3.unit]).label}</strong>
+                                <strong>
+                                    {exercise.setsDetails[0].field3.value}
+                                    {exercise.setsDetails.length > 2 && exercise.setsDetails[(exercise.setsDetails.length - 2)].field3 &&
+                                        ' - ' + exercise.setsDetails[(exercise.setsDetails.length - 2)].field3.value
+                                    }
+                                </strong>
+                            </div>
+                        }
                     </div>
-                    <div className="workout-exercise-head-toggle-actions">
-                        <button type="button" onClick={() => this.setState({ show: !show })}>
-                            ...
-                    </button>
-                    </div>
-                </div>
-                {show &&
+                }
+                {showAdvance &&
                     <div className="workout-exercise-head-view-data-row-ul">
                         <ul>
                             {exercise.setsDetails.map((o, i) => {
@@ -977,17 +1043,17 @@ class WorkoutExerciseSupersetAdvanceView extends Component {
                                             </div>
                                             {o.field1 &&
                                                 <div className="workout-exercise-head-view-data-col">
-                                                    <strong>{o.field1.value}</strong>&nbsp;<strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', o.field1.unit]).label}</strong>
+                                                    <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', o.field1.unit]).label}</strong><strong>{o.field1.value}</strong>
                                                 </div>
                                             }
                                             {o.field2 &&
                                                 <div className="workout-exercise-head-view-data-col">
-                                                    <strong>{o.field2.value}</strong>&nbsp;<strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', o.field2.unit]).label}</strong>
+                                                    <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', o.field2.unit]).label}</strong><strong>{o.field2.value}</strong>
                                                 </div>
                                             }
                                             {o.field3 &&
                                                 <div className="workout-exercise-head-view-data-col">
-                                                    <strong>{o.field3.value}</strong>&nbsp;<strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', o.field3.unit]).label}</strong>
+                                                    <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', o.field3.unit]).label}</strong><strong>{o.field3.value}</strong>
                                                 </div>
                                             }
                                         </div>
@@ -1003,74 +1069,51 @@ class WorkoutExerciseSupersetAdvanceView extends Component {
 }
 
 class WorkoutExerciseCircuitAdvanceView extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            show: false,
-        }
-    }
-
     render() {
         const {
             exercise,
-            handleSingleExeDelete,
-            exerciseObj,
+            showAdvance
         } = this.props;
-        const { show } = this.state;
         return (
             <div className="workout-exercise-head-view-data-row-inner">
-                <div className="workout-exercise-body-view-data-row d-flex">
-                    {exercise.setsDetails[0].field1 &&
-                        <div className="workout-exercise-body-view-data-col">
-                            <strong>{exercise.setsDetails[0].field1.value}</strong>&nbsp;<strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[0].field1.unit]).label}</strong>
-                            {exercise.setsDetails.length > 1 && exercise.setsDetails[(exercise.setsDetails.length - 1)].field1 &&
-                                <strong> - {exercise.setsDetails[(exercise.setsDetails.length - 1)].field1.value}</strong>
-                            }
-                            &nbsp;
-                            {exercise.setsDetails.length > 1 && exercise.setsDetails[(exercise.setsDetails.length - 1)].field1 &&
-                                <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[(exercise.setsDetails.length - 1)].field1.unit]).label}</strong>
-                            }
-                        </div>
-                    }
-                    {exercise.setsDetails[0].field2 &&
-                        <div className="workout-exercise-body-view-data-col">
-                            <strong>{exercise.setsDetails[0].field2.value}</strong>&nbsp;<strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[0].field2.unit]).label}</strong>
-                            {exercise.setsDetails.length > 1 && exercise.setsDetails[(exercise.setsDetails.length - 1)].field2 &&
-                                <strong> - {exercise.setsDetails[(exercise.setsDetails.length - 1)].field2.value}</strong>
-                            }
-                            &nbsp;
-                            {exercise.setsDetails.length > 1 && exercise.setsDetails[(exercise.setsDetails.length - 1)].field2 &&
-                                <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[(exercise.setsDetails.length - 1)].field2.unit]).label}</strong>
-                            }
-                        </div>
-                    }
-                    {exercise.setsDetails[0].field3 &&
-                        <div className="workout-exercise-body-view-data-col">
-                            <strong>{exercise.setsDetails[0].field3.value}</strong>&nbsp;<strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[0].field3.unit]).label}</strong>
-                            {exercise.setsDetails.length > 1 && exercise.setsDetails[(exercise.setsDetails.length - 1)].field3 &&
-                                <strong> - {exercise.setsDetails[(exercise.setsDetails.length - 1)].field3.value}</strong>
-                            }
-                            &nbsp;
-                            {exercise.setsDetails.length > 1 && exercise.setsDetails[(exercise.setsDetails.length - 1)].field3 &&
-                                <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[(exercise.setsDetails.length - 1)].field3.unit]).label}</strong>
-                            }
-                        </div>
-                    }
-                    <div className="workout-exercise-head-view-edit">
-                        <button type="button">
-                            <FaPencil />
-                        </button>
+                {!showAdvance &&
+                    <div className="workout-exercise-body-view-data-row d-flex">
+                        {exercise.setsDetails[0].field1 &&
+                            <div className="workout-exercise-body-view-data-col">
+                                <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[0].field1.unit]).label}</strong>
+                                <strong>
+                                    {exercise.setsDetails[0].field1.value}
+                                    {exercise.setsDetails.length > 2 && exercise.setsDetails[(exercise.setsDetails.length - 2)].field1 &&
+                                        ' - ' + exercise.setsDetails[(exercise.setsDetails.length - 2)].field1.value
+                                    }
+                                </strong>
+                            </div>
+                        }
+                        {exercise.setsDetails[0].field2 &&
+                            <div className="workout-exercise-body-view-data-col">
+                                <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[0].field2.unit]).label}</strong>
+                                <strong>
+                                    {exercise.setsDetails[0].field2.value}
+                                    {exercise.setsDetails.length > 2 && exercise.setsDetails[(exercise.setsDetails.length - 2)].field2 &&
+                                        ' - ' + exercise.setsDetails[(exercise.setsDetails.length - 2)].field2.value
+                                    }
+                                </strong>
+                            </div>
+                        }
+                        {exercise.setsDetails[0].field3 &&
+                            <div className="workout-exercise-body-view-data-col">
+                                <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[0].field3.unit]).label}</strong>
+                                <strong>
+                                    {exercise.setsDetails[0].field3.value}
+                                    {exercise.setsDetails.length > 2 && exercise.setsDetails[(exercise.setsDetails.length - 2)].field3 &&
+                                        ' - ' + exercise.setsDetails[(exercise.setsDetails.length - 2)].field3.value
+                                    }
+                                </strong>
+                            </div>
+                        }
                     </div>
-                    <div className="workout-exercise-head-toggle-actions">
-                        <button type="button" onClick={() => this.setState({ show: !show })}>...</button>
-                    </div>
-                    <div className="workout-exercise-head-view-cancel">
-                        <button type="button" onClick={() => handleSingleExeDelete(exercise._id, exerciseObj)}>
-                            <i className="icon-cancel"></i>
-                        </button>
-                    </div>
-                </div>
-                {show &&
+                }
+                {showAdvance &&
                     <div className="workout-exercise-head-view-data-row-ul">
                         <ul>
                             {exercise.setsDetails.map((o, i) => {
@@ -1082,17 +1125,17 @@ class WorkoutExerciseCircuitAdvanceView extends Component {
                                             </div>
                                             {o.field1 &&
                                                 <div className="workout-exercise-head-view-data-col">
-                                                    <strong>{o.field1.value}</strong>&nbsp;<strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', o.field1.unit]).label}</strong>
+                                                    <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', o.field1.unit]).label}</strong><strong>{o.field1.value}</strong>
                                                 </div>
                                             }
                                             {o.field2 &&
                                                 <div className="workout-exercise-head-view-data-col">
-                                                    <strong>{o.field2.value}</strong>&nbsp;<strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', o.field2.unit]).label}</strong>
+                                                    <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', o.field2.unit]).label}</strong><strong>{o.field2.value}</strong>
                                                 </div>
                                             }
                                             {o.field3 &&
                                                 <div className="workout-exercise-head-view-data-col">
-                                                    <strong>{o.field3.value}</strong>&nbsp;<strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', o.field3.unit]).label}</strong>
+                                                    <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', o.field3.unit]).label}</strong><strong>{o.field3.value}</strong>
                                                 </div>
                                             }
                                         </div>
@@ -1102,6 +1145,31 @@ class WorkoutExerciseCircuitAdvanceView extends Component {
                         </ul>
                     </div>
                 }
+            </div>
+        );
+    }
+}
+
+class ToggleAdvanceSwitch extends Component {
+    render() {
+        const {
+            exercise,
+            showAdvance,
+            handleAdvanceViewChange
+        } = this.props;
+        return (
+            <div className="advance-toggle-switch-workout-view switch-wrap">
+                <small>Advance View</small>
+                <div className="material-switch">
+                    <input
+                        id={`advance_toggle_${exercise._id}`}
+                        name={`advance_toggle_${exercise._id}`}
+                        type="checkbox"
+                        checked={showAdvance}
+                        onChange={handleAdvanceViewChange}
+                    />
+                    <label htmlFor={`advance_toggle_${exercise._id}`} className="label-default"></label>
+                </div>
             </div>
         );
     }

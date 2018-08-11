@@ -165,7 +165,11 @@ class App extends Component {
                             <PrivateRoute path={routeCodes.NUTRITIONSHOP} component={NutritionShopping} />
 
                             <PrivateRoute path={routeCodes.CALENDAR} component={Calendar} />
-                            <PrivateRoute path={routeCodes.BADGES} component={Badges} />
+
+                            <PrivateRoute path={routeCodes.BADGESTRACKING} component={Badges} />
+                            <PrivateRoute path={routeCodes.BADGESINCOMPLETE} component={Badges} />
+                            <PrivateRoute path={routeCodes.BADGESCOMPLETE} component={Badges} />
+
                             <PrivateRoute path={routeCodes.GOALS} component={Goals} />
 
                             <PrivateRoute path={routeCodes.RECEIP} component={Receip} />

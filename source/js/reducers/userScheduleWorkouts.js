@@ -11,9 +11,6 @@ import {
     ADD_USERS_WORKOUT_SCHEDULE_SUCCESS,
     ADD_USERS_WORKOUT_SCHEDULE_ERROR,
     COPY_USER_WORKOUT_SCHEDULE,
-    CHANGE_USERS_WORKOUT_SCHEDULE_SUCCESS,
-    CHANGE_USERS_WORKOUT_SCHEDULE_ERROR,
-    CHANGE_USERS_WORKOUT_SCHEDULE_REQUEST,
     GET_PROGRAMS_NAME_REQUEST,
     GET_PROGRAMS_NAME_SUCCESS,
     GET_PROGRAMS_NAME_ERROR,
@@ -53,6 +50,11 @@ import {
     UPDATE_USERS_WORKOUT_SCHEDULE_SUCCESS,
     UPDATE_USERS_WORKOUT_SCHEDULE_ERROR,
     CHANGE_WORKOUT_MAIN_TYPE_DETAILS,
+    GET_USER_FIRST_WORKOUT_BY_DATE_REQUEST,
+    GET_USER_FIRST_WORKOUT_BY_DATE_SUCCESS,
+    GET_USER_FIRST_WORKOUT_BY_DATE_ERROR,
+    GET_USER_WORKOUT_CALENDAR_LIST_SUCCESS,
+    SET_TODAYS_WORKOUT_DATE,
 } from "../actions/userScheduleWorkouts";
 import { VALIDATION_FAILURE_STATUS, SCHEDULED_WORKOUT_TYPE_WARMUP } from "../constants/consts";
 import { generateValidationErrorMsgArr, createNewStateForWorkout } from "../helpers/funs";
@@ -62,6 +64,9 @@ const initialState = Map({
     loading: false,
     workouts: [],
     workout: null,
+    workoutsList: [],
+    calendarList: [],
+    workoutStat: null,
     error: [],
     exercises: [],
     programs: [],
@@ -80,6 +85,10 @@ const initialState = Map({
     workoutWarmupSequence: -1,
     workoutSequence: -1,
     workoutCooldownSequence: -1,
+    firstWorkoutLoading: false,
+    firstWorkoutId: null,
+    firstWorkoutError: [],
+    todaysWorkoutDate: null,
 });
 
 const actionMap = {
@@ -126,7 +135,6 @@ const actionMap = {
     [GET_USERS_WORKOUT_SCHEDULE_REQUEST]: (state, action) => {
         return state.merge(Map({
             loading: true,
-            workout: null,
             error: [],
         }));
     },
@@ -135,8 +143,11 @@ const actionMap = {
             loading: false,
         };
         if (action.data.status === 1) {
-             var newSt = createNewStateForWorkout(action.data.workouts);
+            var newSt = createNewStateForWorkout(action.data.workouts);
             newState.workout = newSt.workout;
+            newState.workoutsList = action.data.workouts_list;
+            newState.calendarList = action.data.calendar_list;
+            newState.workoutStat = action.data.workouts_stat;
             newState.workoutWarmupSequence = newSt.workoutWarmupSequence;
             newState.workoutSequence = newSt.workoutSequence;
             newState.workoutCooldownSequence = newSt.workoutCooldownSequence;
@@ -207,6 +218,9 @@ const actionMap = {
         if (action.data.status === 1) {
             var newSt = createNewStateForWorkout(action.data.workouts);
             newState.workout = newSt.workout;
+            newState.workoutsList = action.data.workouts_list;
+            newState.calendarList = action.data.calendar_list;
+            newState.workoutStat = action.data.workouts_stat;
             newState.workoutWarmupSequence = newSt.workoutWarmupSequence;
             newState.workoutSequence = newSt.workoutSequence;
             newState.workoutCooldownSequence = newSt.workoutCooldownSequence;
@@ -241,8 +255,11 @@ const actionMap = {
             loading: false,
         };
         if (action.data.status === 1) {
-             var newSt = createNewStateForWorkout(action.data.workouts);
+            var newSt = createNewStateForWorkout(action.data.workouts);
             newState.workout = newSt.workout;
+            newState.workoutsList = action.data.workouts_list;
+            newState.calendarList = action.data.calendar_list;
+            newState.workoutStat = action.data.workouts_stat;
             newState.workoutWarmupSequence = newSt.workoutWarmupSequence;
             newState.workoutSequence = newSt.workoutSequence;
             newState.workoutCooldownSequence = newSt.workoutCooldownSequence;
@@ -283,39 +300,6 @@ const actionMap = {
         return state.merge(Map(newState));
     },
     [PASTE_USERS_WORKOUT_SCHEDULE_ERROR]: (state, action) => {
-        let error = [];
-        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
-            error = generateValidationErrorMsgArr(action.error.response.message);
-        } else if (action.error && action.error.message) {
-            error = [action.error.message];
-        } else {
-            error = ['Something went wrong! please try again later'];
-        }
-        return state.merge(Map({
-            loading: false,
-            error: error,
-        }));
-    },
-    [CHANGE_USERS_WORKOUT_SCHEDULE_REQUEST]: (state, action) => {
-        return state.merge(Map({
-            loading: true,
-            workout: null,
-            error: [],
-        }));
-    },
-    [CHANGE_USERS_WORKOUT_SCHEDULE_SUCCESS]: (state, action) => {
-        var newState = {
-            loading: false,
-        };
-        if (action.data.status === 1) {
-            newState.workout = action.data.workout;
-        } else {
-            var msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
-            newState.error = [msg];
-        }
-        return state.merge(Map(newState));
-    },
-    [CHANGE_USERS_WORKOUT_SCHEDULE_ERROR]: (state, action) => {
         let error = [];
         if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
             error = generateValidationErrorMsgArr(action.error.response.message);
@@ -429,7 +413,7 @@ const actionMap = {
     },
     [ADD_USER_WORKOUT_TITLE_REQUEST]: (state, action) => {
         return state.merge(Map({
-            loadingTitle: false,
+            loadingTitle: true,
             workoutTitle: null,
             errorTitle: [],
         }));
@@ -528,8 +512,11 @@ const actionMap = {
             loading: false,
         };
         if (action.data.status === 1) {
-             var newSt = createNewStateForWorkout(action.data.workouts);
+            var newSt = createNewStateForWorkout(action.data.workouts);
             newState.workout = newSt.workout;
+            newState.workoutsList = action.data.workouts_list;
+            newState.calendarList = action.data.calendar_list;
+            newState.workoutStat = action.data.workouts_stat;
             newState.workoutWarmupSequence = newSt.workoutWarmupSequence;
             newState.workoutSequence = newSt.workoutSequence;
             newState.workoutCooldownSequence = newSt.workoutCooldownSequence;
@@ -564,8 +551,11 @@ const actionMap = {
             loading: false,
         };
         if (action.data.status === 1) {
-             var newSt = createNewStateForWorkout(action.data.workouts);
+            var newSt = createNewStateForWorkout(action.data.workouts);
             newState.workout = newSt.workout;
+            newState.workoutsList = action.data.workouts_list;
+            newState.calendarList = action.data.calendar_list;
+            newState.workoutStat = action.data.workouts_stat;
             newState.workoutWarmupSequence = newSt.workoutWarmupSequence;
             newState.workoutSequence = newSt.workoutSequence;
             newState.workoutCooldownSequence = newSt.workoutCooldownSequence;
@@ -594,6 +584,53 @@ const actionMap = {
             workoutFormAction: action.action,
             selectedWorkoutForEdit: action.data,
         }));
+    },
+    [GET_USER_FIRST_WORKOUT_BY_DATE_REQUEST]: (state, action) => {
+        return state.merge(Map({
+            firstWorkoutLoading: true,
+            firstWorkoutId: null,
+            firstWorkoutError: [],
+        }));
+    },
+    [GET_USER_FIRST_WORKOUT_BY_DATE_SUCCESS]: (state, action) => {
+        var newState = {
+            firstWorkoutLoading: false,
+        };
+        if (action.data.status === 1) {
+            newState.firstWorkoutId = action.data.workout_id;
+        } else if (action.data.status === 2) {
+            newState.firstWorkoutId = null
+        } else {
+            var msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
+            newState.firstWorkoutError = [msg];
+        }
+        return state.merge(Map(newState));
+    },
+    [GET_USER_FIRST_WORKOUT_BY_DATE_ERROR]: (state, action) => {
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
+        }
+        return state.merge(Map({
+            firstWorkoutLoading: false,
+            firstWorkoutError: error,
+        }));
+    },
+    [GET_USER_WORKOUT_CALENDAR_LIST_SUCCESS]: (state, action) => {
+        var newState = {}
+        if (action.data.status === 1) {
+            newState.calendarList = action.data.calendar_list;
+        }
+        return state.merge(Map(newState));
+    },
+    [SET_TODAYS_WORKOUT_DATE]: (state, action) => {
+        return state.merge(Map({
+            todaysWorkoutDate: action.date,
+        }))
     },
 }
 

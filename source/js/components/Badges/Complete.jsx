@@ -1,10 +1,12 @@
-import React,{ Component } from 'react';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
-
-export default class Complete extends Component{
-
-    render(){
-        return(
+class Complete extends Component {
+    componentWillMount() {
+        alert('complete');
+    }
+    render() {
+        return (
             <div className="body-content budges">
                 <div className="row d-flex">
                     <div className="col-md-4">
@@ -14,7 +16,7 @@ export default class Complete extends Component{
                             </div>
                             <h3>Getting Started</h3>
                             <p>Congratulations on completing your first
-                                <br/> workout, Keep it up!</p>
+                                <br /> workout, Keep it up!</p>
                             <h5>Completed
                                 <small>June 8, 2017</small>
                             </h5>
@@ -26,3 +28,13 @@ export default class Complete extends Component{
         );
     }
 }
+
+const mapStateToProps = (state) => {
+    return {
+
+    };
+}
+
+export default connect(
+    mapStateToProps,
+)(Complete);

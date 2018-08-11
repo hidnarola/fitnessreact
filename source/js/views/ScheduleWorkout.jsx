@@ -98,6 +98,15 @@ class ScheduleWorkout extends Component {
                             <h2>Workouts</h2>
                             <p>Your goal choice shapes how your fitness assistant will ceate your meal and exercise plans, it’s important that you set goals which are achieveable. Keep updating your profile and your fitness assistant will keep you on track and meeting the goals you’ve set out for yourself.</p>
                         </div>
+                        <div className="body-head-r">
+                            <NavLink
+                                className="white-btn"
+                                to={routeCodes.EXERCISE}
+                            >
+                                <span>Back</span>
+                                <i className="icon-arrow_back"></i>
+                            </NavLink>
+                        </div>
                     </div>
                     <div className="body-content d-flex row justify-content-start profilephoto-content">
                         <div className="col-md-12">
@@ -180,7 +189,7 @@ class ScheduleWorkout extends Component {
                     onConfirm={this.handleDeleteWorkoutSchedule}
                     onCancel={this.handleCancelDelete}
                 >
-                    You will not be able to recover this file!
+                    You will not be able to recover it!
                 </SweetAlert>
 
                 <SweetAlert
@@ -194,7 +203,7 @@ class ScheduleWorkout extends Component {
                     onConfirm={this.handleDeleteBulkWorkoutSchedule}
                     onCancel={() => this.setState({ deleteBulkActionAlert: false })}
                 >
-                    You will not be able to recover this file!
+                    You will not be able to recover it!
                 </SweetAlert>
 
                 <SweetAlert

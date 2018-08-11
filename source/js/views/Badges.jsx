@@ -15,9 +15,7 @@ import InComplete from 'components/Badges/InComplete';
 import Tracking from 'components/Badges/Tracking';
 
 export default class Badges extends Component {
-    
-    render() {        
-
+    render() {
         return (
             <div className='stat-page'>
                 <FitnessHeader/>
@@ -57,14 +55,6 @@ export default class Badges extends Component {
                                 </NavLink>
                                                                 
                             </div>
-                        </div>
-                        <div className="body-head-r ml-auto">
-                            <a href="" className="white-btn">Reset
-                                <i className="icon-settings_backup_restore"></i>
-                            </a>
-                            <a href="" className="green-blue-btn">Update Changes
-                                <i className="icon-restore"></i>
-                            </a>
                         </div>
                     </div>
 

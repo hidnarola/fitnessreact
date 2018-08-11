@@ -57,9 +57,10 @@
 }
 
 *{margin:0;padding:0;}
-body{background:#f9fafa; font-family:'gt_walsheim_proregular';font-weight:400;padding:100px 0 0 110px;width:100%;}
+img{max-width:100%;}
+body{background:#f9fafa; font-family:'gt_walsheim_proregular' !important;font-weight:400;padding:100px 0 0 110px;width:100%;}
 body { background: #f9fafa;  }
-input, textarea, select, button, a{font-family:'gt_walsheim_proregular';font-weight:400;}
+input, textarea, select, button, a{font-family:'gt_walsheim_proregular' !important  ;font-weight:400;}
 
 a:hover, a:focus{text-decoration:none;}
 :focus, select:focus, input:focus{outline:none !important; outline-offset:none !important;}
@@ -123,12 +124,12 @@ h3.title-h3{padding:0;margin:0;display:block; color:#232B41; font-size:20px; fon
 .logo a{display:block;}
 .search{text-align:left;padding:30px 37px; }
 .search div.search-form{ height:40px; width:420px;	border-radius: 15px; background-color:#FFF;	box-shadow:0 2px 4px 0 rgba(190,190,190,0.1);position:relative;padding:0 0 0 52px;}
-.search div.search-form input{background:#fff; border:0; width:100%; color:#898989; font-family:"GT Walsheim Pro"; font-size:12px; font-weight:400; line-height:34px;}
+.search div.search-form input{background:#fff; border:0; width:100%; color:#898989; font-family:"gt_walsheim_proregular"; font-size:12px; font-weight:400; line-height:34px;}
 .search div.search-form span.search-icon {position: absolute;top: 5px;left: 20px;-webkit-transform: translateY(-50%);-moz-transform: translateY(-50%);transform: none;border: 0;background: transparent;color: #777;}
 .search div.search-form span.search-icon i{font-size:22px;}
 
 /* .search form{ height:40px; width:420px;	border-radius: 15px; background-color:#FFF;	box-shadow:0 2px 4px 0 rgba(190,190,190,0.1);position:relative;padding:0 0 0 52px;}
-.search form input{background:#fff; border:0; width:100%; color:#898989; font-family:"GT Walsheim Pro"; font-size:12px; font-weight:400; line-height:34px;}
+.search form input{background:#fff; border:0; width:100%; color:#898989; font-family:"gt_walsheim_proregular"; font-size:12px; font-weight:400; line-height:34px;}
 .search form button {position: absolute;top: 5px;left: 20px;-webkit-transform: translateY(-50%);-moz-transform: translateY(-50%);transform: none;border: 0;background: transparent;color: #777;}
 .search form button i{font-size:22px;} */
 
@@ -198,7 +199,7 @@ h3.title-h3{padding:0;margin:0;display:block; color:#232B41; font-size:20px; fon
 .white-btn{ border-radius:25px; background-color:#fff; box-shadow:0 2px 4px 0 rgba(0,0,0,0.1); color:#1A2032;	font-family:gt_walsheim_proregular;	font-size:14px; font-weight:700;line-height:50px;background:#fff;}
 .white-btn:hover{opacity:.6}
 
-.green-blue-btn{border-radius:25px; color:#fff; font-family:"GT Walsheim Pro";	font-size:14px; font-weight:700;line-height:46px; background:linear-gradient(123.28deg, #46E9C5 0%, #3FFBFC 100%);box-shadow:0 2px 4px 0 rgba(0,0,0,0.1);border:2px solid transparent;}
+.green-blue-btn{border-radius:25px; color:#fff; font-family:"gt_walsheim_proregular";	font-size:14px; font-weight:700;line-height:46px; background:linear-gradient(123.28deg, #46E9C5 0%, #3FFBFC 100%);box-shadow:0 2px 4px 0 rgba(0,0,0,0.1);border:2px solid transparent;}
 .green-blue-btn:hover{opacity:.6}
 
 .white-box:after{content:'';clear:both;display:block;}
@@ -218,7 +219,7 @@ h3.title-h3{padding:0;margin:0;display:block; color:#232B41; font-size:20px; fon
 .dtl-div h5{width:40%;margin:0;padding:12px 10px;background:#fff;color: #232B41;	font-size: 14px;	font-weight: 500;	line-height: 20px;	text-align: right;}
 .recipe-rate i{display:inline-block;vertical-align:top;font-size:20px; color:#46DFB5;width:20px;}
 .recipe-type{margin: 15px 0 0;}
-.recipe-type span{display:inline-block;vertical-align:top;color: #232B41;	font-family: "GT Walsheim Pro";	font-size: 14px;	font-weight: 500;	line-height: 20px;margin:0 10px 0 0;}
+.recipe-type span{display:inline-block;vertical-align:top;color: #232B41;	font-family: "gt_walsheim_proregular";	font-size: 14px;	font-weight: 500;	line-height: 20px;margin:0 10px 0 0;}
 .recipe-type span i{ background:linear-gradient(123.28deg, #46E9C5 0%, #3FFBFC 100%); border-radius:90px;widtH:30px;height:30px;vertical-align:middle;text-align:center;display:inline-block;color:#fff;line-height:30px;font-size: 15px;	font-weight: 500;margin:0 10px 0 0;    font-style:normal;}
 
 .decimal-ul{list-style:decimal;}
@@ -689,7 +690,7 @@ color:#282828;font-size: 12px; font-weight: 500;	line-height:50px;}
 .meal-img img{width:150px;min-height:150px;border-radius:5px 0 0 5px;}
 .meal-name{width:30%;text-align:left !important;padding-left:30px;}
 .meal-name small{	color: #282828;	font-size: 12px;	font-weight: 300;	line-height: 17px;margin:0 0 12px;}
-/* .meal-name h5{margin:0;padding:0;color: #232B41;	font-family: "GT Walsheim Pro";	font-size: 14px; font-weight:700; line-height: 20px;} */
+/* .meal-name h5{margin:0;padding:0;color: #232B41;	font-family: "gt_walsheim_proregular";	font-size: 14px; font-weight:700; line-height: 20px;} */
 .meal-name h5 a{margin:0;padding:0;color: #232B41;	font-family: 'gt_walsheim_proregular';	font-size: 15px; font-weight:600; line-height: 20px;}
 .meal-info{width:10%;}
 .meal-info small,
@@ -803,8 +804,8 @@ display:-webkit-box; display:webkit-flex; display:-ms-flex; display:flex; justif
 .print-btn{height:50px;	width:50px;	background: linear-gradient(148.66deg, #FF3366 0%, #FF339A 100%);	box-shadow: 0 2px 4px 0 rgba(0,0,0,0.15); text-align:center;line-height:100%; border-radius:80px;display:inline-block;margin:0 0 0 18px;}
 .print-btn i{ color:#fff; font-size:20px; line-height:50px; vertical-align:top; display:inline-block;}
 .switch-wrap{display:-webkit-box; display:-webkit-flex; display:-ms-flex; display:flex;padding:0 20px 0 30px;
-border-radius: 25px; background-color: #fff; box-shadow: 0 2px 4px 0 rgba(0,0,0,0.1); color: #1A2032; font-family: "GT Walsheim Pro";
-font-size: 14px; font-weight: 700; line-height: 46px; background: #fff;}
+border-radius: 25px; background-color: #fff; box-shadow: 0 2px 4px 0 rgba(0,0,0,0.1); color: #1A2032; font-family: "gt_walsheim_proregular";
+font-size: 14px; font-weight: 500; line-height: 46px; background: #fff;}
 .switch-wrap .material-switch{margin-left:auto;}
 
 .material-switch > input[type="checkbox"] {display:none;}
@@ -850,8 +851,8 @@ display:-webkit-box; display:-webkit-flex; display:-ms-flex; display:flex; justi
 .workout-status h4{width:60%; background:#f9fafa; color:#232B41;	font-size:14px;	font-weight:500; line-height:20px;margin:0;padding:0 0 0 15px;
 display:-webkit-box; display:-webkit-flex; display:-ms-flex; display:flex; flex-direction:column; justify-content:center;}
 .workout-status h5{width:40%; background:#fff; color:#232B41; font-size:14px; font-weight:500; line-height:20px; margin:0 0 0 auto; padding:0 15px 0 0; text-align:right;  display:-webkit-box; display:-webkit-flex; display:-ms-flex; display:flex; flex-direction:column; justify-content:center;}
-.workoutstatus-btm{display:block;padding:15px 20px;}
-.workoutstatus-btm p{ color:#282828; font-size:14px;	font-weight:300; line-height:20px; margin:0; padding:0;}
+.workoutstatus-btm{display:block;padding:15px 20px; border-top:2px solid #f9fafa;}
+.workoutstatus-btm p{ color:#282828; font-size:14px; font-weight:300; line-height:20px; margin:0; padding:0;}
 
 .popup-big-img{margin:0 0 20px;}
 .popup-big-img img{min-height:580px; max-width:100%;}
@@ -1237,7 +1238,7 @@ flex-direction:row; display:-webkit-box; display:-webkit-flex; display:-ms-flex;
 .react-calendar__navigation button.react-calendar__navigation__label {font-size: 16px !important;font-weight: 700 !important;}
 
 /* .react-calendar__tile--highlight {background: #42f2e1 !important;border-radius: 50%;} */
-.react-calendar__tile--highlight {display: block;width: 8px;height: 8px;border-radius: 50%;background-color: #45edd1;position: relative;left: 45%;}
+.react-calendar__tile--highlight {display: block;width: 8px;height: 8px;border-radius: 50%;background-color: #45edd1;position: relative;left: 40%;}
 .badges-timed-date-range-wrapper{padding: 10px 15px; border: 1px solid #ccc; border-radius: 5px;}
 .cm-kg{line-height: 44px; font-size: 12px; padding: 0 10px; color: #999;}
 .body-measurement-list-section-wrapper .help-block{position: relative; bottom: 0; right: 0; margin: 0; font-size: 12px; display: block; text-align: right; color: red;}
@@ -1347,7 +1348,7 @@ div#loader .loader-spinner, div.loader .loader-spinner, div.no-content-loader .l
 .h3_left_content .dropdown.btn-group ul.dropdown-menu a {display: block;padding: 3px 20px;clear: both;font-weight: 400;line-height: 1.42857143;color: #333;font-size: 14px;white-space: nowrap;}
 .nutrition-meal-add-search-form-wrapper .row {margin-left: 0;margin-right: 0;}
 .search.search_Cstm {padding: 0;position: relative;width: 100%;margin-top: -20px;}
-.search.search_Cstm input {background: #fff;border: 1px solid #eee;width: 100%;color: #898989;font-family: "GT Walsheim Pro";font-size: 14px;font-weight: 400;line-height: 34px;height: auto;width: 400px;box-shadow: none;border-radius: 40px;padding: 6px 12px 6px 45px;}
+.search.search_Cstm input {background: #fff;border: 1px solid #eee;width: 100%;color: #898989;font-family: "gt_walsheim_proregular";font-size: 14px;font-weight: 400;line-height: 34px;height: auto;width: 400px;box-shadow: none;border-radius: 40px;padding: 6px 12px 6px 45px;}
 .search.search_Cstm button {position: absolute  !important;background: transparent  !important;border: 0;top: 2px;padding: 10px;margin: 0;left: 5px;}
 .margin-top-30{margin-top: 30px;}
 .ml-20{margin-left: 20px !important;}
@@ -1393,7 +1394,7 @@ div#loader .loader-spinner, div.loader .loader-spinner, div.no-content-loader .l
 .posttype-body-grey.forth_row {padding: 10px;text-align: center;}
 
 .post-comment-box-form-wrapper .comment-form-box {padding: 0;position: relative;width: 100%;}
-.post-comment-box-form-wrapper .comment-form-box textarea {background: #fff;border: 1px solid #eee;width: 100%;color: #898989;font-family: "GT Walsheim Pro";font-size: 14px;font-weight: 400;height: auto;width: 100%;box-shadow: none;padding: 6px 45px 6px 12px;resize: none;}
+.post-comment-box-form-wrapper .comment-form-box textarea {background: #fff;border: 1px solid #eee;width: 100%;color: #898989;font-family: "gt_walsheim_proregular";font-size: 14px;font-weight: 400;height: auto;width: 100%;box-shadow: none;padding: 6px 45px 6px 12px;resize: none;}
 .post-comment-box-form-wrapper .comment-form-box button {position: absolute  !important;background: transparent  !important;border: 0;top: 2px;padding: 10px;margin: 0;right: 5px;}
 .post-comment-box-form-wrapper .comment-form-box i {color: #777;font-size: 16px;vertical-align: middle;}
 
@@ -1819,18 +1820,18 @@ td.close-td a i{ font-size:20px;}
 .workout-main-types-wrapper ul li a{color:#1A2032; font-family: gt_walsheim_proregular; font-size:15px; font-weight:700; line-height:50px; background:#fff; border:0; min-width:150px; margin:0 auto; box-shadow:0 1px 4px 0 rgba(0, 0, 0, .1); display:block; border-radius:80px; }
 .workout-main-types-wrapper ul li.active a,
 .workout-main-types-wrapper ul li:hover a{ background:linear-gradient(148.66deg, #FF3366 0%, #FF339A 100%); color:#fff; }
-.select-workout-type-wrapper{background: #f9fafa; padding:15px;}
+.select-workout-type-wrapper{background: #fff; padding:15px;}
 .select-workout-type-wrapper strong{ display:inline-block; vertical-align:top; line-height:40px; margin-right:15px;  }
 .select-workout-type-wrapper .workout-type-radios{ display:inline-block; vertical-align:top; }
 .select-workout-type-wrapper .workout-type-radios ul{ list-style:none; margin:0; padding:0;}
 .select-workout-type-wrapper .workout-type-radios ul li{ position:relative; display:inline-block; vertical-align:top; margin:0 15px 0 0;}
 
 .workout-type-radios .radiobox input[type=radio]{display: none;}
-.workout-type-radios .radiobox label:before {content: ""; display: inline-block; width: 16px; height: 16px; margin-right: 10px; position: absolute; left: 0; bottom: 1px; background-color: #aaa;}
+.workout-type-radios .radiobox label:before {content: ""; display: inline-block; width: 16px; height: 16px; margin-right: 10px; position: absolute; left: 0; bottom: 1px; background-color:rgba(0,0,0,.01);}
 .workout-type-radios .radiobox input[type=radio]:checked + label:before { content: "\2022"; color: #f3f3f3; font-size: 30px; text-align: center; line-height: 18px;}
 
-.workout-type-radios ul li label {display:inline-block; max-width:100%; font-weight:700; width:100%; padding:10px 50px; z-index:10; position:relative; border-radius:2px;cursor: pointer;}
-.workout-type-radios .radiobox label:before {content: ""; display: inline-block; width: 100%; height: 100%;   position: absolute;  left: 0; top: 0; background-color: #fff;  z-index: -1; border-radius:4px; }
+.workout-type-radios ul li label {display:inline-block; max-width:100%; font-weight:700; width:100%; padding:10px 50px; z-index:10; position:relative; border-radius:2px;cursor: pointer; margin:0;}
+.workout-type-radios .radiobox label:before {content: ""; display: inline-block; width: 100%; height: 100%;   position: absolute;  left: 0; top: 0; background-color: #fff;  z-index: -1; border-radius:4px;box-shadow:0 0 10px 0 rgba(0, 0, 0, .10); }
 .workout-type-radios .radiobox input[type=radio]:checked + label:before {content:''; background:linear-gradient(123.28deg, #46E9C5 0%, #3FFBFC 100%);}
 .workout-type-radios .radiobox input[type=radio]:checked + label{ color:#fff;}
 .workout-type-card-block{margin: 10px 0 0; background:#fff; padding:20px; }
@@ -1842,8 +1843,8 @@ td.close-td a i{ font-size:20px;}
 .workout-type-card-wrapper ul li > div > input[max='12'] {width: 100px; max-width: 100px;}
 
                            
-.single-exercise-selest .form-group { margin-bottom:0;}
-.single-exercise-switch .switch-wrap{ background:transparent; box-shadow:none; line-height:34px; }
+.single-exercise-selest .form-group {margin-bottom:0;}
+.single-exercise-switch .switch-wrap{background:transparent; box-shadow:none; line-height:34px;padding:0;float:right;}
 .single-exercise-switch .switch-wrap small{font-family:'gt_walsheim_proregular';}
 .single-exercise-switch .material-switch > input[type="checkbox"]:checked + label::after{background:linear-gradient(123.28deg, #46E9C5 0%, #3FFBFC 100%); }
 .workout-type-card-block-top{ margin-bottom:15px;}
@@ -1874,14 +1875,16 @@ td.close-td a i{ font-size:20px;}
 .workout-type-circuit-card-cBtn i{font-size: 16px; color: #fff;}
 
 .workout-exercises-view-wrapper ul{ list-style:none; margin:0; padding:0;}
-.workout-exercises-view-wrapper ul>li{ display:block; margin:0 0 10px; background:#eee; padding:10px;}
-.workout-exercise-head-view {}
+.workout-exercises-view-wrapper ul>li{ display:block;}
+.workout-exercises-view-wrapper ul>li + li{margin-top:20px;}
+.workout-exercise-head-view { margin:0 0 15px; align-items:center;}
 .workout-exercise-head-view-r{ margin-left:auto;align-items: center; }
 .workout-exercise-head-view-data-row{    justify-content: flex-end;}
-.workout-exercise-head-view-data-row>div {background: #fff; padding: 10px; margin-left:6px; display:-webkit-box!important; display:-ms-flexbox!important; display:flex!important;}
-.workout-exercise-head-view-l strong{ font-weight:500; font-size:14px;}
-.workout-exercise-head-view-data-col {font-size: 12px; line-height: 100%; font-weight: 400; margin: 0 0 0 10px;}
-.workout-exercise-head-view-data-col strong {font-weight: 500;}
+.workout-exercise-head-view-data-row>div {background:rgba(0,0,0,.05); padding: 10px; display:-webkit-box!important; display:-ms-flexbox!important; display:flex!important;    flex-wrap: wrap; text-align:center;}
+.workout-exercise-head-view-l strong{ font-weight: 500; display:block; }
+.workout-exercise-head-view-data-col {font-size: 12px; line-height: 100%; font-weight: 400; margin:0 10px 0 0;}
+.workout-exercise-head-view-data-col strong {font-weight:500; width:100%; min-width:56px; padding:5px 0 10px;}
+.workout-exercise-head-view-data-col strong:last-child{background: #fff;padding: 10px; width:100%;}
 .workout-exercise-head-view-data-row>.workout-exercise-head-view-cancel{ padding:6px 10px;}
 .workout-exercise-head-view-cancel button{color:#FF3366; border:0; background:transparent; line-height:10px; line-height:10px; vertical-align:top;}
 .workout-exercise-head-view-cancel button i{ font-size:20px;}
@@ -1892,18 +1895,78 @@ td.close-td a i{ font-size:20px;}
 .workout-exercise-head-view-data-row>.workout-exercise-head-toggle-actions{ padding:6px 10px;}
 .workout-exercise-head-toggle-actions button{background:transparent; border:0; border-radius:80px; color:#666; vertical-align:top; line-height:8px; font-size:30px; }
 
-.workout-exercise-head-view-l{ width:25%;}
-.workout-exercise-head-view-r{width:73%;}
-ul.workout-exercise-body-view-ul{background:#fff; margin:10px 0 0;}
+.workout-exercise-head-view-l{ width:50%;display: -webkit-box!important; display: -ms-flexbox!important; display: flex!important; align-items:center;}
+.workout-exercise-head-view-r{width:auto; margin-left:auto; display:-webkit-box!important; display: -ms-flexbox!important; display: flex!important;}
+ul.workout-exercise-body-view-ul{background:#fff; margin:10px 0 0; box-shadow:0 0 30px 0 rgba(0,0,0,.02); padding:0;}
 ul.workout-exercise-body-view-ul li{background:transparent; width:100%;}
-ul.workout-exercise-body-view-ul .workout-exercise-body-view + .workout-exercise-body-view { margin-top:10px;}
 .workout-exercise-body-view-data-row{justify-content:flex-end; font-size:12px;}
 
-ul.workout-exercise-body-view-ul .workout-exercise-body-view-data-row>div {background: #eee; padding:7px 10px; margin-left: 6px;}
-ul.workout-exercise-body-view-ul .workout-exercise-body-view-data-row>div strong{ font-weight:500;}
+ul.workout-exercise-body-view-ul .workout-exercise-body-view-data-row>div {background:#eee; padding:7px 10px; margin:0 10px 0 0; text-align:center; min-width:135px;}
+ul.workout-exercise-body-view-ul .workout-exercise-body-view-data-row>div strong { font-weight:500; width:100%; display:block; padding:5px 0 10px;}
+ul.workout-exercise-body-view-ul .workout-exercise-body-view-data-row>div strong:last-child{ background:#fff; min-width:56px; padding:10px;}
 ul.workout-exercise-body-view-ul .workout-exercise-head-view-edit button{ color:#333;}
 
 .workout-exercise-head-view-data-row-ul ul li{ padding:0; margin:10px 0 0;}
 .workout-exercise-advance-set-view-wrapper{justify-content:flex-end;} 
 .workout-exercise-advance-set-view-wrapper .workout-exercise-head-view-data-col{background:#fff; padding:10px; margin-left: 6px; display: -webkit-box!important; display: -ms-flexbox!important; display: flex!important;}
 .workout-exercise-head-view-data-row-ul .workout-exercise-head-view-data-col:first-child{ margin-right:auto; background:transparent;}
+
+.drag-drop-handler-button{background:transparent; border:0; margin-right:15px;}
+.drag-drop-handler-button svg{ width:12px;}
+.workout-exercise-head-view-r .btn-toolbar {margin:0;}
+.workout-exercise-head-view-r .btn-toolbar button{background:transparent !important; border: 0; padding: 0; margin:0; }
+.workout-exercise-head-view-r .btn-toolbar button i{ vertical-align:middle;}
+.workout-exercise-body-view-l{ width:20%;margin:auto;}
+.workout-exercise-body-content-view-l img,
+.workout-exercise-body-view-l img{max-width:150px;}
+.workout-exercise-body-view-r{ width:78%; margin-left:auto;}
+.workout-exercise-body-view-desc{ height:40px; overflow:hidden;}
+.workout-exercise-head-view-r .btn-group.open .dropdown-toggle{ background:transparent !important;}
+.workout-exercise-view {background: #fff;padding: 20px;}
+.advance-toggle-switch-workout-view.switch-wrap{ font-family: 'gt_walsheim_proregular' !important; font-weight: 500; background: transparent; box-shadow: none; line-height: 22px;}
+.workout-exercise-head-view-wrapper{background:#fff; padding:20px;}
+.workout-exercise-head-view-wrapper .workout-exercise-head-view-data-row>div.workout-exercise-head-view-data-col{ padding:4px;align-items:center;min-width: 80%;}
+.workout-exercise-head-view-wrapper .workout-exercise-head-view-data-col strong{ width:50%; padding:5px;}
+.workout-exercise-body-view + .workout-exercise-body-view { margin-top:10px; border-top: 10px solid rgba(0,0,0,.02); padding-top: 20px;}
+.workout-exercise-body-content-view-l {width: 22%;margin:auto;}
+.workout-exercise-body-content-view-r {width: 76%;margin-left: auto;}
+.workout-exercise-body-view-wrapper .workout-exercise-body-view {padding:15px 20px;}
+.workout-exercise-body-head-view.d-flex {margin-bottom: 15px;}
+.workout-exercises-view-wrapper {margin: 0 0 25px;}
+
+.todays-workout-box-wrapper .whitebox-head{ margin-bottom:10px;}
+.todays-workout-list-card {box-shadow: 0 0 10px 0 rgba(0,0,0,.05); padding: 15px 20px; border-radius: 2px; text-align: left; color: #232B41;}
+.todays-workout-list-card a{color:#232B41;}
+.todays-workout-list-card + .todays-workout-list-card{margin-top:20px;}
+.todays-workout-list-card .switch-wrap{ line-height:40px; border-radius:0; margin: 10px -20px -20px; box-shadow: 0 4px 15px 0 rgba(0, 0, 0, .04); border-top:1px solid rgba(0,0,0,.03);}
+.todays-workout-list-card .switch-wrap small {margin:0 0 0 auto;}
+.todays-workout-list-card .switch-wrap .material-switch {margin:0 0 0 20px;}
+.todays-workout-box-wrapper.white-box{padding:15px 20px 30px;}
+.log-date-wrap>button[type="button"]{background: linear-gradient(134.72deg, #3023AE 0%, #C86DD7 100%); border: 0; color: #fff; border-radius: 4px; padding: 3px 20px; border-radius: 90px; margin: 10px 10px 5px 10px; font-size: 12px;}
+.new-log-date-wrap .react-calendar {border: 0 !important;}
+.new-log-date-wrap .react-calendar__tile--active {background:linear-gradient(148.66deg, #FF3366 0%, #FF339A 100%); color: white; border-radius: 100px;}
+.new-log-date-wrap button.react-calendar__tile--active:enabled:hover, 
+.new-log-date-wrap button.react-calendar__tile--active:enabled:focus{background:linear-gradient(148.66deg, #FF339A 0%, #FF3366 100%);}
+.new-log-date-wrap button.react-calendar__tile--active:enabled .react-calendar__tile--highlight{background-color:#fff;}
+.new-log-date-wrap button.react-calendar__tile:enabled:hover,
+.new-log-date-wrap button.react-calendar__tile:enabled:focus,
+.new-log-date-wrap .react-calendar__tile--hasActive {background-color: #e6e6e6; border-radius: 100px; color: #fff;}
+.new-log-date-wrap .react-calendar__navigation button[disabled]{background-color: #e6e6e6; border-radius: 100px;}
+.new-log-date-wrap .react-calendar__navigation button:enabled:hover, .react-calendar__navigation button:enabled:focus {border-radius: 90px;}
+.new-log-date-wrap-view{box-shadow: 0 4px 15px 0 rgba(0, 0, 0, .04); padding: 10px 0; display: block; color: #232B41; font-weight: 500;}
+.workout-exercises-view-wrapper .workout-exercise-head-view-r .dropdown  ul>li + li{ margin:0;}
+.workout-exercises-view-wrapper .workout-exercise-head-view-r .dropdown  ul{min-width:110px;}
+.workout-exercises-view-wrapper .workout-exercise-head-view-r .dropdown  ul.dropdown-menu>li{ border-radius:4px;}
+.workout-exercises-view-wrapper .workout-exercise-head-view-r .dropdown  ul.dropdown-menu>li>a {padding:10px 20px 5px 20px;}
+.todays-workout-list-card button {border:0;background:transparent;float: right;}
+.todays-workout-list-card button i {color:#FF339A;font-size:16px;}
+
+.navigation svg.menu-link-badge-icon { width: 24px; fill: #fff; }
+.workout-exercise-head-view-data-row-ul ul li .workout-exercise-advance-set-view-wrapper .workout-exercise-head-view-data-col{background: rgba(0, 0, 0, .05) !important; display:-webkit-box!important; display: -ms-flexbox!important; display: flex!important; -ms-flex-wrap: wrap; flex-wrap: wrap; text-align: center; padding:4px; align-items:center;}
+.workout-exercise-head-view-data-row-ul ul li .workout-exercise-advance-set-view-wrapper .workout-exercise-head-view-data-col strong{width:50%;}
+
+.workout-exercise-body-content-advance{ flex-wrap:wrap; }
+.workout-exercise-body-content-advance .workout-exercise-body-content-view-l{ width:100%; margin:0 0 25px; }
+.workout-exercise-body-content-advance .workout-exercise-body-content-view-r{ width:100%;}
+.white-exercise-block{ background:#fff; box-shadow:0 2px 4px 0 rgba(0, 0, 0, .1); padding:40px; text-align:center;}
+.white-exercise-block a{background: linear-gradient(134.72deg, #3023AE 0%, #C86DD7 100%); padding:10px 25px; color:#fff; border-radius:80px; display:inline-block; vertical-align:top; margin:0 25px; min-width:250px; text-align:center;}

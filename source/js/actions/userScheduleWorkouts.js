@@ -22,10 +22,6 @@ export const UPDATE_USERS_WORKOUT_SCHEDULE_REQUEST = 'UPDATE_USERS_WORKOUT_SCHED
 export const UPDATE_USERS_WORKOUT_SCHEDULE_SUCCESS = 'UPDATE_USERS_WORKOUT_SCHEDULE_SUCCESS';
 export const UPDATE_USERS_WORKOUT_SCHEDULE_ERROR = 'UPDATE_USERS_WORKOUT_SCHEDULE_ERROR';
 
-export const CHANGE_USERS_WORKOUT_SCHEDULE_REQUEST = 'CHANGE_USERS_WORKOUT_SCHEDULE_REQUEST';
-export const CHANGE_USERS_WORKOUT_SCHEDULE_SUCCESS = 'CHANGE_USERS_WORKOUT_SCHEDULE_SUCCESS';
-export const CHANGE_USERS_WORKOUT_SCHEDULE_ERROR = 'CHANGE_USERS_WORKOUT_SCHEDULE_ERROR';
-
 export const COPY_USER_WORKOUT_SCHEDULE = 'COPY_USER_WORKOUT_SCHEDULE';
 
 export const DELETE_USERS_BULK_WORKOUT_SCHEDULE_REQUEST = 'DELETE_USERS_BULK_WORKOUT_SCHEDULE_REQUEST';
@@ -76,6 +72,16 @@ export const PASTE_USERS_WORKOUT_SCHEDULE_SUCCESS = 'PASTE_USERS_WORKOUT_SCHEDUL
 export const PASTE_USERS_WORKOUT_SCHEDULE_ERROR = 'PASTE_USERS_WORKOUT_SCHEDULE_ERROR';
 
 export const CHANGE_USERS_WORKOUT_FORM_ACTION = 'CHANGE_USERS_WORKOUT_FORM_ACTION';
+
+export const GET_USER_FIRST_WORKOUT_BY_DATE_REQUEST = 'GET_USER_FIRST_WORKOUT_BY_DATE_REQUEST';
+export const GET_USER_FIRST_WORKOUT_BY_DATE_SUCCESS = 'GET_USER_FIRST_WORKOUT_BY_DATE_SUCCESS';
+export const GET_USER_FIRST_WORKOUT_BY_DATE_ERROR = 'GET_USER_FIRST_WORKOUT_BY_DATE_ERROR';
+
+export const GET_USER_WORKOUT_CALENDAR_LIST_REQUEST = 'GET_USER_WORKOUT_CALENDAR_LIST_REQUEST';
+export const GET_USER_WORKOUT_CALENDAR_LIST_SUCCESS = 'GET_USER_WORKOUT_CALENDAR_LIST_SUCCESS';
+export const GET_USER_WORKOUT_CALENDAR_LIST_ERROR = 'GET_USER_WORKOUT_CALENDAR_LIST_ERROR';
+
+export const SET_TODAYS_WORKOUT_DATE = 'SET_TODAYS_WORKOUT_DATE';
 
 export function setSelectedSlotFromCalendar(slotInfo = null) {
     return {
@@ -205,28 +211,6 @@ export function pasteUsersWorkoutScheduleSuccess(data) {
 export function pasteUsersWorkoutScheduleError(error) {
     return {
         type: PASTE_USERS_WORKOUT_SCHEDULE_ERROR,
-        error,
-    }
-}
-
-export function changeUsersWorkoutScheduleRequest(_id, requestData) {
-    return {
-        type: CHANGE_USERS_WORKOUT_SCHEDULE_REQUEST,
-        _id,
-        requestData,
-    }
-}
-
-export function changeUsersWorkoutScheduleSuccess(data) {
-    return {
-        type: CHANGE_USERS_WORKOUT_SCHEDULE_SUCCESS,
-        data,
-    }
-}
-
-export function changeUsersWorkoutScheduleError(error) {
-    return {
-        type: CHANGE_USERS_WORKOUT_SCHEDULE_ERROR,
         error,
     }
 }
@@ -445,5 +429,54 @@ export function changeUsersWorkoutFormAction(action = 'add', data = null) {
         type: CHANGE_USERS_WORKOUT_FORM_ACTION,
         action,
         data,
+    }
+}
+
+export function getUserFirstWorkoutByDateRequest(requestData) {
+    return {
+        type: GET_USER_FIRST_WORKOUT_BY_DATE_REQUEST,
+        requestData,
+    }
+}
+
+export function getUserFirstWorkoutByDateSuccess(data) {
+    return {
+        type: GET_USER_FIRST_WORKOUT_BY_DATE_SUCCESS,
+        data
+    }
+}
+
+export function getUserFirstWorkoutByDateError(error) {
+    return {
+        type: GET_USER_FIRST_WORKOUT_BY_DATE_ERROR,
+        error
+    }
+}
+
+export function getUserWorkoutCalendarListRequest(requestData) {
+    return {
+        type: GET_USER_WORKOUT_CALENDAR_LIST_REQUEST,
+        requestData,
+    }
+}
+
+export function getUserWorkoutCalendarListSuccess(data) {
+    return {
+        type: GET_USER_WORKOUT_CALENDAR_LIST_SUCCESS,
+        data
+    }
+}
+
+export function getUserWorkoutCalendarListError(error) {
+    return {
+        type: GET_USER_WORKOUT_CALENDAR_LIST_ERROR,
+        error
+    }
+}
+
+export function setTodaysWorkoutDate(date) {
+    return {
+        type: SET_TODAYS_WORKOUT_DATE,
+        date
     }
 }

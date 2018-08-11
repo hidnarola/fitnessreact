@@ -1,15 +1,10 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
-import { routeCodes } from 'constants/routes';
-
-import FaDashboard from 'react-icons/lib/md/dashboard';
-import FaPie from 'react-icons/lib/fa/pie-chart';
-import FaUser from 'react-icons/lib/fa/user';
-import FaFitness from 'react-icons/lib/md/fitness-center';
 import FaNutrition from 'react-icons/lib/md/local-restaurant';
-import FaCalendar from 'react-icons/lib/fa/calendar';
 import FaGoal from 'react-icons/lib/fa/bullseye';
 import { Scrollbars } from 'react-custom-scrollbars';
+import BadgeIcon from "svg/badge-icon.svg";
+import { routeCodes } from '../../constants/routes';
 
 export default class FitnessNav extends Component {
 
@@ -61,29 +56,6 @@ export default class FitnessNav extends Component {
                                     <span>Exercise</span>
                                 </NavLink>
                             </li>
-                            
-                            <li>
-                                <NavLink
-                                    activeClassName='active'
-                                    className='Menu-link'
-                                    to={routeCodes.SCHEDULE_WORKOUT}
-                                >
-                                    <i className="icon-fitness_center"></i>
-                                    <span>Workouts</span>
-                                </NavLink>
-                            </li>
-                            
-                            <li>
-                                <NavLink
-                                    activeClassName='active'
-                                    className='Menu-link'
-                                    to={routeCodes.PROGRAMS}
-                                >
-                                    <i className="icon-fitness_center"></i>
-                                    <span>Programs</span>
-                                </NavLink>
-                            </li>
-
                             <li>
                                 <NavLink
                                     activeClassName='active'
@@ -110,8 +82,18 @@ export default class FitnessNav extends Component {
                                     className='Menu-link'
                                     to={routeCodes.GOALS}
                                 >
-                                    <FaGoal size={24} />
+                                    <i className="icon-trending_up"></i>
                                     <span>Progress</span>
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink
+                                    activeClassName='active'
+                                    className='Menu-link'
+                                    to={routeCodes.BADGESTRACKING}
+                                >
+                                    <BadgeIcon className="menu-link-badge-icon" />
+                                    <span>Badges</span>
                                 </NavLink>
                             </li>
                         </ul>
