@@ -236,7 +236,7 @@ h3.title-h3{padding:0;margin:0;display:block; color:#232B41; font-size:20px; fon
 .badges{margin:0; flex-wrap:wrap;}
 .badges-box{border-radius: 5px;	background-color: #FFFFFF;	box-shadow:0 2px 4px 0 rgba(0,0,0,0.1);padding:30px 30px 0;position:relative;margin:0 0 30px;}
 .badges-check{position:absolute;top:-6px;right:-6px;widtH:50px;height:50px;}
-.badges-check a{	background: linear-gradient(123.28deg, #46E9C5 0%, #3FFBFC 100%);display:block;text-align:center;line-height:50px;font-size:20px;color:#fff;border-radius:80px;text-decoration:none;}
+.badges-check a, .badges-check i{background: linear-gradient(123.28deg, #46E9C5 0%, #3FFBFC 100%);display:block;text-align:center;line-height:50px;font-size:20px;color:#fff;border-radius:80px;text-decoration:none;}
 .badges-box h3{margin:0 0 5px;padding:0;color: #232B41; font-size: 14px;	font-weight: bold;	line-height: 20px;display:block;}
 .badges-box p{margin:0 0 26px;padding:0;color: #282828;	font-size: 12px;	font-weight: 300;	line-height: 17px;display:block;}
 .badges-box h5{margin:0 0 34px;font-size: 14px;	font-weight: 500;	line-height: 20px;display:block;}
@@ -246,7 +246,7 @@ h3.title-h3{padding:0;margin:0;display:block; color:#232B41; font-size:20px; fon
 .badges-box-option{margin:0 0 30px; flex-wrap:wrap;}
 .badges-box-option{border-radius: 5px;	background-color: #FFFFFF;	border:2px solid #f9fafa; padding:20px 28px 16px; position:relative; margin:0 0 30px;}
 .badges-check{position:absolute;top:-6px;right:-6px;widtH:50px;height:50px;}
-.badges-check a{	background: linear-gradient(123.28deg, #46E9C5 0%, #3FFBFC 100%);display:block;text-align:center;line-height:50px;font-size:20px;color:#fff;border-radius:80px;text-decoration:none;}
+.badges-check a, .badges-check i{background: linear-gradient(123.28deg, #46E9C5 0%, #3FFBFC 100%);display:block;text-align:center;line-height:50px;font-size:20px;color:#fff;border-radius:80px;text-decoration:none;}
 .badges-box-option h3{margin:0 0 5px;padding:0;color: #232B41; font-size: 14px;	font-weight: bold;	line-height: 20px;display:block;}
 .badges-box-option p{margin:0 0 26px;padding:0;color: #282828;	font-size: 12px;	font-weight: 300;	line-height: 17px;display:block;}
 
@@ -1970,3 +1970,8 @@ ul.workout-exercise-body-view-ul .workout-exercise-head-view-edit button{ color:
 .workout-exercise-body-content-advance .workout-exercise-body-content-view-r{ width:100%;}
 .white-exercise-block{ background:#fff; box-shadow:0 2px 4px 0 rgba(0, 0, 0, .1); padding:40px; text-align:center;}
 .white-exercise-block a{background: linear-gradient(134.72deg, #3023AE 0%, #C86DD7 100%); padding:10px 25px; color:#fff; border-radius:80px; display:inline-block; vertical-align:top; margin:0 25px; min-width:250px; text-align:center;}
+.server-error-wrapper {text-align: center;}
+.server-error-wrapper svg{width: 150px;}
+.no-record-found-wrapper{text-align: center;}
+.no-record-found-wrapper img{width: 350px;}
+.whitebox-head.d-flex.badge-category-card i { position: absolute; right: 45px; }

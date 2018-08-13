@@ -1,3 +1,5 @@
+import { BADGE_TYPE_TRACKING, BADGE_TYPE_IN_COMPLETE, BADGE_TYPE_COMPLETE } from "./consts";
+
 export const publicPath = '/';
 
 export const routeCodes = {
@@ -34,9 +36,9 @@ export const routeCodes = {
     RECEIP: `${publicPath}receip`,
 
     // Badges Pages
-    BADGESTRACKING: `${publicPath}badges/tracking`,
-    BADGESINCOMPLETE: `${publicPath}badges/incomplete`,
-    BADGESCOMPLETE: `${publicPath}badges/complete`,
+    BADGESTRACKING: `${publicPath}badges/${BADGE_TYPE_TRACKING}`,
+    BADGESINCOMPLETE: `${publicPath}badges/${BADGE_TYPE_IN_COMPLETE}`,
+    BADGESCOMPLETE: `${publicPath}badges/${BADGE_TYPE_COMPLETE}`,
 
     BODY: `${publicPath}body`,
 
@@ -45,17 +47,17 @@ export const routeCodes = {
     EXERCISEPREFERENCE: `${publicPath}exercise/preference`,
     EXERCISEEQP: `${publicPath}exercise/equipment`,
     EXERCISEFITNESS: `${publicPath}exercise/fitness`,
-    
+
     SCHEDULE_WORKOUT: `${publicPath}exercise/schedule_workout`,
     SAVE_SCHEDULE_WORKOUT: `${publicPath}exercise/schedule_workout/save/:id`,
     VIEW_SCHEDULE_WORKOUT: `${publicPath}exercise/schedule_workout/details/:id`,
-    
+
     PROGRAMS: `${publicPath}exercise/programs`,
     PROGRAM_SAVE: `${publicPath}exercise/programs/save`,
     SAVE_PROGRAM_SCHEDULE_WORKOUT: `${publicPath}exercise/programs/save/:id/:workout_id`,
     VIEW_PROGRAM_SCHEDULE_WORKOUT: `${publicPath}exercise/programs/details/:id/:workout_id`,
 
-    
+
     // PROGRAMS: `${publicPath}programs`,
     // PROGRAM_SAVE: `${publicPath}programs/save`,
     // SAVE_PROGRAM_SCHEDULE_WORKOUT: `${publicPath}programs/save/:id/:workout_id`,

@@ -834,3 +834,11 @@ export const EXE_REST_TIME_UNITS = [
     { value: MEASUREMENT_UNIT_SECONDS, label: 'Seconds' },
     { value: MEASUREMENT_UNIT_MINUTES, label: 'Minutes' },
 ];
+
+export const BADGE_TYPE_TRACKING = 'tracking';
+export const BADGE_TYPE_IN_COMPLETE = 'incomplete';
+export const BADGE_TYPE_COMPLETE = 'complete';
+
+export const BADGE_TYPE_TRACKING_STR = 'Tracking';
+export const BADGE_TYPE_IN_COMPLETE_STR = 'Incomplete';
+export const BADGE_TYPE_COMPLETE_STR = 'Complete';

@@ -25,6 +25,7 @@ import userSearch from 'reducers/userSearch';
 import userGalleryPhotos from 'reducers/userGalleryPhotos';
 import userNotifications from 'reducers/userNotifications';
 import userMessages from 'reducers/userMessages';
+import userBadges from 'reducers/userBadges';
 import postLikes from 'reducers/postLikes';
 import postComments from 'reducers/postComments';
 import profile from 'reducers/profile';
@@ -71,6 +72,7 @@ export default combineReducers({
     userGalleryPhotos,
     userNotifications,
     userMessages,
+    userBadges,
     postLikes,
     postComments,
     profile,
