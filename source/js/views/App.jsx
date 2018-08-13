@@ -170,7 +170,7 @@ class App extends Component {
                             <PrivateRoute path={routeCodes.BADGESINCOMPLETE} component={Badges} />
                             <PrivateRoute path={routeCodes.BADGESCOMPLETE} component={Badges} />
 
-                            <PrivateRoute path={routeCodes.GOALS} component={Goals} />
+                            <PrivateRoute path={routeCodes.PROGRESS} component={Goals} />
 
                             <PrivateRoute path={routeCodes.RECEIP} component={Receip} />
 
