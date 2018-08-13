@@ -1,5 +1,3 @@
-import { BADGE_TYPE_TRACKING, BADGE_TYPE_IN_COMPLETE, BADGE_TYPE_COMPLETE } from "./consts";
-
 export const publicPath = '/';
 
 export const routeCodes = {
@@ -36,9 +34,9 @@ export const routeCodes = {
     RECEIP: `${publicPath}receip`,
 
     // Badges Pages
-    BADGESTRACKING: `${publicPath}badges/${BADGE_TYPE_TRACKING}`,
-    BADGESINCOMPLETE: `${publicPath}badges/${BADGE_TYPE_IN_COMPLETE}`,
-    BADGESCOMPLETE: `${publicPath}badges/${BADGE_TYPE_COMPLETE}`,
+    BADGESTRACKING: `${publicPath}badges/tracking`,
+    BADGESINCOMPLETE: `${publicPath}badges/incomplete`,
+    BADGESCOMPLETE: `${publicPath}badges/complete`,
 
     BODY: `${publicPath}body`,
 
@@ -57,13 +55,6 @@ export const routeCodes = {
     SAVE_PROGRAM_SCHEDULE_WORKOUT: `${publicPath}exercise/programs/save/:id/:workout_id`,
     VIEW_PROGRAM_SCHEDULE_WORKOUT: `${publicPath}exercise/programs/details/:id/:workout_id`,
 
-
-    // PROGRAMS: `${publicPath}programs`,
-    // PROGRAM_SAVE: `${publicPath}programs/save`,
-    // SAVE_PROGRAM_SCHEDULE_WORKOUT: `${publicPath}programs/save/:id/:workout_id`,
-    // VIEW_PROGRAM_SCHEDULE_WORKOUT: `${publicPath}programs/details/:id/:workout_id`,
-
-
     // Nutrition Routes
     NUTRITION: `${publicPath}nutrition`,
     NUTRITION_ADD: `${publicPath}nutrition/add`,
@@ -71,10 +62,16 @@ export const routeCodes = {
     NUTRITIONPREFERENCE: `${publicPath}nutrition/preference`,
     NUTRITIONSHOP: `${publicPath}nutrition/shoppinglist`,
 
-    //Calendar Routes
+    //Calendar Route
     CALENDAR: `${publicPath}calendar`,
 
-    PROGRESS: `${publicPath}progress`,
+    //Progress Route
+    PROGRESS_BODY_FAT: `${publicPath}progress/body_fat`,
+    PROGRESS_MOBILITY: `${publicPath}progress/mobility`,
+    PROGRESS_MUSCLE: `${publicPath}progress/muscle`,
+    PROGRESS_STRENGTH: `${publicPath}progress/strength`,
+    PROGRESS_ENDURANCE: `${publicPath}progress/endurance`,
+
 
     ALL_NOTIFICATIONS: `${publicPath}notifications`,
     MESSENGER: `${publicPath}messenger`,

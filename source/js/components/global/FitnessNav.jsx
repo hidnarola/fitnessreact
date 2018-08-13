@@ -80,7 +80,7 @@ export default class FitnessNav extends Component {
                                 <NavLink
                                     activeClassName='active'
                                     className='Menu-link'
-                                    to={routeCodes.PROGRESS}
+                                    to={routeCodes.PROGRESS_BODY_FAT}
                                 >
                                     <i className="icon-trending_up"></i>
                                     <span>Progress</span>

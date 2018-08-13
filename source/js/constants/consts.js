@@ -842,3 +842,15 @@ export const BADGE_TYPE_COMPLETE = 'complete';
 export const BADGE_TYPE_TRACKING_STR = 'Tracking';
 export const BADGE_TYPE_IN_COMPLETE_STR = 'Incomplete';
 export const BADGE_TYPE_COMPLETE_STR = 'Complete';
+
+export const PROGRESS_BODY_FAT = 'body_fat';
+export const PROGRESS_MOBILITY = 'mobility';
+export const PROGRESS_MUSCLE = 'muscle';
+export const PROGRESS_STRENGTH = 'strength';
+export const PROGRESS_ENDURANCE = 'endurance';
+
+export const PROGRESS_BODY_FAT_STR = 'Body Fat';
+export const PROGRESS_MOBILITY_STR = 'Mobility';
+export const PROGRESS_MUSCLE_STR = 'Muscle';
+export const PROGRESS_STRENGTH_STR = 'Strength';
+export const PROGRESS_ENDURANCE_STR = 'Endurance';

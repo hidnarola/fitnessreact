@@ -6,9 +6,7 @@ import { hot } from 'react-hot-loader';
 import ScrollToTop from 'components/global/ScrollToTop';
 import NutritionShopping from 'components/Nutrition/NutritionShopping';
 import NutritionMeal from 'components/Nutrition/NutritionMeal';
-import Goals from 'components/Goals/Goals';
 import Receip from '../components/Receip/Receip';
-import Calendar from 'components/Calendar/Calendar';
 import People from 'views/People';
 import NotFound from 'views/NotFound';
 import StatsPage from 'views/StatsPage';
@@ -36,7 +34,7 @@ import history from '../config/history';
 import { ToastContainer } from "react-toastify";
 import NutritionPreferences from '../components/Nutrition/NutritionPreferences'
 import { publicPath, routeCodes } from '../constants/routes';
-import { SESSION_EXPIRED_URL_TYPE, LOCALSTORAGE_ACCESS_TOKEN_KEY, SERVER_BASE_URL } from '../constants/consts';
+import { SESSION_EXPIRED_URL_TYPE, SERVER_BASE_URL } from '../constants/consts';
 import { FaCircleONotch } from "react-icons/lib/fa";
 import FitnessTests from './Admin/FitnessTests';
 import NutritionRecipeDetails from '../components/Nutrition/NutritionRecipeDetails';
@@ -46,7 +44,7 @@ import UpdateProfile from './UpdateProfile';
 import { toggleSideMenu, getToken, scrollBottom, slideToBottomOfChatWindow } from '../helpers/funs';
 import Auth from '../auth/Auth';
 import socketClient from "socket.io-client";
-import { openSocket, closeSocket } from '../actions/user';
+import { openSocket } from '../actions/user';
 import {
     receiveUserNotificationCount,
     receiveUsersConversationChannels,
@@ -87,6 +85,8 @@ import ProgramSave from '../components/Program/ProgramSave';
 import ViewScheduleWorkout from '../components/ScheduleWorkout/ViewScheduleWorkout';
 import SaveScheduleProgramWorkout from '../components/Program/SaveScheduleProgramWorkout';
 import ViewProgramScheduleWorkout from '../components/Program/ViewProgramScheduleWorkout';
+import Progress from './Progress';
+import ScheduleWorkoutCalendarPage from './ScheduleWorkoutCalendarPage';
 
 const auth = new Auth();
 
@@ -164,13 +164,17 @@ class App extends Component {
                             <PrivateRoute path={routeCodes.NUTRITIONPREFERENCE} component={NutritionPreferences} />
                             <PrivateRoute path={routeCodes.NUTRITIONSHOP} component={NutritionShopping} />
 
-                            <PrivateRoute path={routeCodes.CALENDAR} component={Calendar} />
+                            <PrivateRoute exact path={routeCodes.CALENDAR} component={ScheduleWorkoutCalendarPage} />
 
                             <PrivateRoute path={routeCodes.BADGESTRACKING} component={Badges} />
                             <PrivateRoute path={routeCodes.BADGESINCOMPLETE} component={Badges} />
                             <PrivateRoute path={routeCodes.BADGESCOMPLETE} component={Badges} />
 
-                            <PrivateRoute path={routeCodes.PROGRESS} component={Goals} />
+                            <PrivateRoute path={routeCodes.PROGRESS_BODY_FAT} component={Progress} />
+                            <PrivateRoute path={routeCodes.PROGRESS_MOBILITY} component={Progress} />
+                            <PrivateRoute path={routeCodes.PROGRESS_MUSCLE} component={Progress} />
+                            <PrivateRoute path={routeCodes.PROGRESS_STRENGTH} component={Progress} />
+                            <PrivateRoute path={routeCodes.PROGRESS_ENDURANCE} component={Progress} />
 
                             <PrivateRoute path={routeCodes.RECEIP} component={Receip} />
 
