@@ -1241,7 +1241,8 @@ flex-direction:row; display:-webkit-box; display:-webkit-flex; display:-ms-flex;
 .react-calendar__tile--highlight {display: block;width: 8px;height: 8px;border-radius: 50%;background-color: #45edd1;position: relative;left: 40%;}
 .badges-timed-date-range-wrapper{padding: 10px 15px; border: 1px solid #ccc; border-radius: 5px;}
 .cm-kg{line-height: 44px; font-size: 12px; padding: 0 10px; color: #999;}
-.body-measurement-list-section-wrapper .help-block{position: relative; bottom: 0; right: 0; margin: 0; font-size: 12px; display: block; text-align: right; color: red;}
+.body-measurement-list-section-wrapper .help-block,
+.body-fat-form-wrapper .help-block{position: relative; bottom: 0; right: 0; margin: 0; font-size: 12px; display: block; text-align: right; color: red;}
 .react-autosuggest__container {width: 100%;}
 
 .restiction-box span a {width: 100px;height: 100%;align-items: center;display: flex;justify-content: center;}

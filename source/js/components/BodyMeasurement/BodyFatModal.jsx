@@ -10,14 +10,14 @@ class BodyFatModal extends Component {
         const { show, handleClose, handleSubmit } = this.props;
         return (
             <div className="add-body-fat-modal-wrapper">
-                <Modal show={show} bsSize="large" className="progress-popup">
+                <Modal show={show} bsSize="large" className="progress-popup body-fat-form-wrapper">
                     <form onSubmit={handleSubmit}>
                         <div className="progress-popup-head">
                             <button type="button" className="close-round" onClick={handleClose}>
                                 <span aria-hidden="true">&times;</span>
                             </button>
                             <h3 className="title-h3">Enter Body Fat</h3>
-                            <p>We use We use We use We use We use We use We use We use We use We use We use We use We use We use We use We use We use We use We use We use We use We use We use We use We use We use We use </p>
+                            <p>We use We use We use We use We use We use We use We use We use We use We use We use We use We use We use We use We use We use We use We use We use We use We use We use We use We use We use</p>
                         </div>
 
                         <div className="progress-popup-body">
@@ -28,7 +28,7 @@ class BodyFatModal extends Component {
                                         name="site1"
                                         type="number"
                                         label="Site 1"
-                                        wrapperClass="grey-white"
+                                        wrapperClass="grey-white remove-spinner"
                                         component={InputField}
                                         errorClass="help-block"
                                         placeholder="Site 1"
@@ -40,7 +40,7 @@ class BodyFatModal extends Component {
                                         name="site2"
                                         type="number"
                                         label="Site 2"
-                                        wrapperClass="grey-white"
+                                        wrapperClass="grey-white remove-spinner"
                                         component={InputField}
                                         errorClass="help-block"
                                         placeholder="Site 2"
@@ -52,7 +52,7 @@ class BodyFatModal extends Component {
                                         name="site3"
                                         type="number"
                                         label="Site 3"
-                                        wrapperClass="grey-white"
+                                        wrapperClass="grey-white remove-spinner"
                                         component={InputField}
                                         errorClass="help-block"
                                         placeholder="Site 3"
@@ -64,7 +64,7 @@ class BodyFatModal extends Component {
                                         name="age"
                                         type="number"
                                         label="Age"
-                                        wrapperClass="grey-white"
+                                        wrapperClass="grey-white remove-spinner"
                                         component={InputField}
                                         errorClass="help-block"
                                         placeholder="Age"
@@ -86,7 +86,7 @@ class BodyFatModal extends Component {
                                         name="bodyFat"
                                         type="number"
                                         label="Your Body Fat Percentage"
-                                        wrapperClass="grey-white"
+                                        wrapperClass="grey-white remove-spinner"
                                         component={InputField}
                                         errorClass="help-block"
                                         placeholder="Body Fat"
@@ -117,7 +117,6 @@ class BodyFatModal extends Component {
     }
 
 }
-
 
 BodyFatModal = reduxForm({
     form: 'saveBodyFatForm'
