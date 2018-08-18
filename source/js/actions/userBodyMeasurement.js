@@ -10,6 +10,10 @@ export const SAVE_USER_BODY_MEASUREMENT_REQUEST = 'SAVE_USER_BODY_MEASUREMENT_RE
 export const SAVE_USER_BODY_MEASUREMENT_SUCCESS = 'SAVE_USER_BODY_MEASUREMENT_SUCCESS';
 export const SAVE_USER_BODY_MEASUREMENT_ERROR = 'SAVE_USER_BODY_MEASUREMENT_ERROR';
 
+export const SAVE_USER_BODY_FAT_REQUEST = 'SAVE_USER_BODY_FAT_REQUEST';
+export const SAVE_USER_BODY_FAT_SUCCESS = 'SAVE_USER_BODY_FAT_SUCCESS';
+export const SAVE_USER_BODY_FAT_ERROR = 'SAVE_USER_BODY_FAT_ERROR';
+
 export function getUserBodyMeasurementRequest(requestData) {
     return {
         type: GET_USER_BODY_MEASUREMENT_REQUEST,
@@ -69,6 +73,27 @@ export function saveUserBodyMeasurementSuccess(data) {
 export function saveUserBodyMeasurementError(error) {
     return {
         type: SAVE_USER_BODY_MEASUREMENT_ERROR,
+        error,
+    }
+}
+
+export function saveUserBodyFatRequest(requestData) {
+    return {
+        type: SAVE_USER_BODY_FAT_REQUEST,
+        requestData,
+    }
+}
+
+export function saveUserBodyFatSuccess(data) {
+    return {
+        type: SAVE_USER_BODY_FAT_SUCCESS,
+        data,
+    }
+}
+
+export function saveUserBodyFatError(error) {
+    return {
+        type: SAVE_USER_BODY_FAT_ERROR,
         error,
     }
 }

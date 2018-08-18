@@ -79,7 +79,7 @@ class ProfileSettingsForm extends Component {
                                             <label>Distance</label>
                                             <Field
                                                 name="distance"
-                                                wrapperClass="input-wrap"
+                                                wrapperClass="input-wrap-settings"
                                                 placeholder="Distance"
                                                 component={SelectField}
                                                 options={this.distanceOptions}
@@ -93,7 +93,7 @@ class ProfileSettingsForm extends Component {
                                             <label>Weight</label>
                                             <Field
                                                 name="weight"
-                                                wrapperClass="input-wrap"
+                                                wrapperClass="input-wrap-settings"
                                                 placeholder="Weight"
                                                 component={SelectField}
                                                 options={this.weightOptions}
@@ -107,7 +107,7 @@ class ProfileSettingsForm extends Component {
                                             <label>Body Measurement</label>
                                             <Field
                                                 name="body_measurement"
-                                                wrapperClass="input-wrap"
+                                                wrapperClass="input-wrap-settings"
                                                 placeholder="Body Measurement"
                                                 component={SelectField}
                                                 options={this.bodyMeasurementOptions}
@@ -133,7 +133,7 @@ class ProfileSettingsForm extends Component {
                                             <label>Who can post on your wall?</label>
                                             <Field
                                                 name="post_access"
-                                                wrapperClass="input-wrap"
+                                                wrapperClass="input-wrap-settings"
                                                 placeholder="Who can post on your wall?"
                                                 component={SelectField}
                                                 options={this.accessLevelOptions}
@@ -147,7 +147,7 @@ class ProfileSettingsForm extends Component {
                                             <label>Who can commnet on your post?</label>
                                             <Field
                                                 name="comment_access"
-                                                wrapperClass="input-wrap"
+                                                wrapperClass="input-wrap-settings"
                                                 placeholder="Who can commnet on your post?"
                                                 component={SelectField}
                                                 options={this.accessLevelOptions}
@@ -161,7 +161,7 @@ class ProfileSettingsForm extends Component {
                                             <label>Who can message you?</label>
                                             <Field
                                                 name="message_access"
-                                                wrapperClass="input-wrap"
+                                                wrapperClass="input-wrap-settings"
                                                 placeholder="Who can message you?"
                                                 component={SelectField}
                                                 options={this.accessLevelOptions2}
@@ -175,7 +175,7 @@ class ProfileSettingsForm extends Component {
                                             <label>Who can send you friend request?</label>
                                             <Field
                                                 name="friend_request_access"
-                                                wrapperClass="input-wrap"
+                                                wrapperClass="input-wrap-settings"
                                                 placeholder="Who can send you friend request?"
                                                 component={SelectField}
                                                 options={this.accessLevelOptions2}

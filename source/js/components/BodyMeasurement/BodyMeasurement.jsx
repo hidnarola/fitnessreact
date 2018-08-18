@@ -3,11 +3,14 @@ import { connect } from "react-redux";
 import { reset, initialize } from "redux-form";
 import BodyMeasurementForm from './BodyMeasurementForm';
 import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
-import { saveUserBodyMeasurementRequest } from '../../actions/userBodyMeasurement';
+import { saveUserBodyMeasurementRequest, saveUserBodyFatRequest } from '../../actions/userBodyMeasurement';
 import moment from 'moment';
 import { ts } from '../../helpers/funs';
 import { addUserProgressPhotoRequest } from '../../actions/userProgressPhotos';
 import AddProgressPhotoModal from '../Common/AddProgressPhotoModal';
+import BodyFatModal from './BodyFatModal';
+import { LOCALSTORAGE_USER_DETAILS_KEY, FITASSIST_USER_DETAILS_TOKEN_KEY, GENDER_MALE } from '../../constants/consts';
+import jwt from "jwt-simple";
 
 class BodyMeasurement extends Component {
     constructor(props) {
@@ -17,13 +20,16 @@ class BodyMeasurement extends Component {
             refreshBodyMeasurementForm: false,
             showAddProgressPhotoModal: false,
             saveProgressPhotoActionInit: false,
+            showBodyFatModal: false,
+            saveBodyFatInit: false,
         }
     }
 
     render() {
         const {
             refreshBodyMeasurementForm,
-            showAddProgressPhotoModal
+            showAddProgressPhotoModal,
+            showBodyFatModal,
         } = this.state;
         return (
             <div className="body-measurement-list-section-wrapper">
@@ -32,10 +38,10 @@ class BodyMeasurement extends Component {
                         <h2>Your Body</h2>
                         <p>Your goal choice shapes how your fitness assistant will ceate your meal and exercise plans, it’s important that
                             you set goals which are achieveable. Keep updating your profile and your fitness assistant will keep you
-                                on track and meeting the goals you’ve set out for yourself.</p>
+                            on track and meeting the goals you’ve set out for yourself.</p>
                     </div>
                     <div className="body-head-r">
-                        <a href="" className="white-btn">
+                        <a href="javascript:void(0)" onClick={this.handleShowBodyFatModal} className="white-btn">
                             <span>Enter Body Fat</span>
                             <i className="icon-accessibility"></i>
                         </a>
@@ -63,15 +69,19 @@ class BodyMeasurement extends Component {
                             handleClose={this.handleCloseAddProgressPhotoModal}
                         />
 
+                        <BodyFatModal
+                            show={showBodyFatModal}
+                            handleClose={this.handleCloseBodyFatModal}
+                            onSubmit={this.handleBodyFatSubmit}
+                        />
                     </div>
-
                 </div>
             </div>
         );
     }
 
     componentDidUpdate(prevProps, prevState) {
-        const { saveActionInit, saveProgressPhotoActionInit } = this.state;
+        const { saveActionInit, saveProgressPhotoActionInit, saveBodyFatInit } = this.state;
         const { loading, dispatch, progressPhotoloading } = this.props;
         if (saveActionInit && !loading) {
             this.setState({
@@ -79,6 +89,15 @@ class BodyMeasurement extends Component {
                 refreshBodyMeasurementForm: true,
             });
             ts('Body measurement saved successfully!');
+            dispatch(hidePageLoader());
+        }
+        if (saveBodyFatInit && !loading) {
+            this.setState({
+                saveBodyFatInit: false,
+                refreshBodyMeasurementForm: true,
+            });
+            ts('Body fat saved successfully!');
+            this.handleCloseBodyFatModal();
             dispatch(hidePageLoader());
         }
         if (saveProgressPhotoActionInit && !progressPhotoloading) {
@@ -105,6 +124,7 @@ class BodyMeasurement extends Component {
             hips: data.hips,
             thigh: data.thigh,
             calf: data.calf,
+            heartRate: data.heartRate,
             weight: data.weight,
             height: data.height,
         }
@@ -154,6 +174,45 @@ class BodyMeasurement extends Component {
             formData.append('image', data.photo[0]);
         }
         dispatch(addUserProgressPhotoRequest(formData));
+    }
+
+    handleShowBodyFatModal = () => {
+        const { dispatch } = this.props;
+        this.setState({ showBodyFatModal: true });
+        let encUserDetails = localStorage.getItem(LOCALSTORAGE_USER_DETAILS_KEY);
+        let userDetails = jwt.decode(encUserDetails, FITASSIST_USER_DETAILS_TOKEN_KEY);
+        let dob = (userDetails.dateOfBirth) ? userDetails.dateOfBirth : null;
+        let gender = (userDetails.gender) ? userDetails.gender : GENDER_MALE;
+        let weight = (userDetails.weight) ? userDetails.weight : 0;
+        let diff = moment().diff(dob, 'years');
+        let formData = {};
+        if (diff) {
+            formData.age = diff;
+            formData.gender = gender;
+            formData.weight = weight;
+        }
+        dispatch(initialize('saveBodyFatForm', formData));
+    }
+
+    handleCloseBodyFatModal = () => {
+        const { dispatch } = this.props;
+        this.setState({ showBodyFatModal: false });
+        dispatch(reset('saveBodyFatForm'));
+    }
+
+    handleBodyFatSubmit = (data) => {
+        const { dispatch } = this.props;
+        this.setState({ saveBodyFatInit: true });
+        let requestData = {
+            logDate: moment.utc(data.log_date).toDate(),
+            site1: data.site1,
+            site2: data.site2,
+            site3: data.site3,
+            age: data.age,
+            weight: data.weight,
+        }
+        dispatch(showPageLoader());
+        dispatch(saveUserBodyFatRequest(requestData));
     }
 
 }

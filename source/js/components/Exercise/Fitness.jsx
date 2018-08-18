@@ -39,7 +39,7 @@ class Fitness extends Component {
         const { loading } = this.props;
         var fitnessTestsKeys = Object.keys(fitnessTests);
         return (
-            <div className="body-content d-flex row justify-content-start profilephoto-content">
+            <div className="body-content d-flex row justify-content-start profilephoto-content fitness-tests-wrapper">
                 {fitnessTests && fitnessTestsKeys.length > 0 &&
                     fitnessTestsKeys.map((category, catIndex) => {
                         var fitnessTestSubKeys = Object.keys(fitnessTests[category]);

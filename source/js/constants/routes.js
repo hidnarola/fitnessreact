@@ -34,6 +34,7 @@ export const routeCodes = {
     RECEIP: `${publicPath}receip`,
 
     // Badges Pages
+    BADGES: `${publicPath}badges`,
     BADGESTRACKING: `${publicPath}badges/tracking`,
     BADGESINCOMPLETE: `${publicPath}badges/incomplete`,
     BADGESCOMPLETE: `${publicPath}badges/complete`,
@@ -66,6 +67,7 @@ export const routeCodes = {
     CALENDAR: `${publicPath}calendar`,
 
     //Progress Route
+    PROGRESS: `${publicPath}progress`,
     PROGRESS_BODY_FAT: `${publicPath}progress/body_fat`,
     PROGRESS_MOBILITY: `${publicPath}progress/mobility`,
     PROGRESS_MUSCLE: `${publicPath}progress/muscle`,

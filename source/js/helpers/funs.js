@@ -11,7 +11,8 @@ import {
     MEASUREMENT_UNIT_KILOGRAM,
     LOCALSTORAGE_USER_DETAILS_KEY,
     FITASSIST_USER_DETAILS_TOKEN_KEY,
-    EXE_MEASUREMENT_UNITS
+    EXE_MEASUREMENT_UNITS,
+    GENDER_FEMALE,
 } from "../constants/consts";
 import _ from 'lodash';
 import moment from "moment";
@@ -315,4 +316,20 @@ export function createNewStateForWorkout(workouts) {
         newState.workoutCooldownSequence = -1;
     }
     return newState;
+}
+
+export function calculateBodyFatPercentage(sumOf3Sites, age, gender) {
+    var const1 = 495;
+    var const2 = 1.10938;
+    var const3 = 0.0008267;
+    var const4 = 0.0000016;
+    var const5 = 0.0002574;
+    var const6 = 450;
+    if (gender === GENDER_FEMALE) {
+        const2 = 1.089733;
+        const3 = 0.0009245;
+        const4 = 0.0000025;
+        const5 = 0.0000979;
+    }
+    return (const1 / (const2 - (const3 * sumOf3Sites) + (const4 * sumOf3Sites * sumOf3Sites) - (const5 * age)) - const6).toFixed(2);
 }

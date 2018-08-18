@@ -166,15 +166,9 @@ class App extends Component {
 
                             <PrivateRoute exact path={routeCodes.CALENDAR} component={ScheduleWorkoutCalendarPage} />
 
-                            <PrivateRoute path={routeCodes.BADGESTRACKING} component={Badges} />
-                            <PrivateRoute path={routeCodes.BADGESINCOMPLETE} component={Badges} />
-                            <PrivateRoute path={routeCodes.BADGESCOMPLETE} component={Badges} />
+                            <PrivateRoute path={routeCodes.BADGES} component={Badges} />
 
-                            <PrivateRoute path={routeCodes.PROGRESS_BODY_FAT} component={Progress} />
-                            <PrivateRoute path={routeCodes.PROGRESS_MOBILITY} component={Progress} />
-                            <PrivateRoute path={routeCodes.PROGRESS_MUSCLE} component={Progress} />
-                            <PrivateRoute path={routeCodes.PROGRESS_STRENGTH} component={Progress} />
-                            <PrivateRoute path={routeCodes.PROGRESS_ENDURANCE} component={Progress} />
+                            <PrivateRoute path={routeCodes.PROGRESS} component={Progress} />
 
                             <PrivateRoute path={routeCodes.RECEIP} component={Receip} />
 

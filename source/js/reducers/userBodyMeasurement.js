@@ -8,7 +8,10 @@ import {
     SAVE_USER_BODY_MEASUREMENT_ERROR,
     GET_USER_BODY_MEASUREMENT_LOG_DATES_REQUEST,
     GET_USER_BODY_MEASUREMENT_LOG_DATES_SUCCESS,
-    GET_USER_BODY_MEASUREMENT_LOG_DATES_ERROR
+    GET_USER_BODY_MEASUREMENT_LOG_DATES_ERROR,
+    SAVE_USER_BODY_FAT_REQUEST,
+    SAVE_USER_BODY_FAT_SUCCESS,
+    SAVE_USER_BODY_FAT_ERROR
 } from "../actions/userBodyMeasurement";
 
 const initialState = Map({
@@ -67,6 +70,22 @@ const actionsMap = {
         }));
     },
     [SAVE_USER_BODY_MEASUREMENT_ERROR]: (state, action) => {
+        return state.merge(Map({
+            loading: false,
+            error: action.error,
+        }));
+    },
+    [SAVE_USER_BODY_FAT_REQUEST]: (state, action) => {
+        return state.merge(Map({
+            loading: true,
+        }));
+    },
+    [SAVE_USER_BODY_FAT_SUCCESS]: (state, action) => {
+        return state.merge(Map({
+            loading: false,
+        }));
+    },
+    [SAVE_USER_BODY_FAT_ERROR]: (state, action) => {
         return state.merge(Map({
             loading: false,
             error: action.error,

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import ReactHtmlParser from "react-html-parser";
-import { BADGE_TYPE_COMPLETE, BADGE_TYPE_COMPLETE_STR } from '../../constants/consts';
+import { BADGE_TYPE_COMPLETE, BADGE_TYPE_COMPLETE_STR, BADGE_TYPE_IN_COMPLETE } from '../../constants/consts';
 import moment from "moment";
+import { capitalizeFirstLetter } from '../../helpers/funs';
 
 class BadgeIndividualCard extends Component {
     render() {
@@ -15,10 +15,21 @@ class BadgeIndividualCard extends Component {
                                 <i className="icon-check"></i>
                             </div>
                         }
-                        <h3>{(badge.name) ? badge.name : 'Badge Name'}</h3>
-                        {(badge.descriptionInCompleted) ? ReactHtmlParser(badge.descriptionInCompleted) : <p>Badge Description.</p>}
+                        <h3>{(badge.name) ? capitalizeFirstLetter(badge.name) : 'Badge Name'}</h3>
+
+                        {typeof badgeType !== 'undefined' && badgeType && badgeType === BADGE_TYPE_COMPLETE &&
+                            <p>
+                                {(badge.descriptionCompleted) ? capitalizeFirstLetter(badge.descriptionCompleted) : 'Badge Description.'}
+                            </p>
+                        }
                         {typeof badgeType !== 'undefined' && badgeType && badgeType === BADGE_TYPE_COMPLETE &&
                             <h5>{BADGE_TYPE_COMPLETE_STR} <small>{(badge.createdAt) ? moment(badge.createdAt).format('MMMM D, YYYY') : ''}</small></h5>
+                        }
+
+                        {typeof badgeType !== 'undefined' && badgeType && badgeType === BADGE_TYPE_IN_COMPLETE &&
+                            <p>
+                                {(badge.descriptionInCompleted) ? capitalizeFirstLetter(badge.descriptionInCompleted) : 'Badge Description.'}
+                            </p>
                         }
                         <h6>{(typeof badge.point !== 'undefined' && badge.point > 0) ? `${badge.point}pts` : '0pts'}</h6>
                     </div>

@@ -18,8 +18,14 @@ function saveBodyMeasurementData(data) {
     return postFormData(requestUrl, data, headers);
 }
 
+function saveBodyFatData(requestData) {
+    let headers = extraUserHeaders();
+    return postFormData(requestUrl + '/body_fat', requestData, headers);
+}
+
 export default {
     getBodyMeasurementData,
     getBodyMeasurementLogDatesData,
-    saveBodyMeasurementData
+    saveBodyMeasurementData,
+    saveBodyFatData,
 }

@@ -189,6 +189,7 @@ export const MEASUREMENT_UNIT_KEY_HEAVY_MASS = 'heavy_mass';
 export const MEASUREMENT_UNIT_KEY_MEASUREMENT = 'measurement';
 export const MEASUREMENT_UNIT_KEY_SMALL_DISTANCE = 'small_distance';
 export const MEASUREMENT_UNIT_KEY_LARGE_DISTANCE = 'large_distance';
+export const MEASUREMENT_UNIT_KEY_HEART_RATE = 'heart_rate';
 
 export const MEASUREMENT_UNIT_PERCENTAGE = 'percentage';
 export const MEASUREMENT_UNIT_KCAL = 'kcal';
@@ -197,7 +198,7 @@ export const MEASUREMENT_UNIT_GRAM = 'g';
 export const MEASUREMENT_UNIT_MILIGRAM = 'mg';
 export const MEASUREMENT_UNIT_KILOGRAM = 'kg';
 export const MEASUREMENT_UNIT_POUND = 'lb';
-export const MEASUREMENT_UNIT_INCH = 'in';
+export const MEASUREMENT_UNIT_INCH = 'inch';
 export const MEASUREMENT_UNIT_CENTIMETER = 'cm';
 export const MEASUREMENT_UNIT_METER = 'meter';
 export const MEASUREMENT_UNIT_FEET = 'feet';
@@ -213,6 +214,7 @@ export const MEASUREMENT_UNIT_MPH = 'mph';
 export const MEASUREMENT_UNIT_ONE_RM = 'one_rm';
 export const MEASUREMENT_UNIT_REP_TIME = 'rep_time';
 export const MEASUREMENT_UNIT_SET_TIME = 'set_time';
+export const MEASUREMENT_UNIT_BPM = 'bpm';
 
 export const GOALS_DETAILS = [
     { value: 'weight_gain', label: 'Gain Weight', unitsKey: MEASUREMENT_UNIT_KEY_HEAVY_MASS },
@@ -328,6 +330,12 @@ export const MEASUREMENT_UNITS = [
             { value: MEASUREMENT_UNIT_MILE, label: "Miles" },
         ],
     },
+    {
+        key: MEASUREMENT_UNIT_KEY_HEART_RATE,
+        value: [
+            { value: MEASUREMENT_UNIT_BPM, label: "BPM" },
+        ],
+    },
 ]
 
 export const SECONDARY_GOALS = [
@@ -389,14 +397,14 @@ export const BADGES_TASKS = [
     { value: "running_time_total", label: "Running Time Total", unitKey: MEASUREMENT_UNIT_KEY_TIME },
     { value: "running_elevation_total", label: "Running Elevation Total", unitKey: MEASUREMENT_UNIT_KEY_SMALL_DISTANCE },
     { value: "running_elevation_average", label: "Running Elevation Average", unitKey: MEASUREMENT_UNIT_KEY_SMALL_DISTANCE },
-    // { value: "heart_rate_total", label: "Heart Rate Total", unitKey: "" },
-    // { value: "heart_rate_average", label: "Heart Rate Average", unitKey: "" },
-    // { value: "heart_rate_most", label: "Heart Rate Most", unitKey: "" },
-    // { value: "heart_rate_least", label: "Heart Rate Least", unitKey: "" },
-    // { value: "heart_rate_resting_total", label: "Heart Rate Resting Total", unitKey: "" },
-    // { value: "heart_rate_resting_average", label: "Heart Rate Resting Average", unitKey: "" },
-    // { value: "heart_rate_resting_most", label: "Heart Rate Resting Most", unitKey: "" },
-    // { value: "heart_rate_resting_least", label: "Heart Rate Resting Least", unitKey: "" },
+    // { value: "heart_rate_total", label: "Heart Rate Total", unitKey: MEASUREMENT_UNIT_KEY_HEART_RATE },
+    // { value: "heart_rate_average", label: "Heart Rate Average", unitKey: MEASUREMENT_UNIT_KEY_HEART_RATE },
+    // { value: "heart_rate_most", label: "Heart Rate Most", unitKey: MEASUREMENT_UNIT_KEY_HEART_RATE },
+    // { value: "heart_rate_least", label: "Heart Rate Least", unitKey: MEASUREMENT_UNIT_KEY_HEART_RATE },
+    // { value: "heart_rate_resting_total", label: "Heart Rate Resting Total", unitKey: MEASUREMENT_UNIT_KEY_HEART_RATE },
+    // { value: "heart_rate_resting_average", label: "Heart Rate Resting Average", unitKey: MEASUREMENT_UNIT_KEY_HEART_RATE },
+    // { value: "heart_rate_resting_most", label: "Heart Rate Resting Most", unitKey: MEASUREMENT_UNIT_KEY_HEART_RATE },
+    // { value: "heart_rate_resting_least", label: "Heart Rate Resting Least", unitKey: MEASUREMENT_UNIT_KEY_HEART_RATE },
     { value: "cycle_distance_total", label: "Cycle Distance Total", unitKey: MEASUREMENT_UNIT_KEY_LARGE_DISTANCE },
     { value: "cycle_distance_average", label: "Cycle Distance Average", unitKey: MEASUREMENT_UNIT_KEY_LARGE_DISTANCE },
     { value: "cycle_distance_most", label: "Cycle Distance Most", unitKey: MEASUREMENT_UNIT_KEY_LARGE_DISTANCE },
@@ -854,3 +862,16 @@ export const PROGRESS_MOBILITY_STR = 'Mobility';
 export const PROGRESS_MUSCLE_STR = 'Muscle';
 export const PROGRESS_STRENGTH_STR = 'Strength';
 export const PROGRESS_ENDURANCE_STR = 'Endurance';
+
+export const BADGE_CAT_PROFILE = 'PROFILE';
+export const BADGE_CAT_BODY_MASS = 'BODY_MASS';
+export const BADGE_CAT_BODY_FAT = 'BODY_FAT';
+export const BADGE_CAT_BODY_MEASUREMENT = 'BODY_MEASUREMENT';
+export const BADGE_CAT_WEIGHT_LIFTED = 'WEIGHT_LIFTED';
+export const BADGE_CAT_WORKOUTS = 'WORKOUTS';
+export const BADGE_CAT_RUNNING = 'RUNNING';
+export const BADGE_CAT_HEART_RATE = 'HEART_RATE';
+export const BADGE_CAT_CYCLE = 'CYCLE';
+export const BADGE_CAT_STEPS = 'STEPS';
+export const BADGE_CAT_CALORIES = 'CALORIES';
+export const BADGE_CAT_NUTRITIONS = 'NUTRITIONS';

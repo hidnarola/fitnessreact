@@ -9,13 +9,18 @@ import { required } from '../../formValidation/validationRules';
 import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
 import { getUserBodyMeasurementRequest, getUserBodyMeasurementLogDatesRequest } from '../../actions/userBodyMeasurement';
 import { getLoggedUserProfileSettingsRequest } from '../../actions/profile';
-import { MEASUREMENT_UNIT_CENTIMETER, MEASUREMENT_UNIT_KILOGRAM, MEASUREMENT_UNIT_GRAM } from '../../constants/consts';
+import {
+    MEASUREMENT_UNIT_CENTIMETER,
+    MEASUREMENT_UNIT_KILOGRAM,
+    MEASUREMENT_UNIT_GRAM,
+    MEASUREMENT_UNIT_BPM,
+} from '../../constants/consts';
 import { convertUnits } from '../../helpers/funs';
 
 class BodyMeasurementForm extends Component {
     constructor(props) {
         super(props);
-        var logDate =new Date();
+        var logDate = new Date();
         logDate.setHours(0, 0, 0, 0);
         this.state = {
             selectActionInit: false,
@@ -39,6 +44,7 @@ class BodyMeasurementForm extends Component {
         const { logDates, handleSubmit, profileSettings } = this.props;
         var bodyMeasurement = MEASUREMENT_UNIT_CENTIMETER;
         var weighUnit = MEASUREMENT_UNIT_KILOGRAM;
+        var heartRateUnit = MEASUREMENT_UNIT_BPM;
         if (profileSettings) {
             bodyMeasurement = profileSettings.bodyMeasurement;
             weighUnit = profileSettings.weight;
@@ -166,6 +172,19 @@ class BodyMeasurementForm extends Component {
                                     unitValue={bodyMeasurement}
                                 />
                             </li>
+                            <li>
+                                <Field
+                                    name="heartRate"
+                                    type="number"
+                                    label="Heart Rate"
+                                    wrapperClass="grey-white"
+                                    component={InputField}
+                                    errorClass="help-block"
+                                    placeholder="Heart Rate"
+                                    validate={[required]}
+                                    unitValue={heartRateUnit}
+                                />
+                            </li>
                         </ul>
                     </div>
                     <div className="col-md-4">
@@ -274,6 +293,7 @@ class BodyMeasurementForm extends Component {
                     hips: convertUnits(MEASUREMENT_UNIT_CENTIMETER, bodyUnit, measurement.hips).toFixed(2),
                     thigh: convertUnits(MEASUREMENT_UNIT_CENTIMETER, bodyUnit, measurement.thigh).toFixed(2),
                     calf: convertUnits(MEASUREMENT_UNIT_CENTIMETER, bodyUnit, measurement.calf).toFixed(2),
+                    heartRate: (measurement.heartRate) ? measurement.heartRate : 0,
                     weight: convertUnits(MEASUREMENT_UNIT_GRAM, weightUnit, measurement.weight).toFixed(2),
                     height: convertUnits(MEASUREMENT_UNIT_CENTIMETER, bodyUnit, measurement.height).toFixed(2),
                     log_date: new Date(measurement.logDate),

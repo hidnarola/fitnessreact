@@ -75,7 +75,7 @@ class FitnessItem extends Component {
 
                 {item && item.format && item.format === FITNESS_TEST_FORMAT_MULTISELECT &&
                     <div className="dropdown-menu" aria-labelledby="test-02">
-                        <div className="horizontal-drop">
+                        <div className="horizontal-drop radiobox">
                             {item.multiselect && item.multiselect.length > 0 &&
                                 item.multiselect.map((val, i) => {
                                     var userVal = false;
@@ -84,28 +84,24 @@ class FitnessItem extends Component {
                                     }
                                     return (
                                         <div className="push-ups" key={i}>
-                                            <h5>{val.title}</h5>
-                                                    <input
-                                                        type="radio"
-                                                        id={`${item._id}_multiselect_${i}`}
-                                                        name={`${item._id}_multiselect`}
-                                                        value={i}
-                                                        checked={userVal}
-                                                        onChange={(e) => handleMultiselectChange(item._id, e)}
-                                                    />
-                                            <span>
-                                                <div className="custom_checkbox_cstm">
-                                                    <label htmlFor={`${item._id}_multiselect_${i}`}>
-                                                        <img
-                                                            src={SERVER_BASE_URL + val.image}
-                                                            alt="Image"
-                                                            onError={(e) => {
-                                                                e.target.src = noImg
-                                                            }}
-                                                        />
-                                                    </label>
-                                                </div>
-                                            </span>
+                                            <input
+                                                    type="radio"
+                                                    id={`${item._id}_multiselect_${i}`}
+                                                    name={`${item._id}_multiselect`}
+                                                    value={i}
+                                                    checked={userVal}
+                                                    onChange={(e) => handleMultiselectChange(item._id, e)}
+                                                />
+                                            <label className="d-flex cursor-pointer" htmlFor={`${item._id}_multiselect_${i}`}>
+                                                <h5>{val.title}</h5>
+                                                <img
+                                                    src={SERVER_BASE_URL + val.image}
+                                                    alt="Image"
+                                                    onError={(e) => {
+                                                        e.target.src = noImg
+                                                    }}
+                                                />
+                                            </label>
                                         </div>
                                     )
                                 })

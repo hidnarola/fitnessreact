@@ -23,6 +23,7 @@ import userSearch from 'sagas/userSearch';
 import userGalleryPhotos from 'sagas/userGalleryPhotos';
 import userNotifications from 'sagas/userNotifications';
 import userBadges from 'sagas/userBadges';
+import userProgress from 'sagas/userProgress';
 import postLikes from 'sagas/postLikes';
 import postComments from 'sagas/postComments';
 import profile from 'sagas/profile';
@@ -67,6 +68,7 @@ export default function* rootSaga() {
     ...userGalleryPhotos,
     ...userNotifications,
     ...userBadges,
+    ...userProgress,
     ...postLikes,
     ...postComments,
     ...profile,

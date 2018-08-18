@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import ReactHtmlParser from "react-html-parser";
 import { BADGE_TYPE_COMPLETE_STR } from '../../constants/consts';
 import moment from "moment";
+import { capitalizeFirstLetter } from '../../helpers/funs';
 
 class BadgeCategoryIndividualCard extends Component {
     render() {
@@ -10,11 +10,11 @@ class BadgeCategoryIndividualCard extends Component {
             <div className="badges-box-option">
                 {typeof badge.isCompleted !== 'undefined' && badge.isCompleted > 0 &&
                     <div className="badges-check">
-                        <a href="" className="icon-check"></a>
+                        <a href="javascript:void(0)" className="icon-check"></a>
                     </div>
                 }
-                <h3>{(badge.name) ? badge.name : 'Badge Name'}</h3>
-                {(badge.descriptionInCompleted) ? ReactHtmlParser(badge.descriptionInCompleted) : <p>Badge Description.</p>}
+                <h3>{(badge.name) ? capitalizeFirstLetter(badge.name) : 'Badge Name'}</h3>
+                {(badge.descriptionInCompleted) ? <p>{capitalizeFirstLetter(badge.descriptionInCompleted)}</p> : <p>Badge Description.</p>}
                 <div className="badgesbox-option-btm">
                     {typeof badge.isCompleted !== 'undefined' && badge.isCompleted > 0 &&
                         <h5>{BADGE_TYPE_COMPLETE_STR} <small>{(badge.completedDate) ? moment(badge.completedDate).format('MMMM D, YYYY') : ''}</small></h5>

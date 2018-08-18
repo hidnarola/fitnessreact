@@ -113,7 +113,7 @@
     "react-tagsinput": "^3.19.0",
     "react-toastify": "^4.0.0-rc.5",
     "react-tooltip": "^3.6.0",
-    "recharts": "^1.0.0-beta.10",
+    "recharts": "^1.1.0",
     "redux": "^3.7.2",
     "redux-form": "^7.2.3",
     "redux-form-website-template": "0.0.103",
