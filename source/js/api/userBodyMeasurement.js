@@ -2,6 +2,7 @@ import { postFormData } from '.';
 import { extraUserHeaders } from '../helpers/funs';
 
 const requestUrl = 'user/measurement';
+const requestUrl1 = 'user/body_fat_log';
 
 function getBodyMeasurementData(requestData) {
     let headers = extraUserHeaders();
@@ -20,7 +21,7 @@ function saveBodyMeasurementData(data) {
 
 function saveBodyFatData(requestData) {
     let headers = extraUserHeaders();
-    return postFormData(requestUrl + '/body_fat', requestData, headers);
+    return postFormData(requestUrl1, requestData, headers);
 }
 
 export default {

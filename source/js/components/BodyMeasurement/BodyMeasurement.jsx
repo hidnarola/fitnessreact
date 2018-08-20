@@ -113,8 +113,7 @@ class BodyMeasurement extends Component {
         const { dispatch } = this.props;
         this.setState({ saveActionInit: true });
         let measurementData = {
-            // logDate: data.log_date.toUTCString(),
-            logDate: moment.utc(data.log_date).toDate(),
+            logDate: moment(data.log_date).startOf().utc(),
             neck: data.neck,
             shoulders: data.shoulders,
             chest: data.chest,
@@ -177,19 +176,23 @@ class BodyMeasurement extends Component {
     }
 
     handleShowBodyFatModal = () => {
-        const { dispatch } = this.props;
+        const { dispatch, bodyFat } = this.props;
         this.setState({ showBodyFatModal: true });
         let encUserDetails = localStorage.getItem(LOCALSTORAGE_USER_DETAILS_KEY);
         let userDetails = jwt.decode(encUserDetails, FITASSIST_USER_DETAILS_TOKEN_KEY);
         let dob = (userDetails.dateOfBirth) ? userDetails.dateOfBirth : null;
         let gender = (userDetails.gender) ? userDetails.gender : GENDER_MALE;
-        let weight = (userDetails.weight) ? userDetails.weight : 0;
         let diff = moment().diff(dob, 'years');
         let formData = {};
+        if (bodyFat) {
+            formData.site1 = (bodyFat.site1) ? bodyFat.site1 : '';
+            formData.site2 = (bodyFat.site2) ? bodyFat.site2 : '';
+            formData.site3 = (bodyFat.site3) ? bodyFat.site3 : '';
+            formData.bodyFat = (bodyFat.bodyFatPer) ? bodyFat.bodyFatPer : '';
+        }
         if (diff) {
             formData.age = diff;
             formData.gender = gender;
-            formData.weight = weight;
         }
         dispatch(initialize('saveBodyFatForm', formData));
     }
@@ -204,12 +207,12 @@ class BodyMeasurement extends Component {
         const { dispatch } = this.props;
         this.setState({ saveBodyFatInit: true });
         let requestData = {
-            logDate: moment.utc(data.log_date).toDate(),
+            logDate: moment(data.log_date).startOf('day').utc(),
             site1: data.site1,
             site2: data.site2,
             site3: data.site3,
+            bodyFatPer: data.bodyFat,
             age: data.age,
-            weight: data.weight,
         }
         dispatch(showPageLoader());
         dispatch(saveUserBodyFatRequest(requestData));
@@ -222,6 +225,7 @@ const mapStateToProps = (state) => {
     return {
         loading: userBodyMeasurement.get('loading'),
         error: userBodyMeasurement.get('error'),
+        bodyFat: userBodyMeasurement.get('bodyFat'),
         progressPhotoloading: userProgressPhotos.get('loading'),
     }
 }

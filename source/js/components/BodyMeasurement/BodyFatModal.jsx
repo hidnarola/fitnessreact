@@ -4,10 +4,11 @@ import { Modal } from 'react-bootstrap';
 import { Field, reduxForm, formValueSelector } from "redux-form";
 import { required } from '../../formValidation/validationRules';
 import { calculateBodyFatPercentage } from '../../helpers/funs';
+import { GENDER_FEMALE } from '../../constants/consts';
 
 class BodyFatModal extends Component {
     render() {
-        const { show, handleClose, handleSubmit } = this.props;
+        const { show, handleClose, handleSubmit, gender } = this.props;
         return (
             <div className="add-body-fat-modal-wrapper">
                 <Modal show={show} bsSize="large" className="progress-popup body-fat-form-wrapper">
@@ -27,11 +28,11 @@ class BodyFatModal extends Component {
                                     <Field
                                         name="site1"
                                         type="number"
-                                        label="Site 1"
+                                        label={(gender && gender === GENDER_FEMALE) ? 'Tricep' : 'Chest'}
                                         wrapperClass="grey-white remove-spinner"
                                         component={InputField}
                                         errorClass="help-block"
-                                        placeholder="Site 1"
+                                        placeholder={(gender && gender === GENDER_FEMALE) ? 'Tricep' : 'Chest'}
                                         validate={[required]}
                                     />
                                 </li>
@@ -39,11 +40,11 @@ class BodyFatModal extends Component {
                                     <Field
                                         name="site2"
                                         type="number"
-                                        label="Site 2"
+                                        label={(gender && gender === GENDER_FEMALE) ? 'Suprailiac' : 'Abdominal'}
                                         wrapperClass="grey-white remove-spinner"
                                         component={InputField}
                                         errorClass="help-block"
-                                        placeholder="Site 2"
+                                        placeholder={(gender && gender === GENDER_FEMALE) ? 'Suprailiac' : 'Abdominal'}
                                         validate={[required]}
                                     />
                                 </li>
@@ -51,11 +52,11 @@ class BodyFatModal extends Component {
                                     <Field
                                         name="site3"
                                         type="number"
-                                        label="Site 3"
+                                        label="Thigh"
                                         wrapperClass="grey-white remove-spinner"
                                         component={InputField}
                                         errorClass="help-block"
-                                        placeholder="Site 3"
+                                        placeholder="Thigh"
                                         validate={[required]}
                                     />
                                 </li>
@@ -76,7 +77,7 @@ class BodyFatModal extends Component {
                                         type="hidden"
                                     />
                                     <Field
-                                        name="weight"
+                                        name="log_date"
                                         component="input"
                                         type="hidden"
                                     />
@@ -108,12 +109,13 @@ class BodyFatModal extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        const { site1, site2, site3, change, age, gender } = this.props;
+        const { site1, site2, site3, change, age, gender, log_date } = this.props;
         if (site1 && site2 && site3) {
             let sum = parseFloat(site1) + parseFloat(site2) + parseFloat(site3);
             let bodyFat = calculateBodyFatPercentage(sum, age, gender);
             change('bodyFat', bodyFat);
         }
+        change('log_date', log_date);
     }
 
 }
@@ -123,6 +125,7 @@ BodyFatModal = reduxForm({
 })(BodyFatModal);
 
 const selector = formValueSelector('saveBodyFatForm')
+const selector1 = formValueSelector('userBodyMeasurement')
 const mapStateToProps = (state) => {
     return {
         site1: selector(state, 'site1'),
@@ -130,6 +133,7 @@ const mapStateToProps = (state) => {
         site3: selector(state, 'site3'),
         age: selector(state, 'age'),
         gender: selector(state, 'gender'),
+        log_date: selector1(state, 'log_date'),
     };
 }
 

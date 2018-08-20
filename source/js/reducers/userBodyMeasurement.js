@@ -18,6 +18,7 @@ const initialState = Map({
     loading: false,
     error: null,
     measurement: null,
+    bodyFat: null,
     loadingLogDates: false,
     errorLogDates: null,
     logDates: [],
@@ -33,6 +34,7 @@ const actionsMap = {
         return state.merge(Map({
             loading: false,
             measurement: action.data.measurement,
+            bodyFat: action.data.body_fat_log,
         }));
     },
     [GET_USER_BODY_MEASUREMENT_ERROR]: (state, action) => {
@@ -83,6 +85,7 @@ const actionsMap = {
     [SAVE_USER_BODY_FAT_SUCCESS]: (state, action) => {
         return state.merge(Map({
             loading: false,
+            bodyFat: action.data.body_fat_log,
         }));
     },
     [SAVE_USER_BODY_FAT_ERROR]: (state, action) => {
