@@ -2060,4 +2060,10 @@ input[type=checkbox] {display: none;}
 .custom-graph-tooltip-wrapper ul{list-style: none;margin: 0;}
 
 .progress-wrapper.progress-muscle .tab-wrap-body table.table,
-.progress-wrapper.progress-endurance .tab-wrap-body table.table {border-bottom: none;}
+.progress-wrapper.progress-endurance .tab-wrap-body table.table{border-bottom: none;}
+
+.progress-body-fat-content .progress-body-fat-small-box { width: 20%; display: block; padding: 10px; border-right: 10px solid #f9fafa; position: relative; }
+.progress-body-fat-content .progress-body-fat-small-box>.head { background: #f9fafa; padding: 10px; }
+.progress-body-fat-content .progress-body-fat-small-box>.head .title { font-size: 16px; font-weight: 500; margin: auto 0; }
+.progress-body-fat-content .progress-body-fat-small-box .body { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); }
+.progress-body-fat-content .progress-body-fat-larget-box { width: 60%; padding: 10px; height: 250px; }

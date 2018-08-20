@@ -118,10 +118,10 @@ class EnduranceCard extends Component {
                                 <span className="icon-with-circle-left gradient-color-1 color-white"><i className="icon-equalizer ml-5"></i></span>
                                 {(data.name) ? capitalizeFirstLetter(data.name.replace(/([a-z])([A-Z])/g, '$1 $2')) : 'Endurance'}
                             </td>
-                            <td>{(data.start) ? data.start : '0'}</td>
-                            <td>{(data.current) ? data.current : '0'}</td>
+                            <td>{(data.start) ? `${data.start} ${(data.unit) ? data.unit : ''}` : '0'}</td>
+                            <td>{(data.current) ? `${data.current} ${(data.unit) ? data.unit : ''}` : '0'}</td>
                             <td className="muscle-strength-last-td">
-                                <span>{(data.difference) ? data.difference : '0'}</span>
+                                <span>{(data.difference) ? `${data.difference} ${(data.unit) ? data.unit : ''}` : '0'}</span>
                                 {typeof data.percentageChange !== 'undefined' && data.percentageChange > 0 &&
                                     <span className="btn-change-span"><i className="icon-arrow_upward"></i> {data.percentageChange}%</span>
                                 }

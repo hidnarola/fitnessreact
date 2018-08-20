@@ -9,6 +9,7 @@ import NoDataFoundImg from "img/common/no_datafound.png";
 import ErrorCloud from "svg/error-cloud.svg";
 import { ResponsiveContainer, AreaChart, XAxis, YAxis, Area, Tooltip } from "recharts";
 import { routeCodes } from '../../constants/routes';
+import CustomTooltip1 from './CustomTooltip1';
 
 class Mobility extends Component {
     componentWillMount() {
@@ -78,7 +79,7 @@ class Mobility extends Component {
                                                             </defs>
                                                             <XAxis dataKey='date' axisLine={false} tickLine={false} mirror={false} interval="preserveStartEnd" tick={{ stroke: '#000', strokeWidth: 1 }} />
                                                             <YAxis hide={true} />
-                                                            <Tooltip />
+                                                            <Tooltip content={<CustomTooltip1 valueLabel="Flexibility" />} />
                                                             <Area type='monotone' dataKey='count' activeDot={{ stroke: '#46E9C5', strokeWidth: 2, fill: "#fff" }} stroke="none" fill="url(#mobilityArea)" />
                                                         </AreaChart>
                                                     </ResponsiveContainer>
@@ -117,7 +118,7 @@ class Mobility extends Component {
                                                             </defs>
                                                             <XAxis dataKey='date' axisLine={false} tickLine={false} mirror={false} interval="preserveStartEnd" tick={{ stroke: '#000', strokeWidth: 1 }} />
                                                             <YAxis hide={true} />
-                                                            <Tooltip />
+                                                            <Tooltip content={<CustomTooltip1 valueLabel="Posture" />} />
                                                             <Area type='monotone' dataKey='count' activeDot={{ stroke: '#46E9C5', strokeWidth: 2, fill: "#fff" }} stroke="none" fill="url(#postureArea)" />
                                                         </AreaChart>
                                                     </ResponsiveContainer>

@@ -15,6 +15,8 @@ import {
     MEASUREMENT_UNIT_CENTIMETER,
     MEASUREMENT_UNIT_KILOGRAM,
     MEASUREMENT_UNIT_GRAM,
+    FITASSIST_USER_DETAILS_TOKEN_KEY,
+    LOCALSTORAGE_USER_DETAILS_KEY,
 } from '../../constants/consts';
 import { capitalizeFirstLetter, ts, convertUnits } from '../../helpers/funs';
 import ReactQuill from 'react-quill';
@@ -31,6 +33,7 @@ import userMale from 'img/common/user-male.png';
 import home from 'img/common/home.png';
 import gym from 'img/common/gym.png';
 import ReactTooltip from "react-tooltip";
+import jwt from "jwt-simple";
 
 class UpdateProfileForm extends Component {
     constructor(props) {
@@ -293,7 +296,7 @@ class UpdateProfileForm extends Component {
                                                     value={GOAL_GAIN_STRENGTH}
                                                 />
                                             </div>
-                                            
+
                                             <div className="col-md-4">
                                                 <Field
                                                     id={GOAL_INCREASE_ENDURANCE}
@@ -375,6 +378,7 @@ class UpdateProfileForm extends Component {
                 about_me: profile.aboutMe,
                 primary_goal: (profile.goal) ? profile.goal.name : null,
             }
+            this.updateLocalStorageUserDetails(profile);
             dispatch(initialize('update_profile_details_form', formData));
             dispatch(hidePageLoader());
         } else if (saveActionInit && !loading) {
@@ -411,6 +415,11 @@ class UpdateProfileForm extends Component {
     handleChangeTextEditor = (editorText) => {
         this.props.change('about_me', editorText);
         this.setState({ aboutMe: editorText });
+    }
+
+    updateLocalStorageUserDetails = (userDetails) => {
+        var encryptedUserDetails = jwt.encode(userDetails, FITASSIST_USER_DETAILS_TOKEN_KEY);
+        localStorage.setItem(LOCALSTORAGE_USER_DETAILS_KEY, encryptedUserDetails);
     }
 }
 

@@ -5,10 +5,11 @@ import { Field, reduxForm, formValueSelector } from "redux-form";
 import { required } from '../../formValidation/validationRules';
 import { calculateBodyFatPercentage } from '../../helpers/funs';
 import { GENDER_FEMALE } from '../../constants/consts';
+import cns from "classnames";
 
 class BodyFatModal extends Component {
     render() {
-        const { show, handleClose, handleSubmit, gender } = this.props;
+        const { show, handleClose, handleSubmit, gender, age } = this.props;
         return (
             <div className="add-body-fat-modal-wrapper">
                 <Modal show={show} bsSize="large" className="progress-popup body-fat-form-wrapper">
@@ -60,7 +61,7 @@ class BodyFatModal extends Component {
                                         validate={[required]}
                                     />
                                 </li>
-                                <li>
+                                <li className={cns({ 'display_none': (typeof age !== 'undefined' && age > 0) })}>
                                     <Field
                                         name="age"
                                         type="number"
