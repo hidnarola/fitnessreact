@@ -2,10 +2,14 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { Modal } from 'react-bootstrap';
 import { Field, reduxForm, formValueSelector } from "redux-form";
-import { required } from '../../formValidation/validationRules';
+import { required, min, max } from '../../formValidation/validationRules';
 import { calculateBodyFatPercentage } from '../../helpers/funs';
 import { GENDER_FEMALE } from '../../constants/consts';
 import cns from "classnames";
+
+const min0 = min(0);
+const max110 = max(110);
+const max200 = max(200);
 
 class BodyFatModal extends Component {
     render() {
@@ -34,7 +38,8 @@ class BodyFatModal extends Component {
                                         component={InputField}
                                         errorClass="help-block"
                                         placeholder={(gender && gender === GENDER_FEMALE) ? 'Tricep' : 'Chest'}
-                                        validate={[required]}
+                                        validate={[required, min0, max200]}
+                                        unitValue="mm"
                                     />
                                 </li>
                                 <li>
@@ -46,7 +51,8 @@ class BodyFatModal extends Component {
                                         component={InputField}
                                         errorClass="help-block"
                                         placeholder={(gender && gender === GENDER_FEMALE) ? 'Suprailiac' : 'Abdominal'}
-                                        validate={[required]}
+                                        validate={[required, min0, max200]}
+                                        unitValue="mm"
                                     />
                                 </li>
                                 <li>
@@ -58,7 +64,8 @@ class BodyFatModal extends Component {
                                         component={InputField}
                                         errorClass="help-block"
                                         placeholder="Thigh"
-                                        validate={[required]}
+                                        validate={[required, min0, max200]}
+                                        unitValue="mm"
                                     />
                                 </li>
                                 <li className={cns({ 'display_none': (typeof age !== 'undefined' && age > 0) })}>
@@ -70,7 +77,8 @@ class BodyFatModal extends Component {
                                         component={InputField}
                                         errorClass="help-block"
                                         placeholder="Age"
-                                        validate={[required]}
+                                        validate={[required, min0, max110]}
+                                        unitValue="years"
                                     />
                                     <Field
                                         name="gender"

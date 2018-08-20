@@ -5,7 +5,7 @@ import _ from 'lodash';
 import moment from 'moment';
 import ReactCalender from 'react-calendar/dist/entry.nostyle';
 import bodyGraph from 'img/site/body-graph.png';
-import { required } from '../../formValidation/validationRules';
+import { required, min, max } from '../../formValidation/validationRules';
 import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
 import { getUserBodyMeasurementRequest, getUserBodyMeasurementLogDatesRequest } from '../../actions/userBodyMeasurement';
 import { getLoggedUserProfileSettingsRequest } from '../../actions/profile';
@@ -25,6 +25,7 @@ class BodyMeasurementForm extends Component {
         this.state = {
             selectActionInit: false,
             logDate,
+            validationRules: {}
         }
     }
 
@@ -40,7 +41,7 @@ class BodyMeasurementForm extends Component {
     }
 
     render() {
-        const { logDate } = this.state;
+        const { logDate, validationRules } = this.state;
         const { logDates, handleSubmit, profileSettings } = this.props;
         var bodyMeasurement = MEASUREMENT_UNIT_CENTIMETER;
         var weighUnit = MEASUREMENT_UNIT_KILOGRAM;
@@ -63,7 +64,7 @@ class BodyMeasurementForm extends Component {
                                     component={InputField}
                                     errorClass="help-block"
                                     placeholder="Neck"
-                                    validate={[required]}
+                                    validate={(validationRules.neck) ? validationRules.neck : [required]}
                                     unitValue={bodyMeasurement}
                                 />
 
@@ -77,7 +78,7 @@ class BodyMeasurementForm extends Component {
                                     component={InputField}
                                     errorClass="help-block"
                                     placeholder="Shoulders"
-                                    validate={[required]}
+                                    validate={(validationRules.shoulders) ? validationRules.shoulders : [required]}
                                     unitValue={bodyMeasurement}
                                 />
                             </li>
@@ -90,7 +91,7 @@ class BodyMeasurementForm extends Component {
                                     component={InputField}
                                     errorClass="help-block"
                                     placeholder="Chest"
-                                    validate={[required]}
+                                    validate={(validationRules.chest) ? validationRules.chest : [required]}
                                     unitValue={bodyMeasurement}
                                 />
                             </li>
@@ -103,7 +104,7 @@ class BodyMeasurementForm extends Component {
                                     component={InputField}
                                     errorClass="help-block"
                                     placeholder="Upper Arm"
-                                    validate={[required]}
+                                    validate={(validationRules.upper_arm) ? validationRules.upper_arm : [required]}
                                     unitValue={bodyMeasurement}
                                 />
                             </li>
@@ -116,7 +117,7 @@ class BodyMeasurementForm extends Component {
                                     component={InputField}
                                     errorClass="help-block"
                                     placeholder="Waist"
-                                    validate={[required]}
+                                    validate={(validationRules.waist) ? validationRules.waist : [required]}
                                     unitValue={bodyMeasurement}
                                 />
                             </li>
@@ -129,7 +130,7 @@ class BodyMeasurementForm extends Component {
                                     component={InputField}
                                     errorClass="help-block"
                                     placeholder="Forearm"
-                                    validate={[required]}
+                                    validate={(validationRules.forearm) ? validationRules.forearm : [required]}
                                     unitValue={bodyMeasurement}
                                 />
                             </li>
@@ -142,7 +143,7 @@ class BodyMeasurementForm extends Component {
                                     component={InputField}
                                     errorClass="help-block"
                                     placeholder="Hips"
-                                    validate={[required]}
+                                    validate={(validationRules.hips) ? validationRules.hips : [required]}
                                     unitValue={bodyMeasurement}
                                 />
                             </li>
@@ -155,7 +156,7 @@ class BodyMeasurementForm extends Component {
                                     component={InputField}
                                     errorClass="help-block"
                                     placeholder="Thigh"
-                                    validate={[required]}
+                                    validate={(validationRules.thigh) ? validationRules.thigh : [required]}
                                     unitValue={bodyMeasurement}
                                 />
                             </li>
@@ -168,7 +169,7 @@ class BodyMeasurementForm extends Component {
                                     component={InputField}
                                     errorClass="help-block"
                                     placeholder="Calf"
-                                    validate={[required]}
+                                    validate={(validationRules.calf) ? validationRules.calf : [required]}
                                     unitValue={bodyMeasurement}
                                 />
                             </li>
@@ -181,7 +182,7 @@ class BodyMeasurementForm extends Component {
                                     component={InputField}
                                     errorClass="help-block"
                                     placeholder="Heart Rate"
-                                    validate={[required]}
+                                    validate={(validationRules.heartRate) ? validationRules.heartRate : [required]}
                                     unitValue={heartRateUnit}
                                 />
                             </li>
@@ -203,7 +204,7 @@ class BodyMeasurementForm extends Component {
                                     component={InputField}
                                     errorClass="help-block"
                                     placeholder="Weight"
-                                    validate={[required]}
+                                    validate={(validationRules.weight) ? validationRules.weight : [required]}
                                     unitValue={weighUnit}
                                 />
                             </li>
@@ -216,7 +217,7 @@ class BodyMeasurementForm extends Component {
                                     component={InputField}
                                     errorClass="help-block"
                                     placeholder="Height"
-                                    validate={[required]}
+                                    validate={(validationRules.height) ? validationRules.height : [required]}
                                     unitValue={bodyMeasurement}
                                 />
                             </li>
@@ -304,6 +305,7 @@ class BodyMeasurementForm extends Component {
                 change('log_date', logDate);
                 this.setState({ logDate: logDate });
             }
+            this.setValidationRules();
             dispatch(hidePageLoader());
         }
         if (refreshBodyMeasurementForm && !loading) {
@@ -380,6 +382,43 @@ class BodyMeasurementForm extends Component {
             }
             this.getBodyMeasurementLogData(requestData);
         }
+    }
+
+    setValidationRules = () => {
+        const { profileSettings } = this.props;
+        var validationRules = {
+            neck: [required, min(0), max(30)],
+            shoulders: [required, min(0), max(60)],
+            chest: [required, min(0), max(135)],
+            upper_arm: [required, min(0), max(20)],
+            waist: [required, min(0), max(120)],
+            forearm: [required, min(0), max(40)],
+            hips: [required, min(0), max(155)],
+            thigh: [required, min(0), max(100)],
+            calf: [required, min(0), max(50)],
+            heartRate: [required, min(0), max(250)],
+            weight: [required, min(0), max(100)],
+            height: [required, min(0), max(300)],
+        };
+        if (profileSettings) {
+            if (profileSettings.bodyMeasurement !== MEASUREMENT_UNIT_CENTIMETER) {
+                validationRules.neck = [required, min(0), max(12)];
+                validationRules.shoulders = [required, min(0), max(24)];
+                validationRules.chest = [required, min(0), max(54)];
+                validationRules.upper_arm = [required, min(0), max(8)];
+                validationRules.waist = [required, min(0), max(48)];
+                validationRules.forearm = [required, min(0), max(16)];
+                validationRules.hips = [required, min(0), max(62)];
+                validationRules.thigh = [required, min(0), max(40)];
+                validationRules.calf = [required, min(0), max(20)];
+                validationRules.height = [required, min(0), max(120)];
+            }
+            if (profileSettings.weight !== MEASUREMENT_UNIT_KILOGRAM) {
+                validationRules.weight = [required, min(0), max(220)];
+
+            }
+        }
+        this.setState({ validationRules });
     }
 }
 
