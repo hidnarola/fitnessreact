@@ -9,11 +9,11 @@ import ProfilePhotos from 'components/Profile/ProfilePhotos';
 import FitnessHeader from 'components/global/FitnessHeader';
 import FitnessNav from 'components/global/FitnessNav';
 import { routeCodes } from 'constants/routes';
-import { getProfileDetailsRequest, saveAboutProfileDetailsRequest, saveLoggedUserProfilePhotoRequest } from '../actions/profile';
+import { getProfileDetailsRequest, saveAboutProfileDetailsRequest, saveLoggedUserProfilePhotoRequest, getLoggedUserProfileSettingsRequest } from '../actions/profile';
 import noProfileImg from 'img/common/no-profile-img.png'
-import { FRIENDSHIP_STATUS_SELF, FRIENDSHIP_STATUS_UNKNOWN, FRIENDSHIP_STATUS_FRIEND, FRIENDSHIP_STATUS_REQUEST_RECEIVED, FRIENDSHIP_STATUS_REQUEST_SENT, LOCALSTORAGE_USER_DETAILS_KEY, FITASSIST_USER_DETAILS_TOKEN_KEY } from '../constants/consts';
+import { FRIENDSHIP_STATUS_SELF, FRIENDSHIP_STATUS_UNKNOWN, FRIENDSHIP_STATUS_FRIEND, FRIENDSHIP_STATUS_REQUEST_RECEIVED, FRIENDSHIP_STATUS_REQUEST_SENT, LOCALSTORAGE_USER_DETAILS_KEY, FITASSIST_USER_DETAILS_TOKEN_KEY, MEASUREMENT_UNIT_CENTIMETER, MEASUREMENT_UNIT_KILOGRAM, MEASUREMENT_UNIT_GRAM } from '../constants/consts';
 import { sendFriendRequestRequest, cancelFriendRequestRequest, acceptFriendRequestRequest } from '../actions/friends';
-import { ts, te } from '../helpers/funs';
+import { ts, te, convertUnits } from '../helpers/funs';
 import CancelFriendRequestModal from '../components/Profile/CancelFriendRequestModal';
 import UnfriendRequestModal from '../components/Profile/UnfriendRequestModal';
 import UpdateAboutMeModal from '../components/Profile/UpdateAboutMeModal';
@@ -23,6 +23,7 @@ import jwt from "jwt-simple";
 import { setLoggedUserFromLocalStorage } from '../actions/user';
 import { FaCircleONotch } from "react-icons/lib/fa";
 import { getUserChannelRequest } from '../actions/userMessages';
+import SweetAlert from "react-bootstrap-sweetalert";
 
 class Profile extends Component {
     constructor(props) {
@@ -65,6 +66,7 @@ class Profile extends Component {
             });
             dispatch(getProfileDetailsRequest(username));
         }
+        dispatch(getLoggedUserProfileSettingsRequest());
     }
 
     componentWillReceiveProps(nextProps) {
@@ -148,65 +150,55 @@ class Profile extends Component {
                             {profile && profile.friendshipStatus && profile.friendshipStatus !== '' && profile.friendshipStatus !== FRIENDSHIP_STATUS_SELF &&
                                 <div className="body-head-r add-friend">
                                     {profile.friendshipStatus === FRIENDSHIP_STATUS_FRIEND && (!UnfriendRequestDisabled) &&
-                                        <a
-                                            href="javascript:void(0)"
-                                            className="green-blue-btn active"
+                                        <button
+                                            className="active white-btn"
                                             onClick={() => {
                                                 this.handleShowUnfriendRequestModal(profile.friendshipId)
                                             }}
                                             disabled={UnfriendRequestDisabled}
                                         >
-                                            Unfriend<i className="icon-check"></i>
-                                        </a>
+                                            {(!UnfriendRequestDisabled) ? 'Unfriend' : 'Please wait...'}
+                                            <i className="icon-remove_circle_outline"></i>
+                                        </button>
                                     }
-                                    {profile.friendshipStatus === FRIENDSHIP_STATUS_FRIEND && (UnfriendRequestDisabled) &&
-                                        <span>Please wait to unfriend...</span>
-                                    }
-                                    {profile.friendshipStatus === FRIENDSHIP_STATUS_REQUEST_RECEIVED && (!friendRequestReceivedDisabled) &&
+                                    {profile.friendshipStatus === FRIENDSHIP_STATUS_REQUEST_RECEIVED &&
                                         <div>
-                                            <a
-                                                href="javascript:void(0)"
-                                                className="green-blue-btn active"
+                                            <button
+                                                className="active color-white gradient-color-1 white-btn"
                                                 onClick={() => {
                                                     this.handleAcceptRequest(profile.friendshipId)
                                                 }}
                                                 disabled={friendRequestReceivedDisabled}
                                             >
-                                                Accept <i className="icon-check"></i>
-                                            </a>
-                                            <a
-                                                href="javascript:void(0)"
-                                                className="green-blue-btn active"
+                                                {(!friendRequestReceivedDisabled) ? 'Accept' : 'Please wait...'}
+                                                <i className="icon-check_circle"></i>
+                                            </button>
+                                            <button
+                                                className="active white-btn"
                                                 onClick={() => {
                                                     this.handleShowRejectFriendRequestModal(profile.friendshipId)
                                                 }}
                                                 disabled={friendRequestReceivedDisabled}
                                             >
-                                                Reject <i className="icon-check"></i>
-                                            </a>
+                                                {(!friendRequestReceivedDisabled) ? 'Reject' : 'Please wait...'}
+                                                <i className="icon-cancel"></i>
+                                            </button>
                                         </div>
                                     }
-                                    {profile.friendshipStatus === FRIENDSHIP_STATUS_REQUEST_RECEIVED && (friendRequestReceivedDisabled) &&
-                                        <span>Please wait...</span>
-                                    }
-                                    {profile.friendshipStatus === FRIENDSHIP_STATUS_REQUEST_SENT && (!cancelFriendRequestDisabled) &&
-                                        <a
-                                            href="javascript:void(0)"
-                                            className="green-blue-btn active"
+                                    {profile.friendshipStatus === FRIENDSHIP_STATUS_REQUEST_SENT &&
+                                        <button
+                                            className="active white-btn"
                                             onClick={() => {
                                                 this.handleShowCancelFriendRequestModal(profile.friendshipId)
                                             }}
                                             disabled={cancelFriendRequestDisabled}
                                         >
-                                            Cancel Request <i className="icon-check"></i>
-                                        </a>
+                                            {(!cancelFriendRequestDisabled) ? 'Cancel Request' : 'Please wait...'}
+                                            <i className="icon-cancel"></i>
+                                        </button>
                                     }
-                                    {profile.friendshipStatus === FRIENDSHIP_STATUS_REQUEST_SENT && (cancelFriendRequestDisabled) &&
-                                        <span>Friend request canceling...</span>
-                                    }
-                                    {profile.friendshipStatus === FRIENDSHIP_STATUS_UNKNOWN && (!sendFriendRequestDisabled) &&
-                                        <a
-                                            href="javascript:void(0)"
+                                    {profile.friendshipStatus === FRIENDSHIP_STATUS_UNKNOWN &&
+                                        <button
                                             className="add-friend-btn active"
                                             onClick={() => {
                                                 this.setState({ sendFriendRequestDisabled: true });
@@ -214,24 +206,18 @@ class Profile extends Component {
                                             }}
                                             disabled={sendFriendRequestDisabled}
                                         >
-                                            Add Friend <i className="icon-person_add"></i>
-                                        </a>
+                                            {(!sendFriendRequestDisabled) ? 'Add Friend' : 'Please wait...'}
+                                            <i className="icon-person_add"></i>
+                                        </button>
                                     }
-                                    {profile.friendshipStatus === FRIENDSHIP_STATUS_UNKNOWN && (sendFriendRequestDisabled) &&
-                                        <span>Friend request sending...</span>
-                                    }
-                                    {!requestChannelLoading &&
-                                        <a
-                                            href="javascript:void(0)"
-                                            className="add-friend-btn active"
-                                            onClick={this.handleRequestMessageChannel}
-                                        >
-                                            Send message <i className="icon-mail_outline"></i>
-                                        </a>
-                                    }
-                                    {requestChannelLoading &&
-                                        <span>Loading...</span>
-                                    }
+                                    <button
+                                        className="white-btn gradient-color-2 color-white active"
+                                        onClick={this.handleRequestMessageChannel}
+                                        disabled={requestChannelLoading}
+                                    >
+                                        {(!requestChannelLoading) ? 'Send message' : 'Please wait...'}
+                                        <i className="icon-mail_outline"></i>
+                                    </button>
                                 </div>
                             }
                         </div>
@@ -308,8 +294,8 @@ class Profile extends Component {
                                         <div className="whitebox-body profile-about-body">
                                             {profile && profile.height > 0 &&
                                                 <a href="javascript:void(0)" className="purple-btn">
-                                                    Height:{profile.height} cm
-                                            </a>
+                                                    Height: {profile.height} {(profile.heightUnit) ? profile.heightUnit : MEASUREMENT_UNIT_CENTIMETER}
+                                                </a>
                                             }
                                             {profile && profile.height <= 0 &&
                                                 <a href="javascript:void(0)" className="purple-btn">
@@ -318,8 +304,8 @@ class Profile extends Component {
                                             }
                                             {profile && profile.weight > 0 &&
                                                 <a href="javascript:void(0)" className="green-blue-btn">
-                                                    Weight:{profile.weight} kg
-                                            </a>
+                                                    Weight: {profile.weight} {(profile.weightUnit) ? profile.weightUnit : MEASUREMENT_UNIT_KILOGRAM}
+                                                </a>
                                             }
                                             {profile && profile.weight <= 0 &&
                                                 <a href="javascript:void(0)" className="green-blue-btn">
@@ -338,21 +324,45 @@ class Profile extends Component {
 
                     </section>
                 }
-                <CancelFriendRequestModal
+                <SweetAlert
                     show={showCancelFriendRequestModal}
-                    handleYes={this.handleCancelFriendRequest}
-                    handleClose={this.handleHideCancelFriendRequestModal}
-                />
-                <CancelFriendRequestModal
+                    danger
+                    showCancel
+                    confirmBtnText="Yes, cancel it!"
+                    confirmBtnBsStyle="danger"
+                    cancelBtnBsStyle="default"
+                    title="Are you sure?"
+                    onConfirm={this.handleCancelFriendRequest}
+                    onCancel={this.handleHideCancelFriendRequestModal}
+                >
+                    You will not be able to recover it!
+                </SweetAlert>
+                <SweetAlert
                     show={showRejectFriendRequestModal}
-                    handleYes={this.handleRejectFriendRequest}
-                    handleClose={this.handleHideRejectFriendRequestModal}
-                />
-                <UnfriendRequestModal
+                    danger
+                    showCancel
+                    confirmBtnText="Yes, reject it!"
+                    confirmBtnBsStyle="danger"
+                    cancelBtnBsStyle="default"
+                    title="Are you sure?"
+                    onConfirm={this.handleRejectFriendRequest}
+                    onCancel={this.handleHideRejectFriendRequestModal}
+                >
+                    You will not be able to recover it!
+                </SweetAlert>
+                <SweetAlert
                     show={showUnfriendRequestModal}
-                    handleYes={this.handleUnfriendRequest}
-                    handleClose={this.handleHideUnfriendRequestModal}
-                />
+                    danger
+                    showCancel
+                    confirmBtnText="Yes, unfriend us!"
+                    confirmBtnBsStyle="danger"
+                    cancelBtnBsStyle="default"
+                    title="Are you sure?"
+                    onConfirm={this.handleUnfriendRequest}
+                    onCancel={this.handleHideUnfriendRequestModal}
+                >
+                    You will not be able to recover it!
+                </SweetAlert>
                 <UpdateAboutMeModal
                     show={showUpdateAboutMeModal}
                     onSubmit={this.handleUpdateAboutMeSubmit}
@@ -395,9 +405,10 @@ class Profile extends Component {
         } = this.state;
         var stateProfile = this.state.profile;
         if (loadProfileActionInit && !profileLoading && (profile !== stateProfile)) {
+            var newProfileState = this.formatAboutDetails(profile);
             this.setState({
                 loadProfileActionInit: false,
-                profile,
+                profile: newProfileState,
                 sendFriendRequestDisabled: false,
                 cancelFriendRequestDisabled: false,
                 UnfriendRequestDisabled: false,
@@ -658,6 +669,29 @@ class Profile extends Component {
             socket.emit('get_channel_id', requestData);
         }
     }
+
+    formatAboutDetails = (profile) => {
+        const { settings } = this.props;
+        let heightUnit = MEASUREMENT_UNIT_CENTIMETER;
+        let weightUnit = MEASUREMENT_UNIT_KILOGRAM;
+        let height = 0;
+        let weight = 0;
+        if (settings) {
+            heightUnit = (settings.bodyMeasurement) ? settings.bodyMeasurement : MEASUREMENT_UNIT_CENTIMETER;
+            weightUnit = (settings.weight) ? settings.weight : MEASUREMENT_UNIT_KILOGRAM;
+        }
+        if (profile.height) {
+            height = convertUnits(MEASUREMENT_UNIT_CENTIMETER, heightUnit, profile.height);
+        }
+        if (profile.weight) {
+            weight = convertUnits(MEASUREMENT_UNIT_GRAM, weightUnit, profile.weight);
+        }
+        profile.heightUnit = heightUnit;
+        profile.weightUnit = weightUnit;
+        profile.height = height.toFixed(2);
+        profile.weight = weight.toFixed(2);
+        return profile;
+    }
     //#endregion
 
 }
@@ -667,6 +701,7 @@ const mapStateToProps = (state) => {
     return {
         profileLoading: profile.get('loading'),
         profile: profile.get('profile'),
+        settings: profile.get('settings'),
         requestSendLoading: friends.get('requestSendLoading'),
         requestSendError: friends.get('requestSendError'),
         requestCancelLoading: friends.get('requestCancelLoading'),

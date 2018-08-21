@@ -4,6 +4,7 @@ import { reduxForm, Field } from "redux-form";
 import ReactCalender from 'react-calendar/dist/entry.nostyle';
 import Dropzone from 'react-dropzone';
 import { requiredImage } from '../../formValidation/validationRules';
+import Weightlifting from "svg/weightlifting.svg";
 
 class AddProgressPhotoModal extends Component {
     constructor(props) {
@@ -72,44 +73,6 @@ class AddProgressPhotoModal extends Component {
                                     <button type="submit">Save</button>
                                 </div>
                             </div>
-                            {/* <div className="row d-flex whitebox-body">
-                                <div className="col-md-4">
-                                    <Field
-                                        name="photo"
-                                        mainWrapperClass="image-form-main-wrapper"
-                                        wrapperClass="form-group"
-                                        component={PhotoUploadField}
-                                        multiple={false}
-                                        validate={[requiredImage]}
-                                    />
-                                </div>
-                                <div className="col-md-4">
-                                    <div className="form-group">
-                                        <Field
-                                            name="description"
-                                            component="textarea"
-                                            placeholder="Say something about this photo..."
-                                            className="form-control"
-                                        />
-                                    </div>
-                                </div>
-                                <div className="col-md-4">
-                                    <div className="log-date">
-                                        <div className="log-date-head d-flex">
-                                            <h4>Photo Date</h4>
-                                        </div>
-                                        <div className="log-date-wrap">
-                                            <ReactCalender
-                                                name="photo_date"
-                                                onChange={this.onChangePhotoDate}
-                                                value={photoDate}
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> */}
-
-
                         </div>
                     </form>
                 </Modal>
@@ -160,6 +123,12 @@ class PhotoUploadField extends Component {
                     multiple={false}
                     className={className}
                 >
+                    {!(input.value) &&
+                        <div>
+                            <Weightlifting />
+                            <h4>Select an image</h4>
+                        </div>
+                    }
                     {input.value && images}
                 </Dropzone>
                 {meta.touched &&
