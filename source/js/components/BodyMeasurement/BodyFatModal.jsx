@@ -91,7 +91,7 @@ class BodyFatModal extends Component {
                                         type="hidden"
                                     />
                                 </li>
-                                <li>
+                                <li className="body-fat-field-li">
                                     <Field
                                         name="bodyFat"
                                         type="number"

@@ -15,6 +15,7 @@ import CancelFriendRequestModal from './CancelFriendRequestModal';
 import { ts } from '../../helpers/funs';
 import UnfriendRequestModal from './UnfriendRequestModal';
 import { getUserChannelRequest } from '../../actions/userMessages';
+import SweetAlert from "react-bootstrap-sweetalert";
 
 class ProfileFriends extends Component {
     constructor(props) {
@@ -102,7 +103,9 @@ class ProfileFriends extends Component {
 
                 <div className="white-box space-btm-20">
                     <div className="whitebox-head d-flex">
-                        <h3 className="title-h3">Your Friends</h3>
+                        <h3 className="title-h3">
+                            {`${(profile && profile.firstName) ? `${profile.firstName}'s friends` : 'Friends'}`}
+                        </h3>
                     </div>
                     <div className="whitebox-body profile-body">
                         <div className="row d-flex">
@@ -134,12 +137,19 @@ class ProfileFriends extends Component {
                     handleYes={this.handleRejectFriendRequest}
                     handleClose={this.handleHideRejectFriendRequest}
                 />
-
-                <UnfriendRequestModal
+                <SweetAlert
                     show={showUnfriendModal}
-                    handleYes={this.handleUnfriendRequest}
-                    handleClose={this.handleHideUnfriendRequest}
-                />
+                    danger
+                    showCancel
+                    confirmBtnText="Yes, unfriend us!"
+                    confirmBtnBsStyle="danger"
+                    cancelBtnBsStyle="default"
+                    title="Are you sure?"
+                    onConfirm={this.handleUnfriendRequest}
+                    onCancel={this.handleHideUnfriendRequest}
+                >
+                    You will not be able to recover it!
+                </SweetAlert>
             </div>
         );
     }
