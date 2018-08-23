@@ -8,13 +8,18 @@ import FitnessHeader from 'components/global/FitnessHeader';
 import FitnessNav from 'components/global/FitnessNav';
 
 export default class StatsPage extends Component {
-    
-    render() {        
+    componentWillMount() {
+        const { match, history } = this.props;
+        if (match.isExact) {
+            history.push(routeCodes.STATSTRENGTH);
+        }
+    }
 
+    render() {
         return (
             <div className='stat-page'>
-                <FitnessHeader/>
-                <FitnessNav/>
+                <FitnessHeader />
+                <FitnessNav />
                 <section className="body-wrap starts-body">
                     <div className="body-head d-flex justify-content-start">
                         <div className="body-head-l">
@@ -25,7 +30,7 @@ export default class StatsPage extends Component {
                                     activeClassName='pink-btn'
                                     className='white-btn'
                                     exact
-                                    to={ routeCodes.STATSTRENGTH }
+                                    to={routeCodes.STATSTRENGTH}
                                 >
                                     Strength
                                 </NavLink>
@@ -34,17 +39,17 @@ export default class StatsPage extends Component {
                                     activeClassName='pink-btn'
                                     className='white-btn'
                                     exact
-                                    to={ routeCodes.STATSCARDIO }
+                                    to={routeCodes.STATSCARDIO}
                                 >
                                     Cardio
-                                </NavLink>                           
+                                </NavLink>
                             </div>
                         </div>
                     </div>
 
                     <Switch>
-                        <Route exact path={ routeCodes.STATSTRENGTH } component={ Strength } />
-                        <Route exact path={ routeCodes.STATSCARDIO } component={ Cardio } />
+                        <Route exact path={routeCodes.STATSTRENGTH} component={Strength} />
+                        <Route exact path={routeCodes.STATSCARDIO} component={Cardio} />
                     </Switch>
                 </section>
             </div>
