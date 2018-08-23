@@ -36,6 +36,8 @@ import { FaGlobe, FaLock, FaGroup } from 'react-icons/lib/fa';
 import AddPostPhotoModal from './AddPostPhotoModal';
 import PostDetailsModal from './PostDetailsModal';
 import LikeButton from "./LikeButton";
+import ProfileFithubBodyFatCard from './ProfileFithubBodyFatCard';
+import WidgetsListModal from './WidgetsListModal';
 
 class ProfileFithub extends Component {
     constructor(props) {
@@ -59,6 +61,7 @@ class ProfileFithub extends Component {
             selectedPostForDetailsIndex: null,
             selectedPostForDetails: null,
             showPostDetailsModal: false,
+            showAddWidgetModal: false,
         }
     }
 
@@ -95,6 +98,7 @@ class ProfileFithub extends Component {
             selectedPostForDetailsIndex,
             selectedPostForDetails,
             postImages,
+            showAddWidgetModal,
         } = this.state;
         const {
             loggedUserData,
@@ -103,12 +107,14 @@ class ProfileFithub extends Component {
         return (
             <div className="row">
                 <div className="col-md-6">
-                    <div className="add-widgets">
-                        <a href="javascript:void(0)" data-toggle="modal" data-target="#widget-popup">
-                            <span>Add Widgets</span>
-                            <i className="icon-widgets"></i>
-                        </a>
-                    </div>
+                    {activeProfile && activeProfile.friendshipStatus === FRIENDSHIP_STATUS_SELF &&
+                        <div className="add-widgets">
+                            <a href="javascript:void(0)" onClick={() => this.setState({ showAddWidgetModal: true })} data-toggle="modal" data-target="#widget-popup">
+                                <span>Add Widgets</span>
+                                <i className="icon-widgets"></i>
+                            </a>
+                        </div>
+                    }
 
                     {progressPhotos && Object.keys(progressPhotos).length > 0 &&
                         <div className="white-box space-btm-30">
@@ -156,17 +162,7 @@ class ProfileFithub extends Component {
                         </div>
                     }
 
-                    <div className="white-box space-btm-30">
-                        <div className="whitebox-head d-flex">
-                            <h3 className="title-h3">Body Fat</h3>
-                            <div className="whitebox-head-r ">
-                                <a href="" className="icon-settings"></a>
-                            </div>
-                        </div>
-                        <div className="whitebox-body bodyfat-graph hyphen-30">
-                            <img src="images/bodyfat-graph.png" alt="" />
-                        </div>
-                    </div>
+                    <ProfileFithubBodyFatCard />
 
                     <div className="white-box space-btm-30">
                         <div className="whitebox-head d-flex">
@@ -227,7 +223,7 @@ class ProfileFithub extends Component {
                                         <ul>
                                             {postImages.map((img, imgI) => {
                                                 return (
-                                                    <li>
+                                                    <li key={imgI}>
                                                         <img
                                                             src={img.preview}
                                                         />
@@ -410,7 +406,7 @@ class ProfileFithub extends Component {
                                                         {(likesStr || totalComments > 0) &&
                                                             <p>
                                                                 {likesStr &&
-                                                                    <a href="javascript:void(0)" onClick={() => {}}>{likesStr}</a>
+                                                                    <a href="javascript:void(0)" onClick={() => { }}>{likesStr}</a>
                                                                 }
                                                                 {totalComments > 0 &&
                                                                     <a href="javascript:void(0)" className="pull-right" onClick={() => this.handleShowPostDetailsModal(index)}>Comments {totalComments}</a>
@@ -479,6 +475,11 @@ class ProfileFithub extends Component {
                     loggedUserData={loggedUserData}
                     handleToggleLike={this.handleToggleLike}
                     handleComment={this.handleComment}
+                />
+
+                <WidgetsListModal
+                    show={showAddWidgetModal}
+                    handleClose={() => this.setState({ showAddWidgetModal: false })}
                 />
             </div>
         );

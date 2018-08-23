@@ -17,6 +17,9 @@ const initialState = Map({
     loading: false,
     posts: [],
     progressPhotos: {},
+    loadingBodyFat: false,
+    bodyFat: null,
+    errorBodyFat: [],
     post: null,
     error: [],
 });
@@ -29,18 +32,24 @@ const actionMap = {
             progressPhotos: {},
             post: null,
             error: [],
+            loadingBodyFat: true,
+            bodyFat: null,
+            errorBodyFat: [],
         }));
     },
     [GET_USER_TIMELINE_SUCCESS]: (state, action) => {
         var newState = {
             loading: false,
+            loadingBodyFat: false,
         };
         if (action.data.status === 1) {
             newState.posts = action.data.timeline;
             newState.progressPhotos = action.data.progress_photos;
+            newState.bodyFat = action.data.body_fat;
         } else {
             var msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
             newState.error = [msg];
+            newState.errorBodyFat = [msg];
         }
         return state.merge(Map(newState));
     },
@@ -56,6 +65,7 @@ const actionMap = {
         return state.merge(Map({
             loading: false,
             error: error,
+            errorBodyFat: error,
         }));
     },
     [GET_USER_SINGLE_TIMELINE_REQUEST]: (state, action) => {
