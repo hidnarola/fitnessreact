@@ -51,3 +51,9 @@ export const receiveChannelId = (socket, callback) => {
         callback(data);
     });
 }
+
+export const receiveUserFriendRequestsCount = (socket, callback) => {
+    socket.on('receive_user_friends_count', (data) => {
+        callback(data);
+    });
+}

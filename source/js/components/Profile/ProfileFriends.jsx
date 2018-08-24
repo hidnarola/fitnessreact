@@ -69,7 +69,8 @@ class ProfileFriends extends Component {
             friendsActionDisabled,
         } = this.state;
         const {
-            profile
+            profile,
+            loggedUserData
         } = this.props;
         return (
             <div className="profile-friends-wrapper">
@@ -122,6 +123,7 @@ class ProfileFriends extends Component {
                                             handleShowUnfriendRequest={this.handleShowUnfriendRequest}
                                             friendshipStatus={profile.friendshipStatus}
                                             handleRequestMessageChannel={this.handleRequestMessageChannel}
+                                            loggedUserData={loggedUserData}
                                         />
                                     </div>
                                 ))

@@ -160,28 +160,28 @@ class Profile extends Component {
                                         </button>
                                     }
                                     {profile.friendshipStatus === FRIENDSHIP_STATUS_REQUEST_RECEIVED &&
-                                        <div>
-                                            <button
-                                                className="active color-white gradient-color-1 white-btn"
-                                                onClick={() => {
-                                                    this.handleAcceptRequest(profile.friendshipId)
-                                                }}
-                                                disabled={friendRequestReceivedDisabled}
-                                            >
-                                                {(!friendRequestReceivedDisabled) ? 'Accept' : 'Please wait...'}
-                                                <i className="icon-check_circle"></i>
-                                            </button>
-                                            <button
-                                                className="active white-btn"
-                                                onClick={() => {
-                                                    this.handleShowRejectFriendRequestModal(profile.friendshipId)
-                                                }}
-                                                disabled={friendRequestReceivedDisabled}
-                                            >
-                                                {(!friendRequestReceivedDisabled) ? 'Reject' : 'Please wait...'}
-                                                <i className="icon-cancel"></i>
-                                            </button>
-                                        </div>
+                                        <button
+                                            className="active color-white gradient-color-1 white-btn"
+                                            onClick={() => {
+                                                this.handleAcceptRequest(profile.friendshipId)
+                                            }}
+                                            disabled={friendRequestReceivedDisabled}
+                                        >
+                                            {(!friendRequestReceivedDisabled) ? 'Accept' : 'Please wait...'}
+                                            <i className="icon-check_circle"></i>
+                                        </button>
+                                    }
+                                    {profile.friendshipStatus === FRIENDSHIP_STATUS_REQUEST_RECEIVED &&
+                                        <button
+                                            className="active white-btn"
+                                            onClick={() => {
+                                                this.handleShowRejectFriendRequestModal(profile.friendshipId)
+                                            }}
+                                            disabled={friendRequestReceivedDisabled}
+                                        >
+                                            {(!friendRequestReceivedDisabled) ? 'Reject' : 'Please wait...'}
+                                            <i className="icon-cancel"></i>
+                                        </button>
                                     }
                                     {profile.friendshipStatus === FRIENDSHIP_STATUS_REQUEST_SENT &&
                                         <button
@@ -280,41 +280,35 @@ class Profile extends Component {
                                         <a href="" data-toggle="modal" data-target="#level-gallery">Lavel 13</a>
                                     </div>
 
-                                    <div className="white-box profile-about">
-                                        <div className="whitebox-head d-flex profile-about-head">
-                                            <h3 className="title-h3">About</h3>
-                                            {profile && profile.friendshipStatus && profile.friendshipStatus === FRIENDSHIP_STATUS_SELF &&
-                                                <div className="whitebox-head-r">
-                                                    <a href="javascript:void(0)" onClick={this.showUpdateAboutMeModal}>Edit</a>
-                                                </div>
-                                            }
+                                    {profile && (profile.height > 0 || profile.weight > 0 || profile.aboutMe !== '') &&
+                                        <div className="white-box profile-about">
+                                            <div className="whitebox-head d-flex profile-about-head">
+                                                <h3 className="title-h3">About</h3>
+                                                {profile && profile.friendshipStatus && profile.friendshipStatus === FRIENDSHIP_STATUS_SELF &&
+                                                    <div className="whitebox-head-r">
+                                                        <a href="javascript:void(0)" onClick={this.showUpdateAboutMeModal}>Edit</a>
+                                                    </div>
+                                                }
+                                            </div>
+                                            <div className="whitebox-body profile-about-body">
+                                                {profile && profile.height > 0 &&
+                                                    <a href="javascript:void(0)" className="purple-btn">Height: {profile.height} {(profile.heightUnit) ? profile.heightUnit : MEASUREMENT_UNIT_CENTIMETER}</a>
+                                                }
+                                                {profile && profile.height <= 0 && profile.friendshipStatus === FRIENDSHIP_STATUS_SELF &&
+                                                    <a href="javascript:void(0)" className="purple-btn">Please add your height</a>
+                                                }
+                                                {profile && profile.weight > 0 &&
+                                                    <a href="javascript:void(0)" className="green-blue-btn">Weight: {profile.weight} {(profile.weightUnit) ? profile.weightUnit : MEASUREMENT_UNIT_KILOGRAM}</a>
+                                                }
+                                                {profile && profile.weight <= 0 && profile.friendshipStatus === FRIENDSHIP_STATUS_SELF &&
+                                                    <a href="javascript:void(0)" className="green-blue-btn">Please add your weight</a>
+                                                }
+                                                {profile && profile.aboutMe !== '' &&
+                                                    ReactHtmlParser(profile.aboutMe)
+                                                }
+                                            </div>
                                         </div>
-                                        <div className="whitebox-body profile-about-body">
-                                            {profile && profile.height > 0 &&
-                                                <a href="javascript:void(0)" className="purple-btn">
-                                                    Height: {profile.height} {(profile.heightUnit) ? profile.heightUnit : MEASUREMENT_UNIT_CENTIMETER}
-                                                </a>
-                                            }
-                                            {profile && profile.height <= 0 &&
-                                                <a href="javascript:void(0)" className="purple-btn">
-                                                    Please add your height
-                                            </a>
-                                            }
-                                            {profile && profile.weight > 0 &&
-                                                <a href="javascript:void(0)" className="green-blue-btn">
-                                                    Weight: {profile.weight} {(profile.weightUnit) ? profile.weightUnit : MEASUREMENT_UNIT_KILOGRAM}
-                                                </a>
-                                            }
-                                            {profile && profile.weight <= 0 &&
-                                                <a href="javascript:void(0)" className="green-blue-btn">
-                                                    Please add your weight
-                                            </a>
-                                            }
-                                            {profile && profile.aboutMe !== '' &&
-                                                <div>{ReactHtmlParser(profile.aboutMe)}</div>
-                                            }
-                                        </div>
-                                    </div>
+                                    }
                                 </div>
 
                             </div>

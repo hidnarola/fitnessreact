@@ -27,6 +27,7 @@ import userNotifications from 'reducers/userNotifications';
 import userMessages from 'reducers/userMessages';
 import userBadges from 'reducers/userBadges';
 import userProgress from 'reducers/userProgress';
+import userStats from 'reducers/userStats';
 import timelineWidgets from 'reducers/timelineWidgets';
 import postLikes from 'reducers/postLikes';
 import postComments from 'reducers/postComments';
@@ -66,6 +67,7 @@ export default combineReducers({
     userShoppingList,
     userScheduleWorkouts,
     userPrograms,
+    userStats,
     userTimeline,
     userPersonalGoals,
     userSecondaryGoals,

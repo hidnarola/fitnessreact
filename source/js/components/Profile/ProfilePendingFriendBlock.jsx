@@ -59,33 +59,6 @@ class ProfilePendingFriendBlock extends Component {
                                 </Dropdown.Menu>
                             </Dropdown>
                         </ButtonToolbar>
-                        {/* {(!pendingFriendsActionDisabled) &&
-                            <h6 className="vertical-middle-c">
-                                <a
-                                    href="javascript:void(0)"
-                                    onClick={() => handleAcceptFriendRequest(friend.friendshipId)}
-                                    disabled={pendingFriendsActionDisabled}
-                                >
-                                    Accept
-                                </a>
-                                <a
-                                    href="javascript:void(0)"
-                                    onClick={() => handleShowRejectFriendRequest(friend.friendshipId)}
-                                    disabled={pendingFriendsActionDisabled}
-                                >
-                                    Reject
-                                </a>
-                                <a
-                                    href="javascript:void(0)"
-                                    onClick={() => handleRequestMessageChannel(friend)}
-                                >
-                                    Send Message
-                                </a>
-                            </h6>
-                        }
-                        {pendingFriendsActionDisabled &&
-                            <h6><span>Please wait...</span></h6>
-                        } */}
                     </div>
                 </div>
             );

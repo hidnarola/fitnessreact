@@ -10,16 +10,16 @@ import { generateValidationErrorMsgArr } from "../helpers/funs";
 const initialState = Map({
     loading: false,
     stats: null,
+    selectedType: null,
     error: [],
-    dateRange: null,
 });
 
 const actionMap = {
     [GET_USER_STATS_REQUEST]: (state, action) => {
         return state.merge(Map({
             loading: true,
-            dateRange: action.dateRange,
             stats: null,
+            selectedType: (action.requestData && action.requestData.type) ? action.requestData.type : null,
             error: [],
         }));
     },

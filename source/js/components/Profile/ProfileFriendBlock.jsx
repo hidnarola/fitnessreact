@@ -13,6 +13,7 @@ class ProfileFriendBlock extends Component {
             friendsActionDisabled,
             friendshipStatus,
             handleRequestMessageChannel,
+            loggedUserData,
         } = this.props;
         if (friend) {
             return (
@@ -42,45 +43,33 @@ class ProfileFriendBlock extends Component {
                             }
                         </h5>
                     </div>
-                    <div className="friend-box-status">
-                        <ButtonToolbar>
-                            <Dropdown id={`friend_options_${friend._id}`} pullRight>
-                                <Dropdown.Toggle>
-                                    {(!friendsActionDisabled) &&
-                                        <h6 className="vertical-middle-c"><i className="icon-check_circle"></i> Friends</h6>
-                                    }
-                                    {friendsActionDisabled &&
-                                        <h6 className="vertical-middle-c"><i className="icon-check_circle"></i> Please wait...</h6>
-                                    }
-                                </Dropdown.Toggle>
-                                <Dropdown.Menu className="">
-                                    {friendshipStatus && friendshipStatus === FRIENDSHIP_STATUS_SELF &&
-                                        <MenuItem eventKey="1" href="javascript:void(0)" onClick={() => handleShowUnfriendRequest(friend.friendshipId)}>Unfriend</MenuItem>
-                                    }
-                                    <MenuItem eventKey="2" href="javascript:void(0)" onClick={() => handleRequestMessageChannel(friend)}>Send message</MenuItem>
-                                </Dropdown.Menu>
-                            </Dropdown>
-                        </ButtonToolbar>
-                        {/* {(!friendsActionDisabled) &&
-                            <h6 className="vertical-middle-c">
-                                {friendshipStatus && friendshipStatus === FRIENDSHIP_STATUS_SELF &&
-                                    <a href="javascript:void(0)" onClick={() => handleShowUnfriendRequest(friend.friendshipId)}>
-                                        Unfriend
-                                    </a>
-                                }
-                                <a
-                                    href="javascript:void(0)"
-                                    onClick={() => handleRequestMessageChannel(friend)}
-                                >
-                                    Send Message
-                                </a>
-                                <i className="icon-check_circle"></i> Friends
-                        </h6>
-                        }
-                        {friendsActionDisabled &&
-                            <h6><span>Please wait...</span></h6>
-                        } */}
-                    </div>
+                    {friendshipStatus && friendshipStatus !== FRIENDSHIP_STATUS_SELF && friend.username !== loggedUserData.username &&
+                        <div className="friend-box-status">
+                            <ButtonToolbar>
+                                <Dropdown id={`friend_options_${friend._id}`} pullRight>
+                                    <Dropdown.Toggle>
+                                        {(!friendsActionDisabled) &&
+                                            <h6 className="vertical-middle-c"><i className="icon-check_circle"></i> Friend</h6>
+                                        }
+                                        {friendsActionDisabled &&
+                                            <h6 className="vertical-middle-c"><i className="icon-check_circle"></i> Please wait...</h6>
+                                        }
+                                    </Dropdown.Toggle>
+                                    <Dropdown.Menu className="">
+                                        {friendshipStatus && friendshipStatus === FRIENDSHIP_STATUS_SELF &&
+                                            <MenuItem eventKey="1" href="javascript:void(0)" onClick={() => handleShowUnfriendRequest(friend.friendshipId)}>Unfriend</MenuItem>
+                                        }
+                                        <MenuItem eventKey="2" href="javascript:void(0)" onClick={() => handleRequestMessageChannel(friend)}>Send message</MenuItem>
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                            </ButtonToolbar>
+                        </div>
+                    }
+                    {!(friendshipStatus && friendshipStatus !== FRIENDSHIP_STATUS_SELF && friend.username !== loggedUserData.username) &&
+                        <div className="friend-box-status">
+                            <h6 className="vertical-middle-c"><i className="icon-check_circle"></i> Friend</h6>
+                        </div>
+                    }
                 </div>
             );
         }

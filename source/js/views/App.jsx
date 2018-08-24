@@ -54,7 +54,8 @@ import {
     messageTypingStart,
     messageTypingStop,
     receiveUserMessagesCount,
-    receiveChannelId
+    receiveChannelId,
+    receiveUserFriendRequestsCount
 } from '../socket';
 import { setUserNotificationCount } from '../actions/userNotifications';
 import UserRightMenu from '../components/global/UserRightMenu';
@@ -87,6 +88,7 @@ import SaveScheduleProgramWorkout from '../components/Program/SaveScheduleProgra
 import ViewProgramScheduleWorkout from '../components/Program/ViewProgramScheduleWorkout';
 import Progress from './Progress';
 import ScheduleWorkoutCalendarPage from './ScheduleWorkoutCalendarPage';
+import { setUserFriendRequestsCount } from '../actions/friends';
 
 const auth = new Auth();
 
@@ -99,6 +101,7 @@ class App extends Component {
         const socket = socketClient(SERVER_BASE_URL);
         dispatch(openSocket(socket));
         receiveUserNotificationCount(socket, this.handleUserNotificationCount);
+        receiveUserFriendRequestsCount(socket, this.handleUserFriendRequestsCount);
         receiveUserMessagesCount(socket, this.handleUserMessagesCount);
         receiveUsersConversationChannels(socket, this.handleUsersConversationChannnels);
         receiveUsersConversationByChannel(socket, this.handleUsersConversationByChannel);
@@ -267,6 +270,12 @@ class App extends Component {
         const { dispatch } = this.props;
         var count = data.count;
         dispatch(setUserNotificationCount(count));
+    }
+
+    handleUserFriendRequestsCount = (data) => {
+        const { dispatch } = this.props;
+        var count = data.count;
+        dispatch(setUserFriendRequestsCount(count));
     }
 
     handleUserMessagesCount = (data) => {

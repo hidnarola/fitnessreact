@@ -6,6 +6,7 @@ import FaSearch from 'react-icons/lib/fa/search';
 import FaNoti from 'react-icons/lib/md/notifications-none';
 import FaMenu from 'react-icons/lib/md/menu';
 import FaMail from 'react-icons/lib/md/markunread';
+import FaFrnd from 'react-icons/lib/fa/user-plus';
 import { withRouter } from 'react-router-dom';
 import Auth from '../../auth/Auth';
 import { setLoggedUserFromLocalStorage } from '../../actions/user';
@@ -19,6 +20,7 @@ import AutosuggestHighlightParse from 'autosuggest-highlight/parse';
 import cns from "classnames";
 import { getUserUnreadNotificationsRequest } from '../../actions/userNotifications';
 import { getUserMessageChannelRequest } from '../../actions/userMessages';
+import { getPendingFriendsRequest } from '../../actions/friends';
 
 const auth = new Auth();
 
@@ -38,6 +40,7 @@ class FitnessHeader extends Component {
         if (socket) {
             socket.emit('user_notifications_count', getToken());
             socket.emit('user_messages_count', getToken());
+            socket.emit('user_friends_count', getToken());
         }
     }
 
@@ -47,6 +50,7 @@ class FitnessHeader extends Component {
             searchValue,
             notificationCount,
             messagesCount,
+            pendingRequestsCount,
             dispatch,
         } = this.props;
         const {
@@ -108,6 +112,24 @@ class FitnessHeader extends Component {
                                         />
                                     </span>
                                     {loggedUserData.name}
+                                </NavLink>
+                            }
+                        </div>
+                        <div className="header-friend-requests">
+                            {loggedUserData && loggedUserData.username &&
+                                <NavLink to={routeCodes.PROFILEFRIENDS.replace('{username}', loggedUserData.username)}>
+                                    <FaFrnd />
+                                    {(typeof pendingRequestsCount !== 'undefined' && pendingRequestsCount > 0) &&
+                                        <span>{(pendingRequestsCount) ? pendingRequestsCount : ''}</span>
+                                    }
+                                </NavLink>
+                            }
+                            {!(loggedUserData && loggedUserData.username) &&
+                                <NavLink to={routeCodes.HOME}>
+                                    <FaFrnd />
+                                    {(typeof pendingRequestsCount !== 'undefined' && pendingRequestsCount > 0) &&
+                                        <span>{(pendingRequestsCount) ? pendingRequestsCount : ''}</span>
+                                    }
                                 </NavLink>
                             }
                         </div>
@@ -274,7 +296,7 @@ class FitnessHeader extends Component {
 }
 
 const mapStateToProps = (state) => {
-    const { user, userSearch, userNotifications, userMessages } = state;
+    const { user, userSearch, userNotifications, userMessages, friends } = state;
     return {
         loggedUserData: user.get('loggedUserData'),
         socket: user.get('socket'),
@@ -283,6 +305,7 @@ const mapStateToProps = (state) => {
         searchSuggestions: userSearch.get('users'),
         notificationCount: userNotifications.get('count'),
         messagesCount: userMessages.get('unreadMessagesCount'),
+        pendingRequestsCount: friends.get('pendingRequestsCount')
     }
 }
 

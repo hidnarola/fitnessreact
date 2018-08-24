@@ -15,11 +15,13 @@ import {
     ACCEPT_FRIEND_REQUEST_REQUEST,
     ACCEPT_FRIEND_REQUEST_SUCCESS,
     ACCEPT_FRIEND_REQUEST_ERROR,
+    SET_USER_FRIEND_REQUESTS_COUNT,
 } from "../actions/friends";
 import { VALIDATION_FAILURE_STATUS } from "../constants/consts";
 import { generateValidationErrorMsgArr } from "../helpers/funs";
 
 const initialState = Map({
+    pendingRequestsCount: 0,
     approvedLoading: false,
     approvedError: [],
     approvedFriends: [],
@@ -155,6 +157,11 @@ const actionMap = {
         return state.merge(Map({
             requestAcceptLoading: false,
             requestAcceptError: error,
+        }));
+    },
+    [SET_USER_FRIEND_REQUESTS_COUNT]: (state, action) => {
+        return state.merge(Map({
+            pendingRequestsCount: action.count,
         }));
     },
 };

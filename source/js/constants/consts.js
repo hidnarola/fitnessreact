@@ -875,3 +875,6 @@ export const BADGE_CAT_CYCLE = 'CYCLE';
 export const BADGE_CAT_STEPS = 'STEPS';
 export const BADGE_CAT_CALORIES = 'CALORIES';
 export const BADGE_CAT_NUTRITIONS = 'NUTRITIONS';
+
+export const STATS_STRENGTH = 'strength';
+export const STATS_CARDIO = 'cardio';

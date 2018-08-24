@@ -1,9 +1,9 @@
-import { takeLatest, call } from "redux-saga/effects";
+import { takeLatest, call, put } from "redux-saga/effects";
 import { GET_USER_STATS_REQUEST, getUserStatsSuccess, getUserStatsError } from "../actions/userStats";
 import api from "../api/userStats";
 
-function getUserStatsData(action) {
-    return function* () {
+function getUserStatsData() {
+    return function* (action) {
         try {
             let requestData = action.requestData;
             let data = yield call(() => api.getUserStatsData(requestData));
@@ -19,5 +19,5 @@ export function* watchUserStatsData() {
 }
 
 export default [
-    watchUserStatsData
+    watchUserStatsData()
 ];

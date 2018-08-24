@@ -18,6 +18,8 @@ export const ACCEPT_FRIEND_REQUEST_REQUEST = 'ACCEPT_FRIEND_REQUEST_REQUEST';
 export const ACCEPT_FRIEND_REQUEST_SUCCESS = 'ACCEPT_FRIEND_REQUEST_SUCCESS';
 export const ACCEPT_FRIEND_REQUEST_ERROR = 'ACCEPT_FRIEND_REQUEST_ERROR';
 
+export const SET_USER_FRIEND_REQUESTS_COUNT = 'SET_USER_FRIEND_REQUESTS_COUNT';
+
 export function getApprovedFriendsRequest(username) {
     return {
         type: GET_APPROVED_FRIENDS_REQUEST,
@@ -120,5 +122,12 @@ export function acceptFriendRequestError(error) {
     return {
         type: ACCEPT_FRIEND_REQUEST_ERROR,
         error
+    }
+}
+
+export function setUserFriendRequestsCount(count) {
+    return {
+        type: SET_USER_FRIEND_REQUESTS_COUNT,
+        count,
     }
 }
