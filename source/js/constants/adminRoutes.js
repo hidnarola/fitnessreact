@@ -25,5 +25,7 @@ export const adminRouteCodes = {
     BADGES: `${adminRootRoute}badges`,
     BADGES_SAVE: `${adminRootRoute}badges/save`,
 
+    BODY_PARTS: `${adminRootRoute}bodyparts`,
+
     COUPONS: `${adminRootRoute}coupons`,
 }

@@ -65,7 +65,17 @@ export default class AdminNav extends Component {
                                 to={adminRouteCodes.BADGES}
                             >
                                 <i className="icon-turned_in"></i>
-                                <span>Budges</span>
+                                <span>Badges</span>
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink
+                                activeClassName='active'
+                                className='Menu-link'
+                                to={adminRouteCodes.BODY_PARTS}
+                            >
+                                <i className="icon-accessibility"></i>
+                                <span>Body Parts</span>
                             </NavLink>
                         </li>
                     </ul>

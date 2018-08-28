@@ -23,6 +23,11 @@ function getBodyPart(_id) {
     return fetchResource(requestUrl + '/' + _id, options);
 }
 
+function filterBodyParts(filterData) {
+    let headers = extraHeaders();
+    return postFormData(requestUrl + '/filter', filterData, headers);
+}
+
 function addBodyPart(exerciseData) {
     let headers = extraHeaders();
     return postFormData(requestUrl, exerciseData, headers);
@@ -46,6 +51,7 @@ function deleteBodyPart(_id) {
 export default {
     getBodyParts,
     getBodyPart,
+    filterBodyParts,
     addBodyPart,
     updateBodyPart,
     deleteBodyPart

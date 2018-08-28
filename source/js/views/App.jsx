@@ -91,6 +91,7 @@ import ScheduleWorkoutCalendarPage from './ScheduleWorkoutCalendarPage';
 import { setUserFriendRequestsCount } from '../actions/friends';
 import AdminRightMenu from '../components/Admin/Template/AdminRightMenu';
 import { logout } from '../actions/login';
+import BodyParts from './Admin/BodyParts';
 
 const auth = new Auth();
 
@@ -204,6 +205,8 @@ class App extends Component {
                             <AdminPrivateRoute path={adminRouteCodes.EQUIPMENTS} component={Equipments} />
 
                             <AdminPrivateRoute path={adminRouteCodes.BADGES} component={AdminBadges} />
+
+                            <AdminPrivateRoute path={adminRouteCodes.BODY_PARTS} component={BodyParts} />
 
                             <Route exact path={AUTH_CALLBACK_ROUTE} component={Callback} />
 

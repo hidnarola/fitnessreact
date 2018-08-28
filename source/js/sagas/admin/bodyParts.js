@@ -14,7 +14,10 @@ import {
     BODY_PARTS_SELECT_ONE_REQUEST,
     bodyPartUpdateSuccess,
     bodyPartUpdateError,
-    BODY_PARTS_UPDATE_REQUEST
+    BODY_PARTS_UPDATE_REQUEST,
+    filterBodyPartsSuccess,
+    filterBodyPartsError,
+    FILTER_BODY_PARTS_REQUEST
 } from "../../actions/admin/bodyParts";
 import api from 'api/admin/bodyParts';
 
@@ -37,6 +40,18 @@ function getAdminBodyPartData() {
             yield put(bodyPartSelectOneSuccess(data));
         } catch (error) {
             yield put(bodyPartSelectOneError(error));
+        }
+    }
+}
+
+function filterAdminBodyPartData() {
+    return function* (action) {
+        try {
+            const filterData = action.filterData;
+            const data = yield call(() => api.filterBodyParts(filterData));
+            yield put(filterBodyPartsSuccess(data));
+        } catch (error) {
+            yield put(filterBodyPartsError(error));
         }
     }
 }
@@ -81,6 +96,7 @@ function deleteAdminBodyPartData() {
 export function* watchAdminBodyParts() {
     yield takeLatest(BODY_PARTS_LIST_REQUEST, getAdminBodyPartsData());
     yield takeLatest(BODY_PARTS_SELECT_ONE_REQUEST, getAdminBodyPartData());
+    yield takeLatest(FILTER_BODY_PARTS_REQUEST, filterAdminBodyPartData());
     yield takeLatest(BODY_PARTS_ADD_REQUEST, postAdminBodyPartData());
     yield takeLatest(BODY_PARTS_UPDATE_REQUEST, putAdminBodyPartData());
     yield takeLatest(BODY_PARTS_DELETE_REQUEST, deleteAdminBodyPartData());

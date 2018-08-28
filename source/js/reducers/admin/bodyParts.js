@@ -14,14 +14,22 @@ import {
     BODY_PARTS_SELECT_ONE_ERROR,
     BODY_PARTS_UPDATE_REQUEST,
     BODY_PARTS_UPDATE_SUCCESS,
-    BODY_PARTS_UPDATE_ERROR
+    BODY_PARTS_UPDATE_ERROR,
+    FILTER_BODY_PARTS_REQUEST,
+    FILTER_BODY_PARTS_SUCCESS,
+    FILTER_BODY_PARTS_ERROR
 } from "../../actions/admin/bodyParts";
+import { VALIDATION_FAILURE_STATUS } from "../../constants/consts";
+import { generateValidationErrorMsgArr } from "../../helpers/funs";
 
 const initialState = Map({
     loading: false,
     error: null,
     bodyPart: null,
     bodyParts: null,
+    filteredBodyParts: [],
+    filteredTotalPages: 0,
+    filteredLoading: false,
 });
 
 const actionMap = {
@@ -51,6 +59,38 @@ const actionMap = {
             error: error,
             bodyParts: null,
             bodyPart: null,
+        }));
+    },
+    [FILTER_BODY_PARTS_REQUEST]: (state, action) => {
+        return state.merge(Map({
+            filteredLoading: true,
+            filteredBodyParts: [],
+            filteredTotalPages: 0,
+            error: [],
+        }));
+    },
+    [FILTER_BODY_PARTS_SUCCESS]: (state, action) => {
+        let newState = {
+            filteredLoading: false
+        };
+        if (action.data && action.data.filtered_bodyparts && action.data.filtered_bodyparts.length > 0) {
+            newState.filteredBodyParts = action.data.filtered_bodyparts;
+            newState.filteredTotalPages = action.data.filtered_total_pages;
+        }
+        return state.merge(Map(newState));
+    },
+    [FILTER_BODY_PARTS_ERROR]: (state, action) => {
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
+        }
+        return state.merge(Map({
+            filteredLoading: false,
+            error: error,
         }));
     },
     [BODY_PARTS_SELECT_ONE_REQUEST]: (state, action) => {

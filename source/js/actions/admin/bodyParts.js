@@ -2,6 +2,10 @@ export const BODY_PARTS_LIST_REQUEST = 'BODY_PARTS_LIST_REQUEST';
 export const BODY_PARTS_LIST_SUCCESS = 'BODY_PARTS_LIST_SUCCESS';
 export const BODY_PARTS_LIST_ERROR = 'BODY_PARTS_LIST_ERROR';
 
+export const FILTER_BODY_PARTS_REQUEST = 'FILTER_BODY_PARTS_REQUEST';
+export const FILTER_BODY_PARTS_SUCCESS = 'FILTER_BODY_PARTS_SUCCESS';
+export const FILTER_BODY_PARTS_ERROR = 'FILTER_BODY_PARTS_ERROR';
+
 export const BODY_PARTS_SELECT_ONE_REQUEST = 'BODY_PARTS_SELECT_ONE_REQUEST';
 export const BODY_PARTS_SELECT_ONE_SUCCESS = 'BODY_PARTS_SELECT_ONE_SUCCESS';
 export const BODY_PARTS_SELECT_ONE_ERROR = 'BODY_PARTS_SELECT_ONE_ERROR';
@@ -34,6 +38,27 @@ export function bodyPartListSuccess(data) {
 export function bodyPartListError(error) {
     return {
         type: BODY_PARTS_LIST_ERROR,
+        error
+    }
+}
+
+export function filterBodyPartsRequest(filterData) {
+    return {
+        type: FILTER_BODY_PARTS_REQUEST,
+        filterData
+    }
+}
+
+export function filterBodyPartsSuccess(data) {
+    return {
+        type: FILTER_BODY_PARTS_SUCCESS,
+        data
+    }
+}
+
+export function filterBodyPartsError(error) {
+    return {
+        type: FILTER_BODY_PARTS_ERROR,
         error
     }
 }
