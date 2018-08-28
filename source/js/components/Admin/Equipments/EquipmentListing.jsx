@@ -12,6 +12,7 @@ import { SERVER_BASE_URL } from '../../../constants/consts';
 import _ from 'lodash';
 import moment from 'moment';
 import noImg from 'img/common/no-img.png'
+import { DropdownButton, ButtonToolbar, MenuItem } from "react-bootstrap";
 
 const statusOptions = [
     { value: '', label: 'All' },
@@ -146,8 +147,27 @@ class EquipmentListing extends Component {
                                                 Cell: (row) => {
                                                     return (
                                                         <div className="actions-wrapper">
-                                                            <NavLink to={`${adminRouteCodes.EQUIPMENTS_SAVE}/${row.value}`} className="btn btn-primary"><FaPencil /></NavLink>
-                                                            <a href="javascript:void(0)" onClick={() => this.confirmDelete(row.value)} className="btn btn-danger"><FaTrash /></a>
+                                                            <ButtonToolbar>
+                                                                <DropdownButton title="Actions" pullRight id="dropdown-size-medium">
+                                                                    <MenuItem
+                                                                        eventKey="1"
+                                                                        href={`${adminRouteCodes.EQUIPMENTS_SAVE}/${row.value}`}
+                                                                        onClick={(e) => {
+                                                                            e.preventDefault();
+                                                                            this.props.history.push(`${adminRouteCodes.EQUIPMENTS_SAVE}/${row.value}`);
+                                                                        }}
+                                                                    >
+                                                                        <FaPencil className="v-align-sub" /> Edit
+                                                                    </MenuItem>
+                                                                    <MenuItem
+                                                                        eventKey="2"
+                                                                        href="javascript:void(0)"
+                                                                        onClick={() => this.confirmDelete(row.value)}
+                                                                    >
+                                                                        <FaTrash className="v-align-sub" /> Delete
+                                                                    </MenuItem>
+                                                                </DropdownButton>
+                                                            </ButtonToolbar>
                                                         </div>
                                                     );
                                                 }

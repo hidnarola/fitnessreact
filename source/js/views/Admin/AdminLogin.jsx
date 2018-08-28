@@ -13,7 +13,6 @@ import $ from "jquery";
 class AdminLogin extends Component {
     constructor(props) {
         super(props);
-        this.handleSubmit = this.handleSubmit.bind(this);
         if (isLogin()) {
             var pushUrl = checkLogin();
             props.history.push(pushUrl);
@@ -59,14 +58,12 @@ class AdminLogin extends Component {
     componentDidMount() {
         $('body').addClass('no-padding');
     }
-    
 
     componentWillUnmount() {
         const { dispatch } = this.props;
         dispatch(freeLoginLogoutState());
         $('body').removeClass('no-padding');
     }
-
 }
 
 const mapStateToProps = (state) => {
@@ -76,4 +73,6 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps)(AdminLogin);
+export default connect(
+    mapStateToProps
+)(AdminLogin);

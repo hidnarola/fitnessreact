@@ -1,47 +1,30 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-import FaSearch from 'react-icons/lib/fa/search';
-import FaNoti from 'react-icons/lib/md/notifications-none';
 import FaMenu from 'react-icons/lib/md/menu';
-import FaMail from 'react-icons/lib/md/markunread';
 import { FaSignOut } from 'react-icons/lib/fa'
 import { withRouter } from 'react-router-dom';
 import { adminRouteCodes } from 'constants/adminRoutes';
 import { adminRootRoute } from 'constants/adminRoutes';
 import { logout } from 'actions/login';
-import { ts } from '../../../helpers/funs';
+import { ts, toggleSideMenu } from '../../../helpers/funs';
 import ReactTooltip from "react-tooltip";
+import noProfileImg from 'img/common/no-profile-img.png';
+import { setLoggedAdminFromLocalStorage } from '../../../actions/admin/admin';
 
 class AdminHeader extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            logoutActionInit: false,
-        }
-    }
-
-    handleLogout = () => {
+    componentWillMount() {
         const { dispatch } = this.props;
-        this.setState({ logoutActionInit: true });
-        dispatch(logout());
-
+        dispatch(setLoggedAdminFromLocalStorage());
     }
 
     render() {
+        const { loggedUserData } = this.props;
         return (
             <div className="header">
                 <header className="header d-flex justify-content-start">
                     <div className="logo">
                         <a href="index.html"></a>
-                    </div>
-                    <div className="search">
-                        <form>
-                            <button type="submit">
-                                <FaSearch size={24} />
-                            </button>
-                            <input type="search" name="" placeholder="Search" />
-                        </form>
                     </div>
                     <div className="header-r d-flex">
                         <div className="header-user">
@@ -51,30 +34,20 @@ class AdminHeader extends Component {
                                 exact
                                 to={adminRouteCodes.PROFILE}
                             >
-                                Admin
+                                <span>
+                                    <img
+                                        src={noProfileImg}
+                                        className="avatar"
+                                        onError={(e) => {
+                                            e.target.src = noProfileImg
+                                        }}
+                                    />
+                                </span>
+                                {(loggedUserData && loggedUserData.name) ? loggedUserData.name : 'Admin'}
                             </NavLink>
-
-                        </div>
-                        <div className="header-alert">
-                            <a>
-                                <FaNoti />
-                            </a>
-                        </div>
-                        <div className="header-email">
-                            <a>
-                                <FaMail />
-                            </a>
-                        </div>
-                        <div className="header-logout header-icons">
-                            <a href="javascript:void(0)" onClick={this.handleLogout} data-tip data-for='logout'>
-                                <FaSignOut />
-                                <ReactTooltip id='logout' place="bottom" type="dark" effect="solid">
-                                    <span>Logout</span>
-                                </ReactTooltip>
-                            </a>
                         </div>
                         <div className="header-nav">
-                            <a>
+                            <a href="javascript:void(0)" onClick={() => toggleSideMenu('admin-right-menu', true)}>
                                 <FaMenu size={24} />
                             </a>
                         </div>
@@ -83,22 +56,12 @@ class AdminHeader extends Component {
             </div>
         );
     }
-
-    componentDidUpdate(prevProps, prevState) {
-        const { loading, history } = this.props;
-        const { logoutActionInit } = this.state;
-        if (logoutActionInit && !loading) {
-            ts('Logout success!');
-            history.push(adminRootRoute);
-        }
-    }
-
 }
 
 const mapStateToProps = (state) => {
-    const { login } = state;
+    const { admin } = state;
     return {
-        loading: login.get('loading')
+        loggedUserData: admin.get('loggedUserData')
     }
 }
 

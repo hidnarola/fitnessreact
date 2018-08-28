@@ -24,7 +24,7 @@ const initialState = Map({
     logDates: [],
 });
 
-const actionsMap = {
+const actionMap = {
     [GET_USER_BODY_MEASUREMENT_REQUEST]: (state, action) => {
         return state.merge(Map({
             loading: true,
@@ -97,6 +97,9 @@ const actionsMap = {
 };
 
 export default function reducer(state = initialState, action = {}) {
-    const fn = actionsMap[action.type];
-    return fn ? fn(state, action) : state;
+    if (action && action.type) {
+        var fn = actionMap[action.type];
+        return fn ? fn(state, action) : state;
+    }
+    return state;
 }

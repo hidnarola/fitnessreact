@@ -11,6 +11,7 @@ import { bodyPartListRequest } from '../../../actions/admin/bodyParts';
 import _ from 'lodash';
 import { EXERCISE_MECHANICS_COMPOUND, EXERCISE_MECHANICS_ISOLATION, EXERCISE_DIFFICULTY_BEGINNER, EXERCISE_DIFFICULTY_INTERMEDIATE, EXERCISE_DIFFICULTY_EXPERT, exerciseMechanicsObj, exerciseDifficultyLevelObj, EXE_CATS, EXE_SCATS } from '../../../constants/consts';
 import DeleteConfirmation from '../Common/DeleteConfirmation';
+import { DropdownButton, ButtonToolbar, MenuItem } from "react-bootstrap";
 
 const mechanicsOptions = [
     { value: '', label: 'All' },
@@ -118,7 +119,8 @@ class ExerciseListing extends Component {
                                                     return (
                                                         <div>{dateFormat(row.value, 'mm/dd/yyyy')}</div>
                                                     );
-                                                }
+                                                },
+                                                minWidth: 100,
                                             },
                                             {
                                                 Header: "Category",
@@ -152,7 +154,8 @@ class ExerciseListing extends Component {
                                                             }
                                                         </select>
                                                     );
-                                                }
+                                                },
+                                                minWidth: 100,
                                             },
                                             {
                                                 Header: "Sub Category",
@@ -186,12 +189,14 @@ class ExerciseListing extends Component {
                                                             }
                                                         </select>
                                                     );
-                                                }
+                                                },
+                                                minWidth: 100,
                                             },
                                             {
                                                 Header: "Name",
                                                 accessor: "name",
                                                 id: "name",
+                                                minWidth: 250,
                                             },
                                             {
                                                 Header: "Main Muscle",
@@ -211,56 +216,57 @@ class ExerciseListing extends Component {
                                                             </div>
                                                         );
                                                     }
-                                                }
+                                                },
+                                                minWidth: 150,
                                             },
-                                            {
-                                                Header: "Other Muscle",
-                                                accessor: "otherMuscleGroup",
-                                                id: "otherMuscle.bodypart",
-                                                Cell: (row) => {
-                                                    if (bodyParts) {
-                                                        let otherMuscles = [];
-                                                        row.value.map((val, i) => {
-                                                            const _id = val;
-                                                            const musObj = _.find(bodyParts, ['_id', _id]);
-                                                            otherMuscles.push(musObj);
-                                                        });
-                                                        return (
-                                                            <div>
-                                                                {otherMuscles &&
-                                                                    otherMuscles.map((m, i) => (m.bodypart)).join(',')
-                                                                }
-                                                                {otherMuscles && otherMuscles.length <= 0 && <span>-----</span>}
-                                                                {!otherMuscles && <span>-----</span>}
-                                                            </div>
-                                                        );
-                                                    }
-                                                }
-                                            },
-                                            {
-                                                Header: "Detailed Muscle",
-                                                accessor: "detailedMuscleGroup",
-                                                id: "detailedMuscle.bodypart",
-                                                Cell: (row) => {
-                                                    if (bodyParts) {
-                                                        let otherMuscles = [];
-                                                        row.value.map((val, i) => {
-                                                            const _id = val;
-                                                            const musObj = _.find(bodyParts, ['_id', _id]);
-                                                            otherMuscles.push(musObj);
-                                                        });
-                                                        return (
-                                                            <div>
-                                                                {otherMuscles &&
-                                                                    otherMuscles.map((m, i) => (m.bodypart)).join(',')
-                                                                }
-                                                                {otherMuscles && otherMuscles.length <= 0 && <span>-----</span>}
-                                                                {!otherMuscles && <span>-----</span>}
-                                                            </div>
-                                                        );
-                                                    }
-                                                }
-                                            },
+                                            // {
+                                            //     Header: "Other Muscle",
+                                            //     accessor: "otherMuscleGroup",
+                                            //     id: "otherMuscle.bodypart",
+                                            //     Cell: (row) => {
+                                            //         if (bodyParts) {
+                                            //             let otherMuscles = [];
+                                            //             row.value.map((val, i) => {
+                                            //                 const _id = val;
+                                            //                 const musObj = _.find(bodyParts, ['_id', _id]);
+                                            //                 otherMuscles.push(musObj);
+                                            //             });
+                                            //             return (
+                                            //                 <div>
+                                            //                     {otherMuscles &&
+                                            //                         otherMuscles.map((m, i) => (m.bodypart)).join(',')
+                                            //                     }
+                                            //                     {otherMuscles && otherMuscles.length <= 0 && <span>-----</span>}
+                                            //                     {!otherMuscles && <span>-----</span>}
+                                            //                 </div>
+                                            //             );
+                                            //         }
+                                            //     }
+                                            // },
+                                            // {
+                                            //     Header: "Detailed Muscle",
+                                            //     accessor: "detailedMuscleGroup",
+                                            //     id: "detailedMuscle.bodypart",
+                                            //     Cell: (row) => {
+                                            //         if (bodyParts) {
+                                            //             let otherMuscles = [];
+                                            //             row.value.map((val, i) => {
+                                            //                 const _id = val;
+                                            //                 const musObj = _.find(bodyParts, ['_id', _id]);
+                                            //                 otherMuscles.push(musObj);
+                                            //             });
+                                            //             return (
+                                            //                 <div>
+                                            //                     {otherMuscles &&
+                                            //                         otherMuscles.map((m, i) => (m.bodypart)).join(',')
+                                            //                     }
+                                            //                     {otherMuscles && otherMuscles.length <= 0 && <span>-----</span>}
+                                            //                     {!otherMuscles && <span>-----</span>}
+                                            //                 </div>
+                                            //             );
+                                            //         }
+                                            //     }
+                                            // },
                                             {
                                                 Header: "Mechanics",
                                                 accessor: "mechanics",
@@ -291,7 +297,8 @@ class ExerciseListing extends Component {
                                                             }
                                                         </select>
                                                     );
-                                                }
+                                                },
+                                                minWidth: 100,
                                             },
                                             {
                                                 Header: "Difficlty Level",
@@ -323,7 +330,8 @@ class ExerciseListing extends Component {
                                                             }
                                                         </select>
                                                     );
-                                                }
+                                                },
+                                                minWidth: 100,
                                             },
                                             {
                                                 Header: "Actions",
@@ -334,8 +342,27 @@ class ExerciseListing extends Component {
                                                 Cell: (row) => {
                                                     return (
                                                         <div className="actions-wrapper">
-                                                            <NavLink to={`${adminRouteCodes.EXERCISE_SAVE}/${row.value}`} className="btn btn-primary"><FaPencil /></NavLink>
-                                                            <a href="javascript:void(0)" onClick={() => this.confirmDelete(row.value)} className="btn btn-danger"><FaTrash /></a>
+                                                            <ButtonToolbar>
+                                                                <DropdownButton title="Actions" pullRight id="dropdown-size-medium">
+                                                                    <MenuItem
+                                                                        eventKey="1"
+                                                                        href={`${adminRouteCodes.EXERCISE_SAVE}/${row.value}`}
+                                                                        onClick={(e) => {
+                                                                            e.preventDefault();
+                                                                            this.props.history.push(`${adminRouteCodes.EXERCISE_SAVE}/${row.value}`);
+                                                                        }}
+                                                                    >
+                                                                        <FaPencil className="v-align-sub" /> Edit
+                                                                    </MenuItem>
+                                                                    <MenuItem
+                                                                        eventKey="2"
+                                                                        href="javascript:void(0)"
+                                                                        onClick={() => this.confirmDelete(row.value)}
+                                                                    >
+                                                                        <FaTrash className="v-align-sub" /> Delete
+                                                                    </MenuItem>
+                                                                </DropdownButton>
+                                                            </ButtonToolbar>
                                                         </div>
                                                     );
                                                 }

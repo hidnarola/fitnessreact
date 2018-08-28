@@ -15,9 +15,11 @@ export function login(loginData) {
     }
 }
 
-export function loginSuccess() {
+export function loginSuccess(data, metaData) {
     return {
         type: LOGIN_SUCCESS,
+        data,
+        metaData
     }
 }
 

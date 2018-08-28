@@ -20,7 +20,7 @@ const initialState = Map({
     socket: null,
 });
 
-const actionsMap = {
+const actionMap = {
     [SET_LOGGED_USER_FROM_LOCALSTORAGE]: (state, action) => {
         let idToken = localStorage.getItem(LOCALSTORAGE_ID_TOKEN_KEY);
         let idDetailsToken = localStorage.getItem(LOCALSTORAGE_USER_DETAILS_KEY);
@@ -64,6 +64,9 @@ const actionsMap = {
 };
 
 export default function reducer(state = initialState, action = {}) {
-    const fn = actionsMap[action.type];
-    return fn ? fn(state, action) : state;
+    if (action && action.type) {
+        var fn = actionMap[action.type];
+        return fn ? fn(state, action) : state;
+    }
+    return state;
 }

@@ -1,5 +1,3 @@
-import { required } from "../formValidation/validationRules";
-
 export const LOCALSTORAGE_ID_TOKEN_KEY = 'id_token';
 export const LOCALSTORAGE_ACCESS_TOKEN_KEY = 'access_token';
 export const LOCALSTORAGE_REFRESH_TOKEN_KEY = 'refreshToken';
@@ -13,7 +11,7 @@ export const AUTH_STATE_ACTION_LOGIN = 'login';
 export const AUTH_STATE_ACTION_SIGNUP = 'signup';
 
 export const USER_ROLE = 'fitassist-user';
-export const ADMIN_ROLE = 'firassist-admin'
+export const ADMIN_ROLE = 'fitassist-admin'
 
 var baseUrl = 'http://' + window.location.hostname;
 if (window.location.port) {

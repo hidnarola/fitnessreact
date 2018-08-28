@@ -27,11 +27,7 @@ import {
     STATUS_INACTIVE_STR,
     STATUS_INACTIVE,
 } from '../../../constants/consts';
-import {
-    DropdownButton,
-    ButtonToolbar,
-    MenuItem
-} from "react-bootstrap";
+import { DropdownButton, ButtonToolbar, MenuItem } from "react-bootstrap";
 import { FaPencil, FaTrash } from "react-icons/lib/fa";
 import DeleteConfirmation from '../Common/DeleteConfirmation';
 import { adminRouteCodes } from '../../../constants/adminRoutes';

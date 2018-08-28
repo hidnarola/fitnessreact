@@ -71,23 +71,6 @@ class AdminLoginForm extends Component {
     }
 }
 
-const loginFields = (props) => {
-    const { meta } = props;
-    return (
-        <div className="form-div">
-            <label htmlFor={props.name}>{props.label}</label>
-            <div className="input-wrap">
-                <input {...props.input} placeholder={props.placeholder} type={props.type} />
-            </div>
-            <div className="error">
-                {meta.touched && meta.error &&
-                    <span>{meta.error}</span>
-                }
-            </div>
-        </div>
-    );
-}
-
 AdminLoginForm = reduxForm({
     form: 'adminLoginForm'
 })(AdminLoginForm);
@@ -99,4 +82,6 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps)(withRouter(AdminLoginForm));
+export default connect(
+    mapStateToProps
+)(withRouter(AdminLoginForm));

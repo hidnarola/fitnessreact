@@ -24,7 +24,7 @@ const initialState = Map({
     weekscalories:null
 });
 
-const actionsMap = {
+const actionMap = {
     
     // Async action    
 
@@ -62,6 +62,9 @@ const actionsMap = {
 };
 
 export default function reducer(state = initialState, action = {}) {
-    const fn = actionsMap[action.type];
-    return fn ? fn(state, action) : state;
+    if (action && action.type) {
+        var fn = actionMap[action.type];
+        return fn ? fn(state, action) : state;
+    }
+    return state;
 }

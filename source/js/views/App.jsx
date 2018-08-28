@@ -34,14 +34,14 @@ import history from '../config/history';
 import { ToastContainer } from "react-toastify";
 import NutritionPreferences from '../components/Nutrition/NutritionPreferences'
 import { publicPath, routeCodes } from '../constants/routes';
-import { SESSION_EXPIRED_URL_TYPE, SERVER_BASE_URL } from '../constants/consts';
+import { SESSION_EXPIRED_URL_TYPE, SERVER_BASE_URL, STATS_STRENGTH, STATS_CARDIO } from '../constants/consts';
 import { FaCircleONotch } from "react-icons/lib/fa";
 import FitnessTests from './Admin/FitnessTests';
 import NutritionRecipeDetails from '../components/Nutrition/NutritionRecipeDetails';
 import cns from "classnames";
 import NutritionMealAdd from '../components/Nutrition/NutritionMealAdd';
 import UpdateProfile from './UpdateProfile';
-import { toggleSideMenu, getToken, scrollBottom, slideToBottomOfChatWindow } from '../helpers/funs';
+import { toggleSideMenu, getToken, scrollBottom, slideToBottomOfChatWindow, ts } from '../helpers/funs';
 import Auth from '../auth/Auth';
 import socketClient from "socket.io-client";
 import { openSocket } from '../actions/user';
@@ -89,10 +89,18 @@ import ViewProgramScheduleWorkout from '../components/Program/ViewProgramSchedul
 import Progress from './Progress';
 import ScheduleWorkoutCalendarPage from './ScheduleWorkoutCalendarPage';
 import { setUserFriendRequestsCount } from '../actions/friends';
+import AdminRightMenu from '../components/Admin/Template/AdminRightMenu';
+import { logout } from '../actions/login';
 
 const auth = new Auth();
 
 class App extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            initAdminLogoutAction: false,
+        };
+    }
 
     componentWillMount() {
         const {
@@ -121,6 +129,7 @@ class App extends Component {
             showPageLoader,
             loggedUserData,
             chatWindows,
+            loggedAdminData,
         } = this.props;
         var chatWindowKeys = Object.keys(chatWindows);
         return (
@@ -139,7 +148,7 @@ class App extends Component {
                             <Route path={routeCodes.DASHBOARD} component={Dashboard} />
                             {/* <PrivateRoute path={routeCodes.DASHBOARD} component={Dashboard} /> */}
 
-                            <PrivateRoute path={routeCodes.STATSPAGE} component={StatsPage} />
+                            <PrivateRoute path={`${routeCodes.STATSPAGE}`} component={StatsPage} />
 
                             <PrivateRoute path={`${routeCodes.PROFILE}/:username`} component={ProfilePage} />
                             <PrivateRoute path={routeCodes.UPDATE_PROFILE} component={UpdateProfile} />
@@ -213,7 +222,6 @@ class App extends Component {
                             draggable
                             pauseOnHover
                         />
-
                         {loggedUserData &&
                             <div>
                                 <UserRightMenu
@@ -255,15 +263,40 @@ class App extends Component {
                                 }
                             </div>
                         }
+                        {loggedAdminData &&
+                            <div>
+                                <AdminRightMenu
+                                    handleLogout={this.handleAdminLogout}
+                                />
+                            </div>
+                        }
                     </ScrollToTop>
                 </Router>
             </div>
         );
     }
 
+    componentDidUpdate(prevProps, prevState) {
+        const { loadingAdminLogin } = this.props;
+        const { initAdminLogoutAction } = this.state;
+        if (!loadingAdminLogin && initAdminLogoutAction) {
+            this.setState({ initAdminLogoutAction: false });
+            ts('Logout success!');
+            history.push(adminRootRoute);
+        }
+    }
+
+
     handleLogout = () => {
         toggleSideMenu('user-right-menu', false);
         auth.logout();
+    }
+
+    handleAdminLogout = () => {
+        const { dispatch } = this.props;
+        toggleSideMenu('admin-right-menu', false);
+        dispatch(logout());
+        this.setState({ initAdminLogoutAction: true });
     }
 
     handleUserNotificationCount = (data) => {
@@ -403,12 +436,14 @@ class App extends Component {
 }
 
 const mapStateToProps = (state) => {
-    const { pageLoader, user, userMessages } = state;
+    const { pageLoader, user, userMessages, admin, login } = state;
     return {
         showPageLoader: pageLoader.get("loading"),
         loggedUserData: user.get('loggedUserData'),
         socket: user.get('socket'),
         chatWindows: userMessages.get('chatWindows'),
+        loadingAdminLogin: login.get('loading'),
+        loggedAdminData: admin.get('loggedUserData'),
     };
 }
 

@@ -5,6 +5,7 @@ import FaGoal from 'react-icons/lib/fa/bullseye';
 import { Scrollbars } from 'react-custom-scrollbars';
 import BadgeIcon from "svg/badge-icon.svg";
 import { routeCodes } from '../../constants/routes';
+import { STATS_STRENGTH } from '../../constants/consts';
 
 export default class FitnessNav extends Component {
 

@@ -5,7 +5,6 @@ import { FaPencil, FaTrash } from 'react-icons/lib/fa';
 import DTable from '../Common/DTable';
 import { userFilterRequest, userDeleteRequest } from '../../../actions/admin/users';
 import {
-    SERVER_BASE_URL,
     GENDER_MALE,
     GENDER_FEMALE,
     USER_STATUS_ACTIVE,
@@ -18,7 +17,8 @@ import { adminRouteCodes } from '../../../constants/adminRoutes';
 import DeleteConfirmation from '../Common/DeleteConfirmation';
 import { showPageLoader } from '../../../actions/pageLoader';
 import moment from 'moment';
-import noProfileImg from 'img/common/no-profile-img.png'
+import noProfileImg from 'img/common/no-profile-img.png';
+import { DropdownButton, ButtonToolbar, MenuItem } from "react-bootstrap";
 
 const genderOptions = [
     { value: '', label: 'All' },
@@ -100,26 +100,25 @@ class UserListing extends Component {
                                                 id: 'firstName',
                                                 Header: 'First Name',
                                                 accessor: 'firstName',
+                                                minWidth: 200,
                                             },
                                             {
                                                 id: 'lastName',
                                                 Header: 'Last Name',
                                                 accessor: 'lastName',
-                                            },
-                                            {
-                                                id: 'username',
-                                                Header: 'Username',
-                                                accessor: 'username',
+                                                minWidth: 200,
                                             },
                                             {
                                                 id: 'email',
                                                 Header: 'Email',
                                                 accessor: 'email',
+                                                minWidth: 300,
                                             },
                                             {
                                                 id: 'mobileNumber',
                                                 Header: 'Mobile No.',
                                                 accessor: 'mobileNumber',
+                                                minWidth: 100,
                                             },
                                             {
                                                 id: 'gender',
@@ -168,21 +167,8 @@ class UserListing extends Component {
                                                             </span>
                                                         </div>
                                                     );
-                                                }
-                                            },
-                                            {
-                                                id: 'goal',
-                                                Header: 'Goal',
-                                                accessor: 'goal',
-                                                Cell: (row) => {
-                                                    return (
-                                                        <div className="list-goal-wrapper">
-                                                            <span>
-                                                                {row.value && row.value.length > 0 && row.value.map((m, i) => (m)).join(',')}
-                                                            </span>
-                                                        </div>
-                                                    );
-                                                }
+                                                },
+                                                minWidth: 100,
                                             },
                                             {
                                                 id: 'status',
@@ -215,7 +201,8 @@ class UserListing extends Component {
                                                             }
                                                         </select>
                                                     );
-                                                }
+                                                },
+                                                minWidth: 100,
                                             },
                                             {
                                                 id: 'isDelete',
@@ -249,7 +236,8 @@ class UserListing extends Component {
                                                             }
                                                         </select>
                                                     );
-                                                }
+                                                },
+                                                minWidth: 100,
                                             },
                                             {
                                                 Header: "Actions",
@@ -260,8 +248,27 @@ class UserListing extends Component {
                                                 Cell: (row) => {
                                                     return (
                                                         <div className="actions-wrapper">
-                                                            <NavLink className="btn btn-primary" to={`${adminRouteCodes.USERS_SAVE}/${row.value}`}><FaPencil /></NavLink>
-                                                            <a className="btn btn-danger" href="javascript:void(0)" onClick={() => this.confirmDelete(row.value)}><FaTrash /></a>
+                                                            <ButtonToolbar>
+                                                                <DropdownButton title="Actions" pullRight id="dropdown-size-medium">
+                                                                    <MenuItem
+                                                                        eventKey="1"
+                                                                        href={`${adminRouteCodes.USERS_SAVE}/${row.value}`}
+                                                                        onClick={(e) => {
+                                                                            e.preventDefault();
+                                                                            this.props.history.push(`${adminRouteCodes.USERS_SAVE}/${row.value}`);
+                                                                        }}
+                                                                    >
+                                                                        <FaPencil className="v-align-sub" /> Edit
+                                                                    </MenuItem>
+                                                                    <MenuItem
+                                                                        eventKey="2"
+                                                                        href="javascript:void(0)"
+                                                                        onClick={() => this.confirmDelete(row.value)}
+                                                                    >
+                                                                        <FaTrash className="v-align-sub" /> Delete
+                                                                    </MenuItem>
+                                                                </DropdownButton>
+                                                            </ButtonToolbar>
                                                         </div>
                                                     );
                                                 }

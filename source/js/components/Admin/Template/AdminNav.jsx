@@ -14,6 +14,7 @@ export default class AdminNav extends Component {
                                 className='Menu-link'
                                 to={adminRouteCodes.DASHBOARD}
                             >
+                                <i className="icon-dashboard"></i>
                                 <span>Dashboard</span>
                             </NavLink>
                         </li>
@@ -23,6 +24,7 @@ export default class AdminNav extends Component {
                                 className='Menu-link'
                                 to={adminRouteCodes.USERS}
                             >
+                                <i className="icon-supervisor_account"></i>
                                 <span>Users</span>
                             </NavLink>
                         </li>
@@ -32,6 +34,7 @@ export default class AdminNav extends Component {
                                 className='Menu-link'
                                 to={adminRouteCodes.EXERCISE}
                             >
+                                <i className="icon-directions_run"></i>
                                 <span>Exercise</span>
                             </NavLink>
                         </li>
@@ -41,6 +44,7 @@ export default class AdminNav extends Component {
                                 className='Menu-link'
                                 to={adminRouteCodes.EQUIPMENTS}
                             >
+                                <i className="icon-fitness_center"></i>
                                 <span>Equipments</span>
                             </NavLink>
                         </li>
@@ -50,6 +54,7 @@ export default class AdminNav extends Component {
                                 className='Menu-link'
                                 to={adminRouteCodes.FITNESS_TESTS}
                             >
+                                <i className="icon-golf_course"></i>
                                 <span>Fitness Test</span>
                             </NavLink>
                         </li>
@@ -59,6 +64,7 @@ export default class AdminNav extends Component {
                                 className='Menu-link'
                                 to={adminRouteCodes.BADGES}
                             >
+                                <i className="icon-turned_in"></i>
                                 <span>Budges</span>
                             </NavLink>
                         </li>

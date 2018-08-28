@@ -61,6 +61,9 @@ const actionMap = {
 };
 
 export default function reducer(state = initialState, action = {}) {
-    var fn = actionMap[action.type];
-    return fn ? fn(state, action) : state;
+    if (action && action.type) {
+        var fn = actionMap[action.type];
+        return fn ? fn(state, action) : state;
+    }
+    return state;
 }

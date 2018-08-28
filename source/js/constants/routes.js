@@ -18,8 +18,8 @@ export const routeCodes = {
 
     // Stats all pages
     STATSPAGE: `${publicPath}stats`,
-    STATSTRENGTH: `${publicPath}stats/strength`,
-    STATSCARDIO: `${publicPath}stats/cardio`,
+    // STATSTRENGTH: `${publicPath}stats/strength`,
+    // STATSCARDIO: `${publicPath}stats/cardio`,
 
     // Profile All Pages
     PROFILE: `${publicPath}profile`,

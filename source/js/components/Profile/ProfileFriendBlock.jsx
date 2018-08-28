@@ -43,7 +43,7 @@ class ProfileFriendBlock extends Component {
                             }
                         </h5>
                     </div>
-                    {friendshipStatus && friendshipStatus !== FRIENDSHIP_STATUS_SELF && friend.username !== loggedUserData.username &&
+                    {friendshipStatus && friend.username !== loggedUserData.username &&
                         <div className="friend-box-status">
                             <ButtonToolbar>
                                 <Dropdown id={`friend_options_${friend._id}`} pullRight>
@@ -65,7 +65,7 @@ class ProfileFriendBlock extends Component {
                             </ButtonToolbar>
                         </div>
                     }
-                    {!(friendshipStatus && friendshipStatus !== FRIENDSHIP_STATUS_SELF && friend.username !== loggedUserData.username) &&
+                    {!(friendshipStatus && friend.username !== loggedUserData.username) &&
                         <div className="friend-box-status">
                             <h6 className="vertical-middle-c"><i className="icon-check_circle"></i> Friend</h6>
                         </div>

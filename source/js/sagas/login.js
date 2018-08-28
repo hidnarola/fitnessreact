@@ -16,19 +16,16 @@ function authenticate() {
         try {
             var loginData = action.loginData;
             let data = {};
-            let encodedUserRole = '';
+            let metaData = {};
             if (loginData.userRole === ADMIN_ROLE) {
                 data = yield call(() => api.adminLogin(loginData));
-                encodedUserRole = window.btoa(ADMIN_ROLE)
-            } else if (loginData.userRole === USER_ROLE) {
-                data = yield call(() => api.userLogin(loginData));
-                encodedUserRole = window.btoa(USER_ROLE)
+                metaData.encodedRole = window.btoa(ADMIN_ROLE)
             }
-            localStorage.setItem(LOCALSTORAGE_ROLE_KEY, encodedUserRole);
-            localStorage.setItem(LOCALSTORAGE_ID_TOKEN_KEY, JSON.stringify(data.user));
-            localStorage.setItem(LOCALSTORAGE_ACCESS_TOKEN_KEY, data.token);
-            localStorage.setItem(LOCALSTORAGE_REFRESH_TOKEN_KEY, data.refresh_token);
-            yield put(loginSuccess());
+            // localStorage.setItem(LOCALSTORAGE_ROLE_KEY, encodedUserRole);
+            // localStorage.setItem(LOCALSTORAGE_ID_TOKEN_KEY, JSON.stringify(data.user));
+            // localStorage.setItem(LOCALSTORAGE_ACCESS_TOKEN_KEY, data.token);
+            // localStorage.setItem(LOCALSTORAGE_REFRESH_TOKEN_KEY, data.refresh_token);
+            yield put(loginSuccess(data, metaData));
         } catch (error) {
             yield put(loginError(error));
         }
@@ -38,10 +35,10 @@ function authenticate() {
 function logout() {
     return function* (action) {
         try {
-            localStorage.removeItem(LOCALSTORAGE_ROLE_KEY);
-            localStorage.removeItem(LOCALSTORAGE_ID_TOKEN_KEY);
-            localStorage.removeItem(LOCALSTORAGE_ACCESS_TOKEN_KEY);
-            localStorage.removeItem(LOCALSTORAGE_REFRESH_TOKEN_KEY);
+            // localStorage.removeItem(LOCALSTORAGE_ROLE_KEY);
+            // localStorage.removeItem(LOCALSTORAGE_ID_TOKEN_KEY);
+            // localStorage.removeItem(LOCALSTORAGE_ACCESS_TOKEN_KEY);
+            // localStorage.removeItem(LOCALSTORAGE_REFRESH_TOKEN_KEY);
             yield put(logoutSuccess());
         } catch (error) {
             yield put(logoutError());
@@ -49,15 +46,11 @@ function logout() {
     }
 }
 
-export function* watchLogin() {
+export function* watchAuthentication() {
     yield takeLatest(LOGIN_REQUEST, authenticate());
-}
-
-export function* watchLogout() {
     yield takeLatest(LOGOUT_REQUEST, logout());
 }
 
 export default [
-    watchLogin(),
-    watchLogout(),
+    watchAuthentication()
 ]
