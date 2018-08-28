@@ -18,14 +18,13 @@ class EquipmentSave extends Component {
         const { dispatch, match } = this.props;
 
         var formData = new FormData();
-        formData.append('name', data.name);
-        formData.append('category_id', data.equipmentCategory.value);
-        formData.append('description', data.description);
+        formData.append('name', (data.name) ? data.name.trim() : '');
+        formData.append('category_id', (data.equipmentCategory.value) ? data.equipmentCategory.value : null);
+        formData.append('description', (data.description) ? data.description : '<p></p>');
         if (data.image) {
             formData.append('equipment_img', data.image[0]);
         }
-        formData.append('status', data.status.value);
-
+        formData.append('status', (data.status.value) ? data.status.value : 0);
         this.setState({
             saveActionInit: true
         });

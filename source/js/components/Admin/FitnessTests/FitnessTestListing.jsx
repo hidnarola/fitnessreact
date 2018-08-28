@@ -99,8 +99,8 @@ class FitnessTestListing extends Component {
                     </div>
                     <div className="body-head-r">
                         <NavLink to={adminRouteCodes.FITNESS_TESTS_SAVE} className="pink-btn">
+                            <i className="icon-add_circle"></i>
                             Add Fitness Test
-                            <i className="icon-add"></i>
                         </NavLink>
                     </div>
                 </div>

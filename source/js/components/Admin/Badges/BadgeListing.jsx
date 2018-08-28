@@ -68,7 +68,7 @@ class BadgeListing extends Component {
                         <h2>Badges</h2>
                     </div>
                     <div className="body-head-r">
-                        <NavLink to={adminRouteCodes.BADGES_SAVE} className="pink-btn">Add Badge <i className="icon-control_point"></i></NavLink>
+                        <NavLink to={adminRouteCodes.BADGES_SAVE} className="pink-btn"><i className="icon-add_circle"></i> Add Badge</NavLink>
                     </div>
                 </div>
 

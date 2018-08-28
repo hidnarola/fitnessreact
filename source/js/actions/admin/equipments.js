@@ -2,6 +2,10 @@ export const EQUIPMENTS_LIST_REQUEST = 'EQUIPMENTS_LIST_REQUEST';
 export const EQUIPMENTS_LIST_SUCCESS = 'EQUIPMENTS_LIST_SUCCESS';
 export const EQUIPMENTS_LIST_ERROR = 'EQUIPMENTS_LIST_ERROR';
 
+export const FILTER_EQUIPMENTS_REQUEST = 'FILTER_EQUIPMENTS_REQUEST';
+export const FILTER_EQUIPMENTS_SUCCESS = 'FILTER_EQUIPMENTS_SUCCESS';
+export const FILTER_EQUIPMENTS_ERROR = 'FILTER_EQUIPMENTS_ERROR';
+
 export const EQUIPMENTS_SELECT_ONE_REQUEST = 'EQUIPMENTS_SELECT_ONE_REQUEST';
 export const EQUIPMENTS_SELECT_ONE_SUCCESS = 'EQUIPMENTS_SELECT_ONE_SUCCESS';
 export const EQUIPMENTS_SELECT_ONE_ERROR = 'EQUIPMENTS_SELECT_ONE_ERROR';
@@ -17,6 +21,10 @@ export const EQUIPMENTS_UPDATE_ERROR = 'EQUIPMENTS_UPDATE_ERROR';
 export const EQUIPMENTS_DELETE_REQUEST = 'EQUIPMENTS_DELETE_REQUEST';
 export const EQUIPMENTS_DELETE_SUCCESS = 'EQUIPMENTS_DELETE_SUCCESS';
 export const EQUIPMENTS_DELETE_ERROR = 'EQUIPMENTS_DELETE_ERROR';
+
+export const EQUIPMENTS_RECOVER_REQUEST = 'EQUIPMENTS_RECOVER_REQUEST';
+export const EQUIPMENTS_RECOVER_SUCCESS = 'EQUIPMENTS_RECOVER_SUCCESS';
+export const EQUIPMENTS_RECOVER_ERROR = 'EQUIPMENTS_RECOVER_ERROR';
 
 export function equipmentListRequest() {
     return {
@@ -34,6 +42,27 @@ export function equipmentListSuccess(data) {
 export function equipmentListError(error) {
     return {
         type: EQUIPMENTS_LIST_ERROR,
+        error
+    }
+}
+
+export function filterEquipmentsRequest(filterData) {
+    return {
+        type: FILTER_EQUIPMENTS_REQUEST,
+        filterData,
+    }
+}
+
+export function filterEquipmentsSuccess(data) {
+    return {
+        type: FILTER_EQUIPMENTS_SUCCESS,
+        data
+    }
+}
+
+export function filterEquipmentsError(error) {
+    return {
+        type: FILTER_EQUIPMENTS_ERROR,
         error
     }
 }
@@ -119,6 +148,27 @@ export function equipmentDeleteSuccess(data) {
 export function equipmentDeleteError(error) {
     return {
         type: EQUIPMENTS_DELETE_ERROR,
+        error
+    }
+}
+
+export function equipmentRecoverRequest(_id) {
+    return {
+        type: EQUIPMENTS_RECOVER_REQUEST,
+        _id
+    }
+}
+
+export function equipmentRecoverSuccess(data) {
+    return {
+        type: EQUIPMENTS_RECOVER_SUCCESS,
+        data
+    }
+}
+
+export function equipmentRecoverError(error) {
+    return {
+        type: EQUIPMENTS_RECOVER_ERROR,
         error
     }
 }

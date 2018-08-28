@@ -2144,3 +2144,4 @@ ul.common-ul>li.body-fat-field-li{ width:50%; margin-left:auto;}
 .stats-wrapper .stats-content-body .stats-content-body-r .no-record-block img {width: 35%;}
 .stats-wrapper .stats-content-body .stats-content-body-l .no-record-block img { width: 85%; }
 .stats-wrapper .date-range-picker { border-radius: 5px; background-color: #fff; padding: 15px; display: block; margin-bottom: 20px; text-align: center; position: absolute; margin-top: -20px; right: 0px; z-index: 1; top: 100px; -webkit-box-shadow: 0 0 7px 2px #ccc; box-shadow: 0 0 7px 2px #ccc; }
+.dropdown ul.dropdown-menu{z-index: 98;}

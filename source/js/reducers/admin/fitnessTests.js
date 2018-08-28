@@ -27,7 +27,7 @@ const initialState = Map({
     error: [],
     filteredFitnessTests: [],
     filteredTotalPages: 0,
-    filteredLoading: 0,
+    filteredLoading: false,
 });
 
 const actionMap = {

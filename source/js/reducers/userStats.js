@@ -96,143 +96,158 @@ const actionMap = {
 };
 
 function prepareStatsData(statistics) {
-    let newStats = Object.assign({}, statistics);
-    let data = newStats.data;
-    let prevWeekStart = moment().startOf('day').utc().subtract(1, 'week').format('YYYY-MM-DD');
-    let prevMonthStart = moment().startOf('day').utc().subtract(1, 'month').format('YYYY-MM-DD');
-    data.map((o) => {
-        let start = moment(o.startDate).startOf('day').utc();
-        let end = moment(o.endDate).startOf('day').utc();
-        o.startDate = start;
-        o.endDate = end;
-        o.dateRange = moment.range(
-            start,
-            end
-        );
-        switch (start.format('YYYY-MM-DD')) {
-            case prevWeekStart:
-                o.activeCalendarBtn = 'week';
-                break;
-            case prevMonthStart:
-                o.activeCalendarBtn = 'month';
-                break;
-            default:
-                o.activeCalendarBtn = 'calendar';
-                break;
-        }
-        Object.keys(o.fields).map((key) => {
-            if (typeof o.fields[key].total !== 'undefined' && o.fields[key].total > 0 && (typeof o.activeField === 'undefined' || o.activeField === '')) {
-                o.activeField = key;
+    if (statistics && statistics.data) {
+        let newStats = Object.assign({}, statistics);
+        let data = newStats.data;
+        let prevWeekStart = moment().startOf('day').utc().subtract(1, 'week').format('YYYY-MM-DD');
+        let prevMonthStart = moment().startOf('day').utc().subtract(1, 'month').format('YYYY-MM-DD');
+        data.map((o) => {
+            let start = moment(o.startDate).startOf('day').utc();
+            let end = moment(o.endDate).startOf('day').utc();
+            o.startDate = start;
+            o.endDate = end;
+            o.dateRange = moment.range(
+                start,
+                end
+            );
+            switch (start.format('YYYY-MM-DD')) {
+                case prevWeekStart:
+                    o.activeCalendarBtn = 'week';
+                    break;
+                case prevMonthStart:
+                    o.activeCalendarBtn = 'month';
+                    break;
+                default:
+                    o.activeCalendarBtn = 'calendar';
+                    break;
             }
+            Object.keys(o.fields).map((key) => {
+                if (typeof o.fields[key].total !== 'undefined' && o.fields[key].total > 0 && (typeof o.activeField === 'undefined' || o.activeField === '')) {
+                    o.activeField = key;
+                }
+            });
+            o.fieldsLoading = false;
+            o.fieldsError = [];
+            o.graphLoading = false;
+            o.graphData = [];
+            o.graphError = [];
         });
-        o.fieldsLoading = false;
-        o.fieldsError = [];
-        o.graphLoading = false;
-        o.graphData = [];
-        o.graphError = [];
-    });
-    return newStats;
+        return newStats;
+    }
+    return null;
 }
 
 function prepareStatsDataForGraphRequest(statistics, requestData) {
-    let newData = [];
-    let data = statistics.data;
-    data.map((o) => {
-        let _o = Object.assign({}, o);
-        requestData.map((rd) => {
-            if (o.subCategory === rd.subCategory) {
-                _o.activeField = rd.activeField;
+    if (statistics && statistics.data) {
+        let newData = [];
+        let data = statistics.data;
+        data.map((o) => {
+            let _o = Object.assign({}, o);
+            requestData.map((rd) => {
+                if (o.subCategory === rd.subCategory) {
+                    _o.activeField = rd.activeField;
+                    _o.graphLoading = true;
+                    _o.graphData = [];
+                    _o.graphError = [];
+                }
+            });
+            newData.push(_o);
+        });
+        return { data: newData };
+    }
+    return null;
+}
+
+function prepareStateDataForGraphResponse(statistics, responseData) {
+    if (statistics && statistics.data) {
+        let newData = [];
+        let data = statistics.data;
+        data.map((o) => {
+            let _o = Object.assign({}, o);
+            responseData.statistics.map((res) => {
+                if (o.subCategory === res.subCategory) {
+                    _o.graphLoading = false;
+                    _o.graphData = (res.graphData) ? res.graphData : [];
+                }
+            });
+            newData.push(_o);
+        });
+        return { data: newData };
+    }
+    return null;
+}
+
+function prepareStateDataForSingleRequest(statistics, requestData) {
+    if (statistics && statistics.data) {
+        let newData = [];
+        let data = statistics.data;
+        let prevWeekStart = moment().startOf('day').utc().subtract(1, 'week').format('YYYY-MM-DD');
+        let prevMonthStart = moment().startOf('day').utc().subtract(1, 'month').format('YYYY-MM-DD');
+        data.map((o) => {
+            let _o = Object.assign({}, o);
+            if (o.subCategory === requestData.subCategory) {
+                _o.exerciseId = requestData.exerciseId;
+                _o.dateRange = moment.range(
+                    moment(requestData.start),
+                    moment(requestData.end)
+                );
+                switch (requestData.start.format('YYYY-MM-DD')) {
+                    case prevWeekStart:
+                        _o.activeCalendarBtn = 'week';
+                        break;
+                    case prevMonthStart:
+                        _o.activeCalendarBtn = 'month';
+                        break;
+                    default:
+                        _o.activeCalendarBtn = 'calendar';
+                        break;
+                }
+                _o.fieldsLoading = true;
+                _o.fields = {};
+                _o.fieldsError = [];
                 _o.graphLoading = true;
                 _o.graphData = [];
                 _o.graphError = [];
             }
+            newData.push(_o);
         });
-        newData.push(_o);
-    });
-    return { data: newData };
-}
-
-function prepareStateDataForSingleRequest(statistics, requestData) {
-    let newData = [];
-    let data = statistics.data;
-    let prevWeekStart = moment().startOf('day').utc().subtract(1, 'week').format('YYYY-MM-DD');
-    let prevMonthStart = moment().startOf('day').utc().subtract(1, 'month').format('YYYY-MM-DD');
-    data.map((o) => {
-        let _o = Object.assign({}, o);
-        if (o.subCategory === requestData.subCategory) {
-            _o.exerciseId = requestData.exerciseId;
-            _o.dateRange = moment.range(
-                moment(requestData.start),
-                moment(requestData.end)
-            );
-            switch (requestData.start.format('YYYY-MM-DD')) {
-                case prevWeekStart:
-                    _o.activeCalendarBtn = 'week';
-                    break;
-                case prevMonthStart:
-                    _o.activeCalendarBtn = 'month';
-                    break;
-                default:
-                    _o.activeCalendarBtn = 'calendar';
-                    break;
-            }
-            _o.fieldsLoading = true;
-            _o.fields = {};
-            _o.fieldsError = [];
-            _o.graphLoading = true;
-            _o.graphData = [];
-            _o.graphError = [];
-        }
-        newData.push(_o);
-    });
-    return { data: newData };
+        return { data: newData };
+    }
+    return null;
 }
 
 function prepareStateDataForSingleResponse(statistics, responseData) {
-    let newData = [];
-    let data = statistics.data;
-    data.map((o) => {
-        let _o = Object.assign({}, o);
-        if (o.subCategory === responseData.statistics.subCategory) {
-            _o.fieldsLoading = false;
-            if (responseData.status && responseData.status === 1) {
-                if (responseData.statistics.fields) {
-                    _o.fields = responseData.statistics.fields;
-                    let activeField = '';
-                    Object.keys(responseData.statistics.fields).map((key) => {
-                        if (typeof responseData.statistics.fields[key].total !== 'undefined' && responseData.statistics.fields[key].total > 0 && activeField === '') {
-                            activeField = key;
-                        }
-                    });
-                    _o.activeField = activeField;
+    if (statistics && statistics.data) {
+        let newData = [];
+        let data = statistics.data;
+        data.map((o) => {
+            let _o = Object.assign({}, o);
+            if (o.subCategory === responseData.statistics.subCategory) {
+                _o.fieldsLoading = false;
+                if (responseData.status && responseData.status === 1) {
+                    if (responseData.statistics.fields) {
+                        _o.fields = responseData.statistics.fields;
+                        let activeField = '';
+                        Object.keys(responseData.statistics.fields).map((key) => {
+                            if (typeof responseData.statistics.fields[key].total !== 'undefined' && responseData.statistics.fields[key].total > 0 && activeField === '') {
+                                activeField = key;
+                            }
+                        });
+                        _o.activeField = activeField;
+                    } else {
+                        _o.fields = responseData.statistics.fields;
+                        _o.activeField = '';
+                    }
                 } else {
-                    _o.fields = responseData.statistics.fields;
-                    _o.activeField = '';
+                    let msg = (responseData.message) ? responseData.message : 'Something went wrong! please try again later.';
+                    _o.fieldsError = [msg];
                 }
-            } else {
-                let msg = (responseData.message) ? responseData.message : 'Something went wrong! please try again later.';
-                _o.fieldsError = [msg];
             }
-        }
-        newData.push(_o);
-    });
-    return { data: newData };
-}
-
-function prepareStateDataForGraphResponse(statistics, responseData) {
-    let newData = [];
-    let data = statistics.data;
-    data.map((o) => {
-        let _o = Object.assign({}, o);
-        responseData.statistics.map((res) => {
-            if (o.subCategory === res.subCategory) {
-                _o.graphLoading = false;
-                _o.graphData = (res.graphData) ? res.graphData : [];
-            }
+            newData.push(_o);
         });
-        newData.push(_o);
-    });
-    return { data: newData };
+        return { data: newData };
+    }
+    return null;
 }
 
 export default function reducer(state = initialState, action = {}) {

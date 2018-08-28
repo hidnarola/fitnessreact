@@ -532,6 +532,7 @@ class SaveScheduleWorkout extends Component {
                             type: selectedWorkoutMainType,
                             subType: SCHEDULED_WORKOUT_TYPE_EXERCISE,
                             userWorkoutsId: workoutId,
+                            date: workout.date,
                             exercises: [
                                 {
                                     exerciseId: selectedExercise.value,
@@ -572,6 +573,7 @@ class SaveScheduleWorkout extends Component {
                         type: selectedWorkoutMainType,
                         subType: SCHEDULED_WORKOUT_TYPE_EXERCISE,
                         userWorkoutsId: workoutId,
+                        date: workout.date,
                         exercises: [
                             {
                                 exerciseId: selectedExercise.value,
@@ -721,6 +723,7 @@ class SaveScheduleWorkout extends Component {
                 type: selectedWorkoutMainType,
                 subType: SCHEDULED_WORKOUT_TYPE_SUPERSET,
                 userWorkoutsId: workoutId,
+                date: workout.date,
                 exercises: exercises,
             };
         }
@@ -852,6 +855,7 @@ class SaveScheduleWorkout extends Component {
                 type: selectedWorkoutMainType,
                 subType: SCHEDULED_WORKOUT_TYPE_CIRCUIT,
                 userWorkoutsId: workoutId,
+                date: workout.date,
                 exercises: exercises,
             };
         }

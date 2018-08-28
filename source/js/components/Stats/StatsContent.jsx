@@ -71,7 +71,7 @@ class StatsContent extends Component {
             this.getInitialStatsData();
         }
         if (!loading && initialDataLoaded) {
-            let data = (stats.data) ? stats.data : [];
+            let data = (stats && stats.data) ? stats.data : [];
             let requestData = [];
             data.map((o) => {
                 let obj = {
