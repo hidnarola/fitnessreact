@@ -50,7 +50,7 @@ class AddPostPhotoModal extends Component {
                         </div>
                     </div>
                 </Modal>
-            </div >
+            </div>
         );
     }
 }

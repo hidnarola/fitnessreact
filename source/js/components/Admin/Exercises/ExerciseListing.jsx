@@ -10,8 +10,8 @@ import ReactTable from 'react-table';
 import { bodyPartListRequest } from '../../../actions/admin/bodyParts';
 import _ from 'lodash';
 import { EXERCISE_MECHANICS_COMPOUND, EXERCISE_MECHANICS_ISOLATION, EXERCISE_DIFFICULTY_BEGINNER, EXERCISE_DIFFICULTY_INTERMEDIATE, EXERCISE_DIFFICULTY_EXPERT, exerciseMechanicsObj, exerciseDifficultyLevelObj, EXE_CATS, EXE_SCATS } from '../../../constants/consts';
-import DeleteConfirmation from '../Common/DeleteConfirmation';
 import { DropdownButton, ButtonToolbar, MenuItem } from "react-bootstrap";
+import SweetAlert from "react-bootstrap-sweetalert";
 
 const mechanicsOptions = [
     { value: '', label: 'All' },
@@ -381,11 +381,19 @@ class ExerciseListing extends Component {
                     </div>
                 </div>
 
-                <DeleteConfirmation
+                <SweetAlert
                     show={showDeleteModal}
-                    handleClose={this.closeDeleteModal}
-                    handleYes={this.handleDelete}
-                />
+                    danger
+                    showCancel
+                    confirmBtnText="Yes, delete it!"
+                    confirmBtnBsStyle="danger"
+                    cancelBtnBsStyle="default"
+                    title="Are you sure?"
+                    onConfirm={this.handleDelete}
+                    onCancel={this.closeDeleteModal}
+                >
+                    Record will be deleted!
+                </SweetAlert>
             </div>
         );
     }

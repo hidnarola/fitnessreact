@@ -5,7 +5,6 @@ import AdminHeader from '../../components/Admin/Template/AdminHeader';
 import AdminNav from '../../components/Admin/Template/AdminNav';
 import { adminRouteCodes } from '../../constants/adminRoutes';
 import BodyPartsListing from '../../components/Admin/BodyParts/BodyPartsListing';
-import BodyPartsSave from '../../components/Admin/BodyParts/BodyPartsSave';
 
 class BodyParts extends Component {
     render() {

@@ -22,6 +22,8 @@ export const BODY_PARTS_DELETE_REQUEST = 'BODY_PARTS_DELETE_REQUEST';
 export const BODY_PARTS_DELETE_SUCCESS = 'BODY_PARTS_DELETE_SUCCESS';
 export const BODY_PARTS_DELETE_ERROR = 'BODY_PARTS_DELETE_ERROR';
 
+export const SET_BODY_PARTS_STATE = 'SET_BODY_PARTS_STATE';
+
 export function bodyPartListRequest() {
     return {
         type: BODY_PARTS_LIST_REQUEST,
@@ -84,10 +86,10 @@ export function bodyPartSelectOneError(error) {
     }
 }
 
-export function bodyPartAddRequest(bodyPartData) {
+export function bodyPartAddRequest(requestData) {
     return {
         type: BODY_PARTS_ADD_REQUEST,
-        bodyPartData
+        requestData
     }
 }
 
@@ -145,5 +147,12 @@ export function bodyPartDeleteError(error) {
     return {
         type: BODY_PARTS_DELETE_ERROR,
         error
+    }
+}
+
+export function setBodyPartState(stateData = {}) {
+    return {
+        type: SET_BODY_PARTS_STATE,
+        stateData
     }
 }

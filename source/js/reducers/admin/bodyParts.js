@@ -17,19 +17,23 @@ import {
     BODY_PARTS_UPDATE_ERROR,
     FILTER_BODY_PARTS_REQUEST,
     FILTER_BODY_PARTS_SUCCESS,
-    FILTER_BODY_PARTS_ERROR
+    FILTER_BODY_PARTS_ERROR,
+    SET_BODY_PARTS_STATE
 } from "../../actions/admin/bodyParts";
 import { VALIDATION_FAILURE_STATUS } from "../../constants/consts";
 import { generateValidationErrorMsgArr } from "../../helpers/funs";
 
 const initialState = Map({
-    loading: false,
-    error: null,
-    bodyPart: null,
-    bodyParts: null,
+    filteredLoading: false,
     filteredBodyParts: [],
     filteredTotalPages: 0,
-    filteredLoading: false,
+    loading: false,
+    error: [],
+    bodyParts: null,
+    bodyPart: null,
+    saveLoading: false,
+    saveBodyPart: null,
+    saveError: [],
 });
 
 const actionMap = {
@@ -73,8 +77,8 @@ const actionMap = {
         let newState = {
             filteredLoading: false
         };
-        if (action.data && action.data.filtered_bodyparts && action.data.filtered_bodyparts.length > 0) {
-            newState.filteredBodyParts = action.data.filtered_bodyparts;
+        if (action.data && action.data.filtered_bodypart && action.data.filtered_bodypart.length > 0) {
+            newState.filteredBodyParts = action.data.filtered_bodypart;
             newState.filteredTotalPages = action.data.filtered_total_pages;
         }
         return state.merge(Map(newState));
@@ -123,30 +127,33 @@ const actionMap = {
     },
     [BODY_PARTS_ADD_REQUEST]: (state, action) => {
         return state.merge(Map({
-            loading: true,
-            error: null,
-            bodyParts: null,
-            bodyPart: null
+            saveLoading: true,
+            saveBodyPart: null,
+            saveError: [],
         }));
     },
     [BODY_PARTS_ADD_SUCCESS]: (state, action) => {
-        return state.merge(Map({
-            loading: false,
-            error: null,
-            bodyParts: null,
-            bodyPart: action.data.bodypart
-        }));
+        let newState = { saveLoading: false };
+        if (action.data && action.data.status && action.data.status === 1) {
+            newState.saveBodyPart = action.data.bodypart;
+        } else {
+            let msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later';
+            newState.saveError = [msg];
+        }
+        return state.merge(Map(newState));
     },
     [BODY_PARTS_ADD_ERROR]: (state, action) => {
-        let error = 'Server error';
-        if (action.error && action.error.response) {
-            error = action.error.response.message;
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
         }
         return state.merge(Map({
-            loading: false,
-            error: error,
-            bodyParts: null,
-            bodyPart: null
+            saveLoading: false,
+            saveError: error,
         }));
     },
     [BODY_PARTS_UPDATE_REQUEST]: (state, action) => {
@@ -204,6 +211,9 @@ const actionMap = {
             bodyParts: null,
             bodyPart: null
         }));
+    },
+    [SET_BODY_PARTS_STATE]: (state, action) => {
+        return state.merge(Map(action.stateData));
     },
 };
 

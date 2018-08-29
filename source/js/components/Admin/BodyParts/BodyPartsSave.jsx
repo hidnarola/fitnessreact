@@ -1,19 +1,80 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Modal } from "react-bootstrap";
+import { Field, reduxForm } from "redux-form";
+import { InputField } from '../../../helpers/FormControlHelper';
+import { FaSpinner } from 'react-icons/lib/fa';
+import { Alert } from "react-bootstrap";
 
 class BodyPartsSave extends Component {
     render() {
+        const { show, handleClose, handleSubmit, saveLoading, saveError } = this.props;
         return (
-            <div>
+            <div className="save-body-part-modal-wrapper">
+                <Modal show={show} className="gallery-popup">
+                    <form method="POST" onSubmit={handleSubmit}>
+                        <div className="gallery-popup-head">
+                            <button type="button" className="close-round" onClick={handleClose}>
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h3 className="title-h3">Save Body Parts</h3>
+                        </div>
 
+                        <div className="progress-popup-body">
+
+                            {saveError && saveError.length > 0 &&
+                                <Alert bsStyle="danger">
+                                    {
+                                        saveError.map((e, i) => {
+                                            return (
+                                                <p key={i}>{e}</p>
+                                            );
+                                        })
+                                    }
+                                </Alert>
+                            }
+
+                            <div className="">
+                                <Field
+                                    name="bodypart"
+                                    className="form-control"
+                                    label="Body Part"
+                                    labelClass="control-label"
+                                    wrapperClass="form-group"
+                                    placeholder="Body Part"
+                                    component={InputField}
+                                    errorClass="help-block"
+                                />
+                                <Field
+                                    name="id"
+                                    component="input"
+                                    type="hidden"
+                                />
+                            </div>
+                            <div className="gallery-post">
+                                <button type="submit" disabled={saveLoading}>
+                                    {!saveLoading && <i className="icon-save"></i>}
+                                    {saveLoading && <FaSpinner className="loader-spinner" />}
+                                    <span>Save</span>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </Modal>
             </div>
         );
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
+BodyPartsSave = reduxForm({
+    form: 'body_part_save_form'
+})(BodyPartsSave);
 
+const mapStateToProps = (state) => {
+    const { adminBodyParts } = state;
+    return {
+        saveLoading: adminBodyParts.get('saveLoading'),
+        saveError: adminBodyParts.get('saveError'),
     };
 }
 

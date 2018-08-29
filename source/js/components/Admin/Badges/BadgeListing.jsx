@@ -22,8 +22,7 @@ import {
     MenuItem
 } from "react-bootstrap";
 import { showPageLoader, hidePageLoader } from '../../../actions/pageLoader';
-import DeleteConfirmation from '../Common/DeleteConfirmation';
-import UndoDeleteConfirmation from '../Common/UndoDeleteConfirmation';
+import SweetAlert from "react-bootstrap-sweetalert";
 
 const statusOptions = [
     { value: '', label: 'All' },
@@ -311,18 +310,33 @@ class BadgeListing extends Component {
                     </div>
                 </div>
 
-                <DeleteConfirmation
+                <SweetAlert
                     show={showDeleteModal}
-                    handleClose={this.handleHideDeleteModal}
-                    handleYes={this.handleDelete}
-                />
+                    danger
+                    showCancel
+                    confirmBtnText="Yes, delete it!"
+                    confirmBtnBsStyle="danger"
+                    cancelBtnBsStyle="default"
+                    title="Are you sure?"
+                    onConfirm={this.handleDelete}
+                    onCancel={this.handleHideDeleteModal}
+                >
+                    Record will be deleted!
+                </SweetAlert>
 
-                <UndoDeleteConfirmation
+                <SweetAlert
                     show={showUndoDeleteModal}
-                    handleClose={this.handleHideUndoDeleteModal}
-                    handleYes={this.handleUndoDelete}
-                />
-
+                    success
+                    showCancel
+                    confirmBtnText="Yes, recover it!"
+                    confirmBtnBsStyle="success"
+                    cancelBtnBsStyle="default"
+                    title="Are you sure?"
+                    onConfirm={this.handleUndoDelete}
+                    onCancel={this.handleHideUndoDeleteModal}
+                >
+                    Record will be recovered back!
+                </SweetAlert>
             </div>
         );
     }

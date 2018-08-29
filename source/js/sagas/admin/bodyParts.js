@@ -59,8 +59,8 @@ function filterAdminBodyPartData() {
 function postAdminBodyPartData() {
     return function* (action) {
         try {
-            const bodyPartData = action.bodyPartData;
-            const data = yield call(() => api.addBodyPart(bodyPartData));
+            const requestData = action.requestData;
+            const data = yield call(() => api.addBodyPart(requestData));
             yield put(bodyPartAddSuccess(data));
         } catch (error) {
             yield put(bodyPartAddError(error));

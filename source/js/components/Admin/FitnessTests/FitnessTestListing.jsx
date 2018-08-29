@@ -29,8 +29,8 @@ import {
 } from '../../../constants/consts';
 import { DropdownButton, ButtonToolbar, MenuItem } from "react-bootstrap";
 import { FaPencil, FaTrash } from "react-icons/lib/fa";
-import DeleteConfirmation from '../Common/DeleteConfirmation';
 import { adminRouteCodes } from '../../../constants/adminRoutes';
+import SweetAlert from "react-bootstrap-sweetalert";
 
 //#region basic consts
 const categoryOptions = [
@@ -357,11 +357,19 @@ class FitnessTestListing extends Component {
                         </div>
                     </div>
                 </div>
-                <DeleteConfirmation
+                <SweetAlert
                     show={showDeleteModal}
-                    handleYes={this.handleDelete}
-                    handleClose={() => this.handleDeleteModal(false)}
-                />
+                    danger
+                    showCancel
+                    confirmBtnText="Yes, delete it!"
+                    confirmBtnBsStyle="danger"
+                    cancelBtnBsStyle="default"
+                    title="Are you sure?"
+                    onConfirm={this.handleDelete}
+                    onCancel={() => this.handleDeleteModal(false)}
+                >
+                    Record will be deleted!
+                </SweetAlert>
             </div>
         );
     }

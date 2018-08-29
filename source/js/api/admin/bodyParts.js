@@ -28,9 +28,9 @@ function filterBodyParts(filterData) {
     return postFormData(requestUrl + '/filter', filterData, headers);
 }
 
-function addBodyPart(exerciseData) {
+function addBodyPart(requestData) {
     let headers = extraHeaders();
-    return postFormData(requestUrl, exerciseData, headers);
+    return postFormData(requestUrl, requestData, headers);
 }
 
 function updateBodyPart(_id, exerciseData) {
