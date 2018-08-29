@@ -72,8 +72,8 @@ function putAdminBodyPartData() {
     return function* (action) {
         try {
             const _id = action._id;
-            const bodyPartData = action.bodyPartData;
-            const data = yield call(() => api.updateBodyPart(_id, bodyPartData));
+            const requestData = action.requestData;
+            const data = yield call(() => api.updateBodyPart(_id, requestData));
             yield put(bodyPartUpdateSuccess(data));
         } catch (error) {
             yield put(bodyPartUpdateError(error));

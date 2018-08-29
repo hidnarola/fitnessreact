@@ -2145,3 +2145,14 @@ ul.common-ul>li.body-fat-field-li{ width:50%; margin-left:auto;}
 .stats-wrapper .stats-content-body .stats-content-body-l .no-record-block img { width: 85%; }
 .stats-wrapper .date-range-picker { border-radius: 5px; background-color: #fff; padding: 15px; display: block; margin-bottom: 20px; text-align: center; position: absolute; margin-top: -20px; right: 0px; z-index: 1; top: 100px; -webkit-box-shadow: 0 0 7px 2px #ccc; box-shadow: 0 0 7px 2px #ccc; }
 .dropdown ul.dropdown-menu{z-index: 98;}
+.gallery-popup.body-part-save-modal .modal-dialog { width: 33.33%; }
+.gallery-popup.body-part-save-modal .modal-content { padding: 20px; }
+.gallery-popup.body-part-save-modal button.close-round { top: -40px; right: -40px; }
+.gallery-popup.body-part-save-modal h3 { margin: 0 0 20px; font-size: 18px; font-weight: bolder; }
+.gallery-popup.body-part-save-modal .progress-popup-body { padding: 0 15px; }
+.gallery-popup.body-part-save-modal .progress-popup-body label.control-label { font-weight: 500; }
+.gallery-popup.body-part-save-modal .progress-popup-body .btn-wrap { text-align: right; clear: both; }
+.body-part-save-modal .btn-wrap button { width: 180px; text-align: left; font-size: 14px; font-weight: 600; padding: 0 10px 0 30px; background: linear-gradient(123.28deg, #46E9C5 0%, #3FFBFC 100%); border-radius: 25px; box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .1); line-height: 50px; color: #FFFFFF; border: 0; }
+.body-part-save-modal .btn-wrap button i,
+.body-part-save-modal .btn-wrap button svg { float: right; line-height: 46px; width: 34px; font-size: 20px; }
+.body-part-save-modal .btn-wrap button svg { margin-top: 15px; width: 54px; }

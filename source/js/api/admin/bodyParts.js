@@ -33,9 +33,9 @@ function addBodyPart(requestData) {
     return postFormData(requestUrl, requestData, headers);
 }
 
-function updateBodyPart(_id, exerciseData) {
+function updateBodyPart(_id, requestData) {
     let headers = extraHeaders();
-    return putFormData(requestUrl + '/' + _id, exerciseData, headers);
+    return putFormData(requestUrl + '/' + _id, requestData, headers);
 }
 
 function deleteBodyPart(_id) {

@@ -34,6 +34,9 @@ const initialState = Map({
     saveLoading: false,
     saveBodyPart: null,
     saveError: [],
+    deleteLoading: false,
+    deleteFlag: false,
+    deleteError: [],
 });
 
 const actionMap = {
@@ -158,58 +161,64 @@ const actionMap = {
     },
     [BODY_PARTS_UPDATE_REQUEST]: (state, action) => {
         return state.merge(Map({
-            loading: true,
-            error: null,
-            bodyParts: null,
-            bodyPart: null
+            saveLoading: true,
+            saveBodyPart: null,
+            saveError: [],
         }));
     },
     [BODY_PARTS_UPDATE_SUCCESS]: (state, action) => {
-        return state.merge(Map({
-            loading: false,
-            error: null,
-            bodyParts: null,
-            bodyPart: action.data.bodypart
-        }));
+        let newState = { saveLoading: false };
+        if (action.data && action.data.status && action.data.status === 1) {
+            newState.saveBodyPart = action.data.bodypart;
+        } else {
+            let msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later';
+            newState.saveError = [msg];
+        }
+        return state.merge(Map(newState));
     },
     [BODY_PARTS_UPDATE_ERROR]: (state, action) => {
-        let error = 'Server error';
-        if (action.error && action.error.response) {
-            error = action.error.response.message;
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
         }
         return state.merge(Map({
-            loading: false,
-            error: error,
-            bodyParts: null,
-            bodyPart: null
+            saveLoading: false,
+            saveError: error,
         }));
     },
     [BODY_PARTS_DELETE_REQUEST]: (state, action) => {
         return state.merge(Map({
-            loading: true,
-            error: null,
-            bodyParts: null,
-            bodyPart: null
+            deleteLoading: true,
+            deleteFlag: false,
+            deleteError: []
         }));
     },
     [BODY_PARTS_DELETE_SUCCESS]: (state, action) => {
-        return state.merge(Map({
-            loading: false,
-            error: null,
-            bodyParts: null,
-            bodyPart: null
-        }));
+        let newState = { deleteLoading: false };
+        if (action.data && action.data.status && action.data.status === 1) {
+            newState.deleteFlag = true;
+        } else {
+            let msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later';
+            newState.deleteError = [msg];
+        }
+        return state.merge(Map(newState));
     },
     [BODY_PARTS_DELETE_ERROR]: (state, action) => {
-        let error = 'Server error';
-        if (action.error && action.error.response) {
-            error = action.error.response.message;
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
         }
         return state.merge(Map({
-            loading: false,
-            error: error,
-            bodyParts: null,
-            bodyPart: null
+            deleteLoading: false,
+            deleteError: error,
         }));
     },
     [SET_BODY_PARTS_STATE]: (state, action) => {

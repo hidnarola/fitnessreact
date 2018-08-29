@@ -107,11 +107,11 @@ export function bodyPartAddError(error) {
     }
 }
 
-export function bodyPartUpdateRequest(_id, bodyPartData) {
+export function bodyPartUpdateRequest(_id, requestData) {
     return {
         type: BODY_PARTS_UPDATE_REQUEST,
         _id,
-        bodyPartData
+        requestData
     }
 }
 

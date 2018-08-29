@@ -11,7 +11,7 @@ class BodyPartsSave extends Component {
         const { show, handleClose, handleSubmit, saveLoading, saveError } = this.props;
         return (
             <div className="save-body-part-modal-wrapper">
-                <Modal show={show} className="gallery-popup">
+                <Modal show={show} className="gallery-popup body-part-save-modal">
                     <form method="POST" onSubmit={handleSubmit}>
                         <div className="gallery-popup-head">
                             <button type="button" className="close-round" onClick={handleClose}>
@@ -34,25 +34,23 @@ class BodyPartsSave extends Component {
                                 </Alert>
                             }
 
-                            <div className="">
-                                <Field
-                                    name="bodypart"
-                                    className="form-control"
-                                    label="Body Part"
-                                    labelClass="control-label"
-                                    wrapperClass="form-group"
-                                    placeholder="Body Part"
-                                    component={InputField}
-                                    errorClass="help-block"
-                                />
-                                <Field
-                                    name="id"
-                                    component="input"
-                                    type="hidden"
-                                />
-                            </div>
-                            <div className="gallery-post">
-                                <button type="submit" disabled={saveLoading}>
+                            <Field
+                                name="bodypart"
+                                className="form-control"
+                                label="Body Part"
+                                labelClass="control-label"
+                                wrapperClass="form-group"
+                                placeholder="Body Part"
+                                component={InputField}
+                                errorClass="help-block"
+                            />
+                            <Field
+                                name="id"
+                                component="input"
+                                type="hidden"
+                            />
+                            <div className="btn-wrap">
+                                <button type="submit" className="pink-btn" disabled={saveLoading}>
                                     {!saveLoading && <i className="icon-save"></i>}
                                     {saveLoading && <FaSpinner className="loader-spinner" />}
                                     <span>Save</span>

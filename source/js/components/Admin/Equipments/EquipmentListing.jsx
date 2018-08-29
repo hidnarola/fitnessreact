@@ -120,6 +120,8 @@ class EquipmentListing extends Component {
                                                 id: "category_id",
                                                 Header: "Category",
                                                 accessor: "category_id",
+                                                filterable: false,
+                                                sortable: false,
                                                 Cell: (row) => {
                                                     let cat = _.find(equipmentCategories, (o) => { return o._id === row.value })
                                                     let catName = (cat && cat.name) ? cat.name : '-----';
@@ -129,22 +131,7 @@ class EquipmentListing extends Component {
                                                         </div>
                                                     );
                                                 },
-                                                Filter: ({ filter, onChange }) => {
-                                                    return (
-                                                        <select
-                                                            onChange={event => onChange(event.target.value)}
-                                                            className="width-100-per"
-                                                            value={filter ? filter.value : "all"}
-                                                        >
-                                                            <option value="">All</option>
-                                                            {equipmentCategories && equipmentCategories.length > 0 &&
-                                                                equipmentCategories.map((obj, index) => (
-                                                                    <option key={index} value={obj._id}>{obj.name}</option>
-                                                                ))
-                                                            }
-                                                        </select>
-                                                    );
-                                                },
+
                                                 minWidth: 250,
                                             },
                                             {

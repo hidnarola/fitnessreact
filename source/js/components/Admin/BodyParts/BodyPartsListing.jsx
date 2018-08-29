@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ReactTable from "react-table";
 import moment from "moment";
-import { generateDTTableFilterObj, ts } from '../../../helpers/funs';
-import { filterBodyPartsRequest, bodyPartAddRequest, setBodyPartState } from '../../../actions/admin/bodyParts';
+import { generateDTTableFilterObj, ts, te } from '../../../helpers/funs';
+import { filterBodyPartsRequest, bodyPartAddRequest, setBodyPartState, bodyPartUpdateRequest, bodyPartDeleteRequest } from '../../../actions/admin/bodyParts';
 import BodyPartsSave from './BodyPartsSave';
 import { initialize, reset } from "redux-form";
 import { DropdownButton, ButtonToolbar, MenuItem } from "react-bootstrap";
 import { FaPencil, FaTrash } from "react-icons/lib/fa";
+import SweetAlert from "react-bootstrap-sweetalert";
 
 class BodyPartsListing extends Component {
     constructor(props) {
@@ -18,11 +19,13 @@ class BodyPartsListing extends Component {
             dtLoading: false,
             dtFilterData: null,
             showSaveModal: false,
+            showDeleteModal: false,
+            selectedId: null,
         };
     }
 
     render() {
-        const { dtData, dtPages, dtLoading, showSaveModal } = this.state;
+        const { dtData, dtPages, dtLoading, showSaveModal, showDeleteModal } = this.state;
         return (
             <div className="exercise-listing-wrapper">
                 <div className="body-head space-btm-45 d-flex justify-content-start">
@@ -91,6 +94,7 @@ class BodyPartsListing extends Component {
                                                                     <MenuItem
                                                                         eventKey="2"
                                                                         href="javascript:void(0)"
+                                                                        onClick={() => this.handleShowDeleteModal(row.value)}
                                                                     >
                                                                         <FaTrash className="v-align-sub" /> Delete
                                                                     </MenuItem>
@@ -127,25 +131,47 @@ class BodyPartsListing extends Component {
                     onSubmit={this.handleSubmit}
                     handleClose={this.handleCloseSaveModal}
                 />
+
+                <SweetAlert
+                    show={showDeleteModal}
+                    danger
+                    showCancel
+                    confirmBtnText="Yes, delete it!"
+                    confirmBtnBsStyle="danger"
+                    cancelBtnBsStyle="default"
+                    title="Are you sure?"
+                    onConfirm={this.handleDelete}
+                    onCancel={this.handleCloseDeleteModal}
+                >
+                    You will not be able to recover it!
+                </SweetAlert>
             </div>
         );
     }
 
     componentDidUpdate(prevProps, prevState) {
-        const { dispatch, filteredLoading, filteredBodyParts, filteredTotalPages, saveLoading, saveBodyPart } = this.props;
+        const { dispatch, deleteLoading, deleteFlag, deleteError, filteredLoading, filteredBodyParts, filteredTotalPages, saveLoading, saveBodyPart } = this.props;
         const { dtLoading } = this.state;
         if (dtLoading && !filteredLoading) {
-            this.setState({
-                dtLoading: filteredLoading,
-                dtData: filteredBodyParts,
-                dtPages: filteredTotalPages,
-            });
+            this.setState({ dtLoading: filteredLoading, dtData: filteredBodyParts, dtPages: filteredTotalPages });
         }
         if (!saveLoading && saveBodyPart && prevProps.saveLoading !== saveLoading && prevProps.saveBodyPart !== saveBodyPart) {
             this.handleCloseSaveModal();
             let stateData = { saveLoading: false, saveBodyPart: null, saveError: [] };
             dispatch(setBodyPartState(stateData));
-            ts('Body Part Added!');
+            ts('Body part saved!');
+            this.refreshDtData();
+        }
+        if (!deleteLoading && deleteFlag && prevProps.deleteLoading !== deleteLoading && prevProps.deleteFlag !== deleteFlag) {
+            let stateData = { deleteLoading: false, deleteFlag: false, deleteError: [] };
+            dispatch(setBodyPartState(stateData));
+            ts('Body part deleted!');
+            this.refreshDtData();
+        } else if (!deleteLoading && prevProps.deleteLoading !== deleteLoading && deleteError && deleteError.length > 0) {
+            let stateData = { deleteLoading: false, deleteFlag: false, deleteError: [] };
+            dispatch(setBodyPartState(stateData));
+            te(deleteError[0]);
+            this.refreshDtData();
         }
     }
 
@@ -189,7 +215,26 @@ class BodyPartsListing extends Component {
         var requestData = {
             bodypart: (data && data.bodypart) ? data.bodypart.trim() : '',
         };
-        dispatch(bodyPartAddRequest(requestData));
+        if (data && data.id) {
+            dispatch(bodyPartUpdateRequest(data.id, requestData));
+        } else {
+            dispatch(bodyPartAddRequest(requestData));
+        }
+    }
+
+    handleShowDeleteModal = (_id) => {
+        this.setState({ showDeleteModal: true, selectedId: _id });
+    }
+
+    handleCloseDeleteModal = () => {
+        this.setState({ showDeleteModal: false, selectedId: null });
+    }
+
+    handleDelete = () => {
+        const { dispatch } = this.props;
+        const { selectedId } = this.state;
+        dispatch(bodyPartDeleteRequest(selectedId));
+        this.handleCloseDeleteModal();
     }
 }
 
@@ -202,6 +247,9 @@ const mapStateToProps = (state) => {
         filteredLoading: adminBodyParts.get('filteredLoading'),
         filteredBodyParts: adminBodyParts.get('filteredBodyParts'),
         filteredTotalPages: adminBodyParts.get('filteredTotalPages'),
+        deleteLoading: adminBodyParts.get('deleteLoading'),
+        deleteFlag: adminBodyParts.get('deleteFlag'),
+        deleteError: adminBodyParts.get('deleteError'),
     };
 }
 
