@@ -92,6 +92,7 @@ import { setUserFriendRequestsCount } from '../actions/friends';
 import AdminRightMenu from '../components/Admin/Template/AdminRightMenu';
 import { logout } from '../actions/login';
 import BodyParts from './Admin/BodyParts';
+import EquipmentCategories from './Admin/EquipmentCategories';
 
 const auth = new Auth();
 
@@ -203,6 +204,8 @@ class App extends Component {
                             <AdminPrivateRoute path={adminRouteCodes.FITNESS_TESTS} component={FitnessTests} />
 
                             <AdminPrivateRoute path={adminRouteCodes.EQUIPMENTS} component={Equipments} />
+                            
+                            <AdminPrivateRoute path={adminRouteCodes.EQUIPMENT_CATEGORIES} component={EquipmentCategories} />
 
                             <AdminPrivateRoute path={adminRouteCodes.BADGES} component={AdminBadges} />
 
