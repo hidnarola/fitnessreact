@@ -1434,7 +1434,7 @@ div#loader .loader-spinner, div.loaderloader .loader-spinner, div.no-content-loa
 .input-wrap.radiobox input[type=radio]:checked + label[for="female"]:after {position: absolute;content: " ";background: url(../assets/img/common/user-female-white.png);width: 38px;height: 50px;margin: 0 auto;left: 50%;top: 50%;transform: translate(-50%,-50%);}
 
 .input-wrap.radiobox input[type=radio]:checked + label[for="home"]:after {position: absolute;content: " ";background: url(../assets/img/common/home-white.png);width: 38px;height: 34px;margin: 0 auto;left: 50%;top: 50%;transform: translate(-50%,-50%);background-size: cover;}
-.input-wrap.radiobox input[type=radio]:checked + label[for="gym"]:after {position: absolute;content: " ";background: url(../assets/img/common/gym-white.png);width: 38px;height: 34px;margin: 0 auto;left: 50%;top: 50%;transform: translate(-50%,-50%);background-size: cover;}
+.input-wrap.radiobox input[type=radio]:checked + label[for="gym"]:after {position: absolute;content: " ";background: url(../assets/img/common/gym-white.png);width: 40px;height: 31px;margin: 0 auto;left: 50%;top: 50%;transform: translate(-50%,-50%);background-size: cover;}
 
 .search-word-highlight{color: #ff3368;font-weight: bold;}
 

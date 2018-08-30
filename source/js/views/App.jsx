@@ -93,6 +93,7 @@ import AdminRightMenu from '../components/Admin/Template/AdminRightMenu';
 import { logout } from '../actions/login';
 import BodyParts from './Admin/BodyParts';
 import EquipmentCategories from './Admin/EquipmentCategories';
+import DND from './DND';
 
 const auth = new Auth();
 
@@ -212,6 +213,8 @@ class App extends Component {
                             <AdminPrivateRoute path={adminRouteCodes.BODY_PARTS} component={BodyParts} />
 
                             <Route exact path={AUTH_CALLBACK_ROUTE} component={Callback} />
+                            
+                            <Route exact path={routeCodes.DND} component={DND} />
 
                             <Route path='*' component={NotFound} />
                         </Switch>

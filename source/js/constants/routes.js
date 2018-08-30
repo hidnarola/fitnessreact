@@ -76,4 +76,6 @@ export const routeCodes = {
     ALL_NOTIFICATIONS: `${publicPath}notifications`,
     MESSENGER: `${publicPath}messenger`,
 
+    DND: `${publicPath}dnd`,
+
 };
