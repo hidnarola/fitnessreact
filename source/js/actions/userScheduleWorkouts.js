@@ -81,6 +81,10 @@ export const GET_USER_WORKOUT_CALENDAR_LIST_REQUEST = 'GET_USER_WORKOUT_CALENDAR
 export const GET_USER_WORKOUT_CALENDAR_LIST_SUCCESS = 'GET_USER_WORKOUT_CALENDAR_LIST_SUCCESS';
 export const GET_USER_WORKOUT_CALENDAR_LIST_ERROR = 'GET_USER_WORKOUT_CALENDAR_LIST_ERROR';
 
+export const GET_WORKOUTS_LIST_BY_FIRST_WORKOUT_ID_REQUEST = 'GET_WORKOUTS_LIST_BY_FIRST_WORKOUT_ID_REQUEST';
+export const GET_WORKOUTS_LIST_BY_FIRST_WORKOUT_ID_SUCCESS = 'GET_WORKOUTS_LIST_BY_FIRST_WORKOUT_ID_SUCCESS';
+export const GET_WORKOUTS_LIST_BY_FIRST_WORKOUT_ID_ERROR = 'GET_WORKOUTS_LIST_BY_FIRST_WORKOUT_ID_ERROR';
+
 export const SET_TODAYS_WORKOUT_DATE = 'SET_TODAYS_WORKOUT_DATE';
 
 export function setSelectedSlotFromCalendar(slotInfo = null) {
@@ -470,6 +474,27 @@ export function getUserWorkoutCalendarListSuccess(data) {
 export function getUserWorkoutCalendarListError(error) {
     return {
         type: GET_USER_WORKOUT_CALENDAR_LIST_ERROR,
+        error
+    }
+}
+
+export function getWorkoutsListByFirstWorkoutIdRequest(requestData) {
+    return {
+        type: GET_WORKOUTS_LIST_BY_FIRST_WORKOUT_ID_REQUEST,
+        requestData,
+    }
+}
+
+export function getWorkoutsListByFirstWorkoutIdSuccess(data) {
+    return {
+        type: GET_WORKOUTS_LIST_BY_FIRST_WORKOUT_ID_SUCCESS,
+        data
+    }
+}
+
+export function getWorkoutsListByFirstWorkoutIdError(error) {
+    return {
+        type: GET_WORKOUTS_LIST_BY_FIRST_WORKOUT_ID_ERROR,
         error
     }
 }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { initialize } from 'redux-form';
+import { initialize, reset } from 'redux-form';
 import {
     SERVER_BASE_URL,
     SCHEDULED_WORKOUT_TYPE_EXERCISE,
@@ -141,6 +141,8 @@ class WorkoutExercisesView extends Component {
         };
         dispatch(showPageLoader());
         dispatch(deleteUserWholeExerciseRequest(requestData));
+        dispatch(changeUsersWorkoutFormAction('add', null));
+        dispatch(reset('update_schedule_workout_form'));
         this.setState({ deleteWholeExeInit: true });
     }
 

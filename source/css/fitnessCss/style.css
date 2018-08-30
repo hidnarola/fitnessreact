@@ -1960,14 +1960,17 @@ ul.workout-exercise-body-view-ul .workout-exercise-head-view-edit button{ color:
 
 .todays-workout-box-wrapper .whitebox-head{ margin-bottom:10px;}
 .todays-workout-list-card {box-shadow: 0 0 10px 0 rgba(0,0,0,.05); padding: 15px 20px; border-radius: 2px; text-align: left; color: #232B41;}
-.todays-workout-list-card a{color:#232B41;}
+.todays-workout-list-card a{color:#232B41;word-wrap: break-word;}
 .todays-workout-list-card + .todays-workout-list-card{margin-top:20px;}
 .todays-workout-list-card .switch-wrap{ line-height:40px; border-radius:0; margin: 10px -20px -20px; box-shadow: 0 4px 15px 0 rgba(0, 0, 0, .04); border-top:1px solid rgba(0,0,0,.03);}
 .todays-workout-list-card .switch-wrap small {margin:0 0 0 auto;}
 .todays-workout-list-card .switch-wrap .material-switch {margin:0 0 0 20px;}
 .todays-workout-box-wrapper.white-box{padding:15px 20px 30px;}
+.todays-workout-list-card.active {box-shadow: 0 7px 10px 2px #5f5f5f;}
+.todays-workout-list-card.active a { color: #000; font-weight: 700; }
+.todays-workout-list-card .edit-title-btn { float: left; margin-right: 5px; }
 .log-date-wrap>button[type="button"]{background: linear-gradient(134.72deg, #3023AE 0%, #C86DD7 100%); border: 0; color: #fff; border-radius: 4px; padding: 3px 20px; border-radius: 90px; margin: 10px 10px 5px 10px; font-size: 12px;}
-.new-log-date-wrap .react-calendar {border: 0 !important;}
+.new-log-date-wrap .react-calendar {border: 0 !important;padding: 10px;}
 .new-log-date-wrap .react-calendar__tile--active {background:linear-gradient(148.66deg, #FF3366 0%, #FF339A 100%); color: white; border-radius: 100px;}
 .new-log-date-wrap button.react-calendar__tile--active:enabled:hover, 
 .new-log-date-wrap button.react-calendar__tile--active:enabled:focus{background:linear-gradient(148.66deg, #FF339A 0%, #FF3366 100%);}

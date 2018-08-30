@@ -15,7 +15,8 @@ import {
     completeUsersBulkWorkoutScheduleRequest,
     getUserWorkoutCalendarListRequest,
     setTodaysWorkoutDate,
-    deleteUsersBulkWorkoutScheduleRequest
+    deleteUsersBulkWorkoutScheduleRequest,
+    getWorkoutsListByFirstWorkoutIdRequest
 } from '../../actions/userScheduleWorkouts';
 import { routeCodes } from '../../constants/routes';
 import { te, prepareFieldsOptions, ts, convertUnits } from '../../helpers/funs';
@@ -41,7 +42,8 @@ import UpdateScheduleWorkoutForm from './UpdateScheduleWorkoutForm';
 import ReactCalender from 'react-calendar/dist/entry.nostyle';
 import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
 import SweetAlert from "react-bootstrap-sweetalert";
-import { getUserBodypartsRequest } from '../../actions/userBodyparts';
+import { FaCircleONotch } from "react-icons/lib/fa";
+import UpdateWorkoutTitleForm from './UpdateWorkoutTitleForm';
 
 class SaveScheduleWorkout extends Component {
     constructor(props) {
@@ -51,6 +53,7 @@ class SaveScheduleWorkout extends Component {
         this.state = {
             loadWorkoutInit: false,
             saveWorkoutActionInit: false,
+            showUpdateTitleModal: false,
             updateTitleActionInit: false,
             updateWorkoutActionInit: false,
             logDate: logDate,
@@ -83,8 +86,9 @@ class SaveScheduleWorkout extends Component {
             workoutsList,
             calendarList,
             workoutStat,
+            match
         } = this.props;
-        const { logDate, showWholeWorkoutDeleteAlert } = this.state;
+        const { logDate, showWholeWorkoutDeleteAlert, showUpdateTitleModal } = this.state;
         return (
             <div className="fitness-body">
                 <FitnessHeader />
@@ -180,8 +184,19 @@ class SaveScheduleWorkout extends Component {
                                     </div>
                                     <div className="whitebox-body text-c">
                                         {workoutsList.map((o, i) => {
+                                            let isActive = false;
+                                            if (match && match.params && match.params.id && match.params.id === o._id) {
+                                                isActive = true;
+                                            }
                                             return (
-                                                <TodaysWorkoutListCard key={i} workout={o} handleCompleteWorkout={this.handleCompleteWorkout} handleWholeWorkoutDelete={this.handleShowWholeWorkoutDeleteAlert} />
+                                                <TodaysWorkoutListCard
+                                                    key={i}
+                                                    workout={o}
+                                                    handleCompleteWorkout={this.handleCompleteWorkout}
+                                                    handleWholeWorkoutDelete={this.handleShowWholeWorkoutDeleteAlert}
+                                                    isActive={isActive}
+                                                    openEditExerciseTitleModal={this.handleOpenEditExerciseTitleModal}
+                                                />
                                             );
                                         })}
                                     </div>
@@ -288,6 +303,23 @@ class SaveScheduleWorkout extends Component {
                 >
                     You will not be able to recover it!
                 </SweetAlert>
+                <SweetAlert
+                    type="default"
+                    title={`Update details`}
+                    onConfirm={() => { }}
+                    btnSize="sm"
+                    cancelBtnBsStyle="danger"
+                    confirmBtnBsStyle="success"
+                    show={showUpdateTitleModal}
+                    showConfirm={false}
+                    showCancel={false}
+                    closeOnClickOutside={false}
+                >
+                    <UpdateWorkoutTitleForm
+                        onSubmit={this.handleTitleChangeSubmit}
+                        onCancel={this.handleCloseEditExerciseTitleModal}
+                    />
+                </SweetAlert>
             </div>
         );
     }
@@ -368,6 +400,15 @@ class SaveScheduleWorkout extends Component {
             } else {
                 ts('Updated!');
             }
+            dispatch(hidePageLoader());
+            this.handleCloseEditExerciseTitleModal();
+            let fwi = (firstWorkoutId) ? firstWorkoutId : (match.params && match.params.id) ? match.params.id : null;
+            if (fwi) {
+                let requestData = { workoutId: fwi }
+                dispatch(getWorkoutsListByFirstWorkoutIdRequest(requestData));
+            } else {
+                history.push(routeCodes.EXERCISE);
+            }
         }
         if (firstWorkoutIdInit && !firstWorkoutLoading) {
             this.setState({ firstWorkoutIdInit: false });
@@ -385,6 +426,13 @@ class SaveScheduleWorkout extends Component {
             if (error && error.length > 0) {
                 te(error[0]);
             }
+            let fwi = (firstWorkoutId) ? firstWorkoutId : (match.params && match.params.id) ? match.params.id : null;
+            if (fwi) {
+                let requestData = { workoutId: fwi }
+                dispatch(getWorkoutsListByFirstWorkoutIdRequest(requestData));
+            } else {
+                history.push(routeCodes.EXERCISE);
+            }
         }
         if (deleteWorkoutActionInit && !loading) {
             this.setState({ deleteWorkoutActionInit: false });
@@ -395,18 +443,6 @@ class SaveScheduleWorkout extends Component {
                 ts('Workout deleted successfully!');
                 history.push(routeCodes.EXERCISE);
             }
-        }
-    }
-
-    handleTitleChangeSubmit = (data) => {
-        const { match, dispatch } = this.props;
-        if (match && match.params && match.params.id) {
-            let requestData = {
-                title: data.title,
-                description: data.description,
-            }
-            this.setState({ updateTitleActionInit: true });
-            dispatch(updateUserWorkoutTitleRequest(match.params.id, requestData));
         }
     }
 
@@ -459,6 +495,8 @@ class SaveScheduleWorkout extends Component {
     handleWorkoutMainTypeChange = (mainType) => {
         const { dispatch } = this.props;
         dispatch(changeWorkoutMainType(mainType));
+        dispatch(changeUsersWorkoutFormAction('add', null));
+        dispatch(reset('update_schedule_workout_form'));
     }
 
     prepareRequestDataForSingleWorkout = (data) => {
@@ -963,12 +1001,42 @@ class SaveScheduleWorkout extends Component {
             };
             dispatch(deleteUsersBulkWorkoutScheduleRequest(requestData));
             this.setState({ deleteWorkoutActionInit: true });
+            dispatch(changeUsersWorkoutFormAction('add', null));
+            dispatch(reset('update_schedule_workout_form'));
         }
+    }
+
+    handleOpenEditExerciseTitleModal = (workout) => {
+        const { dispatch } = this.props;
+        let formData = {
+            id: workout._id,
+            title: workout.title,
+            description: workout.description,
+        };
+        dispatch(initialize('update_workout_title_form', formData));
+        this.setState({ showUpdateTitleModal: true });
+    }
+
+    handleCloseEditExerciseTitleModal = () => {
+        const { dispatch } = this.props;
+        dispatch(reset('update_workout_title_form'));
+        this.setState({ showUpdateTitleModal: false });
+    }
+
+    handleTitleChangeSubmit = (data) => {
+        const { dispatch } = this.props;
+        let requestData = {
+            title: (data.title) ? data.title : '',
+            description: (data.description) ? data.description : '',
+        }
+        this.setState({ updateTitleActionInit: true });
+        dispatch(showPageLoader());
+        dispatch(updateUserWorkoutTitleRequest(data.id, requestData));
     }
 }
 
 const mapStateToProps = (state) => {
-    const { userScheduleWorkouts, userBodyparts } = state;
+    const { userScheduleWorkouts } = state;
     return {
         workout: userScheduleWorkouts.get('workout'),
         loading: userScheduleWorkouts.get('loading'),
@@ -1015,12 +1083,15 @@ class TodaysWorkoutListCard extends Component {
             workout,
             handleCompleteWorkout,
             handleWholeWorkoutDelete,
+            isActive,
+            openEditExerciseTitleModal,
         } = this.props;
         const { isCompleted } = this.state;
         var today = moment().utc();
         var workoutDay = moment(workout.date);
         return (
-            <div className="todays-workout-list-card">
+            <div className="" className={cns('todays-workout-list-card', { active: isActive })}>
+                <button type="button" className="edit-title-btn" onClick={() => openEditExerciseTitleModal(workout)}><i className="icon-mode_edit"></i></button>
                 <NavLink to={routeCodes.SAVE_SCHEDULE_WORKOUT.replace(':id', workout._id)}>{workout.title}</NavLink>
                 <button type="button" onClick={() => handleWholeWorkoutDelete(workout._id)}><i className="icon-cancel"></i></button>
                 {workoutDay <= today && workout.dayType && workout.dayType === SCHEDULED_WORKOUT_TYPE_EXERCISE &&

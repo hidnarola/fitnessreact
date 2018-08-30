@@ -51,7 +51,10 @@ import {
     GET_USER_FIRST_WORKOUT_BY_DATE_REQUEST,
     GET_USER_WORKOUT_CALENDAR_LIST_REQUEST,
     getUserWorkoutCalendarListSuccess,
-    getUserWorkoutCalendarListError
+    getUserWorkoutCalendarListError,
+    getWorkoutsListByFirstWorkoutIdSuccess,
+    getWorkoutsListByFirstWorkoutIdError,
+    GET_WORKOUTS_LIST_BY_FIRST_WORKOUT_ID_REQUEST
 } from '../actions/userScheduleWorkouts';
 
 function getUsersWorkoutSchedulesByMonthData() {
@@ -256,6 +259,18 @@ function getUserWorkoutCalendarListData() {
     }
 }
 
+function getWorkoutsListByFirstWorkoutId() {
+    return function* (action) {
+        try {
+            let requestData = action.requestData;
+            const data = yield call(() => api.getWorkoutsListByFirstWorkoutId(requestData));
+            yield put(getWorkoutsListByFirstWorkoutIdSuccess(data))
+        } catch (error) {
+            yield put(getWorkoutsListByFirstWorkoutIdError(error))
+        }
+    }
+}
+
 export function* watchUsersWorkoutSchedulesData() {
     yield takeLatest(GET_USERS_WORKOUT_SCHEDULES_REQUEST, getUsersWorkoutSchedulesByMonthData());
     yield takeLatest(GET_USERS_WORKOUT_SCHEDULE_REQUEST, getUsersWorkoutScheduleData());
@@ -274,6 +289,7 @@ export function* watchUsersWorkoutSchedulesData() {
     yield takeLatest(DELETE_USER_SINGLE_EXERCISE_REQUEST, deleteUserSingleExerciseData());
     yield takeLatest(GET_USER_FIRST_WORKOUT_BY_DATE_REQUEST, getUserFirstWorkoutByDateData());
     yield takeLatest(GET_USER_WORKOUT_CALENDAR_LIST_REQUEST, getUserWorkoutCalendarListData());
+    yield takeLatest(GET_WORKOUTS_LIST_BY_FIRST_WORKOUT_ID_REQUEST, getWorkoutsListByFirstWorkoutId());
 }
 
 export default [

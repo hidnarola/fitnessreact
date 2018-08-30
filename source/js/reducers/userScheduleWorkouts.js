@@ -55,6 +55,9 @@ import {
     GET_USER_FIRST_WORKOUT_BY_DATE_ERROR,
     GET_USER_WORKOUT_CALENDAR_LIST_SUCCESS,
     SET_TODAYS_WORKOUT_DATE,
+    GET_WORKOUTS_LIST_BY_FIRST_WORKOUT_ID_REQUEST,
+    GET_WORKOUTS_LIST_BY_FIRST_WORKOUT_ID_SUCCESS,
+    GET_WORKOUTS_LIST_BY_FIRST_WORKOUT_ID_ERROR,
 } from "../actions/userScheduleWorkouts";
 import { VALIDATION_FAILURE_STATUS, SCHEDULED_WORKOUT_TYPE_WARMUP } from "../constants/consts";
 import { generateValidationErrorMsgArr, createNewStateForWorkout } from "../helpers/funs";
@@ -89,6 +92,8 @@ const initialState = Map({
     firstWorkoutId: null,
     firstWorkoutError: [],
     todaysWorkoutDate: null,
+    workoutsListLoading: false,
+    workoutsListError: [],
 });
 
 const actionMap = {
@@ -503,7 +508,7 @@ const actionMap = {
     },
     [DELETE_USER_WHOLE_EXERCISE_REQUEST]: (state, action) => {
         return state.merge(Map({
-            loading: false,
+            loading: true,
             error: [],
         }));
     },
@@ -626,6 +631,35 @@ const actionMap = {
             newState.calendarList = action.data.calendar_list;
         }
         return state.merge(Map(newState));
+    },
+    [GET_WORKOUTS_LIST_BY_FIRST_WORKOUT_ID_REQUEST]: (state, action) => {
+        return state.merge(Map({
+            workoutsListLoading: true,
+            workoutsListError: [],
+        }));
+    },
+    [GET_WORKOUTS_LIST_BY_FIRST_WORKOUT_ID_SUCCESS]: (state, action) => {
+        let newState = { workoutsListLoading: false };
+        if (action.data && action.data.status && action.data.status === 1) {
+            newState.workoutsList = Object.assign([], action.data.workouts_list);
+        } else {
+            let msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
+            newState.workoutsListError = [msg];
+        }
+    },
+    [GET_WORKOUTS_LIST_BY_FIRST_WORKOUT_ID_ERROR]: (state, action) => {
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
+        }
+        return state.merge(Map({
+            workoutsListLoading: false,
+            workoutsListError: error,
+        }));
     },
     [SET_TODAYS_WORKOUT_DATE]: (state, action) => {
         return state.merge(Map({
