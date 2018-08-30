@@ -641,11 +641,12 @@ const actionMap = {
     [GET_WORKOUTS_LIST_BY_DATE_SUCCESS]: (state, action) => {
         let newState = { workoutsListLoading: false };
         if (action.data && action.data.status && action.data.status === 1) {
-            newState.workoutsList = Object.assign([], action.data.workouts_list);
+            newState.workoutsList = action.data.workouts_list;
         } else {
             let msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
             newState.workoutsListError = [msg];
         }
+        return state.merge(Map(newState));
     },
     [GET_WORKOUTS_LIST_BY_DATE_ERROR]: (state, action) => {
         let error = [];

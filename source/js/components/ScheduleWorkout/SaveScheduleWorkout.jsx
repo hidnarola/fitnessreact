@@ -88,7 +88,7 @@ class SaveScheduleWorkout extends Component {
             workoutStat,
             match
         } = this.props;
-        const { logDate, showWholeWorkoutDeleteAlert, showUpdateTitleModal } = this.state;
+        const { logDate, showWholeWorkoutDeleteAlert, showUpdateTitleModal, completeWorkoutActionInit } = this.state;
         return (
             <div className="fitness-body">
                 <FitnessHeader />
@@ -196,6 +196,7 @@ class SaveScheduleWorkout extends Component {
                                                     handleWholeWorkoutDelete={this.handleShowWholeWorkoutDeleteAlert}
                                                     isActive={isActive}
                                                     openEditExerciseTitleModal={this.handleOpenEditExerciseTitleModal}
+                                                    isCompleteSwitchUnderProcess={completeWorkoutActionInit}
                                                 />
                                             );
                                         })}
@@ -1085,6 +1086,7 @@ class TodaysWorkoutListCard extends Component {
             handleWholeWorkoutDelete,
             isActive,
             openEditExerciseTitleModal,
+            isCompleteSwitchUnderProcess,
         } = this.props;
         const { isCompleted } = this.state;
         var today = moment().utc();
@@ -1106,6 +1108,7 @@ class TodaysWorkoutListCard extends Component {
                                     this.setState({ isCompleted: !isCompleted });
                                     handleCompleteWorkout(workout);
                                 }}
+                                disabled={isCompleteSwitchUnderProcess}
                             />
                             <label htmlFor={workout._id} className="label-default"></label>
                         </div>
