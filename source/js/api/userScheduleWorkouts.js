@@ -118,9 +118,9 @@ function getUserWorkoutCalendarList(requestData) {
     return postFormData(requestUrl + '/calendar_list', requestData, headers);
 }
 
-function getWorkoutsListByFirstWorkoutId(requestData) {
+function getWorkoutsListByDate(requestData) {
     let headers = extraUserHeaders();
-    return postFormData(requestUrl + '/workouts_list_by_first_workout', requestData, headers);
+    return postFormData(requestUrl + '/workouts_list_by_date', requestData, headers);
 }
 
 export default {
@@ -143,5 +143,5 @@ export default {
     getUserWorkoutByDate,
     getUserFirstWorkoutByDate,
     getUserWorkoutCalendarList,
-    getWorkoutsListByFirstWorkoutId,
+    getWorkoutsListByDate,
 }

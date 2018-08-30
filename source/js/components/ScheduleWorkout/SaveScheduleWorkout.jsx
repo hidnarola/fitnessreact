@@ -16,7 +16,7 @@ import {
     getUserWorkoutCalendarListRequest,
     setTodaysWorkoutDate,
     deleteUsersBulkWorkoutScheduleRequest,
-    getWorkoutsListByFirstWorkoutIdRequest
+    getWorkoutsListByDateRequest
 } from '../../actions/userScheduleWorkouts';
 import { routeCodes } from '../../constants/routes';
 import { te, prepareFieldsOptions, ts, convertUnits } from '../../helpers/funs';
@@ -402,10 +402,10 @@ class SaveScheduleWorkout extends Component {
             }
             dispatch(hidePageLoader());
             this.handleCloseEditExerciseTitleModal();
-            let fwi = (firstWorkoutId) ? firstWorkoutId : (match.params && match.params.id) ? match.params.id : null;
-            if (fwi) {
-                let requestData = { workoutId: fwi }
-                dispatch(getWorkoutsListByFirstWorkoutIdRequest(requestData));
+            let date = (workout && workout.date) ? workout.date : null;
+            if (date) {
+                let requestData = { date: date }
+                dispatch(getWorkoutsListByDateRequest(requestData));
             } else {
                 history.push(routeCodes.EXERCISE);
             }
@@ -426,10 +426,10 @@ class SaveScheduleWorkout extends Component {
             if (error && error.length > 0) {
                 te(error[0]);
             }
-            let fwi = (firstWorkoutId) ? firstWorkoutId : (match.params && match.params.id) ? match.params.id : null;
-            if (fwi) {
-                let requestData = { workoutId: fwi }
-                dispatch(getWorkoutsListByFirstWorkoutIdRequest(requestData));
+            let date = (workout && workout.date) ? workout.date : null;
+            if (date) {
+                let requestData = { date: date }
+                dispatch(getWorkoutsListByDateRequest(requestData));
             } else {
                 history.push(routeCodes.EXERCISE);
             }
