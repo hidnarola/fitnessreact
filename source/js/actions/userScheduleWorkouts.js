@@ -87,6 +87,12 @@ export const GET_WORKOUTS_LIST_BY_DATE_ERROR = 'GET_WORKOUTS_LIST_BY_DATE_ERROR'
 
 export const SET_TODAYS_WORKOUT_DATE = 'SET_TODAYS_WORKOUT_DATE';
 
+export const REORDER_WORKOUT_EXERCISES = 'REORDER_WORKOUT_EXERCISES';
+
+export const REORDER_WORKOUT_EXERCISES_REQUEST = 'REORDER_WORKOUT_EXERCISES_REQUEST';
+export const REORDER_WORKOUT_EXERCISES_SUCCESS = 'REORDER_WORKOUT_EXERCISES_SUCCESS';
+export const REORDER_WORKOUT_EXERCISES_ERROR = 'REORDER_WORKOUT_EXERCISES_ERROR';
+
 export function setSelectedSlotFromCalendar(slotInfo = null) {
     return {
         type: SET_SELECTED_SLOT_FROM_CALENDAR,
@@ -503,5 +509,33 @@ export function setTodaysWorkoutDate(date) {
     return {
         type: SET_TODAYS_WORKOUT_DATE,
         date
+    }
+}
+
+export function reorderWorkoutExercises(newOrder) {
+    return {
+        type: REORDER_WORKOUT_EXERCISES,
+        newOrder,
+    }
+}
+
+export function reorderWorkoutExercisesRequest(requestData) {
+    return {
+        type: REORDER_WORKOUT_EXERCISES_REQUEST,
+        requestData,
+    }
+}
+
+export function reorderWorkoutExercisesSuccess(data) {
+    return {
+        type: REORDER_WORKOUT_EXERCISES_SUCCESS,
+        data
+    }
+}
+
+export function reorderWorkoutExercisesError(error) {
+    return {
+        type: REORDER_WORKOUT_EXERCISES_ERROR,
+        error
     }
 }

@@ -11,7 +11,7 @@ import {
 } from '../../constants/consts';
 import noImg from 'img/common/no-img.png'
 import _ from "lodash";
-import { deleteUserWholeExerciseRequest, deleteUserSingleExerciseRequest, changeUsersWorkoutFormAction, reorderWorkoutExercises, reorderWorkoutExercisesRequest } from '../../actions/userScheduleWorkouts';
+import { deleteUserWholeExerciseRequest, deleteUserSingleExerciseRequest, changeUsersWorkoutFormAction } from '../../actions/userScheduleWorkouts';
 import { te, ts, prepareExerciseOptions, focusToControl } from '../../helpers/funs';
 import { FaPencil, FaTrash } from "react-icons/lib/fa";
 import { ButtonToolbar, Dropdown, MenuItem } from "react-bootstrap";
@@ -19,7 +19,6 @@ import ReactHtmlParser from "react-html-parser";
 import SixDots from 'svg/six-dots.svg';
 import SweetAlert from "react-bootstrap-sweetalert";
 import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 class WorkoutExercisesView extends Component {
     constructor(props) {
@@ -30,15 +29,12 @@ class WorkoutExercisesView extends Component {
             deleteExeObj: null,
             deleteExeId: null,
             showDeleteSingleAlert: false,
-            reorderInit: false,
-            requestReorder: false,
         }
     }
 
     render() {
         const {
             exercises,
-            workoutType,
         } = this.props;
         const {
             showDeleteAlert,
@@ -46,51 +42,41 @@ class WorkoutExercisesView extends Component {
         } = this.state;
         return (
             <div className="workout-exercises-view-wrapper">
-                <DragDropContext onDragEnd={this.handleRearrange}>
-                    <Droppable droppableId={workoutType}>
-                        {(provided, snapshot) => (
-                            <ul ref={provided.innerRef}>
-                                {exercises && exercises.length > 0 &&
-                                    exercises.map((o, i) => {
-                                        return (
-                                            <Draggable key={i} draggableId={i} index={i}>
-                                                {(provided, snapshot) => (
-                                                    <li ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                                                        {o.subType === SCHEDULED_WORKOUT_TYPE_EXERCISE &&
-                                                            <WorkoutExerciseSingleView
-                                                                exercise={o.exercises[0]}
-                                                                exerciseObj={o}
-                                                                handleWholeExeDelete={this.handleShowExeDeleteAlert}
-                                                                handleFillFormForEdit={this.handleFillFormForEdit}
-                                                            />
-                                                        }
-                                                        {o.subType === SCHEDULED_WORKOUT_TYPE_SUPERSET &&
-                                                            <WorkoutExerciseSupersetView
-                                                                exercises={o.exercises}
-                                                                exerciseObj={o}
-                                                                handleWholeExeDelete={this.handleShowExeDeleteAlert}
-                                                                handleFillFormForEdit={this.handleFillFormForEdit}
-                                                            />
-                                                        }
-                                                        {o.subType === SCHEDULED_WORKOUT_TYPE_CIRCUIT &&
-                                                            <WorkoutExerciseCircuitView
-                                                                exercises={o.exercises}
-                                                                exerciseObj={o}
-                                                                handleWholeExeDelete={this.handleShowExeDeleteAlert}
-                                                                handleSingleExeDelete={this.handleShowExeDeleteSingleAlert}
-                                                                handleFillFormForEdit={this.handleFillFormForEdit}
-                                                            />
-                                                        }
-                                                    </li>
-                                                )}
-                                            </Draggable>
-                                        );
-                                    })
-                                }
-                            </ul>
-                        )}
-                    </Droppable>
-                </DragDropContext>
+                <ul>
+                    {exercises && exercises.length > 0 &&
+                        exercises.map((o, i) => {
+                            return (
+                                <li key={i}>
+                                    {o.subType === SCHEDULED_WORKOUT_TYPE_EXERCISE &&
+                                        <WorkoutExerciseSingleView
+                                            exercise={o.exercises[0]}
+                                            exerciseObj={o}
+                                            handleWholeExeDelete={this.handleShowExeDeleteAlert}
+                                            handleFillFormForEdit={this.handleFillFormForEdit}
+                                        />
+                                    }
+                                    {o.subType === SCHEDULED_WORKOUT_TYPE_SUPERSET &&
+                                        <WorkoutExerciseSupersetView
+                                            exercises={o.exercises}
+                                            exerciseObj={o}
+                                            handleWholeExeDelete={this.handleShowExeDeleteAlert}
+                                            handleFillFormForEdit={this.handleFillFormForEdit}
+                                        />
+                                    }
+                                    {o.subType === SCHEDULED_WORKOUT_TYPE_CIRCUIT &&
+                                        <WorkoutExerciseCircuitView
+                                            exercises={o.exercises}
+                                            exerciseObj={o}
+                                            handleWholeExeDelete={this.handleShowExeDeleteAlert}
+                                            handleSingleExeDelete={this.handleShowExeDeleteSingleAlert}
+                                            handleFillFormForEdit={this.handleFillFormForEdit}
+                                        />
+                                    }
+                                </li>
+                            );
+                        })
+                    }
+                </ul>
                 <SweetAlert
                     show={showDeleteAlert}
                     danger
@@ -123,8 +109,8 @@ class WorkoutExercisesView extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        const { deleteWholeExeInit, reorderInit, requestReorder } = this.state;
-        const { loading, error, dispatch, exercises, reorderExercisesLoading, reorderExercisesError, workout } = this.props;
+        const { deleteWholeExeInit } = this.state;
+        const { loading, error, dispatch } = this.props;
         if (deleteWholeExeInit && !loading) {
             this.setState({ deleteWholeExeInit: false });
             this.handleCloseExeDeleteAlert();
@@ -135,24 +121,6 @@ class WorkoutExercisesView extends Component {
                 ts('Deleted!');
             }
             dispatch(hidePageLoader());
-        }
-        if (reorderInit) {
-            this.setState({ reorderInit: false, requestReorder: true });
-            let ex = [];
-            exercises.map((o) => {
-                ex.push({ id: o._id, sequence: o.sequence });
-            });
-            let requestData = {
-                workoutId: workout._id,
-                reorderExercises: ex,
-            };
-            dispatch(reorderWorkoutExercisesRequest(requestData));
-        }
-        if (requestReorder && !reorderExercisesLoading) {
-            this.setState({ requestReorder: false });
-            if (reorderExercisesError && reorderExercisesError.length > 0) {
-                te('Something went wrong! please rearrange again.');
-            }
         }
     }
 
@@ -548,30 +516,14 @@ class WorkoutExercisesView extends Component {
         }
         return formData;
     }
-
-    handleRearrange = (result, provider) => {
-        if (result && result.source && result.destination && result.source.index !== result.destination.index) {
-            const { dispatch } = this.props;
-            let newOrder = {
-                workoutType: result.source.droppableId,
-                source: result.source.index,
-                destination: result.destination.index,
-            };
-            dispatch(reorderWorkoutExercises(newOrder));
-            this.setState({ reorderInit: true });
-        }
-    }
 }
 
 const mapStateToProps = (state) => {
     const { userScheduleWorkouts } = state;
     return {
-        workout: userScheduleWorkouts.get('workout'),
         loading: userScheduleWorkouts.get('loading'),
         error: userScheduleWorkouts.get('error'),
         exercisesList: userScheduleWorkouts.get('exercises'),
-        reorderExercisesLoading: userScheduleWorkouts.get('reorderExercisesLoading'),
-        reorderExercisesError: userScheduleWorkouts.get('reorderExercisesError'),
     };
 }
 

@@ -123,6 +123,11 @@ function getWorkoutsListByDate(requestData) {
     return postFormData(requestUrl + '/workouts_list_by_date', requestData, headers);
 }
 
+function reorderWorkoutExercises(requestData) {
+    let headers = extraUserHeaders();
+    return putFormData(requestUrl + '/reorder_exercises', requestData, headers);
+}
+
 export default {
     getUsersWorkoutSchedulesByMonths,
     getExercisesName,
@@ -144,4 +149,5 @@ export default {
     getUserFirstWorkoutByDate,
     getUserWorkoutCalendarList,
     getWorkoutsListByDate,
+    reorderWorkoutExercises,
 }

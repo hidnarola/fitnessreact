@@ -141,16 +141,19 @@ class SaveScheduleWorkout extends Component {
                                             <div className="workout-main-types-view-wrapper">
                                                 {selectedWorkoutMainType === SCHEDULED_WORKOUT_TYPE_WARMUP &&
                                                     <WorkoutExercisesView
+                                                        workoutType={SCHEDULED_WORKOUT_TYPE_WARMUP}
                                                         exercises={workout.warmup}
                                                     />
                                                 }
                                                 {selectedWorkoutMainType === SCHEDULED_WORKOUT_TYPE_EXERCISE &&
                                                     <WorkoutExercisesView
+                                                        workoutType={SCHEDULED_WORKOUT_TYPE_EXERCISE}
                                                         exercises={workout.exercise}
                                                     />
                                                 }
                                                 {selectedWorkoutMainType === SCHEDULED_WORKOUT_TYPE_COOLDOWN &&
                                                     <WorkoutExercisesView
+                                                        workoutType={SCHEDULED_WORKOUT_TYPE_COOLDOWN}
                                                         exercises={workout.cooldown}
                                                     />
                                                 }

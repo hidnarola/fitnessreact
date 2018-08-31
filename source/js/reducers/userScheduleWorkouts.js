@@ -58,8 +58,12 @@ import {
     GET_WORKOUTS_LIST_BY_DATE_REQUEST,
     GET_WORKOUTS_LIST_BY_DATE_SUCCESS,
     GET_WORKOUTS_LIST_BY_DATE_ERROR,
+    REORDER_WORKOUT_EXERCISES_REQUEST,
+    REORDER_WORKOUT_EXERCISES_SUCCESS,
+    REORDER_WORKOUT_EXERCISES_ERROR,
+    REORDER_WORKOUT_EXERCISES,
 } from "../actions/userScheduleWorkouts";
-import { VALIDATION_FAILURE_STATUS, SCHEDULED_WORKOUT_TYPE_WARMUP } from "../constants/consts";
+import { VALIDATION_FAILURE_STATUS, SCHEDULED_WORKOUT_TYPE_WARMUP, SCHEDULED_WORKOUT_TYPE_EXERCISE, SCHEDULED_WORKOUT_TYPE_COOLDOWN } from "../constants/consts";
 import { generateValidationErrorMsgArr, createNewStateForWorkout } from "../helpers/funs";
 
 const initialState = Map({
@@ -94,6 +98,8 @@ const initialState = Map({
     todaysWorkoutDate: null,
     workoutsListLoading: false,
     workoutsListError: [],
+    reorderExercisesLoading: false,
+    reorderExercisesError: [],
 });
 
 const actionMap = {
@@ -667,6 +673,79 @@ const actionMap = {
             todaysWorkoutDate: action.date,
         }))
     },
+    [REORDER_WORKOUT_EXERCISES]: (state, action) => {
+        let newWorkout = reorderExercises(state.get('workout'), action.newOrder);
+        let newState = {
+            workout: newWorkout,
+        };
+        return state.merge(Map(newState));
+    },
+    [REORDER_WORKOUT_EXERCISES_REQUEST]: (state, action) => {
+        return state.merge(Map({
+            reorderExercisesLoading: true,
+            reorderExercisesError: [],
+        }));
+    },
+    [REORDER_WORKOUT_EXERCISES_SUCCESS]: (state, action) => {
+        let newState = { reorderExercisesLoading: false };
+        if (action.data && action.data.status && action.data.status === 1) {
+            newState.workout = action.data.workouts;
+        } else {
+            let msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
+            newState.reorderExercisesError = [msg];
+        }
+        return state.merge(Map(newState));
+    },
+    [REORDER_WORKOUT_EXERCISES_ERROR]: (state, action) => {
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
+        }
+        return state.merge(Map({
+            reorderExercisesLoading: false,
+            reorderExercisesError: error,
+        }));
+    },
+}
+
+function reorderExercises(workout, newOrder) {
+    var exercises = [];
+    switch (newOrder.workoutType) {
+        case SCHEDULED_WORKOUT_TYPE_WARMUP:
+            exercises = workout.warmup;
+            break;
+        case SCHEDULED_WORKOUT_TYPE_EXERCISE:
+            exercises = workout.exercise;
+            break;
+        case SCHEDULED_WORKOUT_TYPE_COOLDOWN:
+            exercises = workout.cooldown;
+            break;
+        default:
+            exercises = [];
+            break;
+    }
+    let [removed] = exercises.splice(newOrder.source, 1);
+    exercises.splice(newOrder.destination, 0, removed);
+    exercises.map((o, i) => {
+        o.sequence = i;
+    });
+    var newWorkout = Object.assign({}, workout);
+    switch (newOrder.workoutType) {
+        case SCHEDULED_WORKOUT_TYPE_WARMUP:
+            newWorkout.warmup = exercises;
+            break;
+        case SCHEDULED_WORKOUT_TYPE_EXERCISE:
+            newWorkout.exercise = exercises;
+            break;
+        case SCHEDULED_WORKOUT_TYPE_COOLDOWN:
+            newWorkout.cooldown = exercises;
+            break;
+    }
+    return newWorkout;
 }
 
 export default function reducer(state = initialState, action = {}) {
