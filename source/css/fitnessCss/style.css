@@ -2159,24 +2159,10 @@ ul.common-ul>li.body-fat-field-li{ width:50%; margin-left:auto;}
 .body-part-save-modal .btn-wrap button i,
 .body-part-save-modal .btn-wrap button svg { float: right; line-height: 46px; width: 34px; font-size: 20px; }
 .body-part-save-modal .btn-wrap button svg { margin-top: 15px; width: 54px; }
-.change-password-form {
-    width: 30%;
-    margin: 0 auto;
-}
-.custom-medium-btn{
-    border-radius: 80px;
-    color: #fff;
-    text-align: left;
-    width: 150px;
-    height: 40px;
-    border: 0;
-    padding: 0px 0px 0 20px;
-    background: linear-gradient(123.28deg, #46E9C5 0%, #3FFBFC 100%);
-}
+.change-password-form { width: 30%; margin: 0 auto; }
+.custom-medium-btn{ border-radius: 80px; color: #fff; text-align: left; width: 150px; height: 40px; border: 0; padding: 0px 0px 0 20px; background: linear-gradient(123.28deg, #46E9C5 0%, #3FFBFC 100%); }
 .custom-medium-btn i,
-.custom-medium-btn svg {
-    float: right;
-    margin: 0 15px 0 0;
-    font-size: 20px;
-    line-height: 18px;
-}
+.custom-medium-btn svg { float: right; margin: 0 15px 0 0; font-size: 20px; line-height: 18px; }
+.todays-workout-box-wrapper .right-btn { margin: 0 0 0 auto; }
+.todays-workout-box-wrapper .right-btn button { border: 0; background: transparent; border-radius: 80px; padding: 0; margin: 0; line-height: 0; }
+.todays-workout-box-wrapper .right-btn button i { color: #432cb3; }

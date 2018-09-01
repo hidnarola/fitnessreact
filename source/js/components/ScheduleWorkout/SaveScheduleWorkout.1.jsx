@@ -16,8 +16,7 @@ import {
     getUserWorkoutCalendarListRequest,
     setTodaysWorkoutDate,
     deleteUsersBulkWorkoutScheduleRequest,
-    getWorkoutsListByDateRequest,
-    addUserWorkoutTitleRequest
+    getWorkoutsListByDateRequest
 } from '../../actions/userScheduleWorkouts';
 import { routeCodes } from '../../constants/routes';
 import { te, prepareFieldsOptions, ts, convertUnits } from '../../helpers/funs';
@@ -45,7 +44,6 @@ import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
 import SweetAlert from "react-bootstrap-sweetalert";
 import { FaCircleONotch } from "react-icons/lib/fa";
 import UpdateWorkoutTitleForm from './UpdateWorkoutTitleForm';
-import AddWorkoutTitleForm from './AddWorkoutTitleForm';
 
 class SaveScheduleWorkout extends Component {
     constructor(props) {
@@ -64,8 +62,6 @@ class SaveScheduleWorkout extends Component {
             selectedWorkoutIdForDelete: null,
             showWholeWorkoutDeleteAlert: false,
             deleteWorkoutActionInit: false,
-            showAddWorkoutTitleAlert: false,
-            addWorkoutTitleInit: false,
         }
     }
 
@@ -90,15 +86,9 @@ class SaveScheduleWorkout extends Component {
             workoutsList,
             calendarList,
             workoutStat,
-            match,
+            match
         } = this.props;
-        const {
-            logDate,
-            showWholeWorkoutDeleteAlert,
-            showUpdateTitleModal,
-            completeWorkoutActionInit,
-            showAddWorkoutTitleAlert,
-        } = this.state;
+        const { logDate, showWholeWorkoutDeleteAlert, showUpdateTitleModal, completeWorkoutActionInit } = this.state;
         return (
             <div className="fitness-body">
                 <FitnessHeader />
@@ -195,7 +185,7 @@ class SaveScheduleWorkout extends Component {
                                     <div className="whitebox-head d-flex">
                                         <h3 className="title-h3 size-14">Today's Workouts</h3>
                                         <div className="right-btn">
-                                            <button type="button" onClick={this.handleAddWorkout}><i className="icon-add_circle"></i></button>
+                                            <button type="button"><i className="icon-add_circle"></i></button>
                                         </div>
                                     </div>
                                     <div className="whitebox-body text-c">
@@ -337,24 +327,6 @@ class SaveScheduleWorkout extends Component {
                         onCancel={this.handleCloseEditExerciseTitleModal}
                     />
                 </SweetAlert>
-
-                <SweetAlert
-                    type="default"
-                    title={`Add workout for - ${(workout && workout.date) ? moment(workout.date).local().format('DD/MM/YYYY') : ''}`}
-                    onConfirm={() => { }}
-                    btnSize="sm"
-                    cancelBtnBsStyle="danger"
-                    confirmBtnBsStyle="success"
-                    show={showAddWorkoutTitleAlert}
-                    showConfirm={false}
-                    showCancel={false}
-                    closeOnClickOutside={false}
-                >
-                    <AddWorkoutTitleForm
-                        onSubmit={this.handleAddTitleSubmit}
-                        onCancel={this.handleAddWorkoutTitleCancel}
-                    />
-                </SweetAlert>
             </div>
         );
     }
@@ -372,7 +344,6 @@ class SaveScheduleWorkout extends Component {
             firstWorkoutLoading,
             firstWorkoutError,
             firstWorkoutId,
-            workoutTitle,
         } = this.props;
         const {
             loadWorkoutInit,
@@ -382,7 +353,6 @@ class SaveScheduleWorkout extends Component {
             firstWorkoutIdInit,
             completeWorkoutActionInit,
             deleteWorkoutActionInit,
-            addWorkoutTitleInit,
         } = this.state;
         if (loadWorkoutInit && !loading) {
             dispatch(hidePageLoader());
@@ -479,18 +449,6 @@ class SaveScheduleWorkout extends Component {
             } else {
                 ts('Workout deleted successfully!');
                 history.push(routeCodes.EXERCISE);
-            }
-        }
-        if (addWorkoutTitleInit && !loadingTitle) {
-            this.setState({ addWorkoutTitleInit: false });
-            this.handleAddWorkoutTitleCancel();
-            if (errorTitle && errorTitle.length > 0) {
-                te(errorTitle[0]);
-            } else if (workoutTitle) {
-                var workoutTitleId = workoutTitle._id;
-                history.push(routeCodes.SAVE_SCHEDULE_WORKOUT.replace(':id', workoutTitleId));
-            } else {
-                te('Something went wrong! Please try after sometime');
             }
         }
     }
@@ -1082,30 +1040,6 @@ class SaveScheduleWorkout extends Component {
         dispatch(showPageLoader());
         dispatch(updateUserWorkoutTitleRequest(data.id, requestData));
     }
-
-    handleAddWorkout = () => {
-        this.setState({ showAddWorkoutTitleAlert: true });
-    }
-
-    handleAddWorkoutTitleCancel = () => {
-        this.setState({ showAddWorkoutTitleAlert: false });
-    }
-
-    handleAddTitleSubmit = (data) => {
-        const { dispatch, workout } = this.props;
-        var date = workout.date;
-        if (!date) {
-            date = moment().startOf('day').utc();
-        }
-        var requestData = {
-            title: data.title,
-            description: (data.description) ? data.description : '',
-            type: SCHEDULED_WORKOUT_TYPE_EXERCISE,
-            date: date,
-        }
-        this.setState({ addWorkoutTitleInit: true });
-        dispatch(addUserWorkoutTitleRequest(requestData));
-    }
 }
 
 const mapStateToProps = (state) => {
@@ -1117,7 +1051,6 @@ const mapStateToProps = (state) => {
         selectedWorkoutMainType: userScheduleWorkouts.get('selectedWorkoutMainType'),
         exerciseMeasurements: userScheduleWorkouts.get('exerciseMeasurements'),
         loadingTitle: userScheduleWorkouts.get('loadingTitle'),
-        workoutTitle: userScheduleWorkouts.get('workoutTitle'),
         errorTitle: userScheduleWorkouts.get('errorTitle'),
         workoutFormAction: userScheduleWorkouts.get('workoutFormAction'),
         selectedWorkoutForEdit: userScheduleWorkouts.get('selectedWorkoutForEdit'),
