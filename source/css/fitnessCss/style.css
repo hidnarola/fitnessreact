@@ -1175,8 +1175,7 @@ flex-direction:row; display:-webkit-box; display:-webkit-flex; display:-ms-flex;
 .step-wrap-login .stepbox-head {padding: 0 30px 30px 0px;}
 .step-wrap-login .step-box-r {width: 100%;}
 .step-wrap-login .step-box-l {width: 100%;}
-/* .step-wrap-login .step-box-l {width: 35%;} */
-.step-wrap-login .step-box {width: 800px;height: 400px;}
+.step-wrap-login .step-box {width: 800px;height: 100%;}
 .step-wrap.step-wrap-login {align-items: center;justify-content: center;}
 
 .stepbox-b{text-align:right; height:80px; display:-webkit-box; display:-webkit-flex; display:-ms-flex; display:flex; margin-left:auto; padding:30px 0 0;}
@@ -1389,7 +1388,6 @@ div#loader .loader-spinner, div.loaderloader .loader-spinner, div.no-content-loa
 .recipe-details-modal-main.progress-popup .modal-dialog {max-width: 1086px;}
 .date_select_func:After {position: absolute;content: " ";right: 180px;top: -15px;border-left: 15px solid transparent;border-right: 15px solid transparent;border-bottom: 15px solid #fff;}
 .date_select_func {border-radius: 5px;background-color: #fff;padding: 15px;display: block;margin-bottom: 20px;text-align: center;position: relative;margin-top: -20px;}
-.login-wrapper .alert-danger {padding: 5px 10px;margin: 0 0 10px 0;}
 .login-wrapper .step-box.step-box_expried .alert.alert-danger {position: absolute;top: -60px;width: 800px;text-align: center;border: 0;color: #000;font-size: 30px;background: linear-gradient(123.28deg, #46E9C5 0%, #3FFBFC 100%);left: 0;}
 .step-box.step-box_expried {position: relative;}
 .nutrition-meal-add-wrapper .dropdown.btn-group button#add_recipe_actions {background: none !important;}
