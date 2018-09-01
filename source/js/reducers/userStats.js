@@ -9,6 +9,7 @@ import {
     GET_USER_SINGLE_STATS_REQUEST,
     GET_USER_SINGLE_STATS_SUCCESS,
     GET_USER_SINGLE_STATS_ERROR,
+    SET_USER_STATS_STATE,
 } from "../actions/userStats";
 import { VALIDATION_FAILURE_STATUS, STATS_STRENGTH } from "../constants/consts";
 import { generateValidationErrorMsgArr } from "../helpers/funs";
@@ -20,6 +21,8 @@ const initialState = Map({
     stats: null,
     selectedType: null,
     error: [],
+    dateRange: null,
+    regetStats: false,  // used as flag to hard reget stats data
 });
 
 const actionMap = {
@@ -28,6 +31,7 @@ const actionMap = {
             loading: true,
             stats: null,
             selectedType: (action.requestData && action.requestData.type) ? action.requestData.type : STATS_STRENGTH,
+            dateRange: (action.requestData && action.requestData.dateRange) ? action.requestData.dateRange : null,
             error: [],
         }));
     },
@@ -92,6 +96,9 @@ const actionMap = {
         };
         newState.stats = prepareStateDataForSingleResponse(state.get('stats'), action.data);
         return state.merge(Map(newState));
+    },
+    [SET_USER_STATS_STATE]: (state, action) => {
+        return state.merge(Map(action.stateData));
     },
 };
 

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { NavLink } from "react-router-dom";
 import { toggleSideMenu } from '../../../helpers/funs';
 import { FaSignOut } from "react-icons/lib/fa";
+import { adminRouteCodes } from '../../../constants/adminRoutes';
 
 class AdminRightMenu extends Component {
     render() {
@@ -19,7 +20,7 @@ class AdminRightMenu extends Component {
                         <ul>
                             <li>
                                 <NavLink
-                                    to={''}
+                                    to={adminRouteCodes.PROFILE}
                                     onClick={() => toggleSideMenu('admin-right-menu', false)}
                                 >
                                     <i className="icon-account_circle"></i>
@@ -27,7 +28,10 @@ class AdminRightMenu extends Component {
                                 </NavLink>
                             </li>
                             <li>
-                                <NavLink to={''}>
+                                <NavLink
+                                    to={adminRouteCodes.CHANGE_PASSWORD}
+                                    onClick={() => toggleSideMenu('admin-right-menu', false)}
+                                >
                                     <i className="icon-lock_open"></i>
                                     Change Password
                                 </NavLink>

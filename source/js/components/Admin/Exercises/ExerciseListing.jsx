@@ -93,7 +93,7 @@ class ExerciseListing extends Component {
                         <h2>Exercises</h2>
                     </div>
                     <div className="body-head-r">
-                        <NavLink to={adminRouteCodes.EXERCISE_SAVE} className="pink-btn">Add Exercise</NavLink>
+                        <NavLink to={adminRouteCodes.EXERCISE_SAVE} className="pink-btn"><i className="icon-add_circle"></i>Add Exercise</NavLink>
                     </div>
                 </div>
 

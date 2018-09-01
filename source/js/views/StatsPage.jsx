@@ -7,8 +7,17 @@ import FitnessNav from 'components/global/FitnessNav';
 import { routeCodes } from '../constants/routes';
 import { STATS_STRENGTH, STATS_CARDIO } from '../constants/consts';
 import StatsContent from '../components/Stats/StatsContent';
+import DateRangePicker from 'react-daterange-picker';
+import { setUserStatsState } from '../actions/userStats';
 
 class StatsPage extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            showSearch: false,
+        }
+    }
+
     componentWillMount() {
         const { match, history } = this.props;
         if (match.isExact) {
@@ -18,7 +27,8 @@ class StatsPage extends Component {
     }
 
     render() {
-        const { loggedUserData } = this.props;
+        const { loggedUserData, dateRange } = this.props;
+        const { showSearch } = this.state;
         return (
             <div className='stat-page'>
                 <FitnessHeader />
@@ -48,7 +58,25 @@ class StatsPage extends Component {
                                 </NavLink>
                             </div>
                         </div>
+                        {dateRange &&
+                            <div className="body-head-r">
+                                <a href="javascript:void(0)" onClick={() => this.setState({ showSearch: !showSearch })} className="pink-btn">{`${dateRange.start.format('DD/MM/YYYY')} - ${dateRange.end.format('DD/MM/YYYY')}`}<i className="icon-date_range"></i></a>
+                            </div>
+                        }
                     </div>
+
+                    {showSearch &&
+                        <div className="progress-date-range-picker">
+                            <DateRangePicker
+                                firstOfWeek={1}
+                                numberOfCalendars={2}
+                                selectionType='range'
+                                value={dateRange}
+                                onSelect={this.handleTimeDateRange}
+                                className="progress-date-range"
+                            />
+                        </div>
+                    }
 
                     <Switch>
                         <Route path={`${routeCodes.STATSPAGE}/:type(${STATS_STRENGTH}|${STATS_CARDIO})`} component={StatsContent} />
@@ -66,12 +94,23 @@ class StatsPage extends Component {
         }
     }
 
+    handleTimeDateRange = (range, state) => {
+        const { dispatch } = this.props;
+        let stateData = {
+            dateRange: range,
+            regetStats: true
+        };
+        dispatch(setUserStatsState(stateData));
+        this.setState({ showSearch: false });
+    }
+
 }
 
 const mapStateToProps = (state) => {
-    const { user } = state;
+    const { user, userStats } = state;
     return {
         loggedUserData: user.get('loggedUserData'),
+        dateRange: userStats.get('dateRange'),
     }
 }
 

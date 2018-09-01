@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import moment from "moment";
 import { STATS_STRENGTH, STATS_CARDIO } from '../../constants/consts';
-import { getUserStatsRequest, getUserGraphDataRequest, getUserSingleStatsRequest, setUserStatsState } from '../../actions/userStats';
+import { getUserStatsRequest, getUserGraphDataRequest, getUserSingleStatsRequest } from '../../actions/userStats';
 import { FaCircleONotch } from "react-icons/lib/fa";
 import NoDataFoundImg from "img/common/no_datafound.png";
 import ErrorCloud from "svg/error-cloud.svg";
@@ -66,7 +66,7 @@ class StatsContent extends Component {
 
     componentDidUpdate(prevProps, prevState) {
         const { initialDataLoaded, fieldsLoaded, singleGraphDataRequest } = this.state;
-        const { loading, stats, selectedType, dispatch, loadingFields, match, regetStats } = this.props;
+        const { loading, stats, selectedType, dispatch, loadingFields, match } = this.props;
         if (match && match.params && match.params.type && prevProps.match && prevProps.match.params && prevProps.match.params.type && prevProps.match.params.type !== match.params.type) {
             this.getInitialStatsData();
         }
@@ -92,34 +92,15 @@ class StatsContent extends Component {
             dispatch(getUserGraphDataRequest(requestData));
             this.setState({ fieldsLoaded: false, singleGraphDataRequest: null });
         }
-        if (regetStats && prevProps.regetStats !== regetStats) {
-            let stateData = { regetStats: false };
-            dispatch(setUserStatsState(stateData));
-            this.getInitialStatsData();
-        }
     }
 
     getInitialStatsData = () => {
-        const { dispatch, match, dateRange } = this.props;
+        const { dispatch, match } = this.props;
         if (match && match.params && match.params.type) {
-            let start = null;
-            let end = null;
-            if (dateRange) {
-                start = dateRange.start;
-                end = dateRange.end;
-            } else {
-                start = moment().startOf('day').utc().subtract(1, 'week');
-                end = moment().startOf('day').utc();
-            }
-            let newdateRange = moment.range(
-                start,
-                end
-            );
             let requestData = {
                 type: match.params.type,
-                dateRange: newdateRange,
-                start,
-                end
+                start: moment().startOf('day').utc().subtract(1, 'week'),
+                end: moment().startOf('day').utc()
             }
             dispatch(getUserStatsRequest(requestData));
             this.setState({ initialDataLoaded: true });
@@ -191,8 +172,6 @@ const mapStateToProps = (state) => {
         stats: userStats.get('stats'),
         selectedType: userStats.get('selectedType'),
         error: userStats.get('error'),
-        dateRange: userStats.get('dateRange'),
-        regetStats: userStats.get('regetStats'),
     };
 }
 

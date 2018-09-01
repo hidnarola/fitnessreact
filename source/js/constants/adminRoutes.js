@@ -30,4 +30,7 @@ export const adminRouteCodes = {
     BODY_PARTS: `${adminRootRoute}bodyparts`,
 
     COUPONS: `${adminRootRoute}coupons`,
+
+    PROFILE: `${adminRootRoute}profile`,
+    CHANGE_PASSWORD: `${adminRootRoute}change_password`,
 }

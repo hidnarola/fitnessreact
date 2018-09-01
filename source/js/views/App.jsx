@@ -94,6 +94,8 @@ import { logout } from '../actions/login';
 import BodyParts from './Admin/BodyParts';
 import EquipmentCategories from './Admin/EquipmentCategories';
 import DND from './DND';
+import ChangePassword from './Admin/ChangePassword';
+import Profile from './Admin/Profile';
 
 const auth = new Auth();
 
@@ -205,15 +207,18 @@ class App extends Component {
                             <AdminPrivateRoute path={adminRouteCodes.FITNESS_TESTS} component={FitnessTests} />
 
                             <AdminPrivateRoute path={adminRouteCodes.EQUIPMENTS} component={Equipments} />
-                            
+
                             <AdminPrivateRoute path={adminRouteCodes.EQUIPMENT_CATEGORIES} component={EquipmentCategories} />
 
                             <AdminPrivateRoute path={adminRouteCodes.BADGES} component={AdminBadges} />
 
                             <AdminPrivateRoute path={adminRouteCodes.BODY_PARTS} component={BodyParts} />
 
+                            <AdminPrivateRoute path={adminRouteCodes.PROFILE} component={Profile} />
+                            <AdminPrivateRoute path={adminRouteCodes.CHANGE_PASSWORD} component={ChangePassword} />
+
                             <Route exact path={AUTH_CALLBACK_ROUTE} component={Callback} />
-                            
+
                             <Route exact path={routeCodes.DND} component={DND} />
 
                             <Route path='*' component={NotFound} />

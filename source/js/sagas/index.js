@@ -43,6 +43,8 @@ import adminBadgeCategorySagas from 'sagas/admin/badgeCategories';
 import adminBadgeTaskSagas from 'sagas/admin/badgeTasks';
 import adminBadgeSagas from 'sagas/admin/badges';
 import adminFitnessTestSagas from 'sagas/admin/fitnessTests';
+import adminProfile from 'sagas/admin/profile';
+import adminChangePasswordSagas from 'sagas/admin/changePassword';
 
 export default function* rootSaga() {
   yield all([
@@ -89,5 +91,7 @@ export default function* rootSaga() {
     ...adminBadgeTaskSagas,
     ...adminBadgeSagas,
     ...adminFitnessTestSagas,
+    ...adminProfile,
+    ...adminChangePasswordSagas,
   ]);
 }
