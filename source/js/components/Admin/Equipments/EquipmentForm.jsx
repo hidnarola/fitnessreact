@@ -43,75 +43,85 @@ class EquipmentForm extends Component {
         const { handleSubmit } = this.props;
         const { exerciseImages, description, categoryOptions } = this.state;
         return (
-            <div className="exercise-form-data">
-                <form onSubmit={handleSubmit}>
-                    <div className="row">
-                        <div className="col-md-12">
-                            <Field
-                                name="name"
-                                className="form-control"
-                                label="Name"
-                                labelClass="control-label"
-                                wrapperClass="form-group"
-                                placeholder="Name"
-                                component={InputField}
-                                errorClass="help-block"
-                                warningClass=""
-                                validate={[required]}
-                            />
-                            <Field
-                                name="equipmentCategory"
-                                label="Category"
-                                labelClass="control-label"
-                                wrapperClass="form-group"
-                                placeholder="Category"
-                                component={SelectField_ReactSelect}
-                                options={categoryOptions}
-                                errorClass="help-block"
-                                validate={[requiredReactSelect]}
-                            />
-                            <Field
-                                name="description"
-                                value={description}
-                                handleChange={this.handleChangeTextEditor}
-                                className="editor-min-height-200"
-                                label="Description"
-                                labelClass="control-label display_block"
-                                wrapperClass="form-group"
-                                placeholder="Description"
-                                component={EditorField}
-                            />
-                            <Field
-                                name="status"
-                                label="Status"
-                                labelClass="control-label"
-                                wrapperClass="form-group"
-                                placeholder="Status"
-                                component={SelectField_ReactSelect}
-                                options={statusOptions}
-                                errorClass="help-block"
-                                validate={[requiredReactSelectStatus]}
-                            />
-                            <Field
-                                name="image"
-                                label="Image"
-                                labelClass="control-label display_block"
-                                mainWrapperClass="image-form-main-wrapper"
-                                wrapperClass="form-group"
-                                placeholder="Image"
-                                component={FileField_Dropzone_Single}
-                                existingImages={exerciseImages}
-                            />
-                            <div className="col-md-12 mb-20 clear-both text-center">
-                                <div className="stepbox-b stepbox-b-center">
-                                    <NavLink to={adminRouteCodes.EQUIPMENTS} className="continues-btn">Back</NavLink>
-                                    <button type="submit" className="continues-btn"><span>Save</span></button>
-                                </div>
-                            </div>
+            <form method="POST" onSubmit={handleSubmit}>
+                <div className="d-flex">
+                    <div className="col-md-4">
+                        <Field
+                            name="name"
+                            className="form-control"
+                            label="Name"
+                            labelClass="control-label display_block"
+                            wrapperClass="form-group"
+                            placeholder="Name"
+                            component={InputField}
+                            errorClass="help-block"
+                            warningClass=""
+                            validate={[required]}
+                        />
+                    </div>
+                    <div className="col-md-4">
+                        <Field
+                            name="equipmentCategory"
+                            label="Category"
+                            labelClass="control-label display_block"
+                            wrapperClass="form-group"
+                            placeholder="Category"
+                            component={SelectField_ReactSelect}
+                            options={categoryOptions}
+                            errorClass="help-block"
+                            validate={[requiredReactSelect]}
+                        />
+                    </div>
+                    <div className="col-md-4">
+                        <Field
+                            name="status"
+                            label="Status"
+                            labelClass="control-label display_block"
+                            wrapperClass="form-group"
+                            placeholder="Status"
+                            component={SelectField_ReactSelect}
+                            options={statusOptions}
+                            errorClass="help-block"
+                            validate={[requiredReactSelectStatus]}
+                        />
+                    </div>
+                </div>
+                <div className="d-flex">
+                    <div className="col-md-8">
+                        <Field
+                            name="description"
+                            value={description}
+                            handleChange={this.handleChangeTextEditor}
+                            className="editor-min-height-200"
+                            label="Description"
+                            labelClass="control-label display_block"
+                            wrapperClass="form-group"
+                            placeholder="Description"
+                            component={EditorField}
+                        />
+                    </div>
+                    <div className="col-md-4">
+                        <Field
+                            name="image"
+                            label="Image"
+                            labelClass="control-label display_block"
+                            mainWrapperClass="image-form-main-wrapper"
+                            wrapperClass="form-group"
+                            placeholder="Image"
+                            component={FileField_Dropzone_Single}
+                            existingImages={exerciseImages}
+                        />
+                    </div>
+                </div>
+                <div className="d-flex">
+                    <div className="col-md-12 mb-20 clear-both text-center">
+                        <div className="stepbox-b stepbox-b-center">
+                            <NavLink to={adminRouteCodes.EQUIPMENTS} className="continues-btn">Back</NavLink>
+                            <button type="submit" className="continues-btn"><span>Save</span></button>
                         </div>
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
         );
     }
 
