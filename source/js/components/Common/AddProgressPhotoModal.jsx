@@ -96,6 +96,11 @@ AddProgressPhotoModal = reduxForm({
 export default AddProgressPhotoModal;
 
 class PhotoUploadField extends Component {
+    constructor(props) {
+        super(props);
+        this.isImageSelected = false;
+    }
+
     render() {
         const {
             input,
@@ -119,7 +124,16 @@ class PhotoUploadField extends Component {
                 <Dropzone
                     {...input}
                     accept={accept ? accept : "image/jpeg, image/png, image/jpg, image/gif"}
-                    onDrop={(filesToUpload, e) => input.onChange(filesToUpload)}
+                    onClick={() => this.isImageSelected = false}
+                    onDrop={(filesToUpload, e) => {
+                        this.isImageSelected = (filesToUpload && filesToUpload.length > 0);
+                        input.onChange(filesToUpload);
+                    }}
+                    onFileDialogCancel={() => {
+                        if (!this.isImageSelected) {
+                            input.onChange('');
+                        }
+                    }}
                     multiple={false}
                     className={className}
                 >

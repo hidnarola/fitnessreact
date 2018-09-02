@@ -12,6 +12,9 @@ import { FRIENDSHIP_STATUS_SELF, POST_TYPE_GALLERY } from '../../constants/const
 import AddGalleryPhotoModal from './AddGalleryPhotoModal';
 import { addUserGalleryPhotoRequest, getUserGalleryPhotoRequest } from '../../actions/userGalleryPhotos';
 import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
+import { FaCircleONotch } from "react-icons/lib/fa";
+import NoDataFoundImg from "img/common/no_datafound.png";
+import ErrorCloud from "svg/error-cloud.svg";
 
 class ProfilePhotos extends Component {
     constructor(props) {
@@ -54,7 +57,9 @@ class ProfilePhotos extends Component {
 
     render() {
         const {
-            profile
+            profile,
+            progressPhotoloading,
+            progressPhotoError,
         } = this.props;
         const {
             progressPhotos,
@@ -78,13 +83,23 @@ class ProfilePhotos extends Component {
                         }
                     </div>
                     <div className="whitebox-body profile-body">
-                        {!progressPhotos &&
-                            <span>No progress image</span>
+                        {progressPhotoloading &&
+                            <div className="text-c">
+                                <FaCircleONotch className="loader-spinner fs-50" />
+                            </div>
                         }
-                        {progressPhotos && progressPhotos.length <= 0 &&
-                            <span>No progress image</span>
+                        {!progressPhotoloading && (!progressPhotos || progressPhotos.length <= 0) && progressPhotoError && progressPhotoError.length <= 0 &&
+                            <div className="no-record-found-wrapper">
+                                <img src={NoDataFoundImg} />
+                            </div>
                         }
-                        {progressPhotos && progressPhotos.length > 0 &&
+                        {!progressPhotoloading && (!progressPhotos || progressPhotos.length <= 0) && progressPhotoError && progressPhotoError.length > 0 &&
+                            <div className="server-error-wrapper">
+                                <ErrorCloud />
+                                <h4>Something went wrong! please try again.</h4>
+                            </div>
+                        }
+                        {!progressPhotoloading && progressPhotos && progressPhotos.length > 0 &&
                             <ul className="d-flex profile-list-ul">
                                 {progressPhotos.map((photo, index) => (
                                     <li key={index}>
@@ -318,6 +333,7 @@ const mapStateToProps = (state) => {
     const { userProgressPhotos, userGalleryPhotos } = state;
     return {
         progressPhotoloading: userProgressPhotos.get('loading'),
+        progressPhotoError: userProgressPhotos.get('error'),
         progressPhotos: userProgressPhotos.get('progressPhotos'),
         galleryPhotoloading: userGalleryPhotos.get('loading'),
         galleryPhotoError: userGalleryPhotos.get('error'),
