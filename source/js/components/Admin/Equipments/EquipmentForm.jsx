@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { NavLink, withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import { InputField, EditorField, SelectField_ReactSelect, FileField_Dropzone_Single } from '../../../helpers/FormControlHelper';
@@ -113,12 +113,16 @@ class EquipmentForm extends Component {
                         />
                     </div>
                 </div>
-                <div className="d-flex">
-                    <div className="col-md-12 mb-20 clear-both text-center">
-                        <div className="stepbox-b stepbox-b-center">
-                            <NavLink to={adminRouteCodes.EQUIPMENTS} className="continues-btn">Back</NavLink>
-                            <button type="submit" className="continues-btn"><span>Save</span></button>
-                        </div>
+                <div className="d-flex pull-right mt-10">
+                    <div className="col-md-12">
+                        <Link to={adminRouteCodes.EQUIPMENTS} className="custom-medium-link-btn">
+                            <span>Back</span>
+                            <i className="icon-arrow_back"></i>
+                        </Link>
+                        <button type="submit" className="custom-medium-btn">
+                            <span>Save</span>
+                            <i className="icon-save"></i>
+                        </button>
                     </div>
                 </div>
             </form>

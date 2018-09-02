@@ -38,7 +38,7 @@ class EquipmentCategoriesSave extends Component {
                                 name="name"
                                 className="form-control"
                                 label="Name"
-                                labelClass="control-label"
+                                labelClass="control-label display_block"
                                 wrapperClass="form-group"
                                 placeholder="Name"
                                 component={InputField}
@@ -47,7 +47,7 @@ class EquipmentCategoriesSave extends Component {
                             <Field
                                 name="description"
                                 label="Description"
-                                labelClass="control-label"
+                                labelClass="control-label display_block"
                                 className="form-control resize-vertical min-height-80"
                                 wrapperClass="form-group"
                                 placeholder="Description"
