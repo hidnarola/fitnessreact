@@ -22,6 +22,12 @@ export const EXERCISES_DELETE_REQUEST = 'EXERCISES_DELETE_REQUEST';
 export const EXERCISES_DELETE_SUCCESS = 'EXERCISES_DELETE_SUCCESS';
 export const EXERCISES_DELETE_ERROR = 'EXERCISES_DELETE_ERROR';
 
+export const EXERCISES_RECOVER_REQUEST = 'EXERCISES_RECOVER_REQUEST';
+export const EXERCISES_RECOVER_SUCCESS = 'EXERCISES_RECOVER_SUCCESS';
+export const EXERCISES_RECOVER_ERROR = 'EXERCISES_RECOVER_ERROR';
+
+export const SET_EXERCISE_STATE = 'SET_EXERCISE_STATE';
+
 export function exerciseListRequest() {
     return {
         type: EXERCISES_LIST_REQUEST,
@@ -145,5 +151,33 @@ export function exerciseDeleteError(error) {
     return {
         type: EXERCISES_DELETE_ERROR,
         error
+    }
+}
+
+export function exerciseRecoverRequest(_id) {
+    return {
+        type: EXERCISES_RECOVER_REQUEST,
+        _id
+    }
+}
+
+export function exerciseRecoverSuccess(data) {
+    return {
+        type: EXERCISES_RECOVER_SUCCESS,
+        data
+    }
+}
+
+export function exerciseRecoverError(error) {
+    return {
+        type: EXERCISES_RECOVER_ERROR,
+        error
+    }
+}
+
+export function setExerciseState(stateData = {}) {
+    return {
+        type: SET_EXERCISE_STATE,
+        stateData
     }
 }

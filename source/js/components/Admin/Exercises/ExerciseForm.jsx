@@ -12,7 +12,8 @@ import {
     maxLength,
     minLength,
     requiredReactSelect,
-    requiredReactSelectMulti
+    requiredReactSelectMulti,
+    requiredReactSelectStatus
 } from '../../../formValidation/validationRules';
 import {
     InputField,
@@ -38,8 +39,8 @@ import _ from 'lodash';
 import DeleteConfirmation from '../Common/DeleteConfirmation';
 import ExerciseTips from './ExerciseTips';
 
-const maxLength15 = maxLength(15);
-const minLength2 = minLength(2);
+const max150 = maxLength(150);
+const min3 = minLength(3);
 const mechanicsOptions = [
     { value: EXERCISE_MECHANICS_COMPOUND, label: 'Compound' },
     { value: EXERCISE_MECHANICS_ISOLATION, label: 'Isolation' }
@@ -48,6 +49,10 @@ const difficultyLevelOptions = [
     { value: EXERCISE_DIFFICULTY_BEGINNER, label: 'Beginner' },
     { value: EXERCISE_DIFFICULTY_INTERMEDIATE, label: 'Intermediate' },
     { value: EXERCISE_DIFFICULTY_EXPERT, label: 'Expert' },
+];
+const statusOptions = [
+    { value: 1, label: 'Active' },
+    { value: 0, label: 'Inactive' },
 ];
 
 class ExerciseForm extends Component {
@@ -126,62 +131,7 @@ class ExerciseForm extends Component {
                                 component={InputField}
                                 errorClass="help-block"
                                 warningClass=""
-                                validate={[required, minLength2]}
-                            />
-                            <Field
-                                name="description"
-                                value={description}
-                                handleChange={this.handleChangeTextEditor}
-                                className="editor-min-height-200"
-                                label="Description"
-                                labelClass="control-label display_block"
-                                wrapperClass="form-group"
-                                placeholder="Description"
-                                component={EditorField}
-                            />
-                            <Field
-                                name="main_muscle"
-                                label="Main Muscle Group"
-                                labelClass="control-label"
-                                wrapperClass="form-group"
-                                placeholder="Main Muscle Group"
-                                component={SelectField_ReactSelect}
-                                options={bodyPartsOptions}
-                                errorClass="help-block"
-                                validate={[requiredReactSelect]}
-                            />
-                            <Field
-                                name="other_muscle"
-                                label="Other Muscle Group"
-                                labelClass="control-label"
-                                wrapperClass="form-group"
-                                placeholder="Other Muscle Group"
-                                component={SelectField_ReactSelectMulti}
-                                options={bodyPartsOptions}
-                                errorClass="help-block"
-                                validate={[requiredReactSelectMulti]}
-                            />
-                            <Field
-                                name="detailed_muscle"
-                                label="Detailed Muscle Group"
-                                labelClass="control-label"
-                                wrapperClass="form-group"
-                                placeholder="Detailed Muscle Group"
-                                component={SelectField_ReactSelectMulti}
-                                options={bodyPartsOptions}
-                                errorClass="help-block"
-                                validate={[requiredReactSelectMulti]}
-                            />
-                            <Field
-                                name="mechanics"
-                                label="Mechanics"
-                                labelClass="control-label"
-                                wrapperClass="form-group"
-                                placeholder="Mechanics"
-                                component={SelectField_ReactSelect}
-                                options={mechanicsOptions}
-                                errorClass="help-block"
-                                validate={[requiredReactSelect]}
+                                validate={[required, min3, max150]}
                             />
                             <Field
                                 name="equipments"
@@ -206,6 +156,55 @@ class ExerciseForm extends Component {
                                 validate={[requiredReactSelect]}
                             />
                             <Field
+                                name="main_muscle"
+                                label="Main Muscle Group"
+                                labelClass="control-label"
+                                wrapperClass="form-group"
+                                placeholder="Main Muscle Group"
+                                component={SelectField_ReactSelect}
+                                options={bodyPartsOptions}
+                                errorClass="help-block"
+                                validate={[requiredReactSelect]}
+                            />
+                            <Field
+                                name="other_muscle"
+                                label="Other Muscle Group"
+                                labelClass="control-label"
+                                wrapperClass="form-group"
+                                placeholder="Other Muscle Group"
+                                component={SelectField_ReactSelectMulti}
+                                options={bodyPartsOptions}
+                            />
+                            <Field
+                                name="detailed_muscle"
+                                label="Detailed Muscle Group"
+                                labelClass="control-label"
+                                wrapperClass="form-group"
+                                placeholder="Detailed Muscle Group"
+                                component={SelectField_ReactSelectMulti}
+                                options={bodyPartsOptions}
+                            />
+                            <Field
+                                name="mechanics"
+                                label="Mechanics"
+                                labelClass="control-label"
+                                wrapperClass="form-group"
+                                placeholder="Mechanics"
+                                component={SelectField_ReactSelect}
+                                options={mechanicsOptions}
+                            />
+                            <Field
+                                name="description"
+                                value={description}
+                                handleChange={this.handleChangeTextEditor}
+                                className="editor-min-height-200"
+                                label="Description"
+                                labelClass="control-label display_block"
+                                wrapperClass="form-group"
+                                placeholder="Description"
+                                component={EditorField}
+                            />
+                            <Field
                                 name="images"
                                 label="Images"
                                 labelClass="control-label display_block"
@@ -215,6 +214,17 @@ class ExerciseForm extends Component {
                                 component={FileField_Dropzone_Multi}
                                 existingImages={exerciseImages}
                                 showExistingImageDeleteModel={(path) => this.handleDeleteImageModel(true, path)}
+                            />
+                            <Field
+                                name="status"
+                                label="Status"
+                                labelClass="control-label display_block"
+                                wrapperClass="form-group"
+                                placeholder="Status"
+                                component={SelectField_ReactSelect}
+                                options={statusOptions}
+                                errorClass="help-block"
+                                validate={[requiredReactSelectStatus]}
                             />
                             <Field
                                 name="deleted_images"
@@ -319,7 +329,8 @@ class ExerciseForm extends Component {
                     difficulty_level: _.find(difficultyLevelOptions, (o) => { return (o.value === exercise.difficltyLevel) }),
                     steps: steps,
                     tips: tips,
-                    deleted_images: deletedImages
+                    deleted_images: deletedImages,
+                    status: exercise.status,
                 };
                 initialize(exerciseData);
                 let exerciseImages = exercise.images;

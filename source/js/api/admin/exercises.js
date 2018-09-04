@@ -43,6 +43,11 @@ function deleteExercise(_id) {
     return fetchResource((requestUrl + '/' + _id), options);
 }
 
+function recoverExercise(_id, exerciseData) {
+    let headers = extraHeaders();
+    return putFormData(requestUrl + '/undo/' + _id, null, headers);
+}
+
 function filterExercise(filterData) {
     let headers = extraHeaders();
     return postFormData(requestUrl + '/filter', filterData, headers);
@@ -54,5 +59,6 @@ export default {
     addExercise,
     updateExercise,
     deleteExercise,
+    recoverExercise,
     filterExercise
 }

@@ -334,6 +334,9 @@ const mapStateToProps = (state) => {
         deleteLoading: adminBodyParts.get('deleteLoading'),
         deleteFlag: adminBodyParts.get('deleteFlag'),
         deleteError: adminBodyParts.get('deleteError'),
+        recoverLoading: adminBodyParts.get('recoverLoading'),
+        recoverFlag: adminBodyParts.get('recoverFlag'),
+        recoverError: adminBodyParts.get('recoverError'),
     };
 }
 

@@ -2,22 +2,16 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { showPageLoader } from '../../../actions/pageLoader';
-import { exerciseDeleteRequest, exerciseFilterRequest } from '../../../actions/admin/exercises';
+import { exerciseDeleteRequest, exerciseFilterRequest, setExerciseState } from '../../../actions/admin/exercises';
 import dateFormat from 'dateformat';
 import { adminRouteCodes } from '../../../constants/adminRoutes';
-import { FaPencil, FaTrash } from 'react-icons/lib/fa';
+import { FaPencil, FaTrash, FaRotateLeft } from 'react-icons/lib/fa';
 import ReactTable from 'react-table';
 import { bodyPartListRequest } from '../../../actions/admin/bodyParts';
 import _ from 'lodash';
-import { EXERCISE_MECHANICS_COMPOUND, EXERCISE_MECHANICS_ISOLATION, EXERCISE_DIFFICULTY_BEGINNER, EXERCISE_DIFFICULTY_INTERMEDIATE, EXERCISE_DIFFICULTY_EXPERT, exerciseMechanicsObj, exerciseDifficultyLevelObj, EXE_CATS, EXE_SCATS } from '../../../constants/consts';
+import { EXERCISE_DIFFICULTY_BEGINNER, EXERCISE_DIFFICULTY_INTERMEDIATE, EXERCISE_DIFFICULTY_EXPERT, exerciseDifficultyLevelObj, EXE_CATS, EXE_SCATS } from '../../../constants/consts';
 import { DropdownButton, ButtonToolbar, MenuItem } from "react-bootstrap";
 import SweetAlert from "react-bootstrap-sweetalert";
-
-const mechanicsOptions = [
-    { value: '', label: 'All' },
-    { value: EXERCISE_MECHANICS_COMPOUND, label: 'Compound' },
-    { value: EXERCISE_MECHANICS_ISOLATION, label: 'Isolation' }
-];
 
 const difficultyLevelOptions = [
     { value: '', label: 'All' },
@@ -26,16 +20,28 @@ const difficultyLevelOptions = [
     { value: EXERCISE_DIFFICULTY_EXPERT, label: 'Expert' },
 ];
 
+const statusOptions = [
+    { value: '', label: 'All' },
+    { value: 1, label: 'Active' },
+    { value: 0, label: 'Inactive' },
+];
+
+const deletedOptions = [
+    { value: '', label: 'All' },
+    { value: 0, label: 'Not Deleted' },
+    { value: 1, label: 'Deleted' },
+];
+
 class ExerciseListing extends Component {
     constructor(props) {
         super(props);
         this.state = {
             selectedId: null,
             showDeleteModal: false,
-            deleteActionInit: false,
             requestFilterInit: false,
             filterData: [],
-            pages: 0
+            pages: 0,
+            showRecoverModal: false
         }
     }
 
@@ -85,7 +91,7 @@ class ExerciseListing extends Component {
 
     render() {
         const { bodyParts, filteredExercises } = this.props;
-        const { showDeleteModal, requestFilterInit, pages } = this.state;
+        const { showDeleteModal, requestFilterInit, pages, showRecoverModal } = this.state;
         return (
             <div className="exercise-listing-wrapper">
                 <div className="body-head space-btm-45 d-flex justify-content-start">
@@ -219,87 +225,6 @@ class ExerciseListing extends Component {
                                                 },
                                                 minWidth: 150,
                                             },
-                                            // {
-                                            //     Header: "Other Muscle",
-                                            //     accessor: "otherMuscleGroup",
-                                            //     id: "otherMuscle.bodypart",
-                                            //     Cell: (row) => {
-                                            //         if (bodyParts) {
-                                            //             let otherMuscles = [];
-                                            //             row.value.map((val, i) => {
-                                            //                 const _id = val;
-                                            //                 const musObj = _.find(bodyParts, ['_id', _id]);
-                                            //                 otherMuscles.push(musObj);
-                                            //             });
-                                            //             return (
-                                            //                 <div>
-                                            //                     {otherMuscles &&
-                                            //                         otherMuscles.map((m, i) => (m.bodypart)).join(',')
-                                            //                     }
-                                            //                     {otherMuscles && otherMuscles.length <= 0 && <span>-----</span>}
-                                            //                     {!otherMuscles && <span>-----</span>}
-                                            //                 </div>
-                                            //             );
-                                            //         }
-                                            //     }
-                                            // },
-                                            // {
-                                            //     Header: "Detailed Muscle",
-                                            //     accessor: "detailedMuscleGroup",
-                                            //     id: "detailedMuscle.bodypart",
-                                            //     Cell: (row) => {
-                                            //         if (bodyParts) {
-                                            //             let otherMuscles = [];
-                                            //             row.value.map((val, i) => {
-                                            //                 const _id = val;
-                                            //                 const musObj = _.find(bodyParts, ['_id', _id]);
-                                            //                 otherMuscles.push(musObj);
-                                            //             });
-                                            //             return (
-                                            //                 <div>
-                                            //                     {otherMuscles &&
-                                            //                         otherMuscles.map((m, i) => (m.bodypart)).join(',')
-                                            //                     }
-                                            //                     {otherMuscles && otherMuscles.length <= 0 && <span>-----</span>}
-                                            //                     {!otherMuscles && <span>-----</span>}
-                                            //                 </div>
-                                            //             );
-                                            //         }
-                                            //     }
-                                            // },
-                                            {
-                                                Header: "Mechanics",
-                                                accessor: "mechanics",
-                                                id: "mechanics",
-                                                filterEqual: true,
-                                                Cell: (row) => {
-                                                    let mech = '-----';
-                                                    if (_.has(exerciseMechanicsObj, row.value)) {
-                                                        mech = exerciseMechanicsObj[row.value];
-                                                    }
-                                                    return (
-                                                        <div className="table-listing-mechanics-wrapper">
-                                                            {mech}
-                                                        </div>
-                                                    );
-                                                },
-                                                Filter: ({ filter, onChange }) => {
-                                                    return (
-                                                        <select
-                                                            onChange={event => onChange(event.target.value)}
-                                                            className="width-100-per"
-                                                            value={filter ? filter.value : "all"}
-                                                        >
-                                                            {mechanicsOptions && mechanicsOptions.length > 0 &&
-                                                                mechanicsOptions.map((obj, index) => (
-                                                                    <option key={index} value={obj.value}>{obj.label}</option>
-                                                                ))
-                                                            }
-                                                        </select>
-                                                    );
-                                                },
-                                                minWidth: 100,
-                                            },
                                             {
                                                 Header: "Difficlty Level",
                                                 accessor: "difficltyLevel",
@@ -334,6 +259,74 @@ class ExerciseListing extends Component {
                                                 minWidth: 100,
                                             },
                                             {
+                                                id: "status",
+                                                Header: "Status",
+                                                accessor: "status",
+                                                filterDigit: true,
+                                                Cell: (row) => {
+                                                    let dataObj = _.find(statusOptions, (o) => {
+                                                        return (o.value === row.value);
+                                                    });
+                                                    return (
+                                                        <div className="list-status-wrapper">
+                                                            {dataObj &&
+                                                                <span>{dataObj.label}</span>
+                                                            }
+                                                        </div>
+                                                    );
+                                                },
+                                                Filter: ({ filter, onChange }) => {
+                                                    return (
+                                                        <select
+                                                            onChange={event => onChange(event.target.value)}
+                                                            className="width-100-per"
+                                                            value={filter ? filter.value : "all"}
+                                                        >
+                                                            {statusOptions && statusOptions.length > 0 &&
+                                                                statusOptions.map((obj, index) => (
+                                                                    <option key={index} value={obj.value}>{obj.label}</option>
+                                                                ))
+                                                            }
+                                                        </select>
+                                                    );
+                                                },
+                                                maxWidth: 100,
+                                            },
+                                            {
+                                                id: "isDeleted",
+                                                Header: "Deleted",
+                                                accessor: "isDeleted",
+                                                filterDigit: true,
+                                                Cell: (row) => {
+                                                    let dataObj = _.find(deletedOptions, (o) => {
+                                                        return (o.value === row.value);
+                                                    });
+                                                    return (
+                                                        <div className="list-status-wrapper">
+                                                            {dataObj &&
+                                                                <span>{dataObj.label}</span>
+                                                            }
+                                                        </div>
+                                                    );
+                                                },
+                                                Filter: ({ filter, onChange }) => {
+                                                    return (
+                                                        <select
+                                                            onChange={event => onChange(event.target.value)}
+                                                            className="width-100-per"
+                                                            value={filter ? filter.value : "all"}
+                                                        >
+                                                            {deletedOptions && deletedOptions.length > 0 &&
+                                                                deletedOptions.map((obj, index) => (
+                                                                    <option key={index} value={obj.value}>{obj.label}</option>
+                                                                ))
+                                                            }
+                                                        </select>
+                                                    );
+                                                },
+                                                maxWidth: 100,
+                                            },
+                                            {
                                                 Header: "Actions",
                                                 accessor: "_id",
                                                 id: "_id",
@@ -354,13 +347,16 @@ class ExerciseListing extends Component {
                                                                     >
                                                                         <FaPencil className="v-align-sub" /> Edit
                                                                     </MenuItem>
-                                                                    <MenuItem
-                                                                        eventKey="2"
-                                                                        href="javascript:void(0)"
-                                                                        onClick={() => this.confirmDelete(row.value)}
-                                                                    >
-                                                                        <FaTrash className="v-align-sub" /> Delete
-                                                                    </MenuItem>
+                                                                    {row && row.original && (typeof row.original.isDeleted === 'undefined' || row.original.isDeleted === 0) &&
+                                                                        <MenuItem eventKey="2" href="javascript:void(0)" onClick={() => this.confirmDelete(row.value)} >
+                                                                            <FaTrash className="v-align-sub" /> Delete
+                                                                        </MenuItem>
+                                                                    }
+                                                                    {row && row.original && typeof row.original.isDeleted !== 'undefined' && row.original.isDeleted === 1 &&
+                                                                        <MenuItem eventKey="3" href="javascript:void(0)" onClick={() => this.openRecoverModal(row.value)}>
+                                                                            <FaRotateLeft className="v-align-sub" /> Recover
+                                                                        </MenuItem>
+                                                                    }
                                                                 </DropdownButton>
                                                             </ButtonToolbar>
                                                         </div>
@@ -394,28 +390,59 @@ class ExerciseListing extends Component {
                 >
                     Record will be deleted!
                 </SweetAlert>
+
+                <SweetAlert
+                    show={showRecoverModal}
+                    success
+                    showCancel
+                    confirmBtnText="Yes, recover it!"
+                    confirmBtnBsStyle="success"
+                    cancelBtnBsStyle="default"
+                    title="Are you sure?"
+                    onConfirm={this.handleRecover}
+                    onCancel={this.closeRecoverModal}
+                >
+                    Record will be recovered back!
+                </SweetAlert>
             </div>
         );
     }
 
-    componentDidUpdate() {
-        const { loading, filteredExercises, filteredTotalPages } = this.props;
-        const { deleteActionInit, requestFilterInit } = this.state;
-        if (deleteActionInit && !loading) {
-            this.setState({
-                selectedId: null,
-                showDeleteModal: false,
-                deleteActionInit: false
-            });
-            this.updateList();
-            window.location.reload();
-        }
+    componentDidUpdate(prevProps, prevState) {
+        const { loading, filteredExercises, filteredTotalPages, deleteLoading, deleteFlag, deleteError, recoverLoading, recoverFlag, recoverError } = this.props;
+        const { requestFilterInit } = this.state;
         if (requestFilterInit && !loading) {
             this.setState({
                 requestFilterInit: false,
                 filterData: filteredExercises,
                 pages: filteredTotalPages,
             });
+        }
+        if (!deleteLoading && deleteFlag && prevProps.deleteLoading !== deleteLoading && prevProps.deleteFlag !== deleteFlag) {
+            let stateData = { deleteLoading: false, deleteFlag: false, deleteError: [] };
+            dispatch(setExerciseState(stateData));
+            ts('Exercise deleted!');
+            window.location.reload();
+            // this.refreshDtData();
+        } else if (!deleteLoading && prevProps.deleteLoading !== deleteLoading && deleteError && deleteError.length > 0) {
+            let stateData = { deleteLoading: false, deleteFlag: false, deleteError: [] };
+            dispatch(setExerciseState(stateData));
+            te(deleteError[0]);
+            window.location.reload();
+            // this.refreshDtData();
+        }
+        if (!recoverLoading && recoverFlag && prevProps.recoverLoading !== recoverLoading && prevProps.recoverFlag !== recoverFlag) {
+            let stateData = { recoverLoading: false, recoverFlag: false, recoverError: [] };
+            dispatch(setExerciseState(stateData));
+            ts('Exercise recovered!');
+            window.location.reload();
+            // this.refreshDtData();
+        } else if (!recoverLoading && prevProps.recoverLoading !== recoverLoading && recoverError && recoverError.length > 0) {
+            let stateData = { recoverLoading: false, recoverFlag: false, recoverError: [] };
+            dispatch(setExerciseState(stateData));
+            te(recoverError[0]);
+            window.location.reload();
+            // this.refreshDtData();
         }
     }
 
@@ -426,27 +453,40 @@ class ExerciseListing extends Component {
     }
 
     confirmDelete = (_id) => {
-        this.setState({
-            selectedId: _id,
-            showDeleteModal: true
-        });
+        this.setState({ selectedId: _id, showDeleteModal: true });
     }
 
     closeDeleteModal = () => {
-        this.setState({
-            selectedId: null,
-            showDeleteModal: false
-        });
+        this.setState({ selectedId: null, showDeleteModal: false });
     }
 
     handleDelete = () => {
         const { selectedId } = this.state;
         const { dispatch } = this.props;
-        dispatch(showPageLoader());
-        this.setState({
-            deleteActionInit: true
-        });
         dispatch(exerciseDeleteRequest(selectedId));
+        this.closeDeleteModal();
+    }
+
+    handleDelete = () => {
+        const { selectedId } = this.state;
+        const { dispatch } = this.props;
+        dispatch(exerciseDeleteRequest(selectedId));
+        this.closeDeleteModal();
+    }
+
+    openRecoverModal = (_id) => {
+        this.setState({ selectedId: _id, showRecoverModal: true });
+    }
+
+    closeRecoverModal = () => {
+        this.setState({ selectedId: null, showRecoverModal: false });
+    }
+
+    handleRecover = () => {
+        const { selectedId } = this.state;
+        const { dispatch } = this.props;
+        dispatch(exerciseRecoverRequest(selectedId));
+        this.closeRecoverModal();
     }
     // ----END funs -----
 }
@@ -461,6 +501,12 @@ const mapStateToProps = (state) => {
         bodyPartsLoading: adminBodyParts.get('loading'),
         bodyPartsError: adminBodyParts.get('error'),
         bodyParts: adminBodyParts.get('bodyParts'),
+        deleteLoading: adminExercises.get('deleteLoading'),
+        deleteFlag: adminExercises.get('deleteFlag'),
+        deleteError: adminExercises.get('deleteError'),
+        recoverLoading: adminExercises.get('recoverLoading'),
+        recoverFlag: adminExercises.get('recoverFlag'),
+        recoverError: adminExercises.get('recoverError'),
     }
 }
 
