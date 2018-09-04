@@ -5,6 +5,10 @@ import { Field, reduxForm } from "redux-form";
 import { InputField } from '../../../helpers/FormControlHelper';
 import { FaSpinner } from 'react-icons/lib/fa';
 import { Alert } from "react-bootstrap";
+import { required, minLength, maxLength } from '../../../formValidation/validationRules';
+
+const min3 = minLength(3);
+const max50 = maxLength(50);
 
 class BodyPartsSave extends Component {
     render() {
@@ -26,9 +30,7 @@ class BodyPartsSave extends Component {
                                 <Alert bsStyle="danger">
                                     {
                                         saveError.map((e, i) => {
-                                            return (
-                                                <p key={i}>{e}</p>
-                                            );
+                                            return <p key={i}>{e}</p>
                                         })
                                     }
                                 </Alert>
@@ -43,6 +45,7 @@ class BodyPartsSave extends Component {
                                 placeholder="Body Part"
                                 component={InputField}
                                 errorClass="help-block"
+                                validate={[required, min3, max50]}
                             />
                             <Field
                                 name="id"

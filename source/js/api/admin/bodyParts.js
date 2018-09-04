@@ -48,11 +48,17 @@ function deleteBodyPart(_id) {
     return fetchResource((requestUrl + '/' + _id), options);
 }
 
+function recoverBodyPart(_id) {
+    let headers = extraHeaders();
+    return putFormData(requestUrl + '/undo/' + _id, null, headers);
+}
+
 export default {
     getBodyParts,
     getBodyPart,
     filterBodyParts,
     addBodyPart,
     updateBodyPart,
-    deleteBodyPart
+    deleteBodyPart,
+    recoverBodyPart
 }

@@ -2,13 +2,19 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ReactTable from "react-table";
 import moment from "moment";
-import { generateDTTableFilterObj, ts, te } from '../../../helpers/funs';
-import { filterBodyPartsRequest, bodyPartAddRequest, setBodyPartState, bodyPartUpdateRequest, bodyPartDeleteRequest } from '../../../actions/admin/bodyParts';
+import { generateDTTableFilterObj, ts, te, capitalizeFirstLetter } from '../../../helpers/funs';
+import { filterBodyPartsRequest, bodyPartAddRequest, setBodyPartState, bodyPartUpdateRequest, bodyPartDeleteRequest, bodyPartRecoverRequest } from '../../../actions/admin/bodyParts';
 import BodyPartsSave from './BodyPartsSave';
 import { initialize, reset } from "redux-form";
 import { DropdownButton, ButtonToolbar, MenuItem } from "react-bootstrap";
-import { FaPencil, FaTrash } from "react-icons/lib/fa";
+import { FaPencil, FaTrash, FaRotateLeft } from "react-icons/lib/fa";
 import SweetAlert from "react-bootstrap-sweetalert";
+
+const deletedOptions = [
+    { value: '', label: 'All' },
+    { value: 0, label: 'Not Deleted' },
+    { value: 1, label: 'Deleted' },
+];
 
 class BodyPartsListing extends Component {
     constructor(props) {
@@ -21,11 +27,12 @@ class BodyPartsListing extends Component {
             showSaveModal: false,
             showDeleteModal: false,
             selectedId: null,
+            showRecoverModal: false,
         };
     }
 
     render() {
-        const { dtData, dtPages, dtLoading, showSaveModal, showDeleteModal } = this.state;
+        const { dtData, dtPages, dtLoading, showSaveModal, showDeleteModal, showRecoverModal } = this.state;
         return (
             <div className="exercise-listing-wrapper">
                 <div className="body-head space-btm-45 d-flex justify-content-start">
@@ -74,6 +81,40 @@ class BodyPartsListing extends Component {
                                                 accessor: 'bodypart',
                                             },
                                             {
+                                                id: "isDeleted",
+                                                Header: "Deleted",
+                                                accessor: "isDeleted",
+                                                filterDigit: true,
+                                                Cell: (row) => {
+                                                    let dataObj = _.find(deletedOptions, (o) => {
+                                                        return (o.value === row.value);
+                                                    });
+                                                    return (
+                                                        <div className="list-status-wrapper">
+                                                            {dataObj &&
+                                                                <span>{dataObj.label}</span>
+                                                            }
+                                                        </div>
+                                                    );
+                                                },
+                                                Filter: ({ filter, onChange }) => {
+                                                    return (
+                                                        <select
+                                                            onChange={event => onChange(event.target.value)}
+                                                            className="width-100-per"
+                                                            value={filter ? filter.value : "all"}
+                                                        >
+                                                            {deletedOptions && deletedOptions.length > 0 &&
+                                                                deletedOptions.map((obj, index) => (
+                                                                    <option key={index} value={obj.value}>{obj.label}</option>
+                                                                ))
+                                                            }
+                                                        </select>
+                                                    );
+                                                },
+                                                maxWidth: 100,
+                                            },
+                                            {
                                                 id: '_id',
                                                 Header: 'Action',
                                                 accessor: '_id',
@@ -91,13 +132,16 @@ class BodyPartsListing extends Component {
                                                                     >
                                                                         <FaPencil className="v-align-sub" /> Edit
                                                                     </MenuItem>
-                                                                    <MenuItem
-                                                                        eventKey="2"
-                                                                        href="javascript:void(0)"
-                                                                        onClick={() => this.handleShowDeleteModal(row.value)}
-                                                                    >
-                                                                        <FaTrash className="v-align-sub" /> Delete
-                                                                    </MenuItem>
+                                                                    {row && row.original && (typeof row.original.isDeleted === 'undefined' || row.original.isDeleted === 0) &&
+                                                                        <MenuItem eventKey="2" href="javascript:void(0)" onClick={() => this.handleShowDeleteModal(row.value)} >
+                                                                            <FaTrash className="v-align-sub" /> Delete
+                                                                        </MenuItem>
+                                                                    }
+                                                                    {row && row.original && typeof row.original.isDeleted !== 'undefined' && row.original.isDeleted === 1 &&
+                                                                        <MenuItem eventKey="3" href="javascript:void(0)" onClick={() => this.openRecoverModal(row.value)}>
+                                                                            <FaRotateLeft className="v-align-sub" /> Recover
+                                                                        </MenuItem>
+                                                                    }
                                                                 </DropdownButton>
                                                             </ButtonToolbar>
                                                         </div>
@@ -145,12 +189,26 @@ class BodyPartsListing extends Component {
                 >
                     You will not be able to recover it!
                 </SweetAlert>
+
+                <SweetAlert
+                    show={showRecoverModal}
+                    success
+                    showCancel
+                    confirmBtnText="Yes, recover it!"
+                    confirmBtnBsStyle="success"
+                    cancelBtnBsStyle="default"
+                    title="Are you sure?"
+                    onConfirm={this.handleRecover}
+                    onCancel={this.closeRecoverModal}
+                >
+                    Record will be recovered back!
+                </SweetAlert>
             </div>
         );
     }
 
     componentDidUpdate(prevProps, prevState) {
-        const { dispatch, deleteLoading, deleteFlag, deleteError, filteredLoading, filteredBodyParts, filteredTotalPages, saveLoading, saveBodyPart } = this.props;
+        const { dispatch, deleteLoading, deleteFlag, deleteError, filteredLoading, filteredBodyParts, filteredTotalPages, saveLoading, saveBodyPart,recoverLoading, recoverFlag, recoverError, } = this.props;
         const { dtLoading } = this.state;
         if (dtLoading && !filteredLoading) {
             this.setState({ dtLoading: filteredLoading, dtData: filteredBodyParts, dtPages: filteredTotalPages });
@@ -171,6 +229,17 @@ class BodyPartsListing extends Component {
             let stateData = { deleteLoading: false, deleteFlag: false, deleteError: [] };
             dispatch(setBodyPartState(stateData));
             te(deleteError[0]);
+            this.refreshDtData();
+        }
+        if (!recoverLoading && recoverFlag && prevProps.recoverLoading !== recoverLoading && prevProps.recoverFlag !== recoverFlag) {
+            let stateData = { recoverLoading: false, recoverFlag: false, recoverError: [] };
+            dispatch(setBodyPartState(stateData));
+            ts('Body part recovered!');
+            this.refreshDtData();
+        } else if (!recoverLoading && prevProps.recoverLoading !== recoverLoading && recoverError && recoverError.length > 0) {
+            let stateData = { recoverLoading: false, recoverFlag: false, recoverError: [] };
+            dispatch(setBodyPartState(stateData));
+            te(recoverError[0]);
             this.refreshDtData();
         }
     }
@@ -213,7 +282,7 @@ class BodyPartsListing extends Component {
     handleSubmit = (data) => {
         const { dispatch } = this.props;
         var requestData = {
-            bodypart: (data && data.bodypart) ? data.bodypart.trim() : '',
+            bodypart: (data && data.bodypart && data.bodypart.trim()) ? capitalizeFirstLetter(data.bodypart).trim() : '',
         };
         if (data && data.id) {
             dispatch(bodyPartUpdateRequest(data.id, requestData));
@@ -235,6 +304,21 @@ class BodyPartsListing extends Component {
         const { selectedId } = this.state;
         dispatch(bodyPartDeleteRequest(selectedId));
         this.handleCloseDeleteModal();
+    }
+
+    openRecoverModal = (_id) => {
+        this.setState({ selectedId: _id, showRecoverModal: true });
+    }
+
+    closeRecoverModal = () => {
+        this.setState({ selectedId: null, showRecoverModal: false });
+    }
+
+    handleRecover = () => {
+        const { selectedId } = this.state;
+        const { dispatch } = this.props;
+        dispatch(bodyPartRecoverRequest(selectedId));
+        this.closeRecoverModal();
     }
 }
 

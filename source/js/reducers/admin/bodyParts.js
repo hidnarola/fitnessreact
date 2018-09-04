@@ -18,7 +18,10 @@ import {
     FILTER_BODY_PARTS_REQUEST,
     FILTER_BODY_PARTS_SUCCESS,
     FILTER_BODY_PARTS_ERROR,
-    SET_BODY_PARTS_STATE
+    SET_BODY_PARTS_STATE,
+    BODY_PARTS_RECOVER_REQUEST,
+    BODY_PARTS_RECOVER_SUCCESS,
+    BODY_PARTS_RECOVER_ERROR
 } from "../../actions/admin/bodyParts";
 import { VALIDATION_FAILURE_STATUS } from "../../constants/consts";
 import { generateValidationErrorMsgArr } from "../../helpers/funs";
@@ -219,6 +222,37 @@ const actionMap = {
         return state.merge(Map({
             deleteLoading: false,
             deleteError: error,
+        }));
+    },
+    [BODY_PARTS_RECOVER_REQUEST]: (state, action) => {
+        return state.merge(Map({
+            recoverLoading: true,
+            recoverFlag: false,
+            recoverError: []
+        }));
+    },
+    [BODY_PARTS_RECOVER_SUCCESS]: (state, action) => {
+        let newState = { recoverLoading: false };
+        if (action.data && action.data.status && action.data.status === 1) {
+            newState.recoverFlag = true;
+        } else {
+            let msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later';
+            newState.recoverError = [msg];
+        }
+        return state.merge(Map(newState));
+    },
+    [BODY_PARTS_RECOVER_ERROR]: (state, action) => {
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
+        }
+        return state.merge(Map({
+            recoverLoading: false,
+            recoverError: error,
         }));
     },
     [SET_BODY_PARTS_STATE]: (state, action) => {

@@ -47,7 +47,7 @@ class EquipmentCategoriesSave extends Component {
                                 placeholder="Name"
                                 component={InputField}
                                 errorClass="help-block"
-                                // validate={[required, min3, max50]}
+                                validate={[required, min3, max50]}
                             />
                             <Field
                                 name="description"

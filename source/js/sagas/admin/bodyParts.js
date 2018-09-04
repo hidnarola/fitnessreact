@@ -17,7 +17,10 @@ import {
     BODY_PARTS_UPDATE_REQUEST,
     filterBodyPartsSuccess,
     filterBodyPartsError,
-    FILTER_BODY_PARTS_REQUEST
+    FILTER_BODY_PARTS_REQUEST,
+    BODY_PARTS_RECOVER_REQUEST,
+    bodyPartRecoverSuccess,
+    bodyPartRecoverError
 } from "../../actions/admin/bodyParts";
 import api from 'api/admin/bodyParts';
 
@@ -93,6 +96,18 @@ function deleteAdminBodyPartData() {
     }
 }
 
+function recoverAdminBodyPartData() {
+    return function* (action) {
+        try {
+            const _id = action._id;
+            const data = yield call(() => api.recoverBodyPart(_id));
+            yield put(bodyPartRecoverSuccess(data));
+        } catch (error) {
+            yield put(bodyPartRecoverError(error));
+        }
+    }
+}
+
 export function* watchAdminBodyParts() {
     yield takeLatest(BODY_PARTS_LIST_REQUEST, getAdminBodyPartsData());
     yield takeLatest(BODY_PARTS_SELECT_ONE_REQUEST, getAdminBodyPartData());
@@ -100,6 +115,7 @@ export function* watchAdminBodyParts() {
     yield takeLatest(BODY_PARTS_ADD_REQUEST, postAdminBodyPartData());
     yield takeLatest(BODY_PARTS_UPDATE_REQUEST, putAdminBodyPartData());
     yield takeLatest(BODY_PARTS_DELETE_REQUEST, deleteAdminBodyPartData());
+    yield takeLatest(BODY_PARTS_RECOVER_REQUEST, recoverAdminBodyPartData());
 }
 
 export default [
