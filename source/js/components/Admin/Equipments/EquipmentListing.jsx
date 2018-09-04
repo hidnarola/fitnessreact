@@ -223,7 +223,7 @@ class EquipmentListing extends Component {
                                                                     >
                                                                         <FaPencil className="v-align-sub" /> Edit
                                                                     </MenuItem>
-                                                                    {row && row.original && typeof row.original.isDeleted !== 'undefined' && row.original.isDeleted === 0 &&
+                                                                    {row && row.original && (typeof row.original.isDeleted === 'undefined' || row.original.isDeleted === 0) &&
                                                                         <MenuItem eventKey="2" href="javascript:void(0)" onClick={() => this.confirmDelete(row.value)}>
                                                                             <FaTrash className="v-align-sub" /> Delete
                                                                         </MenuItem>

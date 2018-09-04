@@ -27,9 +27,9 @@ import { generateValidationErrorMsgArr } from "../../helpers/funs";
 
 const initialState = Map({
     loading: false,
-    error: null,
+    error: [],
     equipment: null,
-    equipments: null,
+    equipments: [],
     filteredEquipments: [],
     filteredTotalPages: 0,
     filteredLoading: false,
@@ -39,57 +39,65 @@ const actionMap = {
     [EQUIPMENTS_LIST_REQUEST]: (state, action) => {
         return state.merge(Map({
             loading: true,
-            error: null,
-            equipments: null,
+            error: [],
+            equipments: [],
             equipment: null,
         }));
     },
     [EQUIPMENTS_LIST_SUCCESS]: (state, action) => {
-        return state.merge(Map({
-            loading: false,
-            error: null,
-            equipments: action.data.equipments,
-            equipment: null,
-        }));
+        let newState = { loading: false };
+        if (action.data && action.data.status && action.data.status === 1) {
+            newState.equipments = action.data.equipments;
+        } else {
+            let msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
+            newState.error = [msg];
+        }
+        return state.merge(Map(newState));
     },
     [EQUIPMENTS_LIST_ERROR]: (state, action) => {
-        let error = 'Server error';
-        if (action.error && action.error.response) {
-            error = action.error.response.message;
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
         }
         return state.merge(Map({
             loading: false,
             error: error,
-            equipments: null,
-            equipment: null,
         }));
     },
     [EQUIPMENTS_SELECT_ONE_REQUEST]: (state, action) => {
         return state.merge(Map({
             loading: true,
-            error: null,
-            equipments: null,
+            error: [],
+            equipments: [],
             equipment: null,
         }));
     },
     [EQUIPMENTS_SELECT_ONE_SUCCESS]: (state, action) => {
-        return state.merge(Map({
-            loading: false,
-            error: null,
-            equipments: null,
-            equipment: action.data.equipment,
-        }));
+        let newState = { loading: false };
+        if (action.data && action.data.status && action.data.status === 1) {
+            newState.equipment = action.data.equipment;
+        } else {
+            let msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
+            newState.error = [msg];
+        }
+        return state.merge(Map(newState));
     },
     [EQUIPMENTS_SELECT_ONE_ERROR]: (state, action) => {
-        let error = 'Server error';
-        if (action.error && action.error.response) {
-            error = action.error.response.message;
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
         }
         return state.merge(Map({
             loading: false,
             error: error,
-            equipments: null,
-            equipment: null,
         }));
     },
     [FILTER_EQUIPMENTS_REQUEST]: (state, action) => {
@@ -127,113 +135,125 @@ const actionMap = {
     [EQUIPMENTS_ADD_REQUEST]: (state, action) => {
         return state.merge(Map({
             loading: true,
-            error: null,
-            equipments: null,
-            equipment: null
+            error: [],
+            equipments: [],
+            equipment: null,
         }));
     },
     [EQUIPMENTS_ADD_SUCCESS]: (state, action) => {
-        return state.merge(Map({
-            loading: false,
-            error: null,
-            equipments: null,
-            equipment: action.data.equipment
-        }));
+        let newState = { loading: false };
+        if (action.data && action.data.status && action.data.status === 1) {
+            newState.equipment = action.data.equipment;
+        } else {
+            let msg = (action.data.message) ? action.data.message : 'Something went wrong! Please try again later';
+            newState.error = [msg];
+        }
+        return state.merge(Map(newState));
     },
     [EQUIPMENTS_ADD_ERROR]: (state, action) => {
-        let error = 'Server error';
-        if (action.error && action.error.response) {
-            error = action.error.response.message;
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
         }
         return state.merge(Map({
             loading: false,
             error: error,
-            equipments: null,
-            equipment: null
         }));
     },
     [EQUIPMENTS_UPDATE_REQUEST]: (state, action) => {
         return state.merge(Map({
             loading: true,
-            error: null,
-            equipments: null,
-            equipment: null
+            error: [],
+            equipments: [],
+            equipment: null,
         }));
     },
     [EQUIPMENTS_UPDATE_SUCCESS]: (state, action) => {
-        return state.merge(Map({
-            loading: false,
-            error: null,
-            equipments: null,
-            equipment: action.data.equipment
-        }));
+        let newState = { loading: false };
+        if (action.data && action.data.status && action.data.status === 1) {
+            newState.equipment = action.data.equipment;
+        } else {
+            let msg = (action.data.message) ? action.data.message : 'Something went wrong! Please try again later';
+            newState.error = [msg];
+        }
+        return state.merge(Map(newState));
     },
     [EQUIPMENTS_UPDATE_ERROR]: (state, action) => {
-        let error = 'Server error';
-        if (action.error && action.error.response) {
-            error = action.error.response.message;
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
         }
         return state.merge(Map({
             loading: false,
             error: error,
-            equipments: null,
-            equipment: null
         }));
     },
     [EQUIPMENTS_DELETE_REQUEST]: (state, action) => {
         return state.merge(Map({
             loading: true,
-            error: null,
-            equipments: null,
+            error: [],
+            equipments: [],
             equipment: null
         }));
     },
     [EQUIPMENTS_DELETE_SUCCESS]: (state, action) => {
-        return state.merge(Map({
-            loading: false,
-            error: null,
-            equipments: null,
-            equipment: null
-        }));
+        let newState = { loading: false };
+        if (action.data && action.data.status && action.data.status !== 1) {
+            let msg = (action.data.message) ? action.data.message : 'Something went wrong! Please try again later';
+            newState.error = [msg];
+        }
+        return state.merge(Map(newState));
     },
     [EQUIPMENTS_DELETE_ERROR]: (state, action) => {
-        let error = 'Server error';
-        if (action.error && action.error.response) {
-            error = action.error.response.message;
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
         }
         return state.merge(Map({
             loading: false,
             error: error,
-            equipments: null,
-            equipment: null
         }));
     },
     [EQUIPMENTS_RECOVER_REQUEST]: (state, action) => {
         return state.merge(Map({
             loading: true,
-            error: null,
-            equipments: null,
+            error: [],
+            equipments: [],
             equipment: null
         }));
     },
     [EQUIPMENTS_RECOVER_SUCCESS]: (state, action) => {
-        return state.merge(Map({
-            loading: false,
-            error: null,
-            equipments: null,
-            equipment: null
-        }));
+        let newState = { loading: false };
+        if (action.data && action.data.status && action.data.status !== 1) {
+            let msg = (action.data.message) ? action.data.message : 'Something went wrong! Please try again later';
+            newState.error = [msg];
+        }
+        return state.merge(Map(newState));
     },
     [EQUIPMENTS_RECOVER_ERROR]: (state, action) => {
-        let error = 'Server error';
-        if (action.error && action.error.response) {
-            error = action.error.response.message;
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
         }
         return state.merge(Map({
             loading: false,
             error: error,
-            equipments: null,
-            equipment: null
         }));
     },
 };

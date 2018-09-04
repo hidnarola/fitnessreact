@@ -5,6 +5,10 @@ import { Field, reduxForm } from "redux-form";
 import { InputField, TextAreaField } from '../../../helpers/FormControlHelper';
 import { FaSpinner } from 'react-icons/lib/fa';
 import { Alert } from "react-bootstrap";
+import { required, minLength, maxLength } from '../../../formValidation/validationRules';
+
+const min3 = minLength(3);
+const max50 = maxLength(50);
 
 class EquipmentCategoriesSave extends Component {
     render() {
@@ -43,7 +47,8 @@ class EquipmentCategoriesSave extends Component {
                                 placeholder="Name"
                                 component={InputField}
                                 errorClass="help-block"
-                                />
+                                // validate={[required, min3, max50]}
+                            />
                             <Field
                                 name="description"
                                 label="Description"

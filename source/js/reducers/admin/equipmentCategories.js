@@ -18,7 +18,10 @@ import {
     EQUIPMENT_CATEGORIES_DELETE_REQUEST,
     EQUIPMENT_CATEGORIES_DELETE_SUCCESS,
     EQUIPMENT_CATEGORIES_DELETE_ERROR,
-    SET_EQUIPMENT_CATEGORIES_STATE
+    SET_EQUIPMENT_CATEGORIES_STATE,
+    EQUIPMENT_CATEGORIES_RECOVER_REQUEST,
+    EQUIPMENT_CATEGORIES_RECOVER_SUCCESS,
+    EQUIPMENT_CATEGORIES_RECOVER_ERROR
 } from "../../actions/admin/equipmentCategories";
 import { generateValidationErrorMsgArr } from "../../helpers/funs";
 import { VALIDATION_FAILURE_STATUS } from "../../constants/consts";
@@ -37,6 +40,9 @@ const initialState = Map({
     deleteLoading: false,
     deleteFlag: false,
     deleteError: [],
+    recoverLoading: false,
+    recoverFlag: false,
+    recoverError: [],
 });
 
 const actionMap = {
@@ -226,6 +232,37 @@ const actionMap = {
         return state.merge(Map({
             deleteLoading: false,
             deleteError: error,
+        }));
+    },
+    [EQUIPMENT_CATEGORIES_RECOVER_REQUEST]: (state, action) => {
+        return state.merge(Map({
+            recoverLoading: true,
+            recoverFlag: false,
+            recoverError: []
+        }));
+    },
+    [EQUIPMENT_CATEGORIES_RECOVER_SUCCESS]: (state, action) => {
+        let newState = { recoverLoading: false };
+        if (action.data && action.data.status && action.data.status === 1) {
+            newState.recoverFlag = true;
+        } else {
+            let msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later';
+            newState.recoverError = [msg];
+        }
+        return state.merge(Map(newState));
+    },
+    [EQUIPMENT_CATEGORIES_RECOVER_ERROR]: (state, action) => {
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
+        }
+        return state.merge(Map({
+            recoverLoading: false,
+            recoverError: error,
         }));
     },
     [SET_EQUIPMENT_CATEGORIES_STATE]: (state, action) => {

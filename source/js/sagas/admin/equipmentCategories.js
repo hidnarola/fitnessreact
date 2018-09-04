@@ -18,7 +18,10 @@ import {
     FILTER_EQUIPMENT_CATEGORIES_REQUEST,
     EQUIPMENT_CATEGORIES_ADD_REQUEST,
     EQUIPMENT_CATEGORIES_UPDATE_REQUEST,
-    EQUIPMENT_CATEGORIES_DELETE_REQUEST
+    EQUIPMENT_CATEGORIES_DELETE_REQUEST,
+    EQUIPMENT_CATEGORIES_RECOVER_REQUEST,
+    equipmentCategoryRecoverSuccess,
+    equipmentCategoryRecoverError
 } from '../../actions/admin/equipmentCategories';
 
 function getAdminEquipmentCategoriesData() {
@@ -93,6 +96,18 @@ function deleteAdminEquipmentCategoryData() {
     }
 }
 
+function recoverAdminEquipmentCategoryData() {
+    return function* (action) {
+        try {
+            const _id = action._id;
+            const data = yield call(() => api.recoverEquipmentCategory(_id));
+            yield put(equipmentCategoryRecoverSuccess(data));
+        } catch (error) {
+            yield put(equipmentCategoryRecoverError(error));
+        }
+    }
+}
+
 export function* watchAdminEquipmentCategories() {
     yield takeLatest(EQUIPMENT_CATEGORIES_LIST_REQUEST, getAdminEquipmentCategoriesData());
     yield takeLatest(EQUIPMENT_CATEGORIES_SELECT_ONE_REQUEST, getAdminEquipmentCategoryData());
@@ -100,6 +115,7 @@ export function* watchAdminEquipmentCategories() {
     yield takeLatest(EQUIPMENT_CATEGORIES_ADD_REQUEST, postAdminEquipmentCategoryData());
     yield takeLatest(EQUIPMENT_CATEGORIES_UPDATE_REQUEST, putAdminEquipmentCategoryData());
     yield takeLatest(EQUIPMENT_CATEGORIES_DELETE_REQUEST, deleteAdminEquipmentCategoryData());
+    yield takeLatest(EQUIPMENT_CATEGORIES_RECOVER_REQUEST, recoverAdminEquipmentCategoryData());
 }
 
 export default [

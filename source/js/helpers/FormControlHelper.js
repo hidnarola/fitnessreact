@@ -195,6 +195,11 @@ export const SelectField_ReactSelectMulti = (props) => {
 }
 
 export class FileField_Dropzone_Single extends Component {
+    constructor(props) {
+        super(props);
+        this.isFileSelected = false;
+    }
+
     render() {
         const {
             label,
@@ -250,7 +255,18 @@ export class FileField_Dropzone_Single extends Component {
                     <Dropzone
                         {...input}
                         accept={accept ? accept : "image/jpeg, image/png, image/jpg, image/gif"}
-                        onDrop={(filesToUpload, e) => input.onChange(filesToUpload)}
+                        onClick={() => this.isFileSelected = false}
+                        onDrop={(filesToUpload, e) => {
+                            if (filesToUpload && filesToUpload.length > 0) {
+                                this.isFileSelected = true;
+                            }
+                            input.onChange(filesToUpload);
+                        }}
+                        onFileDialogCancel={() => {
+                            if (!this.isFileSelected) {
+                                input.onChange('');
+                            }
+                        }}
                         multiple={false}
                         className={className}
                     ></Dropzone>

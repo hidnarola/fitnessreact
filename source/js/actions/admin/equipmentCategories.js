@@ -22,6 +22,10 @@ export const EQUIPMENT_CATEGORIES_DELETE_REQUEST = 'EQUIPMENT_CATEGORIES_DELETE_
 export const EQUIPMENT_CATEGORIES_DELETE_SUCCESS = 'EQUIPMENT_CATEGORIES_DELETE_SUCCESS';
 export const EQUIPMENT_CATEGORIES_DELETE_ERROR = 'EQUIPMENT_CATEGORIES_DELETE_ERROR';
 
+export const EQUIPMENT_CATEGORIES_RECOVER_REQUEST = 'EQUIPMENT_CATEGORIES_RECOVER_REQUEST';
+export const EQUIPMENT_CATEGORIES_RECOVER_SUCCESS = 'EQUIPMENT_CATEGORIES_RECOVER_SUCCESS';
+export const EQUIPMENT_CATEGORIES_RECOVER_ERROR = 'EQUIPMENT_CATEGORIES_RECOVER_ERROR';
+
 export const SET_EQUIPMENT_CATEGORIES_STATE = 'SET_EQUIPMENT_CATEGORIES_STATE';
 
 export function equipmentCategoryListRequest() {
@@ -146,6 +150,27 @@ export function equipmentCategoryDeleteSuccess(data) {
 export function equipmentCategoryDeleteError(error) {
     return {
         type: EQUIPMENT_CATEGORIES_DELETE_ERROR,
+        error
+    }
+}
+
+export function equipmentCategoryRecoverRequest(_id) {
+    return {
+        type: EQUIPMENT_CATEGORIES_RECOVER_REQUEST,
+        _id
+    }
+}
+
+export function equipmentCategoryRecoverSuccess(data) {
+    return {
+        type: EQUIPMENT_CATEGORIES_RECOVER_SUCCESS,
+        data
+    }
+}
+
+export function equipmentCategoryRecoverError(error) {
+    return {
+        type: EQUIPMENT_CATEGORIES_RECOVER_ERROR,
         error
     }
 }

@@ -87,7 +87,7 @@ class EquipmentForm extends Component {
                     </div>
                 </div>
                 <div className="d-flex">
-                    <div className="col-md-8">
+                    <div className="col-md-6">
                         <Field
                             name="description"
                             value={description}
@@ -100,7 +100,7 @@ class EquipmentForm extends Component {
                             component={EditorField}
                         />
                     </div>
-                    <div className="col-md-4">
+                    <div className="col-md-6">
                         <Field
                             name="image"
                             label="Image"

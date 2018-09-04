@@ -5,6 +5,7 @@ import { showPageLoader, hidePageLoader } from '../../../actions/pageLoader';
 import { equipmentAddRequest, equipmentUpdateRequest } from '../../../actions/admin/equipments';
 import { adminRouteCodes } from '../../../constants/adminRoutes';
 import { equipmentCategoryListRequest } from '../../../actions/admin/equipmentCategories';
+import { Alert } from "react-bootstrap";
 
 class EquipmentSave extends Component {
     constructor(props) {
@@ -14,28 +15,6 @@ class EquipmentSave extends Component {
         };
     }
 
-    handleSubmit = (data) => {
-        const { dispatch, match } = this.props;
-
-        var formData = new FormData();
-        formData.append('name', (data.name) ? data.name.trim() : '');
-        formData.append('category_id', (data.equipmentCategory.value) ? data.equipmentCategory.value : null);
-        formData.append('description', (data.description) ? data.description : '<p></p>');
-        if (data.image) {
-            formData.append('equipment_img', data.image[0]);
-        }
-        formData.append('status', (data.status.value) ? data.status.value : 0);
-        this.setState({
-            saveActionInit: true
-        });
-        dispatch(showPageLoader());
-        if (typeof match.params.id !== 'undefined') {
-            dispatch(equipmentUpdateRequest(match.params.id, formData));
-        } else {
-            dispatch(equipmentAddRequest(formData));
-        }
-    }
-
     componentWillMount() {
         const { dispatch } = this.props;
         dispatch(showPageLoader());
@@ -43,7 +22,7 @@ class EquipmentSave extends Component {
     }
 
     render() {
-        const { equipmentCategories } = this.props;
+        const { equipmentCategories, error } = this.props;
         let equipmentCats = [{ value: '', label: 'Select category' }];
         if (equipmentCategories) {
             for (let index = 0; index < equipmentCategories.length; index++) {
@@ -65,6 +44,15 @@ class EquipmentSave extends Component {
                             <h3 className="title-h3">Save Equipment</h3>
                         </div>
                         <div className="whitebox-body">
+                            {error && error.length > 0 &&
+                                <Alert bsStyle="danger">
+                                    {
+                                        error.map((e, i) => {
+                                            <p key={i}>{e}</p>
+                                        })
+                                    }
+                                </Alert>
+                            }
                             <EquipmentForm
                                 onSubmit={this.handleSubmit}
                                 equipmentCats={equipmentCats}
@@ -77,14 +65,35 @@ class EquipmentSave extends Component {
     }
 
     componentDidUpdate() {
-        const { loading, history, dispatch } = this.props;
+        const { loading, history, dispatch, error } = this.props;
         const { saveActionInit } = this.state;
         if (saveActionInit && !loading) {
-            this.setState({
-                saveActionInit: false
-            });
+            if (!error || error.length <= 0) {
+                history.push(adminRouteCodes.EQUIPMENTS);
+            }
+            this.setState({ saveActionInit: false });
             dispatch(hidePageLoader());
-            history.push(adminRouteCodes.EQUIPMENTS);
+        }
+    }
+
+    handleSubmit = (data) => {
+        const { dispatch, match } = this.props;
+        var formData = new FormData();
+        formData.append('name', (data.name) ? data.name.trim() : '');
+        formData.append('category_id', (data.equipmentCategory.value) ? data.equipmentCategory.value : null);
+        formData.append('description', (data.description) ? data.description : '<p></p>');
+        if (data.image) {
+            formData.append('equipment_img', data.image[0]);
+        }
+        formData.append('status', (data.status.value) ? data.status.value : 0);
+        this.setState({
+            saveActionInit: true
+        });
+        dispatch(showPageLoader());
+        if (typeof match.params.id !== 'undefined') {
+            dispatch(equipmentUpdateRequest(match.params.id, formData));
+        } else {
+            dispatch(equipmentAddRequest(formData));
         }
     }
 }

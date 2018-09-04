@@ -47,11 +47,18 @@ function deleteEquipmentCategory(_id) {
 
     return fetchResource((requestUrl + '/' + _id), options);
 }
+
+function recoverEquipmentCategory(_id) {
+    let headers = extraHeaders();
+    return putFormData(requestUrl + '/undo/' + _id, null, headers);
+}
+
 export default {
     getEquipmentCategories,
     getEquipmentCategory,
     filterEquipmentCategories,
     addEquipmentCategory,
     updateEquipmentCategory,
-    deleteEquipmentCategory
+    deleteEquipmentCategory,
+    recoverEquipmentCategory
 }
