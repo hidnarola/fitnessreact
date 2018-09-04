@@ -3,13 +3,15 @@ import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import { InputField, EditorField, SelectField_ReactSelect, FileField_Dropzone_Single } from '../../../helpers/FormControlHelper';
-import { required, requiredReactSelect, requiredReactSelectStatus } from '../../../formValidation/validationRules';
+import { required, requiredReactSelect, requiredReactSelectStatus, minLength, maxLength } from '../../../formValidation/validationRules';
 import { adminRouteCodes } from '../../../constants/adminRoutes';
 import { showPageLoader, hidePageLoader } from '../../../actions/pageLoader';
 import { equipmentCategoryListRequest } from '../../../actions/admin/equipmentCategories';
-import { watchAdminEquipmentCategories } from '../../../sagas/admin/equipmentCategories';
 import { prepareDropdownOptionsData } from '../../../helpers/funs';
 import { equipmentSelectOneRequest } from '../../../actions/admin/equipments';
+
+const min3 = minLength(3);
+const max50 = maxLength(50);
 
 const statusOptions = [
     { value: 1, label: 'Active' },
@@ -56,7 +58,7 @@ class EquipmentForm extends Component {
                             component={InputField}
                             errorClass="help-block"
                             warningClass=""
-                            validate={[required]}
+                            validate={[required, min3, max50]}
                         />
                     </div>
                     <div className="col-md-4">

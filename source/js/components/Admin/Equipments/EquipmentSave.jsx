@@ -6,6 +6,7 @@ import { equipmentAddRequest, equipmentUpdateRequest } from '../../../actions/ad
 import { adminRouteCodes } from '../../../constants/adminRoutes';
 import { equipmentCategoryListRequest } from '../../../actions/admin/equipmentCategories';
 import { Alert } from "react-bootstrap";
+import { capitalizeFirstLetter } from '../../../helpers/funs';
 
 class EquipmentSave extends Component {
     constructor(props) {
@@ -48,7 +49,7 @@ class EquipmentSave extends Component {
                                 <Alert bsStyle="danger">
                                     {
                                         error.map((e, i) => {
-                                            <p key={i}>{e}</p>
+                                            return <p key={i}>{e}</p>
                                         })
                                     }
                                 </Alert>
@@ -79,16 +80,14 @@ class EquipmentSave extends Component {
     handleSubmit = (data) => {
         const { dispatch, match } = this.props;
         var formData = new FormData();
-        formData.append('name', (data.name) ? data.name.trim() : '');
-        formData.append('category_id', (data.equipmentCategory.value) ? data.equipmentCategory.value : null);
+        formData.append('name', (data.name && data.name.trim()) ? capitalizeFirstLetter(data.name).trim() : '');
+        formData.append('category_id', (data.equipmentCategory && data.equipmentCategory.value) ? data.equipmentCategory.value : '');
         formData.append('description', (data.description) ? data.description : '<p></p>');
         if (data.image) {
             formData.append('equipment_img', data.image[0]);
         }
-        formData.append('status', (data.status.value) ? data.status.value : 0);
-        this.setState({
-            saveActionInit: true
-        });
+        formData.append('status', (data.status && data.status.value) ? data.status.value : 0);
+        this.setState({ saveActionInit: true });
         dispatch(showPageLoader());
         if (typeof match.params.id !== 'undefined') {
             dispatch(equipmentUpdateRequest(match.params.id, formData));
