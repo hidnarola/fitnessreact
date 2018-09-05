@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
+import { showPageLoader } from '../../../actions/pageLoader';
 import { exerciseDeleteRequest, exerciseFilterRequest, setExerciseState } from '../../../actions/admin/exercises';
 import dateFormat from 'dateformat';
 import { adminRouteCodes } from '../../../constants/adminRoutes';
@@ -11,7 +12,6 @@ import _ from 'lodash';
 import { EXERCISE_DIFFICULTY_BEGINNER, EXERCISE_DIFFICULTY_INTERMEDIATE, EXERCISE_DIFFICULTY_EXPERT, exerciseDifficultyLevelObj, EXE_CATS, EXE_SCATS } from '../../../constants/consts';
 import { DropdownButton, ButtonToolbar, MenuItem } from "react-bootstrap";
 import SweetAlert from "react-bootstrap-sweetalert";
-import { generateDTTableFilterObj } from '../../../helpers/funs';
 
 const difficultyLevelOptions = [
     { value: '', label: 'All' },
@@ -36,10 +36,6 @@ class ExerciseListing extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            dtData: [],
-            dtPages: 0,
-            dtLoading: false,
-            dtFilterData: null,
             selectedId: null,
             showDeleteModal: false,
             requestFilterInit: false,
@@ -50,13 +46,52 @@ class ExerciseListing extends Component {
     }
 
     componentWillMount() {
+        this.updateList();
+    }
+
+    fetchData = (state, instance) => {
+        this.setState({ requestFilterInit: true });
+        const { pageSize, page, filtered, sorted, columns } = state;
         const { dispatch } = this.props;
-        dispatch(bodyPartListRequest());
+        let columnFilter = [];
+        let columnSort = [];
+        _.forEach(columns, (column) => {
+            if (typeof column.id !== 'undefined') {
+                if (filtered && filtered.length > 0) {
+                    let filterObj = _.find(filtered, (o) => {
+                        return o.id === column.id;
+                    });
+                    if (typeof filterObj !== 'undefined') {
+                        if (column.filterEqual) {
+                            filterObj['isEqualFlag'] = true;
+                        } else {
+                            filterObj['isEqualFlag'] = false;
+                        }
+                        columnFilter.push(filterObj);
+                    }
+                }
+            }
+        });
+
+        if (sorted && sorted.length > 0) {
+            _.forEach(sorted, (sort) => {
+                columnSort.push(sort);
+            });
+        }
+
+        const filterData = {
+            pageSize,
+            page,
+            columnFilter,
+            columnSort,
+        }
+
+        dispatch(exerciseFilterRequest(filterData));
     }
 
     render() {
-        const { bodyParts } = this.props;
-        const { dtData, dtPages, dtLoading, showDeleteModal, showRecoverModal } = this.state;
+        const { bodyParts, filteredExercises } = this.props;
+        const { showDeleteModal, requestFilterInit, pages, showRecoverModal } = this.state;
         return (
             <div className="exercise-listing-wrapper">
                 <div className="body-head space-btm-45 d-flex justify-content-start">
@@ -78,8 +113,7 @@ class ExerciseListing extends Component {
                                 <div className="col-md-12">
                                     <ReactTable
                                         manual
-                                        data={dtData}
-                                        noDataText={"No records found..."}
+                                        data={filteredExercises}
                                         columns={[
                                             {
                                                 Header: "Created Date",
@@ -330,20 +364,12 @@ class ExerciseListing extends Component {
                                                 }
                                             },
                                         ]}
-                                        pages={dtPages}
-                                        loading={dtLoading}
+                                        pages={pages}
+                                        loading={requestFilterInit}
                                         onFetchData={this.fetchData}
                                         filterable
                                         defaultPageSize={10}
                                         className="-striped -highlight"
-                                        showPaginationTop={true}
-                                        showPaginationBottom={true}
-                                        defaultSorted={[
-                                            {
-                                                id: "createdAt",
-                                                desc: true
-                                            }
-                                        ]}
                                     />
                                 </div>
                             </div>
@@ -383,63 +409,48 @@ class ExerciseListing extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        const {
-            filteredLoading,
-            filteredExercises,
-            filteredTotalPages,
-            deleteLoading,
-            deleteFlag,
-            deleteError,
-            recoverLoading,
-            recoverFlag,
-            recoverError,
-            dispatch
-        } = this.props;
-        const { dtLoading } = this.state;
-        if (dtLoading && !filteredLoading) {
-            this.setState({ dtLoading: filteredLoading, dtData: filteredExercises, dtPages: filteredTotalPages });
+        const { loading, filteredExercises, filteredTotalPages, deleteLoading, deleteFlag, deleteError, recoverLoading, recoverFlag, recoverError } = this.props;
+        const { requestFilterInit } = this.state;
+        if (requestFilterInit && !loading) {
+            this.setState({
+                requestFilterInit: false,
+                filterData: filteredExercises,
+                pages: filteredTotalPages,
+            });
         }
         if (!deleteLoading && deleteFlag && prevProps.deleteLoading !== deleteLoading && prevProps.deleteFlag !== deleteFlag) {
             let stateData = { deleteLoading: false, deleteFlag: false, deleteError: [] };
             dispatch(setExerciseState(stateData));
             ts('Exercise deleted!');
-            this.refreshDtData();
+            window.location.reload();
+            // this.refreshDtData();
         } else if (!deleteLoading && prevProps.deleteLoading !== deleteLoading && deleteError && deleteError.length > 0) {
             let stateData = { deleteLoading: false, deleteFlag: false, deleteError: [] };
             dispatch(setExerciseState(stateData));
             te(deleteError[0]);
-            this.refreshDtData();
+            window.location.reload();
+            // this.refreshDtData();
         }
         if (!recoverLoading && recoverFlag && prevProps.recoverLoading !== recoverLoading && prevProps.recoverFlag !== recoverFlag) {
             let stateData = { recoverLoading: false, recoverFlag: false, recoverError: [] };
             dispatch(setExerciseState(stateData));
             ts('Exercise recovered!');
-            this.refreshDtData();
+            window.location.reload();
+            // this.refreshDtData();
         } else if (!recoverLoading && prevProps.recoverLoading !== recoverLoading && recoverError && recoverError.length > 0) {
             let stateData = { recoverLoading: false, recoverFlag: false, recoverError: [] };
             dispatch(setExerciseState(stateData));
             te(recoverError[0]);
-            this.refreshDtData();
+            window.location.reload();
+            // this.refreshDtData();
         }
     }
 
     // ----Start funs -----
-
-    //#region function for fetching data
-    fetchData = (state, instance) => {
+    updateList = () => {
         const { dispatch } = this.props;
-        let filterData = generateDTTableFilterObj(state, instance);
-        this.setState({ dtLoading: true, dtFilterData: filterData });
-        dispatch(exerciseFilterRequest(filterData));
+        dispatch(bodyPartListRequest());
     }
-
-    refreshDtData = () => {
-        const { dispatch } = this.props;
-        const { dtFilterData } = this.state;
-        this.setState({ dtLoading: true });
-        dispatch(exerciseFilterRequest(dtFilterData));
-    }
-    //#endregion
 
     confirmDelete = (_id) => {
         this.setState({ selectedId: _id, showDeleteModal: true });
@@ -483,9 +494,12 @@ class ExerciseListing extends Component {
 const mapStateToProps = (state) => {
     const { adminExercises, adminBodyParts } = state;
     return {
-        filteredLoading: adminExercises.get('filteredLoading'),
+        loading: adminExercises.get('loading'),
+        error: adminExercises.get('error'),
         filteredExercises: adminExercises.get('filteredExercises'),
         filteredTotalPages: adminExercises.get('filteredTotalPages'),
+        bodyPartsLoading: adminBodyParts.get('loading'),
+        bodyPartsError: adminBodyParts.get('error'),
         bodyParts: adminBodyParts.get('bodyParts'),
         deleteLoading: adminExercises.get('deleteLoading'),
         deleteFlag: adminExercises.get('deleteFlag'),

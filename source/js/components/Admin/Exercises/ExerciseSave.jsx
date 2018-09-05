@@ -32,7 +32,7 @@ class ExerciseSave extends Component {
                             <div className="whitebox-head">
                                 <h3 className="title-h3">Save Exercise</h3>
                             </div>
-                            <div className="row d-flex whitebox-body">
+                            <div className="whitebox-body">
                                 {error && error.length > 0 &&
                                     <Alert bsStyle="danger">
                                         {
@@ -42,9 +42,7 @@ class ExerciseSave extends Component {
                                         }
                                     </Alert>
                                 }
-                                <div className="col-md-12">
-                                    <ExerciseForm onSubmit={this.handleSubmit} />
-                                </div>
+                                <ExerciseForm onSubmit={this.handleSubmit} />
                             </div>
                         </div>
                     </div>

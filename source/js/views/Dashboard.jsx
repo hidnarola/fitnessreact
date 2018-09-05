@@ -3,13 +3,11 @@ import FitnessHeader from 'components/global/FitnessHeader';
 import FitnessNav from 'components/global/FitnessNav';
 import { connect } from 'react-redux';
 import { getToken } from '../helpers/funs';
-
+import WidgetsListModal from '../components/Dashboard/WidgetsListModal';
 
 class Dashboard extends Component {
     componentWillMount() {
-        const {
-            socket,
-        } = this.props;
+        const { socket, } = this.props;
         let token = getToken();
         if (socket && token) {
             socket.emit('join', token);
@@ -30,31 +28,22 @@ class Dashboard extends Component {
                                 on track and meeting the goals you’ve set out for yourself.</p>
                         </div>
                         <div className="body-head-r space-btm-20">
-                            <a className="white-btn for_cursor">
-                                Add Widget
-                            </a>
-                            <a className="pink-btn">
-                                Profile Completion
-                            </a>
+                            <button type="button" className="white-btn">
+                                <i className="icon-control_point"></i>
+                                <span>Add Widget</span>
+                            </button>
+                            <button type="button" className="pink-btn">
+                                <span>Profile Completion</span>
+                            </button>
                         </div>
                     </div>
 
                     <div className="body-content row d-flex">
-                        <div className="col-md-4">
-                            {/* <TodaysWorkout />
-                            <GoalProgress />
-                            <Badges /> */}
-                        </div>
-                        <div className="col-md-4">
-                            {/* <NextMeal />
-                            <BodyFatLoss />
-                            <WeeksCalories /> */}
-                        </div>
-                        <div className="col-md-4">
-                            {/* <ActivityFeed /> */}
-                        </div>
                     </div>
                 </section>
+                <WidgetsListModal
+                    show={true}
+                />
             </div>
         );
     }

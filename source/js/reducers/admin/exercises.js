@@ -31,6 +31,7 @@ const initialState = Map({
     error: [],
     exercise: null,
     exercises: [],
+    filteredLoading: false,
     filteredExercises: [],
     filteredTotalPages: 0,
     deleteLoading: false,
@@ -76,14 +77,14 @@ const actionMap = {
     },
     [EXERCISES_FILTER_REQUEST]: (state, action) => {
         return state.merge(Map({
-            loading: true,
+            filteredLoading: true,
             error: [],
             filteredExercises: [],
             filteredTotalPages: 0,
         }));
     },
     [EXERCISES_FILTER_SUCCESS]: (state, action) => {
-        let newState = { loading: false };
+        let newState = { filteredLoading: false };
         if (action.data && action.data.status && action.data.status === 1) {
             newState.filteredExercises = action.data.filtered_exercises;
             newState.filteredTotalPages = action.data.filtered_total_pages;
@@ -103,7 +104,7 @@ const actionMap = {
             error = ['Something went wrong! please try again later'];
         }
         return state.merge(Map({
-            loading: false,
+            filteredLoading: false,
             error: error,
         }));
     },

@@ -54,10 +54,7 @@ class EquipmentSave extends Component {
                                     }
                                 </Alert>
                             }
-                            <EquipmentForm
-                                onSubmit={this.handleSubmit}
-                                equipmentCats={equipmentCats}
-                            />
+                            <EquipmentForm onSubmit={this.handleSubmit} equipmentCats={equipmentCats} />
                         </div>
                     </div>
                 </div>

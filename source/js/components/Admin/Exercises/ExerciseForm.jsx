@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { NavLink, withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { FaTrash } from 'react-icons/lib/fa';
 import { showPageLoader, hidePageLoader } from '../../../actions/pageLoader';
 import { bodyPartListRequest } from '../../../actions/admin/bodyParts';
 import { equipmentListRequest } from '../../../actions/admin/equipments';
@@ -97,7 +96,7 @@ class ExerciseForm extends Component {
             <div className="exercise-form-data">
                 <form onSubmit={handleSubmit}>
                     <div className="row">
-                        <div className="col-md-12">
+                        <div className="col-md-4">
                             <Field
                                 name="category"
                                 label="Category"
@@ -110,6 +109,8 @@ class ExerciseForm extends Component {
                                 validate={[requiredReactSelect]}
                                 onChange={this.handleCategoryChange}
                             />
+                        </div>
+                        <div className="col-md-4">
                             <Field
                                 name="sub_category"
                                 label="Sub Category"
@@ -121,6 +122,8 @@ class ExerciseForm extends Component {
                                 errorClass="help-block"
                                 validate={subCategoriesValidation}
                             />
+                        </div>
+                        <div className="col-md-4">
                             <Field
                                 name="name"
                                 className="form-control"
@@ -133,6 +136,8 @@ class ExerciseForm extends Component {
                                 warningClass=""
                                 validate={[required, min3, max150]}
                             />
+                        </div>
+                        <div className="col-md-4">
                             <Field
                                 name="equipments"
                                 label="Equipments"
@@ -144,6 +149,8 @@ class ExerciseForm extends Component {
                                 errorClass="help-block"
                                 validate={[requiredReactSelectMulti]}
                             />
+                        </div>
+                        <div className="col-md-4">
                             <Field
                                 name="difficulty_level"
                                 label="Difficulty Level"
@@ -155,66 +162,8 @@ class ExerciseForm extends Component {
                                 errorClass="help-block"
                                 validate={[requiredReactSelect]}
                             />
-                            <Field
-                                name="main_muscle"
-                                label="Main Muscle Group"
-                                labelClass="control-label"
-                                wrapperClass="form-group"
-                                placeholder="Main Muscle Group"
-                                component={SelectField_ReactSelect}
-                                options={bodyPartsOptions}
-                                errorClass="help-block"
-                                validate={[requiredReactSelect]}
-                            />
-                            <Field
-                                name="other_muscle"
-                                label="Other Muscle Group"
-                                labelClass="control-label"
-                                wrapperClass="form-group"
-                                placeholder="Other Muscle Group"
-                                component={SelectField_ReactSelectMulti}
-                                options={bodyPartsOptions}
-                            />
-                            <Field
-                                name="detailed_muscle"
-                                label="Detailed Muscle Group"
-                                labelClass="control-label"
-                                wrapperClass="form-group"
-                                placeholder="Detailed Muscle Group"
-                                component={SelectField_ReactSelectMulti}
-                                options={bodyPartsOptions}
-                            />
-                            <Field
-                                name="mechanics"
-                                label="Mechanics"
-                                labelClass="control-label"
-                                wrapperClass="form-group"
-                                placeholder="Mechanics"
-                                component={SelectField_ReactSelect}
-                                options={mechanicsOptions}
-                            />
-                            <Field
-                                name="description"
-                                value={description}
-                                handleChange={this.handleChangeTextEditor}
-                                className="editor-min-height-200"
-                                label="Description"
-                                labelClass="control-label display_block"
-                                wrapperClass="form-group"
-                                placeholder="Description"
-                                component={EditorField}
-                            />
-                            <Field
-                                name="images"
-                                label="Images"
-                                labelClass="control-label display_block"
-                                mainWrapperClass="image-form-main-wrapper"
-                                wrapperClass="form-group"
-                                placeholder="Images"
-                                component={FileField_Dropzone_Multi}
-                                existingImages={exerciseImages}
-                                showExistingImageDeleteModel={(path) => this.handleDeleteImageModel(true, path)}
-                            />
+                        </div>
+                        <div className="col-md-2">
                             <Field
                                 name="status"
                                 label="Status"
@@ -226,25 +175,107 @@ class ExerciseForm extends Component {
                                 errorClass="help-block"
                                 validate={[requiredReactSelectStatus]}
                             />
+                        </div>
+                        <div className="col-md-2">
                             <Field
-                                name="deleted_images"
-                                component='input'
-                                type='hidden'
+                                name="mechanics"
+                                label="Mechanics"
+                                labelClass="control-label"
+                                wrapperClass="form-group"
+                                placeholder="Mechanics"
+                                component={SelectField_ReactSelect}
+                                options={mechanicsOptions}
                             />
+                        </div>
+                        <div className="col-md-4">
+                            <Field
+                                name="main_muscle"
+                                label="Main Muscle Group"
+                                labelClass="control-label"
+                                wrapperClass="form-group"
+                                placeholder="Main Muscle Group"
+                                component={SelectField_ReactSelect}
+                                options={bodyPartsOptions}
+                                errorClass="help-block"
+                                validate={[requiredReactSelect]}
+                            />
+                        </div>
+                        <div className="col-md-4">
+                            <Field
+                                name="other_muscle"
+                                label="Other Muscle Group"
+                                labelClass="control-label"
+                                wrapperClass="form-group"
+                                placeholder="Other Muscle Group"
+                                component={SelectField_ReactSelectMulti}
+                                options={bodyPartsOptions}
+                            />
+                        </div>
+                        <div className="col-md-4">
+                            <Field
+                                name="detailed_muscle"
+                                label="Detailed Muscle Group"
+                                labelClass="control-label"
+                                wrapperClass="form-group"
+                                placeholder="Detailed Muscle Group"
+                                component={SelectField_ReactSelectMulti}
+                                options={bodyPartsOptions}
+                            />
+                        </div>
+                        <div className="col-md-6">
+                            <Field
+                                name="description"
+                                value={description}
+                                handleChange={this.handleChangeTextEditor}
+                                className="editor-min-height-200"
+                                label="Description"
+                                labelClass="control-label display_block"
+                                wrapperClass="form-group"
+                                placeholder="Description"
+                                component={EditorField}
+                            />
+                        </div>
+                        <div className="col-md-6">
+                            <Field
+                                name="images"
+                                label="Images"
+                                labelClass="control-label display_block"
+                                mainWrapperClass="image-form-main-wrapper"
+                                wrapperClass="form-group"
+                                placeholder="Images"
+                                component={FileField_Dropzone_Multi}
+                                existingImages={exerciseImages}
+                                showExistingImageDeleteModel={(path) => this.handleDeleteImageModel(true, path)}
+                            />
+                        </div>
+                        <Field
+                            name="deleted_images"
+                            component='input'
+                            type='hidden'
+                        />
+                        <div className="col-md-12 mb-20">
                             <FieldArray
                                 name="steps"
                                 component={ExerciseSteps}
                             />
+                        </div>
+                        <div className="col-md-12 mb-10">
                             <FieldArray
                                 name="tips"
                                 component={ExerciseTips}
                             />
-                            <div className="col-md-12 mb-20 clear-both text-center">
-                                <div className="stepbox-b stepbox-b-center">
-                                    <NavLink to={adminRouteCodes.EXERCISE} className="continues-btn">Back</NavLink>
-                                    <button type="submit" className="continues-btn"><span>Save</span></button>
-                                </div>
-                            </div>
+                        </div>
+                    </div>
+                    <div className="d-flex pull-right mt-10">
+                        <div className="col-md-12">
+                            <Link to={adminRouteCodes.EXERCISE} className="custom-medium-link-btn">
+                                <span>Back</span>
+                                <i className="icon-arrow_back"></i>
+                            </Link>
+                            <button type="submit" className="custom-medium-btn">
+                                <span>Save</span>
+                                <i className="icon-save"></i>
+                            </button>
                         </div>
                     </div>
                 </form>
@@ -254,7 +285,7 @@ class ExerciseForm extends Component {
                     handleClose={() => this.handleDeleteImageModel(false)}
                     handleYes={this.handleDeleteImage}
                 />
-            </div>
+            </div >
         );
     }
 
