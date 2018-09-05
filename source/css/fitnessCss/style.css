@@ -776,8 +776,6 @@ flex-direction:column;}
 .styled-checkbox + label::before{content:'\e86c'; display: inline-block; background: transparent; font-family:'icomoon'; background:#fff; position: absolute; top:0; left:0; text-align:center; width:100%; height:100%; line-height:76px;    color: #d5d5d5;}
 .styled-checkbox:checked + label:before { content:'\e86c'; background: linear-gradient(123.28deg, #46E9C5 0%, #3FFBFC 100%); color:#fff; border-radius: 0 4px 4px 0;}
 
-
-
 .fitness-wrap{margin-bottom:10px;}
 .fitness-wrap>h4{margin:0 0 20px; padding:0; color:#232B41; font-size:14px; font-weight:700; line-height:20px;}
 .fitness-test-box{margin-bottom:20px; border:2px solid #f9fafa;border-radius:5px; display:inline-block; vertical-align:top; width:100%;}
@@ -2174,3 +2172,21 @@ ul.common-ul>li.body-fat-field-li{ width:50%; margin-left:auto;}
 .dashboard-widgets-wrapper button[type="submit"] { border: 0; background: linear-gradient(123.28deg, #46E9C5 0%, #3FFBFC 100%) !important; border-radius: 80px; height: 42px; width: 150px; color: #fff; text-align: left; padding: 0 20px; font-size: 14px; line-height: 22px; display: block; margin-left: auto; }
 .dashboard-widgets-wrapper button[type="submit"] i { float: right; font-size: 20px; }
 .dashboard-widgets-wrapper button[type="submit"]:hover { background: linear-gradient(123.28deg, #3FFBFC 0%, #46E9C5 100%) !important; }
+
+.choose-widget ul li {position: relative;}
+.choose-widget .custom_check .choosewidget-box{ background:transparent; z-index:2; position:relative; }
+.choose-widget .custom_check [type="checkbox"]:not(:checked) + label, 
+.choose-widget .custom_check [type="checkbox"]:checked + label{ width:194px; height: 194px; padding:0;}
+
+.choose-widget .custom_check [type="checkbox"]:checked + label:before {background:linear-gradient(148.66deg, #FF3366 0%, #FF339A 100%); border:0; width:194px; height:194px; border-radius: 100%; border: 0; top: 0; left: 0;}
+.choose-widget .custom_check [type="checkbox"]:not(:checked) + label:before{position: absolute; padding: 0; cursor: pointer;  border:0; width: 194px; height: 194px; top: 0; left: 0; background: #F8F9F9; border-radius: 100%;}
+
+.choose-widget .custom_check [type="checkbox"]:checked + label:after{display:none;}
+.choosewidget-box svg{ width:34px; height:34px; margin:0 auto 10px;}
+
+.choose-widget .custom_check [type="checkbox"]:checked + label .choosewidget-box big,
+.choose-widget .custom_check [type="checkbox"]:checked + label .choosewidget-box i{color:#fff;}
+.choose-widget .custom_check [type="checkbox"]:checked + label .choosewidget-box svg{fill:#fff;}
+.choose-widget .choosewidget-box big {font-size: 16px;}
+
+

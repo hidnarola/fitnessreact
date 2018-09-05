@@ -6,14 +6,14 @@ class BodyFat extends Component {
     render() {
         const { bodyFat } = this.props;
         return (
-            <div class="white-box space-btm-30">
-                <div class="whitebox-head d-flex">
-                    <h3 class="title-h3">Body Fat</h3>
-                    <div class="whitebox-head-r">
-                        <a href="" class="icon-settings"></a>
+            <div className="white-box space-btm-30">
+                <div className="whitebox-head d-flex">
+                    <h3 className="title-h3">Body Fat</h3>
+                    <div className="whitebox-head-r">
+                        <a href="" className="icon-settings"></a>
                     </div>
                 </div>
-                <div class="whitebox-body bodyfat-graph">
+                <div className="whitebox-body bodyfat-graph">
                     <ResponsiveContainer>
                         <AreaChart data={bodyFat}>
                             <defs>

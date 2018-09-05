@@ -8,6 +8,7 @@ import {
     DASHBOARD_WIDGET_BODY_FAT,
 } from '../../constants/consts';
 import { Field, reduxForm } from "redux-form";
+import BadgeIcon from "svg/badge-icon.svg";
 
 class WidgetsListModal extends Component {
     render() {
@@ -21,57 +22,57 @@ class WidgetsListModal extends Component {
                     <h3 className="title-h3">Add A Widget</h3>
                     <div className="choose-widget">
                         <ul>
-                            <li>
-                                <div className="choosewidget-box">
-                                    <i className="icon-fitness_center"></i>
-                                    <big>Today's Workout</big>
-                                </div>
+                            <li className="custom_check">
+                                
                                 <Field
                                     type="checkbox"
                                     component="input"
                                     name={`dashboard_${DASHBOARD_WIDGET_TODAYS_WORKOUT}`}
                                     id={`dashboard_${DASHBOARD_WIDGET_TODAYS_WORKOUT}`}
                                 />
-                                <label htmlFor={`dashboard_${DASHBOARD_WIDGET_TODAYS_WORKOUT}`}></label>
+                                <label htmlFor={`dashboard_${DASHBOARD_WIDGET_TODAYS_WORKOUT}`}><div className="choosewidget-box">
+                                    <i className="icon-fitness_center"></i>
+                                    <big>Today's Workout</big>
+                                </div></label>
                             </li>
-                            <li>
-                                <div className="choosewidget-box">
-                                    <i className="icon-view_quilt"></i>
-                                    <big>Activity Feed</big>
-                                </div>
+                            <li className="custom_check">
+                                
                                 <Field
                                     type="checkbox"
                                     component="input"
                                     name={`dashboard_${DASHBOARD_WIDGET_ACTIVITY_FEED}`}
                                     id={`dashboard_${DASHBOARD_WIDGET_ACTIVITY_FEED}`}
                                 />
-                                <label htmlFor={`dashboard_${DASHBOARD_WIDGET_ACTIVITY_FEED}`}></label>
+                                <label htmlFor={`dashboard_${DASHBOARD_WIDGET_ACTIVITY_FEED}`}><div className="choosewidget-box">
+                                    <i className="icon-view_quilt"></i>
+                                    <big>Activity Feed</big>
+                                </div></label>
                             </li>
-                            <li>
-                                <div className="choosewidget-box">
-                                    <i className="icon-security"></i>
-                                    <big>Badges</big>
-                                </div>
+                            <li className="custom_check">
+                               
                                 <Field
                                     type="checkbox"
                                     component="input"
                                     name={`dashboard_${DASHBOARD_WIDGET_BADGES}`}
                                     id={`dashboard_${DASHBOARD_WIDGET_BADGES}`}
                                 />
-                                <label htmlFor={`dashboard_${DASHBOARD_WIDGET_BADGES}`}></label>
+                                <label htmlFor={`dashboard_${DASHBOARD_WIDGET_BADGES}`}> <div className="choosewidget-box">
+                                    <BadgeIcon />
+                                    <big>Badges</big>
+                                </div></label>
                             </li>
-                            <li>
-                                <div className="choosewidget-box">
-                                    <i className="icon-accessibility"></i>
-                                    <big>Body Fat</big>
-                                </div>
+                            <li className="custom_check">
+                               
                                 <Field
                                     type="checkbox"
                                     component="input"
                                     name={`dashboard_${DASHBOARD_WIDGET_BODY_FAT}`}
                                     id={`dashboard_${DASHBOARD_WIDGET_BODY_FAT}`}
                                 />
-                                <label htmlFor={`dashboard_${DASHBOARD_WIDGET_BODY_FAT}`}></label>
+                                <label htmlFor={`dashboard_${DASHBOARD_WIDGET_BODY_FAT}`}> <div className="choosewidget-box">
+                                    <i className="icon-accessibility"></i>
+                                    <big>Body Fat</big>
+                                </div></label>
                             </li>
                         </ul>
                     </div>
