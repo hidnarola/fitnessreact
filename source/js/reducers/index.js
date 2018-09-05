@@ -4,7 +4,7 @@ import app from 'reducers/app';
 import user from 'reducers/user';
 import userBodyMeasurement from 'reducers/userBodyMeasurement';
 import people from 'reducers/people';
-import dashboardnew from 'reducers/dashboard';
+import dashboard from 'reducers/dashboard';
 import nutritions from 'reducers/nutritions';
 import userEquipments from 'reducers/userEquipments';
 import userExercisePreferences from 'reducers/userExercisePreferences';
@@ -57,7 +57,7 @@ export default combineReducers({
     user,
     userBodyMeasurement,
     people,
-    dashboardnew,
+    dashboard,
     nutritions,
     userEquipments,
     userExercisePreferences,

@@ -1,17 +1,23 @@
-export const GET_DASHBOARD_START = 'GET_DASHBOARD_START';
-export const GET_DASHBOARD_ERROR = 'GET_DASHBOARD_ERROR';
-export const GET_DASHBOARD_SUCCESS = 'GET_DASHBOARD_SUCCESS';
-export const SET_WIDGETS = 'SET_WIDGETS';
+export const GET_DASHBOARD_PAGE_REQUEST = 'GET_DASHBOARD_PAGE_REQUEST';
+export const GET_DASHBOARD_PAGE_SUCCESS = 'GET_DASHBOARD_PAGE_SUCCESS';
+export const GET_DASHBOARD_PAGE_ERROR = 'GET_DASHBOARD_PAGE_ERROR';
 
-export function getDashboardData(){
+export function getDashboardPageRequest() {
     return {
-        type:GET_DASHBOARD_START
+        type: GET_DASHBOARD_PAGE_REQUEST
     }
 }
 
-export function setWidgets(data){
+export function getDashboardPageSuccess(data) {
     return {
-        type:SET_WIDGETS,
+        type: GET_DASHBOARD_PAGE_SUCCESS,
         data
+    }
+}
+
+export function getDashboardPageError(error) {
+    return {
+        type: GET_DASHBOARD_PAGE_ERROR,
+        error
     }
 }

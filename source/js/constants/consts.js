@@ -876,3 +876,12 @@ export const BADGE_CAT_NUTRITIONS = 'NUTRITIONS';
 
 export const STATS_STRENGTH = 'strength';
 export const STATS_CARDIO = 'cardio';
+
+export const DASHBOARD_WIDGET_TODAYS_WORKOUT = 'todays_workout';
+export const DASHBOARD_WIDGET_ACTIVITY_FEED = 'activity_feed';
+export const DASHBOARD_WIDGET_BADGES = 'badges';
+export const DASHBOARD_WIDGET_BODY_FAT = 'body_fat';
+export const DASHBOARD_WIDGET_MOBILITY = 'mobility';
+export const DASHBOARD_WIDGET_MUSCLE = 'muscle';
+export const DASHBOARD_WIDGET_STRENGTH = 'strength';
+export const DASHBOARD_WIDGET_ENDURANCE = 'endurance';

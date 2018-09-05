@@ -1,33 +1,21 @@
-import { delay } from 'redux-saga'
-import { takeLatest, call, put  } from 'redux-saga/effects';
+import { takeLatest, call, put } from "redux-saga/effects";
+import { GET_DASHBOARD_PAGE_REQUEST, getDashboardPageSuccess, getDashboardPageError } from "../actions/dashboard";
 
-import {    
-    GET_DASHBOARD_START,GET_DASHBOARD_ERROR,GET_DASHBOARD_SUCCESS
-} from '../actions/dashboard';
-
-import api from 'api/newapi';
-
- 
-//----------------------------------------------------------------------------------------
-
-function makeDashboardReq() {
-    return function* (options) { // eslint-disable-line consistent-return
+function getDashboardPageData() {
+    return function* (action) {
         try {
-            const data = yield call(() => api.getAPI(options.id));
-            const action = { type: GET_DASHBOARD_SUCCESS, data };
-            // yield delay(3000);
-            yield put(action);
+            const data = yield call(() => api.getFriends(username, FRIEND_APPROVED));
+            yield put(getDashboardPageSuccess(data));
         } catch (error) {
-            const action = { type: GET_DASHBOARD_ERROR, error };
-            yield put(action);
+            yield put(getDashboardPageError(error));
         }
-    };
+    }
 }
 
-export function* fetchDashboardData(){
-    yield takeLatest(GET_DASHBOARD_START,makeDashboardReq())
+export function* watchDashboardData() {
+    yield takeLatest(GET_DASHBOARD_PAGE_REQUEST, getDashboardPageData());
 }
- 
+
 export default [
-    fetchDashboardData()
+    watchDashboardData()
 ];
