@@ -19,7 +19,6 @@ import Badges from '../components/Dashboard/Badges';
 import Workouts from '../components/Dashboard/Workouts';
 import BodyFat from '../components/Dashboard/BodyFat';
 import ActivityFeed from '../components/Dashboard/ActivityFeed';
-import { FaTh } from "react-icons/lib/fa";
 
 class Dashboard extends Component {
     constructor(props) {
@@ -60,7 +59,7 @@ class Dashboard extends Component {
                         </div>
                         <div className="body-head-r space-btm-20">
                             <button type="button" onClick={this.handleShowWidgetsModal} className="white-btn">
-                                <i className="icon-control_point"></i>
+                                <i className="icon-widgets"></i>
                                 <span>Add Widget</span>
                             </button>
                             <button type="button" className="pink-btn">
@@ -111,7 +110,7 @@ class Dashboard extends Component {
                                 (!userWidgets || typeof userWidgets[DASHBOARD_WIDGET_ACTIVITY_FEED] === 'undefined' || userWidgets[DASHBOARD_WIDGET_ACTIVITY_FEED] === 0 || userWidgets[DASHBOARD_WIDGET_ACTIVITY_FEED] === null) &&
                                 (!userWidgets || typeof userWidgets[DASHBOARD_WIDGET_BADGES] === 'undefined' || userWidgets[DASHBOARD_WIDGET_BADGES] === 0 || userWidgets[DASHBOARD_WIDGET_BADGES] === null) &&
                                 <div className="select-dashboard-widget-wrapper">
-                                    <FaTh />
+                                    <i className="icon-widgets"></i>
                                     <h3>Please add widgets on dashboard.</h3>
                                 </div>
                             }
