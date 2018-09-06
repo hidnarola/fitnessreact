@@ -24,8 +24,14 @@ function changeDashboardBodyFatWidget(requestData) {
     return postFormData(requestUrl + '/body_fat', requestData, headers);
 }
 
+function changeCompleteStatusOfWorkout(requestData) {
+    let headers = extraUserHeaders();
+    return postFormData(requestUrl + '/workout_complete', requestData, headers);
+}
+
 export default {
     getDashboardPage,
     saveDashboardWidgetsData,
-    changeDashboardBodyFatWidget
+    changeDashboardBodyFatWidget,
+    changeCompleteStatusOfWorkout
 }

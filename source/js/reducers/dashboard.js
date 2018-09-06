@@ -8,7 +8,10 @@ import {
     SAVE_DASHBOARD_WIDGETS_DATA_ERROR,
     CHANGE_DASHBOARD_BODY_FAT_WIDGET_REQUEST,
     CHANGE_DASHBOARD_BODY_FAT_WIDGET_SUCCESS,
-    CHANGE_DASHBOARD_BODY_FAT_WIDGET_ERROR
+    CHANGE_DASHBOARD_BODY_FAT_WIDGET_ERROR,
+    CHANGE_COMPLETE_STATUS_OF_WORKOUT_REQUEST,
+    CHANGE_COMPLETE_STATUS_OF_WORKOUT_SUCCESS,
+    CHANGE_COMPLETE_STATUS_OF_WORKOUT_ERROR
 } from "../actions/dashboard";
 import { VALIDATION_FAILURE_STATUS } from "../constants/consts";
 import { generateValidationErrorMsgArr } from "../helpers/funs";
@@ -26,6 +29,8 @@ const initialState = Map({
     saveWidgetsError: [],
     changeBodyFatLoading: false,
     changeBodyFatError: [],
+    changeCompleteWorkoutLoading: false,
+    changeCompleteWorkoutError: [],
 });
 
 const actionMap = {
@@ -106,6 +111,28 @@ const actionMap = {
         return state.merge(Map({
             changeBodyFatLoading: false,
             changeBodyFatError: prepareResponseError(action),
+        }));
+    },
+    [CHANGE_COMPLETE_STATUS_OF_WORKOUT_REQUEST]: (state, action) => {
+        return state.merge(Map({
+            changeCompleteWorkoutLoading: true,
+            changeCompleteWorkoutError: [],
+        }));
+    },
+    [CHANGE_COMPLETE_STATUS_OF_WORKOUT_SUCCESS]: (state, action) => {
+        let newState = { changeCompleteWorkoutLoading: false };
+        if (action.data && action.data.status && action.data.status === 1) {
+            newState.workouts = action.cdata.data.workouts;
+        } else {
+            let msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later';
+            newState.changeCompleteWorkoutError = [msg];
+        }
+        return state.merge(Map(newState));
+    },
+    [CHANGE_COMPLETE_STATUS_OF_WORKOUT_ERROR]: (state, action) => {
+        return state.merge(Map({
+            changeCompleteWorkoutLoading: false,
+            changeCompleteWorkoutError: prepareResponseError(action),
         }));
     },
 };

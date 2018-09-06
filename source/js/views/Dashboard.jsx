@@ -19,6 +19,7 @@ import Badges from '../components/Dashboard/Badges';
 import Workouts from '../components/Dashboard/Workouts';
 import BodyFat from '../components/Dashboard/BodyFat';
 import ActivityFeed from '../components/Dashboard/ActivityFeed';
+import { FaTh } from "react-icons/lib/fa";
 
 class Dashboard extends Component {
     constructor(props) {
@@ -77,11 +78,14 @@ class Dashboard extends Component {
 
                     {!loading &&
                         <div className="body-content row d-flex col-md-12">
-                            {userWidgets && typeof userWidgets[DASHBOARD_WIDGET_TODAYS_WORKOUT] !== 'undefined' && userWidgets[DASHBOARD_WIDGET_TODAYS_WORKOUT] &&
-                                <div className="col-md-4">
+                            <div className="col-md-4">
+                                {userWidgets && typeof userWidgets[DASHBOARD_WIDGET_TODAYS_WORKOUT] !== 'undefined' && userWidgets[DASHBOARD_WIDGET_TODAYS_WORKOUT] === 1 &&
                                     <Workouts />
-                                </div>
-                            }
+                                }
+                                {userWidgets && typeof userWidgets[DASHBOARD_WIDGET_BADGES] !== 'undefined' && userWidgets[DASHBOARD_WIDGET_BADGES] === 1 &&
+                                    <Badges />
+                                }
+                            </div>
 
                             {userWidgets && typeof userWidgets[DASHBOARD_WIDGET_BODY_FAT] !== 'undefined' && userWidgets[DASHBOARD_WIDGET_BODY_FAT] &&
                                 <div className="col-md-4">
@@ -89,18 +93,28 @@ class Dashboard extends Component {
                                 </div>
                             }
 
-                            {userWidgets && typeof userWidgets[DASHBOARD_WIDGET_ACTIVITY_FEED] !== 'undefined' && userWidgets[DASHBOARD_WIDGET_ACTIVITY_FEED] &&
+                            {userWidgets && typeof userWidgets[DASHBOARD_WIDGET_ACTIVITY_FEED] !== 'undefined' && userWidgets[DASHBOARD_WIDGET_ACTIVITY_FEED] === 1 &&
                                 <div className="col-md-4">
                                     <ActivityFeed />
                                 </div>
                             }
 
-                            {userWidgets && typeof userWidgets[DASHBOARD_WIDGET_BADGES] !== 'undefined' && userWidgets[DASHBOARD_WIDGET_BADGES] &&
+                            {/* {userWidgets && typeof userWidgets[DASHBOARD_WIDGET_BADGES] !== 'undefined' && userWidgets[DASHBOARD_WIDGET_BADGES] === 1 &&
                                 <div className="col-md-4">
                                     <Badges />
                                 </div>
-                            }
+                            } */}
 
+                            {
+                                (!userWidgets || typeof userWidgets[DASHBOARD_WIDGET_TODAYS_WORKOUT] === 'undefined' || userWidgets[DASHBOARD_WIDGET_TODAYS_WORKOUT] === 0 || userWidgets[DASHBOARD_WIDGET_TODAYS_WORKOUT] === null) &&
+                                (!userWidgets || typeof userWidgets[DASHBOARD_WIDGET_BODY_FAT] === 'undefined' || !userWidgets[DASHBOARD_WIDGET_TODAYS_WORKOUT]) &&
+                                (!userWidgets || typeof userWidgets[DASHBOARD_WIDGET_ACTIVITY_FEED] === 'undefined' || userWidgets[DASHBOARD_WIDGET_ACTIVITY_FEED] === 0 || userWidgets[DASHBOARD_WIDGET_ACTIVITY_FEED] === null) &&
+                                (!userWidgets || typeof userWidgets[DASHBOARD_WIDGET_BADGES] === 'undefined' || userWidgets[DASHBOARD_WIDGET_BADGES] === 0 || userWidgets[DASHBOARD_WIDGET_BADGES] === null) &&
+                                <div className="select-dashboard-widget-wrapper">
+                                    <FaTh />
+                                    <h3>Please add widgets on dashboard.</h3>
+                                </div>
+                            }
                         </div>
                     }
 

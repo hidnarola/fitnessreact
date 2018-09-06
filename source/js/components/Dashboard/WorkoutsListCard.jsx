@@ -21,7 +21,7 @@ class WorkoutsListCard extends Component {
     }
 
     render() {
-        const { workout } = this.props;
+        const { workout, handleCompleteWorkout } = this.props;
         const { isCompleted } = this.state;
         var today = moment().utc();
         var workoutDay = moment(workout.date);
@@ -38,6 +38,7 @@ class WorkoutsListCard extends Component {
                                 checked={isCompleted}
                                 onChange={() => {
                                     this.setState({ isCompleted: !isCompleted });
+                                    handleCompleteWorkout(workout._id, !isCompleted);
                                 }}
                                 disabled={false}
                             />

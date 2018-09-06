@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import WorkoutsListCard from './WorkoutsListCard';
 import NoDataFoundImg from "img/common/no_datafound.png";
+import { changeCompleteStatusOfWorkoutRequest } from '../../actions/dashboard';
 
 class Workouts extends Component {
     render() {
@@ -10,14 +11,10 @@ class Workouts extends Component {
             <div className="white-box space-btm-30">
                 <div className="whitebox-head d-flex">
                     <h3 className="title-h3">Today's Workout</h3>
-                    <div className="whitebox-head-r">
-                        <a href="" className="icon-print"></a>
-                        <a href="" className="icon-settings"></a>
-                    </div>
                 </div>
                 {workouts && workouts.length > 0 &&
                     workouts.map((o, i) =>
-                        <WorkoutsListCard key={i} workout={o} />
+                        <WorkoutsListCard key={i} workout={o} handleCompleteWorkout={this.handleCompleteWorkout} />
                     )
                 }
                 {(!workouts || workouts.length <= 0) &&
@@ -27,6 +24,12 @@ class Workouts extends Component {
                 }
             </div>
         );
+    }
+
+    handleCompleteWorkout = (workoutId, isCompleted) => {
+        const { dispatch } = this.props;
+        let requestData = { workoutId, isCompleted };
+        dispatch(changeCompleteStatusOfWorkoutRequest(requestData));
     }
 }
 

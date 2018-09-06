@@ -10,6 +10,10 @@ export const CHANGE_DASHBOARD_BODY_FAT_WIDGET_REQUEST = 'CHANGE_DASHBOARD_BODY_F
 export const CHANGE_DASHBOARD_BODY_FAT_WIDGET_SUCCESS = 'CHANGE_DASHBOARD_BODY_FAT_WIDGET_SUCCESS';
 export const CHANGE_DASHBOARD_BODY_FAT_WIDGET_ERROR = 'CHANGE_DASHBOARD_BODY_FAT_WIDGET_ERROR';
 
+export const CHANGE_COMPLETE_STATUS_OF_WORKOUT_REQUEST = 'CHANGE_COMPLETE_STATUS_OF_WORKOUT_REQUEST';
+export const CHANGE_COMPLETE_STATUS_OF_WORKOUT_SUCCESS = 'CHANGE_COMPLETE_STATUS_OF_WORKOUT_SUCCESS';
+export const CHANGE_COMPLETE_STATUS_OF_WORKOUT_ERROR = 'CHANGE_COMPLETE_STATUS_OF_WORKOUT_ERROR';
+
 export function getDashboardPageRequest() {
     return {
         type: GET_DASHBOARD_PAGE_REQUEST
@@ -68,6 +72,27 @@ export function changeDashboardBodyFatWidgetSuccess(data) {
 export function changeDashboardBodyFatWidgetError(error) {
     return {
         type: CHANGE_DASHBOARD_BODY_FAT_WIDGET_ERROR,
+        error
+    }
+}
+
+export function changeCompleteStatusOfWorkoutRequest(requestData) {
+    return {
+        type: CHANGE_COMPLETE_STATUS_OF_WORKOUT_REQUEST,
+        requestData
+    }
+}
+
+export function changeCompleteStatusOfWorkoutSuccess(data) {
+    return {
+        type: CHANGE_COMPLETE_STATUS_OF_WORKOUT_SUCCESS,
+        data
+    }
+}
+
+export function changeCompleteStatusOfWorkoutError(error) {
+    return {
+        type: CHANGE_COMPLETE_STATUS_OF_WORKOUT_ERROR,
         error
     }
 }

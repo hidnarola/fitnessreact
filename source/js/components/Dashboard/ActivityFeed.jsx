@@ -10,9 +10,6 @@ class ActivityFeed extends Component {
             <div className="white-box space-btm-30">
                 <div className="whitebox-head d-flex">
                     <h3 className="title-h3">Activity Feed</h3>
-                    <div className="whitebox-head-r">
-                        <a href="" className="icon-settings"></a>
-                    </div>
                 </div>
                 {activityFeed && activityFeed.length > 0 &&
                     activityFeed.map((o, i) =>
