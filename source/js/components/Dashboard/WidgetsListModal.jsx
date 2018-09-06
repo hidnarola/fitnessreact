@@ -14,7 +14,7 @@ class WidgetsListModal extends Component {
     render() {
         const { show, handleSubmit, handleClose, saveWidgetsLoading } = this.props;
         return (
-            <Modal show={show} className="widget-popup dashboard-widgets-wrapper">
+            <Modal show={show} className="widget-popup dashboard-widgets-wrapper widgets-wrapper">
                 <form method="POST" onSubmit={handleSubmit}>
                     <button type="button" onClick={handleClose} className="close-round" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>

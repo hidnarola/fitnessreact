@@ -884,3 +884,8 @@ export const DASHBOARD_WIDGET_TODAYS_WORKOUT = 'workout';
 export const DASHBOARD_WIDGET_ACTIVITY_FEED = 'activityFeed';
 export const DASHBOARD_WIDGET_BADGES = 'badges';
 export const DASHBOARD_WIDGET_BODY_FAT = 'bodyFat';
+
+export const TIMELINE_WIDGET_MUSCLE = 'muscle';
+export const TIMELINE_WIDGET_PROGRESS_PHOTO = 'progressPhoto';
+export const TIMELINE_WIDGET_BADGES = 'badges';
+export const TIMELINE_WIDGET_BODY_FAT = 'bodyFat';
