@@ -5,7 +5,10 @@ import {
     GET_DASHBOARD_PAGE_ERROR,
     SAVE_DASHBOARD_WIDGETS_DATA_REQUEST,
     SAVE_DASHBOARD_WIDGETS_DATA_SUCCESS,
-    SAVE_DASHBOARD_WIDGETS_DATA_ERROR
+    SAVE_DASHBOARD_WIDGETS_DATA_ERROR,
+    CHANGE_DASHBOARD_BODY_FAT_WIDGET_REQUEST,
+    CHANGE_DASHBOARD_BODY_FAT_WIDGET_SUCCESS,
+    CHANGE_DASHBOARD_BODY_FAT_WIDGET_ERROR
 } from "../actions/dashboard";
 import { VALIDATION_FAILURE_STATUS } from "../constants/consts";
 import { generateValidationErrorMsgArr } from "../helpers/funs";
@@ -21,6 +24,8 @@ const initialState = Map({
     error: [],
     saveWidgetsLoading: false,
     saveWidgetsError: [],
+    changeBodyFatLoading: false,
+    changeBodyFatError: [],
 });
 
 const actionMap = {
@@ -75,8 +80,32 @@ const actionMap = {
     },
     [SAVE_DASHBOARD_WIDGETS_DATA_ERROR]: (state, action) => {
         return state.merge(Map({
-            loading: false,
-            error: prepareResponseError(action),
+            saveWidgetsLoading: false,
+            saveWidgetsError: prepareResponseError(action),
+        }));
+    },
+    [CHANGE_DASHBOARD_BODY_FAT_WIDGET_REQUEST]: (state, action) => {
+        return state.merge(Map({
+            changeBodyFatLoading: true,
+            bodyFat: [],
+            changeBodyFatError: [],
+        }));
+    },
+    [CHANGE_DASHBOARD_BODY_FAT_WIDGET_SUCCESS]: (state, action) => {
+        let newState = { changeBodyFatLoading: false };
+        if (action.data && action.data.status && action.data.status === 1) {
+            newState.userWidgets = action.data.data.widgets;
+            newState.bodyFat = action.data.data.bodyFat;
+        } else {
+            let msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later';
+            newState.changeBodyFatError = [msg];
+        }
+        return state.merge(Map(newState));
+    },
+    [CHANGE_DASHBOARD_BODY_FAT_WIDGET_ERROR]: (state, action) => {
+        return state.merge(Map({
+            changeBodyFatLoading: false,
+            changeBodyFatError: prepareResponseError(action),
         }));
     },
 };

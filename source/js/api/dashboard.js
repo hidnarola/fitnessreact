@@ -19,7 +19,13 @@ function saveDashboardWidgetsData(requestData) {
     return postFormData(requestUrlWidgets + '/' + WIDGETS_TYPE_DASHBOARD, requestData, headers);
 }
 
+function changeDashboardBodyFatWidget(requestData) {
+    let headers = extraUserHeaders();
+    return postFormData(requestUrl + '/body_fat', requestData, headers);
+}
+
 export default {
     getDashboardPage,
-    saveDashboardWidgetsData
+    saveDashboardWidgetsData,
+    changeDashboardBodyFatWidget
 }

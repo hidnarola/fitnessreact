@@ -6,6 +6,10 @@ export const SAVE_DASHBOARD_WIDGETS_DATA_REQUEST = 'SAVE_DASHBOARD_WIDGETS_DATA_
 export const SAVE_DASHBOARD_WIDGETS_DATA_SUCCESS = 'SAVE_DASHBOARD_WIDGETS_DATA_SUCCESS';
 export const SAVE_DASHBOARD_WIDGETS_DATA_ERROR = 'SAVE_DASHBOARD_WIDGETS_DATA_ERROR';
 
+export const CHANGE_DASHBOARD_BODY_FAT_WIDGET_REQUEST = 'CHANGE_DASHBOARD_BODY_FAT_WIDGET_REQUEST';
+export const CHANGE_DASHBOARD_BODY_FAT_WIDGET_SUCCESS = 'CHANGE_DASHBOARD_BODY_FAT_WIDGET_SUCCESS';
+export const CHANGE_DASHBOARD_BODY_FAT_WIDGET_ERROR = 'CHANGE_DASHBOARD_BODY_FAT_WIDGET_ERROR';
+
 export function getDashboardPageRequest() {
     return {
         type: GET_DASHBOARD_PAGE_REQUEST
@@ -43,6 +47,27 @@ export function saveDashboardWidgetsDataSuccess(data) {
 export function saveDashboardWidgetsDataError(error) {
     return {
         type: SAVE_DASHBOARD_WIDGETS_DATA_ERROR,
+        error
+    }
+}
+
+export function changeDashboardBodyFatWidgetRequest(requestData) {
+    return {
+        type: CHANGE_DASHBOARD_BODY_FAT_WIDGET_REQUEST,
+        requestData
+    }
+}
+
+export function changeDashboardBodyFatWidgetSuccess(data) {
+    return {
+        type: CHANGE_DASHBOARD_BODY_FAT_WIDGET_SUCCESS,
+        data
+    }
+}
+
+export function changeDashboardBodyFatWidgetError(error) {
+    return {
+        type: CHANGE_DASHBOARD_BODY_FAT_WIDGET_ERROR,
         error
     }
 }

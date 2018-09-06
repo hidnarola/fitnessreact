@@ -2190,3 +2190,19 @@ ul.common-ul>li.body-fat-field-li{ width:50%; margin-left:auto;}
 .choose-widget .choosewidget-box big {font-size: 16px;}
 
 
+
+.dashboard-bodyfat-card .bodyfat-date-range-picker {
+    border-radius: 5px;
+    background-color: #fff;
+    padding: 15px;
+    display: block;
+    margin-bottom: 20px;
+    text-align: center;
+    position: absolute;
+    margin-top: -20px;
+    right: -50px;
+    z-index: 1;
+    top: 90px;
+    -webkit-box-shadow: 0 0 7px 2px #ccc;
+    box-shadow: 0 0 7px 2px #ccc;
+}
