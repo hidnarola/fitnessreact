@@ -17,6 +17,7 @@ const initialState = Map({
     profileComplete: 0,
     badges: [],
     bodyFat: [],
+    activityFeed: [],
     error: [],
     saveWidgetsLoading: false,
     saveWidgetsError: [],
@@ -31,6 +32,7 @@ const actionMap = {
             profileComplete: 0,
             badges: [],
             bodyFat: [],
+            activityFeed: [],
             error: [],
         }));
     },
@@ -42,6 +44,7 @@ const actionMap = {
             newState.profileComplete = action.data.data.profileComplete;
             newState.badges = action.data.data.badges;
             newState.bodyFat = action.data.data.bodyFat;
+            newState.activityFeed = action.data.data.activityFeed;
         } else {
             let msg = (newState.data.message) ? newState.data.message : 'Something went wrong! please try again later';
             newState.error = [msg];
