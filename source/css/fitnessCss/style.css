@@ -1171,6 +1171,7 @@ flex-direction:row; display:-webkit-box; display:-webkit-flex; display:-ms-flex;
 .step-wrap-login .stepbox-head h2 {font-size: 40px;}
 .step-wrap-login .stepbox-m {height: auto;padding-left: 0;width: 100%;}
 .step-wrap-login .stepbox-head {padding: 0 30px 30px 0px;}
+.step-wrap-login .stepbox-head h3 { text-transform: uppercase; }
 .step-wrap-login .step-box-r {width: 100%;}
 .step-wrap-login .step-box-l {width: 100%;}
 .step-wrap-login .step-box {width: 800px;height: 100%;}

@@ -187,8 +187,8 @@ class Dashboard extends Component {
         let requestData = {
             [DASHBOARD_WIDGET_TODAYS_WORKOUT]: 0,
             [DASHBOARD_WIDGET_ACTIVITY_FEED]: 0,
-            [DASHBOARD_WIDGET_BADGES]: '',
-            [DASHBOARD_WIDGET_BODY_FAT]: '',
+            [DASHBOARD_WIDGET_BADGES]: 0,
+            [DASHBOARD_WIDGET_BODY_FAT]: null,
         };
         if (typeof data[`dashboard_${DASHBOARD_WIDGET_TODAYS_WORKOUT}`] !== 'undefined' && data[`dashboard_${DASHBOARD_WIDGET_TODAYS_WORKOUT}`]) {
             requestData[DASHBOARD_WIDGET_TODAYS_WORKOUT] = (data[`dashboard_${DASHBOARD_WIDGET_TODAYS_WORKOUT}`]) ? 1 : 0;
@@ -208,6 +208,7 @@ class Dashboard extends Component {
             }
             requestData[DASHBOARD_WIDGET_BODY_FAT] = data;
         }
+        console.log('requestData => ', requestData);
         dispatch(saveDashboardWidgetsDataRequest(requestData));
     }
 }

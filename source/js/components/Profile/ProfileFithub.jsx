@@ -38,6 +38,7 @@ import PostDetailsModal from './PostDetailsModal';
 import LikeButton from "./LikeButton";
 import ProfileFithubBodyFatCard from './ProfileFithubBodyFatCard';
 import WidgetsListModal from './WidgetsListModal';
+import { getTimelineWidgetsAndWidgetsDataRequest } from '../../actions/timelineWidgets';
 
 class ProfileFithub extends Component {
     constructor(props) {
@@ -63,6 +64,11 @@ class ProfileFithub extends Component {
             showPostDetailsModal: false,
             showAddWidgetModal: false,
         }
+    }
+
+    componentWillMount() {
+        const { dispatch } = this.props;
+        dispatch(getTimelineWidgetsAndWidgetsDataRequest());
     }
 
     componentWillReceiveProps(nextProps) {
@@ -109,7 +115,7 @@ class ProfileFithub extends Component {
                 <div className="col-md-6">
                     {activeProfile && activeProfile.friendshipStatus === FRIENDSHIP_STATUS_SELF &&
                         <div className="add-widgets">
-                            <a href="javascript:void(0)" onClick={() => this.setState({ showAddWidgetModal: true })} data-toggle="modal" data-target="#widget-popup">
+                            <a href="javascript:void(0)" onClick={this.handleShowWidgetModal} data-toggle="modal" data-target="#widget-popup">
                                 <span>Add Widgets</span>
                                 <i className="icon-widgets"></i>
                             </a>
@@ -479,7 +485,8 @@ class ProfileFithub extends Component {
 
                 <WidgetsListModal
                     show={showAddWidgetModal}
-                    handleClose={() => this.setState({ showAddWidgetModal: false })}
+                    handleClose={this.handleHideWidgetModal}
+                    onSubmit={this.handleSaveWidget}
                 />
             </div>
         );
@@ -720,6 +727,20 @@ class ProfileFithub extends Component {
             selectedPostForDetailsIndex: null,
             selectedPostForDetails: null,
         });
+    }
+
+    handleShowWidgetModal = () => {
+        this.setState({ showAddWidgetModal: true });
+    }
+
+    handleHideWidgetModal = () => {
+        const { dispatch } = this.props;
+        this.setState({ showAddWidgetModal: false });
+        dispatch(reset('timeline_widgets_list_form'));
+    }
+
+    handleSaveWidget = (data) => {
+        console.log('data => ', data);
     }
 }
 

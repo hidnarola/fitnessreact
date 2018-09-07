@@ -33,6 +33,7 @@ import login from 'sagas/login';
 import healthLabels from 'sagas/healthLabels';
 import dietLabels from 'sagas/dietLabels';
 import userProgressPhotos from 'sagas/userProgressPhotos';
+import timelineWidgets from 'sagas/timelineWidgets';
 import adminEquipmentSagas from 'sagas/admin/equipments';
 import adminEquipmentCategorySagas from 'sagas/admin/equipmentCategories';
 import adminExerciseSagas from 'sagas/admin/exercises';
@@ -81,6 +82,7 @@ export default function* rootSaga() {
     ...healthLabels,
     ...dietLabels,
     ...userProgressPhotos,
+    ...timelineWidgets,
     ...adminEquipmentSagas,
     ...adminEquipmentCategorySagas,
     ...adminExerciseSagas,

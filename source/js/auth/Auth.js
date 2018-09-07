@@ -37,7 +37,10 @@ export default class Auth {
       },
       avatar: null,
       autoclose:false,
-    }
+      languageDictionary: {
+        title: "Login"
+      },
+    },
   );
 
   constructor() {
