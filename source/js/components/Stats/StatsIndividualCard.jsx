@@ -44,6 +44,13 @@ class StatsIndividualCard extends Component {
                             </select>
                         }
                     </div>
+                    <div className="stats-content-head-m">
+                        <ul>
+                            <li><i className="graph-stroke-identifier gradient-color-2"></i> <span>Self</span></li>
+                            <li><i className="graph-stroke-identifier gradient-color-3"></i> <span>Friend</span></li>
+                            <li><i className="graph-stroke-identifier gradient-color-1"></i> <span>Global</span></li>
+                        </ul>
+                    </div>
                     <div className="stats-content-head-r">
                         <button type="button" className={cns({ 'active': (o.activeCalendarBtn && o.activeCalendarBtn === 'week') })} onClick={() => this.handleCalendarShortCutBtn('week')}>Week</button>
                         <button type="button" className={cns({ 'active': (o.activeCalendarBtn && o.activeCalendarBtn === 'month') })} onClick={() => this.handleCalendarShortCutBtn('month')}>Month</button>
@@ -111,29 +118,30 @@ class StatsIndividualCard extends Component {
                                 <ResponsiveContainer>
                                     <AreaChart data={o.graphData}>
                                         <defs>
-                                            <linearGradient id={`graph_data_${o.subCategory}`} x1="0" y1="0" x2="0" y2="1">
+                                            <linearGradient id={`self_${o.subCategory}`} x1="0" y1="0" x2="0" y2="1">
                                                 <stop offset="8%" stopColor="#FF339A" stopOpacity={1} />
                                                 <stop offset="92%" stopColor="#FF3366" stopOpacity={1} />
                                             </linearGradient>
                                         </defs>
-                                        {/* <defs>
-                                            <linearGradient id="bodyFatArea_2" x1="0" y1="0" x2="0" y2="1">
+                                        <defs>
+                                            <linearGradient id={`friend_avg_${o.subCategory}`} x1="0" y1="0" x2="0" y2="1">
                                                 <stop offset="8%" stopColor="#46E9C5" stopOpacity={1} />
                                                 <stop offset="92%" stopColor="#3FFBFC" stopOpacity={1} />
                                             </linearGradient>
                                         </defs>
                                         <defs>
-                                            <linearGradient id="bodyFatArea_3" x1="0" y1="0" x2="0" y2="1">
+                                            <linearGradient id={`global_avg_${o.subCategory}`} x1="0" y1="0" x2="0" y2="1">
                                                 <stop offset="8%" stopColor="#9625a9" stopOpacity={1} />
                                                 <stop offset="92%" stopColor="#1808b3" stopOpacity={1} />
                                             </linearGradient>
-                                        </defs> */}
+                                        </defs>
                                         <XAxis dataKey='date' axisLine={false} tickLine={false} mirror={false} interval="preserveStartEnd" tick={{ stroke: '#000', strokeWidth: 1 }} />
                                         <YAxis hide={true} />
                                         <Tooltip content={<CustomTooltip />} />
-                                        <Area type='monotone' dataKey='count' activeDot={{ stroke: '#46E9C5', strokeWidth: 2, fill: "#fff" }} stroke="none" fill={`url(#graph_data_${o.subCategory})`} />
-                                        {/* <Area type='monotone' dataKey='count2' activeDot={{ stroke: '#46E9C5', strokeWidth: 2, fill: "#fff" }} stroke="none" fill="url(#bodyFatArea_2)" />
-                                        <Area type='monotone' dataKey='count3' activeDot={{ stroke: '#46E9C5', strokeWidth: 2, fill: "#fff" }} stroke="none" fill="url(#bodyFatArea_3)" /> */}
+                                        {/* <Tooltip /> */}
+                                        <Area type='monotone' dataKey='self' activeDot={{ stroke: '#46E9C5', strokeWidth: 2, fill: "#fff" }} stroke="none" fill={`url(#self_${o.subCategory})`} />
+                                        <Area type='monotone' dataKey='friendAvg' activeDot={{ stroke: '#46E9C5', strokeWidth: 2, fill: "#fff" }} stroke="none" fill={`url(#friend_avg_${o.subCategory})`} />
+                                        <Area type='monotone' dataKey='globalAvg' activeDot={{ stroke: '#46E9C5', strokeWidth: 2, fill: "#fff" }} stroke="none" fill={`url(#global_avg_${o.subCategory})`} />
                                     </AreaChart>
                                 </ResponsiveContainer>
                             </div>
@@ -185,13 +193,20 @@ export default connect(
 class CustomTooltip extends Component {
     render() {
         const { payload, label, active } = this.props;
+        console.log('payload => ', payload);
         if (active) {
             return (
                 <div className="custom-graph-tooltip-wrapper">
                     <ul>
                         <li><strong>Date : </strong> <span>{label}</span></li>
                         {payload[0].payload && payload[0].payload.metaData && payload[0].payload.metaData.name &&
-                            <li><strong>{`Total ${capitalizeFirstLetter(payload[0].payload.metaData.name.replace(/([a-z])([A-Z])/g, '$1 $2'))}`} : </strong> <span>{`${payload[0].value} ${payload[0].payload.metaData.unit}`}</span></li>
+                            <li><strong>{`Self ${capitalizeFirstLetter(payload[0].payload.metaData.name.replace(/([a-z])([A-Z])/g, '$1 $2'))}`} : </strong> <span>{`${payload[0].value} ${payload[0].payload.metaData.unit}`}</span></li>
+                        }
+                        {payload[1].payload && payload[1].payload.metaData && payload[1].payload.metaData.name &&
+                            <li><strong>{`Friends Avg. ${capitalizeFirstLetter(payload[1].payload.metaData.name.replace(/([a-z])([A-Z])/g, '$1 $2'))}`} : </strong> <span>{`${payload[1].value} ${payload[1].payload.metaData.unit}`}</span></li>
+                        }
+                        {payload[2].payload && payload[2].payload.metaData && payload[2].payload.metaData.name &&
+                            <li><strong>{`Global Avg. ${capitalizeFirstLetter(payload[2].payload.metaData.name.replace(/([a-z])([A-Z])/g, '$1 $2'))}`} : </strong> <span>{`${payload[2].value} ${payload[2].payload.metaData.unit}`}</span></li>
                         }
                     </ul>
                 </div>

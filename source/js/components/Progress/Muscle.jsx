@@ -8,6 +8,7 @@ import NoDataFoundImg from "img/common/no_datafound.png";
 import ErrorCloud from "svg/error-cloud.svg";
 import { capitalizeFirstLetter } from '../../helpers/funs';
 import { ResponsiveContainer, AreaChart, XAxis, YAxis, Area, Tooltip, LabelList } from "recharts";
+import CustomTooltip from './CustomTooltip';
 
 class Muscle extends Component {
     componentWillMount() {
@@ -170,24 +171,5 @@ class MuscleCard extends Component {
                 </div>
             </div>
         );
-    }
-}
-
-class CustomTooltip extends Component {
-    render() {
-        const { payload, label, active } = this.props;
-        if (active) {
-            return (
-                <div className="custom-graph-tooltip-wrapper">
-                    <ul>
-                        <li><strong>Date : </strong> <span>{label}</span></li>
-                        {payload[0].payload && payload[0].payload.metaData && payload[0].payload.metaData.name &&
-                            <li><strong>{payload[0].payload.metaData.name} : </strong> <span>{`${payload[0].value} ${payload[0].payload.metaData.unit}`}</span></li>
-                        }
-                    </ul>
-                </div>
-            );
-        }
-        return null;
     }
 }

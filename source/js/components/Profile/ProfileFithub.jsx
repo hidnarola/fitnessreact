@@ -17,7 +17,23 @@ import {
     ACCESS_LEVEL_PUBLIC_STR,
     ACCESS_LEVEL_FRIENDS_STR,
     ACCESS_LEVEL_PRIVATE_STR,
-    FRIENDSHIP_STATUS_SELF
+    FRIENDSHIP_STATUS_SELF,
+    TIMELINE_WIDGET_MUSCLE,
+    TIMELINE_WIDGET_PROGRESS_PHOTO,
+    TIMELINE_WIDGET_BADGES,
+    TIMELINE_WIDGET_BODY_FAT,
+    TIMELINE_MUSCLE_WIDGET_NECK,
+    TIMELINE_MUSCLE_WIDGET_SHOULDER,
+    TIMELINE_MUSCLE_WIDGET_CHEST,
+    TIMELINE_MUSCLE_WIDGET_UPPER_ARM,
+    TIMELINE_MUSCLE_WIDGET_WAIST,
+    TIMELINE_MUSCLE_WIDGET_FOREARM,
+    TIMELINE_MUSCLE_WIDGET_HIPS,
+    TIMELINE_MUSCLE_WIDGET_THIGH,
+    TIMELINE_MUSCLE_WIDGET_CALF,
+    TIMELINE_MUSCLE_WIDGET_HEART_RATE,
+    TIMELINE_MUSCLE_WIDGET_WEIGHT,
+    TIMELINE_MUSCLE_WIDGET_HEIGHT
 } from '../../constants/consts';
 import cns from "classnames";
 import { routeCodes } from '../../constants/routes';
@@ -25,7 +41,7 @@ import { NavLink } from "react-router-dom";
 import { toggleLikeOnPostRequest } from '../../actions/postLikes';
 import CommentBoxForm from './CommentBoxForm';
 import { commentOnPostRequest } from '../../actions/postComments';
-import { reset } from "redux-form";
+import { initialize, reset } from "redux-form";
 import ReactHtmlParser from "react-html-parser";
 import ReactQuill from 'react-quill';
 import { te } from '../../helpers/funs';
@@ -38,14 +54,16 @@ import PostDetailsModal from './PostDetailsModal';
 import LikeButton from "./LikeButton";
 import ProfileFithubBodyFatCard from './ProfileFithubBodyFatCard';
 import WidgetsListModal from './WidgetsListModal';
-import { getTimelineWidgetsAndWidgetsDataRequest } from '../../actions/timelineWidgets';
+import { getTimelineWidgetsAndWidgetsDataRequest, saveTimelineWidgetsRequest } from '../../actions/timelineWidgets';
+import ProfileFithubBadgesCard from './ProfileFithubBadgesCard';
+import ProfileFithubProgressPhotoCard from './ProfileFithubProgressPhotoCard';
+import ProfileFithubMuscleCard from './ProfileFithubMuscleCard';
 
 class ProfileFithub extends Component {
     constructor(props) {
         super(props);
         this.state = {
             posts: [],
-            progressPhotos: {},
             start: 0,
             offset: 10,
             hasMorePosts: true,
@@ -67,8 +85,10 @@ class ProfileFithub extends Component {
     }
 
     componentWillMount() {
-        const { dispatch } = this.props;
-        dispatch(getTimelineWidgetsAndWidgetsDataRequest());
+        const { dispatch, match } = this.props;
+        if (match.params.username) {
+            dispatch(getTimelineWidgetsAndWidgetsDataRequest(match.params.username));
+        }
     }
 
     componentWillReceiveProps(nextProps) {
@@ -84,7 +104,6 @@ class ProfileFithub extends Component {
         if (match.params.username !== this.props.match.params.username) {
             this.setState({
                 posts: [],
-                progressPhotos: {},
                 start: 0,
                 offset: 10,
                 hasMorePosts: true,
@@ -95,7 +114,6 @@ class ProfileFithub extends Component {
     render() {
         const {
             posts,
-            progressPhotos,
             postContent,
             postPrivacy,
             hasMorePosts,
@@ -109,104 +127,36 @@ class ProfileFithub extends Component {
         const {
             loggedUserData,
             activeProfile,
+            userWidgets,
+            tilelineWidgetsLoading,
         } = this.props;
         return (
             <div className="row">
                 <div className="col-md-6">
                     {activeProfile && activeProfile.friendshipStatus === FRIENDSHIP_STATUS_SELF &&
                         <div className="add-widgets">
-                            <a href="javascript:void(0)" onClick={this.handleShowWidgetModal} data-toggle="modal" data-target="#widget-popup">
+                            <button type="button" onClick={this.handleShowWidgetModal} disabled={tilelineWidgetsLoading}>
                                 <span>Add Widgets</span>
                                 <i className="icon-widgets"></i>
-                            </a>
+                            </button>
                         </div>
                     }
 
-                    {progressPhotos && Object.keys(progressPhotos).length > 0 &&
-                        <div className="white-box space-btm-30">
-                            <div className="whitebox-head d-flex">
-                                <h3 className="title-h3">Progress Photos</h3>
-                            </div>
-                            <div className="whitebox-body d-flex">
-                                <ul className="d-flex profile-list-ul profilelist-2">
-                                    <li>
-                                        <div className="profile-list">
-                                            <span>
-                                                <a href="javascript:void(0)">
-                                                    <img
-                                                        src={SERVER_BASE_URL + progressPhotos.current}
-                                                        onError={(e) => {
-                                                            e.target.src = noImg
-                                                        }}
-                                                    />
-                                                </a>
-                                            </span>
-                                            <h4>
-                                                <a href="javascript:void(0)">Current</a>
-                                            </h4>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div className="profile-list">
-                                            <span>
-                                                <a href="javascript:void(0)">
-                                                    <img
-                                                        src={SERVER_BASE_URL + progressPhotos.beginning}
-                                                        onError={(e) => {
-                                                            e.target.src = noImg
-                                                        }}
-                                                    />
-                                                </a>
-                                            </span>
-                                            <h4>
-                                                <a href="javascript:void(0)">Beginning</a>
-                                            </h4>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+                    {userWidgets && typeof userWidgets[TIMELINE_WIDGET_PROGRESS_PHOTO] !== 'undefined' && userWidgets[TIMELINE_WIDGET_PROGRESS_PHOTO] === 1 &&
+                        <ProfileFithubProgressPhotoCard />
                     }
 
-                    <ProfileFithubBodyFatCard />
+                    {userWidgets && userWidgets[TIMELINE_WIDGET_BODY_FAT] &&
+                        <ProfileFithubBodyFatCard />
+                    }
 
-                    <div className="white-box space-btm-30">
-                        <div className="whitebox-head d-flex">
-                            <h3 className="title-h3">Badges</h3>
-                            <div className="whitebox-head-r ">
-                                <a href="" className="icon-settings"></a>
-                            </div>
-                        </div>
-                        <div className="whitebox-body today-badges">
-                            <div className="customiser-box">
-                                <h3>
-                                    <strong>Achievement - </strong> Profile</h3>
-                                <h5>Customiser</h5>
-                                <p>You’ve filled out your entire Fitassist profile,
-                                                <br /> now everything will fit you even better.</p>
-                                <h4>
-                                    <span>
-                                        <i className="icon-check"></i>
-                                    </span>
-                                    <strong>Completed</strong>
-                                    <small>June 8, 2017</small>
-                                </h4>
-                                <div className="tropy-icon-box">
+                    {userWidgets && userWidgets[TIMELINE_WIDGET_MUSCLE] && userWidgets[TIMELINE_WIDGET_MUSCLE].length > 0 &&
+                        <ProfileFithubMuscleCard />
+                    }
 
-                                </div>
-                            </div>
-                            <div className="achivement-box">
-                                <h4>
-                                    <strong>Achievement -</strong>Strength</h4>
-                                <h5>Getting Heavy</h5>
-                                <p>Lift a total of 1000Kg overall.</p>
-                                <h6>500/1000Kg</h6>
-                                <span>
-                                    {/* <img src="images/achievment-graph.png" alt=""/> */}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
+                    {userWidgets && typeof userWidgets[TIMELINE_WIDGET_BADGES] !== 'undefined' && userWidgets[TIMELINE_WIDGET_BADGES] === 1 &&
+                        <ProfileFithubBadgesCard />
+                    }
                 </div>
 
                 <div className="col-md-6">
@@ -492,7 +442,7 @@ class ProfileFithub extends Component {
         );
     }
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps, nextProps) {
         const {
             selectActionInit,
             start,
@@ -509,7 +459,6 @@ class ProfileFithub extends Component {
             posts,
             post,
             error,
-            progressPhotos,
             likeLoading,
             likePost,
             likeError,
@@ -518,6 +467,9 @@ class ProfileFithub extends Component {
             commentError,
             forceUpdateChildComponents,
             setForceUpdateChildComponents,
+            saveWidgetsLoading,
+            saveWidgetsError,
+            match,
         } = this.props;
         if (selectActionInit && !postLoading) {
             var hasMorePosts = (posts && posts.length > 0) ? true : false;
@@ -528,7 +480,6 @@ class ProfileFithub extends Component {
             this.setState({
                 selectActionInit: false,
                 posts: newPosts,
-                progressPhotos,
                 start: (start + offset),
                 hasMorePosts,
             });
@@ -593,7 +544,6 @@ class ProfileFithub extends Component {
         if (forceUpdateChildComponents) {
             this.setState({
                 posts: [],
-                progressPhotos: {},
                 start: 0,
                 offset: 10,
                 hasMorePosts: true,
@@ -601,6 +551,15 @@ class ProfileFithub extends Component {
                 this.loadPostsData();
             });
             setForceUpdateChildComponents(false);
+        }
+        if (!saveWidgetsLoading && prevProps.saveWidgetsLoading !== saveWidgetsLoading) {
+            if (saveWidgetsError && saveWidgetsError.length > 0) {
+                te('Something went wrong! please try again later.');
+            }
+            this.handleHideWidgetModal();
+            if (match.params.username) {
+                dispatch(getTimelineWidgetsAndWidgetsDataRequest(match.params.username));
+            }
         }
     }
 
@@ -730,6 +689,76 @@ class ProfileFithub extends Component {
     }
 
     handleShowWidgetModal = () => {
+        const { dispatch, userWidgets } = this.props;
+        var formData = {
+            [`timeline_${TIMELINE_WIDGET_MUSCLE}`]: false,
+            [`timeline_${TIMELINE_WIDGET_PROGRESS_PHOTO}`]: false,
+            [`timeline_${TIMELINE_WIDGET_BADGES}`]: false,
+            [`timeline_${TIMELINE_WIDGET_BODY_FAT}`]: false,
+            [`muscle_${TIMELINE_MUSCLE_WIDGET_NECK}`]: false,
+            [`muscle_${TIMELINE_MUSCLE_WIDGET_SHOULDER}`]: false,
+            [`muscle_${TIMELINE_MUSCLE_WIDGET_CHEST}`]: false,
+            [`muscle_${TIMELINE_MUSCLE_WIDGET_UPPER_ARM}`]: false,
+            [`muscle_${TIMELINE_MUSCLE_WIDGET_WAIST}`]: false,
+            [`muscle_${TIMELINE_MUSCLE_WIDGET_FOREARM}`]: false,
+            [`muscle_${TIMELINE_MUSCLE_WIDGET_HIPS}`]: false,
+            [`muscle_${TIMELINE_MUSCLE_WIDGET_THIGH}`]: false,
+            [`muscle_${TIMELINE_MUSCLE_WIDGET_CALF}`]: false,
+            [`muscle_${TIMELINE_MUSCLE_WIDGET_HEART_RATE}`]: false,
+            [`muscle_${TIMELINE_MUSCLE_WIDGET_WEIGHT}`]: false,
+            [`muscle_${TIMELINE_MUSCLE_WIDGET_HEIGHT}`]: false,
+        };
+        if (userWidgets && typeof userWidgets[TIMELINE_WIDGET_BADGES] !== 'undefined' && userWidgets[TIMELINE_WIDGET_BADGES] === 1) {
+            formData[`timeline_${TIMELINE_WIDGET_BADGES}`] = true;
+        }
+        if (userWidgets && typeof userWidgets[TIMELINE_WIDGET_PROGRESS_PHOTO] !== 'undefined' && userWidgets[TIMELINE_WIDGET_PROGRESS_PHOTO] === 1) {
+            formData[`timeline_${TIMELINE_WIDGET_PROGRESS_PHOTO}`] = true;
+        }
+        if (userWidgets && userWidgets[TIMELINE_WIDGET_BODY_FAT]) {
+            formData[`timeline_${TIMELINE_WIDGET_BODY_FAT}`] = true;
+        }
+        if (userWidgets && userWidgets[TIMELINE_WIDGET_MUSCLE] && userWidgets[TIMELINE_WIDGET_MUSCLE].length > 0) {
+            userWidgets[TIMELINE_WIDGET_MUSCLE].map((o, i) => {
+                if (o.name === TIMELINE_MUSCLE_WIDGET_NECK) {
+                    formData[`muscle_${TIMELINE_MUSCLE_WIDGET_NECK}`] = true;
+                }
+                if (o.name === TIMELINE_MUSCLE_WIDGET_SHOULDER) {
+                    formData[`muscle_${TIMELINE_MUSCLE_WIDGET_SHOULDER}`] = true;
+                }
+                if (o.name === TIMELINE_MUSCLE_WIDGET_CHEST) {
+                    formData[`muscle_${TIMELINE_MUSCLE_WIDGET_CHEST}`] = true;
+                }
+                if (o.name === TIMELINE_MUSCLE_WIDGET_UPPER_ARM) {
+                    formData[`muscle_${TIMELINE_MUSCLE_WIDGET_UPPER_ARM}`] = true;
+                }
+                if (o.name === TIMELINE_MUSCLE_WIDGET_WAIST) {
+                    formData[`muscle_${TIMELINE_MUSCLE_WIDGET_WAIST}`] = true;
+                }
+                if (o.name === TIMELINE_MUSCLE_WIDGET_FOREARM) {
+                    formData[`muscle_${TIMELINE_MUSCLE_WIDGET_FOREARM}`] = true;
+                }
+                if (o.name === TIMELINE_MUSCLE_WIDGET_HIPS) {
+                    formData[`muscle_${TIMELINE_MUSCLE_WIDGET_HIPS}`] = true;
+                }
+                if (o.name === TIMELINE_MUSCLE_WIDGET_THIGH) {
+                    formData[`muscle_${TIMELINE_MUSCLE_WIDGET_THIGH}`] = true;
+                }
+                if (o.name === TIMELINE_MUSCLE_WIDGET_CALF) {
+                    formData[`muscle_${TIMELINE_MUSCLE_WIDGET_CALF}`] = true;
+                }
+                if (o.name === TIMELINE_MUSCLE_WIDGET_HEART_RATE) {
+                    formData[`muscle_${TIMELINE_MUSCLE_WIDGET_HEART_RATE}`] = true;
+                }
+                if (o.name === TIMELINE_MUSCLE_WIDGET_WEIGHT) {
+                    formData[`muscle_${TIMELINE_MUSCLE_WIDGET_WEIGHT}`] = true;
+                }
+                if (o.name === TIMELINE_MUSCLE_WIDGET_HEIGHT) {
+                    formData[`muscle_${TIMELINE_MUSCLE_WIDGET_HEIGHT}`] = true;
+                }
+            });
+            formData[`timeline_${TIMELINE_WIDGET_MUSCLE}`] = true;
+        }
+        dispatch(initialize('timeline_widgets_list_form', formData));
         this.setState({ showAddWidgetModal: true });
     }
 
@@ -740,20 +769,248 @@ class ProfileFithub extends Component {
     }
 
     handleSaveWidget = (data) => {
-        console.log('data => ', data);
+        const { dispatch, userWidgets } = this.props;
+        let dateRange = moment.range(
+            moment().startOf('day').subtract(1, 'month').utc(),
+            moment().startOf('day').utc(),
+        );
+        let requestData = {
+            [TIMELINE_WIDGET_BADGES]: 0,
+            [TIMELINE_WIDGET_PROGRESS_PHOTO]: 0,
+            [TIMELINE_WIDGET_BODY_FAT]: null,
+            [TIMELINE_WIDGET_MUSCLE]: null,
+        };
+        if (typeof data[`timeline_${TIMELINE_WIDGET_BADGES}`] !== 'undefined' && data[`timeline_${TIMELINE_WIDGET_BADGES}`]) {
+            requestData[TIMELINE_WIDGET_BADGES] = 1;
+        }
+        if (typeof data[`timeline_${TIMELINE_WIDGET_PROGRESS_PHOTO}`] !== 'undefined' && data[`timeline_${TIMELINE_WIDGET_PROGRESS_PHOTO}`]) {
+            requestData[TIMELINE_WIDGET_PROGRESS_PHOTO] = 1;
+        }
+        if (typeof data[`timeline_${TIMELINE_WIDGET_BODY_FAT}`] !== 'undefined' && data[`timeline_${TIMELINE_WIDGET_BODY_FAT}`]) {
+            let _data = null;
+            if (userWidgets && userWidgets[TIMELINE_WIDGET_BODY_FAT]) {
+                _data = userWidgets[TIMELINE_WIDGET_BODY_FAT];
+            } else {
+                _data = {
+                    start: dateRange.start,
+                    end: dateRange.end,
+                };
+            }
+            requestData[TIMELINE_WIDGET_BODY_FAT] = _data;
+        }
+        if (typeof data[`timeline_${TIMELINE_WIDGET_MUSCLE}`] !== 'undefined' && data[`timeline_${TIMELINE_WIDGET_MUSCLE}`]) {
+            let _data = [];
+            let isDataAlreadyAvailable = false;
+            if (userWidgets && userWidgets[TIMELINE_WIDGET_MUSCLE] && userWidgets[TIMELINE_WIDGET_MUSCLE].length > 0) {
+                isDataAlreadyAvailable = true;
+            }
+            if (typeof data[`muscle_${TIMELINE_MUSCLE_WIDGET_NECK}`] !== 'undefined' && data[`muscle_${TIMELINE_MUSCLE_WIDGET_NECK}`]) {
+                if (isDataAlreadyAvailable) {
+                    let isDataPushed = false;
+                    userWidgets[TIMELINE_WIDGET_MUSCLE].map((o, i) => {
+                        if (o.name === TIMELINE_MUSCLE_WIDGET_NECK) {
+                            _data.push(o);
+                            isDataPushed = true;
+                        }
+                    });
+                    if (!isDataPushed) {
+                        _data.push({ name: TIMELINE_MUSCLE_WIDGET_NECK, start: dateRange.start, end: dateRange.end })
+                    }
+                } else {
+                    _data.push({ name: TIMELINE_MUSCLE_WIDGET_NECK, start: dateRange.start, end: dateRange.end })
+                }
+            }
+            if (typeof data[`muscle_${TIMELINE_MUSCLE_WIDGET_SHOULDER}`] !== 'undefined' && data[`muscle_${TIMELINE_MUSCLE_WIDGET_SHOULDER}`]) {
+                if (isDataAlreadyAvailable) {
+                    let isDataPushed = false;
+                    userWidgets[TIMELINE_WIDGET_MUSCLE].map((o, i) => {
+                        if (o.name === TIMELINE_MUSCLE_WIDGET_SHOULDER) {
+                            _data.push(o);
+                            isDataPushed = true;
+                        }
+                    });
+                    if (!isDataPushed) {
+                        _data.push({ name: TIMELINE_MUSCLE_WIDGET_SHOULDER, start: dateRange.start, end: dateRange.end })
+                    }
+                } else {
+                    _data.push({ name: TIMELINE_MUSCLE_WIDGET_SHOULDER, start: dateRange.start, end: dateRange.end })
+                }
+            }
+            if (typeof data[`muscle_${TIMELINE_MUSCLE_WIDGET_CHEST}`] !== 'undefined' && data[`muscle_${TIMELINE_MUSCLE_WIDGET_CHEST}`]) {
+                if (isDataAlreadyAvailable) {
+                    let isDataPushed = false;
+                    userWidgets[TIMELINE_WIDGET_MUSCLE].map((o, i) => {
+                        if (o.name === TIMELINE_MUSCLE_WIDGET_CHEST) {
+                            _data.push(o);
+                            isDataPushed = true;
+                        }
+                    });
+                    if (!isDataPushed) {
+                        _data.push({ name: TIMELINE_MUSCLE_WIDGET_CHEST, start: dateRange.start, end: dateRange.end })
+                    }
+                } else {
+                    _data.push({ name: TIMELINE_MUSCLE_WIDGET_CHEST, start: dateRange.start, end: dateRange.end })
+                }
+            }
+            if (typeof data[`muscle_${TIMELINE_MUSCLE_WIDGET_UPPER_ARM}`] !== 'undefined' && data[`muscle_${TIMELINE_MUSCLE_WIDGET_UPPER_ARM}`]) {
+                if (isDataAlreadyAvailable) {
+                    let isDataPushed = false;
+                    userWidgets[TIMELINE_WIDGET_MUSCLE].map((o, i) => {
+                        if (o.name === TIMELINE_MUSCLE_WIDGET_UPPER_ARM) {
+                            _data.push(o);
+                            isDataPushed = true;
+                        }
+                    });
+                    if (!isDataPushed) {
+                        _data.push({ name: TIMELINE_MUSCLE_WIDGET_UPPER_ARM, start: dateRange.start, end: dateRange.end })
+                    }
+                } else {
+                    _data.push({ name: TIMELINE_MUSCLE_WIDGET_UPPER_ARM, start: dateRange.start, end: dateRange.end })
+                }
+            }
+            if (typeof data[`muscle_${TIMELINE_MUSCLE_WIDGET_WAIST}`] !== 'undefined' && data[`muscle_${TIMELINE_MUSCLE_WIDGET_WAIST}`]) {
+                if (isDataAlreadyAvailable) {
+                    let isDataPushed = false;
+                    userWidgets[TIMELINE_WIDGET_MUSCLE].map((o, i) => {
+                        if (o.name === TIMELINE_MUSCLE_WIDGET_WAIST) {
+                            _data.push(o);
+                            isDataPushed = true;
+                        }
+                    });
+                    if (!isDataPushed) {
+                        _data.push({ name: TIMELINE_MUSCLE_WIDGET_WAIST, start: dateRange.start, end: dateRange.end })
+                    }
+                } else {
+                    _data.push({ name: TIMELINE_MUSCLE_WIDGET_WAIST, start: dateRange.start, end: dateRange.end })
+                }
+            }
+            if (typeof data[`muscle_${TIMELINE_MUSCLE_WIDGET_FOREARM}`] !== 'undefined' && data[`muscle_${TIMELINE_MUSCLE_WIDGET_FOREARM}`]) {
+                if (isDataAlreadyAvailable) {
+                    let isDataPushed = false;
+                    userWidgets[TIMELINE_WIDGET_MUSCLE].map((o, i) => {
+                        if (o.name === TIMELINE_MUSCLE_WIDGET_FOREARM) {
+                            _data.push(o);
+                            isDataPushed = true;
+                        }
+                    });
+                    if (!isDataPushed) {
+                        _data.push({ name: TIMELINE_MUSCLE_WIDGET_FOREARM, start: dateRange.start, end: dateRange.end })
+                    }
+                } else {
+                    _data.push({ name: TIMELINE_MUSCLE_WIDGET_FOREARM, start: dateRange.start, end: dateRange.end })
+                }
+            }
+            if (typeof data[`muscle_${TIMELINE_MUSCLE_WIDGET_HIPS}`] !== 'undefined' && data[`muscle_${TIMELINE_MUSCLE_WIDGET_HIPS}`]) {
+                if (isDataAlreadyAvailable) {
+                    let isDataPushed = false;
+                    userWidgets[TIMELINE_WIDGET_MUSCLE].map((o, i) => {
+                        if (o.name === TIMELINE_MUSCLE_WIDGET_HIPS) {
+                            _data.push(o);
+                            isDataPushed = true;
+                        }
+                    });
+                    if (!isDataPushed) {
+                        _data.push({ name: TIMELINE_MUSCLE_WIDGET_HIPS, start: dateRange.start, end: dateRange.end })
+                    }
+                } else {
+                    _data.push({ name: TIMELINE_MUSCLE_WIDGET_HIPS, start: dateRange.start, end: dateRange.end })
+                }
+            }
+            if (typeof data[`muscle_${TIMELINE_MUSCLE_WIDGET_THIGH}`] !== 'undefined' && data[`muscle_${TIMELINE_MUSCLE_WIDGET_THIGH}`]) {
+                if (isDataAlreadyAvailable) {
+                    let isDataPushed = false;
+                    userWidgets[TIMELINE_WIDGET_MUSCLE].map((o, i) => {
+                        if (o.name === TIMELINE_MUSCLE_WIDGET_THIGH) {
+                            _data.push(o);
+                            isDataPushed = true;
+                        }
+                    });
+                    if (!isDataPushed) {
+                        _data.push({ name: TIMELINE_MUSCLE_WIDGET_THIGH, start: dateRange.start, end: dateRange.end })
+                    }
+                } else {
+                    _data.push({ name: TIMELINE_MUSCLE_WIDGET_THIGH, start: dateRange.start, end: dateRange.end })
+                }
+            }
+            if (typeof data[`muscle_${TIMELINE_MUSCLE_WIDGET_CALF}`] !== 'undefined' && data[`muscle_${TIMELINE_MUSCLE_WIDGET_CALF}`]) {
+                if (isDataAlreadyAvailable) {
+                    let isDataPushed = false;
+                    userWidgets[TIMELINE_WIDGET_MUSCLE].map((o, i) => {
+                        if (o.name === TIMELINE_MUSCLE_WIDGET_CALF) {
+                            _data.push(o);
+                            isDataPushed = true;
+                        }
+                    });
+                    if (!isDataPushed) {
+                        _data.push({ name: TIMELINE_MUSCLE_WIDGET_CALF, start: dateRange.start, end: dateRange.end })
+                    }
+                } else {
+                    _data.push({ name: TIMELINE_MUSCLE_WIDGET_CALF, start: dateRange.start, end: dateRange.end })
+                }
+            }
+            if (typeof data[`muscle_${TIMELINE_MUSCLE_WIDGET_HEART_RATE}`] !== 'undefined' && data[`muscle_${TIMELINE_MUSCLE_WIDGET_HEART_RATE}`]) {
+                if (isDataAlreadyAvailable) {
+                    let isDataPushed = false;
+                    userWidgets[TIMELINE_WIDGET_MUSCLE].map((o, i) => {
+                        if (o.name === TIMELINE_MUSCLE_WIDGET_HEART_RATE) {
+                            _data.push(o);
+                            isDataPushed = true;
+                        }
+                    });
+                    if (!isDataPushed) {
+                        _data.push({ name: TIMELINE_MUSCLE_WIDGET_HEART_RATE, start: dateRange.start, end: dateRange.end })
+                    }
+                } else {
+                    _data.push({ name: TIMELINE_MUSCLE_WIDGET_HEART_RATE, start: dateRange.start, end: dateRange.end })
+                }
+            }
+            if (typeof data[`muscle_${TIMELINE_MUSCLE_WIDGET_WEIGHT}`] !== 'undefined' && data[`muscle_${TIMELINE_MUSCLE_WIDGET_WEIGHT}`]) {
+                if (isDataAlreadyAvailable) {
+                    let isDataPushed = false;
+                    userWidgets[TIMELINE_WIDGET_MUSCLE].map((o, i) => {
+                        if (o.name === TIMELINE_MUSCLE_WIDGET_WEIGHT) {
+                            _data.push(o);
+                            isDataPushed = true;
+                        }
+                    });
+                    if (!isDataPushed) {
+                        _data.push({ name: TIMELINE_MUSCLE_WIDGET_WEIGHT, start: dateRange.start, end: dateRange.end })
+                    }
+                } else {
+                    _data.push({ name: TIMELINE_MUSCLE_WIDGET_WEIGHT, start: dateRange.start, end: dateRange.end })
+                }
+            }
+            if (typeof data[`muscle_${TIMELINE_MUSCLE_WIDGET_HEIGHT}`] !== 'undefined' && data[`muscle_${TIMELINE_MUSCLE_WIDGET_HEIGHT}`]) {
+                if (isDataAlreadyAvailable) {
+                    let isDataPushed = false;
+                    userWidgets[TIMELINE_WIDGET_MUSCLE].map((o, i) => {
+                        if (o.name === TIMELINE_MUSCLE_WIDGET_HEIGHT) {
+                            _data.push(o);
+                            isDataPushed = true;
+                        }
+                    });
+                    if (!isDataPushed) {
+                        _data.push({ name: TIMELINE_MUSCLE_WIDGET_HEIGHT, start: dateRange.start, end: dateRange.end })
+                    }
+                } else {
+                    _data.push({ name: TIMELINE_MUSCLE_WIDGET_HEIGHT, start: dateRange.start, end: dateRange.end })
+                }
+            }
+            requestData[TIMELINE_WIDGET_MUSCLE] = _data;
+        }
+        dispatch(saveTimelineWidgetsRequest(requestData));
     }
 }
 
 ProfileFithub = withRouter(ProfileFithub);
 
 const mapStateToProps = (state) => {
-    const { userTimeline, user, postLikes, postComments, profile } = state;
+    const { userTimeline, user, postLikes, postComments, profile, timelineWidgets } = state;
     return {
         postLoading: userTimeline.get('loading'),
         posts: userTimeline.get('posts'),
         post: userTimeline.get('post'),
         error: userTimeline.get('error'),
-        progressPhotos: userTimeline.get('progressPhotos'),
         loggedUserData: user.get('loggedUserData'),
         likeLoading: postLikes.get('loading'),
         likePost: postLikes.get('post'),
@@ -761,7 +1018,11 @@ const mapStateToProps = (state) => {
         commentLoading: postComments.get('loading'),
         commentPost: postComments.get('post'),
         commentError: postComments.get('error'),
-        activeProfile: profile.get('profile')
+        activeProfile: profile.get('profile'),
+        tilelineWidgetsLoading: timelineWidgets.get('loading'),
+        userWidgets: timelineWidgets.get('userWidgets'),
+        saveWidgetsLoading: timelineWidgets.get('saveWidgetsLoading'),
+        saveWidgetsError: timelineWidgets.get('saveWidgetsError'),
     };
 }
 

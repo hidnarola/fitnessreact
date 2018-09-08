@@ -20,10 +20,10 @@ if (window.location.port) {
 baseUrl += '/';
 
 export const BASE_URL = baseUrl;
-export const SERVER_BASE_URL = 'http://' + window.location.hostname + ':3300/';
+// export const SERVER_BASE_URL = 'http://' + window.location.hostname + ':3300/';
 
 // amit's system url of api
-// export const SERVER_BASE_URL = 'http://192.168.100.19:3300/';
+export const SERVER_BASE_URL = 'http://192.168.100.19:3300/';
 
 export const EXERCISE_MECHANICS_COMPOUND = 'compound';
 export const EXERCISE_MECHANICS_ISOLATION = 'isolation';
@@ -889,3 +889,16 @@ export const TIMELINE_WIDGET_MUSCLE = 'muscle';
 export const TIMELINE_WIDGET_PROGRESS_PHOTO = 'progressPhoto';
 export const TIMELINE_WIDGET_BADGES = 'badges';
 export const TIMELINE_WIDGET_BODY_FAT = 'bodyFat';
+
+export const TIMELINE_MUSCLE_WIDGET_NECK = 'neck';
+export const TIMELINE_MUSCLE_WIDGET_SHOULDER = 'shoulder';
+export const TIMELINE_MUSCLE_WIDGET_CHEST = 'chest';
+export const TIMELINE_MUSCLE_WIDGET_UPPER_ARM = 'upperArm';
+export const TIMELINE_MUSCLE_WIDGET_WAIST = 'waist';
+export const TIMELINE_MUSCLE_WIDGET_FOREARM = 'forearm';
+export const TIMELINE_MUSCLE_WIDGET_HIPS = 'hips';
+export const TIMELINE_MUSCLE_WIDGET_THIGH = 'thigh';
+export const TIMELINE_MUSCLE_WIDGET_CALF = 'calf';
+export const TIMELINE_MUSCLE_WIDGET_HEART_RATE = 'heartRate';
+export const TIMELINE_MUSCLE_WIDGET_WEIGHT = 'weight';
+export const TIMELINE_MUSCLE_WIDGET_HEIGHT = 'height';

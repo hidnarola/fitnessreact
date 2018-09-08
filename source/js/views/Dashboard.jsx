@@ -208,7 +208,6 @@ class Dashboard extends Component {
             }
             requestData[DASHBOARD_WIDGET_BODY_FAT] = data;
         }
-        console.log('requestData => ', requestData);
         dispatch(saveDashboardWidgetsDataRequest(requestData));
     }
 }

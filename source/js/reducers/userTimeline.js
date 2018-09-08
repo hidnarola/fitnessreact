@@ -16,7 +16,6 @@ import { generateValidationErrorMsgArr } from "../helpers/funs";
 const initialState = Map({
     loading: false,
     posts: [],
-    progressPhotos: {},
     loadingBodyFat: false,
     bodyFat: null,
     errorBodyFat: [],
@@ -29,7 +28,6 @@ const actionMap = {
         return state.merge(Map({
             loading: true,
             posts: [],
-            progressPhotos: {},
             post: null,
             error: [],
             loadingBodyFat: true,
@@ -44,7 +42,6 @@ const actionMap = {
         };
         if (action.data.status === 1) {
             newState.posts = action.data.timeline;
-            newState.progressPhotos = action.data.progress_photos;
             newState.bodyFat = action.data.body_fat;
         } else {
             var msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
