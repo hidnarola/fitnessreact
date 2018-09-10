@@ -42,6 +42,7 @@ class WorkoutTypeSupersetCardUpdate extends Component {
                         type="number"
                         validate={[required, min1, max12]}
                     />
+                    <div className="set-div">Sets</div>
                     {typeof supersetSets !== 'undefined' && supersetSets > 1 &&
                         <label>Rest Between Sets</label>
                     }

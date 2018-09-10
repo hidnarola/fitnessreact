@@ -37,13 +37,14 @@ class BodyFat extends Component {
                         <a href="javascript:void(0)" onClick={this.toggleCalendar} className="icon-date_range"></a>
                     </div>
                 </div>
-                <div className="whitebox-body bodyfat-graph">
+                
                     {changeBodyFatLoading &&
                         <div className="text-c">
                             <FaCircleONotch className="loader-spinner fs-50" />
                         </div>
                     }
                     {!changeBodyFatLoading && bodyFat && bodyFat.length > 0 &&
+                    <div className="whitebox-body bodyfat-graph">
                         <ResponsiveContainer>
                             <AreaChart data={bodyFat}>
                                 <defs>
@@ -58,6 +59,7 @@ class BodyFat extends Component {
                                 <Area type='monotone' dataKey='count' activeDot={{ stroke: '#46E9C5', strokeWidth: 2, fill: "#fff" }} stroke="none" fill="url(#bodyFatArea)" />
                             </AreaChart>
                         </ResponsiveContainer>
+                        </div>
                     }
                     {!changeBodyFatLoading && (!bodyFat || bodyFat.length <= 0) && changeBodyFatError && changeBodyFatError.length <= 0 &&
                         <div className="no-record-found-wrapper">
@@ -70,7 +72,7 @@ class BodyFat extends Component {
                             <h4>Something went wrong! please try again.</h4>
                         </div>
                     }
-                </div>
+                
                 {showCalendar &&
                     <div className="bodyfat-date-range-picker">
                         <DateRangePicker

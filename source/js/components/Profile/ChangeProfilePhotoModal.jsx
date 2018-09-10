@@ -74,7 +74,10 @@ class ChangeProfilePhotoModal extends Component {
                             </div>
                             <div className="gallery-post">
                                 {selectedImage &&
-                                    <button type="button" onClick={this.cropImg}>Crop</button>
+                                    <button className="gradient-color-2" type="button">Cancel</button>
+                                }
+                                {selectedImage &&
+                                    <button className="gradient-color-3" type="button" onClick={this.cropImg}>Crop</button>
                                 }
                                 {croppedImg &&
                                     <button type="button" onClick={() => handleSubmit({ ...this.state })}>Save</button>

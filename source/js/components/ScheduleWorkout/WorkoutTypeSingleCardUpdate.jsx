@@ -103,6 +103,7 @@ class WorkoutTypeSingleCardUpdate extends Component {
                                                             type="number"
                                                             validate={[required, min1, max12]}
                                                         />
+                                                        <div className="set-div single">Sets</div>
                                                     </li>
                                                     {field1Options && field1Options.length > 0 &&
                                                         <li>

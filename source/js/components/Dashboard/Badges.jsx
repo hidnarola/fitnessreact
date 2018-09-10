@@ -12,11 +12,13 @@ class Badges extends Component {
                 <div className="whitebox-head d-flex">
                     <h3 className="title-h3">Badges</h3>
                 </div>
-                {badges && badges.length > 0 &&
-                    badges.map((o, i) =>
-                        <BadgesListCard key={i} badge={o} />
-                    )
-                }
+                <div className="d-flex flex-wrap badges-wrap badges-wrap-box2">
+                    {badges && badges.length > 0 &&
+                        badges.map((o, i) =>
+                            <BadgesListCard key={i} badge={o} />
+                        )
+                    }
+                </div>
 
                 {(!badges || badges.length <= 0) &&
                     <div className="no-record-found-wrapper">
@@ -43,6 +45,7 @@ class BadgesListCard extends Component {
     render() {
         const { badge } = this.props;
         return (
+
             <div className="whitebox-body today-badges">
                 <div className="customiser-box">
                     <h3><strong>Achievement</strong> {(badge.point) ? ` - ${badge.point}pts` : ''}</h3>

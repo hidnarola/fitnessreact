@@ -19,6 +19,7 @@ import Badges from '../components/Dashboard/Badges';
 import Workouts from '../components/Dashboard/Workouts';
 import BodyFat from '../components/Dashboard/BodyFat';
 import ActivityFeed from '../components/Dashboard/ActivityFeed';
+import cns from "classnames";
 
 class Dashboard extends Component {
     constructor(props) {
@@ -77,32 +78,37 @@ class Dashboard extends Component {
 
                     {!loading &&
                         <div className="body-content row d-flex col-md-12">
-                            <div className="col-md-4">
-                                {userWidgets && typeof userWidgets[DASHBOARD_WIDGET_TODAYS_WORKOUT] !== 'undefined' && userWidgets[DASHBOARD_WIDGET_TODAYS_WORKOUT] === 1 &&
-                                    <Workouts />
-                                }
-                                {userWidgets && typeof userWidgets[DASHBOARD_WIDGET_BADGES] !== 'undefined' && userWidgets[DASHBOARD_WIDGET_BADGES] === 1 &&
-                                    <Badges />
-                                }
-                            </div>
-
-                            {userWidgets && typeof userWidgets[DASHBOARD_WIDGET_BODY_FAT] !== 'undefined' && userWidgets[DASHBOARD_WIDGET_BODY_FAT] &&
-                                <div className="col-md-4">
-                                    <BodyFat />
+                            <div className="col-md-8">
+                                <div className="row">
+                                    {userWidgets && typeof userWidgets[DASHBOARD_WIDGET_TODAYS_WORKOUT] !== 'undefined' && userWidgets[DASHBOARD_WIDGET_TODAYS_WORKOUT] === 1 &&
+                                        <div className={cns(
+                                            { 'col-md-12': (typeof userWidgets[DASHBOARD_WIDGET_BODY_FAT] === 'undefined') || !userWidgets[DASHBOARD_WIDGET_BODY_FAT] },
+                                            { 'col-md-6': (typeof userWidgets[DASHBOARD_WIDGET_BODY_FAT] !== 'undefined') && userWidgets[DASHBOARD_WIDGET_BODY_FAT] }
+                                        )}>
+                                            <Workouts />
+                                        </div>
+                                    }
+                                    {userWidgets && typeof userWidgets[DASHBOARD_WIDGET_BODY_FAT] !== 'undefined' && userWidgets[DASHBOARD_WIDGET_BODY_FAT] &&
+                                        <div className={cns(
+                                            { 'col-md-12': (typeof userWidgets[DASHBOARD_WIDGET_TODAYS_WORKOUT] === 'undefined') || userWidgets[DASHBOARD_WIDGET_TODAYS_WORKOUT] === 0 },
+                                            { 'col-md-6': (typeof userWidgets[DASHBOARD_WIDGET_TODAYS_WORKOUT] !== 'undefined') && userWidgets[DASHBOARD_WIDGET_TODAYS_WORKOUT] === 1 }
+                                        )}>
+                                            <BodyFat />
+                                        </div>
+                                    }
+                                    {userWidgets && typeof userWidgets[DASHBOARD_WIDGET_BADGES] !== 'undefined' && userWidgets[DASHBOARD_WIDGET_BADGES] === 1 &&
+                                        <div className="col-md-12">
+                                            <Badges />
+                                        </div>
+                                    }
                                 </div>
-                            }
+                            </div>
 
                             {userWidgets && typeof userWidgets[DASHBOARD_WIDGET_ACTIVITY_FEED] !== 'undefined' && userWidgets[DASHBOARD_WIDGET_ACTIVITY_FEED] === 1 &&
                                 <div className="col-md-4">
                                     <ActivityFeed />
                                 </div>
                             }
-
-                            {/* {userWidgets && typeof userWidgets[DASHBOARD_WIDGET_BADGES] !== 'undefined' && userWidgets[DASHBOARD_WIDGET_BADGES] === 1 &&
-                                <div className="col-md-4">
-                                    <Badges />
-                                </div>
-                            } */}
 
                             {
                                 (!userWidgets || typeof userWidgets[DASHBOARD_WIDGET_TODAYS_WORKOUT] === 'undefined' || userWidgets[DASHBOARD_WIDGET_TODAYS_WORKOUT] === 0 || userWidgets[DASHBOARD_WIDGET_TODAYS_WORKOUT] === null) &&

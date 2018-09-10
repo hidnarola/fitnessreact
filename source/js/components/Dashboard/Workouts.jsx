@@ -8,7 +8,7 @@ class Workouts extends Component {
     render() {
         const { workouts, } = this.props;
         return (
-            <div className="white-box space-btm-30">
+            <div className="white-box space-btm-30 min-height-348">
                 <div className="whitebox-head d-flex">
                     <h3 className="title-h3">Today's Workout</h3>
                 </div>

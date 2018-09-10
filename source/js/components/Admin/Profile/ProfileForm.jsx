@@ -67,7 +67,7 @@ class ProfileForm extends Component {
                             <div className="form-group text-c">
                                 <button type="submit" className="custom-medium-btn" disabled={saveLoading}>
                                     <span>Save</span>
-                                    {!saveLoading && <i className="icon-add_circle"></i>}
+                                    {!saveLoading && <i className="icon-save"></i>}
                                     {saveLoading && <FaSpinner className="loader-spinner" />}
                                 </button>
                             </div>

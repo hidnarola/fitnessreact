@@ -95,7 +95,7 @@ class ActivityFeedListCard extends Component {
             }
         }
         return (
-            <div className="post-type">
+            <div className="post-type timeline-infinite-scroll">
                 <div className="posttype-head d-flex justify-content-start">
                     <span>
                         <img

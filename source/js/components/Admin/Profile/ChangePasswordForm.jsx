@@ -67,7 +67,7 @@ class ChangePasswordForm extends Component {
                             <div className="form-group text-c">
                                 <button type="submit" className="custom-medium-btn" disabled={loading}>
                                     <span>Save</span>
-                                    {!loading && <i className="icon-add_circle"></i>}
+                                    {!loading && <i className="icon-save"></i>}
                                     {loading && <FaSpinner className="loader-spinner" />}
                                 </button>
                             </div>

@@ -2,14 +2,16 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { NavLink } from "react-router-dom";
 import { toggleSideMenu } from '../../../helpers/funs';
-import { FaSignOut } from "react-icons/lib/fa";
 import { adminRouteCodes } from '../../../constants/adminRoutes';
+import UserCircle from "svg/user-circle.svg";
+import OpenLock from "svg/open-lock.svg";
+import Logout from "svg/logout.svg";
 
 class AdminRightMenu extends Component {
     render() {
         const { handleLogout, loggedUserData } = this.props;
         return (
-            <div id="admin-right-menu" className="chat-wrap">
+            <div id="admin-right-menu" className="chat-wrap user-right-menu-css">
                 <div className="chat-bg"></div>
                 <div className="chat-inr">
                     <div className="chat-head">
@@ -23,7 +25,7 @@ class AdminRightMenu extends Component {
                                     to={adminRouteCodes.PROFILE}
                                     onClick={() => toggleSideMenu('admin-right-menu', false)}
                                 >
-                                    <i className="icon-account_circle"></i>
+                                    <UserCircle />
                                     Update Profile
                                 </NavLink>
                             </li>
@@ -32,13 +34,13 @@ class AdminRightMenu extends Component {
                                     to={adminRouteCodes.CHANGE_PASSWORD}
                                     onClick={() => toggleSideMenu('admin-right-menu', false)}
                                 >
-                                    <i className="icon-lock_open"></i>
+                                    <OpenLock />
                                     Change Password
                                 </NavLink>
                             </li>
                             <li>
                                 <a href="javascript:void(0)" onClick={handleLogout}>
-                                    <FaSignOut />
+                                    <Logout />
                                     Logout
                                 </a>
                             </li>

@@ -42,6 +42,7 @@ class WorkoutTypeCircuitCard extends Component {
                         type="number"
                         validate={[required, min1, max12]}
                     />
+                    <div className="set-div">Sets</div>
                     {typeof circuitSets !== 'undefined' && circuitSets > 1 &&
                         <label>Rest Between Sets</label>
                     }
@@ -95,7 +96,7 @@ class WorkoutTypeCircuitCard extends Component {
                         }
                     }
                     return (
-                        <div key={index} className="workout-type-card-block pos-relative">
+                        <div key={index} className="workout-type-card-block  pos-relative">
                             {/* <strong>Exercise # {(index + 1)}</strong> */}
                             <div className="row workout-type-card-block-top">
                                 <div className="col-md-10 single-exercise-selest">
