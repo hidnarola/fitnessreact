@@ -8,7 +8,7 @@ class Badges extends Component {
     render() {
         const { badges } = this.props;
         return (
-            <div className="white-box space-btm-30">
+            <div className="white-box space-btm-30 min-height-373">
                 <div className="whitebox-head d-flex">
                     <h3 className="title-h3">Badges</h3>
                 </div>

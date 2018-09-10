@@ -112,7 +112,7 @@ class Dashboard extends Component {
 
                             {
                                 (!userWidgets || typeof userWidgets[DASHBOARD_WIDGET_TODAYS_WORKOUT] === 'undefined' || userWidgets[DASHBOARD_WIDGET_TODAYS_WORKOUT] === 0 || userWidgets[DASHBOARD_WIDGET_TODAYS_WORKOUT] === null) &&
-                                (!userWidgets || typeof userWidgets[DASHBOARD_WIDGET_BODY_FAT] === 'undefined' || !userWidgets[DASHBOARD_WIDGET_TODAYS_WORKOUT]) &&
+                                (!userWidgets || typeof userWidgets[DASHBOARD_WIDGET_BODY_FAT] === 'undefined' || !userWidgets[DASHBOARD_WIDGET_BODY_FAT]) &&
                                 (!userWidgets || typeof userWidgets[DASHBOARD_WIDGET_ACTIVITY_FEED] === 'undefined' || userWidgets[DASHBOARD_WIDGET_ACTIVITY_FEED] === 0 || userWidgets[DASHBOARD_WIDGET_ACTIVITY_FEED] === null) &&
                                 (!userWidgets || typeof userWidgets[DASHBOARD_WIDGET_BADGES] === 'undefined' || userWidgets[DASHBOARD_WIDGET_BADGES] === 0 || userWidgets[DASHBOARD_WIDGET_BADGES] === null) &&
                                 <div className="select-dashboard-widget-wrapper">

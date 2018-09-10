@@ -1242,7 +1242,7 @@ flex-direction:row; display:-webkit-box; display:-webkit-flex; display:-ms-flex;
 
 .resize-vertical{resize: vertical;}
 .min-height-80{min-height: 80px;}
-.min-height-348{min-height: 348px;}
+.min-height-373{min-height: 373px;}
 
 .has-error .Select-control{border-color: #a94442;-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);}
 .has-error .Select-control span.Select-arrow {border-color: #a94442 transparent transparent;}
