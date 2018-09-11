@@ -25,25 +25,32 @@ import {
 import { Field, reduxForm, formValueSelector } from "redux-form";
 import BadgeIcon from "svg/badge-icon.svg";
 import MuscleIcon from "svg/muscles.svg";
+import cns from "classnames";
 
 class WidgetsListModal extends Component {
     constructor(props) {
         super(props);
         this.state = {
             showMuscleSubMenu: false,
+            modalTitle: 'Add A Widget',
         };
     }
 
     render() {
         const { show, handleSubmit, saveLoading, type } = this.props;
-        const { showMuscleSubMenu } = this.state;
+        const { showMuscleSubMenu, modalTitle } = this.state;
         return (
-            <Modal show={show} className="widget-popup dashboard-widgets-wrapper widgets-wrapper">
+            <Modal show={show} className={cns('widget-popup dashboard-widgets-wrapper widgets-wrapper', { 'sub-widgets-view': showMuscleSubMenu })}>
                 <form method="POST" onSubmit={handleSubmit}>
                     <button type="button" onClick={this.handleModaClose} className="close-round" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                    <h3 className="title-h3">Add A Widget</h3>
+                    <h3 className="title-h3">
+                        {showMuscleSubMenu &&
+                            <button type="button" className="icon-arrow_back modal-bk-btn-sub" onClick={this.handleHideMuscleSubMenu}></button>
+                        }
+                        {modalTitle}
+                    </h3>
                     {!showMuscleSubMenu &&
                         <div className="choose-widget">
                             <ul>
@@ -303,7 +310,7 @@ class WidgetsListModal extends Component {
     }
 
     handleShowMuscleSubMenu = () => {
-        this.setState({ showMuscleSubMenu: true });
+        this.setState({ showMuscleSubMenu: true, modalTitle: 'Select Muscle' });
     }
 
     handleHideMuscleSubMenu = () => {
@@ -326,7 +333,7 @@ class WidgetsListModal extends Component {
                 break;
         }
         change(`widget_list_${WIDGET_MUSCLE}`, muscleChecked);
-        this.setState({ showMuscleSubMenu: false });
+        this.setState({ showMuscleSubMenu: false, modalTitle: 'Add A Widget' });
     }
 }
 

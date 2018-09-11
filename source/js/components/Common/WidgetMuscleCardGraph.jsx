@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { capitalizeFirstLetter } from '../../helpers/funs';
 import { ResponsiveContainer, AreaChart, XAxis, YAxis, Area, Tooltip } from "recharts";
 import CustomTooltip from '../Progress/CustomTooltip';
-import { FRIENDSHIP_STATUS_SELF, TIMELINE_WIDGET_MUSCLE, WIDGETS_TYPE_TIMELINE, WIDGETS_TYPE_DASHBOARD } from '../../constants/consts';
+import { FRIENDSHIP_STATUS_SELF, WIDGET_MUSCLE, WIDGETS_TYPE_TIMELINE, WIDGETS_TYPE_DASHBOARD } from '../../constants/consts';
 import DateRangePicker from 'react-daterange-picker';
 import moment from "moment";
 import _ from "lodash";
@@ -23,7 +23,7 @@ class WidgetMuscleCardGraph extends Component {
     render() {
         const { cardKey, data, profile, userWidgets, type, bodyWrapperClass } = this.props;
         const { showDatePicker } = this.state;
-        let muscleWidget = userWidgets[TIMELINE_WIDGET_MUSCLE];
+        let muscleWidget = userWidgets[WIDGET_MUSCLE];
         let selectedWidget = _.find(muscleWidget, ['name', cardKey]);
         let dateRange = null;
         if (selectedWidget) {

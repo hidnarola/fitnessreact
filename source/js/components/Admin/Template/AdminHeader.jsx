@@ -8,6 +8,7 @@ import { adminRootRoute } from 'constants/adminRoutes';
 import { toggleSideMenu } from '../../../helpers/funs';
 import noProfileImg from 'img/common/no-profile-img.png';
 import { setLoggedAdminFromLocalStorage } from '../../../actions/admin/admin';
+import logo from 'img/common/logo.png';
 
 class AdminHeader extends Component {
     componentWillMount() {

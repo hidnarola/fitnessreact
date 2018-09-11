@@ -2212,3 +2212,7 @@ ul.common-ul>li.body-fat-field-li{ width:50%; margin-left:auto;}
 
 .set-div{background: #eee; border: 0; padding: 5px 15px 5px 15px; font-size: 12px; line-height: 20px !important; height: 29px; min-width: 80px; text-align: center; display: inline-block; vertical-align: top; margin: 0 20px 0 -4px;}
 .set-div.single { height: 31px; margin: 0 0 0 -4px; }
+
+.sub-widgets-view .modal-dialog{ max-width: 1400px; }
+.sub-widgets-view .modal-dialog .choose-widget ul li { width: 15%; margin: 0 auto 20px auto; }
+.modal-bk-btn-sub{ border: 0; background: transparent; line-height: 25px; vertical-align: top; margin-right: 5px; }
