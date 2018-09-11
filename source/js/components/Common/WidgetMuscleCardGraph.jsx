@@ -3,16 +3,16 @@ import { connect } from 'react-redux';
 import { capitalizeFirstLetter } from '../../helpers/funs';
 import { ResponsiveContainer, AreaChart, XAxis, YAxis, Area, Tooltip } from "recharts";
 import CustomTooltip from '../Progress/CustomTooltip';
-import { FRIENDSHIP_STATUS_SELF, TIMELINE_WIDGET_MUSCLE } from '../../constants/consts';
+import { FRIENDSHIP_STATUS_SELF, TIMELINE_WIDGET_MUSCLE, WIDGETS_TYPE_TIMELINE, WIDGETS_TYPE_DASHBOARD } from '../../constants/consts';
 import DateRangePicker from 'react-daterange-picker';
 import moment from "moment";
 import _ from "lodash";
-import { changeTimelineMuscleInnerDataRequest } from '../../actions/timelineWidgets';
 import { FaCircleONotch } from "react-icons/lib/fa";
 import NoDataFoundImg from "img/common/no_datafound.png";
 import ErrorCloud from "svg/error-cloud.svg";
+import cns from "classnames";
 
-class ProfileFithubMuscleCardGraph extends Component {
+class WidgetMuscleCardGraph extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -21,7 +21,7 @@ class ProfileFithubMuscleCardGraph extends Component {
     }
 
     render() {
-        const { cardKey, data, profile, userWidgets } = this.props;
+        const { cardKey, data, profile, userWidgets, type, bodyWrapperClass } = this.props;
         const { showDatePicker } = this.state;
         let muscleWidget = userWidgets[TIMELINE_WIDGET_MUSCLE];
         let selectedWidget = _.find(muscleWidget, ['name', cardKey]);
@@ -33,15 +33,15 @@ class ProfileFithubMuscleCardGraph extends Component {
             );
         }
         return (
-            <div className="white-box space-btm-30 p-relative">
+            <div className={cns('white-box space-btm-30 p-relative', { [bodyWrapperClass]: (bodyWrapperClass) ? true : false })}>
                 <div className="whitebox-head d-flex">
                     <h3 className="title-h3">{capitalizeFirstLetter(cardKey.replace(/([a-z])([A-Z])/g, '$1 $2').replace('_', ' '))}</h3>
-                    {profile && profile.friendshipStatus && profile.friendshipStatus === FRIENDSHIP_STATUS_SELF &&
+                    {((type === WIDGETS_TYPE_TIMELINE && profile && profile.friendshipStatus && profile.friendshipStatus === FRIENDSHIP_STATUS_SELF) || (type === WIDGETS_TYPE_DASHBOARD)) &&
                         <div className="whitebox-head-r">
                             <button className="icon-settings no-border bg-transparent" onClick={this.toggleCalendar}></button>
                         </div>
                     }
-                    {profile && profile.friendshipStatus && profile.friendshipStatus === FRIENDSHIP_STATUS_SELF && showDatePicker &&
+                    {((type === WIDGETS_TYPE_TIMELINE && profile && profile.friendshipStatus && profile.friendshipStatus === FRIENDSHIP_STATUS_SELF) || (type === WIDGETS_TYPE_DASHBOARD)) && showDatePicker &&
                         <div className="fithub-widget-date-range">
                             <DateRangePicker
                                 firstOfWeek={1}
@@ -102,25 +102,24 @@ class ProfileFithubMuscleCardGraph extends Component {
     }
 
     handleTimeDateRange = (range, state) => {
-        const { dispatch, cardKey } = this.props;
+        const { cardKey, requestGraphData } = this.props;
         let requestData = {
             bodypart: cardKey,
             start: range.start,
             end: range.end,
         };
-        dispatch(changeTimelineMuscleInnerDataRequest(requestData));
+        requestGraphData(requestData);
         this.toggleCalendar();
     }
 }
 
 const mapStateToProps = (state) => {
-    const { profile, timelineWidgets } = state;
+    const { profile } = state;
     return {
-        userWidgets: timelineWidgets.get('userWidgets'),
         profile: profile.get('profile'),
     };
 }
 
 export default connect(
     mapStateToProps,
-)(ProfileFithubMuscleCardGraph);
+)(WidgetMuscleCardGraph);

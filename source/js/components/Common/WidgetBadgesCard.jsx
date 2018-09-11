@@ -1,18 +1,17 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import TrophyIcon from "svg/tropy-icon.svg";
 import NoDataFoundImg from "img/common/no_datafound.png";
 import moment from "moment";
 
-class Badges extends Component {
+class WidgetBadgesCard extends Component {
     render() {
-        const { badges } = this.props;
+        const { badges, bodyWrapperClass } = this.props;
         return (
-            <div className="white-box space-btm-30 min-height-373">
+            <div className="white-box space-btm-30">
                 <div className="whitebox-head d-flex">
                     <h3 className="title-h3">Badges</h3>
                 </div>
-                <div className="d-flex flex-wrap badges-wrap badges-wrap-box2">
+                <div className={(bodyWrapperClass) ? bodyWrapperClass : ''}>
                     {badges && badges.length > 0 &&
                         badges.map((o, i) =>
                             <BadgesListCard key={i} badge={o} />
@@ -30,16 +29,7 @@ class Badges extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    const { dashboard } = state;
-    return {
-        badges: dashboard.get('badges'),
-    };
-}
-
-export default connect(
-    mapStateToProps,
-)(Badges);
+export default WidgetBadgesCard;
 
 class BadgesListCard extends Component {
     render() {

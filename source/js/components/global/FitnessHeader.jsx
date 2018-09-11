@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import { routeCodes } from 'constants/routes';
 import FaSearch from 'react-icons/lib/fa/search';
 import FaNoti from 'react-icons/lib/md/notifications-none';
@@ -21,6 +21,8 @@ import cns from "classnames";
 import { getUserUnreadNotificationsRequest } from '../../actions/userNotifications';
 import { getUserMessageChannelRequest } from '../../actions/userMessages';
 import { getPendingFriendsRequest } from '../../actions/friends';
+import logo from 'img/common/logo.png';
+import { publicPath } from '../../constants/routes';
 
 const auth = new Auth();
 
@@ -67,8 +69,9 @@ class FitnessHeader extends Component {
             <div className="header">
                 <header className="header d-flex justify-content-start">
                     <div className="logo">
-                        <a href="index.html">
-                        </a>
+                        <Link to={publicPath}>
+                            <img src={logo} />
+                        </Link>
                     </div>
                     <div className="search">
                         <div className="search-form header-search-form">

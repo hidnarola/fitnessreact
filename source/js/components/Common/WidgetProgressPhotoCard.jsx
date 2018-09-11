@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import noImg from 'img/common/no-img.png'
 import { SERVER_BASE_URL } from '../../constants/consts';
 
-class ProfileFithubProgressPhotoCard extends Component {
+class WidgetProgressPhotoCard extends Component {
     render() {
         const { progressPhoto } = this.props;
         if (progressPhoto) {
@@ -57,13 +56,4 @@ class ProfileFithubProgressPhotoCard extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    const { timelineWidgets } = state;
-    return {
-        progressPhoto: timelineWidgets.get('progressPhoto'),
-    };
-}
-
-export default connect(
-    mapStateToProps,
-)(ProfileFithubProgressPhotoCard);
+export default WidgetProgressPhotoCard;

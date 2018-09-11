@@ -11,7 +11,10 @@ import {
     CHANGE_DASHBOARD_BODY_FAT_WIDGET_ERROR,
     CHANGE_COMPLETE_STATUS_OF_WORKOUT_REQUEST,
     CHANGE_COMPLETE_STATUS_OF_WORKOUT_SUCCESS,
-    CHANGE_COMPLETE_STATUS_OF_WORKOUT_ERROR
+    CHANGE_COMPLETE_STATUS_OF_WORKOUT_ERROR,
+    CHANGE_DASHBOARD_MUSCLE_INNER_DATA_REQUEST,
+    CHANGE_DASHBOARD_MUSCLE_INNER_DATA_SUCCESS,
+    CHANGE_DASHBOARD_MUSCLE_INNER_DATA_ERROR
 } from "../actions/dashboard";
 import { VALIDATION_FAILURE_STATUS } from "../constants/consts";
 import { generateValidationErrorMsgArr } from "../helpers/funs";
@@ -22,6 +25,8 @@ const initialState = Map({
     userWidgets: {},
     profileComplete: 0,
     badges: [],
+    muscle: {},
+    progressPhoto: {},
     bodyFat: [],
     activityFeed: [],
     error: [],
@@ -41,6 +46,8 @@ const actionMap = {
             userWidgets: {},
             profileComplete: 0,
             badges: [],
+            muscle: {},
+            progressPhoto: {},
             bodyFat: [],
             activityFeed: [],
             error: [],
@@ -53,6 +60,8 @@ const actionMap = {
             newState.userWidgets = action.data.data.userWidgets;
             newState.profileComplete = action.data.data.profileComplete;
             newState.badges = action.data.data.badges;
+            newState.muscle = prepareMuscleData(action.data.data.muscle);
+            newState.progressPhoto = action.data.data.progressPhoto;
             newState.bodyFat = action.data.data.bodyFat;
             newState.activityFeed = action.data.data.activityFeed;
         } else {
@@ -135,6 +144,60 @@ const actionMap = {
             changeCompleteWorkoutError: prepareResponseError(action),
         }));
     },
+    [CHANGE_DASHBOARD_MUSCLE_INNER_DATA_REQUEST]: (state, action) => {
+        let prevMuscleState = state.get('muscle');
+        let nextMuscleState = {};
+        Object.keys(prevMuscleState).map((k, i) => {
+            let _o = Object.assign({}, prevMuscleState[k]);
+            if (k === action.requestData.bodypart) {
+                _o.loading = true;
+                _o.error = [];
+            }
+            nextMuscleState[k] = _o;
+        });
+        return state.merge(Map({
+            muscle: nextMuscleState,
+        }));
+    },
+    [CHANGE_DASHBOARD_MUSCLE_INNER_DATA_SUCCESS]: (state, action) => {
+        let prevMuscleState = state.get('muscle');
+        let nextMuscleState = {};
+        Object.keys(prevMuscleState).map((k, i) => {
+            let _o = Object.assign({}, prevMuscleState[k]);
+            if (k === action.data.data.bodypart) {
+                if (action.data.data.muscle) {
+                    _o = action.data.data.muscle;
+                    _o.loading = false;
+                    _o.error = [];
+                } else {
+                    _o = {
+                        loading: false,
+                        error: [],
+                    }
+                }
+            }
+            nextMuscleState[k] = _o;
+        });
+        return state.merge(Map({
+            muscle: nextMuscleState,
+            userWidgets: action.data.data.widgets,
+        }));
+    },
+    [CHANGE_DASHBOARD_MUSCLE_INNER_DATA_ERROR]: (state, action) => {
+        let prevMuscleState = state.get('muscle');
+        let nextMuscleState = {};
+        Object.keys(prevMuscleState).map((k, i) => {
+            let _o = Object.assign({}, prevMuscleState[k]);
+            if (k === action.data.data.bodypart) {
+                _o.loading = false;
+                _o.error = prepareResponseError(action);
+            }
+            nextMuscleState[k] = _o;
+        })
+        return state.merge(Map({
+            muscle: nextMuscleState,
+        }));
+    },
 };
 
 function prepareResponseError(action) {
@@ -147,6 +210,20 @@ function prepareResponseError(action) {
         error = ['Something went wrong! please try again later'];
     }
     return error;
+}
+
+function prepareMuscleData(data) {
+    if (!data) {
+        return data;
+    }
+    let _data = {};
+    Object.keys(data).map((k, i) => {
+        let _o = Object.assign({}, data[k]);
+        _o.loading = false;
+        _o.error = [];
+        _data[k] = _o;
+    });
+    return _data;
 }
 
 export default function reducer(state = initialState, action = {}) {

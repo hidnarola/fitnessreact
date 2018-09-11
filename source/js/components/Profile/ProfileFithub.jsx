@@ -18,22 +18,23 @@ import {
     ACCESS_LEVEL_FRIENDS_STR,
     ACCESS_LEVEL_PRIVATE_STR,
     FRIENDSHIP_STATUS_SELF,
-    TIMELINE_WIDGET_MUSCLE,
-    TIMELINE_WIDGET_PROGRESS_PHOTO,
-    TIMELINE_WIDGET_BADGES,
-    TIMELINE_WIDGET_BODY_FAT,
-    TIMELINE_MUSCLE_WIDGET_NECK,
-    TIMELINE_MUSCLE_WIDGET_SHOULDER,
-    TIMELINE_MUSCLE_WIDGET_CHEST,
-    TIMELINE_MUSCLE_WIDGET_UPPER_ARM,
-    TIMELINE_MUSCLE_WIDGET_WAIST,
-    TIMELINE_MUSCLE_WIDGET_FOREARM,
-    TIMELINE_MUSCLE_WIDGET_HIPS,
-    TIMELINE_MUSCLE_WIDGET_THIGH,
-    TIMELINE_MUSCLE_WIDGET_CALF,
-    TIMELINE_MUSCLE_WIDGET_HEART_RATE,
-    TIMELINE_MUSCLE_WIDGET_WEIGHT,
-    TIMELINE_MUSCLE_WIDGET_HEIGHT
+    WIDGET_MUSCLE,
+    WIDGET_PROGRESS_PHOTO,
+    WIDGET_BADGES,
+    WIDGET_BODY_FAT,
+    MUSCLE_WIDGET_NECK,
+    MUSCLE_WIDGET_SHOULDER,
+    MUSCLE_WIDGET_CHEST,
+    MUSCLE_WIDGET_UPPER_ARM,
+    MUSCLE_WIDGET_WAIST,
+    MUSCLE_WIDGET_FOREARM,
+    MUSCLE_WIDGET_HIPS,
+    MUSCLE_WIDGET_THIGH,
+    MUSCLE_WIDGET_CALF,
+    MUSCLE_WIDGET_HEART_RATE,
+    MUSCLE_WIDGET_WEIGHT,
+    MUSCLE_WIDGET_HEIGHT,
+    WIDGETS_TYPE_TIMELINE
 } from '../../constants/consts';
 import cns from "classnames";
 import { routeCodes } from '../../constants/routes';
@@ -52,12 +53,13 @@ import { FaGlobe, FaLock, FaGroup } from 'react-icons/lib/fa';
 import AddPostPhotoModal from './AddPostPhotoModal';
 import PostDetailsModal from './PostDetailsModal';
 import LikeButton from "./LikeButton";
-import ProfileFithubBodyFatCard from './ProfileFithubBodyFatCard';
-import WidgetsListModal from './WidgetsListModal';
-import { getTimelineWidgetsAndWidgetsDataRequest, saveTimelineWidgetsRequest } from '../../actions/timelineWidgets';
+import { getTimelineWidgetsAndWidgetsDataRequest, saveTimelineWidgetsRequest, changeTimelineMuscleInnerDataRequest, changeTimelineBodyFatWidgetRequest } from '../../actions/timelineWidgets';
 import ProfileFithubBadgesCard from './ProfileFithubBadgesCard';
-import ProfileFithubProgressPhotoCard from './ProfileFithubProgressPhotoCard';
-import ProfileFithubMuscleCard from './ProfileFithubMuscleCard';
+import WidgetsListModal from '../Common/WidgetsListModal';
+import WidgetProgressPhotoCard from '../Common/WidgetProgressPhotoCard';
+import WidgetMuscleCard from '../Common/WidgetMuscleCard';
+import WidgetBodyFatCard from '../Common/WidgetBodyFatCard';
+import WidgetBadgesCard from '../Common/WidgetBadgesCard';
 
 class ProfileFithub extends Component {
     constructor(props) {
@@ -129,6 +131,13 @@ class ProfileFithub extends Component {
             activeProfile,
             userWidgets,
             tilelineWidgetsLoading,
+            saveWidgetsLoading,
+            widgetProgressPhotos,
+            widgetMuscle,
+            widgetBodyFat,
+            changeBodyFatLoading,
+            changeBodyFatError,
+            widgetBadges,
         } = this.props;
         return (
             <div className="row">
@@ -142,20 +151,36 @@ class ProfileFithub extends Component {
                         </div>
                     }
 
-                    {userWidgets && typeof userWidgets[TIMELINE_WIDGET_PROGRESS_PHOTO] !== 'undefined' && userWidgets[TIMELINE_WIDGET_PROGRESS_PHOTO] === 1 &&
-                        <ProfileFithubProgressPhotoCard />
+                    {userWidgets && typeof userWidgets[WIDGET_PROGRESS_PHOTO] !== 'undefined' && userWidgets[WIDGET_PROGRESS_PHOTO] === 1 &&
+                        <WidgetProgressPhotoCard
+                            progressPhoto={widgetProgressPhotos}
+                        />
                     }
 
-                    {userWidgets && userWidgets[TIMELINE_WIDGET_BODY_FAT] &&
-                        <ProfileFithubBodyFatCard />
+                    {userWidgets && userWidgets[WIDGET_BODY_FAT] &&
+                        <WidgetBodyFatCard
+                            type={WIDGETS_TYPE_TIMELINE}
+                            userWidgets={userWidgets}
+                            bodyFat={widgetBodyFat}
+                            changeBodyFatLoading={changeBodyFatLoading}
+                            changeBodyFatError={changeBodyFatError}
+                            requestBodyFatData={this.requestBodyFatData}
+                        />
                     }
 
-                    {userWidgets && userWidgets[TIMELINE_WIDGET_MUSCLE] && userWidgets[TIMELINE_WIDGET_MUSCLE].length > 0 &&
-                        <ProfileFithubMuscleCard />
+                    {userWidgets && userWidgets[WIDGET_MUSCLE] && userWidgets[WIDGET_MUSCLE].length > 0 &&
+                        <WidgetMuscleCard
+                            type={WIDGETS_TYPE_TIMELINE}
+                            userWidgets={userWidgets}
+                            muscle={widgetMuscle}
+                            requestGraphData={this.requestGraphData}
+                        />
                     }
 
-                    {userWidgets && typeof userWidgets[TIMELINE_WIDGET_BADGES] !== 'undefined' && userWidgets[TIMELINE_WIDGET_BADGES] === 1 &&
-                        <ProfileFithubBadgesCard />
+                    {userWidgets && typeof userWidgets[WIDGET_BADGES] !== 'undefined' && userWidgets[WIDGET_BADGES] === 1 &&
+                        <WidgetBadgesCard
+                            badges={widgetBadges}
+                        />
                     }
                 </div>
 
@@ -434,9 +459,11 @@ class ProfileFithub extends Component {
                 />
 
                 <WidgetsListModal
+                    type={WIDGETS_TYPE_TIMELINE}
                     show={showAddWidgetModal}
                     handleClose={this.handleHideWidgetModal}
                     onSubmit={this.handleSaveWidget}
+                    saveLoading={saveWidgetsLoading}
                 />
             </div>
         );
@@ -691,81 +718,81 @@ class ProfileFithub extends Component {
     handleShowWidgetModal = () => {
         const { dispatch, userWidgets } = this.props;
         var formData = {
-            [`timeline_${TIMELINE_WIDGET_MUSCLE}`]: false,
-            [`timeline_${TIMELINE_WIDGET_PROGRESS_PHOTO}`]: false,
-            [`timeline_${TIMELINE_WIDGET_BADGES}`]: false,
-            [`timeline_${TIMELINE_WIDGET_BODY_FAT}`]: false,
-            [`muscle_${TIMELINE_MUSCLE_WIDGET_NECK}`]: false,
-            [`muscle_${TIMELINE_MUSCLE_WIDGET_SHOULDER}`]: false,
-            [`muscle_${TIMELINE_MUSCLE_WIDGET_CHEST}`]: false,
-            [`muscle_${TIMELINE_MUSCLE_WIDGET_UPPER_ARM}`]: false,
-            [`muscle_${TIMELINE_MUSCLE_WIDGET_WAIST}`]: false,
-            [`muscle_${TIMELINE_MUSCLE_WIDGET_FOREARM}`]: false,
-            [`muscle_${TIMELINE_MUSCLE_WIDGET_HIPS}`]: false,
-            [`muscle_${TIMELINE_MUSCLE_WIDGET_THIGH}`]: false,
-            [`muscle_${TIMELINE_MUSCLE_WIDGET_CALF}`]: false,
-            [`muscle_${TIMELINE_MUSCLE_WIDGET_HEART_RATE}`]: false,
-            [`muscle_${TIMELINE_MUSCLE_WIDGET_WEIGHT}`]: false,
-            [`muscle_${TIMELINE_MUSCLE_WIDGET_HEIGHT}`]: false,
+            [`widget_list_${WIDGET_MUSCLE}`]: false,
+            [`widget_list_${WIDGET_PROGRESS_PHOTO}`]: false,
+            [`widget_list_${WIDGET_BADGES}`]: false,
+            [`widget_list_${WIDGET_BODY_FAT}`]: false,
+            [`widget_list_${MUSCLE_WIDGET_NECK}`]: false,
+            [`widget_list_${MUSCLE_WIDGET_SHOULDER}`]: false,
+            [`widget_list_${MUSCLE_WIDGET_CHEST}`]: false,
+            [`widget_list_${MUSCLE_WIDGET_UPPER_ARM}`]: false,
+            [`widget_list_${MUSCLE_WIDGET_WAIST}`]: false,
+            [`widget_list_${MUSCLE_WIDGET_FOREARM}`]: false,
+            [`widget_list_${MUSCLE_WIDGET_HIPS}`]: false,
+            [`widget_list_${MUSCLE_WIDGET_THIGH}`]: false,
+            [`widget_list_${MUSCLE_WIDGET_CALF}`]: false,
+            [`widget_list_${MUSCLE_WIDGET_HEART_RATE}`]: false,
+            [`widget_list_${MUSCLE_WIDGET_WEIGHT}`]: false,
+            [`widget_list_${MUSCLE_WIDGET_HEIGHT}`]: false,
         };
-        if (userWidgets && typeof userWidgets[TIMELINE_WIDGET_BADGES] !== 'undefined' && userWidgets[TIMELINE_WIDGET_BADGES] === 1) {
-            formData[`timeline_${TIMELINE_WIDGET_BADGES}`] = true;
+        if (userWidgets && typeof userWidgets[WIDGET_BADGES] !== 'undefined' && userWidgets[WIDGET_BADGES] === 1) {
+            formData[`widget_list_${WIDGET_BADGES}`] = true;
         }
-        if (userWidgets && typeof userWidgets[TIMELINE_WIDGET_PROGRESS_PHOTO] !== 'undefined' && userWidgets[TIMELINE_WIDGET_PROGRESS_PHOTO] === 1) {
-            formData[`timeline_${TIMELINE_WIDGET_PROGRESS_PHOTO}`] = true;
+        if (userWidgets && typeof userWidgets[WIDGET_PROGRESS_PHOTO] !== 'undefined' && userWidgets[WIDGET_PROGRESS_PHOTO] === 1) {
+            formData[`widget_list_${WIDGET_PROGRESS_PHOTO}`] = true;
         }
-        if (userWidgets && userWidgets[TIMELINE_WIDGET_BODY_FAT]) {
-            formData[`timeline_${TIMELINE_WIDGET_BODY_FAT}`] = true;
+        if (userWidgets && userWidgets[WIDGET_BODY_FAT]) {
+            formData[`widget_list_${WIDGET_BODY_FAT}`] = true;
         }
-        if (userWidgets && userWidgets[TIMELINE_WIDGET_MUSCLE] && userWidgets[TIMELINE_WIDGET_MUSCLE].length > 0) {
-            userWidgets[TIMELINE_WIDGET_MUSCLE].map((o, i) => {
-                if (o.name === TIMELINE_MUSCLE_WIDGET_NECK) {
-                    formData[`muscle_${TIMELINE_MUSCLE_WIDGET_NECK}`] = true;
+        if (userWidgets && userWidgets[WIDGET_MUSCLE] && userWidgets[WIDGET_MUSCLE].length > 0) {
+            userWidgets[WIDGET_MUSCLE].map((o, i) => {
+                if (o.name === MUSCLE_WIDGET_NECK) {
+                    formData[`widget_list_${MUSCLE_WIDGET_NECK}`] = true;
                 }
-                if (o.name === TIMELINE_MUSCLE_WIDGET_SHOULDER) {
-                    formData[`muscle_${TIMELINE_MUSCLE_WIDGET_SHOULDER}`] = true;
+                if (o.name === MUSCLE_WIDGET_SHOULDER) {
+                    formData[`widget_list_${MUSCLE_WIDGET_SHOULDER}`] = true;
                 }
-                if (o.name === TIMELINE_MUSCLE_WIDGET_CHEST) {
-                    formData[`muscle_${TIMELINE_MUSCLE_WIDGET_CHEST}`] = true;
+                if (o.name === MUSCLE_WIDGET_CHEST) {
+                    formData[`widget_list_${MUSCLE_WIDGET_CHEST}`] = true;
                 }
-                if (o.name === TIMELINE_MUSCLE_WIDGET_UPPER_ARM) {
-                    formData[`muscle_${TIMELINE_MUSCLE_WIDGET_UPPER_ARM}`] = true;
+                if (o.name === MUSCLE_WIDGET_UPPER_ARM) {
+                    formData[`widget_list_${MUSCLE_WIDGET_UPPER_ARM}`] = true;
                 }
-                if (o.name === TIMELINE_MUSCLE_WIDGET_WAIST) {
-                    formData[`muscle_${TIMELINE_MUSCLE_WIDGET_WAIST}`] = true;
+                if (o.name === MUSCLE_WIDGET_WAIST) {
+                    formData[`widget_list_${MUSCLE_WIDGET_WAIST}`] = true;
                 }
-                if (o.name === TIMELINE_MUSCLE_WIDGET_FOREARM) {
-                    formData[`muscle_${TIMELINE_MUSCLE_WIDGET_FOREARM}`] = true;
+                if (o.name === MUSCLE_WIDGET_FOREARM) {
+                    formData[`widget_list_${MUSCLE_WIDGET_FOREARM}`] = true;
                 }
-                if (o.name === TIMELINE_MUSCLE_WIDGET_HIPS) {
-                    formData[`muscle_${TIMELINE_MUSCLE_WIDGET_HIPS}`] = true;
+                if (o.name === MUSCLE_WIDGET_HIPS) {
+                    formData[`widget_list_${MUSCLE_WIDGET_HIPS}`] = true;
                 }
-                if (o.name === TIMELINE_MUSCLE_WIDGET_THIGH) {
-                    formData[`muscle_${TIMELINE_MUSCLE_WIDGET_THIGH}`] = true;
+                if (o.name === MUSCLE_WIDGET_THIGH) {
+                    formData[`widget_list_${MUSCLE_WIDGET_THIGH}`] = true;
                 }
-                if (o.name === TIMELINE_MUSCLE_WIDGET_CALF) {
-                    formData[`muscle_${TIMELINE_MUSCLE_WIDGET_CALF}`] = true;
+                if (o.name === MUSCLE_WIDGET_CALF) {
+                    formData[`widget_list_${MUSCLE_WIDGET_CALF}`] = true;
                 }
-                if (o.name === TIMELINE_MUSCLE_WIDGET_HEART_RATE) {
-                    formData[`muscle_${TIMELINE_MUSCLE_WIDGET_HEART_RATE}`] = true;
+                if (o.name === MUSCLE_WIDGET_HEART_RATE) {
+                    formData[`widget_list_${MUSCLE_WIDGET_HEART_RATE}`] = true;
                 }
-                if (o.name === TIMELINE_MUSCLE_WIDGET_WEIGHT) {
-                    formData[`muscle_${TIMELINE_MUSCLE_WIDGET_WEIGHT}`] = true;
+                if (o.name === MUSCLE_WIDGET_WEIGHT) {
+                    formData[`widget_list_${MUSCLE_WIDGET_WEIGHT}`] = true;
                 }
-                if (o.name === TIMELINE_MUSCLE_WIDGET_HEIGHT) {
-                    formData[`muscle_${TIMELINE_MUSCLE_WIDGET_HEIGHT}`] = true;
+                if (o.name === MUSCLE_WIDGET_HEIGHT) {
+                    formData[`widget_list_${MUSCLE_WIDGET_HEIGHT}`] = true;
                 }
             });
-            formData[`timeline_${TIMELINE_WIDGET_MUSCLE}`] = true;
+            formData[`widget_list_${WIDGET_MUSCLE}`] = true;
         }
-        dispatch(initialize('timeline_widgets_list_form', formData));
+        dispatch(initialize('widgets_list_form', formData));
         this.setState({ showAddWidgetModal: true });
     }
 
     handleHideWidgetModal = () => {
         const { dispatch } = this.props;
         this.setState({ showAddWidgetModal: false });
-        dispatch(reset('timeline_widgets_list_form'));
+        dispatch(reset('widgets_list_form'));
     }
 
     handleSaveWidget = (data) => {
@@ -775,230 +802,240 @@ class ProfileFithub extends Component {
             moment().startOf('day').utc(),
         );
         let requestData = {
-            [TIMELINE_WIDGET_BADGES]: 0,
-            [TIMELINE_WIDGET_PROGRESS_PHOTO]: 0,
-            [TIMELINE_WIDGET_BODY_FAT]: null,
-            [TIMELINE_WIDGET_MUSCLE]: null,
+            [WIDGET_BADGES]: 0,
+            [WIDGET_PROGRESS_PHOTO]: 0,
+            [WIDGET_BODY_FAT]: null,
+            [WIDGET_MUSCLE]: null,
         };
-        if (typeof data[`timeline_${TIMELINE_WIDGET_BADGES}`] !== 'undefined' && data[`timeline_${TIMELINE_WIDGET_BADGES}`]) {
-            requestData[TIMELINE_WIDGET_BADGES] = 1;
+        if (typeof data[`widget_list_${WIDGET_BADGES}`] !== 'undefined' && data[`widget_list_${WIDGET_BADGES}`]) {
+            requestData[WIDGET_BADGES] = 1;
         }
-        if (typeof data[`timeline_${TIMELINE_WIDGET_PROGRESS_PHOTO}`] !== 'undefined' && data[`timeline_${TIMELINE_WIDGET_PROGRESS_PHOTO}`]) {
-            requestData[TIMELINE_WIDGET_PROGRESS_PHOTO] = 1;
+        if (typeof data[`widget_list_${WIDGET_PROGRESS_PHOTO}`] !== 'undefined' && data[`widget_list_${WIDGET_PROGRESS_PHOTO}`]) {
+            requestData[WIDGET_PROGRESS_PHOTO] = 1;
         }
-        if (typeof data[`timeline_${TIMELINE_WIDGET_BODY_FAT}`] !== 'undefined' && data[`timeline_${TIMELINE_WIDGET_BODY_FAT}`]) {
+        if (typeof data[`widget_list_${WIDGET_BODY_FAT}`] !== 'undefined' && data[`widget_list_${WIDGET_BODY_FAT}`]) {
             let _data = null;
-            if (userWidgets && userWidgets[TIMELINE_WIDGET_BODY_FAT]) {
-                _data = userWidgets[TIMELINE_WIDGET_BODY_FAT];
+            if (userWidgets && userWidgets[WIDGET_BODY_FAT]) {
+                _data = userWidgets[WIDGET_BODY_FAT];
             } else {
                 _data = {
                     start: dateRange.start,
                     end: dateRange.end,
                 };
             }
-            requestData[TIMELINE_WIDGET_BODY_FAT] = _data;
+            requestData[WIDGET_BODY_FAT] = _data;
         }
-        if (typeof data[`timeline_${TIMELINE_WIDGET_MUSCLE}`] !== 'undefined' && data[`timeline_${TIMELINE_WIDGET_MUSCLE}`]) {
+        if (typeof data[`widget_list_${WIDGET_MUSCLE}`] !== 'undefined' && data[`widget_list_${WIDGET_MUSCLE}`]) {
             let _data = [];
             let isDataAlreadyAvailable = false;
-            if (userWidgets && userWidgets[TIMELINE_WIDGET_MUSCLE] && userWidgets[TIMELINE_WIDGET_MUSCLE].length > 0) {
+            if (userWidgets && userWidgets[WIDGET_MUSCLE] && userWidgets[WIDGET_MUSCLE].length > 0) {
                 isDataAlreadyAvailable = true;
             }
-            if (typeof data[`muscle_${TIMELINE_MUSCLE_WIDGET_NECK}`] !== 'undefined' && data[`muscle_${TIMELINE_MUSCLE_WIDGET_NECK}`]) {
+            if (typeof data[`widget_list_${MUSCLE_WIDGET_NECK}`] !== 'undefined' && data[`widget_list_${MUSCLE_WIDGET_NECK}`]) {
                 if (isDataAlreadyAvailable) {
                     let isDataPushed = false;
-                    userWidgets[TIMELINE_WIDGET_MUSCLE].map((o, i) => {
-                        if (o.name === TIMELINE_MUSCLE_WIDGET_NECK) {
+                    userWidgets[WIDGET_MUSCLE].map((o, i) => {
+                        if (o.name === MUSCLE_WIDGET_NECK) {
                             _data.push(o);
                             isDataPushed = true;
                         }
                     });
                     if (!isDataPushed) {
-                        _data.push({ name: TIMELINE_MUSCLE_WIDGET_NECK, start: dateRange.start, end: dateRange.end })
+                        _data.push({ name: MUSCLE_WIDGET_NECK, start: dateRange.start, end: dateRange.end })
                     }
                 } else {
-                    _data.push({ name: TIMELINE_MUSCLE_WIDGET_NECK, start: dateRange.start, end: dateRange.end })
+                    _data.push({ name: MUSCLE_WIDGET_NECK, start: dateRange.start, end: dateRange.end })
                 }
             }
-            if (typeof data[`muscle_${TIMELINE_MUSCLE_WIDGET_SHOULDER}`] !== 'undefined' && data[`muscle_${TIMELINE_MUSCLE_WIDGET_SHOULDER}`]) {
+            if (typeof data[`widget_list_${MUSCLE_WIDGET_SHOULDER}`] !== 'undefined' && data[`widget_list_${MUSCLE_WIDGET_SHOULDER}`]) {
                 if (isDataAlreadyAvailable) {
                     let isDataPushed = false;
-                    userWidgets[TIMELINE_WIDGET_MUSCLE].map((o, i) => {
-                        if (o.name === TIMELINE_MUSCLE_WIDGET_SHOULDER) {
+                    userWidgets[WIDGET_MUSCLE].map((o, i) => {
+                        if (o.name === MUSCLE_WIDGET_SHOULDER) {
                             _data.push(o);
                             isDataPushed = true;
                         }
                     });
                     if (!isDataPushed) {
-                        _data.push({ name: TIMELINE_MUSCLE_WIDGET_SHOULDER, start: dateRange.start, end: dateRange.end })
+                        _data.push({ name: MUSCLE_WIDGET_SHOULDER, start: dateRange.start, end: dateRange.end })
                     }
                 } else {
-                    _data.push({ name: TIMELINE_MUSCLE_WIDGET_SHOULDER, start: dateRange.start, end: dateRange.end })
+                    _data.push({ name: MUSCLE_WIDGET_SHOULDER, start: dateRange.start, end: dateRange.end })
                 }
             }
-            if (typeof data[`muscle_${TIMELINE_MUSCLE_WIDGET_CHEST}`] !== 'undefined' && data[`muscle_${TIMELINE_MUSCLE_WIDGET_CHEST}`]) {
+            if (typeof data[`widget_list_${MUSCLE_WIDGET_CHEST}`] !== 'undefined' && data[`widget_list_${MUSCLE_WIDGET_CHEST}`]) {
                 if (isDataAlreadyAvailable) {
                     let isDataPushed = false;
-                    userWidgets[TIMELINE_WIDGET_MUSCLE].map((o, i) => {
-                        if (o.name === TIMELINE_MUSCLE_WIDGET_CHEST) {
+                    userWidgets[WIDGET_MUSCLE].map((o, i) => {
+                        if (o.name === MUSCLE_WIDGET_CHEST) {
                             _data.push(o);
                             isDataPushed = true;
                         }
                     });
                     if (!isDataPushed) {
-                        _data.push({ name: TIMELINE_MUSCLE_WIDGET_CHEST, start: dateRange.start, end: dateRange.end })
+                        _data.push({ name: MUSCLE_WIDGET_CHEST, start: dateRange.start, end: dateRange.end })
                     }
                 } else {
-                    _data.push({ name: TIMELINE_MUSCLE_WIDGET_CHEST, start: dateRange.start, end: dateRange.end })
+                    _data.push({ name: MUSCLE_WIDGET_CHEST, start: dateRange.start, end: dateRange.end })
                 }
             }
-            if (typeof data[`muscle_${TIMELINE_MUSCLE_WIDGET_UPPER_ARM}`] !== 'undefined' && data[`muscle_${TIMELINE_MUSCLE_WIDGET_UPPER_ARM}`]) {
+            if (typeof data[`widget_list_${MUSCLE_WIDGET_UPPER_ARM}`] !== 'undefined' && data[`widget_list_${MUSCLE_WIDGET_UPPER_ARM}`]) {
                 if (isDataAlreadyAvailable) {
                     let isDataPushed = false;
-                    userWidgets[TIMELINE_WIDGET_MUSCLE].map((o, i) => {
-                        if (o.name === TIMELINE_MUSCLE_WIDGET_UPPER_ARM) {
+                    userWidgets[WIDGET_MUSCLE].map((o, i) => {
+                        if (o.name === MUSCLE_WIDGET_UPPER_ARM) {
                             _data.push(o);
                             isDataPushed = true;
                         }
                     });
                     if (!isDataPushed) {
-                        _data.push({ name: TIMELINE_MUSCLE_WIDGET_UPPER_ARM, start: dateRange.start, end: dateRange.end })
+                        _data.push({ name: MUSCLE_WIDGET_UPPER_ARM, start: dateRange.start, end: dateRange.end })
                     }
                 } else {
-                    _data.push({ name: TIMELINE_MUSCLE_WIDGET_UPPER_ARM, start: dateRange.start, end: dateRange.end })
+                    _data.push({ name: MUSCLE_WIDGET_UPPER_ARM, start: dateRange.start, end: dateRange.end })
                 }
             }
-            if (typeof data[`muscle_${TIMELINE_MUSCLE_WIDGET_WAIST}`] !== 'undefined' && data[`muscle_${TIMELINE_MUSCLE_WIDGET_WAIST}`]) {
+            if (typeof data[`widget_list_${MUSCLE_WIDGET_WAIST}`] !== 'undefined' && data[`widget_list_${MUSCLE_WIDGET_WAIST}`]) {
                 if (isDataAlreadyAvailable) {
                     let isDataPushed = false;
-                    userWidgets[TIMELINE_WIDGET_MUSCLE].map((o, i) => {
-                        if (o.name === TIMELINE_MUSCLE_WIDGET_WAIST) {
+                    userWidgets[WIDGET_MUSCLE].map((o, i) => {
+                        if (o.name === MUSCLE_WIDGET_WAIST) {
                             _data.push(o);
                             isDataPushed = true;
                         }
                     });
                     if (!isDataPushed) {
-                        _data.push({ name: TIMELINE_MUSCLE_WIDGET_WAIST, start: dateRange.start, end: dateRange.end })
+                        _data.push({ name: MUSCLE_WIDGET_WAIST, start: dateRange.start, end: dateRange.end })
                     }
                 } else {
-                    _data.push({ name: TIMELINE_MUSCLE_WIDGET_WAIST, start: dateRange.start, end: dateRange.end })
+                    _data.push({ name: MUSCLE_WIDGET_WAIST, start: dateRange.start, end: dateRange.end })
                 }
             }
-            if (typeof data[`muscle_${TIMELINE_MUSCLE_WIDGET_FOREARM}`] !== 'undefined' && data[`muscle_${TIMELINE_MUSCLE_WIDGET_FOREARM}`]) {
+            if (typeof data[`widget_list_${MUSCLE_WIDGET_FOREARM}`] !== 'undefined' && data[`widget_list_${MUSCLE_WIDGET_FOREARM}`]) {
                 if (isDataAlreadyAvailable) {
                     let isDataPushed = false;
-                    userWidgets[TIMELINE_WIDGET_MUSCLE].map((o, i) => {
-                        if (o.name === TIMELINE_MUSCLE_WIDGET_FOREARM) {
+                    userWidgets[WIDGET_MUSCLE].map((o, i) => {
+                        if (o.name === MUSCLE_WIDGET_FOREARM) {
                             _data.push(o);
                             isDataPushed = true;
                         }
                     });
                     if (!isDataPushed) {
-                        _data.push({ name: TIMELINE_MUSCLE_WIDGET_FOREARM, start: dateRange.start, end: dateRange.end })
+                        _data.push({ name: MUSCLE_WIDGET_FOREARM, start: dateRange.start, end: dateRange.end })
                     }
                 } else {
-                    _data.push({ name: TIMELINE_MUSCLE_WIDGET_FOREARM, start: dateRange.start, end: dateRange.end })
+                    _data.push({ name: MUSCLE_WIDGET_FOREARM, start: dateRange.start, end: dateRange.end })
                 }
             }
-            if (typeof data[`muscle_${TIMELINE_MUSCLE_WIDGET_HIPS}`] !== 'undefined' && data[`muscle_${TIMELINE_MUSCLE_WIDGET_HIPS}`]) {
+            if (typeof data[`widget_list_${MUSCLE_WIDGET_HIPS}`] !== 'undefined' && data[`widget_list_${MUSCLE_WIDGET_HIPS}`]) {
                 if (isDataAlreadyAvailable) {
                     let isDataPushed = false;
-                    userWidgets[TIMELINE_WIDGET_MUSCLE].map((o, i) => {
-                        if (o.name === TIMELINE_MUSCLE_WIDGET_HIPS) {
+                    userWidgets[WIDGET_MUSCLE].map((o, i) => {
+                        if (o.name === MUSCLE_WIDGET_HIPS) {
                             _data.push(o);
                             isDataPushed = true;
                         }
                     });
                     if (!isDataPushed) {
-                        _data.push({ name: TIMELINE_MUSCLE_WIDGET_HIPS, start: dateRange.start, end: dateRange.end })
+                        _data.push({ name: MUSCLE_WIDGET_HIPS, start: dateRange.start, end: dateRange.end })
                     }
                 } else {
-                    _data.push({ name: TIMELINE_MUSCLE_WIDGET_HIPS, start: dateRange.start, end: dateRange.end })
+                    _data.push({ name: MUSCLE_WIDGET_HIPS, start: dateRange.start, end: dateRange.end })
                 }
             }
-            if (typeof data[`muscle_${TIMELINE_MUSCLE_WIDGET_THIGH}`] !== 'undefined' && data[`muscle_${TIMELINE_MUSCLE_WIDGET_THIGH}`]) {
+            if (typeof data[`widget_list_${MUSCLE_WIDGET_THIGH}`] !== 'undefined' && data[`widget_list_${MUSCLE_WIDGET_THIGH}`]) {
                 if (isDataAlreadyAvailable) {
                     let isDataPushed = false;
-                    userWidgets[TIMELINE_WIDGET_MUSCLE].map((o, i) => {
-                        if (o.name === TIMELINE_MUSCLE_WIDGET_THIGH) {
+                    userWidgets[WIDGET_MUSCLE].map((o, i) => {
+                        if (o.name === MUSCLE_WIDGET_THIGH) {
                             _data.push(o);
                             isDataPushed = true;
                         }
                     });
                     if (!isDataPushed) {
-                        _data.push({ name: TIMELINE_MUSCLE_WIDGET_THIGH, start: dateRange.start, end: dateRange.end })
+                        _data.push({ name: MUSCLE_WIDGET_THIGH, start: dateRange.start, end: dateRange.end })
                     }
                 } else {
-                    _data.push({ name: TIMELINE_MUSCLE_WIDGET_THIGH, start: dateRange.start, end: dateRange.end })
+                    _data.push({ name: MUSCLE_WIDGET_THIGH, start: dateRange.start, end: dateRange.end })
                 }
             }
-            if (typeof data[`muscle_${TIMELINE_MUSCLE_WIDGET_CALF}`] !== 'undefined' && data[`muscle_${TIMELINE_MUSCLE_WIDGET_CALF}`]) {
+            if (typeof data[`widget_list_${MUSCLE_WIDGET_CALF}`] !== 'undefined' && data[`widget_list_${MUSCLE_WIDGET_CALF}`]) {
                 if (isDataAlreadyAvailable) {
                     let isDataPushed = false;
-                    userWidgets[TIMELINE_WIDGET_MUSCLE].map((o, i) => {
-                        if (o.name === TIMELINE_MUSCLE_WIDGET_CALF) {
+                    userWidgets[WIDGET_MUSCLE].map((o, i) => {
+                        if (o.name === MUSCLE_WIDGET_CALF) {
                             _data.push(o);
                             isDataPushed = true;
                         }
                     });
                     if (!isDataPushed) {
-                        _data.push({ name: TIMELINE_MUSCLE_WIDGET_CALF, start: dateRange.start, end: dateRange.end })
+                        _data.push({ name: MUSCLE_WIDGET_CALF, start: dateRange.start, end: dateRange.end })
                     }
                 } else {
-                    _data.push({ name: TIMELINE_MUSCLE_WIDGET_CALF, start: dateRange.start, end: dateRange.end })
+                    _data.push({ name: MUSCLE_WIDGET_CALF, start: dateRange.start, end: dateRange.end })
                 }
             }
-            if (typeof data[`muscle_${TIMELINE_MUSCLE_WIDGET_HEART_RATE}`] !== 'undefined' && data[`muscle_${TIMELINE_MUSCLE_WIDGET_HEART_RATE}`]) {
+            if (typeof data[`widget_list_${MUSCLE_WIDGET_HEART_RATE}`] !== 'undefined' && data[`widget_list_${MUSCLE_WIDGET_HEART_RATE}`]) {
                 if (isDataAlreadyAvailable) {
                     let isDataPushed = false;
-                    userWidgets[TIMELINE_WIDGET_MUSCLE].map((o, i) => {
-                        if (o.name === TIMELINE_MUSCLE_WIDGET_HEART_RATE) {
+                    userWidgets[WIDGET_MUSCLE].map((o, i) => {
+                        if (o.name === MUSCLE_WIDGET_HEART_RATE) {
                             _data.push(o);
                             isDataPushed = true;
                         }
                     });
                     if (!isDataPushed) {
-                        _data.push({ name: TIMELINE_MUSCLE_WIDGET_HEART_RATE, start: dateRange.start, end: dateRange.end })
+                        _data.push({ name: MUSCLE_WIDGET_HEART_RATE, start: dateRange.start, end: dateRange.end })
                     }
                 } else {
-                    _data.push({ name: TIMELINE_MUSCLE_WIDGET_HEART_RATE, start: dateRange.start, end: dateRange.end })
+                    _data.push({ name: MUSCLE_WIDGET_HEART_RATE, start: dateRange.start, end: dateRange.end })
                 }
             }
-            if (typeof data[`muscle_${TIMELINE_MUSCLE_WIDGET_WEIGHT}`] !== 'undefined' && data[`muscle_${TIMELINE_MUSCLE_WIDGET_WEIGHT}`]) {
+            if (typeof data[`widget_list_${MUSCLE_WIDGET_WEIGHT}`] !== 'undefined' && data[`widget_list_${MUSCLE_WIDGET_WEIGHT}`]) {
                 if (isDataAlreadyAvailable) {
                     let isDataPushed = false;
-                    userWidgets[TIMELINE_WIDGET_MUSCLE].map((o, i) => {
-                        if (o.name === TIMELINE_MUSCLE_WIDGET_WEIGHT) {
+                    userWidgets[WIDGET_MUSCLE].map((o, i) => {
+                        if (o.name === MUSCLE_WIDGET_WEIGHT) {
                             _data.push(o);
                             isDataPushed = true;
                         }
                     });
                     if (!isDataPushed) {
-                        _data.push({ name: TIMELINE_MUSCLE_WIDGET_WEIGHT, start: dateRange.start, end: dateRange.end })
+                        _data.push({ name: MUSCLE_WIDGET_WEIGHT, start: dateRange.start, end: dateRange.end })
                     }
                 } else {
-                    _data.push({ name: TIMELINE_MUSCLE_WIDGET_WEIGHT, start: dateRange.start, end: dateRange.end })
+                    _data.push({ name: MUSCLE_WIDGET_WEIGHT, start: dateRange.start, end: dateRange.end })
                 }
             }
-            if (typeof data[`muscle_${TIMELINE_MUSCLE_WIDGET_HEIGHT}`] !== 'undefined' && data[`muscle_${TIMELINE_MUSCLE_WIDGET_HEIGHT}`]) {
+            if (typeof data[`widget_list_${MUSCLE_WIDGET_HEIGHT}`] !== 'undefined' && data[`widget_list_${MUSCLE_WIDGET_HEIGHT}`]) {
                 if (isDataAlreadyAvailable) {
                     let isDataPushed = false;
-                    userWidgets[TIMELINE_WIDGET_MUSCLE].map((o, i) => {
-                        if (o.name === TIMELINE_MUSCLE_WIDGET_HEIGHT) {
+                    userWidgets[WIDGET_MUSCLE].map((o, i) => {
+                        if (o.name === MUSCLE_WIDGET_HEIGHT) {
                             _data.push(o);
                             isDataPushed = true;
                         }
                     });
                     if (!isDataPushed) {
-                        _data.push({ name: TIMELINE_MUSCLE_WIDGET_HEIGHT, start: dateRange.start, end: dateRange.end })
+                        _data.push({ name: MUSCLE_WIDGET_HEIGHT, start: dateRange.start, end: dateRange.end })
                     }
                 } else {
-                    _data.push({ name: TIMELINE_MUSCLE_WIDGET_HEIGHT, start: dateRange.start, end: dateRange.end })
+                    _data.push({ name: MUSCLE_WIDGET_HEIGHT, start: dateRange.start, end: dateRange.end })
                 }
             }
-            requestData[TIMELINE_WIDGET_MUSCLE] = _data;
+            requestData[WIDGET_MUSCLE] = _data;
         }
         dispatch(saveTimelineWidgetsRequest(requestData));
+    }
+
+    requestGraphData = (requestData) => {
+        const { dispatch } = this.props;
+        dispatch(changeTimelineMuscleInnerDataRequest(requestData));
+    }
+
+    requestBodyFatData = (requestData) => {
+        const { dispatch } = this.props;
+        dispatch(changeTimelineBodyFatWidgetRequest(requestData));
     }
 }
 
@@ -1023,6 +1060,12 @@ const mapStateToProps = (state) => {
         userWidgets: timelineWidgets.get('userWidgets'),
         saveWidgetsLoading: timelineWidgets.get('saveWidgetsLoading'),
         saveWidgetsError: timelineWidgets.get('saveWidgetsError'),
+        widgetProgressPhotos: timelineWidgets.get('progressPhoto'),
+        widgetMuscle: timelineWidgets.get('muscle'),
+        widgetBodyFat: timelineWidgets.get('bodyFat'),
+        changeBodyFatLoading: timelineWidgets.get('changeBodyFatLoading'),
+        changeBodyFatError: timelineWidgets.get('changeBodyFatError'),
+        widgetBadges: timelineWidgets.get('badges'),
     };
 }
 

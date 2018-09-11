@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import { ResponsiveContainer, AreaChart, XAxis, YAxis, Area, Tooltip } from "recharts";
 import DateRangePicker from 'react-daterange-picker';
-import { DASHBOARD_WIDGET_BODY_FAT } from '../../constants/consts';
+import { WIDGET_BODY_FAT } from '../../constants/consts';
 import moment from 'moment';
-import { changeDashboardBodyFatWidgetRequest } from '../../actions/dashboard';
 import { FaCircleONotch } from "react-icons/lib/fa";
 import NoDataFoundImg from "img/common/no_datafound.png";
 import ErrorCloud from "svg/error-cloud.svg";
 
-class BodyFat extends Component {
+class WidgetBodyFatCard extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -21,29 +19,29 @@ class BodyFat extends Component {
         const { bodyFat, userWidgets, changeBodyFatLoading, changeBodyFatError } = this.props;
         const { showCalendar } = this.state;
         let dateRange = null;
-        if (userWidgets && typeof userWidgets[DASHBOARD_WIDGET_BODY_FAT] !== 'undefined' && userWidgets[DASHBOARD_WIDGET_BODY_FAT]) {
-            let start = userWidgets[DASHBOARD_WIDGET_BODY_FAT].start;
-            let end = userWidgets[DASHBOARD_WIDGET_BODY_FAT].end;
+        if (userWidgets && typeof userWidgets[WIDGET_BODY_FAT] !== 'undefined' && userWidgets[WIDGET_BODY_FAT]) {
+            let start = userWidgets[WIDGET_BODY_FAT].start;
+            let end = userWidgets[WIDGET_BODY_FAT].end;
             dateRange = moment.range(
                 start,
                 end
             );
         }
         return (
-            <div className="white-box space-btm-30 dashboard-bodyfat-card">
+            <div className="white-box space-btm-30 dashboard-bodyfat-card min-height-373">
                 <div className="whitebox-head d-flex">
                     <h3 className="title-h3">Body Fat</h3>
                     <div className="whitebox-head-r">
                         <a href="javascript:void(0)" onClick={this.toggleCalendar} className="icon-date_range"></a>
                     </div>
                 </div>
-                
-                    {changeBodyFatLoading &&
-                        <div className="text-c">
-                            <FaCircleONotch className="loader-spinner fs-50" />
-                        </div>
-                    }
-                    {!changeBodyFatLoading && bodyFat && bodyFat.length > 0 &&
+
+                {changeBodyFatLoading &&
+                    <div className="text-c">
+                        <FaCircleONotch className="loader-spinner fs-50" />
+                    </div>
+                }
+                {!changeBodyFatLoading && bodyFat && bodyFat.length > 0 &&
                     <div className="whitebox-body bodyfat-graph">
                         <ResponsiveContainer>
                             <AreaChart data={bodyFat}>
@@ -59,20 +57,20 @@ class BodyFat extends Component {
                                 <Area type='monotone' dataKey='count' activeDot={{ stroke: '#46E9C5', strokeWidth: 2, fill: "#fff" }} stroke="none" fill="url(#bodyFatArea)" />
                             </AreaChart>
                         </ResponsiveContainer>
-                        </div>
-                    }
-                    {!changeBodyFatLoading && (!bodyFat || bodyFat.length <= 0) && changeBodyFatError && changeBodyFatError.length <= 0 &&
-                        <div className="no-record-found-wrapper">
-                            <img src={NoDataFoundImg} />
-                        </div>
-                    }
-                    {!changeBodyFatLoading && changeBodyFatError && changeBodyFatError.length > 0 &&
-                        <div className="server-error-wrapper">
-                            <ErrorCloud />
-                            <h4>Something went wrong! please try again.</h4>
-                        </div>
-                    }
-                
+                    </div>
+                }
+                {!changeBodyFatLoading && (!bodyFat || bodyFat.length <= 0) && changeBodyFatError && changeBodyFatError.length <= 0 &&
+                    <div className="no-record-found-wrapper">
+                        <img src={NoDataFoundImg} />
+                    </div>
+                }
+                {!changeBodyFatLoading && changeBodyFatError && changeBodyFatError.length > 0 &&
+                    <div className="server-error-wrapper">
+                        <ErrorCloud />
+                        <h4>Something went wrong! please try again.</h4>
+                    </div>
+                }
+
                 {showCalendar &&
                     <div className="bodyfat-date-range-picker">
                         <DateRangePicker
@@ -95,29 +93,17 @@ class BodyFat extends Component {
     }
 
     handleTimeDateRange = (range, state) => {
-        const { dispatch } = this.props;
+        const { requestBodyFatData } = this.props;
         let requestData = {
             start: range.start,
             end: range.end,
         };
-        dispatch(changeDashboardBodyFatWidgetRequest(requestData));
+        requestBodyFatData(requestData);
         this.toggleCalendar();
     }
 }
 
-const mapStateToProps = (state) => {
-    const { dashboard } = state;
-    return {
-        userWidgets: dashboard.get('userWidgets'),
-        bodyFat: dashboard.get('bodyFat'),
-        changeBodyFatLoading: dashboard.get('changeBodyFatLoading'),
-        changeBodyFatError: dashboard.get('changeBodyFatError'),
-    };
-}
-
-export default connect(
-    mapStateToProps,
-)(BodyFat);
+export default WidgetBodyFatCard;
 
 class CustomTooltip extends Component {
     render() {

@@ -880,6 +880,26 @@ export const STATS_CARDIO = 'cardio';
 export const WIDGETS_TYPE_DASHBOARD = 'dashboard';
 export const WIDGETS_TYPE_TIMELINE = 'timeline';
 
+export const WIDGET_TODAYS_WORKOUT = 'workout';
+export const WIDGET_ACTIVITY_FEED = 'activityFeed';
+export const WIDGET_BADGES = 'badges';
+export const WIDGET_BODY_FAT = 'bodyFat';
+export const WIDGET_MUSCLE = 'muscle';
+export const WIDGET_PROGRESS_PHOTO = 'progressPhoto';
+
+export const MUSCLE_WIDGET_NECK = 'neck';
+export const MUSCLE_WIDGET_SHOULDER = 'shoulders';
+export const MUSCLE_WIDGET_CHEST = 'chest';
+export const MUSCLE_WIDGET_UPPER_ARM = 'upperArm';
+export const MUSCLE_WIDGET_WAIST = 'waist';
+export const MUSCLE_WIDGET_FOREARM = 'forearm';
+export const MUSCLE_WIDGET_HIPS = 'hips';
+export const MUSCLE_WIDGET_THIGH = 'thigh';
+export const MUSCLE_WIDGET_CALF = 'calf';
+export const MUSCLE_WIDGET_HEART_RATE = 'heartRate';
+export const MUSCLE_WIDGET_WEIGHT = 'weight';
+export const MUSCLE_WIDGET_HEIGHT = 'height';
+
 export const DASHBOARD_WIDGET_TODAYS_WORKOUT = 'workout';
 export const DASHBOARD_WIDGET_ACTIVITY_FEED = 'activityFeed';
 export const DASHBOARD_WIDGET_BADGES = 'badges';

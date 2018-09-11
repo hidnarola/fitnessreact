@@ -121,7 +121,7 @@ h3.title-h3{padding:0;margin:0;display:block; color:#232B41; font-size:20px; fon
 .size-14{font-size:14px !important;}
 
 .header{height:100px;width:100%;display:flex; position:fixed;top:0;left:0;z-index:99;background:#fff; display:-webkit-box; display:-webkit-flex; display:-ms-flexbox; display:flex;  -webkit-box-pack:start; -webkit-jutify-content:fles-start; -ms-jutify-content:fles-start; jutify-content:fles-start;}
-.logo{padding:32px 34px;}
+.logo{padding: 15px 15px; width: 110px;}
 .logo a{display:block;}
 .search{text-align:left;padding:30px 37px; }
 .search div.search-form{ height:40px; width:420px;	border-radius: 15px; background-color:#FFF;	box-shadow:0 2px 4px 0 rgba(190,190,190,0.1);position:relative;padding:0 0 0 52px;}
@@ -1242,7 +1242,7 @@ flex-direction:row; display:-webkit-box; display:-webkit-flex; display:-ms-flex;
 
 .resize-vertical{resize: vertical;}
 .min-height-80{min-height: 80px;}
-.min-height-373{min-height: 373px;}
+.min-height-373{min-height: 373px; position: relative;}
 
 .has-error .Select-control{border-color: #a94442;-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);}
 .has-error .Select-control span.Select-arrow {border-color: #a94442 transparent transparent;}
@@ -2182,9 +2182,9 @@ ul.common-ul>li.body-fat-field-li{ width:50%; margin-left:auto;}
 .todays-workout-box-wrapper .right-btn { margin: 0 0 0 auto; }
 .todays-workout-box-wrapper .right-btn button { border: 0; background: transparent; border-radius: 80px; padding: 0; margin: 0; line-height: 0; }
 .todays-workout-box-wrapper .right-btn button i { color: #432cb3; }
-.widgets-wrapper button[type="submit"] { border: 0; background: linear-gradient(123.28deg, #46E9C5 0%, #3FFBFC 100%) !important; border-radius: 80px; height: 42px; width: 150px; color: #fff; text-align: left; padding: 0 20px; font-size: 14px; line-height: 22px; display: block; margin-left: auto; }
-.widgets-wrapper button[type="submit"] i { float: right; font-size: 20px; }
-.widgets-wrapper button[type="submit"]:hover { background: linear-gradient(123.28deg, #3FFBFC 0%, #46E9C5 100%) !important; }
+.widgets-wrapper button.btm-btn { border: 0; background: linear-gradient(123.28deg, #46E9C5 0%, #3FFBFC 100%) !important; border-radius: 80px; height: 42px; width: 150px; color: #fff; text-align: left; padding: 0 20px; font-size: 14px; line-height: 22px; display: block; margin-left: auto; }
+.widgets-wrapper button.btm-btn i { float: right; font-size: 20px; }
+.widgets-wrapper button.btm-btn:hover { background: linear-gradient(123.28deg, #3FFBFC 0%, #46E9C5 100%) !important; }
 
 .choose-widget ul li {position: relative;}
 .choose-widget .custom_check .choosewidget-box{ background:transparent; z-index:2; position:relative; }

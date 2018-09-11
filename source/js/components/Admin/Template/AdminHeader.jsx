@@ -1,14 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import FaMenu from 'react-icons/lib/md/menu';
-import { FaSignOut } from 'react-icons/lib/fa'
 import { withRouter } from 'react-router-dom';
 import { adminRouteCodes } from 'constants/adminRoutes';
 import { adminRootRoute } from 'constants/adminRoutes';
-import { logout } from 'actions/login';
-import { ts, toggleSideMenu } from '../../../helpers/funs';
-import ReactTooltip from "react-tooltip";
+import { toggleSideMenu } from '../../../helpers/funs';
 import noProfileImg from 'img/common/no-profile-img.png';
 import { setLoggedAdminFromLocalStorage } from '../../../actions/admin/admin';
 
@@ -24,7 +21,9 @@ class AdminHeader extends Component {
             <div className="header">
                 <header className="header d-flex justify-content-start">
                     <div className="logo">
-                        <a href="index.html"></a>
+                        <Link to={adminRootRoute}>
+                            <img src={logo} />
+                        </Link>
                     </div>
                     <div className="header-r d-flex">
                         <div className="header-user">

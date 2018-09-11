@@ -14,6 +14,10 @@ export const CHANGE_COMPLETE_STATUS_OF_WORKOUT_REQUEST = 'CHANGE_COMPLETE_STATUS
 export const CHANGE_COMPLETE_STATUS_OF_WORKOUT_SUCCESS = 'CHANGE_COMPLETE_STATUS_OF_WORKOUT_SUCCESS';
 export const CHANGE_COMPLETE_STATUS_OF_WORKOUT_ERROR = 'CHANGE_COMPLETE_STATUS_OF_WORKOUT_ERROR';
 
+export const CHANGE_DASHBOARD_MUSCLE_INNER_DATA_REQUEST = 'CHANGE_DASHBOARD_MUSCLE_INNER_DATA_REQUEST';
+export const CHANGE_DASHBOARD_MUSCLE_INNER_DATA_SUCCESS = 'CHANGE_DASHBOARD_MUSCLE_INNER_DATA_SUCCESS';
+export const CHANGE_DASHBOARD_MUSCLE_INNER_DATA_ERROR = 'CHANGE_DASHBOARD_MUSCLE_INNER_DATA_ERROR';
+
 export function getDashboardPageRequest() {
     return {
         type: GET_DASHBOARD_PAGE_REQUEST
@@ -93,6 +97,27 @@ export function changeCompleteStatusOfWorkoutSuccess(data) {
 export function changeCompleteStatusOfWorkoutError(error) {
     return {
         type: CHANGE_COMPLETE_STATUS_OF_WORKOUT_ERROR,
+        error
+    }
+}
+
+export function changeDashboardMuscleInnerDataRequest(requestData) {
+    return {
+        type: CHANGE_DASHBOARD_MUSCLE_INNER_DATA_REQUEST,
+        requestData
+    }
+}
+
+export function changeDashboardMuscleInnerDataSuccess(data) {
+    return {
+        type: CHANGE_DASHBOARD_MUSCLE_INNER_DATA_SUCCESS,
+        data
+    }
+}
+
+export function changeDashboardMuscleInnerDataError(error) {
+    return {
+        type: CHANGE_DASHBOARD_MUSCLE_INNER_DATA_ERROR,
         error
     }
 }

@@ -11,7 +11,10 @@ import {
     changeDashboardBodyFatWidgetError,
     CHANGE_COMPLETE_STATUS_OF_WORKOUT_REQUEST,
     changeCompleteStatusOfWorkoutSuccess,
-    changeCompleteStatusOfWorkoutError
+    changeCompleteStatusOfWorkoutError,
+    changeDashboardMuscleInnerDataSuccess,
+    changeDashboardMuscleInnerDataError,
+    CHANGE_DASHBOARD_MUSCLE_INNER_DATA_REQUEST
 } from "../actions/dashboard";
 
 import api from "../api/dashboard";
@@ -63,11 +66,24 @@ function changeCompleteStatusOfWorkoutData() {
     }
 }
 
+function changeDashboardMuscleInnerData() {
+    return function* (action) {
+        try {
+            let requestData = action.requestData;
+            const data = yield call(() => api.changeDashboardMuscleInnerData(requestData));
+            yield put(changeDashboardMuscleInnerDataSuccess(data));
+        } catch (error) {
+            yield put(changeDashboardMuscleInnerDataError(error));
+        }
+    }
+}
+
 export function* watchDashboardData() {
     yield takeLatest(GET_DASHBOARD_PAGE_REQUEST, getDashboardPageData());
     yield takeLatest(SAVE_DASHBOARD_WIDGETS_DATA_REQUEST, saveDashboardWidgetsData());
     yield takeLatest(CHANGE_DASHBOARD_BODY_FAT_WIDGET_REQUEST, changeDashboardBodyFatWidgetData());
     yield takeLatest(CHANGE_COMPLETE_STATUS_OF_WORKOUT_REQUEST, changeCompleteStatusOfWorkoutData());
+    yield takeLatest(CHANGE_DASHBOARD_MUSCLE_INNER_DATA_REQUEST, changeDashboardMuscleInnerData());
 }
 
 export default [

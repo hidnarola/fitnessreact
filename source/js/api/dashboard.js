@@ -29,9 +29,15 @@ function changeCompleteStatusOfWorkout(requestData) {
     return postFormData(requestUrl + '/workout_complete', requestData, headers);
 }
 
+function changeDashboardMuscleInnerData(requestData) {
+    let headers = extraUserHeaders();
+    return postFormData(requestUrl + '/muscle', requestData, headers);
+}
+
 export default {
     getDashboardPage,
     saveDashboardWidgetsData,
     changeDashboardBodyFatWidget,
-    changeCompleteStatusOfWorkout
+    changeCompleteStatusOfWorkout,
+    changeDashboardMuscleInnerData,
 }
