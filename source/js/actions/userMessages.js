@@ -23,10 +23,10 @@ export const SET_USER_MESSAGES_COUNT = 'SET_USER_MESSAGES_COUNT';
 export const GET_CHANNEL_REQUEST = 'GET_CHANNEL_REQUEST';
 export const GET_CHANNEL_RESPONSE = 'GET_CHANNEL_RESPONSE';
 
-export function getUserMessageChannelRequest(setStateFor = 'messenger') {
+export function getUserMessageChannelRequest(requestData) {
     return {
         type: GET_USER_MESSAGE_CHANNEL_REQUEST,
-        setStateFor,
+        requestData
     }
 }
 

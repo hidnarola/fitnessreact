@@ -76,7 +76,6 @@ import {
     getUserChannelResponse,
     openUserChatWindowRequest
 } from '../actions/userMessages';
-import Messenger from './Messenger';
 import $ from "jquery";
 import UserChatWindow from '../components/global/UserChatWindow';
 import ScheduleWorkout from './ScheduleWorkout';
@@ -93,7 +92,6 @@ import AdminRightMenu from '../components/Admin/Template/AdminRightMenu';
 import { logout } from '../actions/login';
 import BodyParts from './Admin/BodyParts';
 import EquipmentCategories from './Admin/EquipmentCategories';
-import DND from './DND';
 import ChangePassword from './Admin/ChangePassword';
 import Profile from './Admin/Profile';
 
@@ -192,7 +190,6 @@ class App extends Component {
                             <PrivateRoute path={routeCodes.USERS} component={FrontEndUsersList} />
 
                             <PrivateRoute path={routeCodes.ALL_NOTIFICATIONS} component={Notifications} />
-                            <PrivateRoute path={routeCodes.MESSENGER} component={Messenger} />
 
                             <Route exact path={adminRootRoute} component={AdminLogin} />
                             <Route exact path={`${adminRootRoute}/${SESSION_EXPIRED_URL_TYPE}`} component={AdminLogin} />
@@ -218,8 +215,6 @@ class App extends Component {
                             <AdminPrivateRoute path={adminRouteCodes.CHANGE_PASSWORD} component={ChangePassword} />
 
                             <Route exact path={AUTH_CALLBACK_ROUTE} component={Callback} />
-
-                            <Route exact path={routeCodes.DND} component={DND} />
 
                             <Route path='*' component={NotFound} />
                         </Switch>

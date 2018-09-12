@@ -288,9 +288,9 @@ class FitnessHeader extends Component {
             var requestData = {
                 token: getToken(),
                 start: 0,
-                limit: 5,
+                limit: 10,
             }
-            dispatch(getUserMessageChannelRequest('messages_panel'));
+            dispatch(getUserMessageChannelRequest(requestData));
             socket.emit('request_users_conversation_channels', requestData);
         }
         toggleSideMenu('user-message-panel', true);
@@ -308,7 +308,9 @@ const mapStateToProps = (state) => {
         searchSuggestions: userSearch.get('users'),
         notificationCount: userNotifications.get('count'),
         messagesCount: userMessages.get('unreadMessagesCount'),
-        pendingRequestsCount: friends.get('pendingRequestsCount')
+        pendingRequestsCount: friends.get('pendingRequestsCount'),
+        panelChannelStart: userMessages.get('panelChannelStart'),
+        panelChannelLimit: userMessages.get('panelChannelLimit'),
     }
 }
 

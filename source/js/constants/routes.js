@@ -72,10 +72,5 @@ export const routeCodes = {
     PROGRESS_STRENGTH: `${publicPath}progress/strength`,
     PROGRESS_ENDURANCE: `${publicPath}progress/endurance`,
 
-
     ALL_NOTIFICATIONS: `${publicPath}notifications`,
-    MESSENGER: `${publicPath}messenger`,
-
-    DND: `${publicPath}dnd`,
-
 };
