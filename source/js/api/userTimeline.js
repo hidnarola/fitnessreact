@@ -28,8 +28,19 @@ function addPostOnUserTimeline(formData) {
     return postFormData(requestUrl, formData, headers);
 }
 
+function getPrivacyOfTimelineUser(username) {
+    let headers = extraUserHeaders();
+    var options = {
+        method: 'GET',
+        headers: headers,
+    }
+
+    return fetchResource(requestUrl + '/' + username, options);
+}
+
 export default {
     getUserTimeline,
     getUserSingleTimeline,
     addPostOnUserTimeline,
+    getPrivacyOfTimelineUser,
 }

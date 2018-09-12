@@ -9,7 +9,10 @@ import {
     GET_USER_SINGLE_TIMELINE_REQUEST,
     addPostOnUserTimelineSuccess,
     addPostOnUserTimelineError,
-    ADD_POST_ON_USER_TIMELINE_REQUEST
+    ADD_POST_ON_USER_TIMELINE_REQUEST,
+    GET_PRIVACY_OF_TIMELINE_USER_REQUEST,
+    getPrivacyOfTimelineUserSuccess,
+    getPrivacyOfTimelineUserError
 } from '../actions/userTimeline';
 
 function getUserTimelineData() {
@@ -50,10 +53,23 @@ function postPostOnUserTimelineData() {
     }
 }
 
+function getPrivacyOfTimelineUserData() {
+    return function* (action) {
+        try {
+            let formData = action.formData;
+            const data = yield call(() => api.getPrivacyOfTimelineUser(formData));
+            yield put(getPrivacyOfTimelineUserSuccess(data));
+        } catch (error) {
+            yield put(getPrivacyOfTimelineUserError(error));
+        }
+    }
+}
+
 export function* watchUserTimelineData() {
     yield takeLatest(GET_USER_TIMELINE_REQUEST, getUserTimelineData());
     yield takeLatest(GET_USER_SINGLE_TIMELINE_REQUEST, getUserSingleTimelineData());
     yield takeLatest(ADD_POST_ON_USER_TIMELINE_REQUEST, postPostOnUserTimelineData());
+    yield takeLatest(GET_PRIVACY_OF_TIMELINE_USER_REQUEST, getPrivacyOfTimelineUserData());
 }
 
 export default [

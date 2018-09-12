@@ -10,6 +10,10 @@ export const ADD_POST_ON_USER_TIMELINE_REQUEST = 'ADD_POST_ON_USER_TIMELINE_REQU
 export const ADD_POST_ON_USER_TIMELINE_SUCCESS = 'ADD_POST_ON_USER_TIMELINE_SUCCESS';
 export const ADD_POST_ON_USER_TIMELINE_ERROR = 'ADD_POST_ON_USER_TIMELINE_ERROR';
 
+export const GET_PRIVACY_OF_TIMELINE_USER_REQUEST = 'GET_PRIVACY_OF_TIMELINE_USER_REQUEST';
+export const GET_PRIVACY_OF_TIMELINE_USER_SUCCESS = 'GET_PRIVACY_OF_TIMELINE_USER_SUCCESS';
+export const GET_PRIVACY_OF_TIMELINE_USER_ERROR = 'GET_PRIVACY_OF_TIMELINE_USER_ERROR';
+
 export function getUserTimelineRequest(username, start, offset) {
     return {
         type: GET_USER_TIMELINE_REQUEST,
@@ -71,6 +75,27 @@ export function addPostOnUserTimelineSuccess(data) {
 export function addPostOnUserTimelineError(error) {
     return {
         type: ADD_POST_ON_USER_TIMELINE_ERROR,
+        error
+    }
+}
+
+export function getPrivacyOfTimelineUserRequest(username) {
+    return {
+        type: GET_PRIVACY_OF_TIMELINE_USER_REQUEST,
+        username,
+    }
+}
+
+export function getPrivacyOfTimelineUserSuccess(data) {
+    return {
+        type: GET_PRIVACY_OF_TIMELINE_USER_SUCCESS,
+        data
+    }
+}
+
+export function getPrivacyOfTimelineUserError(error) {
+    return {
+        type: GET_PRIVACY_OF_TIMELINE_USER_ERROR,
         error
     }
 }
