@@ -192,6 +192,7 @@ class BodyMeasurement extends Component {
         }
         if (diff) {
             formData.age = diff;
+            formData.hidden_age = diff;
             formData.gender = gender;
         }
         dispatch(initialize('saveBodyFatForm', formData));

@@ -13,7 +13,7 @@ const max200 = max(200);
 
 class BodyFatModal extends Component {
     render() {
-        const { show, handleClose, handleSubmit, gender, age } = this.props;
+        const { show, handleClose, handleSubmit, gender, hidden_age } = this.props;
         return (
             <div className="add-body-fat-modal-wrapper">
                 <Modal show={show} bsSize="large" className="progress-popup body-fat-form-wrapper">
@@ -68,7 +68,7 @@ class BodyFatModal extends Component {
                                         unitValue="mm"
                                     />
                                 </li>
-                                <li className={cns({ 'display_none': (typeof age !== 'undefined' && age > 0) })}>
+                                <li className={cns({ 'display_none': (typeof hidden_age !== 'undefined' && hidden_age > 0) })}>
                                     <Field
                                         name="age"
                                         type="number"
@@ -79,6 +79,11 @@ class BodyFatModal extends Component {
                                         placeholder="Age"
                                         validate={[required, min0, max110]}
                                         unitValue="years"
+                                    />
+                                    <Field
+                                        name="hidden_age"
+                                        component="input"
+                                        type="hidden"
                                     />
                                     <Field
                                         name="gender"
@@ -141,6 +146,7 @@ const mapStateToProps = (state) => {
         site2: selector(state, 'site2'),
         site3: selector(state, 'site3'),
         age: selector(state, 'age'),
+        hidden_age: selector(state, 'hidden_age'),
         gender: selector(state, 'gender'),
         log_date: selector1(state, 'log_date'),
     };
