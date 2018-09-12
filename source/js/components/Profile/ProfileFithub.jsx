@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import { getUserTimelineRequest, getUserSingleTimelineRequest, addPostOnUserTimelineRequest } from '../../actions/userTimeline';
+import { getUserTimelineRequest, addPostOnUserTimelineRequest } from '../../actions/userTimeline';
 import _ from "lodash";
 import noProfileImg from 'img/common/no-profile-img.png'
 import noImg from 'img/common/no-img.png'
@@ -55,12 +55,12 @@ import AddPostPhotoModal from './AddPostPhotoModal';
 import PostDetailsModal from './PostDetailsModal';
 import LikeButton from "./LikeButton";
 import { getTimelineWidgetsAndWidgetsDataRequest, saveTimelineWidgetsRequest, changeTimelineMuscleInnerDataRequest, changeTimelineBodyFatWidgetRequest } from '../../actions/timelineWidgets';
-import ProfileFithubBadgesCard from './ProfileFithubBadgesCard';
 import WidgetsListModal from '../Common/WidgetsListModal';
 import WidgetProgressPhotoCard from '../Common/WidgetProgressPhotoCard';
 import WidgetMuscleCard from '../Common/WidgetMuscleCard';
 import WidgetBodyFatCard from '../Common/WidgetBodyFatCard';
 import WidgetBadgesCard from '../Common/WidgetBadgesCard';
+import { FaSpinner } from 'react-icons/lib/fa';
 
 class ProfileFithub extends Component {
     constructor(props) {
@@ -165,8 +165,9 @@ class ProfileFithub extends Component {
                     {activeProfile && activeProfile.friendshipStatus === FRIENDSHIP_STATUS_SELF &&
                         <div className="add-widgets">
                             <button type="button" onClick={this.handleShowWidgetModal} disabled={tilelineWidgetsLoading}>
-                                <span>Add Widgets</span>
-                                <i className="icon-widgets"></i>
+                                <span>Widgets</span>
+                                {!tilelineWidgetsLoading && <i className="icon-widgets"></i>}
+                                {tilelineWidgetsLoading && <FaSpinner className="loader-spinner ml-5" />}
                             </button>
                         </div>
                     }
@@ -481,7 +482,6 @@ class ProfileFithub extends Component {
                     handleToggleLike={this.handleToggleLike}
                     handleComment={this.handleComment}
                 />
-
                 <WidgetsListModal
                     type={WIDGETS_TYPE_TIMELINE}
                     show={showAddWidgetModal}

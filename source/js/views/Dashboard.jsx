@@ -85,7 +85,7 @@ class Dashboard extends Component {
                         <div className="body-head-r space-btm-20">
                             <button type="button" onClick={this.handleShowWidgetsModal} className="white-btn">
                                 <i className="icon-widgets"></i>
-                                <span>Add Widget</span>
+                                <span>Widget</span>
                             </button>
                             <button type="button" className="pink-btn">
                                 <span>Profile Completion</span>

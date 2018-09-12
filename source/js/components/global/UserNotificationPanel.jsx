@@ -30,7 +30,6 @@ class UserNotificationPanel extends Component {
                         <a href="javascript:void(0)" onClick={() => toggleSideMenu('user-notification-panel', false)}><i className="icon-close"></i></a>
                     </div>
                     <div className="notification-option">
-                        <a href="javascript:void(0)"><small>Settings</small> <i className="icon-settings"></i></a>
                         {notifications && notifications.length > 0 &&
                             <a href="javascript:void(0)" onClick={this.handleMarkAll}><small>Mark as read</small></a>
                         }
