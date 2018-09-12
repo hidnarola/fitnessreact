@@ -139,7 +139,7 @@ const actionMap = {
             privacyLoading: false,
         };
         if (action.data.status === 1) {
-            newState.privacy = action.data.privacy;
+            newState.privacy = action.data.user_settings;
         } else {
             var msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
             newState.privacyError = [msg];

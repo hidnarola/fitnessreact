@@ -53,6 +53,10 @@ class ProfileSettingsForm extends Component {
             { value: ACCESS_LEVEL_FRIENDS, label: ACCESS_LEVEL_FRIENDS_STR },
             { value: ACCESS_LEVEL_NONE, label: ACCESS_LEVEL_NONE_STR },
         ];
+        this.accessLevelOptions3 = [
+            { value: ACCESS_LEVEL_PUBLIC, label: ACCESS_LEVEL_PUBLIC_STR },
+            { value: ACCESS_LEVEL_NONE, label: ACCESS_LEVEL_NONE_STR },
+        ];
     }
 
     componentWillMount() {
@@ -144,11 +148,11 @@ class ProfileSettingsForm extends Component {
                                     </li>
                                     <li>
                                         <div className="form-div">
-                                            <label>Who can commnet on your post?</label>
+                                            <label>Who can comment on your post?</label>
                                             <Field
                                                 name="comment_access"
                                                 wrapperClass="input-wrap-settings"
-                                                placeholder="Who can commnet on your post?"
+                                                placeholder="Who can comment on your post?"
                                                 component={SelectField}
                                                 options={this.accessLevelOptions}
                                                 errorClass="help-block"
@@ -178,7 +182,7 @@ class ProfileSettingsForm extends Component {
                                                 wrapperClass="input-wrap-settings"
                                                 placeholder="Who can send you friend request?"
                                                 component={SelectField}
-                                                options={this.accessLevelOptions2}
+                                                options={this.accessLevelOptions3}
                                                 errorClass="help-block"
                                                 validate={[requiredReactSelect]}
                                             />
@@ -212,7 +216,7 @@ class ProfileSettingsForm extends Component {
             var postObj = _.find(this.accessLevelOptions, ['value', settings.postAccessibility.toString()]);
             var commentObj = _.find(this.accessLevelOptions, ['value', settings.commentAccessibility.toString()]);
             var messageObj = _.find(this.accessLevelOptions2, ['value', settings.messageAccessibility.toString()]);
-            var friendObj = _.find(this.accessLevelOptions2, ['value', settings.friendRequestAccessibility.toString()]);
+            var friendObj = _.find(this.accessLevelOptions3, ['value', settings.friendRequestAccessibility.toString()]);
             var formData = {
                 distance: (distanceObj) ? distanceObj : null,
                 weight: (weightObj) ? weightObj : null,

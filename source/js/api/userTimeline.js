@@ -35,7 +35,7 @@ function getPrivacyOfTimelineUser(username) {
         headers: headers,
     }
 
-    return fetchResource(requestUrl + '/' + username, options);
+    return fetchResource(requestUrl + '/privacy/' + username, options);
 }
 
 export default {

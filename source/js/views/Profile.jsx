@@ -11,7 +11,7 @@ import FitnessNav from 'components/global/FitnessNav';
 import { routeCodes } from 'constants/routes';
 import { getProfileDetailsRequest, saveAboutProfileDetailsRequest, saveLoggedUserProfilePhotoRequest, getLoggedUserProfileSettingsRequest } from '../actions/profile';
 import noProfileImg from 'img/common/no-profile-img.png'
-import { FRIENDSHIP_STATUS_SELF, FRIENDSHIP_STATUS_UNKNOWN, FRIENDSHIP_STATUS_FRIEND, FRIENDSHIP_STATUS_REQUEST_RECEIVED, FRIENDSHIP_STATUS_REQUEST_SENT, LOCALSTORAGE_USER_DETAILS_KEY, FITASSIST_USER_DETAILS_TOKEN_KEY, MEASUREMENT_UNIT_CENTIMETER, MEASUREMENT_UNIT_KILOGRAM, MEASUREMENT_UNIT_GRAM } from '../constants/consts';
+import { FRIENDSHIP_STATUS_SELF, FRIENDSHIP_STATUS_UNKNOWN, FRIENDSHIP_STATUS_FRIEND, FRIENDSHIP_STATUS_REQUEST_RECEIVED, FRIENDSHIP_STATUS_REQUEST_SENT, LOCALSTORAGE_USER_DETAILS_KEY, FITASSIST_USER_DETAILS_TOKEN_KEY, MEASUREMENT_UNIT_CENTIMETER, MEASUREMENT_UNIT_KILOGRAM, MEASUREMENT_UNIT_GRAM, ACCESS_LEVEL_PUBLIC, ACCESS_LEVEL_FRIENDS } from '../constants/consts';
 import { sendFriendRequestRequest, cancelFriendRequestRequest, acceptFriendRequestRequest } from '../actions/friends';
 import { ts, te, convertUnits } from '../helpers/funs';
 import UpdateAboutMeModal from '../components/Profile/UpdateAboutMeModal';
@@ -22,6 +22,7 @@ import { setLoggedUserFromLocalStorage } from '../actions/user';
 import { FaCircleONotch } from "react-icons/lib/fa";
 import { getUserChannelRequest } from '../actions/userMessages';
 import SweetAlert from "react-bootstrap-sweetalert";
+import { getPrivacyOfTimelineUserRequest } from '../actions/userTimeline';
 
 class Profile extends Component {
     constructor(props) {
@@ -63,6 +64,7 @@ class Profile extends Component {
                 username
             });
             dispatch(getProfileDetailsRequest(username));
+            dispatch(getPrivacyOfTimelineUserRequest(username));
         }
         dispatch(getLoggedUserProfileSettingsRequest());
     }
@@ -78,6 +80,7 @@ class Profile extends Component {
                     username: newUsername,
                 });
                 nextProps.dispatch(getProfileDetailsRequest(newUsername));
+                nextProps.dispatch(getPrivacyOfTimelineUserRequest(newUsername));
             }
         }
     }
@@ -97,7 +100,10 @@ class Profile extends Component {
             showChangeProfilePicModal,
             loadProfileActionInit,
         } = this.state;
-        const { requestChannelLoading } = this.props;
+        const {
+            requestChannelLoading,
+            timelineUserPrivacy,
+        } = this.props;
         return (
             <div className='stat-page'>
                 <FitnessHeader />
@@ -195,7 +201,11 @@ class Profile extends Component {
                                             <i className="icon-cancel"></i>
                                         </button>
                                     }
-                                    {profile.friendshipStatus === FRIENDSHIP_STATUS_UNKNOWN &&
+                                    {
+                                        timelineUserPrivacy &&
+                                        typeof timelineUserPrivacy.friendRequestAccessibility !== 'undefined' &&
+                                        timelineUserPrivacy.friendRequestAccessibility === parseInt(ACCESS_LEVEL_PUBLIC) &&
+                                        profile.friendshipStatus === FRIENDSHIP_STATUS_UNKNOWN &&
                                         <button
                                             className="add-friend-btn active"
                                             onClick={() => {
@@ -208,14 +218,22 @@ class Profile extends Component {
                                             <i className="icon-person_add"></i>
                                         </button>
                                     }
-                                    <button
-                                        className="white-btn gradient-color-2 color-white active"
-                                        onClick={this.handleRequestMessageChannel}
-                                        disabled={requestChannelLoading}
-                                    >
-                                        {(!requestChannelLoading) ? 'Send message' : 'Please wait...'}
-                                        <i className="icon-mail_outline"></i>
-                                    </button>
+                                    {
+                                        timelineUserPrivacy &&
+                                        typeof timelineUserPrivacy.messageAccessibility !== 'undefined' &&
+                                        (
+                                            (timelineUserPrivacy.messageAccessibility === parseInt(ACCESS_LEVEL_PUBLIC)) ||
+                                            (profile.friendshipStatus === FRIENDSHIP_STATUS_FRIEND && timelineUserPrivacy.messageAccessibility === parseInt(ACCESS_LEVEL_FRIENDS))
+                                        ) &&
+                                        <button
+                                            className="white-btn gradient-color-2 color-white active"
+                                            onClick={this.handleRequestMessageChannel}
+                                            disabled={requestChannelLoading}
+                                        >
+                                            {(!requestChannelLoading) ? 'Send message' : 'Please wait...'}
+                                            <i className="icon-mail_outline"></i>
+                                        </button>
+                                    }
                                 </div>
                             }
                         </div>
@@ -689,7 +707,7 @@ class Profile extends Component {
 }
 
 const mapStateToProps = (state) => {
-    const { profile, friends, user, userMessages } = state;
+    const { profile, friends, user, userMessages, userTimeline } = state;
     return {
         profileLoading: profile.get('loading'),
         profile: profile.get('profile'),
@@ -703,6 +721,7 @@ const mapStateToProps = (state) => {
         loggedUserData: user.get('loggedUserData'),
         socket: user.get('socket'),
         requestChannelLoading: userMessages.get('requestChannelLoading'),
+        timelineUserPrivacy: userTimeline.get('privacy'),
     }
 }
 

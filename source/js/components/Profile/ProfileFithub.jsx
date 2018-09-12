@@ -34,7 +34,8 @@ import {
     MUSCLE_WIDGET_HEART_RATE,
     MUSCLE_WIDGET_WEIGHT,
     MUSCLE_WIDGET_HEIGHT,
-    WIDGETS_TYPE_TIMELINE
+    WIDGETS_TYPE_TIMELINE,
+    FRIENDSHIP_STATUS_FRIEND
 } from '../../constants/consts';
 import cns from "classnames";
 import { routeCodes } from '../../constants/routes';
@@ -138,7 +139,26 @@ class ProfileFithub extends Component {
             changeBodyFatLoading,
             changeBodyFatError,
             widgetBadges,
+            timelineUserPrivacy,
+            profile,
         } = this.props;
+        let showCommentBox = false;
+        let showPostBox = false;
+        if (profile.friendshipStatus === FRIENDSHIP_STATUS_SELF) {
+            showCommentBox = true;
+            showPostBox = true;
+        } else {
+            if (timelineUserPrivacy && typeof timelineUserPrivacy.commentAccessibility !== 'undefined') {
+                if (timelineUserPrivacy.commentAccessibility === parseInt(ACCESS_LEVEL_PUBLIC) || profile.friendshipStatus === FRIENDSHIP_STATUS_FRIEND && timelineUserPrivacy.commentAccessibility === parseInt(ACCESS_LEVEL_FRIENDS)) {
+                    showCommentBox = true;
+                }
+            }
+            if (timelineUserPrivacy && typeof timelineUserPrivacy.postAccessibility !== 'undefined') {
+                if (timelineUserPrivacy.postAccessibility === parseInt(ACCESS_LEVEL_PUBLIC) || profile.friendshipStatus === FRIENDSHIP_STATUS_FRIEND && timelineUserPrivacy.postAccessibility === parseInt(ACCESS_LEVEL_FRIENDS)) {
+                    showPostBox = true;
+                }
+            }
+        }
         return (
             <div className="row">
                 <div className="col-md-6">
@@ -190,53 +210,55 @@ class ProfileFithub extends Component {
                             <h3 className="title-h3">Timeline</h3>
                         </div>
                         <div className="whitebox-body">
-                            <div className="how-training timeline-new-post-editor">
-                                <ReactQuill
-                                    value={postContent}
-                                    onChange={this.handlePostContentChange}
-                                    placeholder="What's in your mind"
-                                    modules={{
-                                        toolbar: ['bold', 'italic', 'underline', 'strike']
-                                    }}
-                                />
-                                {postImages && postImages.length > 0 &&
-                                    <div className="post-photos-selected-view-wrapper">
-                                        <ul>
-                                            {postImages.map((img, imgI) => {
-                                                return (
-                                                    <li key={imgI}>
-                                                        <img
-                                                            src={img.preview}
-                                                        />
-                                                    </li>
-                                                );
-                                            })}
-                                        </ul>
-                                    </div>
-                                }
-                                <div className="how-training-btm d-flex justify-content-end">
-                                    <a href="javascript:void(0)" onClick={this.handleShowPostPhotosModal}>
-                                        <i className="icon-photo_size_select_actual vertical-middle-c"></i>
-                                    </a>
-                                    {activeProfile && activeProfile.friendshipStatus === FRIENDSHIP_STATUS_SELF &&
-                                        <Dropdown id="post_privacy">
-                                            <Dropdown.Toggle className="d-flex public-dropdown">
-                                                {postPrivacy === ACCESS_LEVEL_PUBLIC && <span><FaGlobe /><strong>{ACCESS_LEVEL_PUBLIC_STR}</strong></span>}
-                                                {postPrivacy === ACCESS_LEVEL_FRIENDS && <span><FaGroup /><strong>{ACCESS_LEVEL_FRIENDS_STR}</strong></span>}
-                                                {postPrivacy === ACCESS_LEVEL_PRIVATE && <span><FaLock /><strong>{ACCESS_LEVEL_PRIVATE_STR}</strong></span>}
-                                            </Dropdown.Toggle>
-                                            <Dropdown.Menu>
-                                                <MenuItem eventKey="3" onClick={() => this.handlePostPrivacy(ACCESS_LEVEL_PUBLIC)}><FaGlobe /> {ACCESS_LEVEL_PUBLIC_STR}</MenuItem>
-                                                <MenuItem eventKey="2" onClick={() => this.handlePostPrivacy(ACCESS_LEVEL_FRIENDS)}><FaGroup /> {ACCESS_LEVEL_FRIENDS_STR}</MenuItem>
-                                                <MenuItem eventKey="1" onClick={() => this.handlePostPrivacy(ACCESS_LEVEL_PRIVATE)}><FaLock /> {ACCESS_LEVEL_PRIVATE_STR}</MenuItem>
-                                            </Dropdown.Menu>
-                                        </Dropdown>
+                            {showPostBox &&
+                                <div className="how-training timeline-new-post-editor">
+                                    <ReactQuill
+                                        value={postContent}
+                                        onChange={this.handlePostContentChange}
+                                        placeholder="What's in your mind"
+                                        modules={{
+                                            toolbar: ['bold', 'italic', 'underline', 'strike']
+                                        }}
+                                    />
+                                    {postImages && postImages.length > 0 &&
+                                        <div className="post-photos-selected-view-wrapper">
+                                            <ul>
+                                                {postImages.map((img, imgI) => {
+                                                    return (
+                                                        <li key={imgI}>
+                                                            <img
+                                                                src={img.preview}
+                                                            />
+                                                        </li>
+                                                    );
+                                                })}
+                                            </ul>
+                                        </div>
                                     }
-                                    <button type="button" onClick={this.handleMakePost} className="vertical-middle-r">
-                                        Post<i className="icon-send"></i>
-                                    </button>
+                                    <div className="how-training-btm d-flex justify-content-end">
+                                        <a href="javascript:void(0)" onClick={this.handleShowPostPhotosModal}>
+                                            <i className="icon-photo_size_select_actual vertical-middle-c"></i>
+                                        </a>
+                                        {activeProfile && activeProfile.friendshipStatus === FRIENDSHIP_STATUS_SELF &&
+                                            <Dropdown id="post_privacy">
+                                                <Dropdown.Toggle className="d-flex public-dropdown">
+                                                    {postPrivacy === ACCESS_LEVEL_PUBLIC && <span><FaGlobe /><strong>{ACCESS_LEVEL_PUBLIC_STR}</strong></span>}
+                                                    {postPrivacy === ACCESS_LEVEL_FRIENDS && <span><FaGroup /><strong>{ACCESS_LEVEL_FRIENDS_STR}</strong></span>}
+                                                    {postPrivacy === ACCESS_LEVEL_PRIVATE && <span><FaLock /><strong>{ACCESS_LEVEL_PRIVATE_STR}</strong></span>}
+                                                </Dropdown.Toggle>
+                                                <Dropdown.Menu>
+                                                    <MenuItem eventKey="3" onClick={() => this.handlePostPrivacy(ACCESS_LEVEL_PUBLIC)}><FaGlobe /> {ACCESS_LEVEL_PUBLIC_STR}</MenuItem>
+                                                    <MenuItem eventKey="2" onClick={() => this.handlePostPrivacy(ACCESS_LEVEL_FRIENDS)}><FaGroup /> {ACCESS_LEVEL_FRIENDS_STR}</MenuItem>
+                                                    <MenuItem eventKey="1" onClick={() => this.handlePostPrivacy(ACCESS_LEVEL_PRIVATE)}><FaLock /> {ACCESS_LEVEL_PRIVATE_STR}</MenuItem>
+                                                </Dropdown.Menu>
+                                            </Dropdown>
+                                        }
+                                        <button type="button" onClick={this.handleMakePost} className="vertical-middle-r">
+                                            Post<i className="icon-send"></i>
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
+                            }
 
                             <InfiniteScroll
                                 pageStart={0}
@@ -428,11 +450,13 @@ class ProfileFithub extends Component {
                                                         </div>
                                                     </div>
                                                 }
-                                                <CommentBoxForm
-                                                    index={index}
-                                                    postId={post._id}
-                                                    onSubmit={this.handleComment}
-                                                />
+                                                {showCommentBox &&
+                                                    <CommentBoxForm
+                                                        index={index}
+                                                        postId={post._id}
+                                                        onSubmit={this.handleComment}
+                                                    />
+                                                }
                                             </div>
                                         );
                                     })
@@ -1066,6 +1090,7 @@ const mapStateToProps = (state) => {
         changeBodyFatLoading: timelineWidgets.get('changeBodyFatLoading'),
         changeBodyFatError: timelineWidgets.get('changeBodyFatError'),
         widgetBadges: timelineWidgets.get('badges'),
+        timelineUserPrivacy: userTimeline.get('privacy'),
     };
 }
 

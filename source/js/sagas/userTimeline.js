@@ -56,8 +56,8 @@ function postPostOnUserTimelineData() {
 function getPrivacyOfTimelineUserData() {
     return function* (action) {
         try {
-            let formData = action.formData;
-            const data = yield call(() => api.getPrivacyOfTimelineUser(formData));
+            let username = action.username;
+            const data = yield call(() => api.getPrivacyOfTimelineUser(username));
             yield put(getPrivacyOfTimelineUserSuccess(data));
         } catch (error) {
             yield put(getPrivacyOfTimelineUserError(error));
