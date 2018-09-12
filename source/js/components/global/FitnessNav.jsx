@@ -1,9 +1,19 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 import FaNutrition from 'react-icons/lib/md/local-restaurant';
+import FaGoal from 'react-icons/lib/fa/bullseye';
 import { Scrollbars } from 'react-custom-scrollbars';
 import BadgeIcon from "svg/badge-icon.svg";
 import { routeCodes } from '../../constants/routes';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUtensils } from '@fortawesome/free-solid-svg-icons';
+import { faCalendar } from '@fortawesome/free-solid-svg-icons';
+import { faChartLine } from '@fortawesome/free-solid-svg-icons';
+import { faTrophy } from '@fortawesome/free-solid-svg-icons';
+import { faDumbbell } from '@fortawesome/free-solid-svg-icons';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
+import { faChartPie } from '@fortawesome/free-solid-svg-icons';
+import { faThLarge } from '@fortawesome/free-solid-svg-icons';
 
 export default class FitnessNav extends Component {
 
@@ -19,7 +29,7 @@ export default class FitnessNav extends Component {
                                     className='Menu-link'
                                     to={routeCodes.DASHBOARD}
                                 >
-                                    <i className="icon-dashboard"></i>
+                                    <FontAwesomeIcon icon={faThLarge} />
                                     <span>Dashboard</span>
                                 </NavLink>
                             </li>
@@ -29,7 +39,7 @@ export default class FitnessNav extends Component {
                                     className='Menu-link'
                                     to={routeCodes.STATSPAGE}
                                 >
-                                    <i className="icon-pie_chart"></i>
+                                    <FontAwesomeIcon icon={faChartPie} />
                                     <span>Stats</span>
                                 </NavLink>
                             </li>
@@ -40,7 +50,7 @@ export default class FitnessNav extends Component {
                                     className='Menu-link'
                                     to={routeCodes.BODY}
                                 >
-                                    <i className="icon-person"></i>
+                                    <FontAwesomeIcon icon={faUser} />
                                     <span>Body</span>
                                 </NavLink>
                             </li>
@@ -51,7 +61,7 @@ export default class FitnessNav extends Component {
                                     className='Menu-link'
                                     to={routeCodes.EXERCISE}
                                 >
-                                    <i className="icon-fitness_center"></i>
+                                    <FontAwesomeIcon icon={faDumbbell} />
                                     <span>Exercise</span>
                                 </NavLink>
                             </li>
@@ -61,7 +71,7 @@ export default class FitnessNav extends Component {
                                     className='Menu-link'
                                     to={routeCodes.NUTRITION}
                                 >
-                                    <FaNutrition size={24} />
+                                    <FontAwesomeIcon icon={faUtensils} />
                                     <span>Nutrition</span>
                                 </NavLink>
                             </li>
@@ -71,7 +81,7 @@ export default class FitnessNav extends Component {
                                     className='Menu-link'
                                     to={routeCodes.CALENDAR}
                                 >
-                                    <i className="icon-insert_invitation"></i>
+                                    <FontAwesomeIcon icon={faCalendar} />
                                     <span>Calendar</span>
                                 </NavLink>
                             </li>
@@ -81,7 +91,7 @@ export default class FitnessNav extends Component {
                                     className='Menu-link'
                                     to={routeCodes.PROGRESS}
                                 >
-                                    <i className="icon-trending_up"></i>
+                                    <FontAwesomeIcon icon={faChartLine} />
                                     <span>Progress</span>
                                 </NavLink>
                             </li>
@@ -91,7 +101,7 @@ export default class FitnessNav extends Component {
                                     className='Menu-link'
                                     to={routeCodes.BADGES}
                                 >
-                                    <BadgeIcon className="menu-link-badge-icon" />
+                                    <FontAwesomeIcon icon={faTrophy} />
                                     <span>Badges</span>
                                 </NavLink>
                             </li>
