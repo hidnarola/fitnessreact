@@ -714,7 +714,7 @@ class CustomDaysCalendarBlock extends Component {
                                                     <a href="javascript:void(0)" data-tip="Copy" onClick={(event) => this.handleCopyEvent(event, e._id)}><FaCopy /></a>
                                                 }
                                                 {(e.type === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
-                                                    <NavLink to={routeCodes.VIEW_PROGRAM_SCHEDULE_WORKOUT.replace(':id', e.programId).replace(':workout_id', e._id)} data-tip="Details" title=""><FaEye /></NavLink>
+                                                    <NavLink to={routeCodes.SAVE_PROGRAM_SCHEDULE_WORKOUT.replace(':id', e.programId).replace(':workout_id', e._id)} data-tip="Details" title=""><FaEye /></NavLink>
                                                 }
                                                 {(e.type === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
                                                     <NavLink to={routeCodes.SAVE_PROGRAM_SCHEDULE_WORKOUT.replace(':id', e.programId).replace(':workout_id', e._id)} data-tip="Change" title=""><FaPencil /></NavLink>
