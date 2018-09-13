@@ -2,7 +2,6 @@ export const publicPath = '/';
 
 export const routeCodes = {
     HOME: publicPath,
-    PEOPLE: `${publicPath}people`,
     USERS: `${publicPath}users`,
 
     // Dashboard Routes
@@ -11,10 +10,6 @@ export const routeCodes = {
     WORKOUTWARMUP: `${publicPath}dashboard`,
     WORKOUT: `${publicPath}dashboard`,
     WORKOUTCOOLDOWN: `${publicPath}dashboard`,
-
-
-    // Registration Routes
-    REGISTERUSER: `${publicPath}registration`,
 
     // Stats all pages
     STATSPAGE: `${publicPath}stats`,

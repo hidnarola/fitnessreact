@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import { BrowserRouter as Router, Route, Link, Redirect, Switch, withRouter } from "react-router-dom";
 import { Router, Route, Switch } from "react-router-dom";
 import { connect } from 'react-redux';
 import { hot } from 'react-hot-loader';
@@ -7,14 +6,12 @@ import ScrollToTop from 'components/global/ScrollToTop';
 import NutritionShopping from 'components/Nutrition/NutritionShopping';
 import NutritionMeal from 'components/Nutrition/NutritionMeal';
 import Receip from '../components/Receip/Receip';
-import People from 'views/People';
 import NotFound from 'views/NotFound';
 import StatsPage from 'views/StatsPage';
 import Badges from 'views/Badges';
 import Exercise from 'views/Exercise';
 import Dashboard from 'views/Dashboard';
 import ProfilePage from 'views/Profile';
-import RegisterUser from 'views/RegisterUser';
 import ExerciseSettings from 'views/ExerciseSettings';
 import Login from './Login';
 import AdminLogin from './Admin/AdminLogin';
@@ -34,7 +31,7 @@ import history from '../config/history';
 import { ToastContainer } from "react-toastify";
 import NutritionPreferences from '../components/Nutrition/NutritionPreferences'
 import { publicPath, routeCodes } from '../constants/routes';
-import { SESSION_EXPIRED_URL_TYPE, SERVER_BASE_URL, STATS_STRENGTH, STATS_CARDIO } from '../constants/consts';
+import { SESSION_EXPIRED_URL_TYPE, SERVER_BASE_URL } from '../constants/consts';
 import { FaCircleONotch } from "react-icons/lib/fa";
 import FitnessTests from './Admin/FitnessTests';
 import NutritionRecipeDetails from '../components/Nutrition/NutritionRecipeDetails';
@@ -145,11 +142,8 @@ class App extends Component {
                         <Switch>
                             <Route exact path={routeCodes.HOME} component={Login} />
                             <Route exact path={`${publicPath}${SESSION_EXPIRED_URL_TYPE}`} component={Login} />
-                            <Route path={routeCodes.REGISTERUSER} component={RegisterUser} />
 
-                            <PrivateRoute path={routeCodes.PEOPLE} component={People} />
-                            <Route path={routeCodes.DASHBOARD} component={Dashboard} />
-                            {/* <PrivateRoute path={routeCodes.DASHBOARD} component={Dashboard} /> */}
+                            <PrivateRoute path={routeCodes.DASHBOARD} component={Dashboard} />
 
                             <PrivateRoute path={`${routeCodes.STATSPAGE}`} component={StatsPage} />
 

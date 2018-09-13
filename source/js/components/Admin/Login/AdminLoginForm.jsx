@@ -4,9 +4,6 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { required, email } from 'formValidation/validationRules';
 import { InputField } from '../../../helpers/FormControlHelper';
-import { adminRootRoute } from '../../../constants/adminRoutes';
-import { SESSION_EXPIRED_URL_TYPE } from '../../../constants/consts';
-import { Alert } from "react-bootstrap";
 
 class AdminLoginForm extends Component {
     render() {
@@ -26,11 +23,6 @@ class AdminLoginForm extends Component {
                                         <p key={index}>{err}</p>
                                     ))
                                 }
-                            </div>
-                        }
-                        {(match.path === (adminRootRoute + '/' + SESSION_EXPIRED_URL_TYPE)) &&
-                            <div className="alert alert-danger" role="alert">
-                                <p>Session expired! please login again.</p>
                             </div>
                         }
                     </div>

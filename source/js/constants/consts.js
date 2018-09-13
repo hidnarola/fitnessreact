@@ -10,6 +10,9 @@ export const FITASSIST_USER_DETAILS_TOKEN_KEY = '697BE4E2355E75EA41F62BAB675F1';
 export const AUTH_STATE_ACTION_LOGIN = 'login';
 export const AUTH_STATE_ACTION_SIGNUP = 'signup';
 
+export const AUTH_STATE_ACTION_LOGIN_KEY = 'com.auth0.auth.{"action":"login"}';
+export const AUTH_STATE_ACTION_SIGNUP_KEY = 'com.auth0.auth.{"action":"signup"}';
+
 export const USER_ROLE = 'fitassist-user';
 export const ADMIN_ROLE = 'fitassist-admin'
 

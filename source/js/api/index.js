@@ -12,7 +12,8 @@ import {
     LOCALSTORAGE_EXPIRES_AT_KEY,
     LOCALSTORAGE_USERNAME_KEY,
     LOCALSTORAGE_REFRESH_TOKEN_KEY,
-    SESSION_EXPIRED_URL_TYPE
+    SESSION_EXPIRED_URL_TYPE,
+    LOCALSTORAGE_USER_DETAILS_KEY
 } from '../constants/consts';
 import history from '../config/history';
 import { publicPath } from '../constants/routes';
@@ -88,7 +89,7 @@ export const fetchResource = (path, userOptions = {}) => {
             response = responseObject;
 
             // HTTP unauthorized
-            if (response.status === 401) {
+            if (response.status === UNAUTHORIZED) {
                 var userRole = localStorage.getItem(LOCALSTORAGE_ROLE_KEY);
                 var url = publicPath;
                 if (window.atob(userRole) === ADMIN_ROLE) {
@@ -100,6 +101,7 @@ export const fetchResource = (path, userOptions = {}) => {
                 localStorage.removeItem(LOCALSTORAGE_ROLE_KEY);
                 localStorage.removeItem(LOCALSTORAGE_USERNAME_KEY);
                 localStorage.removeItem(LOCALSTORAGE_REFRESH_TOKEN_KEY);
+                localStorage.removeItem(LOCALSTORAGE_USER_DETAILS_KEY);
                 history.replace(`${url}${SESSION_EXPIRED_URL_TYPE}`);
             }
 
@@ -153,7 +155,7 @@ export const postFormData = (path, data, headers) => {
         method: 'POST',
         url: url,
         data: data,
-        headers: headers
+        headers: _headers
     }).then(function (res) {
         return res.data;
     }).catch(function (error) {
@@ -162,7 +164,7 @@ export const postFormData = (path, data, headers) => {
                 var userRole = localStorage.getItem(LOCALSTORAGE_ROLE_KEY);
                 var url = publicPath;
                 if (window.atob(userRole) === ADMIN_ROLE) {
-                    url = adminRootRoute + '/';
+                    url = adminRootRoute + '/';;
                 }
                 localStorage.removeItem(LOCALSTORAGE_ACCESS_TOKEN_KEY);
                 localStorage.removeItem(LOCALSTORAGE_ID_TOKEN_KEY);
@@ -170,6 +172,7 @@ export const postFormData = (path, data, headers) => {
                 localStorage.removeItem(LOCALSTORAGE_ROLE_KEY);
                 localStorage.removeItem(LOCALSTORAGE_USERNAME_KEY);
                 localStorage.removeItem(LOCALSTORAGE_REFRESH_TOKEN_KEY);
+                localStorage.removeItem(LOCALSTORAGE_USER_DETAILS_KEY);
                 history.replace(`${url}${SESSION_EXPIRED_URL_TYPE}`);
             } else if (error.response.status === BAD_REQUEST) {
                 throw ApiError(error.response.data.message, error.response.data, error.response.status);
@@ -190,11 +193,21 @@ export const putFormData = (path, data, headers) => {
     // Build Url
     const url = `${API_URL}${path}`;
 
+    let defaultHeaders = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+    }
+
+    let _headers = {
+        ...defaultHeaders,
+        ...headers
+    }
+
     return axios({
         method: 'PUT',
         url: url,
         data: data,
-        headers: headers
+        headers: _headers
     }).then(function (res) {
         return res.data;
     }).catch(function (error) {
@@ -211,6 +224,7 @@ export const putFormData = (path, data, headers) => {
                 localStorage.removeItem(LOCALSTORAGE_ROLE_KEY);
                 localStorage.removeItem(LOCALSTORAGE_USERNAME_KEY);
                 localStorage.removeItem(LOCALSTORAGE_REFRESH_TOKEN_KEY);
+                localStorage.removeItem(LOCALSTORAGE_USER_DETAILS_KEY);
                 history.replace(`${url}${SESSION_EXPIRED_URL_TYPE}`);
             } else if (error.response.status === BAD_REQUEST) {
                 throw ApiError(error.response.data.message, error.response.data, error.response.status);

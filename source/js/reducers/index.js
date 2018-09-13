@@ -1,9 +1,7 @@
 import { combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form';
-import app from 'reducers/app';
 import user from 'reducers/user';
 import userBodyMeasurement from 'reducers/userBodyMeasurement';
-import people from 'reducers/people';
 import dashboard from 'reducers/dashboard';
 import nutritions from 'reducers/nutritions';
 import userEquipments from 'reducers/userEquipments';
@@ -53,10 +51,8 @@ import adminChangePassword from 'reducers/admin/changePassword';
 import admin from 'reducers/admin/admin';
 
 export default combineReducers({
-    app,
     user,
     userBodyMeasurement,
-    people,
     dashboard,
     nutritions,
     userEquipments,

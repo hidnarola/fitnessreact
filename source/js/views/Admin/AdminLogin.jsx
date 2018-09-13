@@ -3,10 +3,10 @@ import { connect } from 'react-redux';
 import { login } from 'actions/login';
 import { showPageLoader, hidePageLoader } from 'actions/pageLoader';
 import AdminLoginForm from '../../components/Admin/Login/AdminLoginForm';
-import { adminRouteCodes } from '../../constants/adminRoutes';
-import { ADMIN_ROLE, LOCALSTORAGE_ACCESS_TOKEN_KEY } from '../../constants/consts';
+import { adminRouteCodes, adminRootRoute } from '../../constants/adminRoutes';
+import { ADMIN_ROLE, LOCALSTORAGE_ACCESS_TOKEN_KEY, SESSION_EXPIRED_URL_TYPE } from '../../constants/consts';
 import { checkLogin, isLogin } from '../../helpers/loginHelper';
-import { ts } from '../../helpers/funs';
+import { ts, te } from '../../helpers/funs';
 import { freeLoginLogoutState } from '../../actions/login';
 import $ from "jquery";
 
@@ -19,15 +19,12 @@ class AdminLogin extends Component {
         }
     }
 
-    handleSubmit = (data) => {
-        const { dispatch } = this.props;
-        let loginData = {
-            email: data.email,
-            password: data.password,
-            userRole: ADMIN_ROLE,
+    componentWillMount() {
+        const { match, history } = this.props;
+        if (match.path === (adminRootRoute + '/' + SESSION_EXPIRED_URL_TYPE)) {
+            te('Session expired! Login again.');
+            history.push(adminRootRoute);
         }
-        dispatch(showPageLoader());
-        dispatch(login(loginData));
     }
 
     componentWillUpdate() {
@@ -63,6 +60,17 @@ class AdminLogin extends Component {
         const { dispatch } = this.props;
         dispatch(freeLoginLogoutState());
         $('body').removeClass('no-padding');
+    }
+
+    handleSubmit = (data) => {
+        const { dispatch } = this.props;
+        let loginData = {
+            email: data.email,
+            password: data.password,
+            userRole: ADMIN_ROLE,
+        }
+        dispatch(showPageLoader());
+        dispatch(login(loginData));
     }
 }
 

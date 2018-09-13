@@ -1,29 +1,38 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { NavLink } from 'react-router-dom';
-import LoginForm from '../components/Login/LoginForm';
-import { login } from '../actions/login';
-import { showPageLoader, hidePageLoader } from '../actions/pageLoader';
-import { USER_ROLE, SESSION_EXPIRED_URL_TYPE } from '../constants/consts';
+import { USER_ROLE, SESSION_EXPIRED_URL_TYPE, LOCALSTORAGE_ROLE_KEY, ADMIN_ROLE } from '../constants/consts';
 import { checkLogin } from '../helpers/loginHelper';
 import Auth from '../auth/Auth';
-import { publicPath, routeCodes } from '../constants/routes';
+import { publicPath } from '../constants/routes';
 import $ from "jquery";
+import { adminRootRoute } from '../constants/adminRoutes';
+import { te } from '../helpers/funs';
 
 const auth = new Auth();
 
 class Login extends Component {
     constructor(props) {
         super(props);
-        if (auth.isAuthenticated()) {
-            var pushUrl = checkLogin();
-            props.history.push(pushUrl);
+        let role = localStorage.getItem(LOCALSTORAGE_ROLE_KEY);
+        if (role) {
+            let decodedRole = window.atob(role);
+            if (decodedRole === ADMIN_ROLE) {
+                props.history.push(adminRootRoute);
+            } else if (decodedRole === USER_ROLE) {
+                if (auth.isAuthenticated()) {
+                    var pushUrl = checkLogin();
+                    props.history.push(pushUrl);
+                }
+            }
         }
     }
 
     componentWillMount() {
-        const { dispatch } = this.props;
-        dispatch(hidePageLoader());
+        const { match, history } = this.props;
+        if (match.path === (publicPath + SESSION_EXPIRED_URL_TYPE)) {
+            te('Session expired! Login again.');
+            history.push(publicPath);
+        }
     }
 
     handleLoginRequest = () => {
@@ -35,7 +44,7 @@ class Login extends Component {
     }
 
     render() {
-        const { error, loading, match } = this.props;
+        const { match } = this.props;
         return (
             <div className="step-wrap step-wrap-login login-wrapper">
                 <div className="step-box step-box_expried">
@@ -47,13 +56,6 @@ class Login extends Component {
                         </div>
                     </div>
                     <div className="step-box-r">
-                        <div id="validation_errors_wrapper">
-                            {(match.path === (publicPath + SESSION_EXPIRED_URL_TYPE)) &&
-                                <div className="alert alert-danger" role="alert">
-                                    <p>Session expired! please login again.</p>
-                                </div>
-                            }
-                        </div>
                         <div className="stepbox-head">
                             <h3>Login</h3>
                             <p>Come join the fitness community! Lets get to your Account.</p>
