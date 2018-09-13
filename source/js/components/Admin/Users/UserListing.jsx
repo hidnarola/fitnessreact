@@ -278,6 +278,7 @@ class UserListing extends Component {
                                         serverloading={loading}
                                         filterDTable={this.filterDTable}
                                         manualReload={dtManualForceReload}
+                                        minRows={5}
                                     />
                                 </div>
                             </div>

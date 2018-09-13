@@ -157,6 +157,7 @@ class BodyPartsListing extends Component {
                                         className="-striped -highlight"
                                         showPaginationTop={true}
                                         showPaginationBottom={true}
+                                        minRows={5}
                                         defaultSorted={[
                                             {
                                                 id: "createdAt",
