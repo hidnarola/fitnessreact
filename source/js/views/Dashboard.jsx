@@ -169,6 +169,7 @@ class Dashboard extends Component {
                                 (!userWidgets || typeof userWidgets[WIDGET_BADGES] === 'undefined' || userWidgets[WIDGET_BADGES] === 0 || userWidgets[WIDGET_BADGES] === null) &&
                                 (!userWidgets || typeof userWidgets[WIDGET_PROGRESS_PHOTO] === 'undefined' || userWidgets[WIDGET_PROGRESS_PHOTO] === 0 || userWidgets[WIDGET_PROGRESS_PHOTO] === null) &&
                                 (!userWidgets || typeof userWidgets[WIDGET_MUSCLE] === 'undefined' || userWidgets[WIDGET_MUSCLE] === null || userWidgets[WIDGET_MUSCLE].length <= 0) &&
+                                typeof error !== 'undefined' && error && error.length <= 0 &&
                                 <div className="select-dashboard-widget-wrapper">
                                     <i className="icon-widgets"></i>
                                     <h3>Please add widgets on dashboard.</h3>
