@@ -34,6 +34,7 @@ import home from 'img/common/home.png';
 import gym from 'img/common/gym.png';
 import ReactTooltip from "react-tooltip";
 import jwt from "jwt-simple";
+import { setLoggedUserFromLocalStorage } from '../../actions/user';
 
 class UpdateProfileForm extends Component {
     constructor(props) {
@@ -380,6 +381,7 @@ class UpdateProfileForm extends Component {
             }
             this.updateLocalStorageUserDetails(profile);
             dispatch(initialize('update_profile_details_form', formData));
+            dispatch(setLoggedUserFromLocalStorage());
             dispatch(hidePageLoader());
         } else if (saveActionInit && !loading) {
             this.setState({ selectActionInit: true });
