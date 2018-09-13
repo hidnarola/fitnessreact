@@ -17,10 +17,10 @@ import {
   LOCALSTORAGE_USER_DETAILS_KEY,
   FITASSIST_USER_DETAILS_TOKEN_KEY
 } from '../constants/consts';
-
 import axios from 'axios';
 import { ts } from '../helpers/funs';
 import jwt from "jwt-simple";
+import logo from "../../assets/img/common/logo.png";
 
 export default class Auth {
   auth0Lock = new Auth0Lock(
@@ -36,10 +36,14 @@ export default class Auth {
         }
       },
       avatar: null,
-      autoclose:false,
+      autoclose: false,
       languageDictionary: {
         title: "Login"
       },
+      theme: {
+        logo: logo,
+        primaryColor: '#FF3366',
+      }
     },
   );
 
@@ -97,12 +101,15 @@ export default class Auth {
         .then((res) => {
           if (authResult.state && authResult.state !== '' && res && res.data) {
             let authState = JSON.parse(authResult.state);
+            let welcomeStr = `Welcome ${(res.data && res.data.user && res.data.user.firstName) ? res.data.user.firstName : ''}`;
             if (authState && authState.action && authState.action === AUTH_STATE_ACTION_LOGIN) {
               this.setSession(authResult, res.data.user);
               history.replace(routeCodes.DASHBOARD);
+              ts(welcomeStr);
             } else if (authState && authState.action && authState.action === AUTH_STATE_ACTION_SIGNUP) {
               this.setSession(authResult, res.data.user);
               history.replace(routeCodes.DASHBOARD);
+              ts(welcomeStr);
             }
           }
         })
