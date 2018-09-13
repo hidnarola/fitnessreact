@@ -1227,6 +1227,7 @@ flex-direction:row; display:-webkit-box; display:-webkit-flex; display:-ms-flex;
 .stepbox-b.stepbox-b-center {display: inline-flex;}
 
 .react-datepicker-wrapper, .react-datepicker__input-container{display: block !important;}
+.react-datepicker__close-icon::after { background-color: #ff338c;}
 
 .quill.editor-min-height-200 .ql-container,
 .quill.editor-min-height-200 .ql-editor

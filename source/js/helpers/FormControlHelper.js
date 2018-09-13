@@ -426,9 +426,10 @@ export const DateField = (props) => {
         <div className={wrapperClass}>
             <label htmlFor={input.name} className={labelClass}>{label}</label>
             <DatePicker
+                {...props}
                 selected={selectedDate}
                 onChange={handleChange}
-                dateFormat={dateFormat ? dateFormat : "MM/DD/YYYY"}
+                dateFormat={dateFormat ? dateFormat : "DD/MM/YYYY"}
                 className={className}
                 placeholderText={placeholder}
             />

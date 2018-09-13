@@ -154,9 +154,11 @@ class UpdateProfileForm extends Component {
                                                 wrapperClass="input-wrap"
                                                 placeholder="Date Of Birth"
                                                 component={DateField}
+                                                maxDate={moment()}
+                                                isClearable={true}
                                                 selectedDate={this.state.dob}
                                                 handleChange={this.handleChangeDob}
-                                                dateFormat="MM/DD/YYYY"
+                                                dateFormat="DD/MM/YYYY"
                                                 errorClass="help-block"
                                             />
                                         </div>
@@ -518,9 +520,10 @@ class DateField extends Component {
         return (
             <div className={wrapperClass}>
                 <DatePicker
+                    {...this.props}
                     selected={selectedDate}
                     onChange={handleChange}
-                    dateFormat={dateFormat ? dateFormat : "MM/DD/YYYY"}
+                    dateFormat={dateFormat ? dateFormat : "DD/MM/YYYY"}
                     className={className}
                     placeholderText={placeholder}
                 />
