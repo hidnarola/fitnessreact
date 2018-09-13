@@ -588,7 +588,7 @@ display: flex; justify-content: center; flex-direction: column; text-align: cent
 .progress-popup-body-l>a{height:50px; width:50px; background:linear-gradient(148.66deg, #FF3366 0%, #FF339A 100%); box-shadow:0 2px 4px 0 rgba(0,0,0,0.1); position:absolute; bottom:-5px; right:10px; display:block;text-align:center; border-radius:80px;}
 .progress-popup-body-l>a>i{line-height:50px;color:#fff;}
 .progress-popup-body-m{width:33%;padding-right:30px;}
-.progress-popup-body-m textarea{height:329px;	border: 2px solid #F9FAFA;	border-radius:5px;background:#fff;font-size:13px;font-weight:500;color:#999;width:100%;padding:10px;}
+.progress-popup-body-m textarea{height:329px;border: 2px solid #F9FAFA;	border-radius:5px;background:#fff;font-size:13px;font-weight:500;color:#999;width:100%;padding:10px;resize:none;}
 .progress-popup-body-r{width:37%;}
 .progress-popup-body-r .log-date-head {padding: 5px 11px 5px 27px;}
 .progress-popup-body-r .log-date-head a{line-height:20px;}
