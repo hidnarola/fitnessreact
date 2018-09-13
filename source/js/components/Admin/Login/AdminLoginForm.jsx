@@ -30,7 +30,6 @@ class AdminLoginForm extends Component {
                     <div className="stepbox-m personal-dtl">
                         <Field
                             name="email"
-                            type="email"
                             className="form-control"
                             label="Email"
                             labelClass="control-label"
