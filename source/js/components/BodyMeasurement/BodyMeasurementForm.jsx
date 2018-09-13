@@ -387,34 +387,34 @@ class BodyMeasurementForm extends Component {
     setValidationRules = () => {
         const { profileSettings } = this.props;
         var validationRules = {
-            neck: [required, min(0), max(30)],
-            shoulders: [required, min(0), max(60)],
-            chest: [required, min(0), max(135)],
-            upper_arm: [required, min(0), max(20)],
-            waist: [required, min(0), max(120)],
-            forearm: [required, min(0), max(40)],
-            hips: [required, min(0), max(155)],
-            thigh: [required, min(0), max(100)],
-            calf: [required, min(0), max(50)],
+            neck: [required, min(0), max(60)],
+            shoulders: [required, min(0), max(120)],
+            chest: [required, min(0), max(270)],
+            upper_arm: [required, min(0), max(40)],
+            waist: [required, min(0), max(240)],
+            forearm: [required, min(0), max(80)],
+            hips: [required, min(0), max(310)],
+            thigh: [required, min(0), max(200)],
+            calf: [required, min(0), max(100)],
             heartRate: [required, min(0), max(250)],
-            weight: [required, min(0), max(100)],
-            height: [required, min(0), max(300)],
+            weight: [required, min(0), max(1000)],
+            height: [required, min(0), max(600)],
         };
         if (profileSettings) {
             if (profileSettings.bodyMeasurement !== MEASUREMENT_UNIT_CENTIMETER) {
-                validationRules.neck = [required, min(0), max(12)];
-                validationRules.shoulders = [required, min(0), max(24)];
-                validationRules.chest = [required, min(0), max(54)];
-                validationRules.upper_arm = [required, min(0), max(8)];
-                validationRules.waist = [required, min(0), max(48)];
-                validationRules.forearm = [required, min(0), max(16)];
-                validationRules.hips = [required, min(0), max(62)];
-                validationRules.thigh = [required, min(0), max(40)];
-                validationRules.calf = [required, min(0), max(20)];
-                validationRules.height = [required, min(0), max(120)];
+                validationRules.neck = [required, min(0), max(24)];
+                validationRules.shoulders = [required, min(0), max(48)];
+                validationRules.chest = [required, min(0), max(108)];
+                validationRules.upper_arm = [required, min(0), max(16)];
+                validationRules.waist = [required, min(0), max(96)];
+                validationRules.forearm = [required, min(0), max(32)];
+                validationRules.hips = [required, min(0), max(124)];
+                validationRules.thigh = [required, min(0), max(80)];
+                validationRules.calf = [required, min(0), max(40)];
+                validationRules.height = [required, min(0), max(240)];
             }
             if (profileSettings.weight !== MEASUREMENT_UNIT_KILOGRAM) {
-                validationRules.weight = [required, min(0), max(220)];
+                validationRules.weight = [required, min(0), max(2200)];
 
             }
         }

@@ -27,7 +27,7 @@ import {
 } from '../../actions/profile';
 import moment from "moment";
 import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
-import { required, mobile } from '../../formValidation/validationRules';
+import { required, mobile, minLength, maxLength, min, max } from '../../formValidation/validationRules';
 import userFemale from 'img/common/user-female.png';
 import userMale from 'img/common/user-male.png';
 import home from 'img/common/home.png';
@@ -35,6 +35,14 @@ import gym from 'img/common/gym.png';
 import ReactTooltip from "react-tooltip";
 import jwt from "jwt-simple";
 import { setLoggedUserFromLocalStorage } from '../../actions/user';
+
+const minLength2 = minLength(2);
+const maxLength20 = maxLength(20);
+const min0 = min(0);
+const max2200 = max(2200);
+const max240 = max(240);
+const max1000 = max(1000);
+const max600 = max(600);
 
 class UpdateProfileForm extends Component {
     constructor(props) {
@@ -80,7 +88,7 @@ class UpdateProfileForm extends Component {
                                                 errorClass="help-block"
                                                 type="text"
                                                 component={InputField}
-                                                validate={[required]}
+                                                validate={[required, minLength2, maxLength20]}
                                             />
                                         </div>
                                     </li>
@@ -95,7 +103,7 @@ class UpdateProfileForm extends Component {
                                                 errorClass="help-block"
                                                 type="text"
                                                 component={InputField}
-                                                validate={[required]}
+                                                validate={[required, minLength2, maxLength20]}
                                             />
                                         </div>
                                     </li>
@@ -110,7 +118,7 @@ class UpdateProfileForm extends Component {
                                                 errorClass="help-block"
                                                 type="text"
                                                 component={InputField}
-                                                validate={[mobile]}
+                                                validate={[required, mobile]}
                                             />
                                         </div>
                                     </li>
@@ -129,6 +137,7 @@ class UpdateProfileForm extends Component {
                                                         <label htmlFor="male" data-tip="Male"><img src={userMale} /></label>
                                                     )}
                                                     value={GENDER_MALE}
+                                                    validate={[required]}
                                                 />
                                                 <Field
                                                     id={GENDER_FEMALE}
@@ -141,6 +150,7 @@ class UpdateProfileForm extends Component {
                                                         <label htmlFor="female" data-tip="Female"><img src={userFemale} /></label>
                                                     )}
                                                     value={GENDER_FEMALE}
+                                                    validate={[required]}
                                                 />
                                             </div>
                                         </div>
@@ -170,11 +180,15 @@ class UpdateProfileForm extends Component {
                                                 id="height"
                                                 name="height"
                                                 wrapperClass="input-wrap weight-wrap"
-                                                placeholder="Foot"
+                                                placeholder="Height"
                                                 errorClass="help-block"
                                                 type="number"
                                                 component={InputField}
-                                                units={(<label>{heightUnit.toUpperCase()}</label>)}
+                                                units={(<label>{(heightUnit) ? heightUnit.toUpperCase() : MEASUREMENT_UNIT_CENTIMETER.toUpperCase()}</label>)}
+                                                validate={[
+                                                    min0,
+                                                    (heightUnit !== MEASUREMENT_UNIT_CENTIMETER) ? max240 : max600,
+                                                ]}
                                             />
                                             <Field
                                                 type="hidden"
@@ -192,9 +206,13 @@ class UpdateProfileForm extends Component {
                                                 wrapperClass="input-wrap weight-wrap"
                                                 errorClass="help-block"
                                                 type="number"
-                                                placeholder="Kg"
+                                                placeholder="Weight"
                                                 component={InputField}
-                                                units={(<label>{weightUnit.toUpperCase()}</label>)}
+                                                units={(<label>{(weightUnit) ? weightUnit.toUpperCase() : MEASUREMENT_UNIT_KILOGRAM.toUpperCase()}</label>)}
+                                                validate={[
+                                                    min0,
+                                                    (weightUnit !== MEASUREMENT_UNIT_KILOGRAM) ? max2200 : max1000,
+                                                ]}
                                             />
                                             <Field
                                                 type="hidden"
@@ -226,6 +244,7 @@ class UpdateProfileForm extends Component {
                                                     component={InputField}
                                                     units={(<label htmlFor="home" data-tip="Home"><img src={home} /></label>)}
                                                     value={WORKOUT_LOCATION_HOME}
+                                                    validate={[required]}
                                                 />
                                                 <Field
                                                     id={WORKOUT_LOCATION_GYM}
@@ -236,6 +255,7 @@ class UpdateProfileForm extends Component {
                                                     component={InputField}
                                                     units={(<label htmlFor="gym" data-tip="Gym"><img src={gym} /></label>)}
                                                     value={WORKOUT_LOCATION_GYM}
+                                                    validate={[required]}
                                                 />
                                             </div>
                                         </div>
@@ -374,8 +394,8 @@ class UpdateProfileForm extends Component {
                 mobile_no: profile.mobileNumber,
                 gender: profile.gender,
                 dob: dob,
-                height: profile.height.toFixed(2),
-                weight: profile.weight.toFixed(2),
+                height: (profile.height) ? profile.height.toFixed(2) : '',
+                weight: (profile.weight) ? profile.weight.toFixed(2) : '',
                 heightUnit: this.state.heightUnit,
                 weightUnit: this.state.weightUnit,
                 workout_location: profile.workoutLocation,
@@ -398,17 +418,14 @@ class UpdateProfileForm extends Component {
             if (profileSettings) {
                 heightUnit = (profileSettings.bodyMeasurement) ? profileSettings.bodyMeasurement : MEASUREMENT_UNIT_CENTIMETER;
                 weightUnit = (profileSettings.weight) ? profileSettings.weight : MEASUREMENT_UNIT_KILOGRAM;
-                var height = convertUnits(MEASUREMENT_UNIT_CENTIMETER, heightUnit, profile.height).toFixed(2);
-                var weight = convertUnits(MEASUREMENT_UNIT_GRAM, weightUnit, profile.weight).toFixed(2);
+                var height = (profile.height) ? convertUnits(MEASUREMENT_UNIT_CENTIMETER, heightUnit, profile.height).toFixed(2) : '';
+                var weight = (profile.weight) ? convertUnits(MEASUREMENT_UNIT_GRAM, weightUnit, profile.weight).toFixed(2) : '';
                 this.props.change('height', height);
                 this.props.change('heightUnit', heightUnit);
                 this.props.change('weight', weight);
                 this.props.change('weightUnit', weightUnit);
             }
-            this.setState({
-                heightUnit,
-                weightUnit,
-            });
+            this.setState({ heightUnit, weightUnit });
         }
     }
 
