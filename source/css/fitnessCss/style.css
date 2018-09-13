@@ -541,6 +541,7 @@ display: flex; justify-content: center; flex-direction: column; text-align: cent
 .profile-about-body a.purple-btn{background:linear-gradient(134.72deg, #3023AE 0%, #C86DD7 100%);}
 .profile-about-body a.purple-btn:hover{background:transparent; color:#3023ae;border:2px solid #3023ae;padding:8px;}
 .profile-about-body p{margin:0;padding:0;color:#282828; font-size:14px; font-weight:500; line-height: 18px;}
+.profile-about-body span { margin: 0 0 20px; border-radius: 4px; display: block; color: #fff; font-size: 14px; font-weight: 700; line-height: 25px; text-align: center; padding: 10px; }
 
 .gallery-popup-head{position:relative;}
 .gallery-popup-head h3{margin:0 0 30px;padding:0;color:#232B41; font-size:14px;	font-weight:700; line-height:20px;}

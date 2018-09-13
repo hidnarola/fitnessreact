@@ -310,16 +310,16 @@ class Profile extends Component {
                                             </div>
                                             <div className="whitebox-body profile-about-body">
                                                 {profile && profile.height > 0 &&
-                                                    <a href="javascript:void(0)" className="purple-btn">Height: {profile.height} {(profile.heightUnit) ? profile.heightUnit : MEASUREMENT_UNIT_CENTIMETER}</a>
+                                                    <span href="javascript:void(0)" className="gradient-color-1">Height: {profile.height} {(profile.heightUnit) ? profile.heightUnit : MEASUREMENT_UNIT_CENTIMETER}</span>
                                                 }
                                                 {profile && profile.height <= 0 && profile.friendshipStatus === FRIENDSHIP_STATUS_SELF &&
-                                                    <a href="javascript:void(0)" className="purple-btn">Please add your height</a>
+                                                    <span href="javascript:void(0)" className="gradient-color-1">Please add your height</span>
                                                 }
                                                 {profile && profile.weight > 0 &&
-                                                    <a href="javascript:void(0)" className="green-blue-btn">Weight: {profile.weight} {(profile.weightUnit) ? profile.weightUnit : MEASUREMENT_UNIT_KILOGRAM}</a>
+                                                    <span href="javascript:void(0)" className="gradient-color-3">Weight: {profile.weight} {(profile.weightUnit) ? profile.weightUnit : MEASUREMENT_UNIT_KILOGRAM}</span>
                                                 }
                                                 {profile && profile.weight <= 0 && profile.friendshipStatus === FRIENDSHIP_STATUS_SELF &&
-                                                    <a href="javascript:void(0)" className="green-blue-btn">Please add your weight</a>
+                                                    <span href="javascript:void(0)" className="gradient-color-3">Please add your weight</span>
                                                 }
                                                 {profile && profile.aboutMe !== '' &&
                                                     ReactHtmlParser(profile.aboutMe)
