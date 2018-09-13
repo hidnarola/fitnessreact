@@ -164,12 +164,13 @@ class UpdateProfileForm extends Component {
                                                 wrapperClass="input-wrap"
                                                 placeholder="Date Of Birth"
                                                 component={DateField}
-                                                maxDate={moment()}
+                                                maxDate={moment().subtract(18, 'year')}
                                                 isClearable={true}
                                                 selectedDate={this.state.dob}
                                                 handleChange={this.handleChangeDob}
                                                 dateFormat="DD/MM/YYYY"
                                                 errorClass="help-block"
+                                                autoComplete="off"
                                             />
                                         </div>
                                     </li>

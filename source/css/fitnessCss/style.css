@@ -1865,7 +1865,7 @@ td.close-td a i{ font-size:20px;}
 .workout-type-radios .radiobox input[type=radio]:checked + label:before { content: "\2022"; color: #f3f3f3; font-size: 30px; text-align: center; line-height: 18px;}
 
 .workout-type-radios ul li label {display:inline-block; max-width:100%; font-weight:700; width:100%; padding:10px 50px; z-index:10; position:relative; border-radius:2px;cursor: pointer; margin:0;}
-.workout-type-radios .radiobox label:before {content: ""; display: inline-block; width: 100%; height: 100%;   position: absolute;  left: 0; top: 0; background-color: #fff;  z-index: -1; border-radius:4px;box-shadow:0 0 10px 0 rgba(0, 0, 0, .10); }
+.workout-type-radios .radiobox label:before {content: ""; display: inline-block; width: 100%; height: 100%;   position: absolute;  left: 0; top: 0; background-color: #fff;  z-index: -1; border-radius:4px;box-shadow:0 2px 3px 2px #e6e6e6;}
 .workout-type-radios .radiobox input[type=radio]:checked + label:before {content:''; background:linear-gradient(123.28deg, #46E9C5 0%, #3FFBFC 100%);}
 .workout-type-radios .radiobox input[type=radio]:checked + label{ color:#fff;}
 .workout-type-card-block{margin: 10px 0 0; background:#f9fafa; padding:20px; }
