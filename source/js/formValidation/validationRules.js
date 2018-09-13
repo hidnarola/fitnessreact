@@ -41,6 +41,13 @@ export const email = (value) => {
     return undefined;
 }
 
+export const mobile = (value) => {
+    if (!value || !/^(\+\d{1,3}[- ]?)?\d{10}$/i.test(value)) {
+        return "Invalid mobile number";
+    }
+    return undefined;
+}
+
 export const maxLength = (max) => (value) => {
     if (value && value.length > max) {
         return "Length must be less than or equal to " + max

@@ -27,7 +27,7 @@ import {
 } from '../../actions/profile';
 import moment from "moment";
 import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
-import { required } from '../../formValidation/validationRules';
+import { required, mobile } from '../../formValidation/validationRules';
 import userFemale from 'img/common/user-female.png';
 import userMale from 'img/common/user-male.png';
 import home from 'img/common/home.png';
@@ -110,6 +110,7 @@ class UpdateProfileForm extends Component {
                                                 errorClass="help-block"
                                                 type="text"
                                                 component={InputField}
+                                                validate={[mobile]}
                                             />
                                         </div>
                                     </li>
