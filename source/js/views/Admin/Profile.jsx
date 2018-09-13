@@ -25,9 +25,6 @@ class Profile extends Component {
                         <div className="body-content row d-flex">
                             <div className="col-md-12">
                                 <div className="white-box">
-                                    <div className="whitebox-head">
-                                        <h3 className="title-h3">Profile</h3>
-                                    </div>
                                     <div className="row d-flex whitebox-body">
                                         <div className="col-md-12">
                                             <ProfileForm onSubmit={this.handleSubmit} />
