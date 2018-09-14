@@ -152,7 +152,7 @@ class App extends Component {
                             <PrivateRoute path={routeCodes.UPDATE_PROFILE} component={UpdateProfile} />
                             <PrivateRoute path={routeCodes.PROFILE_SETTINGS} component={ProfileSettings} />
 
-                            <PrivateRoute path={`${routeCodes.POST}/:id`} component={Post} />
+                            <PrivateRoute path={`${routeCodes.POST}/:username/:id`} component={Post} />
 
                             <PrivateRoute path={routeCodes.BODY} component={Body} />
 

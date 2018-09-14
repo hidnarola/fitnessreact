@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import FitnessHeader from '../components/global/FitnessHeader';
 import FitnessNav from '../components/global/FitnessNav';
-import { getUserSingleTimelineRequest } from '../actions/userTimeline';
+import { getUserSingleTimelineRequest, setTimelineState } from '../actions/userTimeline';
 import { FaCircleONotch } from "react-icons/lib/fa";
 import ErrorCloud from "svg/error-cloud.svg";
 import NoDataFoundImg from "img/common/no_datafound.png";
@@ -16,8 +16,19 @@ import ReactHtmlParser from "react-html-parser";
 import cns from "classnames";
 import { NavLink, Link } from "react-router-dom";
 import CommentBoxForm from '../components/Profile/CommentBoxForm';
+import { toggleLikeOnPostRequest } from '../actions/postLikes';
+import { te } from '../helpers/funs';
+import { commentOnPostRequest } from '../actions/postComments';
+import { reset } from "redux-form";
 
 class Post extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            isLikedByLoggedUser: false,
+        }
+    }
+
     componentWillMount() {
         const { dispatch, match } = this.props;
         let id = match.params.id;
@@ -25,7 +36,8 @@ class Post extends Component {
     }
 
     render() {
-        const { loading, error, post, loggedUserData } = this.props;
+        const { loading, error, post, match } = this.props;
+        const { isLikedByLoggedUser } = this.state;
         let doRenderPost = true;
         if (!loading && post) {
             var createdBy = (post.created_by && Object.keys(post.created_by).length > 0) ? post.created_by : null;
@@ -50,12 +62,7 @@ class Post extends Component {
             var likes = post.likes;
             var totalLikes = likes.length;
             var likesStr = '';
-            var isLikedByLoggedUser = false;
             if (totalLikes > 0) {
-                var likedOfLoggedUser = _.find(likes, ['authUserId', loggedUserData.authId]);
-                if (likedOfLoggedUser) {
-                    isLikedByLoggedUser = true;
-                }
                 if (totalLikes > 2) {
                     for (let i = 0; i < 2; i++) {
                         const obj = likes[i];
@@ -91,9 +98,8 @@ class Post extends Component {
                 <FitnessNav />
                 <section className="body-wrap">
                     <div className="body-head space-btm-45 d-flex justify-content-start">
-                        <div className="body-head-l">
-                            <h2>Post</h2>
-                            <p>Post description.</p>
+                        <div className="body-head-r">
+                            <Link to={`${routeCodes.PROFILE}/${match.params.username}`} className="white-btn">Back <i className="icon-arrow_back"></i></Link>
                         </div>
                     </div>
 
@@ -137,18 +143,17 @@ class Post extends Component {
                                             {ReactHtmlParser(description)}
                                         </div>
                                     }
-                                    <div className={cns("posttype-body-grey")}>
+                                    <div className={cns("posttype-body-grey text-c")}>
                                         {images && images.length > 0 &&
                                             images.map((imageD, imageI) => {
                                                 return (
-                                                    <span key={imageI}>
-                                                        <img
-                                                            src={SERVER_BASE_URL + imageD.image}
-                                                            onError={(e) => {
-                                                                e.target.src = noImg
-                                                            }}
-                                                        />
-                                                    </span>
+                                                    <img
+                                                        key={imageI}
+                                                        src={SERVER_BASE_URL + imageD.image}
+                                                        onError={(e) => {
+                                                            e.target.src = noImg
+                                                        }}
+                                                    />
                                                 )
                                             })
                                         }
@@ -161,18 +166,15 @@ class Post extends Component {
                                     </div>
                                 </div>
                                 <div className="posttype-btm d-flex">
-                                    {/* <LikeButton
-                                    index={index}
-                                    postId={post._id}
-                                    isLikedByLoggedUser={isLikedByLoggedUser}
-                                    handleToggleLike={this.handleToggleLike}
-                                /> */}
-                                    <Link to={`${routeCodes.POST}/${post._id}`} className="icon-thumb_up"></Link>
+                                    <a href="javascript:void(0)" className={cns('icon-thumb_up', { 'liked-color': isLikedByLoggedUser })} onClick={this.handleLike}></a>
                                     <Link to={`${routeCodes.POST}/${post._id}`} className="icon-chat"></Link>
                                 </div>
                             </div>
                             <div className="single-post-right">
-                                <CommentBoxForm />
+                                <CommentBoxForm
+                                    postId={post._id}
+                                    onSubmit={this.handleComment}
+                                />
                                 {post.comments && post.comments.length > 0 &&
                                     post.comments.map((o, i) => {
                                         return (
@@ -190,10 +192,11 @@ class Post extends Component {
                                                     <h4>
                                                         <NavLink to={`${routeCodes.PROFILE}/${o.username}`}>
                                                             {o.firstName} {(o.lastName) ? o.lastName : ''}
-                                                        </NavLink> {(o.comment)}
+                                                        </NavLink>
+                                                        <p>{moment(moment.utc(o.create_date).toDate()).local().format('Do MMM [at] hh:mm')}</p>
                                                     </h4>
-                                                    <div className="post-comment-r-btm d-flex">
-                                                        <p>{moment(moment.utc(o.create_date).toDate()).local().format('Do MMMM [at] hh:mm')}</p>
+                                                    <div className="post-comment-r-btm">
+                                                        {ReactHtmlParser(o.comment)}
                                                     </div>
                                                 </div>
                                             </div>
@@ -226,15 +229,73 @@ class Post extends Component {
             </div>
         );
     }
+
+    componentDidUpdate(prevProps, prevState) {
+        const {
+            loading, post,
+            postLikeLoading, postLikePost, postLikeError,
+            postCommentLoading, postCommentPost, postCommentError,
+            loggedUserData,
+            dispatch
+        } = this.props;
+        if (!loading && post && post !== prevProps.post) {
+            let isLiked = false;
+            let likedOfLoggedUser = _.find(post.likes, ['authUserId', loggedUserData.authId]);
+            if (likedOfLoggedUser) {
+                isLiked = true;
+            }
+            this.setState({ isLikedByLoggedUser: isLiked });
+        }
+        if (!postLikeLoading && postLikePost && postLikePost !== prevProps.postLikePost) {
+            let stateData = { post: Object.assign({}, postLikePost) };
+            dispatch(setTimelineState(stateData));
+        } else if (!postLikeLoading && prevProps.postLikeLoading !== postLikeLoading && postLikeError && postLikeError.length > 0) {
+            te('Something went wrong! please try again later.');
+        }
+        if (!postCommentLoading && postCommentPost && postCommentPost !== prevProps.postCommentPost) {
+            let stateData = { post: Object.assign({}, postCommentPost) };
+            dispatch(setTimelineState(stateData));
+            dispatch(reset('commentBoxForm'));
+        } else if (!postCommentLoading && prevProps.postCommentLoading !== postCommentLoading && postCommentError && postCommentError.length > 0) {
+            te('Something went wrong! please try again later.');
+        }
+    }
+
+    handleLike = () => {
+        const { post, dispatch } = this.props;
+        const { isLikedByLoggedUser } = this.state;
+        var requestData = { postId: post._id };
+        dispatch(toggleLikeOnPostRequest(requestData));
+        this.setState({ isLikedByLoggedUser: !isLikedByLoggedUser });
+    }
+
+    handleComment = (data) => {
+        const { dispatch, post } = this.props;
+        var postId = post._id;
+        var comment = (data[`comment_${postId}`]) ? data[`comment_${postId}`].trim() : '';
+        if (comment) {
+            var requestData = {
+                comment: comment.replace(/\n/gi, '<br/>'),
+                postId: postId,
+            };
+            dispatch(commentOnPostRequest(requestData));
+        }
+    }
 }
 
 const mapStateToProps = (state) => {
-    const { userTimeline, user } = state;
+    const { userTimeline, user, postLikes, postComments } = state;
     return {
         loading: userTimeline.get('postLoading'),
         post: userTimeline.get('post'),
         postError: userTimeline.get('postError'),
         loggedUserData: user.get('loggedUserData'),
+        postLikeLoading: postLikes.get('loading'),
+        postLikePost: postLikes.get('post'),
+        postLikeError: postLikes.get('error'),
+        postCommentLoading: postComments.get('loading'),
+        postCommentPost: postComments.get('post'),
+        postCommentError: postComments.get('error'),
     };
 }
 

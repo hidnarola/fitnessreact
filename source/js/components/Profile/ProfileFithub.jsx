@@ -305,7 +305,7 @@ class ProfileFithub extends Component {
                                             lastComment = comments[(totalComments - 1)];
                                             lastCommentCreatedAt = lastComment.create_date;
                                             lastCommentCreatedAt = moment.utc(lastCommentCreatedAt).toDate();
-                                            lastCommentCreatedAt = moment(lastCommentCreatedAt).local().format('Do MMMM [at] hh:mm');
+                                            lastCommentCreatedAt = moment(lastCommentCreatedAt).local().format('Do MMM [at] hh:mm');
                                         }
                                         var likes = post.likes;
                                         var totalLikes = likes.length;
@@ -362,7 +362,7 @@ class ProfileFithub extends Component {
                                                                 {`${createdBy.firstName} ${(createdBy.lastName) ? createdBy.lastName : ''}`}
                                                             </NavLink>
                                                         </big>
-                                                        <small><Link to={`${routeCodes.POST}/${post._id}`} className="pull-right">{(post.tag_line) ? post.tag_line : ''}</Link></small>
+                                                        <small><Link to={`${routeCodes.POST}/${match.params.username}/${post._id}`} className="pull-right">{(post.tag_line) ? post.tag_line : ''}</Link></small>
                                                         <p className="">
                                                             {postCreatedAt}
                                                             {post.privacy == ACCESS_LEVEL_PUBLIC && <FaGlobe />}
@@ -408,7 +408,7 @@ class ProfileFithub extends Component {
                                                                     <a href="javascript:void(0)" onClick={() => { }}>{likesStr}</a>
                                                                 }
                                                                 {totalComments > 0 &&
-                                                                    <Link to={`${routeCodes.POST}/${post._id}`} className="pull-right">Comments {totalComments}</Link>
+                                                                    <Link to={`${routeCodes.POST}/${match.params.username}/${post._id}`} className="pull-right">Comments {totalComments}</Link>
                                                                 }
                                                             </p>
                                                         }
@@ -421,7 +421,7 @@ class ProfileFithub extends Component {
                                                         isLikedByLoggedUser={isLikedByLoggedUser}
                                                         handleToggleLike={this.handleToggleLike}
                                                     />
-                                                    <Link to={`${routeCodes.POST}/${post._id}`} className="icon-chat"></Link>
+                                                    <Link to={`${routeCodes.POST}/${match.params.username}/${post._id}`} className="icon-chat"></Link>
                                                 </div>
                                                 {totalComments > 0 &&
                                                     <div className="post-comment d-flex">
@@ -438,17 +438,17 @@ class ProfileFithub extends Component {
                                                             <h4>
                                                                 <NavLink to={`${routeCodes.PROFILE}/${lastComment.username}`}>
                                                                     {lastComment.firstName} {(lastComment.lastName) ? lastComment.lastName : ''}
-                                                                </NavLink> {(lastComment.comment)}
-                                                            </h4>
-                                                            <div className="post-comment-r-btm d-flex">
+                                                                </NavLink>
                                                                 <p>{lastCommentCreatedAt}</p>
+                                                            </h4>
+                                                            <div className="post-comment-r-btm">
+                                                                {ReactHtmlParser(lastComment.comment)}
                                                             </div>
                                                         </div>
                                                     </div>
                                                 }
                                                 {showCommentBox &&
                                                     <CommentBoxForm
-                                                        index={index}
                                                         postId={post._id}
                                                         onSubmit={this.handleComment}
                                                     />

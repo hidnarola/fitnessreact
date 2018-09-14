@@ -555,7 +555,8 @@ display: flex; justify-content: center; flex-direction: column; text-align: cent
 .upload-gallery span i{color:#606986; font-size:21px;	line-height: 21px;position:absolute;top:50%;left:50%; -webkit-transform:translate(-50%, -50%); -moz-transform:translate(-50%, -50%); transform:translate(-50%, -50%);}
 .upload-gallery span img {width: 100%;height: 100%;}
 .upload-gallery span:hover img{filter: blur(10px);}
-.upload-gallery span button i{ color:#d9534f;}
+.upload-gallery span button i{color:#d9534f; display:none;}
+.upload-gallery span:hover button i{display:block;}
 .upload-gallery span button i:before{ top:-1px; position: relative;}
 .upload-gallery span div{ display:none;}
 .upload-gallery span:hover div{ display:block; position:absolute; top:50%; left: 50%;transform: translate(-50%, -50%); z-index:1;}
@@ -698,7 +699,7 @@ color:#282828;font-size: 12px; font-weight: 500;	line-height:50px;}
 .post-comment-r{padding:0 0 0 20px;overflow: hidden; word-wrap: break-word;}
 .post-comment-r h4{margin:0 0 10px;padding:0; color:#282828; font-size:14px; font-weight:300; line-height: 14px;}
 .post-comment-r h4 a{color:#46E9C5;}
-.post-comment-r p{margin:0;padding:0; color: #737D98;	font-size: 12px;	font-weight: 300;	line-height: 10px;}
+.post-comment-r p{ padding: 0; color: #999; font-size: 11px; line-height: 10px; margin-top: 5px; font-weight: 500;}
 .post-comment-r h6{margin:0 0 0 auto;padding:0;}
 .post-comment-r h6 small{padding:0 4px;font-size:12px;	font-weight: 300;	line-height:10px;}
 .post-comment-r h6 a{font-size:12px;	font-weight: 300; line-height:10px;color: #737D98;}
@@ -2197,8 +2198,9 @@ ul.common-ul>li.body-fat-field-li{ width:50%; margin-left:auto;}
 .modal-bk-btn-sub{ border: 0; background: transparent; line-height: 25px; vertical-align: top; margin-right: 5px; }
 
 .single-post-left .posttype-body-grey p span:last-child {margin-left: auto;}
+.single-post-left .posttype-body-grey p span:first-child { margin-left: 0; }
 .single-post-left .posttype-body-grey p {display: flex;padding:15px;}
-.single-post-left .posttype-body img {max-width: 150px;}
+.single-post-left .posttype-body img {width: 150px; margin: 10px 5px 0px; height: 150px;}
 .single-post-left {flex: 0 0 60%;background: #fff;box-sizing: border-box;}
 .single-post-right {-ms-flex: 0 0 40%;flex: 0 0 40%;max-width: 40%;margin: 0;}
 .single-post-right .post-comment-box-form-wrapper {background: #fff;margin-left: 30px;padding: 20px 20px 20px 20px;}

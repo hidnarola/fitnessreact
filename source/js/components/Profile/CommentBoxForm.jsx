@@ -4,11 +4,7 @@ import { Field, reduxForm } from 'redux-form';
 
 class CommentBoxForm extends Component {
     render() {
-        const {
-            handleSubmit,
-            postId,
-            index,
-        } = this.props;
+        const { handleSubmit, postId } = this.props;
         return (
             <div className="post-comment-box-form-wrapper">
                 <form onSubmit={handleSubmit}>
