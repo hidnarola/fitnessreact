@@ -36,7 +36,6 @@ class ChangeProfilePhotoModal extends Component {
                             <Cropper
                                 ref='cropper'
                                 src={selectedImage.preview}
-
                                 viewMode={3}
                                 aspectRatio={1}
                                 guides={false}
@@ -59,25 +58,27 @@ class ChangeProfilePhotoModal extends Component {
                             </div>
                         }
                         <div className="gallery-popup-body-r">
-                            <div className="upload-gallery">
-                                <Dropzone
-                                    name="profile_pic"
-                                    className="no-padding"
-                                    accept={"image/jpeg, image/png, image/jpg, image/gif"}
-                                    onDrop={this.onDrop}
-                                    multiple={false}
-                                >
-                                    <span>
-                                        <i className="icon-add_a_photo"></i>
-                                    </span>
-                                </Dropzone>
-                            </div>
+                            {!selectedImage &&
+                                <div className="upload-gallery">
+                                    <Dropzone
+                                        name="profile_pic"
+                                        className="no-padding"
+                                        accept={"image/jpeg, image/png, image/jpg, image/gif"}
+                                        onDrop={this.onDrop}
+                                        multiple={false}
+                                    >
+                                        <span>
+                                            <i className="icon-add_a_photo"></i>
+                                        </span>
+                                    </Dropzone>
+                                </div>
+                            }
                             <div className="gallery-post">
                                 {selectedImage &&
-                                    <button className="gradient-color-2" type="button">Cancel</button>
+                                    <button className="gradient-color-2 mt-10" type="button" onClick={this.cancelSelectedImg}>Cancel</button>
                                 }
                                 {selectedImage &&
-                                    <button className="gradient-color-3" type="button" onClick={this.cropImg}>Crop</button>
+                                    <button className="gradient-color-3 mt-10" type="button" onClick={this.cropImg}>Crop</button>
                                 }
                                 {croppedImg &&
                                     <button type="button" onClick={() => handleSubmit({ ...this.state })}>Save</button>
@@ -93,6 +94,13 @@ class ChangeProfilePhotoModal extends Component {
     onDrop = (filesToUpload, e) => {
         this.setState({
             selectedImage: filesToUpload[0],
+            croppedImg: null,
+        });
+    }
+
+    cancelSelectedImg = () => {
+        this.setState({
+            selectedImage: null,
             croppedImg: null,
         });
     }

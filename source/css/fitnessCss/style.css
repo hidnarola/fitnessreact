@@ -2208,3 +2208,4 @@ ul.common-ul>li.body-fat-field-li{ width:50%; margin-left:auto;}
 .single-post-right .post-comment {background: #fff;margin-left: 30px;}
 .single-post-wrapper {background: transparent;margin: 0;box-sizing: border-box;}
 .single-post-left .posttype-body {padding: 15px;}
+.auth0-lock-error-msg { width: -moz-max-content; }
