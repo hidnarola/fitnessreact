@@ -91,6 +91,7 @@ import BodyParts from './Admin/BodyParts';
 import EquipmentCategories from './Admin/EquipmentCategories';
 import ChangePassword from './Admin/ChangePassword';
 import Profile from './Admin/Profile';
+import Post from './Post';
 
 const auth = new Auth();
 
@@ -150,6 +151,8 @@ class App extends Component {
                             <PrivateRoute path={`${routeCodes.PROFILE}/:username`} component={ProfilePage} />
                             <PrivateRoute path={routeCodes.UPDATE_PROFILE} component={UpdateProfile} />
                             <PrivateRoute path={routeCodes.PROFILE_SETTINGS} component={ProfileSettings} />
+
+                            <PrivateRoute path={`${routeCodes.POST}/:id`} component={Post} />
 
                             <PrivateRoute path={routeCodes.BODY} component={Body} />
 

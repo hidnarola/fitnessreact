@@ -39,7 +39,7 @@ import {
 } from '../../constants/consts';
 import cns from "classnames";
 import { routeCodes } from '../../constants/routes';
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import { toggleLikeOnPostRequest } from '../../actions/postLikes';
 import CommentBoxForm from './CommentBoxForm';
 import { commentOnPostRequest } from '../../actions/postComments';
@@ -52,7 +52,6 @@ import { FaCircleONotch } from "react-icons/lib/fa";
 import { MenuItem, Dropdown, DropdownButton } from "react-bootstrap";
 import { FaGlobe, FaLock, FaGroup } from 'react-icons/lib/fa';
 import AddPostPhotoModal from './AddPostPhotoModal';
-import PostDetailsModal from './PostDetailsModal';
 import LikeButton from "./LikeButton";
 import { getTimelineWidgetsAndWidgetsDataRequest, saveTimelineWidgetsRequest, changeTimelineMuscleInnerDataRequest, changeTimelineBodyFatWidgetRequest } from '../../actions/timelineWidgets';
 import WidgetsListModal from '../Common/WidgetsListModal';
@@ -80,9 +79,7 @@ class ProfileFithub extends Component {
             postPrivacy: ACCESS_LEVEL_PRIVATE,
             newPostActionInit: false,
             showPostPhotoModal: false,
-            selectedPostForDetailsIndex: null,
             selectedPostForDetails: null,
-            showPostDetailsModal: false,
             showAddWidgetModal: false,
         }
     }
@@ -121,9 +118,6 @@ class ProfileFithub extends Component {
             postPrivacy,
             hasMorePosts,
             showPostPhotoModal,
-            showPostDetailsModal,
-            selectedPostForDetailsIndex,
-            selectedPostForDetails,
             postImages,
             showAddWidgetModal,
         } = this.state;
@@ -367,7 +361,7 @@ class ProfileFithub extends Component {
                                                                 {`${createdBy.firstName} ${(createdBy.lastName) ? createdBy.lastName : ''}`}
                                                             </NavLink>
                                                         </big>
-                                                        <small><a href="javascript:void(0)" onClick={() => this.handleShowPostDetailsModal(index)}>{(post.tag_line) ? post.tag_line : ''}</a></small>
+                                                        <small><Link to={`${routeCodes.POST}/${post._id}`} className="pull-right">{(post.tag_line) ? post.tag_line : ''}</Link></small>
                                                         <p className="">
                                                             {postCreatedAt}
                                                             {post.privacy == ACCESS_LEVEL_PUBLIC && <FaGlobe />}
@@ -413,7 +407,7 @@ class ProfileFithub extends Component {
                                                                     <a href="javascript:void(0)" onClick={() => { }}>{likesStr}</a>
                                                                 }
                                                                 {totalComments > 0 &&
-                                                                    <a href="javascript:void(0)" className="pull-right" onClick={() => this.handleShowPostDetailsModal(index)}>Comments {totalComments}</a>
+                                                                    <Link to={`${routeCodes.POST}/${post._id}`} className="pull-right">Comments {totalComments}</Link>
                                                                 }
                                                             </p>
                                                         }
@@ -426,7 +420,7 @@ class ProfileFithub extends Component {
                                                         isLikedByLoggedUser={isLikedByLoggedUser}
                                                         handleToggleLike={this.handleToggleLike}
                                                     />
-                                                    <a href="javascript:void(0)" onClick={() => this.handleShowPostDetailsModal(index)} className="icon-chat"></a>
+                                                    <Link to={`${routeCodes.POST}/${post._id}`} className="icon-chat"></Link>
                                                 </div>
                                                 {totalComments > 0 &&
                                                     <div className="post-comment d-flex">
@@ -472,15 +466,6 @@ class ProfileFithub extends Component {
                     images={postImages}
                     handleAddPostImages={this.handleAddPostImages}
                     handleRemovePostImags={this.handleRemovePostImage}
-                />
-                <PostDetailsModal
-                    show={showPostDetailsModal}
-                    handleClose={this.handleHidePostDetailsModal}
-                    postIndex={selectedPostForDetailsIndex}
-                    post={selectedPostForDetails}
-                    loggedUserData={loggedUserData}
-                    handleToggleLike={this.handleToggleLike}
-                    handleComment={this.handleComment}
                 />
                 <WidgetsListModal
                     type={WIDGETS_TYPE_TIMELINE}
@@ -558,9 +543,6 @@ class ProfileFithub extends Component {
             } else {
                 newPostsState[selectedTimelineIndex] = likePost;
             }
-            if (this.state.showPostDetailsModal) {
-                selectedPostForDetails = likePost;
-            }
             this.setState({
                 likeActionInit: false,
                 selectedTimelineIndex: null,
@@ -576,9 +558,6 @@ class ProfileFithub extends Component {
                 te(commentError[0]);
             } else {
                 newPostsState[selectedTimelineIndex] = commentPost;
-            }
-            if (this.state.showPostDetailsModal) {
-                selectedPostForDetails = commentPost;
             }
             var formData = {
                 [`comment_${selectedTimelineId}`]: '',
@@ -719,24 +698,6 @@ class ProfileFithub extends Component {
         var postImages = this.state.postImages;
         postImages.splice(index, 1);
         this.setState({ postImages });
-    }
-
-    handleShowPostDetailsModal = (index) => {
-        const { posts } = this.state;
-        var selectedPost = posts[index];
-        this.setState({
-            showPostDetailsModal: true,
-            selectedPostForDetailsIndex: index,
-            selectedPostForDetails: selectedPost,
-        });
-    }
-
-    handleHidePostDetailsModal = () => {
-        this.setState({
-            showPostDetailsModal: false,
-            selectedPostForDetailsIndex: null,
-            selectedPostForDetails: null,
-        });
     }
 
     handleShowWidgetModal = () => {

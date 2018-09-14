@@ -23,6 +23,8 @@ export const routeCodes = {
     UPDATE_PROFILE: `${publicPath}update_profile`,
     PROFILE_SETTINGS: `${publicPath}profile_settings`,
 
+    POST: `${publicPath}post`,
+
     // Recipe Routes
     RECEIP: `${publicPath}receip`,
 
