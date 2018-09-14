@@ -611,7 +611,7 @@ class ProfileFithub extends Component {
         const { dispatch } = this.props;
         var index = props.index;
         var postId = props.postId;
-        var comment = data[`comment_${postId}`].trim();
+        var comment = (data[`comment_${postId}`]) ? data[`comment_${postId}`].trim() : '';
         if (comment) {
             var requestData = {
                 comment: comment.replace(/\n/gi, '<br/>'),
