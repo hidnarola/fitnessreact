@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import { getUserTimelineRequest, addPostOnUserTimelineRequest } from '../../actions/userTimeline';
+import { getUserTimelineRequest, addPostOnUserTimelineRequest, setTimelineState } from '../../actions/userTimeline';
 import _ from "lodash";
 import noProfileImg from 'img/common/no-profile-img.png'
 import noImg from 'img/common/no-img.png'
@@ -135,6 +135,7 @@ class ProfileFithub extends Component {
             widgetBadges,
             timelineUserPrivacy,
             profile,
+            match,
         } = this.props;
         let showCommentBox = false;
         let showPostBox = false;

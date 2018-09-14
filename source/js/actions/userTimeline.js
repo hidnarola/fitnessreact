@@ -14,6 +14,8 @@ export const GET_PRIVACY_OF_TIMELINE_USER_REQUEST = 'GET_PRIVACY_OF_TIMELINE_USE
 export const GET_PRIVACY_OF_TIMELINE_USER_SUCCESS = 'GET_PRIVACY_OF_TIMELINE_USER_SUCCESS';
 export const GET_PRIVACY_OF_TIMELINE_USER_ERROR = 'GET_PRIVACY_OF_TIMELINE_USER_ERROR';
 
+export const SET_TIMELINE_STATE = 'SET_TIMELINE_STATE';
+
 export function getUserTimelineRequest(username, start, offset) {
     return {
         type: GET_USER_TIMELINE_REQUEST,
@@ -97,5 +99,12 @@ export function getPrivacyOfTimelineUserError(error) {
     return {
         type: GET_PRIVACY_OF_TIMELINE_USER_ERROR,
         error
+    }
+}
+
+export function setTimelineState(stateData) {
+    return {
+        type: SET_TIMELINE_STATE,
+        stateData
     }
 }

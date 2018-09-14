@@ -11,7 +11,8 @@ import {
     ADD_POST_ON_USER_TIMELINE_ERROR,
     GET_PRIVACY_OF_TIMELINE_USER_REQUEST,
     GET_PRIVACY_OF_TIMELINE_USER_SUCCESS,
-    GET_PRIVACY_OF_TIMELINE_USER_ERROR
+    GET_PRIVACY_OF_TIMELINE_USER_ERROR,
+    SET_TIMELINE_STATE
 } from "../actions/userTimeline";
 import { VALIDATION_FAILURE_STATUS } from "../constants/consts";
 import { generateValidationErrorMsgArr } from "../helpers/funs";
@@ -19,11 +20,13 @@ import { generateValidationErrorMsgArr } from "../helpers/funs";
 const initialState = Map({
     loading: false,
     posts: [],
-    post: null,
     error: [],
     privacyLoading: false,
     privacy: null,
     privacyError: [],
+    postLoading: false,
+    post: null,
+    postError: [],
 });
 
 const actionMap = {
@@ -63,20 +66,20 @@ const actionMap = {
     },
     [GET_USER_SINGLE_TIMELINE_REQUEST]: (state, action) => {
         return state.merge(Map({
-            loading: true,
+            postLoading: true,
             post: null,
-            error: [],
+            postError: [],
         }));
     },
     [GET_USER_SINGLE_TIMELINE_SUCCESS]: (state, action) => {
         var newState = {
-            loading: false,
+            postLoading: false,
         };
-        if (action.data.status === 1) {
+        if (action.data && action.data.status === 1) {
             newState.post = action.data.timeline;
         } else {
             var msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
-            newState.error = [msg];
+            newState.postError = [msg];
         }
         return state.merge(Map(newState));
     },
@@ -90,8 +93,8 @@ const actionMap = {
             error = ['Something went wrong! please try again later'];
         }
         return state.merge(Map({
-            loading: false,
-            error: error,
+            postLoading: false,
+            postError: error,
         }));
     },
     [ADD_POST_ON_USER_TIMELINE_REQUEST]: (state, action) => {
@@ -160,6 +163,9 @@ const actionMap = {
             privacyError: error,
         }));
     },
+    [SET_TIMELINE_STATE]: (state, action) => {
+        return state.merge(Map(action.stateData));
+    }
 }
 
 export default function reducer(state = initialState, action = {}) {
