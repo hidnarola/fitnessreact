@@ -1389,6 +1389,7 @@ div#loader .loader-spinner, div.loaderloader .loader-spinner, div.no-content-loa
 .margin-top-30{margin-top: 30px;}
 .ml-20{margin-left: 20px !important;}
 .ml-5{margin-left: 5px !important;}
+.mr-5{margin-right: 5px !important;}
 .loader {padding: 15px;max-width: 100%;text-align: center;border: 1px solid #eee;margin: 0 auto;}
 .loader-spinner-icon {position: relative;top: -2px;margin-left: 2px;}
 .food-img img {width: 100%;}
@@ -2218,3 +2219,4 @@ ul.common-ul>li.body-fat-field-li{ width:50%; margin-left:auto;}
 .photo-load-more-btn i { margin-right: 5px; }
 a.fithub-photos-view-all-link { background: transparent; color: #000; text-decoration: none; width: 100%; display: block; text-align: center; padding: 10px 20px; border: 1px solid #ddd; border-radius: 5px; margin-top: 10px; }
 .photo-load-more-btn { border: 1px solid #ddd; background: transparent; display: block; width: 100%; padding: 10px 20px; margin-top: 10px; border-radius: 5px; color: #000; }
+.fithub-friends-load-more-btn{border: 1px solid #ddd; background: transparent; display: block; width: 100%; padding: 10px 20px; margin: 10px 15px 0; border-radius: 5px; color: #000;}

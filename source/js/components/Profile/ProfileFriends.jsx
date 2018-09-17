@@ -150,6 +150,13 @@ class ProfileFriends extends Component {
                                         </div>
                                     ))
                                 }
+                                <button type="button" className="fithub-friends-load-more-btn">
+                                    <span>Load More</span>
+                                </button>
+                                <button type="button" className="fithub-friends-load-more-btn" disabled={true}>
+                                    <FaCircleONotch className="loader-spinner loader-spinner-icon mr-5" />
+                                    <span>Loading...</span>
+                                </button>
                             </div>
                         }
                     </div>
