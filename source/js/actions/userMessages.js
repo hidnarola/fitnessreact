@@ -2,6 +2,10 @@ export const GET_USER_MESSAGE_CHANNEL_REQUEST = 'GET_USER_MESSAGE_CHANNEL_REQUES
 export const GET_USER_MESSAGE_CHANNEL_SUCCESS = 'GET_USER_MESSAGE_CHANNEL_SUCCESS';
 export const GET_USER_MESSAGE_CHANNEL_ERROR = 'GET_USER_MESSAGE_CHANNEL_ERROR';
 
+export const LOAD_MORE_USER_MESSAGE_CHANNEL_REQUEST = 'LOAD_MORE_USER_MESSAGE_CHANNEL_REQUEST';
+export const LOAD_MORE_USER_MESSAGE_CHANNEL_SUCCESS = 'LOAD_MORE_USER_MESSAGE_CHANNEL_SUCCESS';
+export const LOAD_MORE_USER_MESSAGE_CHANNEL_ERROR = 'LOAD_MORE_USER_MESSAGE_CHANNEL_ERROR';
+
 export const OPEN_USER_CHAT_WINDOW_REQUEST = 'OPEN_USER_CHAT_WINDOW_REQUEST';
 export const OPEN_USER_CHAT_WINDOW_SUCCESS = 'OPEN_USER_CHAT_WINDOW_SUCCESS';
 export const OPEN_USER_CHAT_WINDOW_ERROR = 'OPEN_USER_CHAT_WINDOW_ERROR';
@@ -38,6 +42,27 @@ export function getUserMessageChannelSuccess(data) {
 }
 
 export function getUserMessageChannelError(error) {
+    return {
+        type: GET_USER_MESSAGE_CHANNEL_ERROR,
+        error,
+    }
+}
+
+export function loadMoreUserMessageChannelRequest(requestData) {
+    return {
+        type: GET_USER_MESSAGE_CHANNEL_REQUEST,
+        requestData
+    }
+}
+
+export function loadMoreUserMessageChannelSuccess(data) {
+    return {
+        type: GET_USER_MESSAGE_CHANNEL_SUCCESS,
+        data,
+    }
+}
+
+export function loadMoreUserMessageChannelError(error) {
     return {
         type: GET_USER_MESSAGE_CHANNEL_ERROR,
         error,
