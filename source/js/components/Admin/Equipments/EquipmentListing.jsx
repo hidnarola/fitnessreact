@@ -23,8 +23,8 @@ const statusOptions = [
 
 const deletedOptions = [
     { value: '', label: 'All' },
-    { value: 0, label: 'Not Deleted' },
-    { value: 1, label: 'Deleted' },
+    { value: 1, label: 'Yes' },
+    { value: 0, label: 'No' },
 ];
 
 class EquipmentListing extends Component {
@@ -83,6 +83,7 @@ class EquipmentListing extends Component {
                                                 accessor: "image",
                                                 filterable: false,
                                                 sortable: false,
+                                                maxWidth: 100,
                                                 Cell: (row) => {
                                                     return (
                                                         <div className="avatar-wrapper text-center">
@@ -97,24 +98,34 @@ class EquipmentListing extends Component {
                                                         </div>
                                                     );
                                                 },
-                                                maxWidth: 100,
                                             },
                                             {
                                                 id: "createdAt",
                                                 Header: "Created Date",
                                                 accessor: "createdAt",
                                                 filterable: false,
-                                                sortable: false,
+                                                sortable: true,
+                                                maxWidth: 100,
                                                 Cell: (row) => {
                                                     return moment(row.value).format('DD/MM/YYYY');
                                                 },
-                                                maxWidth: 100,
                                             },
                                             {
                                                 id: "name",
                                                 Header: "Name",
                                                 accessor: "name",
                                                 minWidth: 300,
+                                                Filter: ({ column, filter, onChange }) => {
+                                                    return (
+                                                        <input
+                                                            type="text"
+                                                            className="width-100-per"
+                                                            value={filter ? filter.value : ''}
+                                                            onChange={event => onChange(event.target.value)}
+                                                            placeholder={(column && column.Header) ? `${column.Header}` : 'Search'}
+                                                        />
+                                                    );
+                                                },
                                             },
                                             {
                                                 id: "category_id",
@@ -122,6 +133,8 @@ class EquipmentListing extends Component {
                                                 accessor: "category_id",
                                                 filterable: false,
                                                 sortable: false,
+                                                minWidth: 200,
+                                                maxWidth: 250,
                                                 Cell: (row) => {
                                                     let cat = _.find(equipmentCategories, (o) => { return o._id === row.value })
                                                     let catName = (cat && cat.name) ? cat.name : '-----';
@@ -131,14 +144,13 @@ class EquipmentListing extends Component {
                                                         </div>
                                                     );
                                                 },
-
-                                                minWidth: 250,
                                             },
                                             {
                                                 id: "status",
                                                 Header: "Status",
                                                 accessor: "status",
                                                 filterDigit: true,
+                                                maxWidth: 100,
                                                 Cell: (row) => {
                                                     let dataObj = _.find(statusOptions, (o) => {
                                                         return (o.value === row.value);
@@ -166,13 +178,13 @@ class EquipmentListing extends Component {
                                                         </select>
                                                     );
                                                 },
-                                                minWidth: 100,
                                             },
                                             {
                                                 id: "isDeleted",
                                                 Header: "Deleted",
                                                 accessor: "isDeleted",
                                                 filterDigit: true,
+                                                maxWidth: 100,
                                                 Cell: (row) => {
                                                     let dataObj = _.find(deletedOptions, (o) => {
                                                         return (o.value === row.value);
@@ -200,7 +212,6 @@ class EquipmentListing extends Component {
                                                         </select>
                                                     );
                                                 },
-                                                minWidth: 100,
                                             },
                                             {
                                                 id: "_id",
@@ -208,6 +219,7 @@ class EquipmentListing extends Component {
                                                 accessor: "_id",
                                                 filterable: false,
                                                 sortable: false,
+                                                maxWidth: 100,
                                                 Cell: (row) => {
                                                     return (
                                                         <div className="actions-wrapper">
@@ -238,7 +250,6 @@ class EquipmentListing extends Component {
                                                         </div>
                                                     );
                                                 },
-                                                minWidth: 100,
                                             },
                                         ]}
                                         pages={dtPages}

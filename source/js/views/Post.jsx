@@ -128,7 +128,7 @@ class Post extends Component {
                                                 {`${createdBy.firstName} ${(createdBy.lastName) ? createdBy.lastName : ''}`}
                                             </NavLink>
                                         </big>
-                                        <small><Link to={`${routeCodes.POST}/${post._id}`} className="pull-right">{(post.tag_line) ? post.tag_line : ''}</Link></small>
+                                        <small><Link to={`${routeCodes.POST}/${match.params.username}/${post._id}`} className="pull-right">{(post.tag_line) ? post.tag_line : ''}</Link></small>
                                         <p className="">
                                             {postCreatedAt}
                                             {post.privacy == ACCESS_LEVEL_PUBLIC && <FaGlobe />}
@@ -167,7 +167,7 @@ class Post extends Component {
                                 </div>
                                 <div className="posttype-btm d-flex">
                                     <a href="javascript:void(0)" className={cns('icon-thumb_up', { 'liked-color': isLikedByLoggedUser })} onClick={this.handleLike}></a>
-                                    <Link to={`${routeCodes.POST}/${post._id}`} className="icon-chat"></Link>
+                                    <Link to={`${routeCodes.POST}/${match.params.username}/${post._id}`} className="icon-chat"></Link>
                                 </div>
                             </div>
                             <div className="single-post-right">

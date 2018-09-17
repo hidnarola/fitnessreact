@@ -123,6 +123,8 @@ class FitnessTestListing extends Component {
                                                 Header: 'Created At',
                                                 accessor: 'createdAt',
                                                 filterable: false,
+                                                sortable: true,
+                                                maxWidth: 100,
                                                 Cell: (row) => {
                                                     return (
                                                         <div className="list-dob-wrapper">
@@ -131,17 +133,30 @@ class FitnessTestListing extends Component {
                                                             </span>
                                                         </div>
                                                     );
-                                                }
+                                                },
                                             },
                                             {
                                                 id: 'name',
                                                 Header: 'Name',
                                                 accessor: 'name',
+                                                minWidth: 200,
+                                                Filter: ({ column, filter, onChange }) => {
+                                                    return (
+                                                        <input
+                                                            type="text"
+                                                            className="width-100-per"
+                                                            value={filter ? filter.value : ''}
+                                                            onChange={event => onChange(event.target.value)}
+                                                            placeholder={(column && column.Header) ? `${column.Header}` : 'Search'}
+                                                        />
+                                                    );
+                                                },
                                             },
                                             {
                                                 id: 'category',
                                                 Header: 'Category',
                                                 accessor: 'category',
+                                                maxWidth: 150,
                                                 Cell: (row) => {
                                                     let dataObj = _.find(categoryOptions, (o) => {
                                                         return (o.value === row.value);
@@ -168,12 +183,13 @@ class FitnessTestListing extends Component {
                                                             }
                                                         </select>
                                                     );
-                                                }
+                                                },
                                             },
                                             {
                                                 id: 'subCategory',
                                                 Header: 'Sub Category',
                                                 accessor: 'subCategory',
+                                                maxWidth: 150,
                                                 Cell: (row) => {
                                                     let dataObj = _.find(subCategoryOptions, (o) => {
                                                         return (o.value === row.value);
@@ -200,12 +216,13 @@ class FitnessTestListing extends Component {
                                                             }
                                                         </select>
                                                     );
-                                                }
+                                                },
                                             },
                                             {
                                                 id: 'format',
                                                 Header: 'Format',
                                                 accessor: 'format',
+                                                maxWidth: 120,
                                                 Cell: (row) => {
                                                     let dataObj = _.find(formatOptions, (o) => {
                                                         return (o.value === row.value);
@@ -232,13 +249,14 @@ class FitnessTestListing extends Component {
                                                             }
                                                         </select>
                                                     );
-                                                }
+                                                },
                                             },
                                             {
                                                 id: 'status',
                                                 Header: 'Status',
                                                 accessor: 'status',
                                                 filterDigit: true,
+                                                maxWidth: 100,
                                                 Cell: (row) => {
                                                     let dataObj = _.find(statusOptions, (o) => {
                                                         return (o.value === row.value);
@@ -265,13 +283,14 @@ class FitnessTestListing extends Component {
                                                             }
                                                         </select>
                                                     );
-                                                }
+                                                },
                                             },
                                             {
                                                 id: 'isDeleted',
                                                 Header: 'Deleted',
                                                 accessor: 'isDeleted',
                                                 filterDigit: true,
+                                                maxWidth: 100,
                                                 Cell: (row) => {
                                                     let dataObj = _.find(isDeletedOptions, (o) => {
                                                         return (o.value === row.value);
@@ -298,7 +317,7 @@ class FitnessTestListing extends Component {
                                                             }
                                                         </select>
                                                     );
-                                                }
+                                                },
                                             },
                                             {
                                                 id: '_id',
@@ -306,6 +325,7 @@ class FitnessTestListing extends Component {
                                                 accessor: '_id',
                                                 filterable: false,
                                                 sortable: false,
+                                                maxWidth: 100,
                                                 Cell: (row) => {
                                                     return (
                                                         <div className="actions-wrapper">
@@ -334,7 +354,7 @@ class FitnessTestListing extends Component {
                                                             </ButtonToolbar>
                                                         </div>
                                                     );
-                                                }
+                                                },
                                             },
                                         ]}
                                         pages={dtPages}

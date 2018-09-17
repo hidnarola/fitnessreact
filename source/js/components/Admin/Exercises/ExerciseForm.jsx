@@ -18,8 +18,8 @@ import {
     InputField,
     SelectField_ReactSelect,
     SelectField_ReactSelectMulti,
-    FileField_Dropzone_Multi,
-    EditorField
+    EditorField,
+    FileField_Dropzone_Single
 } from '../../../helpers/FormControlHelper';
 import {
     EXERCISE_MECHANICS_ISOLATION,
@@ -185,6 +185,8 @@ class ExerciseForm extends Component {
                                 placeholder="Mechanics"
                                 component={SelectField_ReactSelect}
                                 options={mechanicsOptions}
+                                errorClass="help-block"
+                                validate={[requiredReactSelectStatus]}
                             />
                         </div>
                         <div className="col-md-4">
@@ -222,7 +224,7 @@ class ExerciseForm extends Component {
                                 options={bodyPartsOptions}
                             />
                         </div>
-                        <div className="col-md-6">
+                        <div className="col-md-7">
                             <Field
                                 name="description"
                                 value={description}
@@ -235,7 +237,7 @@ class ExerciseForm extends Component {
                                 component={EditorField}
                             />
                         </div>
-                        <div className="col-md-6">
+                        <div className="col-md-5">
                             <Field
                                 name="images"
                                 label="Images"
@@ -243,7 +245,7 @@ class ExerciseForm extends Component {
                                 mainWrapperClass="image-form-main-wrapper"
                                 wrapperClass="form-group"
                                 placeholder="Images"
-                                component={FileField_Dropzone_Multi}
+                                component={FileField_Dropzone_Single}
                                 existingImages={exerciseImages}
                                 showExistingImageDeleteModel={(path) => this.handleDeleteImageModel(true, path)}
                             />
@@ -361,7 +363,7 @@ class ExerciseForm extends Component {
                     steps: steps,
                     tips: tips,
                     deleted_images: deletedImages,
-                    status: exercise.status,
+                    status: _.find(statusOptions, (o) => { return (o.value === exercise.status) }),
                 };
                 initialize(exerciseData);
                 let exerciseImages = exercise.images;

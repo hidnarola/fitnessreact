@@ -65,6 +65,7 @@ class BodyPartsListing extends Component {
                                                 Header: 'Created At',
                                                 accessor: 'createdAt',
                                                 filterable: false,
+                                                sortable: true,
                                                 Cell: (row) => {
                                                     return (
                                                         <div className="list-dob-wrapper">
@@ -79,6 +80,17 @@ class BodyPartsListing extends Component {
                                                 id: 'bodypart',
                                                 Header: 'Body Part',
                                                 accessor: 'bodypart',
+                                                Filter: ({ column, filter, onChange }) => {
+                                                    return (
+                                                        <input
+                                                            type="text"
+                                                            className="width-100-per"
+                                                            value={filter ? filter.value : ''}
+                                                            onChange={event => onChange(event.target.value)}
+                                                            placeholder={(column && column.Header) ? `${column.Header}` : 'Search'}
+                                                        />
+                                                    );
+                                                },
                                             },
                                             {
                                                 id: "isDeleted",
@@ -111,8 +123,7 @@ class BodyPartsListing extends Component {
                                                             }
                                                         </select>
                                                     );
-                                                },
-                                                maxWidth: 100,
+                                                }
                                             },
                                             {
                                                 id: '_id',

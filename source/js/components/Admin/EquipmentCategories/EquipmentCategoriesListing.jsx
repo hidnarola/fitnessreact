@@ -66,6 +66,7 @@ class EquipmentCategoriesListing extends Component {
                                                 Header: 'Created At',
                                                 accessor: 'createdAt',
                                                 filterable: false,
+                                                sortable: true,
                                                 Cell: (row) => {
                                                     return (
                                                         <div className="list-dob-wrapper">
@@ -80,16 +81,15 @@ class EquipmentCategoriesListing extends Component {
                                                 id: 'name',
                                                 Header: 'Category',
                                                 accessor: 'name',
-                                            },
-                                            {
-                                                id: 'description',
-                                                Header: 'Description',
-                                                accessor: 'description',
-                                                Cell: (row) => {
+                                                Filter: ({ column, filter, onChange }) => {
                                                     return (
-                                                        <Dotdotdot clamp={3}>
-                                                            {row.value}
-                                                        </Dotdotdot>
+                                                        <input
+                                                            type="text"
+                                                            className="width-100-per"
+                                                            value={filter ? filter.value : ''}
+                                                            onChange={event => onChange(event.target.value)}
+                                                            placeholder={(column && column.Header) ? `${column.Header}` : 'Search'}
+                                                        />
                                                     );
                                                 },
                                             },
@@ -125,7 +125,6 @@ class EquipmentCategoriesListing extends Component {
                                                         </select>
                                                     );
                                                 },
-                                                maxWidth: 100,
                                             },
                                             {
                                                 id: '_id',

@@ -89,8 +89,8 @@ class BadgeListing extends Component {
                                                 Header: 'Created At',
                                                 accessor: 'createdAt',
                                                 filterable: false,
-                                                sortable: false,
-                                                minWidth: 80,
+                                                sortable: true,
+                                                maxWidth: 100,
                                                 Cell: (row) => {
                                                     return (
                                                         <div className="list-dob-wrapper">
@@ -105,7 +105,7 @@ class BadgeListing extends Component {
                                                 id: 'task',
                                                 Header: 'Tasks',
                                                 accessor: 'task',
-                                                minWidth: 150,
+                                                minWidth: 200,
                                                 Cell: (row) => {
                                                     let dataObj = _.find(BADGES_TASKS, (o) => {
                                                         return (o.value === row.value);
@@ -141,7 +141,7 @@ class BadgeListing extends Component {
                                                 Header: 'Target',
                                                 accessor: 'value',
                                                 filterable: false,
-                                                minWidth: 70,
+                                                maxWidth: 130,
                                                 Cell: (row) => {
                                                     var task = row.original.task;
                                                     var unitLabel = row.original.unit;
@@ -169,28 +169,51 @@ class BadgeListing extends Component {
                                                 id: 'point',
                                                 Header: 'Points',
                                                 accessor: 'point',
-                                                filterable: false,
-                                                minWidth: 50,
+                                                filterable: true,
+                                                filterDigit: true,
+                                                maxWidth: 80,
                                                 Cell: (row) => {
                                                     return (
                                                         <div className="list-status-wrapper">
                                                             {`${row.value} pts`}
                                                         </div>
                                                     )
-                                                }
+                                                },
+                                                Filter: ({ column, filter, onChange }) => {
+                                                    return (
+                                                        <input
+                                                            type="text"
+                                                            className="width-100-per"
+                                                            value={filter ? filter.value : ''}
+                                                            onChange={event => onChange(event.target.value)}
+                                                            placeholder={(column && column.Header) ? `${column.Header}` : 'Search'}
+                                                        />
+                                                    );
+                                                },
                                             },
                                             {
                                                 id: 'name',
                                                 Header: 'Name',
                                                 accessor: 'name',
-                                                minWidth: 150,
+                                                minWidth: 200,
+                                                Filter: ({ column, filter, onChange }) => {
+                                                    return (
+                                                        <input
+                                                            type="text"
+                                                            className="width-100-per"
+                                                            value={filter ? filter.value : ''}
+                                                            onChange={event => onChange(event.target.value)}
+                                                            placeholder={(column && column.Header) ? `${column.Header}` : 'Search'}
+                                                        />
+                                                    );
+                                                },
                                             },
                                             {
                                                 id: 'status',
                                                 Header: 'Status',
                                                 accessor: 'status',
                                                 filterDigit: true,
-                                                minWidth: 50,
+                                                maxWidth: 100,
                                                 Cell: (row) => {
                                                     let dataObj = _.find(statusOptions, (o) => {
                                                         return (o.value === row.value);
@@ -224,7 +247,7 @@ class BadgeListing extends Component {
                                                 Header: 'Deleted',
                                                 accessor: 'isDeleted',
                                                 filterDigit: true,
-                                                minWidth: 50,
+                                                maxWidth: 100,
                                                 Cell: (row) => {
                                                     let dataObj = _.find(isDeletedOptions, (o) => {
                                                         return (o.value === row.value);
@@ -259,7 +282,7 @@ class BadgeListing extends Component {
                                                 accessor: "_id",
                                                 filterable: false,
                                                 sortable: false,
-                                                minWidth: 60,
+                                                maxWidth: 100,
                                                 Cell: (row) => {
                                                     return (
                                                         <div className="actions-wrapper">

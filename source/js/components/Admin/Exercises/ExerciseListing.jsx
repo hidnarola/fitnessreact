@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-import { exerciseDeleteRequest, exerciseFilterRequest, setExerciseState } from '../../../actions/admin/exercises';
+import { exerciseDeleteRequest, exerciseFilterRequest, setExerciseState, exerciseRecoverRequest } from '../../../actions/admin/exercises';
 import dateFormat from 'dateformat';
 import { adminRouteCodes } from '../../../constants/adminRoutes';
 import { FaPencil, FaTrash, FaRotateLeft } from 'react-icons/lib/fa';
@@ -11,7 +11,7 @@ import _ from 'lodash';
 import { EXERCISE_DIFFICULTY_BEGINNER, EXERCISE_DIFFICULTY_INTERMEDIATE, EXERCISE_DIFFICULTY_EXPERT, exerciseDifficultyLevelObj, EXE_CATS, EXE_SCATS } from '../../../constants/consts';
 import { DropdownButton, ButtonToolbar, MenuItem } from "react-bootstrap";
 import SweetAlert from "react-bootstrap-sweetalert";
-import { generateDTTableFilterObj } from '../../../helpers/funs';
+import { generateDTTableFilterObj, ts, te } from '../../../helpers/funs';
 
 const difficultyLevelOptions = [
     { value: '', label: 'All' },
@@ -86,18 +86,20 @@ class ExerciseListing extends Component {
                                                 accessor: "createdAt",
                                                 id: "createdAt",
                                                 filterable: false,
-                                                sortable: false,
+                                                sortable: true,
+                                                maxWidth: 100,
                                                 Cell: (row) => {
                                                     return (
                                                         <div>{dateFormat(row.value, 'mm/dd/yyyy')}</div>
                                                     );
                                                 },
-                                                minWidth: 100,
                                             },
                                             {
                                                 Header: "Category",
                                                 accessor: "category",
                                                 id: "category",
+                                                minWidth: 150,
+                                                maxWidth: 200,
                                                 Cell: (row) => {
                                                     let cate = '-----';
                                                     _.forEach(EXE_CATS, (o) => {
@@ -127,12 +129,13 @@ class ExerciseListing extends Component {
                                                         </select>
                                                     );
                                                 },
-                                                minWidth: 100,
                                             },
                                             {
                                                 Header: "Sub Category",
                                                 accessor: "subCategory",
                                                 id: "subCategory",
+                                                minWidth: 150,
+                                                maxWidth: 200,
                                                 Cell: (row) => {
                                                     let cate = '-----';
                                                     _.forEach(EXE_SCATS, (o) => {
@@ -162,18 +165,30 @@ class ExerciseListing extends Component {
                                                         </select>
                                                     );
                                                 },
-                                                minWidth: 100,
                                             },
                                             {
                                                 Header: "Name",
                                                 accessor: "name",
                                                 id: "name",
                                                 minWidth: 250,
+                                                Filter: ({ column, filter, onChange }) => {
+                                                    return (
+                                                        <input
+                                                            type="text"
+                                                            className="width-100-per"
+                                                            value={filter ? filter.value : ''}
+                                                            onChange={event => onChange(event.target.value)}
+                                                            placeholder={(column && column.Header) ? `${column.Header}` : 'Search'}
+                                                        />
+                                                    );
+                                                },
                                             },
                                             {
                                                 Header: "Main Muscle",
                                                 accessor: "mainMuscleGroup",
                                                 id: "mainMuscle.bodypart",
+                                                minWidth: 100,
+                                                maxWidth: 150,
                                                 Cell: (row) => {
                                                     if (bodyParts) {
                                                         let mainMuscle = '-----';
@@ -189,13 +204,25 @@ class ExerciseListing extends Component {
                                                         );
                                                     }
                                                 },
-                                                minWidth: 150,
+                                                Filter: ({ column, filter, onChange }) => {
+                                                    return (
+                                                        <input
+                                                            type="text"
+                                                            className="width-100-per"
+                                                            value={filter ? filter.value : ''}
+                                                            onChange={event => onChange(event.target.value)}
+                                                            placeholder={(column && column.Header) ? `${column.Header}` : 'Search'}
+                                                        />
+                                                    );
+                                                },
                                             },
                                             {
                                                 Header: "Difficlty Level",
                                                 accessor: "difficltyLevel",
                                                 id: "difficltyLevel",
                                                 filterEqual: true,
+                                                minWidth: 100,
+                                                maxWidth: 150,
                                                 Cell: (row) => {
                                                     let difficultyLevel = '-----';
                                                     if (_.has(exerciseDifficultyLevelObj, row.value)) {
@@ -222,13 +249,13 @@ class ExerciseListing extends Component {
                                                         </select>
                                                     );
                                                 },
-                                                minWidth: 100,
                                             },
                                             {
                                                 id: "status",
                                                 Header: "Status",
                                                 accessor: "status",
                                                 filterDigit: true,
+                                                maxWidth: 100,
                                                 Cell: (row) => {
                                                     let dataObj = _.find(statusOptions, (o) => {
                                                         return (o.value === row.value);
@@ -256,13 +283,13 @@ class ExerciseListing extends Component {
                                                         </select>
                                                     );
                                                 },
-                                                maxWidth: 100,
                                             },
                                             {
                                                 id: "isDeleted",
                                                 Header: "Deleted",
                                                 accessor: "isDeleted",
                                                 filterDigit: true,
+                                                maxWidth: 100,
                                                 Cell: (row) => {
                                                     let dataObj = _.find(deletedOptions, (o) => {
                                                         return (o.value === row.value);
@@ -290,7 +317,6 @@ class ExerciseListing extends Component {
                                                         </select>
                                                     );
                                                 },
-                                                maxWidth: 100,
                                             },
                                             {
                                                 Header: "Actions",
@@ -298,6 +324,7 @@ class ExerciseListing extends Component {
                                                 id: "_id",
                                                 filterable: false,
                                                 sortable: false,
+                                                maxWidth: 100,
                                                 Cell: (row) => {
                                                     return (
                                                         <div className="actions-wrapper">
