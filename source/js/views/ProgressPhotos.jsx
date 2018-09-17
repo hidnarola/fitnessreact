@@ -2,13 +2,15 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import FitnessHeader from '../components/global/FitnessHeader';
 import FitnessNav from '../components/global/FitnessNav';
-import { getUserProgressPhotoRequest } from '../actions/userProgressPhotos';
+import { getUserProgressPhotoRequest, loadMoreUserProgressPhotoRequest } from '../actions/userProgressPhotos';
 import { FaCircleONotch } from "react-icons/lib/fa";
 import NoDataFoundImg from "img/common/no_datafound.png";
 import ErrorCloud from "svg/error-cloud.svg";
 import ProfilePhotoBlock from '../components/Profile/ProfilePhotoBlock';
 import Lightbox from 'react-images';
 import { SERVER_BASE_URL } from '../constants/consts';
+import { routeCodes } from '../constants/routes';
+import { Link } from "react-router-dom";
 
 class ProgressPhotos extends Component {
     constructor(props) {
@@ -26,7 +28,7 @@ class ProgressPhotos extends Component {
     }
 
     render() {
-        const { loading, progressPhotos, error } = this.props;
+        const { loading, progressPhotos, error, photoLoadMoreLoading, photoDataOver, match } = this.props;
         const { lightBoxOpen, currentImage, lightBoxImages } = this.state;
         return (
             <div className="fitness-progress-photos-wrapper">
@@ -41,10 +43,10 @@ class ProgressPhotos extends Component {
                                 on track and meeting the goals you’ve set out for yourself.</p>
                         </div>
                         <div className="body-head-r space-btm-20">
-                            <button type="button" className="white-btn">
+                            <Link to={routeCodes.PROFILEPHOTOS.replace('{username}', match.params.username)} className="white-btn">
                                 <i className="icon-arrow_back"></i>
                                 <span>Back</span>
-                            </button>
+                            </Link>
                         </div>
                     </div>
 
@@ -63,9 +65,17 @@ class ProgressPhotos extends Component {
                                     </li>
                                 ))}
                             </ul>
-                            <button type="button" className="photo-load-more-btn progress-photos">
-                                <span>Load More</span>
-                            </button>
+                            {!photoLoadMoreLoading && !photoDataOver &&
+                                <button type="button" className="photo-load-more-btn progress-photos" onClick={this.handleLoadMore}>
+                                    <span>Load More</span>
+                                </button>
+                            }
+                            {photoLoadMoreLoading &&
+                                <button type="button" className="photo-load-more-btn progress-photos" disabled={true}>
+                                    <FaCircleONotch className="loader-spinner loader-spinner-icon" />
+                                    <span>Loading...</span>
+                                </button>
+                            }
                         </div>
                     }
 
@@ -141,6 +151,12 @@ class ProgressPhotos extends Component {
         }
         this.setState({ currentImage: newCurrentImage });
     }
+
+    handleLoadMore = () => {
+        const { match, dispatch, photoStart, photoLimit } = this.props;
+        let _photoStart = parseInt(photoStart) + parseInt(photoLimit);
+        dispatch(loadMoreUserProgressPhotoRequest(match.params.username, _photoStart, photoLimit, -1));
+    }
 }
 
 const mapStateToProps = (state) => {
@@ -149,6 +165,10 @@ const mapStateToProps = (state) => {
         loading: userProgressPhotos.get('loading'),
         progressPhotos: userProgressPhotos.get('progressPhotos'),
         error: userProgressPhotos.get('error'),
+        photoLoadMoreLoading: userProgressPhotos.get('photoLoadMoreLoading'),
+        photoStart: userProgressPhotos.get('photoStart'),
+        photoLimit: userProgressPhotos.get('photoLimit'),
+        photoDataOver: userProgressPhotos.get('photoDataOver'),
     };
 }
 

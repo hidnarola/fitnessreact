@@ -31,8 +31,8 @@ const actionMap = {
         return state.merge(Map({
             loading: true,
             progressPhotos: [],
-            photoStart: action.requestData.start,
-            photoLimit: action.requestData.noOfPhotos,
+            photoStart: action.start,
+            photoLimit: action.noOfPhotos,
             photoDataOver: false,
             error: [],
         }));
@@ -68,8 +68,8 @@ const actionMap = {
     [LOAD_MORE_USER_PROGRESS_PHOTO_REQUEST]: (state, action) => {
         var newState = {
             photoLoadMoreLoading: true,
-            photoStart: action.requestData.start,
-            photoLimit: action.requestData.limit,
+            photoStart: action.start,
+            photoLimit: action.noOfPhotos,
             photoDataOver: false,
             error: [],
         }
@@ -84,6 +84,8 @@ const actionMap = {
             } else {
                 newState.photoDataOver = true;
             }
+        } else if (action.data && action.data.status && action.data.status === 2) {
+            newState.photoDataOver = true;
         } else {
             let msg = (action.message) ? action.message : 'Something went wrong! please try again later.';
             newState.error = [msg];

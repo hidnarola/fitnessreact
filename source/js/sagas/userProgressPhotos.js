@@ -10,7 +10,9 @@ import {
     getUserLatestProgressPhotoSuccess,
     getUserLatestProgressPhotoError,
     GET_USER_LATEST_PROGRESS_PHOTO_REQUEST,
-    LOAD_MORE_USER_PROGRESS_PHOTO_REQUEST
+    LOAD_MORE_USER_PROGRESS_PHOTO_REQUEST,
+    loadMoreUserProgressPhotoSuccess,
+    loadMoreUserProgressPhotoError
 } from '../actions/userProgressPhotos';
 
 function fetchUserProgressPhotosData() {
@@ -24,6 +26,21 @@ function fetchUserProgressPhotosData() {
             yield put(getUserProgressPhotoSuccess(data));
         } catch (error) {
             yield put(getUserProgressPhotoError(error));
+        }
+    }
+}
+
+function loadMoreUserProgressPhotosData() {
+    return function* (action) {
+        try {
+            let username = action.username;
+            let start = action.start;
+            let noOfPhotos = action.noOfPhotos;
+            let sort = action.sort;
+            const data = yield call(() => api.getUserProgressPhotos(username, start, noOfPhotos, sort));
+            yield put(loadMoreUserProgressPhotoSuccess(data));
+        } catch (error) {
+            yield put(loadMoreUserProgressPhotoError(error));
         }
     }
 }
@@ -55,7 +72,7 @@ function addUserProgressPhotoData() {
 
 export function* watchUserProgressPhotosData() {
     yield takeLatest(GET_USER_PROGRESS_PHOTO_REQUEST, fetchUserProgressPhotosData());
-    yield takeLatest(LOAD_MORE_USER_PROGRESS_PHOTO_REQUEST, fetchUserProgressPhotosData());
+    yield takeLatest(LOAD_MORE_USER_PROGRESS_PHOTO_REQUEST, loadMoreUserProgressPhotosData());
     yield takeLatest(GET_USER_LATEST_PROGRESS_PHOTO_REQUEST, fetchUserLatestProgressPhotosData());
     yield takeLatest(ADD_USER_PROGRESS_PHOTO_REQUEST, addUserProgressPhotoData());
 }
