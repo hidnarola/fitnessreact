@@ -34,7 +34,7 @@ const actionMap = {
     [GET_USER_MESSAGE_CHANNEL_REQUEST]: (state, action) => {
         var newState = {
             panelChannelStart: action.requestData.start,
-            panelChannelLimit: action.requestData.end,
+            panelChannelLimit: action.requestData.limit,
             panelChannelLoading: true,
             panelChannels: [],
             panelChannelError: [],

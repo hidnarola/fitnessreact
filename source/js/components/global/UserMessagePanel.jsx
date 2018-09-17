@@ -109,6 +109,8 @@ const mapStateToProps = (state) => {
         panelChannelLoading: userMessages.get('panelChannelLoading'),
         panelChannels: userMessages.get('panelChannels'),
         panelChannelError: userMessages.get('panelChannelError'),
+        panelChannelStart: userMessages.get('panelChannelStart'),
+        panelChannelLimit: userMessages.get('panelChannelLimit'),
         loggedUserData: user.get('loggedUserData'),
         socket: user.get('socket'),
     };
