@@ -14,7 +14,7 @@ import SweetAlert from "react-bootstrap-sweetalert";
 import AddProgramMasterForm from '../components/Program/AddProgramMasterForm';
 import { routeCodes } from '../constants/routes';
 import { te, ts } from '../helpers/funs';
-import { addUserProgramMasterRequest } from '../actions/userPrograms_backup';
+import { addUserProgramMasterRequest } from '../actions/userPrograms';
 
 class Programs extends Component {
     constructor(props) {

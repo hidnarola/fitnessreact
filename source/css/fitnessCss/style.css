@@ -2214,3 +2214,4 @@ ul.common-ul>li.body-fat-field-li{ width:50%; margin-left:auto;}
 #user-message-panel button.btn-messages-loadmore { border: 1px solid #ddd; background: #fff; color: #000; padding: 10px 20px; width: 100%; border-radius: 5px; }
 #user-message-panel button.btn-messages-loadmore svg, #user-message-panel button.btn-messages-loadmore i { margin-right: 5px; }
 a.fithub-photos-view-all-link { background: transparent; color: #000; text-decoration: none; width: 100%; display: block; text-align: center; padding: 10px 20px; border: 1px solid #ddd; border-radius: 5px; margin-top: 10px; }
+.photo-load-more-btn { border: 1px solid #ddd; background: transparent; display: block; width: 100%; padding: 10px 20px; margin-top: 10px; border-radius: 5px; color: #000; }

@@ -17,6 +17,7 @@ import NoDataFoundImg from "img/common/no_datafound.png";
 import ErrorCloud from "svg/error-cloud.svg";
 import Lightbox from 'react-images';
 import { Link } from "react-router-dom";
+import { routeCodes } from '../../constants/routes';
 
 class ProfilePhotos extends Component {
     constructor(props) {
@@ -127,8 +128,8 @@ class ProfilePhotos extends Component {
                                 ))}
                             </ul>
                         }
-                        {!progressPhotoloading && progressPhotos && progressPhotos.length > 0 &&
-                            <Link to="#" className="fithub-photos-view-all-link">View All</Link>
+                        {profile && profile.username && !progressPhotoloading && progressPhotos && progressPhotos.length > 0 &&
+                            <Link to={`${routeCodes.PROGRESS_PHOTOS}/${profile.username}`} className="fithub-photos-view-all-link">View All</Link>
                         }
                     </div>
                 </div>

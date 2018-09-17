@@ -70,4 +70,6 @@ export const routeCodes = {
     PROGRESS_ENDURANCE: `${publicPath}progress/endurance`,
 
     ALL_NOTIFICATIONS: `${publicPath}notifications`,
+
+    PROGRESS_PHOTOS: `${publicPath}progress_photos`,
 };
