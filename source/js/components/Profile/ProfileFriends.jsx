@@ -16,6 +16,9 @@ import { ts } from '../../helpers/funs';
 import UnfriendRequestModal from './UnfriendRequestModal';
 import { getUserChannelRequest } from '../../actions/userMessages';
 import SweetAlert from "react-bootstrap-sweetalert";
+import { FaCircleONotch } from "react-icons/lib/fa";
+import NoDataFoundImg from "img/common/no_datafound.png";
+import ErrorCloud from "svg/error-cloud.svg";
 
 class ProfileFriends extends Component {
     constructor(props) {
@@ -70,7 +73,9 @@ class ProfileFriends extends Component {
         } = this.state;
         const {
             profile,
-            loggedUserData
+            loggedUserData,
+            approvedLoading,
+            approvedError,
         } = this.props;
         return (
             <div className="profile-friends-wrapper">
@@ -109,29 +114,44 @@ class ProfileFriends extends Component {
                         </h3>
                     </div>
                     <div className="whitebox-body profile-body">
-                        <div className="row d-flex">
-                            {approvedFriends && approvedFriends.length > 0 &&
-                                approvedFriends.map((friend, index) => (
-                                    <div className="col-md-6" key={index}>
-                                        <ProfileFriendBlock
-                                            friend={friend}
-                                            friendsActionDisabled={
-                                                (friendsActionDisabled[friend.friendshipId])
-                                                    ? friendsActionDisabled[friend.friendshipId]
-                                                    : false
-                                            }
-                                            handleShowUnfriendRequest={this.handleShowUnfriendRequest}
-                                            friendshipStatus={profile.friendshipStatus}
-                                            handleRequestMessageChannel={this.handleRequestMessageChannel}
-                                            loggedUserData={loggedUserData}
-                                        />
-                                    </div>
-                                ))
-                            }
-                            {approvedFriends && approvedFriends.length <= 0 &&
-                                <span>No friends...</span>
-                            }
-                        </div>
+                        {approvedLoading &&
+                            <div className="text-c">
+                                <FaCircleONotch className="loader-spinner fs-50" />
+                            </div>
+                        }
+                        {!approvedLoading && (!approvedFriends || approvedFriends.length <= 0) && approvedError && approvedError.length <= 0 &&
+                            <div className="no-record-found-wrapper">
+                                <img src={NoDataFoundImg} />
+                            </div>
+                        }
+                        {!approvedLoading && (!approvedFriends || approvedFriends.length <= 0) && approvedError && approvedError.length > 0 &&
+                            <div className="server-error-wrapper">
+                                <ErrorCloud />
+                                <h4>Something went wrong! please try again.</h4>
+                            </div>
+                        }
+                        {!approvedLoading && approvedFriends && approvedFriends.length > 0 &&
+                            <div className="row d-flex">
+                                {
+                                    approvedFriends.map((friend, index) => (
+                                        <div className="col-md-6" key={index}>
+                                            <ProfileFriendBlock
+                                                friend={friend}
+                                                friendsActionDisabled={
+                                                    (friendsActionDisabled[friend.friendshipId])
+                                                        ? friendsActionDisabled[friend.friendshipId]
+                                                        : false
+                                                }
+                                                handleShowUnfriendRequest={this.handleShowUnfriendRequest}
+                                                friendshipStatus={profile.friendshipStatus}
+                                                handleRequestMessageChannel={this.handleRequestMessageChannel}
+                                                loggedUserData={loggedUserData}
+                                            />
+                                        </div>
+                                    ))
+                                }
+                            </div>
+                        }
                     </div>
                 </div>
                 <CancelFriendRequestModal
@@ -369,6 +389,8 @@ const mapStateToProps = (state) => {
         pendingLoading: friends.get('pendingLoading'),
         approvedFriends: friends.get('approvedFriends'),
         pendingFriends: friends.get('pendingFriends'),
+        approvedError: friends.get('approvedError'),
+        pendingError: friends.get('pendingError'),
         requestAcceptLoading: friends.get('requestAcceptLoading'),
         requestAcceptError: friends.get('requestAcceptError'),
         requestCancelLoading: friends.get('requestCancelLoading'),
