@@ -2209,3 +2209,5 @@ ul.common-ul>li.body-fat-field-li{ width:50%; margin-left:auto;}
 .single-post-wrapper {background: transparent;margin: 0;box-sizing: border-box;}
 .single-post-left .posttype-body {padding: 15px;}
 .auth0-lock-error-msg { width: -moz-max-content; }
+#user-message-panel button.btn-messages-loadmore { border: 1px solid #ddd; background: #fff; color: #000; padding: 10px 20px; width: 100%; border-radius: 5px; }
+#user-message-panel button.btn-messages-loadmore svg, #user-message-panel button.btn-messages-loadmore i { margin-right: 5px; }

@@ -92,9 +92,12 @@ const actionMap = {
         var newState = {
             panelChannelLoadMoreLoading: false,
         };
-        if (action.data.status === 1 && action.data.channels && action.data.channels.length <= 0) {
-            newState.panelChannels = prevChannels.concat(action.data.channels);
-            newState.panelChannelDataOver = true;
+        if (action.data.status === 1) {
+            if (action.data.channels && action.data.channels.length > 0) {
+                newState.panelChannels = prevChannels.concat(action.data.channels);
+            } else {
+                newState.panelChannelDataOver = true;
+            }
         } else {
             var msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
             newState.panelChannelError = [msg];

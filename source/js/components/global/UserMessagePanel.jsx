@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { toggleSideMenu, getToken } from '../../helpers/funs';
 import noProfileImg from 'img/common/no-profile-img.png'
 import cns from "classnames";
-import { openUserChatWindowRequest, getUserMessageChannelRequest } from '../../actions/userMessages';
+import { openUserChatWindowRequest, loadMoreUserMessageChannelRequest } from '../../actions/userMessages';
 import { FaCircleONotch } from "react-icons/lib/fa";
 import NoDataFoundImg from "img/common/no_datafound.png";
 import ErrorCloud from "svg/error-cloud.svg";
@@ -16,6 +16,8 @@ class UserMessagePanel extends Component {
             panelChannels,
             panelChannelError,
             loggedUserData,
+            panelChannelDataOver,
+            panelChannelLoadMoreLoading
         } = this.props;
         return (
             <div id="user-message-panel" className="messenger-wrap">
@@ -31,24 +33,34 @@ class UserMessagePanel extends Component {
                                 <FaCircleONotch className="loader-spinner fs-25" />
                             </div>
                         }
-                        <Scrollbars autoHide>
-                            {!panelChannelLoading && panelChannels && panelChannels.length > 0 &&
-                                panelChannels.map((channel, index) => {
-                                    return (
-                                        <ChannelMessageCard
-                                            key={index}
-                                            channel={channel}
-                                            loggedUserData={loggedUserData}
-                                            handleMessageSeen={this.handleMessageSeen}
-                                            handleOpenChatWindow={this.handleOpenChatWindow}
-                                        />
-                                    )
-                                })
-                            }
-                            {!panelChannelLoading && panelChannels && panelChannels.length > 0 &&
-                                <button type="button" onClick={this.handleLoadMore}>Load more</button>
-                            }
-                        </Scrollbars>
+                        {!panelChannelLoading && panelChannels && panelChannels.length > 0 &&
+                            <Scrollbars autoHide>
+                                {
+                                    panelChannels.map((channel, index) => {
+                                        return (
+                                            <ChannelMessageCard
+                                                key={index}
+                                                channel={channel}
+                                                loggedUserData={loggedUserData}
+                                                handleMessageSeen={this.handleMessageSeen}
+                                                handleOpenChatWindow={this.handleOpenChatWindow}
+                                            />
+                                        )
+                                    })
+                                }
+                                {!panelChannelLoadMoreLoading && !panelChannelDataOver &&
+                                    <button type="button" className="btn-messages-loadmore" onClick={this.handleLoadMore}>
+                                        <span>Load more</span>
+                                    </button>
+                                }
+                                {panelChannelLoadMoreLoading &&
+                                    <button type="button" className="btn-messages-loadmore" disabled={true}>
+                                        <FaCircleONotch className="loader-spinner loader-spinner-icon" />
+                                        <span>Loading...</span>
+                                    </button>
+                                }
+                            </Scrollbars>
+                        }
 
                         {!panelChannelLoading && (typeof panelChannels === 'undefined' || !panelChannels || panelChannels.length <= 0) && typeof panelChannelError !== 'undefined' && panelChannelError && panelChannelError.length <= 0 &&
                             <div className="no-record-found-wrapper">
@@ -98,7 +110,7 @@ class UserMessagePanel extends Component {
             start: (panelChannelStart + panelChannelLimit),
             limit: panelChannelLimit,
         }
-        dispatch(getUserMessageChannelRequest(requestData));
+        dispatch(loadMoreUserMessageChannelRequest(requestData));
         socket.emit('request_users_conversation_channels', requestData);
     }
 }
@@ -111,6 +123,8 @@ const mapStateToProps = (state) => {
         panelChannelError: userMessages.get('panelChannelError'),
         panelChannelStart: userMessages.get('panelChannelStart'),
         panelChannelLimit: userMessages.get('panelChannelLimit'),
+        panelChannelDataOver: userMessages.get('panelChannelDataOver'),
+        panelChannelLoadMoreLoading: userMessages.get('panelChannelLoadMoreLoading'),
         loggedUserData: user.get('loggedUserData'),
         socket: user.get('socket'),
     };

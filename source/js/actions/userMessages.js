@@ -50,21 +50,21 @@ export function getUserMessageChannelError(error) {
 
 export function loadMoreUserMessageChannelRequest(requestData) {
     return {
-        type: GET_USER_MESSAGE_CHANNEL_REQUEST,
+        type: LOAD_MORE_USER_MESSAGE_CHANNEL_REQUEST,
         requestData
     }
 }
 
 export function loadMoreUserMessageChannelSuccess(data) {
     return {
-        type: GET_USER_MESSAGE_CHANNEL_SUCCESS,
+        type: LOAD_MORE_USER_MESSAGE_CHANNEL_SUCCESS,
         data,
     }
 }
 
 export function loadMoreUserMessageChannelError(error) {
     return {
-        type: GET_USER_MESSAGE_CHANNEL_ERROR,
+        type: LOAD_MORE_USER_MESSAGE_CHANNEL_ERROR,
         error,
     }
 }

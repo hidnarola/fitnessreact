@@ -71,7 +71,8 @@ import {
     toggleChatWindowMinimize,
     setUserMessagesCount,
     getUserChannelResponse,
-    openUserChatWindowRequest
+    openUserChatWindowRequest,
+    loadMoreUserMessageChannelSuccess
 } from '../actions/userMessages';
 import $ from "jquery";
 import UserChatWindow from '../components/global/UserChatWindow';
@@ -324,8 +325,12 @@ class App extends Component {
     }
 
     handleUsersConversationChannnels = (data) => {
-        const { dispatch } = this.props;
-        dispatch(getUserMessageChannelSuccess(data));
+        const { dispatch, panelChannelLoadMoreLoading } = this.props;
+        if (panelChannelLoadMoreLoading) {
+            dispatch(loadMoreUserMessageChannelSuccess(data));
+        } else {
+            dispatch(getUserMessageChannelSuccess(data));
+        }
     }
 
     handleUsersConversationByChannel = (data) => {
@@ -448,6 +453,7 @@ const mapStateToProps = (state) => {
         loggedUserData: user.get('loggedUserData'),
         socket: user.get('socket'),
         chatWindows: userMessages.get('chatWindows'),
+        panelChannelLoadMoreLoading: userMessages.get('panelChannelLoadMoreLoading'),
         loadingAdminLogin: login.get('loading'),
         loggedAdminData: admin.get('loggedUserData'),
     };
