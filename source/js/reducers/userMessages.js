@@ -16,12 +16,17 @@ import {
     SET_USER_MESSAGES_COUNT,
     GET_CHANNEL_REQUEST,
     GET_CHANNEL_RESPONSE,
+    LOAD_MORE_USER_MESSAGE_CHANNEL_REQUEST,
+    LOAD_MORE_USER_MESSAGE_CHANNEL_SUCCESS,
+    LOAD_MORE_USER_MESSAGE_CHANNEL_ERROR,
 } from "../actions/userMessages";
 import _ from "lodash";
 
 const initialState = Map({
+    panelChannelLoadMoreLoading: false,
     panelChannelStart: 0,
     panelChannelLimit: 10,
+    panelChannelDataOver: false,
     panelChannelLoading: false,
     panelChannels: [],
     panelChannelError: [],
@@ -35,6 +40,7 @@ const actionMap = {
         var newState = {
             panelChannelStart: action.requestData.start,
             panelChannelLimit: action.requestData.limit,
+            panelChannelDataOver: false,
             panelChannelLoading: true,
             panelChannels: [],
             panelChannelError: [],
@@ -47,6 +53,9 @@ const actionMap = {
         };
         if (action.data.status === 1) {
             newState.panelChannels = action.data.channels;
+            if (action.data.channels && action.data.channels.length <= 0) {
+                newState.panelChannelDataOver = true;
+            }
         } else {
             var msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
             newState.panelChannelError = [msg];
@@ -64,6 +73,45 @@ const actionMap = {
         }
         var newState = {
             panelChannelLoading: false,
+            panelChannelError: error,
+        }
+        return state.merge(Map(newState));
+    },
+    [LOAD_MORE_USER_MESSAGE_CHANNEL_REQUEST]: (state, action) => {
+        var newState = {
+            panelChannelLoadMoreLoading: true,
+            panelChannelStart: action.requestData.start,
+            panelChannelLimit: action.requestData.limit,
+            panelChannelDataOver: false,
+            panelChannelError: [],
+        }
+        return state.merge(Map(newState));
+    },
+    [LOAD_MORE_USER_MESSAGE_CHANNEL_SUCCESS]: (state, action) => {
+        let prevChannels = state.get('panelChannels');
+        var newState = {
+            panelChannelLoadMoreLoading: false,
+        };
+        if (action.data.status === 1 && action.data.channels && action.data.channels.length <= 0) {
+            newState.panelChannels = prevChannels.concat(action.data.channels);
+            newState.panelChannelDataOver = true;
+        } else {
+            var msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
+            newState.panelChannelError = [msg];
+        }
+        return state.merge(Map(newState));
+    },
+    [LOAD_MORE_USER_MESSAGE_CHANNEL_ERROR]: (state, action) => {
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
+        }
+        var newState = {
+            panelChannelLoadMoreLoading: false,
             panelChannelError: error,
         }
         return state.merge(Map(newState));
