@@ -16,6 +16,7 @@ import { FaCircleONotch } from "react-icons/lib/fa";
 import NoDataFoundImg from "img/common/no_datafound.png";
 import ErrorCloud from "svg/error-cloud.svg";
 import Lightbox from 'react-images';
+import { Link } from "react-router-dom";
 
 class ProfilePhotos extends Component {
     constructor(props) {
@@ -51,7 +52,7 @@ class ProfilePhotos extends Component {
                 initGalleryPhotosAction: true,
             });
             dispatch(getUserProgressPhotoRequest(username));
-            dispatch(getUserGalleryPhotoRequest(username, 0, 10));
+            dispatch(getUserGalleryPhotoRequest(username));
         } else {
             this.setState({
                 doLoadProgressPhotos: true,
@@ -126,6 +127,9 @@ class ProfilePhotos extends Component {
                                 ))}
                             </ul>
                         }
+                        {!progressPhotoloading && progressPhotos && progressPhotos.length > 0 &&
+                            <Link to="#" className="fithub-photos-view-all-link">View All</Link>
+                        }
                     </div>
                 </div>
 
@@ -168,6 +172,9 @@ class ProfilePhotos extends Component {
                                     )
                                 })}
                             </ul>
+                        }
+                        {!galleryPhotoloading && galleryPhotos && galleryPhotos.length > 0 &&
+                            <Link to="#" className="fithub-photos-view-all-link">View All</Link>
                         }
                     </div>
                 </div>

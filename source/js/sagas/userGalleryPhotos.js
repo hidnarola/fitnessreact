@@ -15,7 +15,8 @@ function fetchUserGalleryPhotosData() {
             let username = action.username;
             let start = action.start;
             let offset = action.offset;
-            const data = yield call(() => api.getUserGalleryPhoto(username, start, offset));
+            let sort = action.sort;
+            const data = yield call(() => api.getUserGalleryPhoto(username, start, offset, sort));
             yield put(getUserGalleryPhotoSuccess(data));
         } catch (error) {
             yield put(getUserGalleryPhotoError(error));

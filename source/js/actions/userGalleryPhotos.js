@@ -6,12 +6,13 @@ export const ADD_USER_GALLERY_PHOTO_REQUEST = 'ADD_USER_GALLERY_PHOTO_REQUEST';
 export const ADD_USER_GALLERY_PHOTO_SUCCESS = 'ADD_USER_GALLERY_PHOTO_SUCCESS';
 export const ADD_USER_GALLERY_PHOTO_ERROR = 'ADD_USER_GALLERY_PHOTO_ERROR';
 
-export function getUserGalleryPhotoRequest(username, start, offset) {
+export function getUserGalleryPhotoRequest(username, start = 0, offset = 5, sort = -1) {
     return {
         type: GET_USER_GALLERY_PHOTO_REQUEST,
         username,
         start,
         offset,
+        sort
     }
 }
 

@@ -3,14 +3,14 @@ import { extraUserHeaders } from '../helpers/funs';
 
 const requestUrl = 'user/gallery';
 
-function getUserGalleryPhoto(username, start = 0, offset = 10) {
+function getUserGalleryPhoto(username, start = 0, offset = 10, sort = -1) {
     let headers = extraUserHeaders();
     var options = {
         method: 'GET',
         headers: headers,
     }
 
-    return fetchResource(requestUrl + '/' + username + '/' + start + '/' + offset, options);
+    return fetchResource(requestUrl + '/' + username + '/' + start + '/' + offset + '/' + sort, options);
 }
 
 function postUserGalleryPhoto(requestData) {
