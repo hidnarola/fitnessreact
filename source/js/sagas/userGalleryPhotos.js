@@ -7,6 +7,9 @@ import {
     getUserGalleryPhotoSuccess,
     getUserGalleryPhotoError,
     GET_USER_GALLERY_PHOTO_REQUEST,
+    loadMoreUserGalleryPhotoSuccess,
+    loadMoreUserGalleryPhotoError,
+    LOAD_MORE_USER_GALLERY_PHOTO_REQUEST,
 } from '../actions/userGalleryPhotos';
 
 function fetchUserGalleryPhotosData() {
@@ -20,6 +23,21 @@ function fetchUserGalleryPhotosData() {
             yield put(getUserGalleryPhotoSuccess(data));
         } catch (error) {
             yield put(getUserGalleryPhotoError(error));
+        }
+    }
+}
+
+function loadMoreUserGalleryPhotosData() {
+    return function* (action) {
+        try {
+            let username = action.username;
+            let start = action.start;
+            let offset = action.offset;
+            let sort = action.sort;
+            const data = yield call(() => api.getUserGalleryPhoto(username, start, offset, sort));
+            yield put(loadMoreUserGalleryPhotoSuccess(data));
+        } catch (error) {
+            yield put(loadMoreUserGalleryPhotoError(error));
         }
     }
 }
@@ -38,6 +56,7 @@ function addUserGalleryPhotoData() {
 
 export function* watchUserGalleryPhotosData() {
     yield takeLatest(GET_USER_GALLERY_PHOTO_REQUEST, fetchUserGalleryPhotosData());
+    yield takeLatest(LOAD_MORE_USER_GALLERY_PHOTO_REQUEST, loadMoreUserGalleryPhotosData());
     yield takeLatest(ADD_USER_GALLERY_PHOTO_REQUEST, addUserGalleryPhotoData());
 }
 

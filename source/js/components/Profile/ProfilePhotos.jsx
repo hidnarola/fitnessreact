@@ -175,7 +175,7 @@ class ProfilePhotos extends Component {
                             </ul>
                         }
                         {!galleryPhotoloading && galleryPhotos && galleryPhotos.length > 0 &&
-                            <Link to="#" className="fithub-photos-view-all-link">View All</Link>
+                            <Link to={`${routeCodes.GALLERY_PHOTOS}/${profile.username}`} className="fithub-photos-view-all-link">View All</Link>
                         }
                     </div>
                 </div>

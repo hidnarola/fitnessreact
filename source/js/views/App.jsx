@@ -94,6 +94,7 @@ import ChangePassword from './Admin/ChangePassword';
 import Profile from './Admin/Profile';
 import Post from './Post';
 import ProgressPhotos from './ProgressPhotos';
+import GalleryPhotos from './GalleryPhotos';
 
 const auth = new Auth();
 
@@ -191,6 +192,7 @@ class App extends Component {
                             <PrivateRoute path={routeCodes.ALL_NOTIFICATIONS} component={Notifications} />
 
                             <PrivateRoute path={`${routeCodes.PROGRESS_PHOTOS}/:username`} component={ProgressPhotos} />
+                            <PrivateRoute path={`${routeCodes.GALLERY_PHOTOS}/:username`} component={GalleryPhotos} />
 
                             <Route exact path={adminRootRoute} component={AdminLogin} />
                             <Route exact path={`${adminRootRoute}/${SESSION_EXPIRED_URL_TYPE}`} component={AdminLogin} />

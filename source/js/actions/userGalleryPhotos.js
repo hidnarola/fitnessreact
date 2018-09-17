@@ -2,6 +2,10 @@ export const GET_USER_GALLERY_PHOTO_REQUEST = 'GET_USER_GALLERY_PHOTO_REQUEST';
 export const GET_USER_GALLERY_PHOTO_SUCCESS = 'GET_USER_GALLERY_PHOTO_SUCCESS';
 export const GET_USER_GALLERY_PHOTO_ERROR = 'GET_USER_GALLERY_PHOTO_ERROR';
 
+export const LOAD_MORE_USER_GALLERY_PHOTO_REQUEST = 'LOAD_MORE_USER_GALLERY_PHOTO_REQUEST';
+export const LOAD_MORE_USER_GALLERY_PHOTO_SUCCESS = 'LOAD_MORE_USER_GALLERY_PHOTO_SUCCESS';
+export const LOAD_MORE_USER_GALLERY_PHOTO_ERROR = 'LOAD_MORE_USER_GALLERY_PHOTO_ERROR';
+
 export const ADD_USER_GALLERY_PHOTO_REQUEST = 'ADD_USER_GALLERY_PHOTO_REQUEST';
 export const ADD_USER_GALLERY_PHOTO_SUCCESS = 'ADD_USER_GALLERY_PHOTO_SUCCESS';
 export const ADD_USER_GALLERY_PHOTO_ERROR = 'ADD_USER_GALLERY_PHOTO_ERROR';
@@ -26,6 +30,30 @@ export function getUserGalleryPhotoSuccess(data) {
 export function getUserGalleryPhotoError(error) {
     return {
         type: GET_USER_GALLERY_PHOTO_ERROR,
+        error,
+    }
+}
+
+export function loadMoreUserGalleryPhotoRequest(username, start, offset, sort) {
+    return {
+        type: LOAD_MORE_USER_GALLERY_PHOTO_REQUEST,
+        username,
+        start,
+        offset,
+        sort,
+    }
+}
+
+export function loadMoreUserGalleryPhotoSuccess(data) {
+    return {
+        type: LOAD_MORE_USER_GALLERY_PHOTO_SUCCESS,
+        data,
+    }
+}
+
+export function loadMoreUserGalleryPhotoError(error) {
+    return {
+        type: LOAD_MORE_USER_GALLERY_PHOTO_ERROR,
         error,
     }
 }
