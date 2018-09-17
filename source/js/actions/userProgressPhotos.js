@@ -2,6 +2,10 @@ export const GET_USER_PROGRESS_PHOTO_REQUEST = 'GET_USER_PROGRESS_PHOTO_REQUEST'
 export const GET_USER_PROGRESS_PHOTO_SUCCESS = 'GET_USER_PROGRESS_PHOTO_SUCCESS';
 export const GET_USER_PROGRESS_PHOTO_ERROR = 'GET_USER_PROGRESS_PHOTO_ERROR';
 
+export const LOAD_MORE_USER_PROGRESS_PHOTO_REQUEST = 'LOAD_MORE_USER_PROGRESS_PHOTO_REQUEST';
+export const LOAD_MORE_USER_PROGRESS_PHOTO_SUCCESS = 'LOAD_MORE_USER_PROGRESS_PHOTO_SUCCESS';
+export const LOAD_MORE_USER_PROGRESS_PHOTO_ERROR = 'LOAD_MORE_USER_PROGRESS_PHOTO_ERROR';
+
 export const GET_USER_LATEST_PROGRESS_PHOTO_REQUEST = 'GET_USER_LATEST_PROGRESS_PHOTO_REQUEST';
 export const GET_USER_LATEST_PROGRESS_PHOTO_SUCCESS = 'GET_USER_LATEST_PROGRESS_PHOTO_SUCCESS';
 export const GET_USER_LATEST_PROGRESS_PHOTO_ERROR = 'GET_USER_LATEST_PROGRESS_PHOTO_ERROR';
@@ -30,6 +34,30 @@ export function getUserProgressPhotoSuccess(data) {
 export function getUserProgressPhotoError(error) {
     return {
         type: GET_USER_PROGRESS_PHOTO_ERROR,
+        error,
+    }
+}
+
+export function loadMoreUserProgressPhotoRequest(username, start, noOfPhotos, sort) {
+    return {
+        type: LOAD_MORE_USER_PROGRESS_PHOTO_REQUEST,
+        username,
+        start,
+        noOfPhotos,
+        sort,
+    }
+}
+
+export function loadMoreUserProgressPhotoSuccess(data) {
+    return {
+        type: LOAD_MORE_USER_PROGRESS_PHOTO_SUCCESS,
+        data,
+    }
+}
+
+export function loadMoreUserProgressPhotoError(error) {
+    return {
+        type: LOAD_MORE_USER_PROGRESS_PHOTO_ERROR,
         error,
     }
 }
