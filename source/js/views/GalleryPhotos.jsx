@@ -24,7 +24,7 @@ class GalleryPhotos extends Component {
 
     componentWillMount() {
         const { dispatch, match } = this.props;
-        dispatch(getUserGalleryPhotoRequest(match.params.username, 0, 1, -1));
+        dispatch(getUserGalleryPhotoRequest(match.params.username, 0, 10, -1));
     }
 
     render() {
@@ -39,7 +39,7 @@ class GalleryPhotos extends Component {
             });
         }
         return (
-            <div className="fitness-progress-photos-wrapper">
+            <div className="fitness-gallery-photos-wrapper">
                 <FitnessHeader />
                 <FitnessNav />
                 <section className="body-wrap">
@@ -74,12 +74,12 @@ class GalleryPhotos extends Component {
                                 ))}
                             </ul>
                             {!photoLoadMoreLoading && !photoDataOver &&
-                                <button type="button" className="photo-load-more-btn progress-photos" onClick={this.handleLoadMore}>
+                                <button type="button" className="photo-load-more-btn gallery-photos" onClick={this.handleLoadMore}>
                                     <span>Load More</span>
                                 </button>
                             }
                             {photoLoadMoreLoading &&
-                                <button type="button" className="photo-load-more-btn progress-photos" disabled={true}>
+                                <button type="button" className="photo-load-more-btn gallery-photos" disabled={true}>
                                     <FaCircleONotch className="loader-spinner loader-spinner-icon" />
                                     <span>Loading...</span>
                                 </button>
