@@ -9,7 +9,8 @@ import {
     GET_USER_PROGRESS_PHOTO_REQUEST,
     getUserLatestProgressPhotoSuccess,
     getUserLatestProgressPhotoError,
-    GET_USER_LATEST_PROGRESS_PHOTO_REQUEST
+    GET_USER_LATEST_PROGRESS_PHOTO_REQUEST,
+    LOAD_MORE_USER_PROGRESS_PHOTO_REQUEST
 } from '../actions/userProgressPhotos';
 
 function fetchUserProgressPhotosData() {
@@ -54,6 +55,7 @@ function addUserProgressPhotoData() {
 
 export function* watchUserProgressPhotosData() {
     yield takeLatest(GET_USER_PROGRESS_PHOTO_REQUEST, fetchUserProgressPhotosData());
+    yield takeLatest(LOAD_MORE_USER_PROGRESS_PHOTO_REQUEST, fetchUserProgressPhotosData());
     yield takeLatest(GET_USER_LATEST_PROGRESS_PHOTO_REQUEST, fetchUserLatestProgressPhotosData());
     yield takeLatest(ADD_USER_PROGRESS_PHOTO_REQUEST, addUserProgressPhotoData());
 }
