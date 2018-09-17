@@ -4,11 +4,11 @@ import noProfileImg from 'img/common/no-profile-img.png'
 import moment from "moment";
 
 const ProfilePhotoBlock = (props) => {
-    const { image, caption } = props;
+    const { image, caption, handleOpenLightbox, index, blockFor } = props;
     return (
         <div className="profile-list">
             <span>
-                <a href="">
+                <a href="javascript:void(0)" onClick={() => handleOpenLightbox(blockFor, index)}>
                     <img
                         src={SERVER_BASE_URL + image}
                         alt={caption}

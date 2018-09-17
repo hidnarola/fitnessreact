@@ -8,13 +8,14 @@ import {
     getUserProgressPhotoRequest,
 } from '../../actions/userProgressPhotos';
 import { ts } from '../../helpers/funs';
-import { FRIENDSHIP_STATUS_SELF, POST_TYPE_GALLERY } from '../../constants/consts';
+import { FRIENDSHIP_STATUS_SELF, POST_TYPE_GALLERY, SERVER_BASE_URL } from '../../constants/consts';
 import AddGalleryPhotoModal from './AddGalleryPhotoModal';
 import { addUserGalleryPhotoRequest, getUserGalleryPhotoRequest } from '../../actions/userGalleryPhotos';
 import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
 import { FaCircleONotch } from "react-icons/lib/fa";
 import NoDataFoundImg from "img/common/no_datafound.png";
 import ErrorCloud from "svg/error-cloud.svg";
+import Lightbox from 'react-images';
 
 class ProfilePhotos extends Component {
     constructor(props) {
@@ -31,6 +32,10 @@ class ProfilePhotos extends Component {
             forceResetGalleryModalState: false,
             initGalleryPhotosAction: false,
             doLoadGalleryPhotos: false,
+
+            lightBoxOpen: false,
+            currentImage: 0,
+            lightBoxImages: [],
         }
     }
 
@@ -67,7 +72,18 @@ class ProfilePhotos extends Component {
             showAddProgressPhotoModal,
             showGalleryPhotoModal,
             forceResetGalleryModalState,
+            lightBoxOpen,
+            currentImage,
+            lightBoxImages,
         } = this.state;
+        let galleryPhotosArr = [];
+        if (galleryPhotos && galleryPhotos.length > 0) {
+            galleryPhotos.map((galleryPhoto) => {
+                galleryPhoto.images.map((photo) => {
+                    galleryPhotosArr.push(photo);
+                });
+            });
+        }
         return (
             <div className="profilePhotosComponentWrapper">
                 <div className="white-box space-btm-20">
@@ -103,7 +119,7 @@ class ProfilePhotos extends Component {
                             <ul className="d-flex profile-list-ul">
                                 {progressPhotos.map((photo, index) => (
                                     <li key={index}>
-                                        <ProfilePhotoBlock image={photo.image} caption={photo.date} />
+                                        <ProfilePhotoBlock image={photo.image} caption={photo.date} handleOpenLightbox={this.handleOpenLightbox} index={index} blockFor="progress_photos" />
                                     </li>
                                 ))}
                             </ul>
@@ -124,22 +140,20 @@ class ProfilePhotos extends Component {
                         }
                     </div>
                     <div className="whitebox-body profile-body">
-                        {!galleryPhotos &&
+                        {!galleryPhotosArr &&
                             <span>No gallery images</span>
                         }
-                        {galleryPhotos && galleryPhotos.length <= 0 &&
+                        {galleryPhotosArr && galleryPhotosArr.length <= 0 &&
                             <span>No gallery images</span>
                         }
-                        {galleryPhotos && galleryPhotos.length > 0 &&
+                        {galleryPhotosArr && galleryPhotosArr.length > 0 &&
                             <ul className="d-flex profile-list-ul">
-                                {galleryPhotos.map((galleryPhoto, index) => {
-                                    return galleryPhoto.images.map((photo, i) => {
-                                        return (
-                                            <li key={`${index}_${i}`}>
-                                                <ProfilePhotoBlock image={photo.image} caption={photo.logDate} />
-                                            </li>
-                                        )
-                                    })
+                                {galleryPhotosArr.map((photo, i) => {
+                                    return (
+                                        <li key={i}>
+                                            <ProfilePhotoBlock image={photo.image} caption={photo.logDate} handleOpenLightbox={this.handleOpenLightbox} index={i} blockFor="gallery_photos" />
+                                        </li>
+                                    )
                                 })}
                             </ul>
                         }
@@ -159,6 +173,17 @@ class ProfilePhotos extends Component {
                     doResetState={forceResetGalleryModalState}
                     resetState={this.handleForceResetGalleryModalState}
                 />
+
+                {lightBoxImages && lightBoxImages.length > 0 &&
+                    <Lightbox
+                        images={lightBoxImages}
+                        isOpen={lightBoxOpen}
+                        onClickPrev={() => this.handleNavigation('prev')}
+                        onClickNext={() => this.handleNavigation('next')}
+                        onClose={this.handleCloseLightbox}
+                        currentImage={currentImage}
+                    />
+                }
             </div>
         );
     }
@@ -325,6 +350,59 @@ class ProfilePhotos extends Component {
         this.setState({
             forceResetGalleryModalState: flag,
         });
+    }
+
+    handleOpenLightbox = (openFor = 'gallery_photos', startFrom = 0) => {
+        const { progressPhotos, galleryPhotos } = this.state;
+        let lightBoxImages = [];
+        let setState = false;
+        if (openFor === 'progress_photos' && progressPhotos && progressPhotos.length > 0) {
+            setState = true;
+            progressPhotos.map((photo) => {
+                lightBoxImages.push({ src: SERVER_BASE_URL + photo.image });
+            });
+        } else if (openFor === 'gallery_photos' && galleryPhotos && galleryPhotos.length > 0) {
+            setState = true;
+            galleryPhotos.map((galleryPhoto) => {
+                return galleryPhoto.images.map((photo) => {
+                    lightBoxImages.push({ src: SERVER_BASE_URL + photo.image });
+                })
+            })
+        }
+        if (setState) {
+            this.setState({
+                currentImage: startFrom,
+                lightBoxOpen: true,
+                lightBoxImages
+            });
+        }
+    }
+
+    handleCloseLightbox = () => {
+        this.setState({
+            currentImage: 0,
+            lightBoxOpen: false,
+            lightBoxImages: [],
+        });
+    }
+
+    handleNavigation = (direction = 'next') => {
+        const { currentImage, lightBoxImages } = this.state;
+        let newCurrentImage = currentImage;
+        if (direction === 'prev') {
+            if (currentImage <= 0) {
+                newCurrentImage = (lightBoxImages.length - 1);
+            } else {
+                newCurrentImage -= 1;
+            }
+        } else if (direction === 'next') {
+            if (currentImage >= (lightBoxImages.length - 1)) {
+                newCurrentImage = 0;
+            } else {
+                newCurrentImage += 1;
+            }
+        }
+        this.setState({ currentImage: newCurrentImage });
     }
     //#endregion
 }
