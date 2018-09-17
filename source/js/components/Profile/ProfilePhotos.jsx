@@ -65,6 +65,8 @@ class ProfilePhotos extends Component {
             profile,
             progressPhotoloading,
             progressPhotoError,
+            galleryPhotoloading,
+            galleryPhotoError,
         } = this.props;
         const {
             progressPhotos,
@@ -140,13 +142,23 @@ class ProfilePhotos extends Component {
                         }
                     </div>
                     <div className="whitebox-body profile-body">
-                        {!galleryPhotosArr &&
-                            <span>No gallery images</span>
+                        {galleryPhotoloading &&
+                            <div className="text-c">
+                                <FaCircleONotch className="loader-spinner fs-50" />
+                            </div>
                         }
-                        {galleryPhotosArr && galleryPhotosArr.length <= 0 &&
-                            <span>No gallery images</span>
+                        {!galleryPhotoloading && (!galleryPhotos || galleryPhotos.length <= 0) && galleryPhotoError && galleryPhotoError.length <= 0 &&
+                            <div className="no-record-found-wrapper">
+                                <img src={NoDataFoundImg} />
+                            </div>
                         }
-                        {galleryPhotosArr && galleryPhotosArr.length > 0 &&
+                        {!galleryPhotoloading && (!galleryPhotos || galleryPhotos.length <= 0) && galleryPhotoError && galleryPhotoError.length > 0 &&
+                            <div className="server-error-wrapper">
+                                <ErrorCloud />
+                                <h4>Something went wrong! please try again.</h4>
+                            </div>
+                        }
+                        {!galleryPhotoloading && galleryPhotos && galleryPhotos.length > 0 &&
                             <ul className="d-flex profile-list-ul">
                                 {galleryPhotosArr.map((photo, i) => {
                                     return (
