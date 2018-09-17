@@ -48,9 +48,8 @@ import ReactHtmlParser from "react-html-parser";
 import ReactQuill from 'react-quill';
 import { te } from '../../helpers/funs';
 import InfiniteScroll from 'react-infinite-scroller';
-import { FaCircleONotch } from "react-icons/lib/fa";
 import { MenuItem, Dropdown, DropdownButton } from "react-bootstrap";
-import { FaGlobe, FaLock, FaGroup } from 'react-icons/lib/fa';
+import { FaGlobe, FaLock, FaGroup, FaSpinner, FaCircleONotch } from 'react-icons/lib/fa';
 import AddPostPhotoModal from './AddPostPhotoModal';
 import LikeButton from "./LikeButton";
 import { getTimelineWidgetsAndWidgetsDataRequest, saveTimelineWidgetsRequest, changeTimelineMuscleInnerDataRequest, changeTimelineBodyFatWidgetRequest } from '../../actions/timelineWidgets';
@@ -59,7 +58,6 @@ import WidgetProgressPhotoCard from '../Common/WidgetProgressPhotoCard';
 import WidgetMuscleCard from '../Common/WidgetMuscleCard';
 import WidgetBodyFatCard from '../Common/WidgetBodyFatCard';
 import WidgetBadgesCard from '../Common/WidgetBadgesCard';
-import { FaSpinner } from 'react-icons/lib/fa';
 
 class ProfileFithub extends Component {
     constructor(props) {

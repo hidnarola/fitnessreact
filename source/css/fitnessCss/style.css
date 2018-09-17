@@ -201,6 +201,8 @@ h3.title-h3{padding:0;margin:0;display:block; color:#232B41; font-size:20px; fon
 .body-head-r button:last-child{margin-bottom:0;}
 .body-head-r a i,
 .body-head-r button i{float:right;line-height:46px;width:24px;font-size:20px;overflow:hidden;}
+.body-head-r a svg,
+.body-head-r button svg{float: right; line-height: 46px; width: 24px; font-size: 20px; overflow: hidden; margin-top: 14px;}
 
 .pink-btn{border-radius:25px; background:linear-gradient(148.66deg, #FF3366 0%, #FF339A 100%);	box-shadow:0 2px 4px 0 rgba(0,0,0,0.1);line-height:50px; color: #FFFFFF;	font-family: gt_walsheim_proregular;	font-size: 14px;	font-weight: 700; border:0;}
 .pink-btn:hover{opacity:.6;}

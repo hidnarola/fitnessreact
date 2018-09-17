@@ -27,7 +27,7 @@ import {
 } from '../constants/consts';
 import moment from "moment";
 import { initialize, reset } from "redux-form";
-import { FaCircleONotch } from "react-icons/lib/fa";
+import { FaCircleONotch, FaSpinner } from "react-icons/lib/fa";
 import ErrorCloud from "svg/error-cloud.svg";
 import Workouts from '../components/Dashboard/Workouts';
 import ActivityFeed from '../components/Dashboard/ActivityFeed';
@@ -83,8 +83,9 @@ class Dashboard extends Component {
                                 on track and meeting the goals you’ve set out for yourself.</p>
                         </div>
                         <div className="body-head-r space-btm-20">
-                            <button type="button" onClick={this.handleShowWidgetsModal} className="white-btn">
-                                <i className="icon-widgets"></i>
+                            <button type="button" onClick={this.handleShowWidgetsModal} className="white-btn" disabled={loading}>
+                                {loading && <FaSpinner className="loader-spinner" />}
+                                {!loading && <i className="icon-widgets"></i>}
                                 <span>Widget</span>
                             </button>
                             <button type="button" className="pink-btn">
