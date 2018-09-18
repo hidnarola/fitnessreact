@@ -5,6 +5,9 @@ import FitnessNav from '../components/global/FitnessNav';
 import { getAllUserNotificationRequest, readOneUserNotificationRequest } from '../actions/userNotifications';
 import NotificationCard from '../components/global/NotificationCard';
 import { getToken } from '../helpers/funs';
+import { FaCircleONotch } from "react-icons/lib/fa";
+import NoDataFoundImg from "img/common/no_datafound.png";
+import ErrorCloud from "svg/error-cloud.svg";
 
 class Notifications extends Component {
     componentWillMount() {
@@ -34,7 +37,9 @@ class Notifications extends Component {
                             <div className="white-box space-btm-20">
                                 <div className="whitebox-body profile-body">
                                     {allLoading &&
-                                        <p>Loading...</p>
+                                        <div className="text-c">
+                                            <FaCircleONotch className="loader-spinner fs-100" />
+                                        </div>
                                     }
                                     {!allLoading && allNotifications && allNotifications.length > 0 &&
                                         <div className="notifications-body" id="notification-box">
@@ -50,10 +55,28 @@ class Notifications extends Component {
                                                     )
                                                 })
                                             }
+                                            <button type="button" className="photo-load-more-btn notifications" onClick={this.handleLoadMore}>
+                                                <span>Load More</span>
+                                            </button>
+
+                                            <button type="button" className="photo-load-more-btn notifications" disabled={true}>
+                                                <FaCircleONotch className="loader-spinner loader-spinner-icon" />
+                                                <span>Loading...</span>
+                                            </button>
                                         </div>
                                     }
-                                    {(!allLoading && !allNotifications) || (!allLoading && allNotifications.length <= 0) &&
-                                        <p>No notification found</p>
+                                    
+                                    {!allLoading && (!allNotifications || allNotifications.length <= 0) && allError && allError.length <= 0 &&
+                                        <div className="no-record-found-wrapper">
+                                            <img src={NoDataFoundImg} />
+                                        </div>
+                                    }
+
+                                    {!allLoading && (!allNotifications || allNotifications.length <= 0) && allError && allError.length > 0 &&
+                                        <div className="server-error-wrapper">
+                                            <ErrorCloud />
+                                            <h4>Something went wrong! please try again.</h4>
+                                        </div>
                                     }
                                 </div>
                             </div>
