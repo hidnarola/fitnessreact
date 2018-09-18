@@ -99,7 +99,7 @@ class Post extends Component {
                 <section className="body-wrap">
                     <div className="body-head space-btm-45 d-flex justify-content-start">
                         <div className="body-head-r">
-                            <Link to={`${routeCodes.PROFILE}/${match.params.username}`} className="white-btn">Back <i className="icon-arrow_back"></i></Link>
+                            <Link to={`${routeCodes.PROFILE}/${match.params.username}`} className="white-btn">Profile <i className="icon-account_circle"></i></Link>
                         </div>
                     </div>
 

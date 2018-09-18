@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import moment from 'moment';
 import { POST_TYPE_TIMELINE, POST_TYPE_GALLERY, POST_TYPE_PROGRESS_PHOTO, ACCESS_LEVEL_PUBLIC, ACCESS_LEVEL_FRIENDS, ACCESS_LEVEL_PRIVATE, SERVER_BASE_URL } from '../../constants/consts';
 import _ from "lodash";
@@ -55,7 +55,7 @@ class ActivityFeedListCard extends Component {
             lastComment = comments[(totalComments - 1)];
             lastCommentCreatedAt = lastComment.create_date;
             lastCommentCreatedAt = moment.utc(lastCommentCreatedAt).toDate();
-            lastCommentCreatedAt = moment(lastCommentCreatedAt).local().format('Do MMMM [at] hh:mm');
+            lastCommentCreatedAt = moment(lastCommentCreatedAt).local().format('Do MMM [at] hh:mm');
         }
         var likes = post.likes;
         var totalLikes = likes.length;
@@ -112,7 +112,7 @@ class ActivityFeedListCard extends Component {
                                 {`${createdBy.firstName} ${(createdBy.lastName) ? createdBy.lastName : ''}`}
                             </NavLink>
                         </big>
-                        <small><a href="javascript:void(0)">{(post.tag_line) ? post.tag_line : ''}</a></small>
+                        <small><Link to={`${routeCodes.POST}/${createdBy.username}/${post._id}`}>{(post.tag_line) ? post.tag_line : ''}</Link></small>
                         <p className="">
                             {postCreatedAt}
                             {post.privacy == ACCESS_LEVEL_PUBLIC && <FaGlobe />}
@@ -148,17 +148,14 @@ class ActivityFeedListCard extends Component {
                         {(likesStr || totalComments > 0) &&
                             <p>
                                 {likesStr &&
-                                    <a href="javascript:void(0)" onClick={() => { }}>{likesStr}</a>
+                                    <Link to={`${routeCodes.POST}/${createdBy.username}/${post._id}`}>{likesStr}</Link>
                                 }
                                 {totalComments > 0 &&
-                                    <a href="javascript:void(0)" className="pull-right">Comments {totalComments}</a>
+                                    <Link to={`${routeCodes.POST}/${createdBy.username}/${post._id}`} className="pull-right">Comments {totalComments}</Link>
                                 }
                             </p>
                         }
                     </div>
-                </div>
-                <div className="posttype-btm d-flex">
-                    <a href="javascript:void(0)" className="icon-chat"></a>
                 </div>
                 {totalComments > 0 &&
                     <div className="post-comment d-flex">
