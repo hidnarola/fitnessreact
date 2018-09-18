@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import Auth from '../Auth';
-import { LOCALSTORAGE_ROLE_KEY, ADMIN_ROLE, USER_ROLE, AUTH_STATE_ACTION_LOGIN_KEY, AUTH_STATE_ACTION_SIGNUP_KEY } from '../../constants/consts';
+import { LOCALSTORAGE_ROLE_KEY, ADMIN_ROLE, USER_ROLE, AUTH_STATE_ACTION_LOGIN_KEY, AUTH_STATE_ACTION_SIGNUP_KEY, AUTH0_ACCESS_DENIED_ERR_STR } from '../../constants/consts';
 import { isLogin, checkLogin } from '../../helpers/loginHelper';
 import { publicPath } from '../../constants/routes';
+import { te } from '../../helpers/funs';
 
 const auth = new Auth();
 
@@ -12,7 +13,13 @@ class Callback extends Component {
     }
 
     componentWillMount() {
-        const { history } = this.props;
+        const { history, location } = this.props;
+        if (location && location.hash && location.hash.includes(AUTH0_ACCESS_DENIED_ERR_STR)) {
+            localStorage.removeItem(AUTH_STATE_ACTION_LOGIN_KEY);
+            localStorage.removeItem(AUTH_STATE_ACTION_SIGNUP_KEY);
+            te('Please allow authorization to access your profile details');
+            history.push(publicPath);
+        }
         let role = localStorage.getItem(LOCALSTORAGE_ROLE_KEY);
         let auth0LoginAction = localStorage.getItem(AUTH_STATE_ACTION_LOGIN_KEY);
         let auth0SignupAction = localStorage.getItem(AUTH_STATE_ACTION_SIGNUP_KEY);
@@ -44,6 +51,16 @@ class Callback extends Component {
             </div>
         );
     }
+
+    componentWillUpdate(nextProps, nextState) {
+        console.log('componentWillUpdate => ');
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        console.log('componentDidUpdate => ');
+    }
+
+
 }
 
 export default Callback;
