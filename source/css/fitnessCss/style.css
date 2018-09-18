@@ -2044,6 +2044,7 @@ table.table.progress-muscle-body-table button span i{vertical-align: middle;}
 .color-white{color: #fff !important;}
 .color-black{color: #000 !important;}
 .cursor-pointer{cursor: pointer !important;}
+.cursor-default{cursor: default !important;}
 
 input[type=radio],
 input[type=checkbox] {display: none;}

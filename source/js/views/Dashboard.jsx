@@ -88,7 +88,7 @@ class Dashboard extends Component {
                                 {!loading && <i className="icon-widgets"></i>}
                                 <span>Widget</span>
                             </button>
-                            <button type="button" className="pink-btn">
+                            <button type="button" disabled={true} className="pink-btn cursor-default">
                                 <span>Profile Completion</span>
                                 <span className="pull-right">{(profileComplete) ? `${profileComplete}%` : ''}</span>
                             </button>
