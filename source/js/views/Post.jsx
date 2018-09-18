@@ -36,7 +36,7 @@ class Post extends Component {
     }
 
     render() {
-        const { loading, error, post, match } = this.props;
+        const { loading, postError, post, match } = this.props;
         const { isLikedByLoggedUser } = this.state;
         let doRenderPost = true;
         if (!loading && post) {
@@ -213,13 +213,13 @@ class Post extends Component {
                         </div>
                     }
 
-                    {!loading && !post && typeof error !== 'undefined' && error && error.length <= 0 &&
+                    {!loading && !post && typeof postError !== 'undefined' && postError && postError.length <= 0 &&
                         <div className="no-record-found-wrapper">
                             <img src={NoDataFoundImg} />
                         </div>
                     }
 
-                    {!loading && typeof error !== 'undefined' && error && error.length > 0 &&
+                    {!loading && typeof postError !== 'undefined' && postError && postError.length > 0 &&
                         <div className="server-error-wrapper">
                             <ErrorCloud />
                             <h4>Something went wrong! please try again.</h4>

@@ -3,7 +3,7 @@ import { toggleSideMenu } from '../../helpers/funs';
 import ReactHtmlParser from "react-html-parser";
 import noProfileImg from 'img/common/no-profile-img.png'
 import { routeCodes } from '../../constants/routes';
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import cns from "classnames";
 import { NOTIFICATION_TYPE_FRIEND_REQUEST_APPROVED, NOTIFICATION_TYPE_BADGE_AWARDED, NOTIFICATION_TYPE_LIKE_POST, NOTIFICATION_TYPE_COMMENT_POST } from '../../constants/consts';
 import BadgeIcon from "svg/badge-icon.svg";
@@ -22,7 +22,7 @@ class NotificationCard extends Component {
                 msg = `<strong>${sender.firstName} ${(sender.lastName) ? sender.lastName : ''}</strong>`;
                 msg += `<small>approved your friend request</small>`;
                 return (
-                    <NavLink
+                    <Link
                         to={`${routeCodes.PROFILE}/${sender.username}`}
                         onClick={() => this.handleNotificationClick(notification._id)}
                     >
@@ -38,12 +38,12 @@ class NotificationCard extends Component {
                             </span>
                             <h4>{ReactHtmlParser(msg)}</h4>
                         </div>
-                    </NavLink>
+                    </Link>
                 )
             case NOTIFICATION_TYPE_BADGE_AWARDED:
                 var msg = (notification.body) ? `<small>${notification.body}</small>` : 'Congratulations! You have received a new badge.';
                 return (
-                    <NavLink
+                    <Link
                         to={`${routeCodes.BADGESTRACKING}`}
                         onClick={() => this.handleNotificationClick(notification._id)}
                     >
@@ -53,17 +53,15 @@ class NotificationCard extends Component {
                             </span>
                             <h4>{ReactHtmlParser(msg)}</h4>
                         </div>
-                    </NavLink>
+                    </Link>
                 )
             case NOTIFICATION_TYPE_LIKE_POST:
             case NOTIFICATION_TYPE_COMMENT_POST:
                 var msg = (notification.body) ? `<small>${notification.body}</small>` : 'Your post is being liked by your friends.';
                 return (
-                    <a
-                        href="javascript:void(0)"
-                        onClick={() => {
-                            this.handleNotificationClick(notification._id);
-                        }}
+                    <Link
+                        to={`${routeCodes.POST}/${notification.receiver.username}/${notification.timelineId}`}
+                        onClick={() => this.handleNotificationClick(notification._id)}
                     >
                         <div className={cns("notifications-box", { 'un-seen-notification': !isSeen })}>
                             <span>
@@ -77,7 +75,7 @@ class NotificationCard extends Component {
                             </span>
                             <h4>{ReactHtmlParser(msg)}</h4>
                         </div>
-                    </a>
+                    </Link>
                 )
             default:
                 if (notification.body) {
