@@ -27,6 +27,7 @@ import userStats from 'sagas/userStats';
 import postLikes from 'sagas/postLikes';
 import postComments from 'sagas/postComments';
 import profile from 'sagas/profile';
+import userChangePasswordSagas from 'sagas/changePassword';
 import friends from 'sagas/friends';
 import login from 'sagas/login';
 import healthLabels from 'sagas/healthLabels';
@@ -75,6 +76,7 @@ export default function* rootSaga() {
     ...postLikes,
     ...postComments,
     ...profile,
+    ...userChangePasswordSagas,
     ...friends,
     ...login,
     ...healthLabels,

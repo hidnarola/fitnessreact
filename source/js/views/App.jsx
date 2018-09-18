@@ -91,6 +91,7 @@ import { logout } from '../actions/login';
 import BodyParts from './Admin/BodyParts';
 import EquipmentCategories from './Admin/EquipmentCategories';
 import ChangePassword from './Admin/ChangePassword';
+import UserChangePassword from './ChangePassword';
 import Profile from './Admin/Profile';
 import Post from './Post';
 import ProgressPhotos from './ProgressPhotos';
@@ -154,6 +155,7 @@ class App extends Component {
                             <PrivateRoute path={`${routeCodes.PROFILE}/:username`} component={ProfilePage} />
                             <PrivateRoute path={routeCodes.UPDATE_PROFILE} component={UpdateProfile} />
                             <PrivateRoute path={routeCodes.PROFILE_SETTINGS} component={ProfileSettings} />
+                            <PrivateRoute path={routeCodes.CHANGE_PASSWORD} component={UserChangePassword} />
 
                             <PrivateRoute path={`${routeCodes.POST}/:username/:id`} component={Post} />
 

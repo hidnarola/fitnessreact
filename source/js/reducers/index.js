@@ -30,6 +30,7 @@ import timelineWidgets from 'reducers/timelineWidgets';
 import postLikes from 'reducers/postLikes';
 import postComments from 'reducers/postComments';
 import profile from 'reducers/profile';
+import userChangePassword from 'reducers/changePassword';
 import friends from 'reducers/friends';
 import login from 'reducers/login';
 import healthLabels from 'reducers/healthLabels';
@@ -81,6 +82,7 @@ export default combineReducers({
     postLikes,
     postComments,
     profile,
+    userChangePassword,
     friends,
     login,
     healthLabels,

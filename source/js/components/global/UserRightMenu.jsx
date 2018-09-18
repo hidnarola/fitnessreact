@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { toggleSideMenu } from '../../helpers/funs';
 import { routeCodes } from '../../constants/routes';
 import UserCircle from "svg/user-circle.svg";
@@ -24,28 +24,31 @@ class UserRightMenu extends Component {
                     <div className="chat-body" id="chat-body">
                         <ul>
                             <li>
-                                <NavLink
+                                <Link
                                     to={routeCodes.UPDATE_PROFILE}
                                     onClick={() => toggleSideMenu('user-right-menu', false)}
                                 >
                                     <UserCircle />
                                     Update Profile
-                                </NavLink>
+                                </Link>
                             </li>
                             <li>
-                                <NavLink to={''}>
+                                <Link
+                                    to={routeCodes.CHANGE_PASSWORD}
+                                    onClick={() => toggleSideMenu('user-right-menu', false)}
+                                >
                                     <OpenLock />
                                     Change Password
-                                </NavLink>
+                                </Link>
                             </li>
                             <li>
-                                <NavLink
+                                <Link
                                     to={routeCodes.PROFILE_SETTINGS}
                                     onClick={() => toggleSideMenu('user-right-menu', false)}
                                 >
                                     <Cog />
                                     Settings
-                                </NavLink>
+                                </Link>
                             </li>
                             <li>
                                 <a
