@@ -16,6 +16,12 @@ import {
     ACCEPT_FRIEND_REQUEST_SUCCESS,
     ACCEPT_FRIEND_REQUEST_ERROR,
     SET_USER_FRIEND_REQUESTS_COUNT,
+    LOAD_MORE_APPROVED_FRIENDS_REQUEST,
+    LOAD_MORE_APPROVED_FRIENDS_SUCCESS,
+    LOAD_MORE_APPROVED_FRIENDS_ERROR,
+    LOAD_MORE_PENDING_FRIENDS_REQUEST,
+    LOAD_MORE_PENDING_FRIENDS_SUCCESS,
+    LOAD_MORE_PENDING_FRIENDS_ERROR,
 } from "../actions/friends";
 import { VALIDATION_FAILURE_STATUS } from "../constants/consts";
 import { generateValidationErrorMsgArr } from "../helpers/funs";
@@ -27,11 +33,15 @@ const initialState = Map({
     approvedError: [],
     approvedSkip: 0,
     approvedLimit: 10,
+    approvedLoadMoreLoading: false,
+    approvedNoMoreData: false,
     pendingLoading: false,
     pendingFriends: [],
     pendingError: [],
     pendingSkip: 0,
     pendingLimit: 10,
+    pendingLoadMoreLoading: false,
+    pendingNoMoreData: false,
     requestSendLoading: false,
     requestSendError: [],
     requestCancelLoading: false,
@@ -47,6 +57,7 @@ const actionMap = {
             approvedFriends: [],
             approvedSkip: action.skip,
             approvedLimit: action.limit,
+            approvedNoMoreData: false,
             approvedError: [],
         }));
     },
@@ -54,6 +65,9 @@ const actionMap = {
         let newState = { approvedLoading: false };
         if (action.data && action.data.status && action.data.status === 1) {
             newState.approvedFriends = action.data.friends;
+            if (action.data.friends && action.data.friends.length <= 0) {
+                newState.approvedNoMoreData = true;
+            }
         } else {
             let msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later';
             newState.approvedError = [msg];
@@ -74,12 +88,53 @@ const actionMap = {
             approvedError: error,
         }));
     },
+    [LOAD_MORE_APPROVED_FRIENDS_REQUEST]: (state, action) => {
+        return state.merge(Map({
+            approvedLoadMoreLoading: true,
+            approvedSkip: action.skip,
+            approvedLimit: action.limit,
+            approvedNoMoreData: false,
+            approvedError: [],
+        }));
+    },
+    [LOAD_MORE_APPROVED_FRIENDS_SUCCESS]: (state, action) => {
+        let prevApprovedFriends = state.get('approvedFriends');
+        let newState = { approvedLoadMoreLoading: false };
+        if (action.data && action.data.status && action.data.status === 1) {
+            if (action.data.friends && action.data.friends.length > 0) {
+                newState.approvedFriends = prevApprovedFriends.concat(action.data.friends);
+            } else {
+                newState.approvedNoMoreData = true;
+            }
+        } else {
+            let msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later';
+            newState.approvedNoMoreData = true;
+            newState.approvedError = [msg];
+        }
+        return state.merge(Map(newState));
+    },
+    [LOAD_MORE_APPROVED_FRIENDS_ERROR]: (state, action) => {
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
+        }
+        return state.merge(Map({
+            approvedLoadMoreLoading: false,
+            approvedNoMoreData: true,
+            approvedError: error,
+        }));
+    },
     [GET_PENDING_FRIENDS_REQUEST]: (state, action) => {
         return state.merge(Map({
             pendingLoading: true,
             pendingFriends: [],
             pendingSkip: action.skip,
             pendingLimit: action.limit,
+            pendingNoMoreData: false,
             pendingError: [],
         }));
     },
@@ -87,6 +142,9 @@ const actionMap = {
         let newState = { pendingLoading: false };
         if (action.data && action.data.status && action.data.status === 1) {
             newState.pendingFriends = action.data.friends;
+            if (action.data.friends && action.data.friends.length <= 0) {
+                newState.pendingNoMoreData = true;
+            }
         } else {
             let msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later';
             newState.pendingError = [msg];
@@ -104,6 +162,46 @@ const actionMap = {
         }
         return state.merge(Map({
             pendingLoading: false,
+            pendingError: error,
+        }));
+    },
+    [LOAD_MORE_PENDING_FRIENDS_REQUEST]: (state, action) => {
+        return state.merge(Map({
+            pendingLoadMoreLoading: true,
+            pendingSkip: action.skip,
+            pendingLimit: action.limit,
+            pendingNoMoreData: false,
+            pendingError: [],
+        }));
+    },
+    [LOAD_MORE_PENDING_FRIENDS_SUCCESS]: (state, action) => {
+        let prevPendingFriends = state.get('pendingFriends');
+        let newState = { pendingLoadMoreLoading: false };
+        if (action.data && action.data.status && action.data.status === 1) {
+            if (action.data.friends && action.data.friends.length > 0) {
+                newState.pendingFriends = prevPendingFriends.concat(action.data.friends);
+            } else {
+                newState.pendingNoMoreData = true;
+            }
+        } else {
+            let msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later';
+            newState.pendingNoMoreData = true;
+            newState.pendingError = [msg];
+        }
+        return state.merge(Map(newState));
+    },
+    [LOAD_MORE_PENDING_FRIENDS_ERROR]: (state, action) => {
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
+        }
+        return state.merge(Map({
+            pendingLoadMoreLoading: false,
+            pendingNoMoreData: true,
             pendingError: error,
         }));
     },

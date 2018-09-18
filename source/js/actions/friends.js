@@ -2,9 +2,17 @@ export const GET_APPROVED_FRIENDS_REQUEST = 'GET_APPROVED_FRIENDS_REQUEST';
 export const GET_APPROVED_FRIENDS_SUCCESS = 'GET_APPROVED_FRIENDS_SUCCESS';
 export const GET_APPROVED_FRIENDS_ERROR = 'GET_APPROVED_FRIENDS_ERROR';
 
+export const LOAD_MORE_APPROVED_FRIENDS_REQUEST = 'LOAD_MORE_APPROVED_FRIENDS_REQUEST';
+export const LOAD_MORE_APPROVED_FRIENDS_SUCCESS = 'LOAD_MORE_APPROVED_FRIENDS_SUCCESS';
+export const LOAD_MORE_APPROVED_FRIENDS_ERROR = 'LOAD_MORE_APPROVED_FRIENDS_ERROR';
+
 export const GET_PENDING_FRIENDS_REQUEST = 'GET_PENDING_FRIENDS_REQUEST';
 export const GET_PENDING_FRIENDS_SUCCESS = 'GET_PENDING_FRIENDS_SUCCESS';
 export const GET_PENDING_FRIENDS_ERROR = 'GET_PENDING_FRIENDS_ERROR';
+
+export const LOAD_MORE_PENDING_FRIENDS_REQUEST = 'LOAD_MORE_PENDING_FRIENDS_REQUEST';
+export const LOAD_MORE_PENDING_FRIENDS_SUCCESS = 'LOAD_MORE_PENDING_FRIENDS_SUCCESS';
+export const LOAD_MORE_PENDING_FRIENDS_ERROR = 'LOAD_MORE_PENDING_FRIENDS_ERROR';
 
 export const SEND_FRIEND_REQUEST_REQUEST = 'SEND_FRIEND_REQUEST_REQUEST';
 export const SEND_FRIEND_REQUEST_SUCCESS = 'SEND_FRIEND_REQUEST_SUCCESS';
@@ -44,6 +52,30 @@ export function getApprovedFriendsError(error) {
     }
 }
 
+export function loadMoreApprovedFriendsRequest(username, skip = 0, limit = 10, sort = -1) {
+    return {
+        type: LOAD_MORE_APPROVED_FRIENDS_REQUEST,
+        username,
+        skip,
+        limit,
+        sort
+    }
+}
+
+export function loadMoreApprovedFriendsSuccess(data) {
+    return {
+        type: LOAD_MORE_APPROVED_FRIENDS_SUCCESS,
+        data
+    }
+}
+
+export function loadMoreApprovedFriendsError(error) {
+    return {
+        type: LOAD_MORE_APPROVED_FRIENDS_ERROR,
+        error
+    }
+}
+
 export function getPendingFriendsRequest(username, skip = 0, limit = 10, sort = -1) {
     return {
         type: GET_PENDING_FRIENDS_REQUEST,
@@ -64,6 +96,30 @@ export function getPendingFriendsSuccess(data) {
 export function getPendingFriendsError(error) {
     return {
         type: GET_PENDING_FRIENDS_ERROR,
+        error
+    }
+}
+
+export function loadMorePendingFriendsRequest(username, skip = 0, limit = 10, sort = -1) {
+    return {
+        type: LOAD_MORE_PENDING_FRIENDS_REQUEST,
+        username,
+        skip,
+        limit,
+        sort
+    }
+}
+
+export function loadMorePendingFriendsSuccess(data) {
+    return {
+        type: LOAD_MORE_PENDING_FRIENDS_SUCCESS,
+        data
+    }
+}
+
+export function loadMorePendingFriendsError(error) {
+    return {
+        type: LOAD_MORE_PENDING_FRIENDS_ERROR,
         error
     }
 }

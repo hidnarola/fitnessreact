@@ -4,7 +4,9 @@ import {
     getApprovedFriendsRequest,
     getPendingFriendsRequest,
     acceptFriendRequestRequest,
-    cancelFriendRequestRequest
+    cancelFriendRequestRequest,
+    loadMoreApprovedFriendsRequest,
+    loadMorePendingFriendsRequest
 } from '../../actions/friends';
 import ProfileFriendBlock from './ProfileFriendBlock';
 import { SET_LOGGED_USER_FROM_LOCALSTORAGE } from '../../actions/user';
@@ -42,23 +44,17 @@ class ProfileFriends extends Component {
     }
 
     componentWillMount() {
-        const {
-            profile,
-            dispatch,
-        } = this.props;
+        const { profile, dispatch } = this.props;
         if (profile && Object.keys(profile).length > 0) {
             var username = profile.username;
             this.setState({ initApprovedFriendAction: true });
-            dispatch(getApprovedFriendsRequest(username));
+            dispatch(getApprovedFriendsRequest(username, 0, 12));
             if (profile.friendshipStatus === FRIENDSHIP_STATUS_SELF) {
                 this.setState({ initPendingFriendAction: true });
-                dispatch(getPendingFriendsRequest(username));
+                dispatch(getPendingFriendsRequest(username, 0, 12));
             }
         } else {
-            this.setState({
-                doLoadApprovedFriends: true,
-                doLoadPendingFriends: true,
-            });
+            this.setState({ doLoadApprovedFriends: true, doLoadPendingFriends: true });
         }
     }
 
@@ -76,6 +72,10 @@ class ProfileFriends extends Component {
             loggedUserData,
             approvedLoading,
             approvedError,
+            approvedLoadMoreLoading,
+            pendingLoadMoreLoading,
+            approvedNoMoreData,
+            pendingNoMoreData,
         } = this.props;
         return (
             <div className="profile-friends-wrapper">
@@ -86,21 +86,33 @@ class ProfileFriends extends Component {
                         </div>
                         <div className="whitebox-body profile-body">
                             <div className="row d-flex">
-                                {pendingFriends.map((friend, index) => (
-                                    <div className="col-md-6" key={index}>
-                                        <ProfilePendingFriendBlock
-                                            friend={friend}
-                                            handleAcceptFriendRequest={this.handleAcceptFriendRequest}
-                                            pendingFriendsActionDisabled={
-                                                (pendingFriendsActionDisabled[friend.friendshipId])
-                                                    ? pendingFriendsActionDisabled[friend.friendshipId]
-                                                    : false
-                                            }
-                                            handleShowRejectFriendRequest={this.handleShowRejectFriendRequest}
-                                            handleRequestMessageChannel={this.handleRequestMessageChannel}
-                                        />
-                                    </div>
-                                ))
+                                {
+                                    pendingFriends.map((friend, index) => (
+                                        <div className="col-md-6" key={index}>
+                                            <ProfilePendingFriendBlock
+                                                friend={friend}
+                                                handleAcceptFriendRequest={this.handleAcceptFriendRequest}
+                                                pendingFriendsActionDisabled={
+                                                    (pendingFriendsActionDisabled[friend.friendshipId])
+                                                        ? pendingFriendsActionDisabled[friend.friendshipId]
+                                                        : false
+                                                }
+                                                handleShowRejectFriendRequest={this.handleShowRejectFriendRequest}
+                                                handleRequestMessageChannel={this.handleRequestMessageChannel}
+                                            />
+                                        </div>
+                                    ))
+                                }
+                                {!pendingLoadMoreLoading && !pendingNoMoreData &&
+                                    <button type="button" className="fithub-friends-load-more-btn" onClick={this.handleLoadMorePendingFriends}>
+                                        <span>Load More</span>
+                                    </button>
+                                }
+                                {pendingLoadMoreLoading &&
+                                    <button type="button" className="fithub-friends-load-more-btn" disabled={true}>
+                                        <FaCircleONotch className="loader-spinner loader-spinner-icon mr-5" />
+                                        <span>Loading...</span>
+                                    </button>
                                 }
                             </div>
                         </div>
@@ -150,13 +162,17 @@ class ProfileFriends extends Component {
                                         </div>
                                     ))
                                 }
-                                <button type="button" className="fithub-friends-load-more-btn">
-                                    <span>Load More</span>
-                                </button>
-                                <button type="button" className="fithub-friends-load-more-btn" disabled={true}>
-                                    <FaCircleONotch className="loader-spinner loader-spinner-icon mr-5" />
-                                    <span>Loading...</span>
-                                </button>
+                                {!approvedLoadMoreLoading && !approvedNoMoreData &&
+                                    <button type="button" className="fithub-friends-load-more-btn" onClick={this.handleLoadMoreApprovedFriends}>
+                                        <span>Load More</span>
+                                    </button>
+                                }
+                                {approvedLoadMoreLoading &&
+                                    <button type="button" className="fithub-friends-load-more-btn" disabled={true}>
+                                        <FaCircleONotch className="loader-spinner loader-spinner-icon mr-5" />
+                                        <span>Loading...</span>
+                                    </button>
+                                }
                             </div>
                         }
                     </div>
@@ -386,6 +402,22 @@ class ProfileFriends extends Component {
             socket.emit('get_channel_id', requestData);
         }
     }
+
+    handleLoadMoreApprovedFriends = () => {
+        const { dispatch, profile, approvedSkip, approvedLimit } = this.props;
+        let username = profile.username;
+        this.setState({ initApprovedFriendAction: true });
+        let newSkip = (parseInt(approvedSkip) + parseInt(approvedLimit));
+        dispatch(loadMoreApprovedFriendsRequest(username, newSkip, approvedLimit));
+    }
+
+    handleLoadMorePendingFriends = () => {
+        const { dispatch, profile, pendingSkip, pendingLimit } = this.props;
+        let username = profile.username;
+        this.setState({ initPendingFriendAction: true });
+        let newSkip = (parseInt(pendingSkip) + parseInt(pendingLimit));
+        dispatch(loadMorePendingFriendsRequest(username, newSkip, pendingLimit));
+    }
     //#endregion
 }
 
@@ -398,6 +430,14 @@ const mapStateToProps = (state) => {
         pendingFriends: friends.get('pendingFriends'),
         approvedError: friends.get('approvedError'),
         pendingError: friends.get('pendingError'),
+        approvedSkip: friends.get('approvedSkip'),
+        pendingSkip: friends.get('pendingSkip'),
+        approvedLimit: friends.get('approvedLimit'),
+        pendingLimit: friends.get('pendingLimit'),
+        approvedLoadMoreLoading: friends.get('approvedLoadMoreLoading'),
+        pendingLoadMoreLoading: friends.get('pendingLoadMoreLoading'),
+        approvedNoMoreData: friends.get('approvedNoMoreData'),
+        pendingNoMoreData: friends.get('pendingNoMoreData'),
         requestAcceptLoading: friends.get('requestAcceptLoading'),
         requestAcceptError: friends.get('requestAcceptError'),
         requestCancelLoading: friends.get('requestCancelLoading'),
