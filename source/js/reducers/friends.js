@@ -23,11 +23,15 @@ import { generateValidationErrorMsgArr } from "../helpers/funs";
 const initialState = Map({
     pendingRequestsCount: 0,
     approvedLoading: false,
-    approvedError: [],
     approvedFriends: [],
+    approvedError: [],
+    approvedSkip: 0,
+    approvedLimit: 10,
     pendingLoading: false,
-    pendingError: [],
     pendingFriends: [],
+    pendingError: [],
+    pendingSkip: 0,
+    pendingLimit: 10,
     requestSendLoading: false,
     requestSendError: [],
     requestCancelLoading: false,
@@ -40,13 +44,21 @@ const actionMap = {
     [GET_APPROVED_FRIENDS_REQUEST]: (state, action) => {
         return state.merge(Map({
             approvedLoading: true,
+            approvedFriends: [],
+            approvedSkip: action.skip,
+            approvedLimit: action.limit,
+            approvedError: [],
         }));
     },
     [GET_APPROVED_FRIENDS_SUCCESS]: (state, action) => {
-        return state.merge(Map({
-            approvedLoading: false,
-            approvedFriends: action.data.friends,
-        }));
+        let newState = { approvedLoading: false };
+        if (action.data && action.data.status && action.data.status === 1) {
+            newState.approvedFriends = action.data.friends;
+        } else {
+            let msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later';
+            newState.approvedError = [msg];
+        }
+        return state.merge(Map(newState));
     },
     [GET_APPROVED_FRIENDS_ERROR]: (state, action) => {
         let error = [];
@@ -65,13 +77,21 @@ const actionMap = {
     [GET_PENDING_FRIENDS_REQUEST]: (state, action) => {
         return state.merge(Map({
             pendingLoading: true,
+            pendingFriends: [],
+            pendingSkip: action.skip,
+            pendingLimit: action.limit,
+            pendingError: [],
         }));
     },
     [GET_PENDING_FRIENDS_SUCCESS]: (state, action) => {
-        return state.merge(Map({
-            pendingLoading: false,
-            pendingFriends: action.data.friends,
-        }));
+        let newState = { pendingLoading: false };
+        if (action.data && action.data.status && action.data.status === 1) {
+            newState.pendingFriends = action.data.friends;
+        } else {
+            let msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later';
+            newState.pendingError = [msg];
+        }
+        return state.merge(Map(newState));
     },
     [GET_PENDING_FRIENDS_ERROR]: (state, action) => {
         let error = [];

@@ -20,10 +20,13 @@ export const ACCEPT_FRIEND_REQUEST_ERROR = 'ACCEPT_FRIEND_REQUEST_ERROR';
 
 export const SET_USER_FRIEND_REQUESTS_COUNT = 'SET_USER_FRIEND_REQUESTS_COUNT';
 
-export function getApprovedFriendsRequest(username) {
+export function getApprovedFriendsRequest(username, skip = 0, limit = 10, sort = -1) {
     return {
         type: GET_APPROVED_FRIENDS_REQUEST,
-        username
+        username,
+        skip,
+        limit,
+        sort
     }
 }
 
@@ -41,10 +44,13 @@ export function getApprovedFriendsError(error) {
     }
 }
 
-export function getPendingFriendsRequest(username) {
+export function getPendingFriendsRequest(username, skip = 0, limit = 10, sort = -1) {
     return {
         type: GET_PENDING_FRIENDS_REQUEST,
-        username
+        username,
+        skip,
+        limit,
+        sort
     }
 }
 

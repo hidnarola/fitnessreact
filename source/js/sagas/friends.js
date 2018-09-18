@@ -26,8 +26,11 @@ import {
 function fetchApprovedFriendsData() {
     return function* (action) {
         try {
-            var username = action.username;
-            const data = yield call(() => api.getFriends(username, FRIEND_APPROVED));
+            let username = action.username;
+            let skip = action.skip;
+            let limit = action.limit;
+            let sort = action.sort;
+            const data = yield call(() => api.getFriends(username, FRIEND_APPROVED, skip, limit, sort));
             yield put(getApprovedFriendsSuccess(data));
         } catch (error) {
             yield put(getApprovedFriendsError(error));
@@ -39,7 +42,10 @@ function fetchPendingFriendsData() {
     return function* (action) {
         try {
             var username = action.username;
-            const data = yield call(() => api.getFriends(username, FRIEND_PENDING));
+            let skip = action.skip;
+            let limit = action.limit;
+            let sort = action.sort;
+            const data = yield call(() => api.getFriends(username, FRIEND_PENDING, skip, limit, sort));
             yield put(getPendingFriendsSuccess(data));
         } catch (error) {
             yield put(getPendingFriendsError(error));
