@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import FitnessHeader from '../components/global/FitnessHeader';
 import FitnessNav from '../components/global/FitnessNav';
-import { getAllUserNotificationRequest, readOneUserNotificationRequest } from '../actions/userNotifications';
+import { getAllUserNotificationRequest, readOneUserNotificationRequest, loadMoreAllUserNotificationRequest } from '../actions/userNotifications';
 import NotificationCard from '../components/global/NotificationCard';
 import { getToken } from '../helpers/funs';
 import { FaCircleONotch } from "react-icons/lib/fa";
@@ -12,7 +12,7 @@ import ErrorCloud from "svg/error-cloud.svg";
 class Notifications extends Component {
     componentWillMount() {
         const { dispatch } = this.props;
-        dispatch(getAllUserNotificationRequest());
+        dispatch(getAllUserNotificationRequest(0, 10));
     }
 
     render() {
@@ -20,6 +20,8 @@ class Notifications extends Component {
             allLoading,
             allError,
             allNotifications,
+            allNotificationsLoadMoreLoading,
+            allNotificationsNoLoadMore,
         } = this.props;
         return (
             <div className='stat-page'>
@@ -55,17 +57,21 @@ class Notifications extends Component {
                                                     )
                                                 })
                                             }
-                                            <button type="button" className="photo-load-more-btn notifications" onClick={this.handleLoadMore}>
-                                                <span>Load More</span>
-                                            </button>
+                                            {!allNotificationsLoadMoreLoading && !allNotificationsNoLoadMore &&
+                                                <button type="button" className="photo-load-more-btn notifications" onClick={this.handleLoadMore}>
+                                                    <span>Load More</span>
+                                                </button>
+                                            }
 
-                                            <button type="button" className="photo-load-more-btn notifications" disabled={true}>
-                                                <FaCircleONotch className="loader-spinner loader-spinner-icon" />
-                                                <span>Loading...</span>
-                                            </button>
+                                            {allNotificationsLoadMoreLoading &&
+                                                <button type="button" className="photo-load-more-btn notifications" disabled={true}>
+                                                    <FaCircleONotch className="loader-spinner loader-spinner-icon" />
+                                                    <span>Loading...</span>
+                                                </button>
+                                            }
                                         </div>
                                     }
-                                    
+
                                     {!allLoading && (!allNotifications || allNotifications.length <= 0) && allError && allError.length <= 0 &&
                                         <div className="no-record-found-wrapper">
                                             <img src={NoDataFoundImg} />
@@ -87,6 +93,12 @@ class Notifications extends Component {
         );
     }
 
+    handleLoadMore = () => {
+        const { dispatch, allNotificationsSkip, allNotificationsLimit } = this.props;
+        let newSkip = (parseInt(allNotificationsSkip) + parseInt(allNotificationsLimit));
+        dispatch(loadMoreAllUserNotificationRequest(newSkip, allNotificationsLimit));
+    }
+
     handleReadOneNotification = (_id) => {
         const { dispatch, socket } = this.props;
         dispatch(readOneUserNotificationRequest(_id));
@@ -103,6 +115,10 @@ const mapStateToProps = (state) => {
         allLoading: userNotifications.get('allLoading'),
         allError: userNotifications.get('allError'),
         allNotifications: userNotifications.get('allNotifications'),
+        allNotificationsSkip: userNotifications.get('allNotificationsSkip'),
+        allNotificationsLimit: userNotifications.get('allNotificationsLimit'),
+        allNotificationsLoadMoreLoading: userNotifications.get('allNotificationsLoadMoreLoading'),
+        allNotificationsNoLoadMore: userNotifications.get('allNotificationsNoLoadMore'),
     };
 }
 

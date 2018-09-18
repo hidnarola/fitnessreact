@@ -23,14 +23,13 @@ function putReadAllUserNotification() {
     return putFormData(requestUrl, {}, headers);
 }
 
-function getAllUserNotifications() {
+function getAllUserNotifications(skip = 0, limit = 10, sort = -1) {
     let headers = extraUserHeaders();
     var options = {
         method: 'GET',
         headers: headers,
     }
-
-    return fetchResource(requestUrl, options);
+    return fetchResource(`${requestUrl}/all/${skip}/${limit}/${sort}`, options);
 }
 
 export default {
