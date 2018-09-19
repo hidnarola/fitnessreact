@@ -14,6 +14,10 @@ export const GET_PRIVACY_OF_TIMELINE_USER_REQUEST = 'GET_PRIVACY_OF_TIMELINE_USE
 export const GET_PRIVACY_OF_TIMELINE_USER_SUCCESS = 'GET_PRIVACY_OF_TIMELINE_USER_SUCCESS';
 export const GET_PRIVACY_OF_TIMELINE_USER_ERROR = 'GET_PRIVACY_OF_TIMELINE_USER_ERROR';
 
+export const DELETE_POST_OF_TIMELINE_REQUEST = 'DELETE_POST_OF_TIMELINE_REQUEST';
+export const DELETE_POST_OF_TIMELINE_SUCCESS = 'DELETE_POST_OF_TIMELINE_SUCCESS';
+export const DELETE_POST_OF_TIMELINE_ERROR = 'DELETE_POST_OF_TIMELINE_ERROR';
+
 export const SET_TIMELINE_STATE = 'SET_TIMELINE_STATE';
 
 export function getUserTimelineRequest(username, start, offset) {
@@ -98,6 +102,27 @@ export function getPrivacyOfTimelineUserSuccess(data) {
 export function getPrivacyOfTimelineUserError(error) {
     return {
         type: GET_PRIVACY_OF_TIMELINE_USER_ERROR,
+        error
+    }
+}
+
+export function deletePostOfTimelineRequest(id) {
+    return {
+        type: DELETE_POST_OF_TIMELINE_REQUEST,
+        id,
+    }
+}
+
+export function deletePostOfTimelineSuccess(data) {
+    return {
+        type: DELETE_POST_OF_TIMELINE_SUCCESS,
+        data
+    }
+}
+
+export function deletePostOfTimelineError(error) {
+    return {
+        type: DELETE_POST_OF_TIMELINE_ERROR,
         error
     }
 }

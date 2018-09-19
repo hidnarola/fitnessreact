@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import { getUserTimelineRequest, addPostOnUserTimelineRequest, setTimelineState } from '../../actions/userTimeline';
+import { getUserTimelineRequest, addPostOnUserTimelineRequest, setTimelineState, deletePostOfTimelineRequest } from '../../actions/userTimeline';
 import _ from "lodash";
 import noProfileImg from 'img/common/no-profile-img.png'
 import noImg from 'img/common/no-img.png'
@@ -46,7 +46,7 @@ import { commentOnPostRequest } from '../../actions/postComments';
 import { initialize, reset } from "redux-form";
 import ReactHtmlParser from "react-html-parser";
 import ReactQuill from 'react-quill';
-import { te } from '../../helpers/funs';
+import { te, ts } from '../../helpers/funs';
 import InfiniteScroll from 'react-infinite-scroller';
 import { MenuItem, Dropdown, DropdownButton } from "react-bootstrap";
 import { FaGlobe, FaLock, FaGroup, FaSpinner, FaCircleONotch } from 'react-icons/lib/fa';
@@ -58,6 +58,7 @@ import WidgetProgressPhotoCard from '../Common/WidgetProgressPhotoCard';
 import WidgetMuscleCard from '../Common/WidgetMuscleCard';
 import WidgetBodyFatCard from '../Common/WidgetBodyFatCard';
 import WidgetBadgesCard from '../Common/WidgetBadgesCard';
+import SweetAlert from "react-bootstrap-sweetalert";
 
 class ProfileFithub extends Component {
     constructor(props) {
@@ -79,6 +80,8 @@ class ProfileFithub extends Component {
             showPostPhotoModal: false,
             selectedPostForDetails: null,
             showAddWidgetModal: false,
+            showPostDeleteModal: false,
+            selectedPostId: null,
         }
     }
 
@@ -118,6 +121,7 @@ class ProfileFithub extends Component {
             showPostPhotoModal,
             postImages,
             showAddWidgetModal,
+            showPostDeleteModal,
         } = this.state;
         const {
             loggedUserData,
@@ -166,9 +170,7 @@ class ProfileFithub extends Component {
                     }
 
                     {userWidgets && typeof userWidgets[WIDGET_PROGRESS_PHOTO] !== 'undefined' && userWidgets[WIDGET_PROGRESS_PHOTO] === 1 &&
-                        <WidgetProgressPhotoCard
-                            progressPhoto={widgetProgressPhotos}
-                        />
+                        <WidgetProgressPhotoCard progressPhoto={widgetProgressPhotos} />
                     }
 
                     {userWidgets && userWidgets[WIDGET_BODY_FAT] &&
@@ -368,13 +370,11 @@ class ProfileFithub extends Component {
                                                             {post.privacy == ACCESS_LEVEL_PRIVATE && <FaLock />}
                                                         </p>
                                                     </h4>
-                                                    <DropdownButton
-                                                        key={index}
-                                                        title={''}
-                                                        id={`post_actions_${index}`}
-                                                    >
-                                                        <MenuItem eventKey="1">Action</MenuItem>
-                                                    </DropdownButton>
+                                                    {profile.friendshipStatus === FRIENDSHIP_STATUS_SELF &&
+                                                        <button type="button" className="timline-post-del-btn" onClick={() => this.handleOpenDeletePostModal(post._id)}>
+                                                            <i className="icon-cancel"></i>
+                                                        </button>
+                                                    }
                                                 </div>
                                                 <div className="posttype-body">
                                                     {description &&
@@ -473,6 +473,19 @@ class ProfileFithub extends Component {
                     onSubmit={this.handleSaveWidget}
                     saveLoading={saveWidgetsLoading}
                 />
+                <SweetAlert
+                    show={showPostDeleteModal}
+                    danger
+                    showCancel
+                    confirmBtnText="Yes, delete it!"
+                    confirmBtnBsStyle="danger"
+                    cancelBtnBsStyle="default"
+                    title="Are you sure?"
+                    onConfirm={this.handleDeletePost}
+                    onCancel={this.handleCloseDeletePostModal}
+                >
+                    You will not be able to recover it!
+                </SweetAlert>
             </div>
         );
     }
@@ -505,6 +518,8 @@ class ProfileFithub extends Component {
             saveWidgetsLoading,
             saveWidgetsError,
             match,
+            postDeleteLoading,
+            postDeleteError,
         } = this.props;
         if (selectActionInit && !postLoading) {
             var hasMorePosts = (posts && posts.length > 0) ? true : false;
@@ -588,6 +603,13 @@ class ProfileFithub extends Component {
             this.handleHideWidgetModal();
             if (match.params.username) {
                 dispatch(getTimelineWidgetsAndWidgetsDataRequest(match.params.username));
+            }
+        }
+        if (!postDeleteLoading && prevProps.postDeleteLoading !== postDeleteLoading) {
+            if (postDeleteError && postDeleteError.length > 0) {
+                te('Something went wrong! please try again later');
+            } else {
+                ts('Post deleted.');
             }
         }
     }
@@ -1021,6 +1043,21 @@ class ProfileFithub extends Component {
         const { dispatch } = this.props;
         dispatch(changeTimelineBodyFatWidgetRequest(requestData));
     }
+
+    handleOpenDeletePostModal = (id) => {
+        this.setState({ showPostDeleteModal: true, selectedPostId: id });
+    }
+
+    handleCloseDeletePostModal = () => {
+        this.setState({ showPostDeleteModal: false, selectedPostId: null });
+    }
+
+    handleDeletePost = () => {
+        const { selectedPostId } = this.state;
+        const { dispatch } = this.props;
+        this.handleCloseDeletePostModal();
+        dispatch(deletePostOfTimelineRequest(selectedPostId));
+    }
 }
 
 ProfileFithub = withRouter(ProfileFithub);
@@ -1051,6 +1088,8 @@ const mapStateToProps = (state) => {
         changeBodyFatError: timelineWidgets.get('changeBodyFatError'),
         widgetBadges: timelineWidgets.get('badges'),
         timelineUserPrivacy: userTimeline.get('privacy'),
+        postDeleteLoading: userTimeline.get('postDeleteLoading'),
+        postDeleteError: userTimeline.get('postDeleteError'),
     };
 }
 

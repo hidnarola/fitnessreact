@@ -12,7 +12,10 @@ import {
     ADD_POST_ON_USER_TIMELINE_REQUEST,
     GET_PRIVACY_OF_TIMELINE_USER_REQUEST,
     getPrivacyOfTimelineUserSuccess,
-    getPrivacyOfTimelineUserError
+    getPrivacyOfTimelineUserError,
+    DELETE_POST_OF_TIMELINE_REQUEST,
+    deletePostOfTimelineSuccess,
+    deletePostOfTimelineError
 } from '../actions/userTimeline';
 
 function getUserTimelineData() {
@@ -65,11 +68,24 @@ function getPrivacyOfTimelineUserData() {
     }
 }
 
+function deletePostOfTimelineData() {
+    return function* (action) {
+        try {
+            let id = action.id;
+            const data = yield call(() => api.deletePostOfTimeline(id));
+            yield put(deletePostOfTimelineSuccess(data));
+        } catch (error) {
+            yield put(deletePostOfTimelineError(error));
+        }
+    }
+}
+
 export function* watchUserTimelineData() {
     yield takeLatest(GET_USER_TIMELINE_REQUEST, getUserTimelineData());
     yield takeLatest(GET_USER_SINGLE_TIMELINE_REQUEST, getUserSingleTimelineData());
     yield takeLatest(ADD_POST_ON_USER_TIMELINE_REQUEST, postPostOnUserTimelineData());
     yield takeLatest(GET_PRIVACY_OF_TIMELINE_USER_REQUEST, getPrivacyOfTimelineUserData());
+    yield takeLatest(DELETE_POST_OF_TIMELINE_REQUEST, deletePostOfTimelineData());
 }
 
 export default [

@@ -38,9 +38,20 @@ function getPrivacyOfTimelineUser(username) {
     return fetchResource(requestUrl + '/privacy/' + username, options);
 }
 
+function deletePostOfTimeline(id) {
+    let headers = extraUserHeaders();
+    var options = {
+        method: 'DELETE',
+        headers: headers,
+    }
+
+    return fetchResource(requestUrl + '/' + id, options);
+}
+
 export default {
     getUserTimeline,
     getUserSingleTimeline,
     addPostOnUserTimeline,
     getPrivacyOfTimelineUser,
+    deletePostOfTimeline,
 }

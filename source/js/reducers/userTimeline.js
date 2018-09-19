@@ -12,7 +12,10 @@ import {
     GET_PRIVACY_OF_TIMELINE_USER_REQUEST,
     GET_PRIVACY_OF_TIMELINE_USER_SUCCESS,
     GET_PRIVACY_OF_TIMELINE_USER_ERROR,
-    SET_TIMELINE_STATE
+    SET_TIMELINE_STATE,
+    DELETE_POST_OF_TIMELINE_REQUEST,
+    DELETE_POST_OF_TIMELINE_SUCCESS,
+    DELETE_POST_OF_TIMELINE_ERROR
 } from "../actions/userTimeline";
 import { VALIDATION_FAILURE_STATUS } from "../constants/consts";
 import { generateValidationErrorMsgArr } from "../helpers/funs";
@@ -27,6 +30,9 @@ const initialState = Map({
     postLoading: false,
     post: null,
     postError: [],
+    postDeleteLoading: false,
+    postDeleteError: [],
+    postDeleteId: null,
 });
 
 const actionMap = {
@@ -161,6 +167,46 @@ const actionMap = {
         return state.merge(Map({
             privacyLoading: false,
             privacyError: error,
+        }));
+    },
+    [DELETE_POST_OF_TIMELINE_REQUEST]: (state, action) => {
+        return state.merge(Map({
+            postDeleteLoading: true,
+            postDeleteId: action.id,
+            postDeleteError: [],
+        }));
+    },
+    [DELETE_POST_OF_TIMELINE_SUCCESS]: (state, action) => {
+        let newState = { postDeleteLoading: false, postDeleteId: null };
+        let prevPostDeleteId = state.get('postDeleteId');
+        let prevPosts = state.get('posts');
+        if (action.data.status && action.data.status === 1) {
+            let newPosts = [];
+            prevPosts.map((o, i) => {
+                if (o._id !== prevPostDeleteId) {
+                    newPosts.push(o);
+                }
+            });
+            newState.posts = newPosts;
+        } else {
+            var msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
+            newState.postDeleteError = [msg];
+        }
+        return state.merge(Map(newState));
+    },
+    [DELETE_POST_OF_TIMELINE_ERROR]: (state, action) => {
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
+        }
+        return state.merge(Map({
+            postDeleteLoading: false,
+            postDeleteId: null,
+            postDeleteError: error,
         }));
     },
     [SET_TIMELINE_STATE]: (state, action) => {
