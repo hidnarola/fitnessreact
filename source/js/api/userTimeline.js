@@ -1,4 +1,4 @@
-import { fetchResource, postFormData } from '.';
+import { fetchResource, postFormData, putFormData } from '.';
 import { extraUserHeaders } from '../helpers/funs';
 
 const requestUrl = 'user/timeline';
@@ -48,10 +48,16 @@ function deletePostOfTimeline(id) {
     return fetchResource(requestUrl + '/' + id, options);
 }
 
+function changeAccessLevelPostOfTimeline(id, requestData) {
+    let headers = extraUserHeaders();
+    return putFormData(requestUrl + '/' + id, requestData, headers);
+}
+
 export default {
     getUserTimeline,
     getUserSingleTimeline,
     addPostOnUserTimeline,
     getPrivacyOfTimelineUser,
     deletePostOfTimeline,
+    changeAccessLevelPostOfTimeline,
 }

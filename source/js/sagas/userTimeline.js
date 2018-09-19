@@ -15,7 +15,10 @@ import {
     getPrivacyOfTimelineUserError,
     DELETE_POST_OF_TIMELINE_REQUEST,
     deletePostOfTimelineSuccess,
-    deletePostOfTimelineError
+    deletePostOfTimelineError,
+    CHANGE_ACCESS_LEVEL_POST_OF_TIMELINE_REQUEST,
+    changeAccessLevelPostOfTimelineSuccess,
+    changeAccessLevelPostOfTimelineError
 } from '../actions/userTimeline';
 
 function getUserTimelineData() {
@@ -80,12 +83,26 @@ function deletePostOfTimelineData() {
     }
 }
 
+function changeAccessLevelPostOfTimelineData() {
+    return function* (action) {
+        try {
+            let id = action.id;
+            let requestData = action.requestData;
+            const data = yield call(() => api.changeAccessLevelPostOfTimeline(id, requestData));
+            yield put(changeAccessLevelPostOfTimelineSuccess(data));
+        } catch (error) {
+            yield put(changeAccessLevelPostOfTimelineError(error));
+        }
+    }
+}
+
 export function* watchUserTimelineData() {
     yield takeLatest(GET_USER_TIMELINE_REQUEST, getUserTimelineData());
     yield takeLatest(GET_USER_SINGLE_TIMELINE_REQUEST, getUserSingleTimelineData());
     yield takeLatest(ADD_POST_ON_USER_TIMELINE_REQUEST, postPostOnUserTimelineData());
     yield takeLatest(GET_PRIVACY_OF_TIMELINE_USER_REQUEST, getPrivacyOfTimelineUserData());
     yield takeLatest(DELETE_POST_OF_TIMELINE_REQUEST, deletePostOfTimelineData());
+    yield takeLatest(CHANGE_ACCESS_LEVEL_POST_OF_TIMELINE_REQUEST, changeAccessLevelPostOfTimelineData());
 }
 
 export default [

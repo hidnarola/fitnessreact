@@ -15,7 +15,10 @@ import {
     SET_TIMELINE_STATE,
     DELETE_POST_OF_TIMELINE_REQUEST,
     DELETE_POST_OF_TIMELINE_SUCCESS,
-    DELETE_POST_OF_TIMELINE_ERROR
+    DELETE_POST_OF_TIMELINE_ERROR,
+    CHANGE_ACCESS_LEVEL_POST_OF_TIMELINE_REQUEST,
+    CHANGE_ACCESS_LEVEL_POST_OF_TIMELINE_SUCCESS,
+    CHANGE_ACCESS_LEVEL_POST_OF_TIMELINE_ERROR
 } from "../actions/userTimeline";
 import { VALIDATION_FAILURE_STATUS } from "../constants/consts";
 import { generateValidationErrorMsgArr } from "../helpers/funs";
@@ -32,7 +35,8 @@ const initialState = Map({
     postError: [],
     postDeleteLoading: false,
     postDeleteError: [],
-    postDeleteId: null,
+    postAccessChangeLoading: false,
+    postAccessChangeError: [],
 });
 
 const actionMap = {
@@ -172,23 +176,12 @@ const actionMap = {
     [DELETE_POST_OF_TIMELINE_REQUEST]: (state, action) => {
         return state.merge(Map({
             postDeleteLoading: true,
-            postDeleteId: action.id,
             postDeleteError: [],
         }));
     },
     [DELETE_POST_OF_TIMELINE_SUCCESS]: (state, action) => {
-        let newState = { postDeleteLoading: false, postDeleteId: null };
-        let prevPostDeleteId = state.get('postDeleteId');
-        let prevPosts = state.get('posts');
-        if (action.data.status && action.data.status === 1) {
-            let newPosts = [];
-            prevPosts.map((o, i) => {
-                if (o._id !== prevPostDeleteId) {
-                    newPosts.push(o);
-                }
-            });
-            newState.posts = newPosts;
-        } else {
+        let newState = { postDeleteLoading: false };
+        if (action.data.status && action.data.status !== 1) {
             var msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
             newState.postDeleteError = [msg];
         }
@@ -205,8 +198,35 @@ const actionMap = {
         }
         return state.merge(Map({
             postDeleteLoading: false,
-            postDeleteId: null,
             postDeleteError: error,
+        }));
+    },
+    [CHANGE_ACCESS_LEVEL_POST_OF_TIMELINE_REQUEST]: (state, action) => {
+        return state.merge(Map({
+            postAccessChangeLoading: true,
+            postAccessChangeError: [],
+        }));
+    },
+    [CHANGE_ACCESS_LEVEL_POST_OF_TIMELINE_SUCCESS]: (state, action) => {
+        let newState = { postAccessChangeLoading: false };
+        if (action.data.status && action.data.status !== 1) {
+            var msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
+            newState.postDeleteError = [msg];
+        }
+        return state.merge(Map(newState));
+    },
+    [CHANGE_ACCESS_LEVEL_POST_OF_TIMELINE_ERROR]: (state, action) => {
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
+        }
+        return state.merge(Map({
+            postAccessChangeLoading: false,
+            postAccessChangeError: error,
         }));
     },
     [SET_TIMELINE_STATE]: (state, action) => {

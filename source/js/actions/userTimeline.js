@@ -18,6 +18,10 @@ export const DELETE_POST_OF_TIMELINE_REQUEST = 'DELETE_POST_OF_TIMELINE_REQUEST'
 export const DELETE_POST_OF_TIMELINE_SUCCESS = 'DELETE_POST_OF_TIMELINE_SUCCESS';
 export const DELETE_POST_OF_TIMELINE_ERROR = 'DELETE_POST_OF_TIMELINE_ERROR';
 
+export const CHANGE_ACCESS_LEVEL_POST_OF_TIMELINE_REQUEST = 'CHANGE_ACCESS_LEVEL_POST_OF_TIMELINE_REQUEST';
+export const CHANGE_ACCESS_LEVEL_POST_OF_TIMELINE_SUCCESS = 'CHANGE_ACCESS_LEVEL_POST_OF_TIMELINE_SUCCESS';
+export const CHANGE_ACCESS_LEVEL_POST_OF_TIMELINE_ERROR = 'CHANGE_ACCESS_LEVEL_POST_OF_TIMELINE_ERROR';
+
 export const SET_TIMELINE_STATE = 'SET_TIMELINE_STATE';
 
 export function getUserTimelineRequest(username, start, offset) {
@@ -123,6 +127,28 @@ export function deletePostOfTimelineSuccess(data) {
 export function deletePostOfTimelineError(error) {
     return {
         type: DELETE_POST_OF_TIMELINE_ERROR,
+        error
+    }
+}
+
+export function changeAccessLevelPostOfTimelineRequest(id, requestData) {
+    return {
+        type: CHANGE_ACCESS_LEVEL_POST_OF_TIMELINE_REQUEST,
+        id,
+        requestData,
+    }
+}
+
+export function changeAccessLevelPostOfTimelineSuccess(data) {
+    return {
+        type: CHANGE_ACCESS_LEVEL_POST_OF_TIMELINE_SUCCESS,
+        data
+    }
+}
+
+export function changeAccessLevelPostOfTimelineError(error) {
+    return {
+        type: CHANGE_ACCESS_LEVEL_POST_OF_TIMELINE_ERROR,
         error
     }
 }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import { getUserTimelineRequest, addPostOnUserTimelineRequest, setTimelineState, deletePostOfTimelineRequest } from '../../actions/userTimeline';
+import { getUserTimelineRequest, addPostOnUserTimelineRequest, setTimelineState, deletePostOfTimelineRequest, changeAccessLevelPostOfTimelineRequest } from '../../actions/userTimeline';
 import _ from "lodash";
 import noProfileImg from 'img/common/no-profile-img.png'
 import noImg from 'img/common/no-img.png'
@@ -82,6 +82,8 @@ class ProfileFithub extends Component {
             showAddWidgetModal: false,
             showPostDeleteModal: false,
             selectedPostId: null,
+            showPostAccessChangeModal: false,
+            selectedPostAccessLevel: null,
         }
     }
 
@@ -122,6 +124,7 @@ class ProfileFithub extends Component {
             postImages,
             showAddWidgetModal,
             showPostDeleteModal,
+            showPostAccessChangeModal,
         } = this.state;
         const {
             loggedUserData,
@@ -365,10 +368,19 @@ class ProfileFithub extends Component {
                                                         <small><Link to={`${routeCodes.POST}/${match.params.username}/${post._id}`} className="pull-right">{(post.tag_line) ? post.tag_line : ''}</Link></small>
                                                         <p className="">
                                                             {postCreatedAt}
-                                                            {post.privacy == ACCESS_LEVEL_PUBLIC && <FaGlobe />}
-                                                            {post.privacy == ACCESS_LEVEL_FRIENDS && <FaGroup />}
-                                                            {post.privacy == ACCESS_LEVEL_PRIVATE && <FaLock />}
                                                         </p>
+                                                        <Dropdown id="single_post_privacy" className="single_post_privacy">
+                                                            <Dropdown.Toggle className="d-flex public-dropdown">
+                                                                {post.privacy == ACCESS_LEVEL_PUBLIC && <FaGlobe />}
+                                                                {post.privacy == ACCESS_LEVEL_FRIENDS && <FaGroup />}
+                                                                {post.privacy == ACCESS_LEVEL_PRIVATE && <FaLock />}
+                                                            </Dropdown.Toggle>
+                                                            <Dropdown.Menu>
+                                                                <MenuItem eventKey="3" onClick={() => this.handleOpenChangeAccessPostModal(ACCESS_LEVEL_PUBLIC, post._id)}><FaGlobe /> {ACCESS_LEVEL_PUBLIC_STR}</MenuItem>
+                                                                <MenuItem eventKey="2" onClick={() => this.handleOpenChangeAccessPostModal(ACCESS_LEVEL_FRIENDS, post._id)}><FaGroup /> {ACCESS_LEVEL_FRIENDS_STR}</MenuItem>
+                                                                <MenuItem eventKey="1" onClick={() => this.handleOpenChangeAccessPostModal(ACCESS_LEVEL_PRIVATE, post._id)}><FaLock /> {ACCESS_LEVEL_PRIVATE_STR}</MenuItem>
+                                                            </Dropdown.Menu>
+                                                        </Dropdown>
                                                     </h4>
                                                     {profile.friendshipStatus === FRIENDSHIP_STATUS_SELF &&
                                                         <button type="button" className="timline-post-del-btn" onClick={() => this.handleOpenDeletePostModal(post._id)}>
@@ -486,6 +498,20 @@ class ProfileFithub extends Component {
                 >
                     You will not be able to recover it!
                 </SweetAlert>
+
+                <SweetAlert
+                    show={showPostAccessChangeModal}
+                    warning
+                    showCancel
+                    confirmBtnText="Yes, change it!"
+                    confirmBtnBsStyle="warning"
+                    cancelBtnBsStyle="default"
+                    title="Are you sure?"
+                    onConfirm={this.handleChangeAccessPost}
+                    onCancel={this.handleCloseChangeAccessPostModal}
+                >
+                    Your post privacy will be changed!
+                </SweetAlert>
             </div>
         );
     }
@@ -500,6 +526,8 @@ class ProfileFithub extends Component {
             selectedTimelineId,
             commentActionInit,
             newPostActionInit,
+            selectedPostId,
+            selectedPostAccessLevel,
         } = this.state;
         const {
             dispatch,
@@ -520,6 +548,8 @@ class ProfileFithub extends Component {
             match,
             postDeleteLoading,
             postDeleteError,
+            postAccessChangeLoading,
+            postAccessChangeError,
         } = this.props;
         if (selectActionInit && !postLoading) {
             var hasMorePosts = (posts && posts.length > 0) ? true : false;
@@ -609,7 +639,33 @@ class ProfileFithub extends Component {
             if (postDeleteError && postDeleteError.length > 0) {
                 te('Something went wrong! please try again later');
             } else {
+                let newPostsState = [];
+                if (this.state.posts && this.state.posts.length > 0) {
+                    this.state.posts.map((o) => {
+                        if (o._id !== selectedPostId) {
+                            newPostsState.push(o);
+                        }
+                    });
+                }
+                this.setState({ posts: newPostsState, selectedPostId: null });
                 ts('Post deleted.');
+            }
+        }
+        if (!postAccessChangeLoading && prevProps.postAccessChangeLoading !== postAccessChangeLoading) {
+            if (postAccessChangeError && postAccessChangeError.length > 0) {
+                te('Something went wrong! please try again later');
+            } else {
+                let newPostsState = [];
+                if (this.state.posts && this.state.posts.length > 0) {
+                    this.state.posts.map((o) => {
+                        if (o._id === selectedPostId) {
+                            o.privacy = selectedPostAccessLevel;
+                        }
+                        newPostsState.push(o);
+                    });
+                }
+                this.setState({ posts: newPostsState, selectedPostId: null, selectedPostAccessLevel: null });
+                ts('Accessibility changed');
             }
         }
     }
@@ -1049,7 +1105,7 @@ class ProfileFithub extends Component {
     }
 
     handleCloseDeletePostModal = () => {
-        this.setState({ showPostDeleteModal: false, selectedPostId: null });
+        this.setState({ showPostDeleteModal: false });
     }
 
     handleDeletePost = () => {
@@ -1057,6 +1113,22 @@ class ProfileFithub extends Component {
         const { dispatch } = this.props;
         this.handleCloseDeletePostModal();
         dispatch(deletePostOfTimelineRequest(selectedPostId));
+    }
+
+    handleOpenChangeAccessPostModal = (level, id) => {
+        this.setState({ showPostAccessChangeModal: true, selectedPostId: id, selectedPostAccessLevel: level });
+    }
+
+    handleCloseChangeAccessPostModal = () => {
+        this.setState({ showPostAccessChangeModal: false });
+    }
+
+    handleChangeAccessPost = () => {
+        const { selectedPostId, selectedPostAccessLevel } = this.state;
+        const { dispatch } = this.props;
+        this.handleCloseChangeAccessPostModal();
+        let requestData = { privacy: selectedPostAccessLevel }
+        dispatch(changeAccessLevelPostOfTimelineRequest(selectedPostId, requestData));
     }
 }
 
@@ -1090,6 +1162,8 @@ const mapStateToProps = (state) => {
         timelineUserPrivacy: userTimeline.get('privacy'),
         postDeleteLoading: userTimeline.get('postDeleteLoading'),
         postDeleteError: userTimeline.get('postDeleteError'),
+        postAccessChangeLoading: userTimeline.get('postAccessChangeLoading'),
+        postAccessChangeError: userTimeline.get('postAccessChangeError'),
     };
 }
 
