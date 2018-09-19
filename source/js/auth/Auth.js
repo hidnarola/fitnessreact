@@ -43,7 +43,8 @@ export default class Auth {
       theme: {
         logo: logo,
         primaryColor: '#FF3366',
-      }
+      },
+      rememberLastLogin: false,
     },
   );
 
@@ -53,7 +54,6 @@ export default class Auth {
     this.handleAuthentication = this.handleAuthentication.bind(this);
     this.isAuthenticated = this.isAuthenticated.bind(this);
     this.auth0Lock.on('authenticated', (authResult) => {
-      console.log('authResult => ', authResult);
       this.handleAuthentication(authResult);
     });
   }

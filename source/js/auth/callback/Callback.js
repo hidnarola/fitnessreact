@@ -52,15 +52,6 @@ class Callback extends Component {
         );
     }
 
-    componentWillUpdate(nextProps, nextState) {
-        console.log('componentWillUpdate => ');
-    }
-
-    componentDidUpdate(prevProps, prevState) {
-        console.log('componentDidUpdate => ');
-    }
-
-
 }
 
 export default Callback;

@@ -333,3 +333,13 @@ export function calculateBodyFatPercentage(sumOf3Sites, age, gender) {
     }
     return (const1 / (const2 - (const3 * sumOf3Sites) + (const4 * sumOf3Sites * sumOf3Sites) - (const5 * age)) - const6).toFixed(2);
 }
+
+export function clearCookies() {
+    var cookies = document.cookie.split(";");
+    for (var i = 0; i < cookies.length; i++) {
+        var cookie = cookies[i];
+        var eqPos = cookie.indexOf("=");
+        var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+        document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+    }
+}

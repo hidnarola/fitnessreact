@@ -4,10 +4,9 @@ import { Field, reduxForm, formValueSelector } from "redux-form";
 import { InputField } from '../../helpers/FormControlHelper';
 import { FaSpinner } from 'react-icons/lib/fa';
 import { Alert } from "react-bootstrap";
-import { required, minLength, maxLength } from '../../formValidation/validationRules';
+import { required, minLength } from '../../formValidation/validationRules';
 
 const min8 = minLength(8);
-const max32 = maxLength(32);
 
 class ChangePasswordForm extends Component {
     render() {
@@ -38,7 +37,7 @@ class ChangePasswordForm extends Component {
                                 component={InputField}
                                 type="password"
                                 errorClass="help-block"
-                                validate={[required, min8, max32]}
+                                validate={[required, min8, this.validatePasswordStrength]}
                             />
                             <Field
                                 name="confirm_password"
@@ -50,7 +49,7 @@ class ChangePasswordForm extends Component {
                                 component={InputField}
                                 type="password"
                                 errorClass="help-block"
-                                validate={[required, min8, max32, this.validateEqualPassword]}
+                                validate={[required, min8, this.validatePasswordStrength, this.validateEqualPassword]}
                             />
                             <div className="form-group text-c">
                                 <button type="submit" className="custom-medium-btn" disabled={loading}>
@@ -77,6 +76,17 @@ class ChangePasswordForm extends Component {
         const { newPassword } = this.props;
         if (value && value !== newPassword) {
             return 'New password and confirm password must be same';
+        }
+        return undefined;
+    }
+
+    validatePasswordStrength = (value) => {
+        if (value) {
+            let patt = /^(((?=.*[a-z])(?=.*[A-Z])(?=.*\d))|((?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&]))|((?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]))|((?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])){8,})/g;
+            let res = patt.test(value);
+            if (!res) {
+                return 'Password is too week';
+            }
         }
         return undefined;
     }

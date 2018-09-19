@@ -3,8 +3,9 @@ import { connect } from 'react-redux';
 import FitnessHeader from '../components/global/FitnessHeader';
 import FitnessNav from '../components/global/FitnessNav';
 import ChangePasswordForm from '../components/Profile/ChangePasswordForm';
-import { ts } from '../helpers/funs';
+import { ts, clearCookies } from '../helpers/funs';
 import { setUserChangePasswordState, userChangePasswordRequest } from '../actions/changePassword';
+import { routeCodes } from '../constants/routes';
 
 class ChangePassword extends Component {
     render() {
@@ -38,9 +39,12 @@ class ChangePassword extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        const { loading, error } = this.props;
+        const { loading, error, history } = this.props;
         if (!loading && prevProps.loading !== loading && (!error || error.length <= 0)) {
-            ts('Password changed!');
+            localStorage.clear();
+            sessionStorage.clear();
+            history.push(routeCodes.HOME);
+            ts('Password changed! Please login with new password');
         }
     }
 
