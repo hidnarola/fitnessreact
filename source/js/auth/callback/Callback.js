@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import Auth from '../Auth';
-import { LOCALSTORAGE_ROLE_KEY, ADMIN_ROLE, USER_ROLE, AUTH_STATE_ACTION_LOGIN_KEY, AUTH_STATE_ACTION_SIGNUP_KEY, AUTH0_ACCESS_DENIED_ERR_STR } from '../../constants/consts';
+import { LOCALSTORAGE_ROLE_KEY, ADMIN_ROLE, USER_ROLE, AUTH_STATE_ACTION_LOGIN_KEY, AUTH_STATE_ACTION_SIGNUP_KEY, AUTH0_ACCESS_DENIED_ERR_STR, AUTH0_UNVERIFIED_ERR_STR } from '../../constants/consts';
 import { isLogin, checkLogin } from '../../helpers/loginHelper';
 import { publicPath } from '../../constants/routes';
-import { te } from '../../helpers/funs';
+import { te, ts } from '../../helpers/funs';
 
 const auth = new Auth();
 
@@ -18,6 +18,12 @@ class Callback extends Component {
             localStorage.removeItem(AUTH_STATE_ACTION_LOGIN_KEY);
             localStorage.removeItem(AUTH_STATE_ACTION_SIGNUP_KEY);
             te('Please allow authorization to access your profile details');
+            history.push(publicPath);
+        }
+        if (location && location.hash && location.hash.includes(AUTH0_UNVERIFIED_ERR_STR)) {
+            localStorage.removeItem(AUTH_STATE_ACTION_LOGIN_KEY);
+            localStorage.removeItem(AUTH_STATE_ACTION_SIGNUP_KEY);
+            ts('Please check email and verify your account');
             history.push(publicPath);
         }
         let role = localStorage.getItem(LOCALSTORAGE_ROLE_KEY);
