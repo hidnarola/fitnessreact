@@ -62,7 +62,10 @@ class Users extends Component {
                             <p>Each fitness test feeds directly into our algorithm - every test is used to identify the most efficient and effective structure of your training plan. Each test is designed to identify imbalances and weaknesses that may lead to increased risk of injury or decreased performance - now and in the future. This may also allow us to identify opportunities for rapid improvement.</p>
                         </div>
                         <div className="body-head-r">
-                            <a href="javascript:void(0)" className="pink-btn">Search  <i className="icon-search"></i></a>
+                            <form class="form_search ">
+                                <input class="" type="text" id="users_search_user" name="users_search_user" autocomplete="off" />
+                                <button type="submit"><i class="icon-search"></i></button>
+                            </form>
                         </div>
                     </div>
                     <div className="body-content d-flex row justify-content-start profilephoto-content">

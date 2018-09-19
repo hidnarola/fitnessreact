@@ -366,21 +366,32 @@ class ProfileFithub extends Component {
                                                             </NavLink>
                                                         </big>
                                                         <small><Link to={`${routeCodes.POST}/${match.params.username}/${post._id}`} className="pull-right">{(post.tag_line) ? post.tag_line : ''}</Link></small>
-                                                        <p className="">
-                                                            {postCreatedAt}
-                                                        </p>
-                                                        <Dropdown id="single_post_privacy" className="single_post_privacy">
-                                                            <Dropdown.Toggle className="d-flex public-dropdown">
-                                                                {post.privacy == ACCESS_LEVEL_PUBLIC && <FaGlobe />}
-                                                                {post.privacy == ACCESS_LEVEL_FRIENDS && <FaGroup />}
-                                                                {post.privacy == ACCESS_LEVEL_PRIVATE && <FaLock />}
-                                                            </Dropdown.Toggle>
-                                                            <Dropdown.Menu>
-                                                                <MenuItem eventKey="3" onClick={() => this.handleOpenChangeAccessPostModal(ACCESS_LEVEL_PUBLIC, post._id)}><FaGlobe /> {ACCESS_LEVEL_PUBLIC_STR}</MenuItem>
-                                                                <MenuItem eventKey="2" onClick={() => this.handleOpenChangeAccessPostModal(ACCESS_LEVEL_FRIENDS, post._id)}><FaGroup /> {ACCESS_LEVEL_FRIENDS_STR}</MenuItem>
-                                                                <MenuItem eventKey="1" onClick={() => this.handleOpenChangeAccessPostModal(ACCESS_LEVEL_PRIVATE, post._id)}><FaLock /> {ACCESS_LEVEL_PRIVATE_STR}</MenuItem>
-                                                            </Dropdown.Menu>
-                                                        </Dropdown>
+                                                        <div className="post-bottom-info">
+                                                            <p className="">
+                                                                {postCreatedAt}
+                                                            </p>
+                                                            {!(profile.friendshipStatus === FRIENDSHIP_STATUS_SELF) &&
+                                                                <p className="access-level-icons">
+                                                                    {post.privacy == ACCESS_LEVEL_PUBLIC && <FaGlobe />}
+                                                                    {post.privacy == ACCESS_LEVEL_FRIENDS && <FaGroup />}
+                                                                    {post.privacy == ACCESS_LEVEL_PRIVATE && <FaLock />}
+                                                                </p>
+                                                            }
+                                                            {profile.friendshipStatus === FRIENDSHIP_STATUS_SELF &&
+                                                                <Dropdown id="single_post_privacy" className="single_post_privacy">
+                                                                    <Dropdown.Toggle className="d-flex public-dropdown">
+                                                                        {post.privacy == ACCESS_LEVEL_PUBLIC && <FaGlobe />}
+                                                                        {post.privacy == ACCESS_LEVEL_FRIENDS && <FaGroup />}
+                                                                        {post.privacy == ACCESS_LEVEL_PRIVATE && <FaLock />}
+                                                                    </Dropdown.Toggle>
+                                                                    <Dropdown.Menu>
+                                                                        <MenuItem eventKey="3" onClick={() => this.handleOpenChangeAccessPostModal(ACCESS_LEVEL_PUBLIC, post._id)}><FaGlobe /> {ACCESS_LEVEL_PUBLIC_STR}</MenuItem>
+                                                                        <MenuItem eventKey="2" onClick={() => this.handleOpenChangeAccessPostModal(ACCESS_LEVEL_FRIENDS, post._id)}><FaGroup /> {ACCESS_LEVEL_FRIENDS_STR}</MenuItem>
+                                                                        <MenuItem eventKey="1" onClick={() => this.handleOpenChangeAccessPostModal(ACCESS_LEVEL_PRIVATE, post._id)}><FaLock /> {ACCESS_LEVEL_PRIVATE_STR}</MenuItem>
+                                                                    </Dropdown.Menu>
+                                                                </Dropdown>
+                                                            }
+                                                        </div>
                                                     </h4>
                                                     {profile.friendshipStatus === FRIENDSHIP_STATUS_SELF &&
                                                         <button type="button" className="timline-post-del-btn" onClick={() => this.handleOpenDeletePostModal(post._id)}>

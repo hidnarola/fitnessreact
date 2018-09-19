@@ -59,6 +59,13 @@
 *{margin:0;padding:0;}
 img{max-width:100%;}
 /* html, body{ font-size: 100%;} */
+
+
+.react-datepicker__current-month, .react-datepicker-time__header {font-size: 1.5rem;}   
+.react-datepicker__day-name, .react-datepicker__day, .react-datepicker__time-name {font-size: 1.5rem;}
+.react-datepicker__day-name, .react-datepicker__day, .react-datepicker__time-name {width: 2.7rem;line-height: 2.7rem;}
+
+
 body{background:#f9fafa; font-family:'gt_walsheim_proregular' !important;font-weight:400;padding:100px 0 0 110px;width:100%;}
 input, textarea, select, button, a{font-family:'gt_walsheim_proregular' !important  ;font-weight:400;}
 
@@ -2230,3 +2237,61 @@ ul.common-ul>li.body-fat-field-li{ width:50%; margin-left:auto;}
 a.fithub-photos-view-all-link { background: transparent; color: #000; text-decoration: none; width: 100%; display: block; text-align: center; padding: 10px 20px; border: 1px solid #ddd; border-radius: 5px; margin-top: 10px; }
 .photo-load-more-btn { border: 1px solid #ddd; background: transparent; display: block; width: 100%; padding: 10px 20px; margin-top: 10px; border-radius: 5px; color: #000; }
 .fithub-friends-load-more-btn{border: 1px solid #ddd; background: transparent; display: block; width: 100%; padding: 10px 20px; margin: 10px 15px 0; border-radius: 5px; color: #000;}
+
+
+.post-bottom-info .single_post_privacy button.public-dropdown.btn-default {border: 0 !important;}
+.post-bottom-info .single_post_privacy button {padding: 0 12px 0 0;}
+.post-bottom-info .single_post_privacy span.caret { vertical-align: bottom; position: absolute; right: 0; bottom: 5px; color: #999; }
+.post-bottom-info .single_post_privacy {position: relative;}
+.post-bottom-info {position: relative;}
+.post-bottom-info p {display: inline-block;padding-right: 10px;}
+.post-bottom-info .single_post_privacy button.public-dropdown.btn-default svg {fill: #999;}
+p.access-level-icons {vertical-align: top;top: 6px;position: relative;left: -8px;}
+
+form.form_search input {
+    width: 100%;
+    font-family: 'gt_walsheim_proregular' !important;
+    font-size: 14px;
+    padding: 0 15px;
+    border: 0;
+    outline: 0;
+    text-shadow: none;
+    border-radius: 25px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .1);
+    line-height: 50px;
+    color: #1A2032;
+    font-size: 14px;
+    font-weight: 700;
+    border: 0;
+    background: #fff;
+}
+form.form_search {
+    margin: 0;
+    padding: 0;
+    -webkit-transition: ease-in-out .5s;
+    transition: ease-in-out .5s;
+    display: block;
+    text-align: left;
+    width: 100%;
+    position: relative;
+}
+form.form_search button {
+    border: 0;
+    box-shadow: none;
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    right: 8px;
+    top: 7px;
+    background: linear-gradient(123.28deg, #46E9C5 0%, #3FFBFC 100%);
+    color: #fff;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    line-height: 36px;
+    text-align: center;
+}
+form.form_search button i {
+    float: none;
+    line-height: 36px;
+}
