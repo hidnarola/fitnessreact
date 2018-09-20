@@ -6,6 +6,8 @@ import { connect } from "react-redux";
 import { handleChangeUserSearchFor, getUsersPageSearchRequest } from '../actions/userSearch';
 import InfiniteScroll from 'react-infinite-scroller';
 import { FaCircleONotch } from "react-icons/lib/fa";
+import NoDataFoundImg from "img/common/no_datafound.png";
+import ErrorCloud from "svg/error-cloud.svg";
 import { NavLink } from "react-router-dom";
 import _ from "lodash";
 import { routeCodes } from '../constants/routes';
@@ -19,6 +21,7 @@ class Users extends Component {
             hasMoreData: false,
             start: 0,
             offset: 20,
+            isFirstReq: false,
         };
     }
 
@@ -32,25 +35,20 @@ class Users extends Component {
             offset,
         } = this.state;
         if (searchValue !== '') {
-            var requestData = {
-                name: searchValue,
-                start,
-                offset,
-            };
-            this.setState({ selectActionInit: true });
+            var requestData = { name: searchValue, start, offset };
+            this.setState({ selectActionInit: true, isFirstReq: true });
             dispatch(handleChangeUserSearchFor('allUsersSearchValue', searchValue));
+            dispatch(getUsersPageSearchRequest(requestData));
+        } else {
+            this.setState({ start: 0, selectActionInit: true, allUsers: [], isFirstReq: true });
+            var requestData = { name: '', start: 0, offset: offset };
             dispatch(getUsersPageSearchRequest(requestData));
         }
     }
 
     render() {
-        const {
-            allUsersSearchValue,
-        } = this.props;
-        const {
-            allUsers,
-            hasMoreData,
-        } = this.state;
+        const { allUsersSearchValue, allUsersError } = this.props;
+        const { allUsers, hasMoreData, isFirstReq } = this.state;
         return (
             <div className="users-list-wrapper">
                 <FitnessHeader />
@@ -62,29 +60,35 @@ class Users extends Component {
                             <p>Each fitness test feeds directly into our algorithm - every test is used to identify the most efficient and effective structure of your training plan. Each test is designed to identify imbalances and weaknesses that may lead to increased risk of injury or decreased performance - now and in the future. This may also allow us to identify opportunities for rapid improvement.</p>
                         </div>
                         <div className="body-head-r">
-                            <form class="form_search ">
-                                <input class="" type="text" id="users_search_user" name="users_search_user" autocomplete="off" />
-                                <button type="submit"><i class="icon-search"></i></button>
+                            <form className="form_search" onSubmit={this.handleSubmit}>
+                                <input className="" type="text" id="users_search_user" name="users_search_user" onChange={this.handleChange} value={allUsersSearchValue} placeholder="Search Users" autocomplete="off" />
+                                <button type="submit"><i className="icon-search"></i></button>
                             </form>
                         </div>
                     </div>
                     <div className="body-content d-flex row justify-content-start profilephoto-content">
                         <div className="col-md-12">
                             <div className="white-box space-btm-20">
-                                <div className="whitebox-head d-flex">
-                                    <form onSubmit={this.handleSubmit}>
-                                        <input
-                                            type="text"
-                                            id="users_search_user"
-                                            name="users_search_user"
-                                            value={allUsersSearchValue}
-                                            onChange={this.handleChange}
-                                            autoComplete="off"
-                                        />
-                                        <button type="submit">Search</button>
-                                    </form>
-                                </div>
                                 <div className="whitebox-body profile-body">
+                                    {isFirstReq &&
+                                        <div className="text-c">
+                                            <FaCircleONotch className="loader-spinner fs-50" />
+                                        </div>
+                                    }
+
+                                    {!isFirstReq && (!allUsers || allUsers.length <= 0) && allUsersError && allUsersError.length <= 0 &&
+                                        <div className="no-record-found-wrapper">
+                                            <img src={NoDataFoundImg} />
+                                        </div>
+                                    }
+
+                                    {!isFirstReq && (!allUsers || allUsers.length <= 0) && allUsersError && allUsersError.length > 0 &&
+                                        <div className="server-error-wrapper">
+                                            <ErrorCloud />
+                                            <h4>Something went wrong! please try again.</h4>
+                                        </div>
+                                    }
+
                                     <InfiniteScroll
                                         pageStart={0}
                                         loadMore={this.loadMore}
@@ -139,16 +143,8 @@ class Users extends Component {
     }
 
     componentDidUpdate() {
-        const {
-            selectActionInit,
-            start,
-            offset,
-            noOfRecs,
-        } = this.state;
-        const {
-            allUsersLoading,
-            allUsers,
-        } = this.props;
+        const { selectActionInit, start, offset } = this.state;
+        const { allUsersLoading, allUsers } = this.props;
         if (selectActionInit && !allUsersLoading) {
             var hasMoreData = (allUsers && allUsers.length > 0);
             this.setState({
@@ -156,6 +152,7 @@ class Users extends Component {
                 allUsers: _.concat(this.state.allUsers, allUsers),
                 start: (start + offset),
                 hasMoreData,
+                isFirstReq: false,
             });
         }
     }
@@ -168,18 +165,9 @@ class Users extends Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
-        const {
-            allUsersSearchValue,
-            dispatch,
-        } = this.props;
-        const {
-            offset,
-        } = this.state;
-        this.setState({
-            start: 0,
-            selectActionInit: true,
-            allUsers: [],
-        });
+        const { allUsersSearchValue, dispatch } = this.props;
+        const { offset } = this.state;
+        this.setState({ start: 0, selectActionInit: true, allUsers: [], isFirstReq: true });
         var requestData = {
             name: allUsersSearchValue,
             start: 0,
@@ -189,21 +177,10 @@ class Users extends Component {
     }
 
     loadMore = () => {
-        const {
-            dispatch,
-            allUsersSearchValue,
-        } = this.props;
-        const {
-            start,
-            offset,
-            selectActionInit,
-        } = this.state;
+        const { dispatch, allUsersSearchValue } = this.props;
+        const { start, offset, selectActionInit } = this.state;
         if (!selectActionInit) {
-            var requestData = {
-                name: allUsersSearchValue,
-                start,
-                offset,
-            };
+            var requestData = { name: allUsersSearchValue, start, offset };
             dispatch(getUsersPageSearchRequest(requestData));
             this.setState({ selectActionInit: true });
         }
@@ -217,6 +194,7 @@ const mapStateToProps = (state) => {
         allUsersSearchValue: userSearch.get('allUsersSearchValue'),
         allUsersLoading: userSearch.get('allUsersLoading'),
         allUsers: userSearch.get('allUsers'),
+        allUsersError: userSearch.get('allUsersError'),
     }
 }
 
