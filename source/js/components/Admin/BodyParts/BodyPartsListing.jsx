@@ -6,7 +6,6 @@ import { generateDTTableFilterObj, ts, te, capitalizeFirstLetter } from '../../.
 import { filterBodyPartsRequest, bodyPartAddRequest, setBodyPartState, bodyPartUpdateRequest, bodyPartDeleteRequest, bodyPartRecoverRequest } from '../../../actions/admin/bodyParts';
 import BodyPartsSave from './BodyPartsSave';
 import { initialize, reset } from "redux-form";
-import { DropdownButton, ButtonToolbar, MenuItem } from "react-bootstrap";
 import { FaPencil, FaTrash, FaRotateLeft } from "react-icons/lib/fa";
 import SweetAlert from "react-bootstrap-sweetalert";
 

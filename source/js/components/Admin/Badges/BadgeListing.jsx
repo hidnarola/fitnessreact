@@ -16,11 +16,6 @@ import {
 import _ from 'lodash';
 import { generateDTTableFilterObj, te, ts } from '../../../helpers/funs';
 import { badgeFilterRequest, badgeDeleteRequest, badgeUndoDeleteRequest } from '../../../actions/admin/badges';
-import {
-    DropdownButton,
-    ButtonToolbar,
-    MenuItem
-} from "react-bootstrap";
 import { showPageLoader, hidePageLoader } from '../../../actions/pageLoader';
 import SweetAlert from "react-bootstrap-sweetalert";
 

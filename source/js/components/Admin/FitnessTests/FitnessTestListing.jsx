@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import ReactTable from "react-table";
 import moment from "moment";
 import { generateDTTableFilterObj, capitalizeFirstLetter, te, ts } from '../../../helpers/funs';
@@ -27,7 +27,6 @@ import {
     STATUS_INACTIVE_STR,
     STATUS_INACTIVE,
 } from '../../../constants/consts';
-import { DropdownButton, ButtonToolbar, MenuItem } from "react-bootstrap";
 import { FaPencil, FaTrash } from "react-icons/lib/fa";
 import { adminRouteCodes } from '../../../constants/adminRoutes';
 import SweetAlert from "react-bootstrap-sweetalert";
@@ -93,23 +92,15 @@ class FitnessTestListing extends Component {
         } = this.state;
         return (
             <div className="exercise-listing-wrapper">
-                <div className="body-head space-btm-45 d-flex justify-content-start">
-                    <div className="body-head-l">
-                        <h2>Fitness Tests</h2>
-                    </div>
-                    <div className="body-head-r">
-                        <NavLink to={adminRouteCodes.FITNESS_TESTS_SAVE} className="pink-btn">
-                            <i className="icon-add_circle"></i>
-                            Add Fitness Test
-                        </NavLink>
-                    </div>
-                </div>
-
-                <div className="body-content row d-flex">
+                <div className="body-content row d-flex my-panel-body">
                     <div className="col-md-12">
                         <div className="white-box">
                             <div className="whitebox-head">
                                 <h3 className="title-h3">Fitness Tests List</h3>
+                                <Link to={adminRouteCodes.FITNESS_TESTS_SAVE} className="add-new-btn">
+                                    <span>Add Fitness Test</span>
+                                    <i className="icon-add_circle"></i>
+                                </Link>
                             </div>
                             <div className="row d-flex whitebox-body">
                                 <div className="col-md-12">
@@ -320,41 +311,26 @@ class FitnessTestListing extends Component {
                                                 },
                                             },
                                             {
-                                                id: '_id',
-                                                Header: 'Action',
-                                                accessor: '_id',
+                                                id: "_id",
+                                                Header: "Actions",
+                                                accessor: "_id",
                                                 filterable: false,
                                                 sortable: false,
-                                                maxWidth: 100,
+                                                maxWidth: 70,
                                                 Cell: (row) => {
                                                     return (
                                                         <div className="actions-wrapper">
-                                                            <ButtonToolbar>
-                                                                <DropdownButton title="Actions" pullRight id="dropdown-size-medium">
-                                                                    <MenuItem
-                                                                        eventKey="1"
-                                                                        href={`${adminRouteCodes.FITNESS_TESTS_SAVE}/${row.value}`}
-                                                                        onClick={(e) => {
-                                                                            e.preventDefault();
-                                                                            this.props.history.push(`${adminRouteCodes.FITNESS_TESTS_SAVE}/${row.value}`);
-                                                                        }}
-                                                                    >
-                                                                        <FaPencil className="v-align-sub" /> Edit
-                                                                    </MenuItem>
-                                                                    {!row.original.isDeleted &&
-                                                                        <MenuItem
-                                                                            eventKey="2"
-                                                                            href="javascript:void(0)"
-                                                                            onClick={() => this.handleDeleteModal(true, row.value)}
-                                                                        >
-                                                                            <FaTrash className="v-align-sub" /> Delete
-                                                                    </MenuItem>
-                                                                    }
-                                                                </DropdownButton>
-                                                            </ButtonToolbar>
+                                                            <Link to={`${adminRouteCodes.FITNESS_TESTS_SAVE}/${row.value}`} className="dt-act-btn dt-act-btn-edit">
+                                                                <FaPencil />
+                                                            </Link>
+                                                            {row && row.original && (typeof row.original.isDeleted === 'undefined' || row.original.isDeleted === 0) &&
+                                                                <button className="dt-act-btn dt-act-btn-delete" onClick={() => this.handleDeleteModal(true, row.value)}>
+                                                                    <FaTrash />
+                                                                </button>
+                                                            }
                                                         </div>
                                                     );
-                                                },
+                                                }
                                             },
                                         ]}
                                         pages={dtPages}
@@ -363,7 +339,7 @@ class FitnessTestListing extends Component {
                                         filterable
                                         defaultPageSize={10}
                                         className="-striped -highlight"
-                                        showPaginationTop={true}
+                                        showPaginationTop={false}
                                         showPaginationBottom={true}
                                         minRows={5}
                                         defaultSorted={[
