@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { FaPencil, FaTrash, FaRotateLeft } from 'react-icons/lib/fa';
 import { adminRouteCodes } from '../../../constants/adminRoutes';
 import ReactTable from 'react-table';
@@ -62,20 +62,15 @@ class BadgeListing extends Component {
         } = this.state;
         return (
             <div className="badge-category-listing-wrapper">
-                <div className="body-head space-btm-45 d-flex justify-content-start">
-                    <div className="body-head-l">
-                        <h2>Badges</h2>
-                    </div>
-                    <div className="body-head-r">
-                        <NavLink to={adminRouteCodes.BADGES_SAVE} className="pink-btn"><i className="icon-add_circle"></i> Add Badge</NavLink>
-                    </div>
-                </div>
-
-                <div className="body-content row d-flex">
+                <div className="body-content row d-flex my-panel-body">
                     <div className="col-md-12">
                         <div className="white-box">
                             <div className="whitebox-head">
                                 <h3 className="title-h3">Bagde List</h3>
+                                <Link to={adminRouteCodes.BADGES_SAVE} className="add-new-btn">
+                                    <span>Add Badge</span>
+                                    <i className="icon-add_circle"></i>
+                                </Link>
                             </div>
                             <div className="row d-flex whitebox-body">
                                 <div className="col-md-12">
@@ -282,37 +277,23 @@ class BadgeListing extends Component {
                                                 accessor: "_id",
                                                 filterable: false,
                                                 sortable: false,
-                                                maxWidth: 100,
+                                                maxWidth: 70,
                                                 Cell: (row) => {
                                                     return (
                                                         <div className="actions-wrapper">
-                                                            <ButtonToolbar>
-                                                                <DropdownButton title="Actions" pullRight id="dropdown-size-medium">
-                                                                    <MenuItem
-                                                                        eventKey="1"
-                                                                        onClick={(e) => this.routeTo(e, `${adminRouteCodes.BADGES_SAVE}/${row.value}`)}
-                                                                        href={`${adminRouteCodes.BADGES_SAVE}/${row.value}`}
-                                                                    >
-                                                                        <FaPencil className="v-align-sub" /> Edit
-                                                                    </MenuItem>
-                                                                    {row.original.isDeleted === 0 &&
-                                                                        <MenuItem
-                                                                            eventKey="2"
-                                                                            onClick={() => this.handleShowDeleteModal(row.value)}
-                                                                        >
-                                                                            <FaTrash className="v-align-sub" /> Delete
-                                                                        </MenuItem>
-                                                                    }
-                                                                    {row.original.isDeleted === 1 &&
-                                                                        <MenuItem
-                                                                            eventKey="3"
-                                                                            onClick={() => this.handleShowUndoDeleteModal(row.value)}
-                                                                        >
-                                                                            <FaRotateLeft className="v-align-sub" /> Recover
-                                                                        </MenuItem>
-                                                                    }
-                                                                </DropdownButton>
-                                                            </ButtonToolbar>
+                                                            <Link to={`${adminRouteCodes.BADGES_SAVE}/${row.value}`} className="dt-act-btn dt-act-btn-edit">
+                                                                <FaPencil />
+                                                            </Link>
+                                                            {row.original.isDeleted === 0 &&
+                                                                <button className="dt-act-btn dt-act-btn-delete" onClick={() => this.handleShowDeleteModal(row.value)}>
+                                                                    <FaTrash />
+                                                                </button>
+                                                            }
+                                                            {row.original.isDeleted === 1 &&
+                                                                <button className="dt-act-btn dt-act-btn-restore" onClick={() => this.handleShowUndoDeleteModal(row.value)}>
+                                                                    <FaRotateLeft />
+                                                                </button>
+                                                            }
                                                         </div>
                                                     );
                                                 }
@@ -324,7 +305,7 @@ class BadgeListing extends Component {
                                         filterable
                                         defaultPageSize={10}
                                         className="-striped -highlight"
-                                        showPaginationTop={true}
+                                        showPaginationTop={false}
                                         showPaginationBottom={true}
                                         minRows={5}
                                     />
