@@ -308,6 +308,12 @@ class BadgeListing extends Component {
                                         showPaginationTop={false}
                                         showPaginationBottom={true}
                                         minRows={5}
+                                        defaultSorted={[
+                                            {
+                                                id: "createdAt",
+                                                desc: true
+                                            }
+                                        ]}
                                     />
                                 </div>
                             </div>
