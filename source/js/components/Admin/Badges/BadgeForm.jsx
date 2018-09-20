@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { NavLink, withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { reduxForm, Field, formValueSelector, initialize } from 'redux-form';
 import { InputField, EditorField, SelectField_ReactSelect } from '../../../helpers/FormControlHelper';
-import { required, requiredReactSelect, requiredReactSelectStatus } from '../../../formValidation/validationRules';
+import { required, requiredReactSelect, requiredReactSelectStatus, min, minLength, maxLength } from '../../../formValidation/validationRules';
 import { adminRouteCodes } from '../../../constants/adminRoutes';
 import {
     TIME_TYPE_TIME_WINDOW,
@@ -17,10 +17,12 @@ import {
     TIME_WINDOW_TYPES
 } from '../../../constants/consts';
 import { capitalizeFirstLetter } from '../../../helpers/funs';
-import DateRangePicker from 'react-daterange-picker';
 import _ from "lodash";
 import { badgeSelectOneRequest } from '../../../actions/admin/badges';
-import moment from "moment";
+
+const min0 = min(0);
+const minLength2 = minLength(2);
+const maxLength100 = maxLength(100);
 
 const timeTypeOptions = [
     { value: TIME_TYPE_STANDARD, label: capitalizeFirstLetter(TIME_TYPE_STANDARD).replace('_', ' ') },
@@ -80,7 +82,7 @@ class BadgeForm extends Component {
             <div className="badge-form-data">
                 <form onSubmit={handleSubmit}>
                     <div className="row">
-                        <div className="col-md-12">
+                        <div className="col-md-4">
                             <Field
                                 name="task"
                                 label="Task"
@@ -92,6 +94,8 @@ class BadgeForm extends Component {
                                 errorClass="help-block"
                                 validate={[requiredReactSelect]}
                             />
+                        </div>
+                        <div className="col-md-4">
                             <Field
                                 name="target"
                                 type="number"
@@ -103,8 +107,10 @@ class BadgeForm extends Component {
                                 component={InputField}
                                 errorClass="help-block"
                                 warningClass=""
-                                validate={[required]}
+                                validate={[required, min0]}
                             />
+                        </div>
+                        <div className="col-md-4">
                             <Field
                                 name="unit"
                                 label="Unit"
@@ -116,6 +122,10 @@ class BadgeForm extends Component {
                                 errorClass="help-block"
                                 validate={[requiredReactSelect]}
                             />
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-md-4">
                             <Field
                                 name="points"
                                 type="number"
@@ -127,8 +137,10 @@ class BadgeForm extends Component {
                                 component={InputField}
                                 errorClass="help-block"
                                 warningClass=""
-                                validate={[required]}
+                                validate={[required, min0]}
                             />
+                        </div>
+                        <div className="col-md-4">
                             <Field
                                 name="name"
                                 className="form-control"
@@ -139,30 +151,10 @@ class BadgeForm extends Component {
                                 component={InputField}
                                 errorClass="help-block"
                                 warningClass=""
-                                validate={[required]}
+                                validate={[required, minLength2, maxLength100]}
                             />
-                            <Field
-                                name="incompleteDescription"
-                                value={incompleteDescription}
-                                handleChange={(editorText) => this.handleEditorChange('incompleteDescription', editorText)}
-                                className="editor-min-height-200"
-                                label="Incomplete Description"
-                                labelClass="control-label display_block"
-                                wrapperClass="form-group"
-                                placeholder="Incomplete Description"
-                                component={EditorField}
-                            />
-                            <Field
-                                name="completeDescription"
-                                value={completeDescription}
-                                handleChange={(editorText) => this.handleEditorChange('completeDescription', editorText)}
-                                className="editor-min-height-200"
-                                label="Complete Description"
-                                labelClass="control-label display_block"
-                                wrapperClass="form-group"
-                                placeholder="Complete Description"
-                                component={EditorField}
-                            />
+                        </div>
+                        <div className="col-md-4">
                             <Field
                                 name="status"
                                 label="Status"
@@ -174,6 +166,10 @@ class BadgeForm extends Component {
                                 errorClass="help-block"
                                 validate={[requiredReactSelectStatus]}
                             />
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-md-4">
                             <Field
                                 name="time_type"
                                 label="Time Type"
@@ -186,7 +182,9 @@ class BadgeForm extends Component {
                                 validate={[requiredReactSelect]}
                                 onChange={(val) => this.setState({ timeType: val.value })}
                             />
-                            {timeType && timeType === TIME_TYPE_TIME_WINDOW &&
+                        </div>
+                        {timeType && timeType === TIME_TYPE_TIME_WINDOW &&
+                            <div className="col-md-4">
                                 <Field
                                     name="time_window_type"
                                     label="Duration Type"
@@ -198,8 +196,10 @@ class BadgeForm extends Component {
                                     errorClass="help-block"
                                     validate={[requiredReactSelectStatus]}
                                 />
-                            }
-                            {timeType && timeType === TIME_TYPE_TIME_WINDOW &&
+                            </div>
+                        }
+                        {timeType && timeType === TIME_TYPE_TIME_WINDOW &&
+                            <div className="col-md-4">
                                 <Field
                                     name="duration"
                                     type="number"
@@ -211,19 +211,53 @@ class BadgeForm extends Component {
                                     component={InputField}
                                     errorClass="help-block"
                                     warningClass=""
-                                    validate={[required]}
+                                    validate={[required, min0]}
                                 />
-                            }
-                            <div className="col-md-12 mb-20 clear-both text-center">
-                                <div className="stepbox-b stepbox-b-center">
-                                    <NavLink to={adminRouteCodes.BADGES} className="continues-btn">Back</NavLink>
-                                    <button type="submit" className="continues-btn"><span>Save</span></button>
-                                </div>
                             </div>
+                        }
+                    </div>
+                    <div className="row">
+                        <div className="col-md-6">
+                            <Field
+                                name="incompleteDescription"
+                                value={incompleteDescription}
+                                handleChange={(editorText) => this.handleEditorChange('incompleteDescription', editorText)}
+                                className="editor-height-100"
+                                label="Incomplete Description"
+                                labelClass="control-label display_block"
+                                wrapperClass="form-group"
+                                placeholder="Incomplete Description"
+                                component={EditorField}
+                            />
+                        </div>
+                        <div className="col-md-6">
+                            <Field
+                                name="completeDescription"
+                                value={completeDescription}
+                                handleChange={(editorText) => this.handleEditorChange('completeDescription', editorText)}
+                                className="editor-height-100"
+                                label="Complete Description"
+                                labelClass="control-label display_block"
+                                wrapperClass="form-group"
+                                placeholder="Complete Description"
+                                component={EditorField}
+                            />
+                        </div>
+                    </div>
+                    <div className="d-flex pull-right mt-10">
+                        <div className="col-md-12">
+                            <Link to={adminRouteCodes.BADGES} className="custom-medium-link-btn">
+                                <span>Back</span>
+                                <i className="icon-arrow_back"></i>
+                            </Link>
+                            <button type="submit" className="custom-medium-btn">
+                                <span>Save</span>
+                                <i className="icon-save"></i>
+                            </button>
                         </div>
                     </div>
                 </form>
-            </div>
+            </div >
         );
     }
 

@@ -18,12 +18,6 @@ class BadgeSave extends Component {
     render() {
         return (
             <div className="badge-save-wrapper">
-                <div className="body-head space-btm-45 d-flex justify-content-start">
-                    <div className="body-head-l">
-                        <h2>Badge</h2>
-                    </div>
-                </div>
-
                 <div className="body-content row d-flex">
                     <div className="col-md-12">
                         <div className="white-box">
