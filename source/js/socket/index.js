@@ -57,3 +57,15 @@ export const receiveUserFriendRequestsCount = (socket, callback) => {
         callback(data);
     });
 }
+
+export const receiveLoggedUserFriends = (socket, callback) => {
+    socket.on('receive_logged_user_friends', (data) => {
+        callback(data);
+    });
+}
+
+export const receiveOnlineFriendStatus = (socket, callback) => {
+    socket.on('receive_online_friend_status', (data) => {
+        callback(data);
+    });
+}

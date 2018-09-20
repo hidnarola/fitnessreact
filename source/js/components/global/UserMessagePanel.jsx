@@ -75,6 +75,54 @@ class UserMessagePanel extends Component {
                             </div>
                         }
                     </div>
+                    <div className="messenger-body" id="friends-messenger-box">
+                        {panelChannelLoading &&
+                            <div className="text-c">
+                                <FaCircleONotch className="loader-spinner fs-25" />
+                            </div>
+                        }
+                        {!panelChannelLoading && panelChannels && panelChannels.length > 0 &&
+                            <Scrollbars autoHide>
+                                {
+                                    panelChannels.map((channel, index) => {
+                                        return (
+                                            <ChannelMessageCard
+                                                key={index}
+                                                channel={channel}
+                                                loggedUserData={loggedUserData}
+                                                handleMessageSeen={this.handleMessageSeen}
+                                                handleOpenChatWindow={this.handleOpenChatWindow}
+                                            />
+                                        )
+                                    })
+                                }
+                                {!panelChannelLoadMoreLoading && !panelChannelDataOver &&
+                                    <button type="button" className="btn-messages-loadmore" onClick={this.handleLoadMore}>
+                                        <span>Load more</span>
+                                    </button>
+                                }
+                                {panelChannelLoadMoreLoading &&
+                                    <button type="button" className="btn-messages-loadmore" disabled={true}>
+                                        <FaCircleONotch className="loader-spinner loader-spinner-icon" />
+                                        <span>Loading...</span>
+                                    </button>
+                                }
+                            </Scrollbars>
+                        }
+
+                        {!panelChannelLoading && (typeof panelChannels === 'undefined' || !panelChannels || panelChannels.length <= 0) && typeof panelChannelError !== 'undefined' && panelChannelError && panelChannelError.length <= 0 &&
+                            <div className="no-record-found-wrapper">
+                                <img src={NoDataFoundImg} />
+                            </div>
+                        }
+
+                        {!panelChannelLoading && typeof panelChannelError !== 'undefined' && panelChannelError && panelChannelError.length > 0 &&
+                            <div className="server-error-wrapper">
+                                <ErrorCloud />
+                                <h4>Something went wrong! please try again.</h4>
+                            </div>
+                        }
+                    </div>
                 </div>
             </div>
         );

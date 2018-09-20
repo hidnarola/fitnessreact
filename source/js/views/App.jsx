@@ -52,7 +52,9 @@ import {
     messageTypingStop,
     receiveUserMessagesCount,
     receiveChannelId,
-    receiveUserFriendRequestsCount
+    receiveUserFriendRequestsCount,
+    receiveLoggedUserFriends,
+    receiveOnlineFriendStatus
 } from '../socket';
 import { setUserNotificationCount } from '../actions/userNotifications';
 import UserRightMenu from '../components/global/UserRightMenu';
@@ -85,7 +87,7 @@ import SaveScheduleProgramWorkout from '../components/Program/SaveScheduleProgra
 import ViewProgramScheduleWorkout from '../components/Program/ViewProgramScheduleWorkout';
 import Progress from './Progress';
 import ScheduleWorkoutCalendarPage from './ScheduleWorkoutCalendarPage';
-import { setUserFriendRequestsCount } from '../actions/friends';
+import { setUserFriendRequestsCount, getApprovedFriendsMessengerSuccess, loadMoreApprovedFriendsMessengerSuccess, updateApprovedFriendsOnlineStatusMessenger } from '../actions/friends';
 import AdminRightMenu from '../components/Admin/Template/AdminRightMenu';
 import { logout } from '../actions/login';
 import BodyParts from './Admin/BodyParts';
@@ -123,6 +125,8 @@ class App extends Component {
         messageTypingStart(socket, this.handleMessageTypingResponse);
         messageTypingStop(socket, this.handleMessageTypingResponse);
         receiveChannelId(socket, this.handleReceiveChannelId);
+        receiveLoggedUserFriends(socket, this.handleLoggedUserFriends);
+        receiveOnlineFriendStatus(socket, this.handleOnlineFriendsStatus);
         let token = getToken();
         if (token) {
             socket.emit('join', token);
@@ -340,6 +344,15 @@ class App extends Component {
         }
     }
 
+    handleLoggedUserFriends = (data) => {
+        const { dispatch, approvedMessLoadMoreLoading } = this.props;
+        if (approvedMessLoadMoreLoading) {
+            dispatch(loadMoreApprovedFriendsMessengerSuccess(data));
+        } else {
+            dispatch(getApprovedFriendsMessengerSuccess(data));
+        }
+    }
+
     handleUsersConversationByChannel = (data) => {
         const { dispatch } = this.props;
         dispatch(openUserChatWindowSuccess(data));
@@ -451,10 +464,15 @@ class App extends Component {
         }
     }
 
+    handleOnlineFriendsStatus = (data) => {
+        const { dispatch } = this.props;
+        dispatch(updateApprovedFriendsOnlineStatusMessenger(data));
+    }
+
 }
 
 const mapStateToProps = (state) => {
-    const { pageLoader, user, userMessages, admin, login } = state;
+    const { pageLoader, user, userMessages, admin, login, friends } = state;
     return {
         showPageLoader: pageLoader.get("loading"),
         loggedUserData: user.get('loggedUserData'),
@@ -463,6 +481,7 @@ const mapStateToProps = (state) => {
         panelChannelLoadMoreLoading: userMessages.get('panelChannelLoadMoreLoading'),
         loadingAdminLogin: login.get('loading'),
         loggedAdminData: admin.get('loggedUserData'),
+        approvedMessLoadMoreLoading: friends.get('approvedMessLoadMoreLoading'),
     };
 }
 

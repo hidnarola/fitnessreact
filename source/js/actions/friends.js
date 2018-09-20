@@ -6,6 +6,14 @@ export const LOAD_MORE_APPROVED_FRIENDS_REQUEST = 'LOAD_MORE_APPROVED_FRIENDS_RE
 export const LOAD_MORE_APPROVED_FRIENDS_SUCCESS = 'LOAD_MORE_APPROVED_FRIENDS_SUCCESS';
 export const LOAD_MORE_APPROVED_FRIENDS_ERROR = 'LOAD_MORE_APPROVED_FRIENDS_ERROR';
 
+export const GET_APPROVED_FRIENDS_MESSENGER_REQUEST = 'GET_APPROVED_FRIENDS_MESSENGER_REQUEST';
+export const GET_APPROVED_FRIENDS_MESSENGER_SUCCESS = 'GET_APPROVED_FRIENDS_MESSENGER_SUCCESS';
+export const GET_APPROVED_FRIENDS_MESSENGER_ERROR = 'GET_APPROVED_FRIENDS_MESSENGER_ERROR';
+
+export const LOAD_MORE_APPROVED_FRIENDS_MESSENGER_REQUEST = 'LOAD_MORE_APPROVED_FRIENDS_REQUEST';
+export const LOAD_MORE_APPROVED_FRIENDS_MESSENGER_SUCCESS = 'LOAD_MORE_APPROVED_FRIENDS_SUCCESS';
+export const LOAD_MORE_APPROVED_FRIENDS_MESSENGER_ERROR = 'LOAD_MORE_APPROVED_FRIENDS_ERROR';
+
 export const GET_PENDING_FRIENDS_REQUEST = 'GET_PENDING_FRIENDS_REQUEST';
 export const GET_PENDING_FRIENDS_SUCCESS = 'GET_PENDING_FRIENDS_SUCCESS';
 export const GET_PENDING_FRIENDS_ERROR = 'GET_PENDING_FRIENDS_ERROR';
@@ -25,6 +33,8 @@ export const CANCEL_FRIEND_REQUEST_ERROR = 'CANCEL_FRIEND_REQUEST_ERROR';
 export const ACCEPT_FRIEND_REQUEST_REQUEST = 'ACCEPT_FRIEND_REQUEST_REQUEST';
 export const ACCEPT_FRIEND_REQUEST_SUCCESS = 'ACCEPT_FRIEND_REQUEST_SUCCESS';
 export const ACCEPT_FRIEND_REQUEST_ERROR = 'ACCEPT_FRIEND_REQUEST_ERROR';
+
+export const UPDATE_APPROVED_FRIENDS_ONLINE_STATUS_MESSENGER = 'UPDATE_APPROVED_FRIENDS_ONLINE_STATUS_MESSENGER';
 
 export const SET_USER_FRIEND_REQUESTS_COUNT = 'SET_USER_FRIEND_REQUESTS_COUNT';
 
@@ -72,6 +82,54 @@ export function loadMoreApprovedFriendsSuccess(data) {
 export function loadMoreApprovedFriendsError(error) {
     return {
         type: LOAD_MORE_APPROVED_FRIENDS_ERROR,
+        error
+    }
+}
+
+export function getApprovedFriendsMessengerRequest(username, skip = 0, limit = 10, sort = -1) {
+    return {
+        type: GET_APPROVED_FRIENDS_MESSENGER_REQUEST,
+        username,
+        skip,
+        limit,
+        sort
+    }
+}
+
+export function getApprovedFriendsMessengerSuccess(data) {
+    return {
+        type: GET_APPROVED_FRIENDS_MESSENGER_SUCCESS,
+        data
+    }
+}
+
+export function getApprovedFriendsMessengerError(error) {
+    return {
+        type: GET_APPROVED_FRIENDS_MESSENGER_ERROR,
+        error
+    }
+}
+
+export function loadMoreApprovedFriendsMessengerRequest(username, skip = 0, limit = 10, sort = -1) {
+    return {
+        type: LOAD_MORE_APPROVED_FRIENDS_MESSENGER_REQUEST,
+        username,
+        skip,
+        limit,
+        sort
+    }
+}
+
+export function loadMoreApprovedFriendsMessengerSuccess(data) {
+    return {
+        type: LOAD_MORE_APPROVED_FRIENDS_MESSENGER_SUCCESS,
+        data
+    }
+}
+
+export function loadMoreApprovedFriendsMessengerError(error) {
+    return {
+        type: LOAD_MORE_APPROVED_FRIENDS_MESSENGER_ERROR,
         error
     }
 }
@@ -184,6 +242,13 @@ export function acceptFriendRequestError(error) {
     return {
         type: ACCEPT_FRIEND_REQUEST_ERROR,
         error
+    }
+}
+
+export function updateApprovedFriendsOnlineStatusMessenger(data) {
+    return {
+        type: UPDATE_APPROVED_FRIENDS_ONLINE_STATUS_MESSENGER,
+        data
     }
 }
 

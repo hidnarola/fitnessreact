@@ -20,9 +20,9 @@ import AutosuggestHighlightParse from 'autosuggest-highlight/parse';
 import cns from "classnames";
 import { getUserUnreadNotificationsRequest } from '../../actions/userNotifications';
 import { getUserMessageChannelRequest } from '../../actions/userMessages';
-import { getPendingFriendsRequest } from '../../actions/friends';
 import logo from 'img/common/logo.png';
 import { publicPath } from '../../constants/routes';
+import { getApprovedFriendsMessengerRequest } from '../../actions/friends';
 
 const auth = new Auth();
 
@@ -283,7 +283,7 @@ class FitnessHeader extends Component {
     }
 
     handleMessagePanel = () => {
-        const { socket, dispatch } = this.props;
+        const { socket, dispatch, loggedUserData } = this.props;
         if (socket) {
             var requestData = {
                 token: getToken(),
@@ -291,7 +291,9 @@ class FitnessHeader extends Component {
                 limit: 10,
             }
             dispatch(getUserMessageChannelRequest(requestData));
+            dispatch(getApprovedFriendsMessengerRequest(requestData));
             socket.emit('request_users_conversation_channels', requestData);
+            socket.emit('request_logged_user_friends', requestData);
         }
         toggleSideMenu('user-message-panel', true);
     }

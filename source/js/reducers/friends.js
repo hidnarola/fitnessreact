@@ -22,6 +22,13 @@ import {
     LOAD_MORE_PENDING_FRIENDS_REQUEST,
     LOAD_MORE_PENDING_FRIENDS_SUCCESS,
     LOAD_MORE_PENDING_FRIENDS_ERROR,
+    GET_APPROVED_FRIENDS_MESSENGER_REQUEST,
+    GET_APPROVED_FRIENDS_MESSENGER_SUCCESS,
+    GET_APPROVED_FRIENDS_MESSENGER_ERROR,
+    LOAD_MORE_APPROVED_FRIENDS_MESSENGER_REQUEST,
+    LOAD_MORE_APPROVED_FRIENDS_MESSENGER_SUCCESS,
+    LOAD_MORE_APPROVED_FRIENDS_MESSENGER_ERROR,
+    UPDATE_APPROVED_FRIENDS_ONLINE_STATUS_MESSENGER,
 } from "../actions/friends";
 import { VALIDATION_FAILURE_STATUS } from "../constants/consts";
 import { generateValidationErrorMsgArr } from "../helpers/funs";
@@ -48,6 +55,14 @@ const initialState = Map({
     requestCancelError: [],
     requestAcceptLoading: false,
     requestAcceptError: [],
+
+    approvedMessLoading: false,
+    approvedMessFriends: [],
+    approvedMessError: [],
+    approvedMessSkip: 0,
+    approvedMessLimit: 10,
+    approvedMessLoadMoreLoading: false,
+    approvedMessNoMoreData: false,
 });
 
 const actionMap = {
@@ -126,6 +141,83 @@ const actionMap = {
             approvedLoadMoreLoading: false,
             approvedNoMoreData: true,
             approvedError: error,
+        }));
+    },
+    [GET_APPROVED_FRIENDS_MESSENGER_REQUEST]: (state, action) => {
+        return state.merge(Map({
+            approvedMessLoading: true,
+            approvedMessFriends: [],
+            approvedMessSkip: action.skip,
+            approvedMessLimit: action.limit,
+            approvedMessNoMoreData: false,
+            approvedMessError: [],
+        }));
+    },
+    [GET_APPROVED_FRIENDS_MESSENGER_SUCCESS]: (state, action) => {
+        let newState = { approvedMessLoading: false };
+        if (action.data && action.data.status && action.data.status === 1) {
+            newState.approvedMessFriends = action.data.friends;
+            if (action.data.friends && action.data.friends.length <= 0) {
+                newState.approvedMessNoMoreData = true;
+            }
+        } else {
+            let msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later';
+            newState.approvedMessError = [msg];
+        }
+        return state.merge(Map(newState));
+    },
+    [GET_APPROVED_FRIENDS_MESSENGER_ERROR]: (state, action) => {
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
+        }
+        return state.merge(Map({
+            approvedMessLoading: false,
+            approvedMessError: error,
+        }));
+    },
+    [LOAD_MORE_APPROVED_FRIENDS_MESSENGER_REQUEST]: (state, action) => {
+        return state.merge(Map({
+            approvedMessLoadMoreLoading: true,
+            approvedMessSkip: action.skip,
+            approvedMessLimit: action.limit,
+            approvedMessNoMoreData: false,
+            approvedMessError: [],
+        }));
+    },
+    [LOAD_MORE_APPROVED_FRIENDS_MESSENGER_SUCCESS]: (state, action) => {
+        let prevApprovedFriends = state.get('approvedMessFriends');
+        let newState = { approvedMessLoadMoreLoading: false };
+        if (action.data && action.data.status && action.data.status === 1) {
+            if (action.data.friends && action.data.friends.length > 0) {
+                newState.approvedMessFriends = prevApprovedFriends.concat(action.data.friends);
+            } else {
+                newState.approvedMessNoMoreData = true;
+            }
+        } else {
+            let msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later';
+            newState.approvedMessNoMoreData = true;
+            newState.approvedMessError = [msg];
+        }
+        return state.merge(Map(newState));
+    },
+    [LOAD_MORE_APPROVED_FRIENDS_MESSENGER_ERROR]: (state, action) => {
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
+        }
+        return state.merge(Map({
+            approvedMessLoadMoreLoading: false,
+            approvedMessNoMoreData: true,
+            approvedMessError: error,
         }));
     },
     [GET_PENDING_FRIENDS_REQUEST]: (state, action) => {
@@ -276,6 +368,23 @@ const actionMap = {
             requestAcceptLoading: false,
             requestAcceptError: error,
         }));
+    },
+    [UPDATE_APPROVED_FRIENDS_ONLINE_STATUS_MESSENGER]: (state, action) => {
+        let prevFrnds = state.get('approvedMessFriends');
+        if (prevFrnds && prevFrnds.length > 0 && action.data && action.data.authUserId) {
+            let nextFrnds = [];
+            prevFrnds.map((o) => {
+                let obj = Object.assign({}, o);
+                if (o.authUserId === action.data.authUserId) {
+                    obj.isOnline = action.data.isOnline;
+                }
+                nextFrnds.push(obj);
+            });
+            return state.merge(Map({
+                approvedMessFriends: nextFrnds,
+            }));
+        }
+        return state;
     },
     [SET_USER_FRIEND_REQUESTS_COUNT]: (state, action) => {
         return state.merge(Map({

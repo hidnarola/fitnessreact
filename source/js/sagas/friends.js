@@ -22,7 +22,7 @@ import {
     loadMoreApprovedFriendsSuccess,
     loadMoreApprovedFriendsError,
     loadMorePendingFriendsSuccess,
-    loadMorePendingFriendsError
+    loadMorePendingFriendsError,
 } from '../actions/friends';
 import {
     FRIEND_APPROVED,
