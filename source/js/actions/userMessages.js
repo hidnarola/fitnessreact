@@ -27,6 +27,9 @@ export const SET_USER_MESSAGES_COUNT = 'SET_USER_MESSAGES_COUNT';
 export const GET_CHANNEL_REQUEST = 'GET_CHANNEL_REQUEST';
 export const GET_CHANNEL_RESPONSE = 'GET_CHANNEL_RESPONSE';
 
+export const SET_USER_MESSAGES_STATE = 'SET_USER_MESSAGES_STATE';
+export const RESET_USER_MESSAGES_STATE = 'RESET_USER_MESSAGES_STATE';
+
 export function getUserMessageChannelRequest(requestData) {
     return {
         type: GET_USER_MESSAGE_CHANNEL_REQUEST,
@@ -157,5 +160,18 @@ export function getUserChannelRequest() {
 export function getUserChannelResponse() {
     return {
         type: GET_CHANNEL_RESPONSE,
+    }
+}
+
+export function setUserMesagesState(stateData) {
+    return {
+        type: SET_USER_MESSAGES_STATE,
+        stateData
+    }
+}
+
+export function resetUserMesagesState() {
+    return {
+        type: RESET_USER_MESSAGES_STATE
     }
 }

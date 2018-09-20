@@ -19,6 +19,8 @@ import {
     LOAD_MORE_USER_MESSAGE_CHANNEL_REQUEST,
     LOAD_MORE_USER_MESSAGE_CHANNEL_SUCCESS,
     LOAD_MORE_USER_MESSAGE_CHANNEL_ERROR,
+    SET_USER_MESSAGES_STATE,
+    RESET_USER_MESSAGES_STATE,
 } from "../actions/userMessages";
 import _ from "lodash";
 
@@ -302,6 +304,12 @@ const actionMap = {
         return state.merge(Map({
             requestChannelLoading: false,
         }));
+    },
+    [SET_USER_MESSAGES_STATE]: (state, action) => {
+        return state.merge(Map(action.stateData));
+    },
+    [RESET_USER_MESSAGES_STATE]: (state, action) => {
+        return initialState;
     },
 }
 

@@ -4,7 +4,8 @@ import jwt from "jwt-simple";
 import {
     SET_LOGGED_USER_FROM_LOCALSTORAGE,
     OPEN_SOCKET,
-    CLOSE_SOCKET
+    CLOSE_SOCKET,
+    RESET_LOGGED_USER_STATE
 } from "../actions/user";
 import {
     LOCALSTORAGE_ID_TOKEN_KEY,
@@ -61,6 +62,9 @@ const actionMap = {
     [CLOSE_SOCKET]: (state, action) => {
         return state.merge(Map({ socket: null }));
     },
+    [RESET_LOGGED_USER_STATE]: (state, action) => {
+        return initialState;
+    }
 };
 
 export default function reducer(state = initialState, action = {}) {
