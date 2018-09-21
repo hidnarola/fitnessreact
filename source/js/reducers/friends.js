@@ -371,7 +371,7 @@ const actionMap = {
     },
     [UPDATE_APPROVED_FRIENDS_ONLINE_STATUS_MESSENGER]: (state, action) => {
         let prevFrnds = state.get('approvedMessFriends');
-        if (prevFrnds && prevFrnds.length > 0 && action.data && action.data.authUserId) {
+        if (prevFrnds && prevFrnds.length > 0 && action.data &&  action.data.authUserId) {
             let nextFrnds = [];
             prevFrnds.map((o) => {
                 let obj = Object.assign({}, o);

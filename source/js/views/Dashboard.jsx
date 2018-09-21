@@ -23,7 +23,8 @@ import {
     MUSCLE_WIDGET_CALF,
     MUSCLE_WIDGET_HEART_RATE,
     MUSCLE_WIDGET_WEIGHT,
-    MUSCLE_WIDGET_HEIGHT
+    MUSCLE_WIDGET_HEIGHT,
+    SERVER_BASE_URL
 } from '../constants/consts';
 import moment from "moment";
 import { initialize, reset } from "redux-form";
@@ -37,6 +38,8 @@ import WidgetProgressPhotoCard from '../components/Common/WidgetProgressPhotoCar
 import WidgetMuscleCard from '../components/Common/WidgetMuscleCard';
 import WidgetBodyFatCard from '../components/Common/WidgetBodyFatCard';
 import WidgetBadgesCard from '../components/Common/WidgetBadgesCard';
+import socketClient from "socket.io-client";
+import { openSocket } from '../actions/user';
 
 class Dashboard extends Component {
     constructor(props) {
@@ -44,6 +47,7 @@ class Dashboard extends Component {
         this.state = {
             showWidgetsModal: false,
         }
+        this.socketWasNullTryJoin = false;
     }
 
     componentWillMount() {
@@ -51,6 +55,14 @@ class Dashboard extends Component {
         let token = getToken();
         if (socket && token) {
             socket.emit('join', token);
+        } else if (!socket) {
+            const _socket = socketClient(SERVER_BASE_URL);
+            dispatch(openSocket(_socket));
+            if (token) {
+                _socket.emit('join', token);
+            } else {
+                this.socketWasNullTryJoin = true;
+            }
         }
         dispatch(getDashboardPageRequest());
     }
@@ -202,6 +214,7 @@ class Dashboard extends Component {
             dispatch,
             saveWidgetsLoading,
             saveWidgetsError,
+            socket,
         } = this.props;
         if (!saveWidgetsLoading && prevProps.saveWidgetsLoading !== saveWidgetsLoading) {
             if (saveWidgetsError && saveWidgetsError.length > 0) {
@@ -209,6 +222,10 @@ class Dashboard extends Component {
             }
             this.handleCloseWidgetsModal();
             dispatch(getDashboardPageRequest());
+        }
+        if (this.socketWasNullTryJoin) {
+            this.socketWasNullTryJoin = false;
+            socket.emit('join', token);
         }
     }
 

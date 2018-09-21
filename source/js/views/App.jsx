@@ -306,6 +306,8 @@ class App extends Component {
 
 
     handleLogout = () => {
+        const { socket } = this.props;
+        socket.emit('request_make_user_offline');
         toggleSideMenu('user-right-menu', false);
         auth.logout();
     }

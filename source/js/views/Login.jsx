@@ -30,8 +30,9 @@ class Login extends Component {
     }
 
     componentWillMount() {
-        const { match, history, dispatch } = this.props;
+        const { match, history, dispatch, socket } = this.props;
         if (match.path === (publicPath + SESSION_EXPIRED_URL_TYPE)) {
+            socket.emit('request_make_user_offline');
             te('Session expired! Login again.');
             history.push(publicPath);
         }
@@ -82,7 +83,13 @@ class Login extends Component {
     componentWillUnmount() {
         $('body').removeClass('no-padding');
     }
-
 }
 
-export default connect()(Login);
+const mapStateToProps = (state) => {
+    const { user } = state;
+    return {
+        socket: user.get('socket')
+    };
+}
+
+export default connect(mapStateToProps)(Login);

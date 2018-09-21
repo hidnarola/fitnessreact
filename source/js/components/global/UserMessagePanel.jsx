@@ -17,7 +17,11 @@ class UserMessagePanel extends Component {
             panelChannelError,
             loggedUserData,
             panelChannelDataOver,
-            panelChannelLoadMoreLoading
+            panelChannelLoadMoreLoading,
+
+            approvedMessLoading,
+            approvedMessFriends,
+            approvedMessError,
         } = this.props;
         return (
             <div id="user-message-panel" className="messenger-wrap">
@@ -76,47 +80,33 @@ class UserMessagePanel extends Component {
                         }
                     </div>
                     <div className="messenger-body" id="friends-messenger-box">
-                        {panelChannelLoading &&
+                        {approvedMessLoading &&
                             <div className="text-c">
                                 <FaCircleONotch className="loader-spinner fs-25" />
                             </div>
                         }
-                        {!panelChannelLoading && panelChannels && panelChannels.length > 0 &&
+                        {!approvedMessLoading && approvedMessFriends && approvedMessFriends.length > 0 &&
                             <Scrollbars autoHide>
                                 {
-                                    panelChannels.map((channel, index) => {
+                                    approvedMessFriends.map((friend, index) => {
                                         return (
-                                            <ChannelMessageCard
+                                            <UsersFriendCard
                                                 key={index}
-                                                channel={channel}
-                                                loggedUserData={loggedUserData}
-                                                handleMessageSeen={this.handleMessageSeen}
-                                                handleOpenChatWindow={this.handleOpenChatWindow}
+                                                friend={friend}
                                             />
                                         )
                                     })
                                 }
-                                {!panelChannelLoadMoreLoading && !panelChannelDataOver &&
-                                    <button type="button" className="btn-messages-loadmore" onClick={this.handleLoadMore}>
-                                        <span>Load more</span>
-                                    </button>
-                                }
-                                {panelChannelLoadMoreLoading &&
-                                    <button type="button" className="btn-messages-loadmore" disabled={true}>
-                                        <FaCircleONotch className="loader-spinner loader-spinner-icon" />
-                                        <span>Loading...</span>
-                                    </button>
-                                }
                             </Scrollbars>
                         }
 
-                        {!panelChannelLoading && (typeof panelChannels === 'undefined' || !panelChannels || panelChannels.length <= 0) && typeof panelChannelError !== 'undefined' && panelChannelError && panelChannelError.length <= 0 &&
+                        {!approvedMessLoading && (typeof approvedMessFriends === 'undefined' || !approvedMessFriends || approvedMessFriends.length <= 0) && typeof approvedMessError !== 'undefined' && approvedMessError && approvedMessError.length <= 0 &&
                             <div className="no-record-found-wrapper">
                                 <img src={NoDataFoundImg} />
                             </div>
                         }
 
-                        {!panelChannelLoading && typeof panelChannelError !== 'undefined' && panelChannelError && panelChannelError.length > 0 &&
+                        {!approvedMessLoading && typeof approvedMessError !== 'undefined' && approvedMessError && approvedMessError.length > 0 &&
                             <div className="server-error-wrapper">
                                 <ErrorCloud />
                                 <h4>Something went wrong! please try again.</h4>
@@ -164,7 +154,7 @@ class UserMessagePanel extends Component {
 }
 
 const mapStateToProps = (state) => {
-    const { userMessages, user } = state;
+    const { userMessages, user, friends } = state;
     return {
         panelChannelLoading: userMessages.get('panelChannelLoading'),
         panelChannels: userMessages.get('panelChannels'),
@@ -175,6 +165,10 @@ const mapStateToProps = (state) => {
         panelChannelLoadMoreLoading: userMessages.get('panelChannelLoadMoreLoading'),
         loggedUserData: user.get('loggedUserData'),
         socket: user.get('socket'),
+
+        approvedMessLoading: friends.get('approvedMessLoading'),
+        approvedMessFriends: friends.get('approvedMessFriends'),
+        approvedMessError: friends.get('approvedMessError'),
     };
 }
 
@@ -222,5 +216,28 @@ class ChannelMessageCard extends Component {
         } else {
             return null;
         }
+    }
+}
+
+class UsersFriendCard extends Component {
+    render() {
+        const { friend } = this.props;
+        return (
+            <a href="javascript:void(0)" className="messenger-box">
+                <span className="p-relative">
+                    <img
+                        src={friend.avatar}
+                        className="avatar"
+                        onError={(e) => {
+                            e.target.src = noProfileImg
+                        }}
+                    />
+                    <div className={cns("online-dot", { 'offline': !friend.isOnline })}></div>
+                </span>
+                <h4>
+                    <strong>{`${friend.firstName} ${(friend.lastName) ? friend.lastName : ''}`}</strong>
+                </h4>
+            </a>
+        );
     }
 }

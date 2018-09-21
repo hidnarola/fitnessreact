@@ -206,10 +206,6 @@ class FitnessHeader extends Component {
 
 
     //#region Common functions
-    handleLogout = () => {
-        auth.logout();
-    }
-
     handleSearchChange = (event, { newValue, method }) => {
         const { dispatch } = this.props;
         dispatch(handleChangeUserSearchFor('searchValue', newValue));
@@ -283,7 +279,7 @@ class FitnessHeader extends Component {
     }
 
     handleMessagePanel = () => {
-        const { socket, dispatch, loggedUserData } = this.props;
+        const { socket, dispatch } = this.props;
         if (socket) {
             var requestData = {
                 token: getToken(),
