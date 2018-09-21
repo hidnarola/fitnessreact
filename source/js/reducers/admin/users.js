@@ -25,8 +25,11 @@ const initialState = Map({
     error: [],
     user: null,
     users: [],
+
+    filteredLoading: false,
     filteredUsers: [],
     filteredTotalPages: 0,
+    filteredError: [],
 });
 
 const actionMap = {
@@ -70,23 +73,22 @@ const actionMap = {
     },
     [USERS_FILTER_REQUEST]: (state, action) => {
         return state.merge(Map({
-            loading: true,
-            error: [],
-            users: [],
-            user: null,
+            filteredLoading: true,
             filteredUsers: [],
             filteredTotalPages: 0,
+            filteredError: [],
         }));
     },
     [USERS_FILTER_SUCCESS]: (state, action) => {
-        return state.merge(Map({
-            loading: false,
-            error: [],
-            users: [],
-            user: null,
-            filteredUsers: action.data.filtered_users,
-            filteredTotalPages: action.data.filtered_total_pages,
-        }));
+        let newState = { filteredLoading: false };
+        if (action.data && action.data.status && action.data.status === 1) {
+            newState.filteredUsers = action.data.filtered_users;
+            newState.filteredTotalPages = action.data.filtered_total_pages;
+        } else {
+            let msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
+            newState.filteredError = [msg];
+        }
+        return state.merge(Map(newState));
     },
     [USERS_FILTER_ERROR]: (state, action) => {
         let error = [];
@@ -95,15 +97,11 @@ const actionMap = {
         } else if (action.error && action.error.message) {
             error = [action.error.message];
         } else {
-            error = ['Something went wrong! please try again later'];
+            error = ['Something went wrong! please try again later.'];
         }
         return state.merge(Map({
-            loading: false,
-            error: error,
-            users: [],
-            user: null,
-            filteredUsers: [],
-            filteredTotalPages: 0,
+            filteredLoading: false,
+            filteredError: error
         }));
     },
     [USERS_SELECT_ONE_REQUEST]: (state, action) => {

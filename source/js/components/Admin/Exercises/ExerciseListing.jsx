@@ -346,7 +346,7 @@ class ExerciseListing extends Component {
                                         filterable
                                         defaultPageSize={10}
                                         className="-striped -highlight"
-                                        showPaginationTop={true}
+                                        showPaginationTop={false}
                                         showPaginationBottom={true}
                                         minRows={5}
                                         defaultSorted={[

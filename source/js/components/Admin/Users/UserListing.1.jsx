@@ -1,13 +1,24 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { generateDTTableFilterObj, capitalizeFirstLetter } from '../../../helpers/funs';
-import { userFilterRequest } from '../../../actions/admin/users';
-import { Link } from "react-router-dom";
-import { FaPencil } from 'react-icons/lib/fa';
-import ReactTable from "react-table";
-import { GENDER_MALE, GENDER_FEMALE, USER_STATUS_ACTIVE_STR, USER_STATUS_INACTIVE_STR, USER_STATUS_ACTIVE, USER_STATUS_INACTIVE } from '../../../constants/consts';
-import moment from "moment";
+import { NavLink } from 'react-router-dom';
+import { FaPencil, FaTrash } from 'react-icons/lib/fa';
+import DTable from '../Common/DTable';
+import { userFilterRequest, userDeleteRequest } from '../../../actions/admin/users';
+import {
+    GENDER_MALE,
+    GENDER_FEMALE,
+    USER_STATUS_ACTIVE,
+    USER_STATUS_ACTIVE_STR,
+    USER_STATUS_INACTIVE,
+    USER_STATUS_INACTIVE_STR
+} from '../../../constants/consts';
+import { capitalizeFirstLetter, ts } from '../../../helpers/funs';
 import { adminRouteCodes } from '../../../constants/adminRoutes';
+import DeleteConfirmation from '../Common/DeleteConfirmation';
+import { showPageLoader } from '../../../actions/pageLoader';
+import moment from 'moment';
+import noProfileImg from 'img/common/no-profile-img.png';
+import { DropdownButton, ButtonToolbar, MenuItem } from "react-bootstrap";
 
 const genderOptions = [
     { value: '', label: 'All' },
@@ -30,15 +41,27 @@ class UserListing extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            dtData: [],
-            dtPages: 0,
-            dtLoading: false,
-            dtFilterData: null,
-        };
+            selectedId: null,
+            showDeleteModal: false,
+            deleteActionInit: false,
+            dtFilter: {},
+            dtManualForceReload: false,
+        }
+    }
+
+    dispatchUsersFilter = (filterData) => {
+        const { dispatch } = this.props;
+        dispatch(userFilterRequest(filterData));
+    }
+
+    filterDTable = (filterData) => {
+        this.setState({ dtFilter: filterData });
+        this.dispatchUsersFilter(filterData);
     }
 
     render() {
-        const { dtData, dtPages, dtLoading } = this.state;
+        const { loading, filteredUsers, filteredTotalPages } = this.props;
+        const { showDeleteModal, dtManualForceReload } = this.state;
         return (
             <div className="user-listing-wrapper">
                 <div className="body-content row d-flex">
@@ -49,16 +72,13 @@ class UserListing extends Component {
                             </div>
                             <div className="row d-flex whitebox-body">
                                 <div className="col-md-12">
-                                    <ReactTable
-                                        manual
-                                        data={dtData}
-                                        noDataText={"No records found..."}
+                                    <DTable
+                                        data={filteredUsers}
                                         columns={[
                                             {
                                                 id: 'avatar',
                                                 Header: 'Profile Image',
                                                 accessor: 'avatar',
-                                                maxWidth: 100,
                                                 filterable: false,
                                                 sortable: false,
                                                 Cell: (row) => {
@@ -80,32 +100,30 @@ class UserListing extends Component {
                                                 id: 'firstName',
                                                 Header: 'First Name',
                                                 accessor: 'firstName',
-                                                minWidth: 170,
+                                                minWidth: 200,
                                             },
                                             {
                                                 id: 'lastName',
                                                 Header: 'Last Name',
                                                 accessor: 'lastName',
-                                                minWidth: 170,
+                                                minWidth: 200,
                                             },
                                             {
                                                 id: 'email',
                                                 Header: 'Email',
                                                 accessor: 'email',
-                                                minWidth: 250,
+                                                minWidth: 300,
                                             },
                                             {
                                                 id: 'mobileNumber',
                                                 Header: 'Mobile No.',
                                                 accessor: 'mobileNumber',
-                                                minWidth: 120,
-                                                maxWidth: 150,
+                                                minWidth: 100,
                                             },
                                             {
                                                 id: 'gender',
                                                 Header: 'Gender',
                                                 accessor: 'gender',
-                                                maxWidth: 120,
                                                 filterEqual: true,
                                                 Cell: (row) => {
                                                     let dataObj = _.find(genderOptions, (o) => {
@@ -136,10 +154,26 @@ class UserListing extends Component {
                                                 }
                                             },
                                             {
+                                                id: 'dateOfBirth',
+                                                Header: 'DOB',
+                                                accessor: 'dateOfBirth',
+                                                filterable: false,
+                                                sortable: false,
+                                                Cell: (row) => {
+                                                    return (
+                                                        <div className="list-dob-wrapper">
+                                                            <span>
+                                                                {row.value && moment(row.value).format('MM/DD/YYYY')}
+                                                            </span>
+                                                        </div>
+                                                    );
+                                                },
+                                                minWidth: 100,
+                                            },
+                                            {
                                                 id: 'status',
                                                 Header: 'Status',
                                                 accessor: 'status',
-                                                maxWidth: 100,
                                                 filterDigit: true,
                                                 Cell: (row) => {
                                                     let dataObj = _.find(userStatusOptions, (o) => {
@@ -171,83 +205,153 @@ class UserListing extends Component {
                                                 minWidth: 100,
                                             },
                                             {
-                                                id: "authUserId",
+                                                id: 'isDelete',
+                                                Header: 'Deleted',
+                                                accessor: 'isDelete',
+                                                filterEqual: true,
+                                                convertBoolean: true,
+                                                Cell: (row) => {
+                                                    let dataObj = _.find(deletedOptions, (o) => {
+                                                        return (o.value === row.value);
+                                                    });
+                                                    return (
+                                                        <div className="list-status-wrapper">
+                                                            {dataObj &&
+                                                                <span>{dataObj.label}</span>
+                                                            }
+                                                        </div>
+                                                    );
+                                                },
+                                                Filter: ({ filter, onChange }) => {
+                                                    return (
+                                                        <select
+                                                            onChange={event => onChange(event.target.value)}
+                                                            className="width-100-per"
+                                                            value={filter ? filter.value : "all"}
+                                                        >
+                                                            {deletedOptions && deletedOptions.length > 0 &&
+                                                                deletedOptions.map((obj, index) => (
+                                                                    <option key={index} value={obj.value}>{obj.label}</option>
+                                                                ))
+                                                            }
+                                                        </select>
+                                                    );
+                                                },
+                                                minWidth: 100,
+                                            },
+                                            {
                                                 Header: "Actions",
                                                 accessor: "authUserId",
+                                                id: "authUserId",
                                                 filterable: false,
                                                 sortable: false,
-                                                maxWidth: 70,
                                                 Cell: (row) => {
                                                     return (
                                                         <div className="actions-wrapper">
-                                                            <Link to={`${adminRouteCodes.USERS_SAVE}/${row.value}`} className="dt-act-btn dt-act-btn-edit">
-                                                                <FaPencil />
-                                                            </Link>
+                                                            <ButtonToolbar>
+                                                                <DropdownButton title="Actions" pullRight id="dropdown-size-medium">
+                                                                    <MenuItem
+                                                                        eventKey="1"
+                                                                        href={`${adminRouteCodes.USERS_SAVE}/${row.value}`}
+                                                                        onClick={(e) => {
+                                                                            e.preventDefault();
+                                                                            this.props.history.push(`${adminRouteCodes.USERS_SAVE}/${row.value}`);
+                                                                        }}
+                                                                    >
+                                                                        <FaPencil className="v-align-sub" /> Edit
+                                                                    </MenuItem>
+                                                                    <MenuItem
+                                                                        eventKey="2"
+                                                                        href="javascript:void(0)"
+                                                                        onClick={() => this.confirmDelete(row.value)}
+                                                                    >
+                                                                        <FaTrash className="v-align-sub" /> Delete
+                                                                    </MenuItem>
+                                                                </DropdownButton>
+                                                            </ButtonToolbar>
                                                         </div>
                                                     );
                                                 }
                                             },
                                         ]}
-                                        pages={dtPages}
-                                        loading={dtLoading}
-                                        onFetchData={this.fetchData}
-                                        filterable
-                                        defaultPageSize={10}
-                                        className="-striped -highlight"
-                                        showPaginationTop={false}
-                                        showPaginationBottom={true}
+                                        pages={filteredTotalPages}
+                                        serverloading={loading}
+                                        filterDTable={this.filterDTable}
+                                        manualReload={dtManualForceReload}
                                         minRows={5}
-                                        defaultSorted={[
-                                            {
-                                                id: "createdAt",
-                                                desc: true
-                                            }
-                                        ]}
                                     />
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                <DeleteConfirmation
+                    show={showDeleteModal}
+                    handleClose={this.closeDeleteModal}
+                    handleYes={this.handleDelete}
+                />
             </div>
         );
     }
 
-    componentDidUpdate(prevProps, prevState) {
-        const { dtLoading } = this.state;
-        const { filteredLoading, filteredUsers, filteredTotalPages } = this.props;
-        if (dtLoading && !filteredLoading) {
-            this.setState({ dtLoading: filteredLoading, dtData: filteredUsers, dtPages: filteredTotalPages });
+    componentDidUpdate() {
+        const { loading, history } = this.props;
+        const { deleteActionInit, dtFilter, dtManualForceReload } = this.state;
+        if (deleteActionInit && !loading) {
+            this.setState({
+                selectedId: null,
+                showDeleteModal: false,
+                deleteActionInit: false,
+                // dtManualForceReload: false,
+            });
+            ts('User deleted successfully');
+            this.dispatchUsersFilter(dtFilter);
+            // history.push(adminRouteCodes.USERS);
+        }
+        if (dtManualForceReload && !loading) {
+            this.setState({
+                dtManualForceReload: false,
+            });
         }
     }
 
-    //#region functions to fetch data for datatable
-    fetchData = (state, instance) => {
-        const { dispatch } = this.props;
-        let filterData = generateDTTableFilterObj(state, instance);
-        this.setState({ dtLoading: true, dtFilterData: filterData });
-        dispatch(userFilterRequest(filterData));
+    // ----Start funs -----
+    confirmDelete = (_id) => {
+        this.setState({
+            selectedId: _id,
+            showDeleteModal: true
+        });
     }
 
-    refreshDtData = () => {
-        const { dispatch } = this.props;
-        const { dtFilterData } = this.state;
-        this.setState({ dtLoading: true });
-        dispatch(userFilterRequest(dtFilterData));
+    closeDeleteModal = () => {
+        this.setState({
+            selectedId: null,
+            showDeleteModal: false
+        });
     }
-    //#endregion
+
+    handleDelete = () => {
+        const { selectedId } = this.state;
+        const { dispatch } = this.props;
+        dispatch(showPageLoader());
+        this.setState({
+            deleteActionInit: true,
+            dtManualForceReload: true,
+        });
+        dispatch(userDeleteRequest(selectedId));
+    }
+    // ----END funs -----
+
 }
 
 const mapStateToProps = (state) => {
     const { adminUsers } = state;
     return {
-        filteredLoading: adminUsers.get('filteredLoading'),
+        loading: adminUsers.get('loading'),
+        error: adminUsers.get('error'),
         filteredUsers: adminUsers.get('filteredUsers'),
         filteredTotalPages: adminUsers.get('filteredTotalPages'),
-        filteredError: adminUsers.get('filteredError'),
-    };
+    }
 }
 
-export default connect(
-    mapStateToProps,
-)(UserListing);
+export default connect(mapStateToProps)(UserListing);
