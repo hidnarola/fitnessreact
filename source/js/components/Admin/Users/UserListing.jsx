@@ -41,7 +41,7 @@ class UserListing extends Component {
         const { dtData, dtPages, dtLoading } = this.state;
         return (
             <div className="user-listing-wrapper">
-                <div className="body-content row d-flex">
+                <div className="body-content row d-flex my-panel-body">
                     <div className="col-md-12">
                         <div className="white-box">
                             <div className="whitebox-head">
