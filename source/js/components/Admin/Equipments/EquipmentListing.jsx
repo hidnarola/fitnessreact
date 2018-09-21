@@ -8,7 +8,6 @@ import { SERVER_BASE_URL } from '../../../constants/consts';
 import noImg from 'img/common/no-img.png';
 import moment from "moment";
 import _ from "lodash";
-import { DropdownButton, ButtonToolbar, MenuItem } from "react-bootstrap";
 import { generateDTTableFilterObj } from '../../../helpers/funs';
 import { equipmentCategoryListRequest } from '../../../actions/admin/equipmentCategories';
 import { filterEquipmentsRequest, equipmentDeleteRequest, equipmentRecoverRequest } from '../../../actions/admin/equipments';

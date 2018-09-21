@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { exerciseDeleteRequest, exerciseFilterRequest, setExerciseState, exerciseRecoverRequest } from '../../../actions/admin/exercises';
 import dateFormat from 'dateformat';
 import { adminRouteCodes } from '../../../constants/adminRoutes';
@@ -9,7 +9,6 @@ import ReactTable from 'react-table';
 import { bodyPartListRequest } from '../../../actions/admin/bodyParts';
 import _ from 'lodash';
 import { EXERCISE_DIFFICULTY_BEGINNER, EXERCISE_DIFFICULTY_INTERMEDIATE, EXERCISE_DIFFICULTY_EXPERT, exerciseDifficultyLevelObj, EXE_CATS, EXE_SCATS } from '../../../constants/consts';
-import { DropdownButton, ButtonToolbar, MenuItem } from "react-bootstrap";
 import SweetAlert from "react-bootstrap-sweetalert";
 import { generateDTTableFilterObj, ts, te } from '../../../helpers/funs';
 
@@ -59,20 +58,15 @@ class ExerciseListing extends Component {
         const { dtData, dtPages, dtLoading, showDeleteModal, showRecoverModal } = this.state;
         return (
             <div className="exercise-listing-wrapper">
-                <div className="body-head space-btm-45 d-flex justify-content-start">
-                    <div className="body-head-l">
-                        <h2>Exercises</h2>
-                    </div>
-                    <div className="body-head-r">
-                        <NavLink to={adminRouteCodes.EXERCISE_SAVE} className="pink-btn"><i className="icon-add_circle"></i>Add Exercise</NavLink>
-                    </div>
-                </div>
-
-                <div className="body-content row d-flex">
+                <div className="body-content row d-flex my-panel-body">
                     <div className="col-md-12">
                         <div className="white-box">
                             <div className="whitebox-head">
                                 <h3 className="title-h3">Exercises List</h3>
+                                <Link to={adminRouteCodes.EXERCISE_SAVE} className="add-new-btn">
+                                    <span>Add Exercise</span>
+                                    <i className="icon-add_circle"></i>
+                                </Link>
                             </div>
                             <div className="row d-flex whitebox-body">
                                 <div className="col-md-12">
@@ -319,39 +313,28 @@ class ExerciseListing extends Component {
                                                 },
                                             },
                                             {
+                                                id: "_id",
                                                 Header: "Actions",
                                                 accessor: "_id",
-                                                id: "_id",
                                                 filterable: false,
                                                 sortable: false,
-                                                maxWidth: 100,
+                                                maxWidth: 70,
                                                 Cell: (row) => {
                                                     return (
                                                         <div className="actions-wrapper">
-                                                            <ButtonToolbar>
-                                                                <DropdownButton title="Actions" pullRight id="dropdown-size-medium">
-                                                                    <MenuItem
-                                                                        eventKey="1"
-                                                                        href={`${adminRouteCodes.EXERCISE_SAVE}/${row.value}`}
-                                                                        onClick={(e) => {
-                                                                            e.preventDefault();
-                                                                            this.props.history.push(`${adminRouteCodes.EXERCISE_SAVE}/${row.value}`);
-                                                                        }}
-                                                                    >
-                                                                        <FaPencil className="v-align-sub" /> Edit
-                                                                    </MenuItem>
-                                                                    {row && row.original && (typeof row.original.isDeleted === 'undefined' || row.original.isDeleted === 0) &&
-                                                                        <MenuItem eventKey="2" href="javascript:void(0)" onClick={() => this.confirmDelete(row.value)} >
-                                                                            <FaTrash className="v-align-sub" /> Delete
-                                                                        </MenuItem>
-                                                                    }
-                                                                    {row && row.original && typeof row.original.isDeleted !== 'undefined' && row.original.isDeleted === 1 &&
-                                                                        <MenuItem eventKey="3" href="javascript:void(0)" onClick={() => this.openRecoverModal(row.value)}>
-                                                                            <FaRotateLeft className="v-align-sub" /> Recover
-                                                                        </MenuItem>
-                                                                    }
-                                                                </DropdownButton>
-                                                            </ButtonToolbar>
+                                                            <Link to={`${adminRouteCodes.EXERCISE_SAVE}/${row.value}`} className="dt-act-btn dt-act-btn-edit">
+                                                                <FaPencil />
+                                                            </Link>
+                                                            {row && row.original && (typeof row.original.isDeleted === 'undefined' || row.original.isDeleted === 0) &&
+                                                                <button className="dt-act-btn dt-act-btn-delete" onClick={() => this.confirmDelete(row.value)}>
+                                                                    <FaTrash />
+                                                                </button>
+                                                            }
+                                                            {row && row.original && typeof row.original.isDeleted !== 'undefined' && row.original.isDeleted === 1 &&
+                                                                <button className="dt-act-btn dt-act-btn-restore" onClick={() => this.openRecoverModal(row.value)}>
+                                                                    <FaRotateLeft />
+                                                                </button>
+                                                            }
                                                         </div>
                                                     );
                                                 }
