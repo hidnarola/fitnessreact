@@ -57,6 +57,7 @@ class UserForm extends Component {
         this.state = {
             dob: null,
             gender: GENDER_MALE,
+            initSelectPageData: false,
             existingProfilePics: [],
             aboutMe: '',
         }
@@ -64,7 +65,8 @@ class UserForm extends Component {
 
     componentDidMount() {
         const { dispatch, match } = this.props;
-        if (match && match.params && match.params.id) {
+        if (typeof match.params.id !== 'undefined') {
+            this.setState({ initSelectPageData: true });
             dispatch(showPageLoader());
             dispatch(userSelectOneRequest(match.params.id));
         }
@@ -203,25 +205,34 @@ class UserForm extends Component {
         );
     }
 
-    componentDidUpdate(prevProps, prevState) {
-        const { selectLoading, selectUser, selectError, initialize } = this.props;
-        if (!selectLoading && prevProps.selectLoading !== selectLoading) {
+    componentDidUpdate() {
+        const { initSelectPageData } = this.state;
+        const { loading, user, initialize } = this.props;
+        if (initSelectPageData && !loading) {
+            let goals = _.map(user.goal, (id) => {
+                return _.find(goalOptions, (o) => {
+                    return (o.value === id);
+                })
+            });
             let dob = null;
-            if (selectUser.dateOfBirth) {
-                dob = moment(selectUser.dateOfBirth);
+            if (user.dateOfBirth) {
+                dob = moment(user.dateOfBirth);
             }
             const userData = {
-                first_name: selectUser.firstName,
-                last_name: selectUser.lastName,
-                mobile_no: selectUser.mobileNumber,
-                gender: selectUser.gender,
+                first_name: user.firstName,
+                last_name: user.lastName,
+                username: user.username,
+                email: user.email,
+                mobile_no: user.mobileNumber,
+                gender: user.gender,
                 dob: dob,
-                goal: selectUser.goal.name,
-                about_me: selectUser.aboutMe,
+                goal: goals,
+                about_me: user.aboutMe,
                 status: _.find(userStatusOptions, (o) => { return (o.value === user.status) }),
             }
             initialize(userData);
             this.setState({
+                initSelectPageData: false,
                 dob: dob,
                 gender: user.gender,
                 existingProfilePics: [user.avatar],
@@ -256,9 +267,9 @@ UserForm = reduxForm({
 const mapStateToProps = (state) => {
     const { adminUsers } = state;
     return {
-        selectLoading: adminUsers.get('selectLoading'),
-        selectUser: adminUsers.get('selectUser'),
-        selectError: adminUsers.get('selectError'),
+        loading: adminUsers.get('loading'),
+        error: adminUsers.get('error'),
+        user: adminUsers.get('user'),
     };
 }
 
