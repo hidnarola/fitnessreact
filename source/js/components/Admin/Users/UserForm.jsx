@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
-import { NavLink, withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import Dropzone from 'react-dropzone';
 import noImg from 'img/common/no-img.png'
 import moment from 'moment';
@@ -18,7 +18,10 @@ import {
     requiredReactSelectMulti,
     required,
     email,
-    requiredReactSelectStatus
+    requiredReactSelectStatus,
+    minLength,
+    maxLength,
+    mobile
 } from '../../../formValidation/validationRules';
 import { adminRouteCodes } from '../../../constants/adminRoutes';
 import { capitalizeFirstLetter } from '../../../helpers/funs';
@@ -34,9 +37,14 @@ import {
     USER_STATUS_INACTIVE_STR,
     GENDER_MALE,
     GENDER_FEMALE,
+    WORKOUT_LOCATION_GYM,
+    WORKOUT_LOCATION_HOME,
 } from '../../../constants/consts';
 import { userSelectOneRequest } from '../../../actions/admin/users';
-import { showPageLoader } from '../../../actions/pageLoader';
+import { showPageLoader, hidePageLoader } from '../../../actions/pageLoader';
+
+const minLength2 = minLength(2);
+const maxLength20 = maxLength(20);
 
 const goalOptions = [
     { value: GOAL_GAIN_MUSCLE, label: capitalizeFirstLetter(GOAL_GAIN_MUSCLE).replace('_', ' ') },
@@ -77,7 +85,7 @@ class UserForm extends Component {
             <div className="exercise-form-data">
                 <form onSubmit={handleSubmit}>
                     <div className="row">
-                        <div className="col-md-12">
+                        <div className="col-md-4">
                             <Field
                                 name="first_name"
                                 className="form-control"
@@ -87,8 +95,10 @@ class UserForm extends Component {
                                 placeholder="First Name"
                                 component={InputField}
                                 errorClass="help-block"
-                                validate={[required]}
+                                validate={[required, minLength2, maxLength20]}
                             />
+                        </div>
+                        <div className="col-md-4">
                             <Field
                                 name="last_name"
                                 className="form-control"
@@ -97,19 +107,11 @@ class UserForm extends Component {
                                 wrapperClass="form-group"
                                 placeholder="Last Name"
                                 component={InputField}
-                            />
-                            <Field
-                                name="email"
-                                type="email"
-                                className="form-control"
-                                label="Email"
-                                labelClass="control-label"
-                                wrapperClass="form-group"
-                                placeholder="Email"
-                                component={InputField}
                                 errorClass="help-block"
-                                validate={[required, email]}
+                                validate={[minLength2, maxLength20]}
                             />
+                        </div>
+                        <div className="col-md-4">
                             <Field
                                 name="mobile_no"
                                 className="form-control"
@@ -118,24 +120,15 @@ class UserForm extends Component {
                                 wrapperClass="form-group"
                                 placeholder="Mobile No."
                                 component={InputField}
-                            />
-                            <Field
-                                name="gender"
-                                className=""
-                                label="Gender"
-                                labelClass="control-label"
-                                wrapperClass="form-group"
-                                component={RadioFields}
-                                radioList={[
-                                    { label: capitalizeFirstLetter(GENDER_MALE), value: GENDER_MALE },
-                                    { label: capitalizeFirstLetter(GENDER_FEMALE), value: GENDER_FEMALE },
-                                ]}
-                                checked={this.state.gender}
-                                handleChange={this.genderChange}
                                 errorClass="help-block"
-                                validate={[required]}
+                                validate={[mobile]}
                             />
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-md-4">
                             <Field
+                                id="dob"
                                 name="dob"
                                 className="form-control"
                                 label="Date Of Birth"
@@ -143,42 +136,94 @@ class UserForm extends Component {
                                 wrapperClass="form-group"
                                 placeholder="Date Of Birth"
                                 component={DateField}
+                                maxDate={moment().subtract(18, 'year')}
+                                isClearable={true}
                                 selectedDate={this.state.dob}
                                 handleChange={this.handleChangeDob}
-                                dateFormat="MM/DD/YYYY"
+                                dateFormat="DD/MM/YYYY"
                                 errorClass="help-block"
+                                autoComplete="off"
                             />
+                        </div>
+                        <div className="col-md-4">
+                            <Field
+                                name="height"
+                                className="form-control"
+                                label="Height"
+                                labelClass="control-label"
+                                wrapperClass="form-group"
+                                placeholder="Height"
+                                component={InputField}
+                                type="number"
+                            />
+                        </div>
+                        <div className="col-md-4">
+                            <Field
+                                name="weight"
+                                className="form-control"
+                                label="Weight"
+                                labelClass="control-label"
+                                wrapperClass="form-group"
+                                placeholder="Weight"
+                                component={InputField}
+                                type="number"
+                            />
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-md-2">
+                            <div className="form-group">
+                                <label for="gender" className="control-label display_block">Gender</label>
+                                <Field
+                                    id={GENDER_MALE}
+                                    name="gender"
+                                    component="input"
+                                    type="radio"
+                                    value={GENDER_MALE}
+                                />
+                                <span className="rbtn">Male</span>
+                                <Field
+                                    id={GENDER_FEMALE}
+                                    name="gender"
+                                    component="input"
+                                    type="radio"
+                                    value={GENDER_FEMALE}
+                                />
+                                <span className="rbtn">Female</span>
+                            </div>
+                        </div>
+                        <div className="col-md-2">
+                            <div className="form-group">
+                                <label for="workout_location" className="control-label display_block">Workout Location</label>
+                                <Field
+                                    id={WORKOUT_LOCATION_HOME}
+                                    name="workout_location"
+                                    component="input"
+                                    type="radio"
+                                    value={WORKOUT_LOCATION_HOME}
+                                />
+                                <span className="rbtn">Home</span>
+                                <Field
+                                    id={WORKOUT_LOCATION_GYM}
+                                    name="workout_location"
+                                    component="input"
+                                    type="radio"
+                                    value={WORKOUT_LOCATION_GYM}
+                                />
+                                <span className="rbtn">Gym</span>
+                            </div>
+                        </div>
+                        <div className="col-md-4">
                             <Field
                                 name="goal"
-                                label="Goals"
+                                label="Goal"
                                 labelClass="control-label"
                                 wrapperClass="form-group"
-                                placeholder="Goals"
-                                component={SelectField_ReactSelectMulti}
+                                component={SelectField_ReactSelect}
                                 options={goalOptions}
                             />
-                            <Field
-                                name="user_img"
-                                label="Profile Image"
-                                labelClass="control-label display_block"
-                                mainWrapperClass="image-form-main-wrapper"
-                                wrapperClass="form-group"
-                                placeholder="Profile Image"
-                                component={UserProfileImageField}
-                                multiple={false}
-                                existingImages={existingProfilePics}
-                            />
-                            <Field
-                                name="about_me"
-                                value={aboutMe}
-                                handleChange={this.handleChangeTextEditor}
-                                className="editor-min-height-200"
-                                label="About Me"
-                                labelClass="control-label"
-                                wrapperClass="form-group"
-                                placeholder="About Me"
-                                component={EditorField}
-                            />
+                        </div>
+                        <div className="col-md-4">
                             <Field
                                 name="status"
                                 label="Status"
@@ -190,22 +235,56 @@ class UserForm extends Component {
                                 validate={[requiredReactSelectStatus]}
                                 errorClass="help-block"
                             />
-                            <div className="col-md-12 mb-20 clear-both text-center">
-                                <div className="stepbox-b stepbox-b-center">
-                                    <NavLink to={adminRouteCodes.USERS} className="continues-btn">Back</NavLink>
-                                    <button type="submit" className="continues-btn"><span>Save</span></button>
-                                </div>
-                            </div>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-md-6">
+                            <Field
+                                name="about_me"
+                                value={aboutMe}
+                                handleChange={this.handleChangeTextEditor}
+                                className="editor-min-height-200"
+                                label="About Me"
+                                labelClass="control-label"
+                                wrapperClass="form-group"
+                                placeholder="About Me"
+                                component={EditorField}
+                            />
+                        </div>
+                        <div className="col-md-6">
+                            <Field
+                                name="user_img"
+                                label="Profile Image"
+                                labelClass="control-label display_block"
+                                mainWrapperClass="image-form-main-wrapper"
+                                wrapperClass="form-group"
+                                placeholder="Profile Image"
+                                component={UserProfileImageField}
+                                multiple={false}
+                                existingImages={existingProfilePics}
+                            />
+                        </div>
+                    </div>
+                    <div className="d-flex pull-right mt-10">
+                        <div className="col-md-12">
+                            <Link to={adminRouteCodes.USERS} className="custom-medium-link-btn">
+                                <span>Back</span>
+                                <i className="icon-arrow_back"></i>
+                            </Link>
+                            <button type="submit" className="custom-medium-btn">
+                                <span>Save</span>
+                                <i className="icon-save"></i>
+                            </button>
                         </div>
                     </div>
                 </form>
-            </div>
+            </div >
         );
     }
 
     componentDidUpdate(prevProps, prevState) {
-        const { selectLoading, selectUser, selectError, initialize } = this.props;
-        if (!selectLoading && prevProps.selectLoading !== selectLoading) {
+        const { selectLoading, selectUser, selectError, initialize, dispatch } = this.props;
+        if (!selectLoading && prevProps.selectLoading !== selectLoading && selectUser && prevProps.selectUser !== selectUser) {
             let dob = null;
             if (selectUser.dateOfBirth) {
                 dob = moment(selectUser.dateOfBirth);
@@ -214,19 +293,23 @@ class UserForm extends Component {
                 first_name: selectUser.firstName,
                 last_name: selectUser.lastName,
                 mobile_no: selectUser.mobileNumber,
-                gender: selectUser.gender,
                 dob: dob,
+                height: selectUser.height,
+                weight: selectUser.weight,
+                gender: selectUser.gender,
+                workout_location: selectUser.workoutLocation,
                 goal: selectUser.goal.name,
+                status: _.find(userStatusOptions, (o) => { return (o.value === selectUser.status) }),
                 about_me: selectUser.aboutMe,
-                status: _.find(userStatusOptions, (o) => { return (o.value === user.status) }),
             }
             initialize(userData);
             this.setState({
                 dob: dob,
-                gender: user.gender,
-                existingProfilePics: [user.avatar],
-                aboutMe: user.aboutMe,
+                gender: selectUser.gender,
+                existingProfilePics: [selectUser.avatar],
+                aboutMe: selectUser.aboutMe,
             });
+            dispatch(hidePageLoader());
         }
     }
 

@@ -2293,3 +2293,7 @@ form.form_search button i { float: none; line-height: 36px; }
 .offline{
     background: #ccc;
 }
+
+.exercise-form-data input[type=radio],
+.exercise-form-data input[type=checkbox] {display: inline-block;margin-right: 5px;vertical-align: sub;}
+.exercise-form-data span.rbtn {margin-right: 20px;}
