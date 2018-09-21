@@ -25,10 +25,10 @@ if (window.location.port) {
 baseUrl += '/';
 
 export const BASE_URL = baseUrl;
-export const SERVER_BASE_URL = 'http://' + window.location.hostname + ':3300/';
+// export const SERVER_BASE_URL = 'http://' + window.location.hostname + ':3300/';
 
 // amit's system url of api
-// export const SERVER_BASE_URL = 'http://192.168.100.19:3300/';
+export const SERVER_BASE_URL = 'http://192.168.100.19:3300/';
 
 export const EXERCISE_MECHANICS_COMPOUND = 'compound';
 export const EXERCISE_MECHANICS_ISOLATION = 'isolation';

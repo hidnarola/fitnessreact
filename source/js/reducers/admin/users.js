@@ -1,5 +1,4 @@
 import { Map } from "immutable";
-import _ from "lodash";
 import {
     USERS_LIST_REQUEST,
     USERS_LIST_SUCCESS,
@@ -22,9 +21,20 @@ import { generateValidationErrorMsgArr } from "../../helpers/funs";
 
 const initialState = Map({
     loading: false,
-    error: [],
-    user: null,
     users: [],
+    error: [],
+
+    selectLoading: false,
+    selectUser: null,
+    selectError: [],
+
+    updateLoading: false,
+    updateUser: null,
+    updateError: [],
+
+    deleteLoading: false,
+    deleteUser: null,
+    deleteError: [],
 
     filteredLoading: false,
     filteredUsers: [],
@@ -36,22 +46,19 @@ const actionMap = {
     [USERS_LIST_REQUEST]: (state, action) => {
         return state.merge(Map({
             loading: true,
-            error: [],
             users: [],
-            user: null,
-            filteredUsers: [],
-            filteredTotalPages: 0,
+            error: [],
         }));
     },
     [USERS_LIST_SUCCESS]: (state, action) => {
-        return state.merge(Map({
-            loading: false,
-            error: [],
-            users: action.data.users,
-            user: null,
-            filteredUsers: [],
-            filteredTotalPages: 0,
-        }));
+        let newState = { loading: false };
+        if (action.data && action.data.status && action.data.status === 1) {
+            newState.users = action.data.users;
+        } else {
+            let msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
+            newState.error = [msg];
+        }
+        return state.merge(Map(newState));
     },
     [USERS_LIST_ERROR]: (state, action) => {
         let error = [];
@@ -65,10 +72,6 @@ const actionMap = {
         return state.merge(Map({
             loading: false,
             error: error,
-            users: [],
-            user: null,
-            filteredUsers: [],
-            filteredTotalPages: 0,
         }));
     },
     [USERS_FILTER_REQUEST]: (state, action) => {
@@ -106,23 +109,20 @@ const actionMap = {
     },
     [USERS_SELECT_ONE_REQUEST]: (state, action) => {
         return state.merge(Map({
-            loading: true,
-            error: [],
-            users: [],
-            user: null,
-            filteredUsers: [],
-            filteredTotalPages: 0,
+            selectLoading: true,
+            selectUser: null,
+            selectError: [],
         }));
     },
     [USERS_SELECT_ONE_SUCCESS]: (state, action) => {
-        return state.merge(Map({
-            loading: false,
-            error: [],
-            users: [],
-            user: action.data.user,
-            filteredUsers: [],
-            filteredTotalPages: 0,
-        }));
+        let newState = { selectLoading: false };
+        if (action.data && action.data.status && action.data.status === 1) {
+            newState.selectUser = action.data.user;
+        } else {
+            let msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
+            newState.selectError = [msg];
+        }
+        return state.merge(Map(newState));
     },
     [USERS_SELECT_ONE_ERROR]: (state, action) => {
         let error = [];
@@ -134,33 +134,26 @@ const actionMap = {
             error = ['Something went wrong! please try again later'];
         }
         return state.merge(Map({
-            loading: false,
-            error: error,
-            users: [],
-            user: null,
-            filteredUsers: [],
-            filteredTotalPages: 0,
+            selectLoading: false,
+            selectError: error,
         }));
     },
     [USERS_UPDATE_REQUEST]: (state, action) => {
         return state.merge(Map({
-            loading: true,
-            error: [],
-            users: [],
-            user: null,
-            filteredUsers: [],
-            filteredTotalPages: 0,
+            updateLoading: true,
+            updateUser: null,
+            updateError: [],
         }));
     },
     [USERS_UPDATE_SUCCESS]: (state, action) => {
-        return state.merge(Map({
-            loading: false,
-            error: [],
-            users: [],
-            user: action.data.user,
-            filteredUsers: [],
-            filteredTotalPages: 0,
-        }));
+        let newState = { updateLoading: false };
+        if (action.data && action.data.status && action.data.status === 1) {
+            newState.updateUser = action.data.user;
+        } else {
+            let msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
+            newState.updateError = [msg];
+        }
+        return state.merge(Map(newState));
     },
     [USERS_UPDATE_ERROR]: (state, action) => {
         let error = [];
@@ -172,33 +165,26 @@ const actionMap = {
             error = ['Something went wrong! please try again later'];
         }
         return state.merge(Map({
-            loading: false,
-            error: error,
-            users: [],
-            user: null,
-            filteredUsers: [],
-            filteredTotalPages: 0,
+            updateLoading: false,
+            updateError: error,
         }));
     },
     [USERS_DELETE_REQUEST]: (state, action) => {
         return state.merge(Map({
-            loading: true,
-            error: [],
-            users: [],
-            user: null,
-            filteredUsers: [],
-            filteredTotalPages: 0,
+            deleteLoading: true,
+            deleteUser: null,
+            deleteError: [],
         }));
     },
     [USERS_DELETE_SUCCESS]: (state, action) => {
-        return state.merge(Map({
-            loading: false,
-            error: [],
-            users: [],
-            user: null,
-            filteredUsers: [],
-            filteredTotalPages: 0,
-        }));
+        let newState = { deleteLoading: false };
+        if (action.data && action.data.status && action.data.status === 1) {
+            newState.deleteUser = action.data.user;
+        } else {
+            let msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
+            newState.deleteError = [msg];
+        }
+        return state.merge(Map(newState));
     },
     [USERS_DELETE_ERROR]: (state, action) => {
         let error = [];
@@ -210,12 +196,8 @@ const actionMap = {
             error = ['Something went wrong! please try again later'];
         }
         return state.merge(Map({
-            loading: false,
-            error: error,
-            users: [],
-            user: null,
-            filteredUsers: [],
-            filteredTotalPages: 0,
+            deleteLoading: false,
+            deleteError: error,
         }));
     },
 };

@@ -5,6 +5,7 @@ import {
     SET_LOGGED_USER_FROM_LOCALSTORAGE,
     OPEN_SOCKET,
     CLOSE_SOCKET,
+    SET_LOGGED_USER_STATE,
     RESET_LOGGED_USER_STATE
 } from "../actions/user";
 import {
@@ -62,8 +63,17 @@ const actionMap = {
     [CLOSE_SOCKET]: (state, action) => {
         return state.merge(Map({ socket: null }));
     },
+    [SET_LOGGED_USER_STATE]: (state, action) => {
+        return state.merge(Map(action.stateData));
+    },
     [RESET_LOGGED_USER_STATE]: (state, action) => {
-        return initialState;
+        let newState = {};
+        initialState.map((o, i) => {
+            if (i !== 'socket') {
+                newState[i] = o;
+            }
+        });
+        return state.merge(newState);
     }
 };
 

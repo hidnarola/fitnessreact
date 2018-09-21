@@ -9,7 +9,6 @@ function getUsers() {
         method: 'GET',
         headers: headers,
     }
-
     return fetchResource(requestUrl, options);
 }
 
@@ -19,7 +18,6 @@ function getUser(_id) {
         method: 'GET',
         headers: headers,
     }
-
     return fetchResource(requestUrl + '/' + _id, options);
 }
 
@@ -34,7 +32,6 @@ function deleteUser(_id) {
         method: 'DELETE',
         headers: headers,
     }
-
     return fetchResource((requestUrl + '/' + _id), options);
 }
 
