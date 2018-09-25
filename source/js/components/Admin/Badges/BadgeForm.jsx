@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
 import { reduxForm, Field, formValueSelector, initialize } from 'redux-form';
-import { InputField, EditorField, SelectField_ReactSelect } from '../../../helpers/FormControlHelper';
+import { InputField, SelectField_ReactSelect, TextAreaField } from '../../../helpers/FormControlHelper';
 import { required, requiredReactSelect, requiredReactSelectStatus, min, minLength, maxLength } from '../../../formValidation/validationRules';
 import { adminRouteCodes } from '../../../constants/adminRoutes';
 import {
@@ -39,8 +39,6 @@ class BadgeForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            incompleteDescription: '',
-            completeDescription: '',
             timeType: '',
             selectOneActionInit: false,
         }
@@ -77,7 +75,7 @@ class BadgeForm extends Component {
     }
 
     render() {
-        const { incompleteDescription, completeDescription, timeType } = this.state;
+        const {  timeType } = this.state;
         const { handleSubmit } = this.props;
         return (
             <div className="badge-form-data">
@@ -221,27 +219,23 @@ class BadgeForm extends Component {
                         <div className="col-md-6">
                             <Field
                                 name="incompleteDescription"
-                                value={incompleteDescription}
-                                handleChange={(editorText) => this.handleEditorChange('incompleteDescription', editorText)}
-                                className="editor-height-100"
+                                className="form-control resize-vertical min-height-80"
                                 label="Incomplete Description"
                                 labelClass="control-label display_block"
                                 wrapperClass="form-group"
                                 placeholder="Incomplete Description"
-                                component={EditorField}
+                                component={TextAreaField}
                             />
                         </div>
                         <div className="col-md-6">
-                            <Field
+                        <Field
                                 name="completeDescription"
-                                value={completeDescription}
-                                handleChange={(editorText) => this.handleEditorChange('completeDescription', editorText)}
-                                className="editor-height-100"
+                                className="form-control resize-vertical min-height-80"
                                 label="Complete Description"
                                 labelClass="control-label display_block"
                                 wrapperClass="form-group"
                                 placeholder="Complete Description"
-                                component={EditorField}
+                                component={TextAreaField}
                             />
                         </div>
                     </div>
@@ -315,20 +309,11 @@ class BadgeForm extends Component {
                 }
                 dispatch(initialize('badgeSaveForm', formData));
                 this.setState({
-                    incompleteDescription: badge.descriptionInCompleted,
-                    completeDescription: badge.descriptionCompleted,
                     timeType: timeTypeObj.value,
                 });
             }
         }
     }
-
-    // ----Start Methods----
-    handleEditorChange = (name, editorText) => {
-        this.props.change(name, editorText);
-        this.setState({ [name]: editorText });
-    }
-    // ----End Methods----
 }
 
 const badgeSaveFormSelector = formValueSelector('badgeSaveForm');
