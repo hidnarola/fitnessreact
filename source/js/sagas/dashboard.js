@@ -22,7 +22,8 @@ import api from "../api/dashboard";
 function getDashboardPageData() {
     return function* (action) {
         try {
-            const data = yield call(() => api.getDashboardPage());
+            let requestData = action.requestData;
+            const data = yield call(() => api.getDashboardPage(requestData));
             yield put(getDashboardPageSuccess(data));
         } catch (error) {
             yield put(getDashboardPageError(error));

@@ -57,7 +57,8 @@ class Dashboard extends Component {
         if (socket && token) {
             socket.emit('join', token);
         }
-        dispatch(getDashboardPageRequest());
+        let today = moment().startOf('day').utc();
+        dispatch(getDashboardPageRequest({ today }));
     }
 
     render() {

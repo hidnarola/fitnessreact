@@ -18,9 +18,10 @@ export const CHANGE_DASHBOARD_MUSCLE_INNER_DATA_REQUEST = 'CHANGE_DASHBOARD_MUSC
 export const CHANGE_DASHBOARD_MUSCLE_INNER_DATA_SUCCESS = 'CHANGE_DASHBOARD_MUSCLE_INNER_DATA_SUCCESS';
 export const CHANGE_DASHBOARD_MUSCLE_INNER_DATA_ERROR = 'CHANGE_DASHBOARD_MUSCLE_INNER_DATA_ERROR';
 
-export function getDashboardPageRequest() {
+export function getDashboardPageRequest(requestData) {
     return {
-        type: GET_DASHBOARD_PAGE_REQUEST
+        type: GET_DASHBOARD_PAGE_REQUEST,
+        requestData
     }
 }
 

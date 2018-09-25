@@ -5,13 +5,9 @@ import { WIDGETS_TYPE_DASHBOARD } from '../constants/consts';
 const requestUrl = 'user/dashboard';
 const requestUrlWidgets = 'user/widgets';
 
-function getDashboardPage() {
+function getDashboardPage(requestData) {
     let headers = extraUserHeaders();
-    var options = {
-        method: 'GET',
-        headers: headers,
-    }
-    return fetchResource(requestUrl, options);
+    return postFormData(requestUrl, requestData, headers);
 }
 
 function saveDashboardWidgetsData(requestData) {
