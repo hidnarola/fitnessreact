@@ -13,6 +13,7 @@ import { equipmentCategoryListRequest } from '../../../actions/admin/equipmentCa
 import { filterEquipmentsRequest, equipmentDeleteRequest, equipmentRecoverRequest } from '../../../actions/admin/equipments';
 import { FaPencil, FaTrash, FaRotateLeft } from 'react-icons/lib/fa'
 import { showPageLoader, hidePageLoader } from '../../../actions/pageLoader';
+import { Label } from "react-bootstrap";
 
 const statusOptions = [
     { value: '', label: 'All' },
@@ -150,7 +151,7 @@ class EquipmentListing extends Component {
                                                     return (
                                                         <div className="list-status-wrapper">
                                                             {dataObj &&
-                                                                <span>{dataObj.label}</span>
+                                                                <Label bsStyle={(dataObj.value === 1) ? 'success' : 'danger'}>{dataObj.label}</Label>
                                                             }
                                                         </div>
                                                     );
@@ -184,7 +185,7 @@ class EquipmentListing extends Component {
                                                     return (
                                                         <div className="list-status-wrapper">
                                                             {dataObj &&
-                                                                <span>{dataObj.label}</span>
+                                                                <Label bsStyle={(dataObj.value === 1) ? 'danger' : 'success'}>{dataObj.label}</Label>
                                                             }
                                                         </div>
                                                     );

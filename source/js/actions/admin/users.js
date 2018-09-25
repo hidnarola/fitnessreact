@@ -18,6 +18,17 @@ export const USERS_DELETE_REQUEST = 'USERS_DELETE_REQUEST';
 export const USERS_DELETE_SUCCESS = 'USERS_DELETE_SUCCESS';
 export const USERS_DELETE_ERROR = 'USERS_DELETE_ERROR';
 
+export const USERS_BLOCK_REQUEST = 'USERS_BLOCK_REQUEST';
+export const USERS_BLOCK_SUCCESS = 'USERS_BLOCK_SUCCESS';
+export const USERS_BLOCK_ERROR = 'USERS_BLOCK_ERROR';
+
+export const USERS_UNBLOCK_REQUEST = 'USERS_UNBLOCK_REQUEST';
+export const USERS_UNBLOCK_SUCCESS = 'USERS_UNBLOCK_SUCCESS';
+export const USERS_UNBLOCK_ERROR = 'USERS_UNBLOCK_ERROR';
+
+export const SET_USERS_STATE = 'SET_USERS_STATE';
+export const RESET_USERS_STATE = 'RESET_USERS_STATE';
+
 export function userListRequest() {
     return {
         type: USERS_LIST_REQUEST,
@@ -120,5 +131,60 @@ export function userDeleteError(error) {
     return {
         type: USERS_DELETE_ERROR,
         error
+    }
+}
+
+export function userBlockRequest(requestData) {
+    return {
+        type: USERS_BLOCK_REQUEST,
+        requestData
+    }
+}
+
+export function userBlockSuccess(data) {
+    return {
+        type: USERS_BLOCK_SUCCESS,
+        data
+    }
+}
+
+export function userBlockError(error) {
+    return {
+        type: USERS_BLOCK_ERROR,
+        error
+    }
+}
+
+export function userUnblockRequest(requestData) {
+    return {
+        type: USERS_UNBLOCK_REQUEST,
+        requestData
+    }
+}
+
+export function userUnblockSuccess(data) {
+    return {
+        type: USERS_UNBLOCK_SUCCESS,
+        data
+    }
+}
+
+export function userUnblockError(error) {
+    return {
+        type: USERS_UNBLOCK_ERROR,
+        error
+    }
+}
+
+export function setUserState(stateData) {
+    return {
+        type: SET_USERS_STATE,
+        stateData,
+    }
+}
+
+export function resetUserState() {
+    return {
+        type: RESET_USERS_STATE,
     }
 }

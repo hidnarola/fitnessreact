@@ -38,10 +38,16 @@ function deleteFitnessTest(_id) {
     return fetchResource((requestUrl + '/' + _id), options);
 }
 
+function recoverFitnessTest(_id) {
+    let headers = extraHeaders();
+    return putFormData(requestUrl + '/undo/' + _id, null, headers);
+}
+
 export default {
     getFitnessTest,
     filterFitnessTests,
     addFitnessTest,
     updateFitnessTest,
-    deleteFitnessTest
+    deleteFitnessTest,
+    recoverFitnessTest
 }

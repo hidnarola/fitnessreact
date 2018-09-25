@@ -18,7 +18,12 @@ export const FITNESS_TESTS_DELETE_REQUEST = 'FITNESS_TESTS_DELETE_REQUEST';
 export const FITNESS_TESTS_DELETE_SUCCESS = 'FITNESS_TESTS_DELETE_SUCCESS';
 export const FITNESS_TESTS_DELETE_ERROR = 'FITNESS_TESTS_DELETE_ERROR';
 
+export const FITNESS_TESTS_RECOVER_REQUEST = 'FITNESS_TESTS_RECOVER_REQUEST';
+export const FITNESS_TESTS_RECOVER_SUCCESS = 'FITNESS_TESTS_RECOVER_SUCCESS';
+export const FITNESS_TESTS_RECOVER_ERROR = 'FITNESS_TESTS_RECOVER_ERROR';
+
 export const FITNESS_TESTS_REINITIALIZE = 'FITNESS_TESTS_REINITIALIZE';
+export const SET_FITNESS_TESTS_STATE = 'SET_FITNESS_TESTS_STATE';
 
 export function fitnessTestsSelectOneRequest(_id) {
     return {
@@ -129,5 +134,33 @@ export function fitnessTestsDeleteError(error) {
 export function fitnessTestsReinitialize() {
     return {
         type: FITNESS_TESTS_REINITIALIZE
+    }
+}
+
+export function fitnessTestsRecoverRequest(_id) {
+    return {
+        type: FITNESS_TESTS_RECOVER_REQUEST,
+        _id
+    }
+}
+
+export function fitnessTestsRecoverSuccess(data) {
+    return {
+        type: FITNESS_TESTS_RECOVER_SUCCESS,
+        data
+    }
+}
+
+export function fitnessTestsRecoverError(error) {
+    return {
+        type: FITNESS_TESTS_RECOVER_ERROR,
+        error
+    }
+}
+
+export function setFitnessTestsState(stateData = {}) {
+    return {
+        type: SET_FITNESS_TESTS_STATE,
+        stateData
     }
 }

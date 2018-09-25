@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import ReactTable from "react-table";
 import moment from "moment";
 import { generateDTTableFilterObj, capitalizeFirstLetter, te, ts } from '../../../helpers/funs';
-import { fitnessTestsFilterRequest, fitnessTestsDeleteRequest, fitnessTestsReinitialize } from '../../../actions/admin/fitnessTests';
+import { fitnessTestsFilterRequest, fitnessTestsDeleteRequest, fitnessTestsReinitialize, fitnessTestsRecoverRequest, setFitnessTestsState } from '../../../actions/admin/fitnessTests';
 import {
     FITNESS_TEST_CAT_STRENGTH,
     FITNESS_TEST_CAT_FLEXIBILITY,
@@ -27,9 +27,10 @@ import {
     STATUS_INACTIVE_STR,
     STATUS_INACTIVE,
 } from '../../../constants/consts';
-import { FaPencil, FaTrash } from "react-icons/lib/fa";
+import { FaPencil, FaTrash, FaRotateLeft } from "react-icons/lib/fa";
 import { adminRouteCodes } from '../../../constants/adminRoutes';
 import SweetAlert from "react-bootstrap-sweetalert";
+import { Label } from "react-bootstrap";
 
 //#region basic consts
 const categoryOptions = [
@@ -80,6 +81,7 @@ class FitnessTestListing extends Component {
             showDeleteModal: false,
             deleteActionInit: false,
             selectedId: null,
+            showRecoverModal: false
         }
     }
 
@@ -89,6 +91,7 @@ class FitnessTestListing extends Component {
             dtPages,
             dtLoading,
             showDeleteModal,
+            showRecoverModal,
         } = this.state;
         return (
             <div className="exercise-listing-wrapper">
@@ -255,7 +258,7 @@ class FitnessTestListing extends Component {
                                                     return (
                                                         <div className="list-status-wrapper">
                                                             {dataObj &&
-                                                                <span>{dataObj.label}</span>
+                                                                <Label bsStyle={(dataObj.value === 1) ? 'success' : 'danger'}>{dataObj.label}</Label>
                                                             }
                                                         </div>
                                                     );
@@ -289,7 +292,7 @@ class FitnessTestListing extends Component {
                                                     return (
                                                         <div className="list-status-wrapper">
                                                             {dataObj &&
-                                                                <span>{dataObj.label}</span>
+                                                                <Label bsStyle={(dataObj.value === 1) ? 'danger' : 'success'}>{dataObj.label}</Label>
                                                             }
                                                         </div>
                                                     );
@@ -326,6 +329,11 @@ class FitnessTestListing extends Component {
                                                             {row && row.original && (typeof row.original.isDeleted === 'undefined' || row.original.isDeleted === 0) &&
                                                                 <button className="dt-act-btn dt-act-btn-delete" onClick={() => this.handleDeleteModal(true, row.value)}>
                                                                     <FaTrash />
+                                                                </button>
+                                                            }
+                                                            {row && row.original && typeof row.original.isDeleted !== 'undefined' && row.original.isDeleted === 1 &&
+                                                                <button className="dt-act-btn dt-act-btn-restore" onClick={() => this.openRecoverModal(row.value)}>
+                                                                    <FaRotateLeft />
                                                                 </button>
                                                             }
                                                         </div>
@@ -367,6 +375,20 @@ class FitnessTestListing extends Component {
                 >
                     Record will be deleted!
                 </SweetAlert>
+
+                <SweetAlert
+                    show={showRecoverModal}
+                    success
+                    showCancel
+                    confirmBtnText="Yes, recover it!"
+                    confirmBtnBsStyle="success"
+                    cancelBtnBsStyle="default"
+                    title="Are you sure?"
+                    onConfirm={this.handleRecover}
+                    onCancel={this.closeRecoverModal}
+                >
+                    Record will be recovered back!
+                </SweetAlert>
             </div>
         );
     }
@@ -383,6 +405,9 @@ class FitnessTestListing extends Component {
             filteredTotalPages,
             error,
             dispatch,
+            recoverLoading,
+            recoverFlag,
+            recoverError
         } = this.props;
         if (dtLoading && !filteredLoading) {
             this.setState({
@@ -400,6 +425,17 @@ class FitnessTestListing extends Component {
             }
             this.setState({ deleteActionInit: false });
             this.handleDeleteModal(false);
+            this.refreshDtData();
+        }
+        if (!recoverLoading && recoverFlag && prevProps.recoverLoading !== recoverLoading && prevProps.recoverFlag !== recoverFlag) {
+            let stateData = { recoverLoading: false, recoverFlag: false, recoverError: [] };
+            dispatch(setFitnessTestsState(stateData));
+            ts('Fitness test recovered!');
+            this.refreshDtData();
+        } else if (!recoverLoading && prevProps.recoverLoading !== recoverLoading && recoverError && recoverError.length > 0) {
+            let stateData = { recoverLoading: false, recoverFlag: false, recoverError: [] };
+            dispatch(setFitnessTestsState(stateData));
+            te(recoverError[0]);
             this.refreshDtData();
         }
     }
@@ -436,6 +472,21 @@ class FitnessTestListing extends Component {
         });
         dispatch(fitnessTestsDeleteRequest(selectedId))
     }
+
+    openRecoverModal = (_id) => {
+        this.setState({ selectedId: _id, showRecoverModal: true });
+    }
+
+    closeRecoverModal = () => {
+        this.setState({ selectedId: null, showRecoverModal: false });
+    }
+
+    handleRecover = () => {
+        const { selectedId } = this.state;
+        const { dispatch } = this.props;
+        dispatch(fitnessTestsRecoverRequest(selectedId));
+        this.closeRecoverModal();
+    }
     //#endregion
 }
 
@@ -447,6 +498,9 @@ const mapStateToProps = (state) => {
         filteredFitnessTests: adminFitnessTests.get('filteredFitnessTests'),
         filteredTotalPages: adminFitnessTests.get('filteredTotalPages'),
         error: adminFitnessTests.get('error'),
+        recoverLoading: adminFitnessTests.get('recoverLoading'),
+        recoverFlag: adminFitnessTests.get('recoverFlag'),
+        recoverError: adminFitnessTests.get('recoverError'),
     }
 }
 

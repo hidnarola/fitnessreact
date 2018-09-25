@@ -8,11 +8,12 @@ import BodyPartsSave from './BodyPartsSave';
 import { initialize, reset } from "redux-form";
 import { FaPencil, FaTrash, FaRotateLeft } from "react-icons/lib/fa";
 import SweetAlert from "react-bootstrap-sweetalert";
+import { Label } from "react-bootstrap";
 
 const deletedOptions = [
     { value: '', label: 'All' },
-    { value: 0, label: 'Not Deleted' },
-    { value: 1, label: 'Deleted' },
+    { value: 0, label: 'No' },
+    { value: 1, label: 'Yes' },
 ];
 
 class BodyPartsListing extends Component {
@@ -95,7 +96,7 @@ class BodyPartsListing extends Component {
                                                     return (
                                                         <div className="list-status-wrapper">
                                                             {dataObj &&
-                                                                <span>{dataObj.label}</span>
+                                                                <Label bsStyle={(dataObj.value === 1) ? 'danger' : 'success'}>{dataObj.label}</Label>
                                                             }
                                                         </div>
                                                     );

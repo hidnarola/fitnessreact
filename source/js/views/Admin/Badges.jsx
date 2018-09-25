@@ -15,17 +15,6 @@ class Badges extends Component {
                 <AdminHeader />
                 <AdminNav />
                 <section className="body-wrap">
-                    <div id="validation_errors_wrapper">
-                        {error && error.length > 0 &&
-                            <div className="alert alert-danger" role="alert">
-                                {
-                                    error.map((err, index) => (
-                                        <p key={index}>{err}</p>
-                                    ))
-                                }
-                            </div>
-                        }
-                    </div>
                     <Switch>
                         <Route exact path={adminRouteCodes.BADGES} component={BadgeListing} />
                         <Route exact path={`${adminRouteCodes.BADGES_SAVE}/:id?`} component={BadgeSave} />

@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { generateDTTableFilterObj, capitalizeFirstLetter } from '../../../helpers/funs';
-import { userFilterRequest } from '../../../actions/admin/users';
+import { generateDTTableFilterObj, capitalizeFirstLetter, ts, te } from '../../../helpers/funs';
+import { userFilterRequest, userBlockRequest, userUnblockRequest } from '../../../actions/admin/users';
 import { Link } from "react-router-dom";
-import { FaPencil } from 'react-icons/lib/fa';
+import { FaPencil, FaUnlock, FaLock } from 'react-icons/lib/fa';
 import ReactTable from "react-table";
 import { GENDER_MALE, GENDER_FEMALE, USER_STATUS_ACTIVE_STR, USER_STATUS_INACTIVE_STR, USER_STATUS_ACTIVE, USER_STATUS_INACTIVE } from '../../../constants/consts';
-import moment from "moment";
 import { adminRouteCodes } from '../../../constants/adminRoutes';
+import noProfileImg from 'img/common/no-profile-img.png';
+import SweetAlert from "react-bootstrap-sweetalert";
+import { Label } from "react-bootstrap";
 
 const genderOptions = [
     { value: '', label: 'All' },
@@ -20,12 +22,6 @@ const userStatusOptions = [
     { value: USER_STATUS_INACTIVE, label: USER_STATUS_INACTIVE_STR },
 ];
 
-const deletedOptions = [
-    { value: '', label: 'All' },
-    { value: true, label: 'Yes' },
-    { value: false, label: 'No' },
-];
-
 class UserListing extends Component {
     constructor(props) {
         super(props);
@@ -34,11 +30,15 @@ class UserListing extends Component {
             dtPages: 0,
             dtLoading: false,
             dtFilterData: null,
+
+            showBlockModal: false,
+            showUnblockModal: false,
+            selectedAuthId: null,
         };
     }
 
     render() {
-        const { dtData, dtPages, dtLoading } = this.state;
+        const { dtData, dtPages, dtLoading, showBlockModal, showUnblockModal } = this.state;
         return (
             <div className="user-listing-wrapper">
                 <div className="body-content row d-flex my-panel-body">
@@ -142,13 +142,13 @@ class UserListing extends Component {
                                                 maxWidth: 100,
                                                 filterDigit: true,
                                                 Cell: (row) => {
-                                                    let dataObj = _.find(userStatusOptions, (o) => {
-                                                        return (o.value === row.value);
-                                                    });
                                                     return (
                                                         <div className="list-status-wrapper">
-                                                            {dataObj &&
-                                                                <span>{dataObj.label}</span>
+                                                            {row && row.original && typeof row.original.status !== 'undefined' && row.original.status === 1 &&
+                                                                <Label bsStyle="success">Active</Label>
+                                                            }
+                                                            {row && row.original && typeof row.original.status !== 'undefined' && row.original.status === 0 &&
+                                                                <Label bsStyle="danger">Blocked</Label>
                                                             }
                                                         </div>
                                                     );
@@ -183,6 +183,16 @@ class UserListing extends Component {
                                                             <Link to={`${adminRouteCodes.USERS_SAVE}/${row.value}`} className="dt-act-btn dt-act-btn-edit">
                                                                 <FaPencil />
                                                             </Link>
+                                                            {row && row.original && typeof row.original.status !== 'undefined' && row.original.status === 1 &&
+                                                                <button className="dt-act-btn dt-act-btn-delete" onClick={() => this.handleShowBlockModal(row.value)}>
+                                                                    <FaLock />
+                                                                </button>
+                                                            }
+                                                            {row && row.original && typeof row.original.status !== 'undefined' && row.original.status === 0 &&
+                                                                <button className="dt-act-btn dt-act-btn-restore" onClick={() => this.handleShowUnblockModal(row.value)}>
+                                                                    <FaUnlock />
+                                                                </button>
+                                                            }
                                                         </div>
                                                     );
                                                 }
@@ -209,15 +219,62 @@ class UserListing extends Component {
                         </div>
                     </div>
                 </div>
+                <SweetAlert
+                    show={showBlockModal}
+                    danger
+                    showCancel
+                    confirmBtnText="Yes, block it!"
+                    confirmBtnBsStyle="danger"
+                    cancelBtnBsStyle="default"
+                    title="Are you sure?"
+                    onConfirm={this.handleBlock}
+                    onCancel={this.handleCloseBlockModal}
+                >
+                    User will be block and will not be able to login to application!
+                </SweetAlert>
+
+                <SweetAlert
+                    show={showUnblockModal}
+                    success
+                    showCancel
+                    confirmBtnText="Yes, active it!"
+                    confirmBtnBsStyle="success"
+                    cancelBtnBsStyle="default"
+                    title="Are you sure?"
+                    onConfirm={this.handleUnblock}
+                    onCancel={this.handleCloseUnblockModal}
+                >
+                    User will be active and will able to login!
+                </SweetAlert>
             </div>
         );
     }
 
     componentDidUpdate(prevProps, prevState) {
         const { dtLoading } = this.state;
-        const { filteredLoading, filteredUsers, filteredTotalPages } = this.props;
+        const {
+            filteredLoading, filteredUsers, filteredTotalPages,
+            blockLoading, blockUser, blockError,
+            unblockLoading, unblockUser, unblockError
+        } = this.props;
         if (dtLoading && !filteredLoading) {
             this.setState({ dtLoading: filteredLoading, dtData: filteredUsers, dtPages: filteredTotalPages });
+        }
+        if (!blockLoading && prevProps.blockLoading !== blockLoading) {
+            if (blockUser && prevProps.blockUser !== blockUser) {
+                ts('User blocked!');
+            } else if (blockError && prevProps.blockError !== blockError && blockError.length > 0) {
+                te('Something went wrong! please try again later.');
+            }
+            this.refreshDtData();
+        }
+        if (!unblockLoading && prevProps.unblockLoading !== unblockLoading) {
+            if (unblockUser && prevProps.unblockUser !== unblockUser) {
+                ts('User activated!');
+            } else if (unblockError && prevProps.unblockError !== unblockError && unblockError.length > 0) {
+                te('Something went wrong! please try again later.');
+            }
+            this.refreshDtData();
         }
     }
 
@@ -236,6 +293,38 @@ class UserListing extends Component {
         dispatch(userFilterRequest(dtFilterData));
     }
     //#endregion
+
+    handleShowBlockModal = (authId) => {
+        this.setState({ showBlockModal: true, selectedAuthId: authId });
+    }
+
+    handleCloseBlockModal = () => {
+        this.setState({ showBlockModal: false, selectedAuthId: null });
+    }
+
+    handleBlock = () => {
+        const { dispatch } = this.props;
+        const { selectedAuthId } = this.state;
+        let requestData = { authUserId: selectedAuthId, status: USER_STATUS_INACTIVE };
+        dispatch(userBlockRequest(requestData));
+        this.handleCloseBlockModal();
+    }
+
+    handleShowUnblockModal = (authId) => {
+        this.setState({ showUnblockModal: true, selectedAuthId: authId });
+    }
+
+    handleCloseUnblockModal = () => {
+        this.setState({ showUnblockModal: false, selectedAuthId: null });
+    }
+
+    handleUnblock = () => {
+        const { dispatch } = this.props;
+        const { selectedAuthId } = this.state;
+        let requestData = { authUserId: selectedAuthId, status: USER_STATUS_ACTIVE };
+        dispatch(userUnblockRequest(requestData));
+        this.handleCloseUnblockModal();
+    }
 }
 
 const mapStateToProps = (state) => {
@@ -245,6 +334,14 @@ const mapStateToProps = (state) => {
         filteredUsers: adminUsers.get('filteredUsers'),
         filteredTotalPages: adminUsers.get('filteredTotalPages'),
         filteredError: adminUsers.get('filteredError'),
+
+        blockLoading: adminUsers.get('blockLoading'),
+        blockUser: adminUsers.get('blockUser'),
+        blockError: adminUsers.get('blockError'),
+
+        unblockLoading: adminUsers.get('unblockLoading'),
+        unblockUser: adminUsers.get('unblockUser'),
+        unblockError: adminUsers.get('unblockError'),
     };
 }
 

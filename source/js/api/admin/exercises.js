@@ -43,7 +43,7 @@ function deleteExercise(_id) {
     return fetchResource((requestUrl + '/' + _id), options);
 }
 
-function recoverExercise(_id, exerciseData) {
+function recoverExercise(_id) {
     let headers = extraHeaders();
     return putFormData(requestUrl + '/undo/' + _id, null, headers);
 }

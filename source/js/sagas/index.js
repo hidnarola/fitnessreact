@@ -46,6 +46,7 @@ import adminBadgeSagas from 'sagas/admin/badges';
 import adminFitnessTestSagas from 'sagas/admin/fitnessTests';
 import adminProfile from 'sagas/admin/profile';
 import adminChangePasswordSagas from 'sagas/admin/changePassword';
+import adminDashboardSaga from 'sagas/admin/dashboard';
 
 export default function* rootSaga() {
   yield all([
@@ -95,5 +96,6 @@ export default function* rootSaga() {
     ...adminFitnessTestSagas,
     ...adminProfile,
     ...adminChangePasswordSagas,
+    ...adminDashboardSaga,
   ]);
 }

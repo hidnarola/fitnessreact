@@ -5,26 +5,10 @@ import { Link, withRouter } from 'react-router-dom';
 import Dropzone from 'react-dropzone';
 import noImg from 'img/common/no-img.png'
 import moment from 'moment';
-import {
-    InputField,
-    SelectField_ReactSelectMulti,
-    TextAreaField,
-    SelectField_ReactSelect,
-    RadioFields,
-    DateField,
-    EditorField
-} from '../../../helpers/FormControlHelper';
-import {
-    requiredReactSelectMulti,
-    required,
-    email,
-    requiredReactSelectStatus,
-    minLength,
-    maxLength,
-    mobile
-} from '../../../formValidation/validationRules';
+import { InputField, SelectField_ReactSelect, DateField, EditorField } from '../../../helpers/FormControlHelper';
+import { required, requiredReactSelectStatus, minLength, maxLength, mobile, min, max } from '../../../formValidation/validationRules';
 import { adminRouteCodes } from '../../../constants/adminRoutes';
-import { capitalizeFirstLetter } from '../../../helpers/funs';
+import { capitalizeFirstLetter, convertUnits } from '../../../helpers/funs';
 import {
     GOAL_GAIN_MUSCLE,
     GOAL_IMPROVE_MOBILITY,
@@ -39,12 +23,24 @@ import {
     GENDER_FEMALE,
     WORKOUT_LOCATION_GYM,
     WORKOUT_LOCATION_HOME,
+    MEASUREMENT_UNIT_CENTIMETER,
+    MEASUREMENT_UNIT_KILOGRAM,
+    MEASUREMENT_UNIT_GRAM,
+    MEASUREMENT_UNIT_INCH,
+    MEASUREMENT_UNIT_POUND,
 } from '../../../constants/consts';
 import { userSelectOneRequest } from '../../../actions/admin/users';
 import { showPageLoader, hidePageLoader } from '../../../actions/pageLoader';
 
 const minLength2 = minLength(2);
 const maxLength20 = maxLength(20);
+const min50 = min(50);
+const min44 = min(44);
+const min20 = min(20);
+const max1000 = max(1000);
+const max600 = max(600);
+const max240 = max(240);
+const max2200 = max(2200);
 
 const goalOptions = [
     { value: GOAL_GAIN_MUSCLE, label: capitalizeFirstLetter(GOAL_GAIN_MUSCLE).replace('_', ' ') },
@@ -65,8 +61,9 @@ class UserForm extends Component {
         this.state = {
             dob: null,
             gender: GENDER_MALE,
-            existingProfilePics: [],
             aboutMe: '',
+            heightUnit: MEASUREMENT_UNIT_CENTIMETER,
+            weightUnit: MEASUREMENT_UNIT_KILOGRAM
         }
     }
 
@@ -79,8 +76,10 @@ class UserForm extends Component {
     }
 
     render() {
-        const { handleSubmit } = this.props;
-        const { existingProfilePics, aboutMe } = this.state;
+        const { handleSubmit, selectUser } = this.props;
+        const { aboutMe, heightUnit, weightUnit } = this.state;
+        let validateWeight = (weightUnit !== MEASUREMENT_UNIT_POUND) ? [min20, max1000] : [min44, max2200];
+        let validateHeight = (heightUnit !== MEASUREMENT_UNIT_INCH) ? [min50, max600] : [min20, max240];
         return (
             <div className="exercise-form-data">
                 <form onSubmit={handleSubmit}>
@@ -137,7 +136,7 @@ class UserForm extends Component {
                                 placeholder="Date Of Birth"
                                 component={DateField}
                                 maxDate={moment().subtract(18, 'year')}
-                                isClearable={true}
+                                isClearable={false}
                                 selectedDate={this.state.dob}
                                 handleChange={this.handleChangeDob}
                                 dateFormat="DD/MM/YYYY"
@@ -149,31 +148,45 @@ class UserForm extends Component {
                             <Field
                                 name="height"
                                 className="form-control"
-                                label="Height"
+                                label={`Height (${heightUnit})`}
                                 labelClass="control-label"
                                 wrapperClass="form-group"
-                                placeholder="Height"
+                                placeholder={`Height (${heightUnit})`}
                                 component={InputField}
                                 type="number"
+                                errorClass="help-block"
+                                validate={validateHeight}
+                            />
+                            <Field
+                                name="height_unit"
+                                component="input"
+                                type="hidden"
                             />
                         </div>
                         <div className="col-md-4">
                             <Field
                                 name="weight"
                                 className="form-control"
-                                label="Weight"
+                                label={`Weight (${weightUnit})`}
                                 labelClass="control-label"
                                 wrapperClass="form-group"
-                                placeholder="Weight"
+                                placeholder={`Weight (${weightUnit})`}
                                 component={InputField}
                                 type="number"
+                                errorClass="help-block"
+                                validate={validateWeight}
+                            />
+                            <Field
+                                name="weight_unit"
+                                component="input"
+                                type="hidden"
                             />
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-md-2">
                             <div className="form-group">
-                                <label for="gender" className="control-label display_block">Gender</label>
+                                <label htmlFor="gender" className="control-label display_block">Gender</label>
                                 <Field
                                     id={GENDER_MALE}
                                     name="gender"
@@ -194,7 +207,7 @@ class UserForm extends Component {
                         </div>
                         <div className="col-md-2">
                             <div className="form-group">
-                                <label for="workout_location" className="control-label display_block">Workout Location</label>
+                                <label htmlFor="workout_location" className="control-label display_block">Workout Location</label>
                                 <Field
                                     id={WORKOUT_LOCATION_HOME}
                                     name="workout_location"
@@ -238,7 +251,7 @@ class UserForm extends Component {
                         </div>
                     </div>
                     <div className="row">
-                        <div className="col-md-6">
+                        <div className="col-md-8">
                             <Field
                                 name="about_me"
                                 value={aboutMe}
@@ -251,18 +264,16 @@ class UserForm extends Component {
                                 component={EditorField}
                             />
                         </div>
-                        <div className="col-md-6">
-                            <Field
-                                name="user_img"
-                                label="Profile Image"
-                                labelClass="control-label display_block"
-                                mainWrapperClass="image-form-main-wrapper"
-                                wrapperClass="form-group"
-                                placeholder="Profile Image"
-                                component={UserProfileImageField}
-                                multiple={false}
-                                existingImages={existingProfilePics}
-                            />
+                        <div className="col-md-4">
+                            <div className="image-preview-wrapper mt-20">
+                                <img
+                                    src={(selectUser) ? selectUser.avatar : ''}
+                                    alt="Image"
+                                    onError={(e) => {
+                                        e.target.src = noImg
+                                    }}
+                                />
+                            </div>
                         </div>
                     </div>
                     <div className="d-flex pull-right mt-10">
@@ -283,22 +294,28 @@ class UserForm extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        const { selectLoading, selectUser, selectError, initialize, dispatch } = this.props;
+        const { selectLoading, selectUser, selectError, initialize, dispatch, selectUserPref } = this.props;
         if (!selectLoading && prevProps.selectLoading !== selectLoading && selectUser && prevProps.selectUser !== selectUser) {
             let dob = null;
             if (selectUser.dateOfBirth) {
                 dob = moment(selectUser.dateOfBirth);
             }
+            let heightUnit = (selectUserPref.bodyMeasurement) ? selectUserPref.bodyMeasurement : MEASUREMENT_UNIT_CENTIMETER;
+            let weightUnit = (selectUserPref.weight) ? selectUserPref.weight : MEASUREMENT_UNIT_KILOGRAM;
+            var height = (selectUser.height) ? convertUnits(MEASUREMENT_UNIT_CENTIMETER, heightUnit, selectUser.height).toFixed(2) : '';
+            var weight = (selectUser.weight) ? convertUnits(MEASUREMENT_UNIT_GRAM, weightUnit, selectUser.weight).toFixed(2) : '';
             const userData = {
                 first_name: selectUser.firstName,
                 last_name: selectUser.lastName,
                 mobile_no: selectUser.mobileNumber,
                 dob: dob,
-                height: selectUser.height,
-                weight: selectUser.weight,
+                height: height,
+                weight: weight,
+                height_unit: heightUnit,
+                weight_unit: weightUnit,
                 gender: selectUser.gender,
                 workout_location: selectUser.workoutLocation,
-                goal: selectUser.goal.name,
+                goal: (selectUser.goal) ? selectUser.goal.name : null,
                 status: _.find(userStatusOptions, (o) => { return (o.value === selectUser.status) }),
                 about_me: selectUser.aboutMe,
             }
@@ -306,13 +323,13 @@ class UserForm extends Component {
             this.setState({
                 dob: dob,
                 gender: selectUser.gender,
-                existingProfilePics: [selectUser.avatar],
                 aboutMe: selectUser.aboutMe,
+                heightUnit,
+                weightUnit
             });
             dispatch(hidePageLoader());
         }
     }
-
 
     handleChangeDob = (date) => {
         this.props.change('dob', date);
@@ -341,69 +358,9 @@ const mapStateToProps = (state) => {
     return {
         selectLoading: adminUsers.get('selectLoading'),
         selectUser: adminUsers.get('selectUser'),
+        selectUserPref: adminUsers.get('selectUserPref'),
         selectError: adminUsers.get('selectError'),
     };
 }
 
 export default connect(mapStateToProps)(UserForm);
-
-class UserProfileImageField extends Component {
-    render() {
-        const {
-            label,
-            input,
-            meta,
-            mainWrapperClass,
-            wrapperClass,
-            className,
-            labelClass,
-            errorClass,
-            accept,
-            existingImages
-        } = this.props;
-        let filesArr = _.values(input.value);
-        let images = [];
-        let _existingImages = [];
-        _.forEach(existingImages, (path, key) => {
-            if (path) {
-                _existingImages.push(
-                    <div className="image-preview-wrapper" key={key}>
-                        <img
-                            src={path}
-                            alt="Image"
-                            onError={(e) => {
-                                e.target.src = noImg
-                            }}
-                        />
-                    </div>
-                )
-            }
-        });
-        _.forEach(filesArr, (file, key) => {
-            images.push(
-                <div className="image-preview-wrapper" key={key}>
-                    <img src={file.preview} />
-                </div>
-            )
-        })
-        return (
-            <div className={mainWrapperClass}>
-                <label htmlFor={input.name} className={labelClass}>{label}</label>
-                {_existingImages}
-                {input.value && images}
-                <div className={wrapperClass}>
-                    <Dropzone
-                        {...input}
-                        accept={accept ? accept : "image/jpeg, image/png, image/jpg, image/gif"}
-                        onDrop={(filesToUpload, e) => input.onChange(filesToUpload)}
-                        multiple={false}
-                        className={className}
-                    ></Dropzone>
-                    {meta.touched &&
-                        ((meta.error && <span className={errorClass}>{meta.error}</span>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))
-                    }
-                </div>
-            </div>
-        );
-    }
-}

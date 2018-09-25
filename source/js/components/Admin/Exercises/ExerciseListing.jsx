@@ -11,6 +11,7 @@ import _ from 'lodash';
 import { EXERCISE_DIFFICULTY_BEGINNER, EXERCISE_DIFFICULTY_INTERMEDIATE, EXERCISE_DIFFICULTY_EXPERT, exerciseDifficultyLevelObj, EXE_CATS, EXE_SCATS } from '../../../constants/consts';
 import SweetAlert from "react-bootstrap-sweetalert";
 import { generateDTTableFilterObj, ts, te } from '../../../helpers/funs';
+import { Label } from "react-bootstrap";
 
 const difficultyLevelOptions = [
     { value: '', label: 'All' },
@@ -27,8 +28,8 @@ const statusOptions = [
 
 const deletedOptions = [
     { value: '', label: 'All' },
-    { value: 0, label: 'Not Deleted' },
-    { value: 1, label: 'Deleted' },
+    { value: 0, label: 'No' },
+    { value: 1, label: 'Yes' },
 ];
 
 class ExerciseListing extends Component {
@@ -257,7 +258,7 @@ class ExerciseListing extends Component {
                                                     return (
                                                         <div className="list-status-wrapper">
                                                             {dataObj &&
-                                                                <span>{dataObj.label}</span>
+                                                                <Label bsStyle={(dataObj.value === 1) ? 'success' : 'danger'}>{dataObj.label}</Label>
                                                             }
                                                         </div>
                                                     );
@@ -291,7 +292,7 @@ class ExerciseListing extends Component {
                                                     return (
                                                         <div className="list-status-wrapper">
                                                             {dataObj &&
-                                                                <span>{dataObj.label}</span>
+                                                                <Label bsStyle={(dataObj.value === 1) ? 'danger' : 'success'}>{dataObj.label}</Label>
                                                             }
                                                         </div>
                                                     );

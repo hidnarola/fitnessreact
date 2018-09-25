@@ -63,14 +63,14 @@ export const minLength = (min) => (value) => {
 }
 
 export const max = (max) => (value) => {
-    if (value > max) {
+    if (value && value > max) {
         return "Value must be less than or equal to " + max
     }
     return undefined;
 }
 
 export const min = (min) => (value) => {
-    if (value < min) {
+    if (value && value < min) {
         return "Value must be more than or equal to " + min
     }
     return undefined;

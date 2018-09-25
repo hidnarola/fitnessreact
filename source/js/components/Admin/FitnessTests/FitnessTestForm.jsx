@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { NavLink, withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { Field, reduxForm, FieldArray, formValueSelector } from 'redux-form';
 import { InputField, EditorField, SelectField_ReactSelect, FileField_Dropzone_Single } from '../../../helpers/FormControlHelper';
 import { required, requiredReactSelect, requiredImage } from '../../../formValidation/validationRules';
@@ -121,64 +121,80 @@ class FitnessTestForm extends Component {
             <div className="fitness-test-form-data">
                 <form onSubmit={handleSubmit}>
                     <div className="row">
-                        <div className="col-md-12">
-                            <Field
-                                name="category"
-                                label="Category"
-                                labelClass="control-label"
-                                wrapperClass="form-group"
-                                placeholder="Category"
-                                component={SelectField_ReactSelect}
-                                options={categoryOptions}
-                                errorClass="help-block"
-                                validate={this.validationRules.category}
-                            />
-                            <Field
-                                name="subCategory"
-                                label="Sub Category"
-                                labelClass="control-label"
-                                wrapperClass="form-group"
-                                placeholder="Sub Category"
-                                component={SelectField_ReactSelect}
-                                options={subCategoryOptions}
-                                errorClass="help-block"
-                                validate={this.validationRules.subCategory}
-                            />
-                            <Field
-                                name="name"
-                                className="form-control"
-                                label="Name"
-                                labelClass="control-label"
-                                wrapperClass="form-group"
-                                placeholder="Name"
-                                component={InputField}
-                                errorClass="help-block"
-                                validate={this.validationRules.name}
-                            />
-                            <Field
-                                name="format"
-                                label="Format"
-                                labelClass="control-label"
-                                wrapperClass="form-group"
-                                placeholder="Format"
-                                component={SelectField_ReactSelect}
-                                options={formatOptions}
-                                errorClass="help-block"
-                                validate={this.validationRules.format}
-                            />
-                            <Field
-                                name="image"
-                                label="Featured Image"
-                                labelClass="control-label display_block"
-                                mainWrapperClass="image-form-main-wrapper"
-                                wrapperClass="form-group"
-                                placeholder="Image"
-                                className="filefield-dropzone-wrapper"
-                                component={FileField_Dropzone_Single}
-                                validate={this.validationRules.image}
-                                errorClass="help-block"
-                                existingImages={existingFeatureImages}
-                            />
+                        <div className="col-md-6 no-padding">
+                            <div className="col-md-12">
+                                <Field
+                                    name="category"
+                                    label="Category"
+                                    labelClass="control-label"
+                                    wrapperClass="form-group"
+                                    placeholder="Category"
+                                    component={SelectField_ReactSelect}
+                                    options={categoryOptions}
+                                    errorClass="help-block"
+                                    validate={this.validationRules.category}
+                                />
+                            </div>
+                            <div className="col-md-12">
+                                <Field
+                                    name="subCategory"
+                                    label="Sub Category"
+                                    labelClass="control-label"
+                                    wrapperClass="form-group"
+                                    placeholder="Sub Category"
+                                    component={SelectField_ReactSelect}
+                                    options={subCategoryOptions}
+                                    errorClass="help-block"
+                                    validate={this.validationRules.subCategory}
+                                />
+                            </div>
+                            <div className="col-md-12">
+                                <Field
+                                    name="name"
+                                    className="form-control"
+                                    label="Name"
+                                    labelClass="control-label"
+                                    wrapperClass="form-group"
+                                    placeholder="Name"
+                                    component={InputField}
+                                    errorClass="help-block"
+                                    validate={this.validationRules.name}
+                                />
+                            </div>
+                            <div className="col-md-12">
+                                <Field
+                                    name="format"
+                                    label="Format"
+                                    labelClass="control-label"
+                                    wrapperClass="form-group"
+                                    placeholder="Format"
+                                    component={SelectField_ReactSelect}
+                                    options={formatOptions}
+                                    errorClass="help-block"
+                                    validate={this.validationRules.format}
+                                />
+                            </div>
+                        </div>
+                        <div className="col-md-6 no-padding">
+                            <div className="col-md-12">
+                                <Field
+                                    name="image"
+                                    label="Featured Image"
+                                    labelClass="control-label display_block"
+                                    mainWrapperClass="image-form-main-wrapper"
+                                    wrapperClass="form-group"
+                                    placeholder="Image"
+                                    className="filefield-dropzone-wrapper"
+                                    component={FileField_Dropzone_Single}
+                                    validate={this.validationRules.image}
+                                    errorClass="help-block"
+                                    existingImages={existingFeatureImages}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-md-6">
                             <Field
                                 name="description"
                                 value={description}
@@ -190,6 +206,8 @@ class FitnessTestForm extends Component {
                                 placeholder="Description"
                                 component={EditorField}
                             />
+                        </div>
+                        <div className="col-md-6">
                             <Field
                                 name="instructions"
                                 value={instructions}
@@ -201,6 +219,10 @@ class FitnessTestForm extends Component {
                                 placeholder="Instructions"
                                 component={EditorField}
                             />
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-md-12">
                             {format && format.value === FITNESS_TEST_FORMAT_MAX_REP &&
                                 <FieldArray
                                     name="max_rep"
@@ -328,12 +350,18 @@ class FitnessTestForm extends Component {
                                     </div>
                                 </div>
                             }
-                            <div className="col-md-12 mb-20 clear-both text-center">
-                                <div className="stepbox-b stepbox-b-center">
-                                    <NavLink to={adminRouteCodes.FITNESS_TESTS} className="continues-btn">Back</NavLink>
-                                    <button type="submit" className="continues-btn"><span>Save</span></button>
-                                </div>
-                            </div>
+                        </div>
+                    </div>
+                    <div className="d-flex pull-right mt-10">
+                        <div className="col-md-12">
+                            <Link to={adminRouteCodes.FITNESS_TESTS} className="custom-medium-link-btn">
+                                <span>Back</span>
+                                <i className="icon-arrow_back"></i>
+                            </Link>
+                            <button type="submit" className="custom-medium-btn">
+                                <span>Save</span>
+                                <i className="icon-save"></i>
+                            </button>
                         </div>
                     </div>
                 </form>

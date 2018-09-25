@@ -18,6 +18,7 @@ import { generateDTTableFilterObj, te, ts } from '../../../helpers/funs';
 import { badgeFilterRequest, badgeDeleteRequest, badgeUndoDeleteRequest } from '../../../actions/admin/badges';
 import { showPageLoader, hidePageLoader } from '../../../actions/pageLoader';
 import SweetAlert from "react-bootstrap-sweetalert";
+import { Label } from "react-bootstrap";
 
 const statusOptions = [
     { value: '', label: 'All' },
@@ -211,7 +212,7 @@ class BadgeListing extends Component {
                                                     return (
                                                         <div className="list-status-wrapper">
                                                             {dataObj &&
-                                                                <span>{dataObj.label}</span>
+                                                                <Label bsStyle={(dataObj.value === 1) ? 'success' : 'danger'}>{dataObj.label}</Label>
                                                             }
                                                         </div>
                                                     );
@@ -245,7 +246,7 @@ class BadgeListing extends Component {
                                                     return (
                                                         <div className="list-status-wrapper">
                                                             {dataObj &&
-                                                                <span>{dataObj.label}</span>
+                                                                <Label bsStyle={(dataObj.value === 1) ? 'danger' : 'success'}>{dataObj.label}</Label>
                                                             }
                                                         </div>
                                                     );

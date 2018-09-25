@@ -14,7 +14,13 @@ import {
     USERS_UPDATE_REQUEST,
     userFilterSuccess,
     userFilterError,
-    USERS_FILTER_REQUEST
+    USERS_FILTER_REQUEST,
+    USERS_BLOCK_REQUEST,
+    USERS_UNBLOCK_REQUEST,
+    userBlockSuccess,
+    userBlockError,
+    userUnblockSuccess,
+    userUnblockError
 } from "../../actions/admin/users";
 import api from 'api/admin/users';
 
@@ -78,12 +84,38 @@ function filterAdminUserData() {
     }
 }
 
+function userBlockData() {
+    return function* (action) {
+        try {
+            const requestData = action.requestData;
+            const data = yield call(() => api.changeBlockStatus(requestData));
+            yield put(userBlockSuccess(data));
+        } catch (error) {
+            yield put(userBlockError(error));
+        }
+    }
+}
+
+function userUnblockData() {
+    return function* (action) {
+        try {
+            const requestData = action.requestData;
+            const data = yield call(() => api.changeBlockStatus(requestData));
+            yield put(userUnblockSuccess(data));
+        } catch (error) {
+            yield put(userUnblockError(error));
+        }
+    }
+}
+
 export function* watchAdminUsers() {
     yield takeLatest(USERS_LIST_REQUEST, getAdminUsersData());
     yield takeLatest(USERS_SELECT_ONE_REQUEST, getAdminUserData());
     yield takeLatest(USERS_UPDATE_REQUEST, putAdminUserData());
     yield takeLatest(USERS_DELETE_REQUEST, deleteAdminUserData());
     yield takeLatest(USERS_FILTER_REQUEST, filterAdminUserData());
+    yield takeLatest(USERS_BLOCK_REQUEST, userBlockData());
+    yield takeLatest(USERS_UNBLOCK_REQUEST, userUnblockData());
 }
 
 export default [

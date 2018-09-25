@@ -6,7 +6,7 @@ import { equipmentAddRequest, equipmentUpdateRequest } from '../../../actions/ad
 import { adminRouteCodes } from '../../../constants/adminRoutes';
 import { equipmentCategoryListRequest } from '../../../actions/admin/equipmentCategories';
 import { Alert } from "react-bootstrap";
-import { capitalizeFirstLetter } from '../../../helpers/funs';
+import { capitalizeFirstLetter, focusToControl } from '../../../helpers/funs';
 
 class EquipmentSave extends Component {
     constructor(props) {
@@ -44,7 +44,7 @@ class EquipmentSave extends Component {
                         <div className="whitebox-head">
                             <h3 className="title-h3">Save Equipment</h3>
                         </div>
-                        <div className="whitebox-body">
+                        <div className="whitebox-body validation_errors_wrapper">
                             {error && error.length > 0 &&
                                 <Alert bsStyle="danger">
                                     {
@@ -68,6 +68,8 @@ class EquipmentSave extends Component {
         if (saveActionInit && !loading) {
             if (!error || error.length <= 0) {
                 history.push(adminRouteCodes.EQUIPMENTS);
+            } else if (error && error.length > 0) {
+                focusToControl('.validation_errors_wrapper');
             }
             this.setState({ saveActionInit: false });
             dispatch(hidePageLoader());

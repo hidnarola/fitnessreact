@@ -55,7 +55,7 @@ export const USER_STATUS_ACTIVE = 1;
 export const USER_STATUS_INACTIVE = 0;
 
 export const USER_STATUS_ACTIVE_STR = 'Active';
-export const USER_STATUS_INACTIVE_STR = 'Inactive';
+export const USER_STATUS_INACTIVE_STR = 'Blocked';
 
 export const STATUS_ACTIVE = 1;
 export const STATUS_INACTIVE = 0;

@@ -10,6 +10,7 @@ import _ from "lodash";
 import { adminRouteCodes } from '../../../constants/adminRoutes';
 import { ts, focusToControl } from '../../../helpers/funs';
 import { fitnessTestsAddRequest, fitnessTestsUpdateRequest, fitnessTestsReinitialize } from '../../../actions/admin/fitnessTests';
+import { Alert } from "react-bootstrap";
 
 class FitnessTestSave extends Component {
     constructor(props) {
@@ -20,6 +21,7 @@ class FitnessTestSave extends Component {
     }
 
     render() {
+        const { error } = this.props;
         return (
             <div className="fitness-test-save-wrapper">
                 <div className="body-head space-btm-45 d-flex justify-content-start">
@@ -35,6 +37,17 @@ class FitnessTestSave extends Component {
                                 <h3 className="title-h3">Save Fitness Test</h3>
                             </div>
                             <div className="row d-flex whitebox-body">
+                                <div className="col-md-12 validation_errors_wrapper">
+                                    {error && error.length > 0 &&
+                                        <Alert bsStyle="danger">
+                                            {
+                                                error.map((e, i) => {
+                                                    return <p key={i}>{e}</p>
+                                                })
+                                            }
+                                        </Alert>
+                                    }
+                                </div>
                                 <div className="col-md-12">
                                     <FitnessTestForm onSubmit={this.handleSubmit} />
                                 </div>
@@ -61,7 +74,7 @@ class FitnessTestSave extends Component {
                 ts('Fitness test saved successfully!');
                 history.push(adminRouteCodes.FITNESS_TESTS)
             } else {
-                focusToControl('#validation_errors_wrapper');
+                focusToControl('.validation_errors_wrapper');
             }
         }
     }

@@ -6,6 +6,7 @@ import { badgeAddRequest, badgeUpdateRequest, badgeRestData } from '../../../act
 import { ts, focusToControl } from '../../../helpers/funs';
 import { adminRouteCodes } from '../../../constants/adminRoutes';
 import { showPageLoader, hidePageLoader } from '../../../actions/pageLoader';
+import { Alert } from "react-bootstrap";
 
 class BadgeSave extends Component {
     constructor(props) {
@@ -16,6 +17,7 @@ class BadgeSave extends Component {
     }
 
     render() {
+        const { error } = this.props;
         return (
             <div className="badge-save-wrapper">
                 <div className="body-content row d-flex">
@@ -25,6 +27,17 @@ class BadgeSave extends Component {
                                 <h3 className="title-h3">Save Badge</h3>
                             </div>
                             <div className="row d-flex whitebox-body">
+                                <div className="col-md-12 validation_errors_wrapper">
+                                    {error && error.length > 0 &&
+                                        <Alert bsStyle="danger">
+                                            {
+                                                error.map((e, i) => {
+                                                    return <p key={i}>{e}</p>
+                                                })
+                                            }
+                                        </Alert>
+                                    }
+                                </div>
                                 <div className="col-md-12">
                                     <BadgeForm onSubmit={this.handleSubmit} />
                                 </div>
@@ -52,7 +65,7 @@ class BadgeSave extends Component {
                 ts('Badge saved successfully.');
                 history.push(adminRouteCodes.BADGES);
             } else {
-                focusToControl('#validation_errors_wrapper');
+                focusToControl('.validation_errors_wrapper');
             }
             dispatch(hidePageLoader());
         }
@@ -66,21 +79,21 @@ class BadgeSave extends Component {
 
     handleSubmit = (data) => {
         const { dispatch, match } = this.props;
-        var timeType = data.time_type.value;
+        var timeType = (data.time_type) ? data.time_type.value : '';
         var requestData = {
             name: data.name,
             descriptionCompleted: data.completeDescription,
             descriptionInCompleted: data.incompleteDescription,
-            task: data.task.value,
+            task: (data.task) ? data.task.value : '',
             value: data.target,
-            unit: data.unit.value,
+            unit: (data.unit) ? data.unit.value : '',
             point: data.points,
             timeType: timeType,
             status: (data.status) ? data.status.value : null,
         }
         if (timeType === TIME_TYPE_TIME_WINDOW) {
             requestData.duration = data.duration;
-            requestData.timeWindowType = data.time_window_type.value;
+            requestData.timeWindowType = (data.time_window_type) ? data.time_window_type.value : '';
         }
         this.setState({ saveActionInit: true });
         dispatch(showPageLoader());

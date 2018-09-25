@@ -21,7 +21,8 @@ import _ from "lodash";
 import { badgeSelectOneRequest } from '../../../actions/admin/badges';
 
 const min0 = min(0);
-const minLength2 = minLength(2);
+const min1 = min(1);
+const minLength3 = minLength(3);
 const maxLength100 = maxLength(100);
 
 const timeTypeOptions = [
@@ -107,7 +108,7 @@ class BadgeForm extends Component {
                                 component={InputField}
                                 errorClass="help-block"
                                 warningClass=""
-                                validate={[required, min0]}
+                                validate={[required, min1]}
                             />
                         </div>
                         <div className="col-md-4">
@@ -151,7 +152,7 @@ class BadgeForm extends Component {
                                 component={InputField}
                                 errorClass="help-block"
                                 warningClass=""
-                                validate={[required, minLength2, maxLength100]}
+                                validate={[required, minLength3, maxLength100]}
                             />
                         </div>
                         <div className="col-md-4">

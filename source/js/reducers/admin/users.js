@@ -14,7 +14,15 @@ import {
     USERS_UPDATE_ERROR,
     USERS_FILTER_REQUEST,
     USERS_FILTER_SUCCESS,
-    USERS_FILTER_ERROR
+    USERS_FILTER_ERROR,
+    SET_USERS_STATE,
+    RESET_USERS_STATE,
+    USERS_BLOCK_REQUEST,
+    USERS_BLOCK_SUCCESS,
+    USERS_BLOCK_ERROR,
+    USERS_UNBLOCK_REQUEST,
+    USERS_UNBLOCK_SUCCESS,
+    USERS_UNBLOCK_ERROR
 } from "../../actions/admin/users";
 import { VALIDATION_FAILURE_STATUS } from "../../constants/consts";
 import { generateValidationErrorMsgArr } from "../../helpers/funs";
@@ -26,6 +34,7 @@ const initialState = Map({
 
     selectLoading: false,
     selectUser: null,
+    selectUserPref: null,
     selectError: [],
 
     updateLoading: false,
@@ -40,6 +49,14 @@ const initialState = Map({
     filteredUsers: [],
     filteredTotalPages: 0,
     filteredError: [],
+
+    blockLoading: false,
+    blockUser: null,
+    blockError: [],
+
+    unblockLoading: false,
+    unblockUser: null,
+    unblockError: [],
 });
 
 const actionMap = {
@@ -111,6 +128,7 @@ const actionMap = {
         return state.merge(Map({
             selectLoading: true,
             selectUser: null,
+            selectUserPref: null,
             selectError: [],
         }));
     },
@@ -118,6 +136,7 @@ const actionMap = {
         let newState = { selectLoading: false };
         if (action.data && action.data.status && action.data.status === 1) {
             newState.selectUser = action.data.user;
+            newState.selectUserPref = action.data.user_preferences;
         } else {
             let msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
             newState.selectError = [msg];
@@ -199,6 +218,74 @@ const actionMap = {
             deleteLoading: false,
             deleteError: error,
         }));
+    },
+    [USERS_BLOCK_REQUEST]: (state, action) => {
+        return state.merge(Map({
+            blockLoading: true,
+            blockUser: null,
+            blockError: [],
+        }));
+    },
+    [USERS_BLOCK_SUCCESS]: (state, action) => {
+        let newState = { blockLoading: false };
+        if (action.data && action.data.status && action.data.status === 1) {
+            newState.blockUser = action.data.user;
+        } else {
+            let msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
+            newState.blockError = [msg];
+        }
+        return state.merge(Map(newState));
+    },
+    [USERS_BLOCK_ERROR]: (state, action) => {
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
+        }
+        return state.merge(Map({
+            blockLoading: false,
+            blockError: error,
+        }));
+    },
+    [USERS_UNBLOCK_REQUEST]: (state, action) => {
+        return state.merge(Map({
+            unblockLoading: true,
+            unblockUser: null,
+            unblockError: [],
+        }));
+    },
+    [USERS_UNBLOCK_SUCCESS]: (state, action) => {
+        let newState = { unblockLoading: false };
+        if (action.data && action.data.status && action.data.status === 1) {
+            newState.unblockUser = action.data.user;
+        } else {
+            let msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
+            newState.unblockError = [msg];
+        }
+        return state.merge(Map(newState));
+    },
+    [USERS_UNBLOCK_ERROR]: (state, action) => {
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
+        }
+        return state.merge(Map({
+            unblockLoading: false,
+            unblockError: error,
+        }));
+    },
+    [SET_USERS_STATE]: (state, action) => {
+        return state.merge(Map(action.stateData));
+    },
+    [RESET_USERS_STATE]: (state, action) => {
+        return initialState;
     },
 };
 

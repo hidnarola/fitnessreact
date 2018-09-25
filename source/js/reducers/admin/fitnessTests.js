@@ -15,7 +15,11 @@ import {
     FITNESS_TESTS_UPDATE_REQUEST,
     FITNESS_TESTS_UPDATE_SUCCESS,
     FITNESS_TESTS_UPDATE_ERROR,
-    FITNESS_TESTS_REINITIALIZE
+    FITNESS_TESTS_REINITIALIZE,
+    FITNESS_TESTS_RECOVER_REQUEST,
+    FITNESS_TESTS_RECOVER_SUCCESS,
+    FITNESS_TESTS_RECOVER_ERROR,
+    SET_FITNESS_TESTS_STATE
 } from "../../actions/admin/fitnessTests";
 
 import { generateValidationErrorMsgArr } from "../../helpers/funs";
@@ -28,6 +32,9 @@ const initialState = Map({
     filteredFitnessTests: [],
     filteredTotalPages: 0,
     filteredLoading: false,
+    recoverLoading: false,
+    recoverFlag: false,
+    recoverError: [],
 });
 
 const actionMap = {
@@ -173,8 +180,42 @@ const actionMap = {
             error: error,
         }));
     },
+    [FITNESS_TESTS_RECOVER_REQUEST]: (state, action) => {
+        return state.merge(Map({
+            recoverLoading: true,
+            recoverFlag: false,
+            recoverError: []
+        }));
+    },
+    [FITNESS_TESTS_RECOVER_SUCCESS]: (state, action) => {
+        let newState = { recoverLoading: false };
+        if (action.data && action.data.status && action.data.status === 1) {
+            newState.recoverFlag = true;
+        } else {
+            let msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later';
+            newState.recoverError = [msg];
+        }
+        return state.merge(Map(newState));
+    },
+    [FITNESS_TESTS_RECOVER_ERROR]: (state, action) => {
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
+        }
+        return state.merge(Map({
+            recoverLoading: false,
+            recoverError: error,
+        }));
+    },
     [FITNESS_TESTS_REINITIALIZE]: (state, action) => {
         return state.merge(initialState);
+    },
+    [SET_FITNESS_TESTS_STATE]: (state, action) => {
+        return state.merge(Map(action.stateData));
     },
 };
 

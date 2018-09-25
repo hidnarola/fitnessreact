@@ -50,6 +50,7 @@ import adminFitnessTests from 'reducers/admin/fitnessTests';
 import adminProfile from 'reducers/admin/profile';
 import adminChangePassword from 'reducers/admin/changePassword';
 import admin from 'reducers/admin/admin';
+import adminDashboard from 'reducers/admin/dashboard';
 
 export default combineReducers({
     user,
@@ -102,6 +103,7 @@ export default combineReducers({
     adminProfile,
     adminChangePassword,
     admin,
+    adminDashboard,
     // ...your other reducers here
     // you have to pass formReducer under 'form' key,
     // for custom keys look up the docs for 'getFormState'

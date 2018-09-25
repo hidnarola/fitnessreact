@@ -5,7 +5,7 @@ import _ from 'lodash';
 import { showPageLoader, hidePageLoader } from '../../../actions/pageLoader';
 import { exerciseAddRequest, exerciseUpdateRequest } from '../../../actions/admin/exercises';
 import { adminRouteCodes } from '../../../constants/adminRoutes';
-import { capitalizeFirstLetter } from '../../../helpers/funs';
+import { capitalizeFirstLetter, focusToControl } from '../../../helpers/funs';
 import { Alert } from "react-bootstrap";
 
 class ExerciseSave extends Component {
@@ -32,7 +32,7 @@ class ExerciseSave extends Component {
                             <div className="whitebox-head">
                                 <h3 className="title-h3">Save Exercise</h3>
                             </div>
-                            <div className="whitebox-body">
+                            <div className="whitebox-body validation_errors_wrapper">
                                 {error && error.length > 0 &&
                                     <Alert bsStyle="danger">
                                         {
@@ -57,6 +57,8 @@ class ExerciseSave extends Component {
         if (saveActionInit && !loading) {
             if (!error || error.length <= 0) {
                 history.push(adminRouteCodes.EXERCISE);
+            } else if (error && error.length > 0) {
+                focusToControl('.validation_errors_wrapper');
             }
             this.setState({ saveActionInit: false });
             dispatch(hidePageLoader());

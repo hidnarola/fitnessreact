@@ -397,8 +397,8 @@ class BodyMeasurementForm extends Component {
             thigh: [required, min(0), max(200)],
             calf: [required, min(0), max(100)],
             heartRate: [required, min(0), max(250)],
-            weight: [required, min(0), max(1000)],
-            height: [required, min(0), max(600)],
+            weight: [required, min(20), max(1000)],
+            height: [required, min(50), max(600)],
         };
         if (profileSettings) {
             if (profileSettings.bodyMeasurement !== MEASUREMENT_UNIT_CENTIMETER) {
@@ -411,10 +411,10 @@ class BodyMeasurementForm extends Component {
                 validationRules.hips = [required, min(0), max(124)];
                 validationRules.thigh = [required, min(0), max(80)];
                 validationRules.calf = [required, min(0), max(40)];
-                validationRules.height = [required, min(0), max(240)];
+                validationRules.height = [required, min(20), max(240)];
             }
             if (profileSettings.weight !== MEASUREMENT_UNIT_KILOGRAM) {
-                validationRules.weight = [required, min(0), max(2200)];
+                validationRules.weight = [required, min(44), max(2200)];
 
             }
         }

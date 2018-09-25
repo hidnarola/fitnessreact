@@ -14,7 +14,10 @@ import {
     FITNESS_TESTS_SELECT_ONE_REQUEST,
     fitnessTestsUpdateSuccess,
     fitnessTestsUpdateError,
-    FITNESS_TESTS_UPDATE_REQUEST
+    FITNESS_TESTS_UPDATE_REQUEST,
+    FITNESS_TESTS_RECOVER_REQUEST,
+    fitnessTestsRecoverSuccess,
+    fitnessTestsRecoverError
 } from '../../actions/admin/fitnessTests';
 
 import api from 'api/admin/fitnessTests';
@@ -80,12 +83,26 @@ function deleteAdminFitnessTestData() {
     }
 }
 
+
+function recoverAdminFitnessTestData() {
+    return function* (action) {
+        try {
+            const _id = action._id;
+            const data = yield call(() => api.recoverFitnessTest(_id));
+            yield put(fitnessTestsRecoverSuccess(data));
+        } catch (error) {
+            yield put(fitnessTestsRecoverError(error));
+        }
+    }
+}
+
 export function* watchAdminFitnessTests() {
     yield takeLatest(FITNESS_TESTS_SELECT_ONE_REQUEST, getAdminFitnessTestData());
     yield takeLatest(FITNESS_TESTS_FILTER_REQUEST, filterAdminFitnessTestData());
     yield takeLatest(FITNESS_TESTS_ADD_REQUEST, addAdminFitnessTestData());
     yield takeLatest(FITNESS_TESTS_UPDATE_REQUEST, updateAdminFitnessTestData());
     yield takeLatest(FITNESS_TESTS_DELETE_REQUEST, deleteAdminFitnessTestData());
+    yield takeLatest(FITNESS_TESTS_RECOVER_REQUEST, recoverAdminFitnessTestData());
 }
 
 export default [

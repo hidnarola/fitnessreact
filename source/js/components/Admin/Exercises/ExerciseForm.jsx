@@ -224,7 +224,7 @@ class ExerciseForm extends Component {
                                 options={bodyPartsOptions}
                             />
                         </div>
-                        <div className="col-md-7">
+                        <div className="col-md-6">
                             <Field
                                 name="description"
                                 value={description}
@@ -237,7 +237,7 @@ class ExerciseForm extends Component {
                                 component={EditorField}
                             />
                         </div>
-                        <div className="col-md-5">
+                        <div className="col-md-6">
                             <Field
                                 name="images"
                                 label="Images"

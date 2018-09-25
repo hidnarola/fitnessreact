@@ -40,10 +40,16 @@ function filterUser(filterData) {
     return postFormData(requestUrl + '/filter', filterData, headers);
 }
 
+function changeBlockStatus(requestData) {
+    let headers = extraHeaders();
+    return putFormData(requestUrl + '/change_block_status', requestData, headers);
+}
+
 export default {
     getUsers,
     getUser,
     updateUser,
     deleteUser,
-    filterUser
+    filterUser,
+    changeBlockStatus,
 }
