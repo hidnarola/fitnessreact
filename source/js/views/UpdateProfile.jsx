@@ -4,6 +4,7 @@ import FitnessHeader from '../components/global/FitnessHeader';
 import FitnessNav from '../components/global/FitnessNav';
 import UpdateProfileForm from '../components/Profile/UpdateProfileForm';
 import { submit } from 'redux-form';
+import { Alert } from "react-bootstrap";
 
 class UpdateProfile extends Component {
     constructor(props) {
@@ -15,6 +16,7 @@ class UpdateProfile extends Component {
 
     render() {
         const { saveActionInit } = this.state;
+        const { profileError } = this.props;
         return (
             <div className='stat-page'>
                 <FitnessHeader />
@@ -30,6 +32,13 @@ class UpdateProfile extends Component {
                         </div>
                     </div>
                     <div className="body-content row prefferences d-flex">
+                        <div className="col-md-12 validation_errors_wrapper">
+                            {profileError && profileError.length > 0 &&
+                                <Alert bsStyle="danger">
+                                    {profileError.map((o, i) => <p key={i}>{o}</p>)}
+                                </Alert>
+                            }
+                        </div>
                         <UpdateProfileForm
                             saveActionInit={saveActionInit}
                             handleSaveActionFlag={this.handleSaveActionFlag}
@@ -51,8 +60,9 @@ class UpdateProfile extends Component {
 }
 
 const mapStateToProps = (state) => {
+    const { profile } = state;
     return {
-
+        profileError: profile.get('error'),
     };
 }
 

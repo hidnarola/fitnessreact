@@ -166,19 +166,12 @@ const actionMap = {
         }));
     },
     [SAVE_LOGGED_USER_PROFILE_DETAILS_SUCCESS]: (state, action) => {
-        var newState = {
-            loading: false,
-        };
+        var newState = { loading: false };
         if (action.data.status === 1) {
             newState.profile = action.data.user;
-            newState.error = [];
         } else {
-            newState.profile = null;
-            if (action.data.message && action.data.message !== '') {
-                newState.error = [action.data.message];
-            } else {
-                newState.error = ['Something went wrong! please try again later.'];
-            }
+            let msg = action.data.message ? action.data.message : 'Something went wrong! please try again later.';
+            newState.error = [msg];
         }
         return state.merge(Map(newState));
     },

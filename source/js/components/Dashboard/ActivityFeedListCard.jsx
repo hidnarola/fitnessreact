@@ -10,6 +10,7 @@ import { routeCodes } from '../../constants/routes';
 import { FaGlobe, FaLock, FaGroup } from 'react-icons/lib/fa';
 import ReactHtmlParser from "react-html-parser";
 import cns from 'classnames';
+import ShowMore from "react-show-more";
 
 class ActivityFeedListCard extends Component {
     render() {
@@ -124,7 +125,14 @@ class ActivityFeedListCard extends Component {
                 <div className="posttype-body">
                     {description &&
                         <div className="posttype-body-white">
-                            {ReactHtmlParser(description)}
+                            <ShowMore
+                                lines={3}
+                                more='Show more'
+                                less='Show less'
+                                anchorClass='show-more-less-link'
+                            >
+                                {ReactHtmlParser(description)}
+                            </ShowMore>
                         </div>
                     }
                     <div className={cns("posttype-body-grey", postImageDisplayClass)}>

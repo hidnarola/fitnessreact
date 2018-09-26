@@ -59,6 +59,7 @@ import WidgetMuscleCard from '../Common/WidgetMuscleCard';
 import WidgetBodyFatCard from '../Common/WidgetBodyFatCard';
 import WidgetBadgesCard from '../Common/WidgetBadgesCard';
 import SweetAlert from "react-bootstrap-sweetalert";
+import ShowMore from "react-show-more";
 
 class ProfileFithub extends Component {
     constructor(props) {
@@ -402,7 +403,14 @@ class ProfileFithub extends Component {
                                                 <div className="posttype-body">
                                                     {description &&
                                                         <div className="posttype-body-white">
-                                                            {ReactHtmlParser(description)}
+                                                            <ShowMore
+                                                                lines={3}
+                                                                more='Show more'
+                                                                less='Show less'
+                                                                anchorClass='show-more-less-link'
+                                                            >
+                                                                {ReactHtmlParser(description)}
+                                                            </ShowMore>
                                                         </div>
                                                     }
                                                     <div className={cns("posttype-body-grey", postImageDisplayClass)}>

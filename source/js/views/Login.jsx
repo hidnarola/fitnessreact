@@ -58,7 +58,7 @@ class Login extends Component {
                     <div className="step-box-l">
                         <div className="what-difference">
                             <h3>Create Your Account</h3>
-                            <p>Come join the fitness community! Lets set up your Account. Already have one? <a href="javascript:void(0)" onClick={this.handleSignUpRequest}>Sign in here</a> </p>
+                            <p>Come join the fitness community! Lets set up your Account. Already have one? <a href="javascript:void(0)" onClick={this.handleLoginRequest}>Sign in here</a> </p>
                             <a href="javascript:void(0)" onClick={this.handleSignUpRequest}>Register</a>
                         </div>
                     </div>

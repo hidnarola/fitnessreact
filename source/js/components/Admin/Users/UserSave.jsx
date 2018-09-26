@@ -22,7 +22,7 @@ class UserSave extends Component {
                                 <div className="col-md-12 validation_errors_wrapper">
                                     {updateError && updateError.length > 0 &&
                                         <Alert bsStyle="danger">
-                                            {updateError.map((o, i) => <p>{o}</p>)}
+                                            {updateError.map((o, i) => <p key={i}>{o}</p>)}
                                         </Alert>
                                     }
                                 </div>

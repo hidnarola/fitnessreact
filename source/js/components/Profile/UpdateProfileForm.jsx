@@ -18,7 +18,7 @@ import {
     FITASSIST_USER_DETAILS_TOKEN_KEY,
     LOCALSTORAGE_USER_DETAILS_KEY,
 } from '../../constants/consts';
-import { capitalizeFirstLetter, ts, convertUnits } from '../../helpers/funs';
+import { capitalizeFirstLetter, ts, convertUnits, focusToControl } from '../../helpers/funs';
 import ReactQuill from 'react-quill';
 import {
     getLoggedUserProfileDetailsRequest,
@@ -65,11 +65,10 @@ class UpdateProfileForm extends Component {
     }
 
     render() {
-        const { handleSubmit } = this.props;
         const { weightUnit, heightUnit } = this.state;
         return (
             <div className="update-profile-details-form col-md-12 no-padding">
-                <form id="form1" onSubmit={handleSubmit}>
+                <form>
                     <div className="col-md-6 pull-left">
                         <div className="white-box">
                             <div className="whitebox-head">
@@ -381,8 +380,9 @@ class UpdateProfileForm extends Component {
             handleSaveActionFlag,
             profileSettings,
             settingsLoading,
+            profileError,
         } = this.props;
-        if (selectActionInit && !loading) {
+        if (selectActionInit && !loading && profile) {
             this.setState({ selectActionInit: false });
             var dob = null;
             if (profile.dateOfBirth) {
@@ -409,8 +409,13 @@ class UpdateProfileForm extends Component {
             dispatch(hidePageLoader());
         } else if (saveActionInit && !loading) {
             this.setState({ selectActionInit: true });
-            dispatch(getLoggedUserProfileDetailsRequest());
-            ts('Profile details updated successfully.');
+            if (profileError && profileError.length > 0) {
+                focusToControl('.validation_errors_wrapper');
+                dispatch(hidePageLoader());
+            } else {
+                dispatch(getLoggedUserProfileDetailsRequest());
+                ts('Profile details updated successfully.');
+            }
             handleSaveActionFlag(false);
         }
         if (!settingsLoading && !loading && ((prevProps.profile !== profile) || (prevProps.profileSettings !== profileSettings))) {
@@ -451,9 +456,9 @@ const handleSubmit = (data, dispatch, props) => {
     var heightUnit = data.heightUnit;
     var weightUnit = data.weightUnit;
     var formData = {
-        firstName: capitalizeFirstLetter(data.first_name),
-        lastName: (data.last_name) ? capitalizeFirstLetter(data.last_name) : '',
-        mobileNumber: (data.mobile_no) ? data.mobile_no : '',
+        firstName: (data.first_name && data.first_name) ? capitalizeFirstLetter(data.first_name) : '',
+        lastName: (data.last_name && data.last_name.trim()) ? capitalizeFirstLetter(data.last_name).trim() : '',
+        mobileNumber: (data.mobile_no && data.mobile_no.trim()) ? data.mobile_no.trim() : '',
         gender: (data.gender) ? data.gender : GENDER_MALE,
         dateOfBirth: (data.dob) ? data.dob : '',
         goal: (data.primary_goal) ? data.primary_goal : null,
@@ -477,6 +482,7 @@ const mapStateToProps = (state) => {
     return {
         loading: profile.get('loading'),
         profile: profile.get('profile'),
+        profileError: profile.get('error'),
         profileSettings: profile.get('settings'),
         settingsLoading: profile.get('loading'),
     };
