@@ -234,6 +234,7 @@ class BodyMeasurementForm extends Component {
                                     onActiveDateChange={this.onActiveDateChange}
                                     onClickMonth={this.onMonthClick}
                                     value={logDate}
+                                    maxDate={new Date()}
                                     tileContent={({ date, view }) => {
                                         if (view !== 'month') {
                                             return '';

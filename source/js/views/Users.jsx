@@ -61,7 +61,7 @@ class Users extends Component {
                         </div>
                         <div className="body-head-r">
                             <form className="form_search" onSubmit={this.handleSubmit}>
-                                <input className="" type="text" id="users_search_user" name="users_search_user" onChange={this.handleChange} value={allUsersSearchValue} placeholder="Search Users" autocomplete="off" />
+                                <input className="" type="text" id="users_search_user" name="users_search_user" onChange={this.handleChange} value={allUsersSearchValue} placeholder="Search Users" autoComplete="off" />
                                 <button type="submit"><i className="icon-search"></i></button>
                             </form>
                         </div>

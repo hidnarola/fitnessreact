@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
 import { Field, reduxForm, FieldArray, formValueSelector } from 'redux-form';
 import { InputField, EditorField, SelectField_ReactSelect, FileField_Dropzone_Single } from '../../../helpers/FormControlHelper';
-import { required, requiredReactSelect, requiredImage } from '../../../formValidation/validationRules';
+import { required, requiredReactSelect, requiredImage, requiredReactSelectStatus } from '../../../formValidation/validationRules';
 import { FaTrash } from 'react-icons/lib/fa'
 import { adminRouteCodes } from '../../../constants/adminRoutes';
 import {
@@ -36,21 +36,26 @@ const categoryOptions = [
     { value: FITNESS_TEST_CAT_FLEXIBILITY, label: capitalizeFirstLetter(FITNESS_TEST_CAT_FLEXIBILITY.replace('_', ' ')) },
     { value: FITNESS_TEST_CAT_POSTURE, label: capitalizeFirstLetter(FITNESS_TEST_CAT_POSTURE.replace('_', ' ')) },
     { value: FITNESS_TEST_CAT_CARDIO, label: capitalizeFirstLetter(FITNESS_TEST_CAT_CARDIO.replace('_', ' ')) },
-]
+];
 
 const subCategoryOptions = [
     { value: FITNESS_TEST_SUB_CAT_UPPER_BODY, label: capitalizeFirstLetter(FITNESS_TEST_SUB_CAT_UPPER_BODY.replace('_', ' ')) },
     { value: FITNESS_TEST_SUB_CAT_SIDE, label: capitalizeFirstLetter(FITNESS_TEST_SUB_CAT_SIDE.replace('_', ' ')) },
     { value: FITNESS_TEST_SUB_CAT_LOWER_BODY, label: capitalizeFirstLetter(FITNESS_TEST_SUB_CAT_LOWER_BODY.replace('_', ' ')) },
     { value: FITNESS_TEST_SUB_CAT_CARDIO, label: capitalizeFirstLetter(FITNESS_TEST_SUB_CAT_CARDIO.replace('_', ' ')) },
-]
+];
 
 const formatOptions = [
     { value: FITNESS_TEST_FORMAT_TEXT_FIELD, label: FITNESS_TEST_FORMAT_TEXT_FIELD_STR },
     { value: FITNESS_TEST_FORMAT_MAX_REP, label: FITNESS_TEST_FORMAT_MAX_REP_STR },
     { value: FITNESS_TEST_FORMAT_MULTISELECT, label: FITNESS_TEST_FORMAT_MULTISELECT_STR },
     { value: FITNESS_TEST_FORMAT_A_OR_B, label: FITNESS_TEST_FORMAT_A_OR_B_STR },
-]
+];
+
+const statusOptions = [
+    { value: 1, label: 'Active' },
+    { value: 0, label: 'Inactive' },
+];
 
 const maxRepOptions = [];
 
@@ -121,75 +126,97 @@ class FitnessTestForm extends Component {
             <div className="fitness-test-form-data">
                 <form onSubmit={handleSubmit}>
                     <div className="row">
-                        <div className="col-md-6 no-padding">
-                            <div className="col-md-12">
-                                <Field
-                                    name="category"
-                                    label="Category"
-                                    labelClass="control-label"
-                                    wrapperClass="form-group"
-                                    placeholder="Category"
-                                    component={SelectField_ReactSelect}
-                                    options={categoryOptions}
-                                    errorClass="help-block"
-                                    validate={this.validationRules.category}
-                                />
+                        <div className="col-md-6">
+                            <div className="row">
+                                <div className="col-md-12">
+                                    <Field
+                                        name="name"
+                                        className="form-control"
+                                        label="Name"
+                                        labelClass="control-label"
+                                        wrapperClass="form-group"
+                                        placeholder="Name"
+                                        component={InputField}
+                                        errorClass="help-block"
+                                        validate={this.validationRules.name}
+                                    />
+                                </div>
                             </div>
-                            <div className="col-md-12">
-                                <Field
-                                    name="subCategory"
-                                    label="Sub Category"
-                                    labelClass="control-label"
-                                    wrapperClass="form-group"
-                                    placeholder="Sub Category"
-                                    component={SelectField_ReactSelect}
-                                    options={subCategoryOptions}
-                                    errorClass="help-block"
-                                    validate={this.validationRules.subCategory}
-                                />
+                            <div className="row">
+                                <div className="col-md-6">
+                                    <Field
+                                        name="category"
+                                        label="Category"
+                                        labelClass="control-label"
+                                        wrapperClass="form-group"
+                                        placeholder="Category"
+                                        component={SelectField_ReactSelect}
+                                        options={categoryOptions}
+                                        errorClass="help-block"
+                                        validate={this.validationRules.category}
+                                    />
+                                </div>
+                                <div className="col-md-6">
+                                    <Field
+                                        name="subCategory"
+                                        label="Sub Category"
+                                        labelClass="control-label"
+                                        wrapperClass="form-group"
+                                        placeholder="Sub Category"
+                                        component={SelectField_ReactSelect}
+                                        options={subCategoryOptions}
+                                        errorClass="help-block"
+                                        validate={this.validationRules.subCategory}
+                                    />
+                                </div>
                             </div>
-                            <div className="col-md-12">
-                                <Field
-                                    name="name"
-                                    className="form-control"
-                                    label="Name"
-                                    labelClass="control-label"
-                                    wrapperClass="form-group"
-                                    placeholder="Name"
-                                    component={InputField}
-                                    errorClass="help-block"
-                                    validate={this.validationRules.name}
-                                />
-                            </div>
-                            <div className="col-md-12">
-                                <Field
-                                    name="format"
-                                    label="Format"
-                                    labelClass="control-label"
-                                    wrapperClass="form-group"
-                                    placeholder="Format"
-                                    component={SelectField_ReactSelect}
-                                    options={formatOptions}
-                                    errorClass="help-block"
-                                    validate={this.validationRules.format}
-                                />
+                            <div className="row">
+                                <div className="col-md-6">
+                                    <Field
+                                        name="format"
+                                        label="Format"
+                                        labelClass="control-label"
+                                        wrapperClass="form-group"
+                                        placeholder="Format"
+                                        component={SelectField_ReactSelect}
+                                        options={formatOptions}
+                                        errorClass="help-block"
+                                        validate={this.validationRules.format}
+                                    />
+                                </div>
+
+                                <div className="col-md-6">
+                                    <Field
+                                        name="status"
+                                        label="Status"
+                                        labelClass="control-label display_block"
+                                        wrapperClass="form-group"
+                                        placeholder="Status"
+                                        component={SelectField_ReactSelect}
+                                        options={statusOptions}
+                                        errorClass="help-block"
+                                        validate={[requiredReactSelectStatus]}
+                                    />
+                                </div>
                             </div>
                         </div>
                         <div className="col-md-6 no-padding">
-                            <div className="col-md-12">
-                                <Field
-                                    name="image"
-                                    label="Featured Image"
-                                    labelClass="control-label display_block"
-                                    mainWrapperClass="image-form-main-wrapper"
-                                    wrapperClass="form-group"
-                                    placeholder="Image"
-                                    className="filefield-dropzone-wrapper"
-                                    component={FileField_Dropzone_Single}
-                                    validate={this.validationRules.image}
-                                    errorClass="help-block"
-                                    existingImages={existingFeatureImages}
-                                />
+                            <div className="row">
+                                <div className="col-md-12">
+                                    <Field
+                                        name="image"
+                                        label="Featured Image"
+                                        labelClass="control-label display_block"
+                                        mainWrapperClass="image-form-main-wrapper"
+                                        wrapperClass="form-group"
+                                        placeholder="Image"
+                                        className="filefield-dropzone-wrapper"
+                                        component={FileField_Dropzone_Single}
+                                        validate={this.validationRules.image}
+                                        errorClass="help-block"
+                                        existingImages={existingFeatureImages}
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -392,6 +419,7 @@ class FitnessTestForm extends Component {
                     subCategory: _.find(subCategoryOptions, { value: fitnessTest.subCategory }),
                     name: fitnessTest.name,
                     format: _.find(formatOptions, { value: fitnessTest.format }),
+                    status: _.find(statusOptions, { value: fitnessTest.status }),
                     description: fitnessTest.description,
                     instructions: fitnessTest.instructions,
                 }

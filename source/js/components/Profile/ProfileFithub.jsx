@@ -126,6 +126,7 @@ class ProfileFithub extends Component {
             showAddWidgetModal,
             showPostDeleteModal,
             showPostAccessChangeModal,
+            newPostActionInit,
         } = this.state;
         const {
             loggedUserData,
@@ -253,8 +254,10 @@ class ProfileFithub extends Component {
                                                 </Dropdown.Menu>
                                             </Dropdown>
                                         }
-                                        <button type="button" onClick={this.handleMakePost} className="vertical-middle-r">
-                                            Post<i className="icon-send"></i>
+                                        <button type="button" onClick={this.handleMakePost} className="vertical-middle-r" disabled={newPostActionInit}>
+                                            Post
+                                            {!newPostActionInit && <i className="icon-send"></i>}
+                                            {newPostActionInit && <FaSpinner className="loader-spinner" />}
                                         </button>
                                     </div>
                                 </div>
@@ -348,6 +351,7 @@ class ProfileFithub extends Component {
                                                 likesStr += ' liked this';
                                             }
                                         }
+                                        let postDesc = ReactHtmlParser(description);
                                         return (
                                             <div className="post-type" key={index}>
                                                 <div className="posttype-head d-flex justify-content-start">
@@ -409,7 +413,8 @@ class ProfileFithub extends Component {
                                                                 less='Show less'
                                                                 anchorClass='show-more-less-link'
                                                             >
-                                                                {ReactHtmlParser(description)}
+                                                                {/* {ReactHtmlParser(description)} */}
+                                                                {/* {postDesc} */}
                                                             </ShowMore>
                                                         </div>
                                                     }
@@ -479,6 +484,7 @@ class ProfileFithub extends Component {
                                                 {showCommentBox &&
                                                     <CommentBoxForm
                                                         postId={post._id}
+                                                        index={index}
                                                         onSubmit={this.handleComment}
                                                     />
                                                 }
@@ -622,9 +628,6 @@ class ProfileFithub extends Component {
             } else {
                 newPostsState[selectedTimelineIndex] = commentPost;
             }
-            var formData = {
-                [`comment_${selectedTimelineId}`]: '',
-            };
             dispatch(reset('commentBoxForm'));
             this.setState({
                 commentActionInit: false,
@@ -784,8 +787,11 @@ class ProfileFithub extends Component {
         this.setState({ showPostPhotoModal: false });
     }
 
-    handleAddPostImages = (filesToUpload, e) => {
+    handleAddPostImages = (filesToUpload, rejectedFiles) => {
         const { postImages } = this.state;
+        if (rejectedFiles && rejectedFiles.length > 0) {
+            te('Invalid file(s)');
+        }
         var allImages = _.concat(postImages, filesToUpload);
         this.setState({ postImages: allImages });
     }

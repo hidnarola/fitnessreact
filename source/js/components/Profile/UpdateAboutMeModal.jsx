@@ -1,8 +1,18 @@
 import React, { Component } from 'react';
-import { reduxForm, Field } from 'redux-form';
+import { connect } from "react-redux";
+import { reduxForm, Field, formValueSelector } from 'redux-form';
 import { Modal, Button } from 'react-bootstrap';
 import { EditorField, InputField } from '../../helpers/FormControlHelper';
-import { required } from '../../formValidation/validationRules';
+import { MEASUREMENT_UNIT_POUND, MEASUREMENT_UNIT_INCH } from '../../constants/consts';
+import { min, max } from '../../formValidation/validationRules';
+
+const min50 = min(50);
+const min44 = min(44);
+const min20 = min(20);
+const max1000 = max(1000);
+const max600 = max(600);
+const max240 = max(240);
+const max2200 = max(2200);
 
 class UpdateAboutMeModal extends Component {
     constructor(props) {
@@ -13,8 +23,10 @@ class UpdateAboutMeModal extends Component {
     }
 
     render() {
-        const { show, handleClose, handleSubmit } = this.props;
+        const { show, handleClose, handleSubmit, heightUnit, weightUnit } = this.props;
         const { aboutMe } = this.state;
+        let validateWeight = (weightUnit !== MEASUREMENT_UNIT_POUND) ? [min20, max1000] : [min44, max2200];
+        let validateHeight = (heightUnit !== MEASUREMENT_UNIT_INCH) ? [min50, max600] : [min20, max240];
         return (
             <div className="about-me-update-modal-save-form-wrapper">
                 <div className="about-me-update-modal-save-modal-wrapper">
@@ -42,25 +54,35 @@ class UpdateAboutMeModal extends Component {
                                             name="height"
                                             type="number"
                                             className="form-control"
-                                            label="Height"
+                                            label={`Height (${heightUnit})`}
                                             labelClass="control-label"
                                             wrapperClass="form-group"
-                                            placeholder="Height"
+                                            placeholder={`Height (${heightUnit})`}
                                             component={InputField}
                                             errorClass="help-block"
-                                            validate={[required]}
+                                            validate={validateHeight}
+                                        />
+                                        <Field
+                                            name="heightUnit"
+                                            component="input"
+                                            type="hidden"
                                         />
                                         <Field
                                             name="weight"
                                             type="number"
                                             className="form-control"
-                                            label="Weight"
+                                            label={`Weight (${weightUnit})`}
                                             labelClass="control-label"
                                             wrapperClass="form-group"
-                                            placeholder="Weight"
+                                            placeholder={`Weight (${weightUnit})`}
                                             component={InputField}
                                             errorClass="help-block"
-                                            validate={[required]}
+                                            validate={validateWeight}
+                                        />
+                                        <Field
+                                            name="weightUnit"
+                                            component="input"
+                                            type="hidden"
                                         />
                                     </div>
                                 </div>
@@ -83,8 +105,17 @@ class UpdateAboutMeModal extends Component {
     }
 }
 
+const selector = formValueSelector('aboutMeUpdateModalForm')
+
 UpdateAboutMeModal = reduxForm({
     form: 'aboutMeUpdateModalForm'
 })(UpdateAboutMeModal);
 
-export default UpdateAboutMeModal;
+const mapStateToProps = (state) => {
+    return {
+        heightUnit: selector(state, 'heightUnit'),
+        weightUnit: selector(state, 'weightUnit'),
+    };
+}
+
+export default connect(mapStateToProps)(UpdateAboutMeModal);

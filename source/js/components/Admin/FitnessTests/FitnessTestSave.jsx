@@ -11,6 +11,7 @@ import { adminRouteCodes } from '../../../constants/adminRoutes';
 import { ts, focusToControl } from '../../../helpers/funs';
 import { fitnessTestsAddRequest, fitnessTestsUpdateRequest, fitnessTestsReinitialize } from '../../../actions/admin/fitnessTests';
 import { Alert } from "react-bootstrap";
+import { showPageLoader, hidePageLoader } from '../../../actions/pageLoader';
 
 class FitnessTestSave extends Component {
     constructor(props) {
@@ -67,9 +68,11 @@ class FitnessTestSave extends Component {
             loading,
             history,
             error,
+            dispatch,
         } = this.props;
         if (saveActionInit && !loading) {
             this.setState({ saveActionInit: false });
+            dispatch(hidePageLoader());
             if (error.length <= 0) {
                 ts('Fitness test saved successfully!');
                 history.push(adminRouteCodes.FITNESS_TESTS)
@@ -96,6 +99,7 @@ class FitnessTestSave extends Component {
             description: (data.description) ? data.description.trim() : '',
             instructions: (data.instructions) ? data.instructions.trim() : '',
             format: format,
+            status: (data.status && data.status.value) ? data.status.value : 0,
             image: (data.image) ? data.image : null,
         }
         if (format === FITNESS_TEST_FORMAT_MAX_REP && data.max_rep) {
@@ -138,6 +142,7 @@ class FitnessTestSave extends Component {
         formData.append('description', requestObj.description);
         formData.append('instructions', requestObj.instructions);
         formData.append('format', requestObj.format);
+        formData.append('status', requestObj.status);
         if (requestObj.image) {
             formData.append('featureImage', requestObj.image[0]);
         }
@@ -173,6 +178,7 @@ class FitnessTestSave extends Component {
         } else {
             dispatch(fitnessTestsAddRequest(formData));
         }
+        dispatch(showPageLoader());
         this.setState({ saveActionInit: true });
     }
     //#endregion

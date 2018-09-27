@@ -118,8 +118,8 @@ class Profile extends Component {
                         <div className="body-head d-flex">
                             <div className="body-head-l">
                                 <h2>
-                                    {profile && (typeof profile.firstName !== 'undefined') && (profile.firstName)}
-                                    {profile && (typeof profile.lastName !== 'undefined') && (' ' + profile.lastName)}
+                                    {profile && (typeof profile.firstName !== 'undefined' && profile.firstName) && (profile.firstName)}
+                                    {profile && (typeof profile.lastName !== 'undefined' && profile.lastName) && (' ' + profile.lastName)}
                                 </h2>
                                 <div className="body-head-l-btm">
 
@@ -424,12 +424,6 @@ class Profile extends Component {
                 UnfriendRequestDisabled: false,
                 friendRequestReceivedDisabled: false,
             });
-            const updateAboutMeFormData = {
-                about_me: profile.aboutMe,
-                height: profile.height,
-                weight: profile.weight,
-            }
-            dispatch(initialize('aboutMeUpdateModalForm', updateAboutMeFormData));
             if (updateLocalStorageData) {
                 this.setState({ updateLocalStorageData: false });
                 localStorage.setItem(LOCALSTORAGE_USER_DETAILS_KEY, jwt.encode(profile, FITASSIST_USER_DETAILS_TOKEN_KEY));
@@ -624,10 +618,22 @@ class Profile extends Component {
     }
 
     showUpdateAboutMeModal = () => {
+        const { dispatch } = this.props;
+        const { profile } = this.state;
+        const updateAboutMeFormData = {
+            about_me: profile.aboutMe,
+            height: profile.height,
+            weight: profile.weight,
+            heightUnit: profile.heightUnit,
+            weightUnit: profile.weightUnit,
+        }
+        dispatch(initialize('aboutMeUpdateModalForm', updateAboutMeFormData));
         this.setState({ showUpdateAboutMeModal: true });
     }
 
     handleHideUpdateAboutMeModal = () => {
+        const { dispatch } = this.props;
+        dispatch(reset('aboutMeUpdateModalForm'));
         this.setState({ showUpdateAboutMeModal: false });
     }
 
@@ -637,6 +643,8 @@ class Profile extends Component {
             aboutMe: data.about_me,
             height: data.height,
             weight: data.weight,
+            heightUnit: data.heightUnit,
+            weightUnit: data.weightUnit,
         }
         this.setState({ updateAboutMeDetailsActionInit: true });
         dispatch(saveAboutProfileDetailsRequest(requestObj));
@@ -684,22 +692,22 @@ class Profile extends Component {
         const { settings } = this.props;
         let heightUnit = MEASUREMENT_UNIT_CENTIMETER;
         let weightUnit = MEASUREMENT_UNIT_KILOGRAM;
-        let height = 0;
-        let weight = 0;
+        let height = '';
+        let weight = '';
         if (settings) {
             heightUnit = (settings.bodyMeasurement) ? settings.bodyMeasurement : MEASUREMENT_UNIT_CENTIMETER;
             weightUnit = (settings.weight) ? settings.weight : MEASUREMENT_UNIT_KILOGRAM;
         }
-        if (profile.height) {
+        if (profile.height && profile.height > 0) {
             height = convertUnits(MEASUREMENT_UNIT_CENTIMETER, heightUnit, profile.height);
         }
-        if (profile.weight) {
+        if (profile.weight && profile.weight > 0) {
             weight = convertUnits(MEASUREMENT_UNIT_GRAM, weightUnit, profile.weight);
         }
         profile.heightUnit = heightUnit;
         profile.weightUnit = weightUnit;
-        profile.height = height.toFixed(2);
-        profile.weight = weight.toFixed(2);
+        profile.height = (height && height > 0) ? height.toFixed(2) : '';
+        profile.weight = (weight && weight > 0) ? weight.toFixed(2) : '';
         return profile;
     }
     //#endregion

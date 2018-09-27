@@ -5,7 +5,7 @@ import _ from 'lodash';
 import { showPageLoader, hidePageLoader } from '../../../actions/pageLoader';
 import { exerciseAddRequest, exerciseUpdateRequest } from '../../../actions/admin/exercises';
 import { adminRouteCodes } from '../../../constants/adminRoutes';
-import { capitalizeFirstLetter, focusToControl } from '../../../helpers/funs';
+import { capitalizeFirstLetter, focusToControl, ts } from '../../../helpers/funs';
 import { Alert } from "react-bootstrap";
 
 class ExerciseSave extends Component {
@@ -56,6 +56,7 @@ class ExerciseSave extends Component {
         const { saveActionInit } = this.state;
         if (saveActionInit && !loading) {
             if (!error || error.length <= 0) {
+                ts('Exercise saved successfully!');
                 history.push(adminRouteCodes.EXERCISE);
             } else if (error && error.length > 0) {
                 focusToControl('.validation_errors_wrapper');

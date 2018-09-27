@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { NavLink, Link } from 'react-router-dom';
 import { routeCodes } from 'constants/routes';
 import FaSearch from 'react-icons/lib/fa/search';
+import FaSpinner from 'react-icons/lib/fa/spinner';
 import FaNoti from 'react-icons/lib/md/notifications-none';
 import FaMenu from 'react-icons/lib/md/menu';
 import FaMail from 'react-icons/lib/md/markunread';
@@ -32,6 +33,7 @@ class FitnessHeader extends Component {
         this.state = {
             searchSuggestions: [],
             searchIsLoading: false,
+            showSearchLoader: false,
         }
         this.searchDebounce = _.debounce(this.searchUsers, 1000);
     }
@@ -57,6 +59,7 @@ class FitnessHeader extends Component {
         } = this.props;
         const {
             searchSuggestions,
+            showSearchLoader,
         } = this.state;
         var loggedUserImage = '';
         if (loggedUserData && loggedUserData.avatar) {
@@ -89,10 +92,14 @@ class FitnessHeader extends Component {
                                     name: 'header_search_users',
                                     value: searchValue,
                                     onChange: this.handleSearchChange,
-                                    placeholder: 'Search',
+                                    placeholder: 'Search users',
                                 }}
                             />
-
+                            {showSearchLoader &&
+                                <span className="loader-icon">
+                                    <FaSpinner size={22} className="loader-spinner" />
+                                </span>
+                            }
                         </div>
                     </div>
                     <div className="header-r d-flex">
@@ -181,9 +188,15 @@ class FitnessHeader extends Component {
                     _id: 'view_all',
                     text: 'View All',
                 });
+            } else {
+                suggestedUsers.push({
+                    _id: 'no_result',
+                    text: 'No user found',
+                });
             }
             this.setState({
-                searchIsLoading: true,
+                searchIsLoading: false,
+                showSearchLoader: false,
                 searchSuggestions,
             });
         }
@@ -208,6 +221,9 @@ class FitnessHeader extends Component {
     //#region Common functions
     handleSearchChange = (event, { newValue, method }) => {
         const { dispatch } = this.props;
+        if (method === 'type' && newValue !== '') {
+            this.setState({ showSearchLoader: true });
+        }
         dispatch(handleChangeUserSearchFor('searchValue', newValue));
     }
 
@@ -234,7 +250,7 @@ class FitnessHeader extends Component {
     };
 
     getSuggestionValue = (suggestion) => {
-        if (suggestion._id === "view_all") {
+        if (suggestion._id === "view_all" || suggestion._id === "no_result") {
             return this.props.searchValue;
         }
         var fullName = suggestion.firstName;
@@ -245,7 +261,7 @@ class FitnessHeader extends Component {
     }
 
     renderSearchSuggestion = (suggestion, { query }) => {
-        if (suggestion._id === 'view_all') {
+        if (suggestion._id === 'view_all' || suggestion._id === 'no_result') {
             return (
                 <NavLink to={`${routeCodes.USERS}`}>
                     <span>{suggestion.text}</span>

@@ -17,6 +17,8 @@ import {
     MEASUREMENT_UNIT_GRAM,
     FITASSIST_USER_DETAILS_TOKEN_KEY,
     LOCALSTORAGE_USER_DETAILS_KEY,
+    MEASUREMENT_UNIT_POUND,
+    MEASUREMENT_UNIT_INCH,
 } from '../../constants/consts';
 import { capitalizeFirstLetter, ts, convertUnits, focusToControl } from '../../helpers/funs';
 import ReactQuill from 'react-quill';
@@ -38,11 +40,13 @@ import { setLoggedUserFromLocalStorage } from '../../actions/user';
 
 const minLength2 = minLength(2);
 const maxLength20 = maxLength(20);
-const min0 = min(0);
-const max2200 = max(2200);
-const max240 = max(240);
+const min50 = min(50);
+const min44 = min(44);
+const min20 = min(20);
 const max1000 = max(1000);
 const max600 = max(600);
+const max240 = max(240);
+const max2200 = max(2200);
 
 class UpdateProfileForm extends Component {
     constructor(props) {
@@ -66,6 +70,8 @@ class UpdateProfileForm extends Component {
 
     render() {
         const { weightUnit, heightUnit } = this.state;
+        let validateWeight = (weightUnit !== MEASUREMENT_UNIT_POUND) ? [min20, max1000] : [min44, max2200];
+        let validateHeight = (heightUnit !== MEASUREMENT_UNIT_INCH) ? [min50, max600] : [min20, max240];
         return (
             <div className="update-profile-details-form col-md-12 no-padding">
                 <form>
@@ -185,10 +191,7 @@ class UpdateProfileForm extends Component {
                                                 type="number"
                                                 component={InputField}
                                                 units={(<label>{(heightUnit) ? heightUnit.toUpperCase() : MEASUREMENT_UNIT_CENTIMETER.toUpperCase()}</label>)}
-                                                validate={[
-                                                    min0,
-                                                    (heightUnit !== MEASUREMENT_UNIT_CENTIMETER) ? max240 : max600,
-                                                ]}
+                                                validate={validateHeight}
                                             />
                                             <Field
                                                 type="hidden"
@@ -209,10 +212,7 @@ class UpdateProfileForm extends Component {
                                                 placeholder="Weight"
                                                 component={InputField}
                                                 units={(<label>{(weightUnit) ? weightUnit.toUpperCase() : MEASUREMENT_UNIT_KILOGRAM.toUpperCase()}</label>)}
-                                                validate={[
-                                                    min0,
-                                                    (weightUnit !== MEASUREMENT_UNIT_KILOGRAM) ? max2200 : max1000,
-                                                ]}
+                                                validate={validateWeight}
                                             />
                                             <Field
                                                 type="hidden"

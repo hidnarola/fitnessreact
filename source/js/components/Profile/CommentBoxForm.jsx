@@ -4,7 +4,7 @@ import { Field, reduxForm } from 'redux-form';
 
 class CommentBoxForm extends Component {
     render() {
-        const { handleSubmit, postId } = this.props;
+        const { handleSubmit, postId, commentLoading } = this.props;
         return (
             <div className="post-comment-box-form-wrapper">
                 <form onSubmit={handleSubmit}>
@@ -15,6 +15,7 @@ class CommentBoxForm extends Component {
                             className="form-control"
                             placeholder="Comment"
                             component={CommentBoxField}
+                            commentLoading={commentLoading}
                         />
                     </div>
                 </form>
@@ -28,8 +29,9 @@ CommentBoxForm = reduxForm({
 })(CommentBoxForm);
 
 const mapStateToProps = (state) => {
+    const { postComments } = state;
     return {
-
+        commentLoading: postComments.get('loading'),
     };
 }
 
@@ -38,7 +40,7 @@ export default connect(
 )(CommentBoxForm);
 
 const CommentBoxField = (props) => {
-    const { input, meta, wrapperClass, className, labelClass, placeholder, errorClass } = props;
+    const { input, meta, wrapperClass, className, labelClass, placeholder, errorClass, commentLoading } = props;
     return (
         <div
             className={
@@ -50,7 +52,7 @@ const CommentBoxField = (props) => {
                 className={className}
                 placeholder={placeholder}
             />
-            <button type="submit">
+            <button type="submit" disabled={commentLoading}>
                 <i className="icon-send"></i>
             </button>
             {meta.submitFailed &&

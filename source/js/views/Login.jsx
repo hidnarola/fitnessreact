@@ -3,12 +3,14 @@ import { connect } from 'react-redux';
 import { USER_ROLE, SESSION_EXPIRED_URL_TYPE, LOCALSTORAGE_ROLE_KEY, ADMIN_ROLE } from '../constants/consts';
 import { checkLogin } from '../helpers/loginHelper';
 import Auth from '../auth/Auth';
-import { publicPath } from '../constants/routes';
+import { publicPath, routeCodes } from '../constants/routes';
 import $ from "jquery";
 import { adminRootRoute } from '../constants/adminRoutes';
 import { te, toggleSideMenu } from '../helpers/funs';
 import { resetUserMesagesState } from '../actions/userMessages';
 import { resetLoggedUserState } from '../actions/user';
+import { Link } from "react-router-dom";
+import logo from 'img/common/logo.png';
 
 const auth = new Auth();
 
@@ -55,6 +57,11 @@ class Login extends Component {
         return (
             <div className="step-wrap step-wrap-login login-wrapper">
                 <div className="step-box step-box_expried">
+                    <div className="logo_login_page">
+                        <Link to={routeCodes.HOME}>
+                            <img src={logo} />Fit-Assist
+                        </Link>
+                    </div>
                     <div className="step-box-l">
                         <div className="what-difference">
                             <h3>Create Your Account</h3>

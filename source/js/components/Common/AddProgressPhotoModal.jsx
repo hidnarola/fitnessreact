@@ -45,6 +45,7 @@ class AddProgressPhotoModal extends Component {
                                     className="progress-dropzone"
                                     multiple={false}
                                     validate={[requiredImage]}
+                                    errorClass="help-block"
                                 />
                             </div>
                             <div className="progress-popup-body-m">
@@ -99,6 +100,7 @@ class PhotoUploadField extends Component {
     constructor(props) {
         super(props);
         this.isImageSelected = false;
+        this.rejectedFiles = false;
     }
 
     render() {
@@ -120,12 +122,17 @@ class PhotoUploadField extends Component {
             )
         })
         return (
-            <div className={wrapperClass}>
+            <div
+                className={
+                    `${wrapperClass ? wrapperClass : ''} ${(meta.touched && meta.error) ? 'has-error' : ''} ${this.rejectedFiles ? 'has-error' : ''}`
+                }
+            >
                 <Dropzone
                     {...input}
                     accept={accept ? accept : "image/jpeg, image/png, image/jpg, image/gif"}
                     onClick={() => this.isImageSelected = false}
-                    onDrop={(filesToUpload, e) => {
+                    onDrop={(filesToUpload, rejectedFiles) => {
+                        this.rejectedFiles = (rejectedFiles && rejectedFiles.length > 0);
                         this.isImageSelected = (filesToUpload && filesToUpload.length > 0);
                         input.onChange(filesToUpload);
                     }}
@@ -147,6 +154,9 @@ class PhotoUploadField extends Component {
                 </Dropzone>
                 {meta.touched &&
                     ((meta.error && <span className={errorClass}>{meta.error}</span>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))
+                }
+                {this.rejectedFiles &&
+                    <span className={errorClass}>Invalid File</span>
                 }
             </div>
         );
