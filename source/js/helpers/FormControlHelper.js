@@ -9,14 +9,14 @@ import { SERVER_BASE_URL } from '../constants/consts';
 import noImg from 'img/common/no-img.png'
 
 export const InputField = (props) => {
-    const { label, input, meta, wrapperClass, className, labelClass, placeholder, errorClass, type, disabled, properties, autoComplete } = props;
+    const { label, input, meta, wrapperClass, className, labelClass, placeholder, errorClass, type, disabled, properties, autoComplete, requiredAstrisk } = props;
     return (
         <div
             className={
                 `${wrapperClass} ${(meta.touched && meta.error) ? 'has-error' : ''}`
             }
         >
-            <label htmlFor={input.name} className={labelClass}>{label}</label>
+            <label htmlFor={input.name} className={labelClass}>{label} {requiredAstrisk && <span style={{ color: "red" }}>*</span>}</label>
             <input
                 {...input}
                 type={type ? type : 'text'}
@@ -45,11 +45,12 @@ export const RadioFields = (props) => {
         type,
         radioList,
         checked,
-        handleChange
+        handleChange,
+        requiredAstrisk
     } = props;
     return (
         <div className={wrapperClass}>
-            <label htmlFor={input.name} className={labelClass}>{label}</label>
+            <label htmlFor={input.name} className={labelClass}>{label} {requiredAstrisk && <span style={{ color: "red" }}>*</span>}</label>
             {
                 radioList.map((obj, index) => {
                     return (
@@ -74,14 +75,14 @@ export const RadioFields = (props) => {
 }
 
 export const TextAreaField = (props) => {
-    const { label, input, meta, wrapperClass, className, labelClass, placeholder, errorClass } = props;
+    const { label, input, meta, wrapperClass, className, labelClass, placeholder, errorClass, requiredAstrisk } = props;
     return (
         <div
             className={
                 `${wrapperClass} ${(meta.touched && meta.error) ? 'has-error' : ''}`
             }
         >
-            <label htmlFor={input.name} className={labelClass}>{label}</label>
+            <label htmlFor={input.name} className={labelClass}>{label} {requiredAstrisk && <span style={{ color: "red" }}>*</span>}</label>
             <textarea
                 {...input}
                 className={className}
@@ -107,7 +108,8 @@ export const CheckboxField = (props) => {
         checked,
         handleClick,
         fieldLabel,
-        id
+        id,
+        requiredAstrisk
     } = props;
     return (
         <div className={wrapperClass}>
@@ -120,7 +122,7 @@ export const CheckboxField = (props) => {
                 checked={checked}
                 onClick={(e) => handleClick(e.target.checked)}
             />
-            <label htmlFor={input.name} className={labelClass}>{label}</label>
+            <label htmlFor={input.name} className={labelClass}>{label} {requiredAstrisk && <span style={{ color: "red" }}>*</span>}</label>
             {meta.touched &&
                 ((meta.error && <span className={errorClass}>{meta.error}</span>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))
             }
@@ -129,7 +131,7 @@ export const CheckboxField = (props) => {
 }
 
 export const SelectField_ReactSelect = (props) => {
-    const { label, input, meta, wrapperClass, className, labelClass, placeholder, errorClass, initialValue, options, clearable } = props;
+    const { label, input, meta, wrapperClass, className, labelClass, placeholder, errorClass, initialValue, options, clearable, requiredAstrisk } = props;
     let val = '';
     if (input.value && Object.keys(input.value).length > 0) {
         val = input.value;
@@ -142,7 +144,7 @@ export const SelectField_ReactSelect = (props) => {
                 `${wrapperClass} ${(meta.touched && meta.error) ? 'has-error' : ''}`
             }
         >
-            <label htmlFor={input.name} className={labelClass}>{label}</label>
+            <label htmlFor={input.name} className={labelClass}>{label} {requiredAstrisk && <span style={{ color: "red" }}>*</span>}</label>
             <Select
                 {...input}
                 value={val}
@@ -162,7 +164,7 @@ export const SelectField_ReactSelect = (props) => {
 }
 
 export const SelectField_ReactSelectMulti = (props) => {
-    const { label, input, meta, wrapperClass, className, labelClass, placeholder, errorClass, initialValue, options } = props;
+    const { label, input, meta, wrapperClass, className, labelClass, placeholder, errorClass, initialValue, options, requiredAstrisk } = props;
     let val = '';
     if (input.value && Object.keys(input.value).length > 0) {
         val = input.value;
@@ -175,7 +177,7 @@ export const SelectField_ReactSelectMulti = (props) => {
                 `${wrapperClass} ${(meta.touched && meta.error) ? 'has-error' : ''}`
             }
         >
-            <label htmlFor={input.name} className={labelClass}>{label}</label>
+            <label htmlFor={input.name} className={labelClass}>{label} {requiredAstrisk && <span style={{ color: "red" }}>*</span>}</label>
             <Select
                 {...input}
                 value={val}
@@ -212,7 +214,8 @@ export class FileField_Dropzone_Single extends Component {
             labelClass,
             errorClass,
             accept,
-            existingImages
+            existingImages,
+            requiredAstrisk
         } = this.props;
         let filesArr = _.values(input.value);
         let images = [];
@@ -245,7 +248,7 @@ export class FileField_Dropzone_Single extends Component {
                     `${mainWrapperClass} ${(meta.touched && meta.error) ? 'has-error' : ''} ${this.rejectedFiles ? 'has-error' : ''}`
                 }
             >
-                <label htmlFor={input.name} className={labelClass}>{label}</label>
+                <label htmlFor={input.name} className={labelClass}>{label} {requiredAstrisk && <span style={{ color: "red" }}>*</span>}</label>
                 {_existingImages}
                 <div
                     className={
@@ -295,11 +298,12 @@ export const StarRating = (props) => {
         errorClass,
         starCount,
         onStarClick,
-        starRating
+        starRating,
+        requiredAstrisk
     } = props;
     return (
         <div className={wrapperClass}>
-            <label htmlFor={input.name} className={labelClass}>{label}</label>
+            <label htmlFor={input.name} className={labelClass}>{label} {requiredAstrisk && <span style={{ color: "red" }}>*</span>}</label>
             <StarRatingComponent
                 {...input}
                 starCount={starCount}
@@ -327,10 +331,11 @@ export const DateField = (props) => {
         selectedDate,
         handleChange,
         dateFormat,
+        requiredAstrisk
     } = props;
     return (
         <div className={wrapperClass}>
-            <label htmlFor={input.name} className={labelClass}>{label}</label>
+            <label htmlFor={input.name} className={labelClass}>{label} {requiredAstrisk && <span style={{ color: "red" }}>*</span>}</label>
             <DatePicker
                 {...props}
                 selected={selectedDate}
@@ -357,11 +362,12 @@ export const EditorField = (props) => {
         placeholder,
         errorClass,
         type,
-        handleChange
+        handleChange,
+        requiredAstrisk
     } = props;
     return (
         <div className={wrapperClass}>
-            <label htmlFor={input.name} className={labelClass}>{label}</label>
+            <label htmlFor={input.name} className={labelClass}>{label} {requiredAstrisk && <span style={{ color: "red" }}>*</span>}</label>
             <ReactQuill
                 {...input}
                 value={input.value ? input.value : ''}

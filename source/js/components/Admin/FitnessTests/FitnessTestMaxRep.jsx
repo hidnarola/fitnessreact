@@ -22,7 +22,7 @@ class FitnessTestMaxRep extends Component {
                 }
             >
                 <div className="max-rep-wrapper dynamic-control-generator-wrapper">
-                    <label className="control-label">Max Reps</label>
+                    <label className="control-label">Max Reps <span style={{ color: 'red' }}>*</span></label>
                     <div className="row pull-left width-100-per step-fields-wrapper">
                         {fields &&
                             fields.map((field, index) => {

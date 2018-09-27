@@ -95,6 +95,7 @@ class UserForm extends Component {
                                 component={InputField}
                                 errorClass="help-block"
                                 validate={[required, minLength2, maxLength20]}
+                                requiredAstrisk={true}
                             />
                         </div>
                         <div className="col-md-4">
@@ -247,6 +248,7 @@ class UserForm extends Component {
                                 options={userStatusOptions}
                                 validate={[requiredReactSelectStatus]}
                                 errorClass="help-block"
+                                requiredAstrisk={true}
                             />
                         </div>
                     </div>

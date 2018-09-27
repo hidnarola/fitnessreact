@@ -108,6 +108,7 @@ class ExerciseForm extends Component {
                                 errorClass="help-block"
                                 validate={[requiredReactSelect]}
                                 onChange={this.handleCategoryChange}
+                                requiredAstrisk={true}
                             />
                         </div>
                         <div className="col-md-4">
@@ -121,6 +122,7 @@ class ExerciseForm extends Component {
                                 options={subCategories}
                                 errorClass="help-block"
                                 validate={subCategoriesValidation}
+                                requiredAstrisk={(subCategoriesValidation.length > 0)}
                             />
                         </div>
                         <div className="col-md-4">
@@ -135,6 +137,7 @@ class ExerciseForm extends Component {
                                 errorClass="help-block"
                                 warningClass=""
                                 validate={[required, min3, max150]}
+                                requiredAstrisk={true}
                             />
                         </div>
                         <div className="col-md-4">
@@ -148,6 +151,7 @@ class ExerciseForm extends Component {
                                 options={equipmentsOptions}
                                 errorClass="help-block"
                                 validate={[requiredReactSelectMulti]}
+                                requiredAstrisk={true}
                             />
                         </div>
                         <div className="col-md-4">
@@ -161,6 +165,7 @@ class ExerciseForm extends Component {
                                 options={difficultyLevelOptions}
                                 errorClass="help-block"
                                 validate={[requiredReactSelect]}
+                                requiredAstrisk={true}
                             />
                         </div>
                         <div className="col-md-2">
@@ -174,6 +179,7 @@ class ExerciseForm extends Component {
                                 options={statusOptions}
                                 errorClass="help-block"
                                 validate={[requiredReactSelectStatus]}
+                                requiredAstrisk={true}
                             />
                         </div>
                         <div className="col-md-2">
@@ -187,6 +193,7 @@ class ExerciseForm extends Component {
                                 options={mechanicsOptions}
                                 errorClass="help-block"
                                 validate={[requiredReactSelectStatus]}
+                                requiredAstrisk={true}
                             />
                         </div>
                         <div className="col-md-4">
@@ -200,6 +207,7 @@ class ExerciseForm extends Component {
                                 options={bodyPartsOptions}
                                 errorClass="help-block"
                                 validate={[requiredReactSelect]}
+                                requiredAstrisk={true}
                             />
                         </div>
                         <div className="col-md-4">

@@ -46,6 +46,7 @@ class BodyPartsSave extends Component {
                                 component={InputField}
                                 errorClass="help-block"
                                 validate={[required, min3, max50]}
+                                requiredAstrisk={true}
                             />
                             <Field
                                 name="id"

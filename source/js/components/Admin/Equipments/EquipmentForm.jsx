@@ -59,6 +59,7 @@ class EquipmentForm extends Component {
                             errorClass="help-block"
                             warningClass=""
                             validate={[required, min3, max50]}
+                            requiredAstrisk={true}
                         />
                     </div>
                     <div className="col-md-4">
@@ -72,6 +73,7 @@ class EquipmentForm extends Component {
                             options={categoryOptions}
                             errorClass="help-block"
                             validate={[requiredReactSelect]}
+                            requiredAstrisk={true}
                         />
                     </div>
                     <div className="col-md-4">
@@ -85,6 +87,7 @@ class EquipmentForm extends Component {
                             options={statusOptions}
                             errorClass="help-block"
                             validate={[requiredReactSelectStatus]}
+                            requiredAstrisk={true}
                         />
                     </div>
                 </div>

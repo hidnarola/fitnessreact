@@ -42,7 +42,7 @@ export const email = (value) => {
 }
 
 export const mobile = (value) => {
-    if (!value || !/^(\+\d{1,3}[- ]?)?\d{10}$/i.test(value)) {
+    if (value || !/^(\+\d{1,3}[- ]?)?\d{10}$/i.test(value)) {
         return "Invalid mobile number";
     }
     return undefined;

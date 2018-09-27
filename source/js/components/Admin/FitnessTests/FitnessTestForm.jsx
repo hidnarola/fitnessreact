@@ -139,6 +139,7 @@ class FitnessTestForm extends Component {
                                         component={InputField}
                                         errorClass="help-block"
                                         validate={this.validationRules.name}
+                                        requiredAstrisk={true}
                                     />
                                 </div>
                             </div>
@@ -154,6 +155,7 @@ class FitnessTestForm extends Component {
                                         options={categoryOptions}
                                         errorClass="help-block"
                                         validate={this.validationRules.category}
+                                        requiredAstrisk={true}
                                     />
                                 </div>
                                 <div className="col-md-6">
@@ -167,6 +169,7 @@ class FitnessTestForm extends Component {
                                         options={subCategoryOptions}
                                         errorClass="help-block"
                                         validate={this.validationRules.subCategory}
+                                        requiredAstrisk={true}
                                     />
                                 </div>
                             </div>
@@ -182,6 +185,7 @@ class FitnessTestForm extends Component {
                                         options={formatOptions}
                                         errorClass="help-block"
                                         validate={this.validationRules.format}
+                                        requiredAstrisk={true}
                                     />
                                 </div>
 
@@ -196,6 +200,7 @@ class FitnessTestForm extends Component {
                                         options={statusOptions}
                                         errorClass="help-block"
                                         validate={[requiredReactSelectStatus]}
+                                        requiredAstrisk={true}
                                     />
                                 </div>
                             </div>
@@ -214,6 +219,7 @@ class FitnessTestForm extends Component {
                                         validate={this.validationRules.image}
                                         errorClass="help-block"
                                         existingImages={existingFeatureImages}
+                                        requiredAstrisk={true}
                                     />
                                 </div>
                             </div>
@@ -332,6 +338,7 @@ class FitnessTestForm extends Component {
                                             errorClass="help-block"
                                             warningClass=""
                                             validate={this.validationRules.titleA}
+                                            requiredAstrisk={true}
                                         />
                                         <Field
                                             name="imageA"
@@ -344,6 +351,7 @@ class FitnessTestForm extends Component {
                                             validate={this.validationRules.imageA}
                                             errorClass="help-block"
                                             existingImages={existingImageA}
+                                            requiredAstrisk={true}
                                         />
                                     </div>
                                     <div className="col-md-6">
@@ -358,6 +366,7 @@ class FitnessTestForm extends Component {
                                             errorClass="help-block"
                                             warningClass=""
                                             validate={this.validationRules.titleB}
+                                            requiredAstrisk={true}
                                         />
                                         <Field
                                             name="imageB"
@@ -370,6 +379,7 @@ class FitnessTestForm extends Component {
                                             validate={this.validationRules.imageB}
                                             errorClass="help-block"
                                             existingImages={existingImageB}
+                                            requiredAstrisk={true}
                                         />
                                     </div>
                                 </div>

@@ -92,6 +92,7 @@ class BadgeForm extends Component {
                                 options={BADGES_TASKS}
                                 errorClass="help-block"
                                 validate={[requiredReactSelect]}
+                                requiredAstrisk={true}
                             />
                         </div>
                         <div className="col-md-4">
@@ -107,6 +108,7 @@ class BadgeForm extends Component {
                                 errorClass="help-block"
                                 warningClass=""
                                 validate={[required, min1]}
+                                requiredAstrisk={true}
                             />
                         </div>
                         <div className="col-md-4">
@@ -120,6 +122,7 @@ class BadgeForm extends Component {
                                 options={this.taskUnits}
                                 errorClass="help-block"
                                 validate={[requiredReactSelect]}
+                                requiredAstrisk={true}
                             />
                         </div>
                     </div>
@@ -137,6 +140,7 @@ class BadgeForm extends Component {
                                 errorClass="help-block"
                                 warningClass=""
                                 validate={[required, min0]}
+                                requiredAstrisk={true}
                             />
                         </div>
                         <div className="col-md-4">
@@ -151,6 +155,7 @@ class BadgeForm extends Component {
                                 errorClass="help-block"
                                 warningClass=""
                                 validate={[required, minLength3, maxLength100]}
+                                requiredAstrisk={true}
                             />
                         </div>
                         <div className="col-md-4">
@@ -164,6 +169,7 @@ class BadgeForm extends Component {
                                 options={statusOptions}
                                 errorClass="help-block"
                                 validate={[requiredReactSelectStatus]}
+                                requiredAstrisk={true}
                             />
                         </div>
                     </div>
@@ -180,6 +186,7 @@ class BadgeForm extends Component {
                                 errorClass="help-block"
                                 validate={[requiredReactSelect]}
                                 onChange={(val) => this.setState({ timeType: val.value })}
+                                requiredAstrisk={true}
                             />
                         </div>
                         {timeType && timeType === TIME_TYPE_TIME_WINDOW &&
@@ -194,6 +201,7 @@ class BadgeForm extends Component {
                                     options={TIME_WINDOW_TYPES}
                                     errorClass="help-block"
                                     validate={[requiredReactSelectStatus]}
+                                    requiredAstrisk={true}
                                 />
                             </div>
                         }
@@ -211,6 +219,7 @@ class BadgeForm extends Component {
                                     errorClass="help-block"
                                     warningClass=""
                                     validate={[required, min0]}
+                                    requiredAstrisk={true}
                                 />
                             </div>
                         }

@@ -20,7 +20,7 @@ class FitnessTestMultiselect extends Component {
                 }
             >
                 <div className="multiselect-wrapper dynamic-control-generator-wrapper">
-                    <label className="control-label">Multiselect Options</label>
+                    <label className="control-label">Multiselect Options <span style={{ color: 'red' }}>*</span></label>
                     <div className="row pull-left width-100-per step-fields-wrapper">
                         {fields &&
                             fields.map((field, index) => {

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from "react-router-dom";
 import { login } from 'actions/login';
 import { showPageLoader, hidePageLoader } from 'actions/pageLoader';
 import AdminLoginForm from '../../components/Admin/Login/AdminLoginForm';
@@ -9,6 +10,7 @@ import { checkLogin, isLogin } from '../../helpers/loginHelper';
 import { ts, te } from '../../helpers/funs';
 import { freeLoginLogoutState } from '../../actions/login';
 import $ from "jquery";
+import logo from 'img/common/logo.png';
 
 class AdminLogin extends Component {
     constructor(props) {
@@ -46,6 +48,11 @@ class AdminLogin extends Component {
         return (
             <div className="step-wrap step-wrap-login login-wrapper">
                 <div className="step-box">
+                    <div className="logo_login_page">
+                        <Link to={adminRouteCodes.LOGIN}>
+                            <img src={logo} />Fit-Assist
+                        </Link>
+                    </div>
                     <AdminLoginForm onSubmit={this.handleSubmit} />
                 </div >
             </div >
