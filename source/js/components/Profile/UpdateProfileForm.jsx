@@ -83,7 +83,7 @@ class UpdateProfileForm extends Component {
                             <div className="stepbox-m personal-dtl no-padding width-100-per">
                                 <ul className="">
                                     <li>
-                                        <div className="form-div">
+                                        <div className="form-div label_float">
                                             <label>First Name</label>
                                             <Field
                                                 id="first_name"
@@ -98,7 +98,7 @@ class UpdateProfileForm extends Component {
                                         </div>
                                     </li>
                                     <li>
-                                        <div className="form-div">
+                                        <div className="form-div label_float">
                                             <label>Last Name</label>
                                             <Field
                                                 id="last_name"
@@ -113,7 +113,7 @@ class UpdateProfileForm extends Component {
                                         </div>
                                     </li>
                                     <li>
-                                        <div className="form-div">
+                                        <div className="form-div label_float">
                                             <label>Mobile No.</label>
                                             <Field
                                                 id="mobile_no"
@@ -161,7 +161,7 @@ class UpdateProfileForm extends Component {
                                         </div>
                                     </li>
                                     <li>
-                                        <div className="form-div">
+                                        <div className="form-div label_float">
                                             <label>Date Of Birth</label>
                                             <Field
                                                 id="dob"
@@ -180,12 +180,12 @@ class UpdateProfileForm extends Component {
                                         </div>
                                     </li>
                                     <li>
-                                        <div className="form-div">
+                                        <div className="form-div label_float">
                                             <label>Height</label>
                                             <Field
                                                 id="height"
                                                 name="height"
-                                                wrapperClass="input-wrap weight-wrap"
+                                                wrapperClass="input-wrap weight-wrap input_unit"
                                                 placeholder="Height"
                                                 errorClass="help-block"
                                                 type="number"
@@ -201,12 +201,12 @@ class UpdateProfileForm extends Component {
                                         </div>
                                     </li>
                                     <li>
-                                        <div className="form-div">
+                                        <div className="form-div label_float">
                                             <label>Weight</label>
                                             <Field
                                                 id="weight"
                                                 name="weight"
-                                                wrapperClass="input-wrap weight-wrap"
+                                                wrapperClass="input-wrap weight-wrap input_unit"
                                                 errorClass="help-block"
                                                 type="number"
                                                 placeholder="Weight"
@@ -346,7 +346,7 @@ class UpdateProfileForm extends Component {
                             <div className="stepbox-m personal-dtl no-padding width-100-per">
                                 <ul className="">
                                     <li>
-                                        <div className="form-div">
+                                        <div className="form-div label_float">
                                             <Field
                                                 name="about_me"
                                                 value={this.state.aboutMe}

@@ -109,7 +109,10 @@ class Dashboard extends Component {
 
                     {!loading &&
                         <div className="body-content row d-flex col-md-12">
-                            <div className="col-md-8">
+                            <div className={cns(
+                                { 'col-md-8': (typeof userWidgets[WIDGET_ACTIVITY_FEED] !== 'undefined' && userWidgets[WIDGET_ACTIVITY_FEED] === 1) },
+                                { 'col-md-12': (typeof userWidgets[WIDGET_ACTIVITY_FEED] === 'undefined' || userWidgets[WIDGET_ACTIVITY_FEED] === 0) },
+                            )}>
                                 <div className="row">
                                     {userWidgets && typeof userWidgets[WIDGET_TODAYS_WORKOUT] !== 'undefined' && userWidgets[WIDGET_TODAYS_WORKOUT] === 1 &&
                                         <div className={cns(
@@ -121,9 +124,16 @@ class Dashboard extends Component {
                                     }
                                     {userWidgets && typeof userWidgets[WIDGET_BODY_FAT] !== 'undefined' && userWidgets[WIDGET_BODY_FAT] &&
                                         <div className={cns(
-                                            { 'col-md-12': (typeof userWidgets[WIDGET_TODAYS_WORKOUT] === 'undefined') || userWidgets[WIDGET_TODAYS_WORKOUT] === 0 },
+                                            { 'col-md-6': (typeof userWidgets[WIDGET_TODAYS_WORKOUT] === 'undefined') || userWidgets[WIDGET_TODAYS_WORKOUT] === 0 },
                                             { 'col-md-6': (typeof userWidgets[WIDGET_TODAYS_WORKOUT] !== 'undefined') && userWidgets[WIDGET_TODAYS_WORKOUT] === 1 }
                                         )}>
+                                            <WidgetProgressPhotoCard
+                                                progressPhoto={widgetProgressPhotos}
+                                            />
+                                        </div>
+                                    }
+                                    {userWidgets && typeof userWidgets[WIDGET_PROGRESS_PHOTO] !== 'undefined' && userWidgets[WIDGET_PROGRESS_PHOTO] === 1 &&
+                                        <div className="col-md-12">
                                             <WidgetBodyFatCard
                                                 type={WIDGETS_TYPE_DASHBOARD}
                                                 userWidgets={userWidgets}
@@ -134,15 +144,8 @@ class Dashboard extends Component {
                                             />
                                         </div>
                                     }
-                                    {userWidgets && typeof userWidgets[WIDGET_PROGRESS_PHOTO] !== 'undefined' && userWidgets[WIDGET_PROGRESS_PHOTO] === 1 &&
-                                        <div className="col-md-6">
-                                            <WidgetProgressPhotoCard
-                                                progressPhoto={widgetProgressPhotos}
-                                            />
-                                        </div>
-                                    }
                                     {userWidgets && userWidgets[WIDGET_MUSCLE] && userWidgets[WIDGET_MUSCLE].length > 0 &&
-                                        <div className="col-md-12 row">
+                                        <div className="col-md-12 row dashboard-muscle-wrapper">
                                             <WidgetMuscleCard
                                                 type={WIDGETS_TYPE_DASHBOARD}
                                                 userWidgets={userWidgets}

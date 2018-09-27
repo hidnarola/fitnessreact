@@ -122,9 +122,7 @@ class FitnessTestListing extends Component {
                                                 Cell: (row) => {
                                                     return (
                                                         <div className="list-dob-wrapper">
-                                                            <span>
-                                                                {row.value && moment(row.value).format('MM/DD/YYYY')}
-                                                            </span>
+                                                            {row.value && moment(row.value).format('DD/MM/YYYY')}
                                                         </div>
                                                     );
                                                 },

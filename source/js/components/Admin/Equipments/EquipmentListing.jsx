@@ -100,7 +100,11 @@ class EquipmentListing extends Component {
                                                 sortable: true,
                                                 maxWidth: 100,
                                                 Cell: (row) => {
-                                                    return moment(row.value).format('DD/MM/YYYY');
+                                                    return (
+                                                        <div className="list-dob-wrapper">
+                                                            {row.value && moment(row.value).format('DD/MM/YYYY')}
+                                                        </div>
+                                                    )
                                                 },
                                             },
                                             {

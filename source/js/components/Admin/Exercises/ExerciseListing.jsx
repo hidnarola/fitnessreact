@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { exerciseDeleteRequest, exerciseFilterRequest, setExerciseState, exerciseRecoverRequest } from '../../../actions/admin/exercises';
-import dateFormat from 'dateformat';
+import moment from 'moment';
 import { adminRouteCodes } from '../../../constants/adminRoutes';
 import { FaPencil, FaTrash, FaRotateLeft } from 'react-icons/lib/fa';
 import ReactTable from 'react-table';
@@ -85,7 +85,9 @@ class ExerciseListing extends Component {
                                                 maxWidth: 100,
                                                 Cell: (row) => {
                                                     return (
-                                                        <div>{dateFormat(row.value, 'mm/dd/yyyy')}</div>
+                                                        <div className="list-dob-wrapper">
+                                                            {row.value && moment(row.value).format('DD/MM/YYYY')}
+                                                        </div>
                                                     );
                                                 },
                                             },

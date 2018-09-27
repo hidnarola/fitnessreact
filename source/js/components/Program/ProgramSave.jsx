@@ -72,7 +72,7 @@ class ProgramSave extends Component {
                 <FitnessNav />
                 <section className="body-wrap">
                     <div className="body-head d-flex justify-content-start">
-                        <div className="body-head-l">
+                        <div className="body-head-l title_edit_pop">
                             <h2>{(program && program.name) ? program.name : ''}</h2>
                             <button type="button" onClick={this.handleShowUpdateProgramTitleAlert}><FaPencil /></button>
                             <p>{(program && program.description) ? program.description : ''}</p>

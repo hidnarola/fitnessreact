@@ -61,9 +61,7 @@ class BodyPartsListing extends Component {
                                                 Cell: (row) => {
                                                     return (
                                                         <div className="list-dob-wrapper">
-                                                            <span>
-                                                                {row.value && moment(row.value).format('DD/MM/YYYY')}
-                                                            </span>
+                                                            {row.value && moment(row.value).format('DD/MM/YYYY')}
                                                         </div>
                                                     );
                                                 }

@@ -105,7 +105,7 @@ class Users extends Component {
                                                 allUsers.map((u, i) => {
                                                     return (
                                                         <div className="col-md-4" key={i}>
-                                                            <div className="friend-box vertical-middle-r">
+                                                            <div className="friend-box vertical-middle-r frd_fithub">
                                                                 <div className="friend-box-img">
                                                                     <NavLink to={`${routeCodes.PROFILE}/${u.username}`}>
                                                                         <img
@@ -118,14 +118,15 @@ class Users extends Component {
                                                                     </NavLink>
                                                                 </div>
                                                                 <div className="friend-box-info">
-                                                                    <h5 className="vertical-middle-c ml-20">
-                                                                        {u.firstName}
-                                                                        {u.friendsCount > 0 &&
-                                                                            <small>{u.friendsCount} Friends</small>
-                                                                        }
-                                                                    </h5>
+                                                                    <NavLink to={`${routeCodes.PROFILE}/${u.username}`}>
+                                                                        <h5 className="vertical-middle-c ml-20">
+                                                                            {u.firstName}
+                                                                            {u.friendsCount > 0 &&
+                                                                                <small>{u.friendsCount} Friends</small>
+                                                                            }
+                                                                        </h5>
+                                                                    </NavLink>
                                                                 </div>
-                                                                <div className="friend-box-status"><h6 className="vertical-middle-c">Actions</h6></div>
                                                             </div>
                                                         </div>
                                                     )

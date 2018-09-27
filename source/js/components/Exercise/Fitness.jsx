@@ -12,6 +12,7 @@ import { capitalizeFirstLetter, ts } from '../../helpers/funs';
 import FitnessItem from './FitnessItem';
 import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
 import moment from "moment";
+import Scrollbars from "react-custom-scrollbars";
 
 class Fitness extends Component {
     constructor(props) {
@@ -44,37 +45,40 @@ class Fitness extends Component {
                     fitnessTestsKeys.map((category, catIndex) => {
                         var fitnessTestSubKeys = Object.keys(fitnessTests[category]);
                         return (
-                            <div className="col-md-4" key={catIndex}>
+                            <div className="col-md-6" key={catIndex}>
                                 <div className="white-box space-btm-20">
                                     <div className="whitebox-head">
                                         <h3 className="title-h3">{category}</h3>
                                     </div>
-                                    <div className="whitebox-body">
-                                        {fitnessTestSubKeys.length > 0 &&
-                                            fitnessTestSubKeys.map((subCategory, subCatIndex) => {
-                                                return (
-                                                    <div className="fitness-wrap" key={subCatIndex}>
-                                                        <h4>{capitalizeFirstLetter(subCategory).replace('_', ' ')}</h4>
-                                                        {
-                                                            fitnessTests[category][subCategory].map((item, index) => {
-                                                                var userValue = syncedUserFitnessTests[item._id];
-                                                                return (
-                                                                    <FitnessItem
-                                                                        item={item}
-                                                                        key={index}
-                                                                        userValue={userValue}
-                                                                        handleTextFieldChange={this.handleTextFieldChange}
-                                                                        handleMaxRepChange={this.handleMaxRepChange}
-                                                                        handleMultiselectChange={this.handleMultiselectChange}
-                                                                        handleAOrBChange={this.handleAOrBChange}
-                                                                    />
-                                                                )
-                                                            })
-                                                        }
-                                                    </div>
-                                                )
-                                            })
-                                        }
+                                    <div className="whitebox-body fitness-test-sub-category-block">
+                                        <Scrollbars autoHide>
+                                            {fitnessTestSubKeys.length > 0 &&
+                                                fitnessTestSubKeys.map((subCategory, subCatIndex) => {
+                                                    return (
+
+                                                        <div className="fitness-wrap" key={subCatIndex}>
+                                                            <h4>{capitalizeFirstLetter(subCategory).replace('_', ' ')}</h4>
+                                                            {
+                                                                fitnessTests[category][subCategory].map((item, index) => {
+                                                                    var userValue = syncedUserFitnessTests[item._id];
+                                                                    return (
+                                                                        <FitnessItem
+                                                                            item={item}
+                                                                            key={index}
+                                                                            userValue={userValue}
+                                                                            handleTextFieldChange={this.handleTextFieldChange}
+                                                                            handleMaxRepChange={this.handleMaxRepChange}
+                                                                            handleMultiselectChange={this.handleMultiselectChange}
+                                                                            handleAOrBChange={this.handleAOrBChange}
+                                                                        />
+                                                                    )
+                                                                })
+                                                            }
+                                                        </div>
+                                                    )
+                                                })
+                                            }
+                                        </Scrollbars>
                                     </div>
                                 </div>
                             </div>

@@ -17,7 +17,7 @@ class ProfileFriendBlock extends Component {
         } = this.props;
         if (friend) {
             return (
-                <div className="friend-box vertical-middle-r">
+                <div className="friend-box vertical-middle-r frd_fithub">
                     <div className="friend-box-img">
                         <NavLink to={`${routeCodes.PROFILE}/${friend.username}`}>
                             <img
@@ -30,6 +30,7 @@ class ProfileFriendBlock extends Component {
                         </NavLink>
                     </div>
                     <div className="friend-box-info">
+                    <NavLink to={`${routeCodes.PROFILE}/${friend.username}`}>
                         <h5 className="vertical-middle-c">
                             {(typeof friend.firstName !== 'undefined') ? friend.firstName : ''}
                             {(typeof friend.lastName !== 'undefined') ? ' ' + friend.lastName : ''}
@@ -42,6 +43,7 @@ class ProfileFriendBlock extends Component {
                                 <small>No friends</small>
                             }
                         </h5>
+                        </NavLink>
                     </div>
                     {friendshipStatus && friend.username !== loggedUserData.username &&
                         <div className="friend-box-status">

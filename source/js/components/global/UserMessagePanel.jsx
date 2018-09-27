@@ -31,6 +31,7 @@ class UserMessagePanel extends Component {
                         <h3><i className="icon-mail_outline"></i> <small>Messenger</small></h3>
                         <a href="javascript:void(0)" onClick={() => toggleSideMenu('user-message-panel', false)}><i className="icon-close"></i></a>
                     </div>
+                    <h3 className="h3_msg_box">Chats</h3>
                     <div className="messenger-body" id="messenger-box">
                         {panelChannelLoading &&
                             <div className="text-c">
@@ -40,17 +41,21 @@ class UserMessagePanel extends Component {
                         {!panelChannelLoading && panelChannels && panelChannels.length > 0 &&
                             <Scrollbars autoHide>
                                 {
-                                    panelChannels.map((channel, index) => {
-                                        return (
-                                            <ChannelMessageCard
-                                                key={index}
-                                                channel={channel}
-                                                loggedUserData={loggedUserData}
-                                                handleMessageSeen={this.handleMessageSeen}
-                                                handleOpenChatWindow={this.handleOpenChatWindow}
-                                            />
-                                        )
-                                    })
+                                    <div className="messenger-scroll-wrapper">
+                                        {
+                                            panelChannels.map((channel, index) => {
+                                                return (
+                                                    <ChannelMessageCard
+                                                        key={index}
+                                                        channel={channel}
+                                                        loggedUserData={loggedUserData}
+                                                        handleMessageSeen={this.handleMessageSeen}
+                                                        handleOpenChatWindow={this.handleOpenChatWindow}
+                                                    />
+                                                )
+                                            })
+                                        }
+                                    </div>
                                 }
                                 {!panelChannelLoadMoreLoading && !panelChannelDataOver &&
                                     <button type="button" className="btn-messages-loadmore" onClick={this.handleLoadMore}>
@@ -79,6 +84,7 @@ class UserMessagePanel extends Component {
                             </div>
                         }
                     </div>
+                    <h3 className="h3_msg_box">Friends</h3>
                     <div className="messenger-body" id="friends-messenger-box">
                         {approvedMessLoading &&
                             <div className="text-c">
@@ -88,14 +94,18 @@ class UserMessagePanel extends Component {
                         {!approvedMessLoading && approvedMessFriends && approvedMessFriends.length > 0 &&
                             <Scrollbars autoHide>
                                 {
-                                    approvedMessFriends.map((friend, index) => {
-                                        return (
-                                            <UsersFriendCard
-                                                key={index}
-                                                friend={friend}
-                                            />
-                                        )
-                                    })
+                                    <div className="messenger-scroll-wrapper">
+                                        {
+                                            approvedMessFriends.map((friend, index) => {
+                                                return (
+                                                    <UsersFriendCard
+                                                        key={index}
+                                                        friend={friend}
+                                                    />
+                                                )
+                                            })
+                                        }
+                                    </div>
                                 }
                             </Scrollbars>
                         }
