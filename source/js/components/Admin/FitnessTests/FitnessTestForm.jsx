@@ -210,7 +210,6 @@ class FitnessTestForm extends Component {
                                         mainWrapperClass="image-form-main-wrapper"
                                         wrapperClass="form-group"
                                         placeholder="Image"
-                                        className="filefield-dropzone-wrapper"
                                         component={FileField_Dropzone_Single}
                                         validate={this.validationRules.image}
                                         errorClass="help-block"
@@ -340,7 +339,6 @@ class FitnessTestForm extends Component {
                                             labelClass="control-label display_block"
                                             mainWrapperClass="image-form-main-wrapper"
                                             wrapperClass="form-group"
-                                            className="filefield-dropzone-wrapper"
                                             placeholder="Image A"
                                             component={FileField_Dropzone_Single}
                                             validate={this.validationRules.imageA}
@@ -367,7 +365,6 @@ class FitnessTestForm extends Component {
                                             labelClass="control-label display_block"
                                             mainWrapperClass="image-form-main-wrapper"
                                             wrapperClass="form-group"
-                                            className="filefield-dropzone-wrapper"
                                             placeholder="Image B"
                                             component={FileField_Dropzone_Single}
                                             validate={this.validationRules.imageB}

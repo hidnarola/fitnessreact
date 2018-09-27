@@ -156,7 +156,7 @@ class PhotoUploadField extends Component {
                     ((meta.error && <span className={errorClass}>{meta.error}</span>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))
                 }
                 {this.rejectedFiles &&
-                    <span className={errorClass}>Invalid File</span>
+                    <span className={errorClass}>Invalid File. Please select jpg, png, gif only</span>
                 }
             </div>
         );

@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import { Field } from 'redux-form';
 import { FaTrash } from 'react-icons/lib/fa'
 import { InputField, FileField_Dropzone_Single } from '../../../helpers/FormControlHelper';
-import { required, requiredImage } from '../../../formValidation/validationRules';
-import _ from "lodash";
 
 class FitnessTestMultiselect extends Component {
     render() {
@@ -48,7 +46,6 @@ class FitnessTestMultiselect extends Component {
                                                 labelClass="control-label display_block"
                                                 mainWrapperClass="image-form-main-wrapper"
                                                 wrapperClass="form-group"
-                                                className="filefield-dropzone-wrapper"
                                                 placeholder={`Image ${(index + 1)}`}
                                                 component={FileField_Dropzone_Single}
                                                 validate={validationRules.image}

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Modal } from 'react-bootstrap';
 import Dropzone from "react-dropzone";
+import { Alert } from "react-bootstrap";
 
 class AddPostPhotoModal extends Component {
     render() {
@@ -10,6 +11,7 @@ class AddPostPhotoModal extends Component {
             images,
             handleRemovePostImags,
             handleAddPostImages,
+            postImagesError
         } = this.props;
         return (
             <div className="add-post-photo-modal-wrapper">
@@ -20,7 +22,15 @@ class AddPostPhotoModal extends Component {
                         </button>
                         <h3 className="title-h3">New Post Photos</h3>
                     </div>
-
+                    {postImagesError && postImagesError.length > 0 &&
+                        <Alert bsStyle="danger">
+                            {
+                                postImagesError.map((e, i) => {
+                                    return <p key={i}>{e}</p>
+                                })
+                            }
+                        </Alert>
+                    }
                     <div className="progress-popup-body">
                         <div className="upload-gallery">
                             {images && images.length > 0 &&

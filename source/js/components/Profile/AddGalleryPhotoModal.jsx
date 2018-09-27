@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { Modal } from 'react-bootstrap';
 import Dropzone from "react-dropzone";
-import Select from 'react-select';
-import { requiredReactSelect } from '../../formValidation/validationRules';
 import {
     ACCESS_LEVEL_PUBLIC,
     ACCESS_LEVEL_PUBLIC_STR,
@@ -12,6 +10,7 @@ import {
     ACCESS_LEVEL_PRIVATE_STR
 } from '../../constants/consts';
 import _ from "lodash";
+import { Alert } from "react-bootstrap";
 
 const accessLevelOptions = [
     { value: ACCESS_LEVEL_PUBLIC, label: ACCESS_LEVEL_PUBLIC_STR },
@@ -26,6 +25,7 @@ class AddGalleryPhotoModal extends Component {
             images: [],
             description: "",
             accessLevel: accessLevelOptions[0].value,
+            noImageError: [],
         }
     }
 
@@ -46,22 +46,29 @@ class AddGalleryPhotoModal extends Component {
             images,
             description,
             accessLevel,
+            noImageError,
         } = this.state;
         const {
             show,
-            handlePost,
-            handleClose,
         } = this.props;
         return (
             <div className="add-galary-photo-modal-wrapper">
                 <Modal show={show} bsSize="large" className="gallery-popup">
                     <div className="gallery-popup-head">
-                        <button type="button" className="close-round" onClick={handleClose}>
+                        <button type="button" className="close-round" onClick={this.handleClose}>
                             <span aria-hidden="true">&times;</span>
                         </button>
                         <h3 className="title-h3">New Gallery Photos</h3>
                     </div>
-
+                    {noImageError && noImageError.length > 0 &&
+                        <Alert bsStyle="danger">
+                            {
+                                noImageError.map((e, i) => {
+                                    return <p key={i}>{e}</p>
+                                })
+                            }
+                        </Alert>
+                    }
                     <div className="progress-popup-body d-flex">
                         <div className="gallery-popup-body-l">
                             <span>
@@ -104,7 +111,14 @@ class AddGalleryPhotoModal extends Component {
                                     name="images"
                                     className="no-padding"
                                     accept={"image/jpeg, image/png, image/jpg, image/gif"}
-                                    onDrop={(filesToUpload, e) => {
+                                    onDrop={(filesToUpload, rejectedFiles) => {
+                                        if (rejectedFiles && rejectedFiles.length > 0) {
+                                            let noImageError = ['Invalid file(s). Please select jpg, png, gif only'];
+                                            this.setState({ noImageError });
+                                        } else {
+                                            let noImageError = [];
+                                            this.setState({ noImageError });
+                                        }
                                         var allImages = _.concat(images, filesToUpload);
                                         this.handleImagesSelection(allImages);
                                     }}
@@ -134,7 +148,7 @@ class AddGalleryPhotoModal extends Component {
                                         })
                                     }
                                 </select>
-                                <button type="button" onClick={() => handlePost({ ...this.state })}>Post</button>
+                                <button type="button" onClick={this.handlePostClick}>Post</button>
                             </div>
                         </div>
                     </div>
@@ -144,13 +158,10 @@ class AddGalleryPhotoModal extends Component {
     }
 
     handleImagesSelection = (fileList) => {
-        this.setState({
-            images: fileList,
-        });
+        this.setState({ images: fileList });
     }
 
     handleImageDelete = (index) => {
-        const { dispatch } = this.props;
         var images = this.state.images;
         images.splice(index, 1);
         this.setState({ images });
@@ -160,6 +171,26 @@ class AddGalleryPhotoModal extends Component {
         var name = e.target.name;
         var value = e.target.value;
         this.setState({ [name]: value });
+    }
+
+    handlePostClick = () => {
+        const { images } = this.state;
+        const { handlePost } = this.props;
+        if (images && images.length <= 0) {
+            let noImageError = ["Please select atleast one image"];
+            this.setState({ noImageError });
+        } else if (images && images.length > 0) {
+            let noImageError = [];
+            this.setState({ noImageError });
+            handlePost({ ...this.state });
+        }
+    }
+
+    handleClose = () => {
+        const { handleClose } = this.props;
+        handleClose();
+        let noImageError = [];
+        this.setState({ noImageError });
     }
 }
 

@@ -48,7 +48,7 @@ import ReactHtmlParser from "react-html-parser";
 import ReactQuill from 'react-quill';
 import { te, ts } from '../../helpers/funs';
 import InfiniteScroll from 'react-infinite-scroller';
-import { MenuItem, Dropdown, DropdownButton } from "react-bootstrap";
+import { MenuItem, Dropdown } from "react-bootstrap";
 import { FaGlobe, FaLock, FaGroup, FaSpinner, FaCircleONotch } from 'react-icons/lib/fa';
 import AddPostPhotoModal from './AddPostPhotoModal';
 import LikeButton from "./LikeButton";
@@ -76,6 +76,7 @@ class ProfileFithub extends Component {
             commentActionInit: false,
             postContent: '',
             postImages: [],
+            postImagesError: [],
             postPrivacy: ACCESS_LEVEL_PRIVATE,
             newPostActionInit: false,
             showPostPhotoModal: false,
@@ -127,6 +128,7 @@ class ProfileFithub extends Component {
             showPostDeleteModal,
             showPostAccessChangeModal,
             newPostActionInit,
+            postImagesError
         } = this.state;
         const {
             loggedUserData,
@@ -500,6 +502,7 @@ class ProfileFithub extends Component {
                     show={showPostPhotoModal}
                     handleClose={this.handleHidePostPhotosModal}
                     images={postImages}
+                    postImagesError={postImagesError}
                     handleAddPostImages={this.handleAddPostImages}
                     handleRemovePostImags={this.handleRemovePostImage}
                 />
@@ -789,11 +792,12 @@ class ProfileFithub extends Component {
 
     handleAddPostImages = (filesToUpload, rejectedFiles) => {
         const { postImages } = this.state;
+        let postImagesError = [];
         if (rejectedFiles && rejectedFiles.length > 0) {
-            te('Invalid file(s)');
+            postImagesError = ['Invalid file(s). Please select jpg, png, gif only'];
         }
         var allImages = _.concat(postImages, filesToUpload);
-        this.setState({ postImages: allImages });
+        this.setState({ postImages: allImages, postImagesError });
     }
 
     handleRemovePostImage = (index) => {

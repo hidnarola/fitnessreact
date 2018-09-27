@@ -198,6 +198,7 @@ export class FileField_Dropzone_Single extends Component {
     constructor(props) {
         super(props);
         this.isFileSelected = false;
+        this.rejectedFiles = false;
     }
 
     render() {
@@ -241,22 +242,22 @@ export class FileField_Dropzone_Single extends Component {
         return (
             <div
                 className={
-                    `${mainWrapperClass} ${(meta.touched && meta.error) ? 'has-error' : ''}`
+                    `${mainWrapperClass} ${(meta.touched && meta.error) ? 'has-error' : ''} ${this.rejectedFiles ? 'has-error' : ''}`
                 }
             >
                 <label htmlFor={input.name} className={labelClass}>{label}</label>
                 {_existingImages}
-                {input.value && images}
                 <div
                     className={
-                        `${wrapperClass} ${(meta.touched && meta.error) ? 'has-error' : ''}`
+                        `${wrapperClass} ${(meta.touched && meta.error) ? 'has-error' : ''} ${this.rejectedFiles ? 'has-error' : ''}`
                     }
                 >
                     <Dropzone
                         {...input}
                         accept={accept ? accept : "image/jpeg, image/png, image/jpg, image/gif"}
                         onClick={() => this.isFileSelected = false}
-                        onDrop={(filesToUpload, e) => {
+                        onDrop={(filesToUpload, rejectedFiles) => {
+                            this.rejectedFiles = (rejectedFiles && rejectedFiles.length > 0);
                             if (filesToUpload && filesToUpload.length > 0) {
                                 this.isFileSelected = true;
                             }
@@ -268,115 +269,20 @@ export class FileField_Dropzone_Single extends Component {
                             }
                         }}
                         multiple={false}
-                        className={className}
-                    ></Dropzone>
+                        className={className ? className : 'default-dropzone-wrapper'}
+                    >
+                        {input.value && images}
+                    </Dropzone>
                     {meta.touched &&
-                        ((meta.error && <span className={errorClass}>{meta.error}</span>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))
+                        ((meta.error && <span className={errorClass ? errorClass : 'help-block'}>{meta.error}</span>) || (meta.warning && <span className={warningClass ? warningClass : 'help-block'}>{meta.warning}</span>))
+                    }
+                    {this.rejectedFiles &&
+                        <span className={errorClass ? errorClass : 'help-block'}>Invalid file(s). Please select jpg, png, gif only.</span>
                     }
                 </div>
             </div>
         );
     }
-}
-
-export class FileField_Dropzone_Multi extends Component {
-    render() {
-        const {
-            label,
-            input,
-            meta,
-            mainWrapperClass,
-            wrapperClass,
-            className,
-            labelClass,
-            errorClass,
-            accept,
-            existingImages,
-            showExistingImageDeleteModel,
-        } = this.props;
-        let filesArr = _.values(input.value);
-        let images = [];
-        let _existingImages = [];
-        _.forEach(existingImages, (path, key) => {
-            if (path) {
-                _existingImages.push(
-                    <div className="image-preview-wrapper dropzone-image-preview-wrapper" key={key}>
-                        <img
-                            src={SERVER_BASE_URL + path}
-                            className="image"
-                            alt="Image"
-                            onError={(e) => {
-                                e.target.src = noImg
-                            }}
-                        />
-                        <div className="middle">
-                            <button type="button" className="btn btn-danger no-margin" onClick={() => showExistingImageDeleteModel(path)}>Delete</button>
-                        </div>
-                    </div>
-                )
-            }
-        });
-        _.forEach(filesArr, (file, key) => {
-            images.push(
-                <div className="image-preview-wrapper" key={key}>
-                    <img src={file.preview} />
-                </div>
-            )
-        })
-        return (
-            <div className={mainWrapperClass}>
-                <label htmlFor={input.name} className={labelClass}>{label}</label>
-                {_existingImages}
-                {input.value && images}
-                <div className={wrapperClass}>
-                    <Dropzone
-                        {...input}
-                        accept={accept ? accept : "image/jpeg, image/png, image/jpg, image/gif"}
-                        onDrop={(filesToUpload, e) => input.onChange(filesToUpload)}
-                        multiple={true}
-                        className={className}
-                    ></Dropzone>
-                    {meta.touched &&
-                        ((meta.error && <span className={errorClass}>{meta.error}</span>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))
-                    }
-                </div>
-            </div>
-        );
-    }
-}
-
-export const FileField_Dropzone = (props) => {
-    const { label, input, meta, wrapperClass, className, labelClass, errorClass, accept, multiple } = props;
-    let filesArr = _.values(input.value);
-    let images = [];
-    _.forEach(filesArr, (file, key) => {
-        images.push(
-            <div className="images-preview-wrapper" key={key}>
-                <div className="image-preview">
-                    <img src={file.preview} />
-                </div>
-            </div>
-        )
-    })
-    return (
-        <div className={wrapperClass}>
-            <label htmlFor={input.name} className={labelClass}>{label}</label>
-            <Dropzone
-                {...input}
-                accept={accept ? accept : "image/jpeg, image/png, image/jpg, image/gif"}
-                onDrop={(filesToUpload, e) => input.onChange(filesToUpload)}
-                multiple={multiple ? multiple : false}
-                className={className}
-            >
-                <div className="dropzone-image-preview-wrapper">
-                    {input.value && images}
-                </div>
-            </Dropzone>
-            {meta.touched &&
-                ((meta.error && <span className={errorClass}>{meta.error}</span>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))
-            }
-        </div>
-    );
 }
 
 export const StarRating = (props) => {
