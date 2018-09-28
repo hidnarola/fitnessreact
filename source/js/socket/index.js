@@ -60,7 +60,6 @@ export const receiveUserFriendRequestsCount = (socket, callback) => {
 
 export const receiveLoggedUserFriends = (socket, callback) => {
     socket.on('receive_logged_user_friends', (data) => {
-        console.log('receive_logged_user_friends => ', data);
         callback(data);
     });
 }

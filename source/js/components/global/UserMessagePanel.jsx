@@ -8,6 +8,7 @@ import { FaCircleONotch } from "react-icons/lib/fa";
 import NoDataFoundImg from "img/common/no_datafound.png";
 import ErrorCloud from "svg/error-cloud.svg";
 import { Scrollbars } from 'react-custom-scrollbars';
+import { loadMoreApprovedFriendsMessengerRequest } from '../../actions/friends';
 
 class UserMessagePanel extends Component {
     render() {
@@ -22,6 +23,8 @@ class UserMessagePanel extends Component {
             approvedMessLoading,
             approvedMessFriends,
             approvedMessError,
+            approvedMessLoadMoreLoading,
+            approvedMessNoMoreData
         } = this.props;
         return (
             <div id="user-message-panel" className="messenger-wrap">
@@ -107,6 +110,17 @@ class UserMessagePanel extends Component {
                                         }
                                     </div>
                                 }
+                                {!approvedMessLoadMoreLoading && !approvedMessNoMoreData &&
+                                    <button type="button" className="btn-messages-loadmore" onClick={this.handleUsersLoadMore}>
+                                        <span>Load more</span>
+                                    </button>
+                                }
+                                {approvedMessLoadMoreLoading &&
+                                    <button type="button" className="btn-messages-loadmore" disabled={true}>
+                                        <FaCircleONotch className="loader-spinner loader-spinner-icon" />
+                                        <span>Loading...</span>
+                                    </button>
+                                }
                             </Scrollbars>
                         }
 
@@ -161,6 +175,18 @@ class UserMessagePanel extends Component {
         dispatch(loadMoreUserMessageChannelRequest(requestData));
         socket.emit('request_users_conversation_channels', requestData);
     }
+
+    handleUsersLoadMore = () => {
+        const { socket, dispatch, approvedMessSkip, approvedMessLimit } = this.props;
+        var requestData = {
+            token: getToken(),
+            start: (approvedMessSkip + approvedMessLimit),
+            limit: approvedMessLimit,
+            sort: -1,
+        }
+        dispatch(loadMoreApprovedFriendsMessengerRequest(requestData));
+        socket.emit('request_logged_user_friends', requestData);
+    }
 }
 
 const mapStateToProps = (state) => {
@@ -179,6 +205,10 @@ const mapStateToProps = (state) => {
         approvedMessLoading: friends.get('approvedMessLoading'),
         approvedMessFriends: friends.get('approvedMessFriends'),
         approvedMessError: friends.get('approvedMessError'),
+        approvedMessSkip: friends.get('approvedMessSkip'),
+        approvedMessLimit: friends.get('approvedMessLimit'),
+        approvedMessLoadMoreLoading: friends.get('approvedMessLoadMoreLoading'),
+        approvedMessNoMoreData: friends.get('approvedMessNoMoreData'),
     };
 }
 

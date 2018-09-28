@@ -147,8 +147,8 @@ const actionMap = {
         return state.merge(Map({
             approvedMessLoading: true,
             approvedMessFriends: [],
-            approvedMessSkip: action.skip,
-            approvedMessLimit: action.limit,
+            approvedMessSkip: action.requestData.start,
+            approvedMessLimit: action.requestData.limit,
             approvedMessNoMoreData: false,
             approvedMessError: [],
         }));
@@ -183,8 +183,8 @@ const actionMap = {
     [LOAD_MORE_APPROVED_FRIENDS_MESSENGER_REQUEST]: (state, action) => {
         return state.merge(Map({
             approvedMessLoadMoreLoading: true,
-            approvedMessSkip: action.skip,
-            approvedMessLimit: action.limit,
+            approvedMessSkip: action.requestData.start,
+            approvedMessLimit: action.requestData.limit,
             approvedMessNoMoreData: false,
             approvedMessError: [],
         }));

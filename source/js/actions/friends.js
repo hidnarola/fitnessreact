@@ -86,13 +86,10 @@ export function loadMoreApprovedFriendsError(error) {
     }
 }
 
-export function getApprovedFriendsMessengerRequest(username, skip = 0, limit = 10, sort = -1) {
+export function getApprovedFriendsMessengerRequest(requestData) {
     return {
         type: GET_APPROVED_FRIENDS_MESSENGER_REQUEST,
-        username,
-        skip,
-        limit,
-        sort
+        requestData
     }
 }
 
@@ -110,13 +107,10 @@ export function getApprovedFriendsMessengerError(error) {
     }
 }
 
-export function loadMoreApprovedFriendsMessengerRequest(username, skip = 0, limit = 10, sort = -1) {
+export function loadMoreApprovedFriendsMessengerRequest(requestData) {
     return {
         type: LOAD_MORE_APPROVED_FRIENDS_MESSENGER_REQUEST,
-        username,
-        skip,
-        limit,
-        sort
+        requestData,
     }
 }
 

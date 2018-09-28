@@ -301,6 +301,7 @@ class FitnessHeader extends Component {
                 token: getToken(),
                 start: 0,
                 limit: 10,
+                sort: -1,
             }
             dispatch(getUserMessageChannelRequest(requestData));
             dispatch(getApprovedFriendsMessengerRequest(requestData));
