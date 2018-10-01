@@ -11,6 +11,7 @@ import { resetUserMesagesState } from '../actions/userMessages';
 import { resetLoggedUserState } from '../actions/user';
 import { Link } from "react-router-dom";
 import logo from 'img/common/logo.png';
+import { hidePageLoader } from '../actions/pageLoader';
 
 const auth = new Auth();
 
@@ -37,6 +38,7 @@ class Login extends Component {
             socket.emit('request_make_user_offline');
             te('Session expired! Login again.');
             history.push(publicPath);
+            dispatch(hidePageLoader());
         }
         toggleSideMenu('user-right-menu', false);
         toggleSideMenu('user-notification-panel', false);

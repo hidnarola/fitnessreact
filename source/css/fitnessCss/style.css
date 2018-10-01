@@ -1907,7 +1907,7 @@ td.close-td a i{ font-size:20px;}
 .workout-exercise-head-view-r{width:auto; margin-left:auto; display:-webkit-box!important; display: -ms-flexbox!important; display: flex!important;}
 ul.workout-exercise-body-view-ul{background:#fff; margin:10px 0 0; box-shadow:0 0 30px 0 rgba(0,0,0,.02); padding:0;}
 ul.workout-exercise-body-view-ul li{background:transparent; width:100%;}
-.workout-exercise-body-view-data-row{justify-content:flex-end; font-size:12px;}
+.workout-exercise-body-view-data-row{justify-content:flex-start; font-size:12px;}
 
 ul.workout-exercise-body-view-ul .workout-exercise-body-view-data-row>div {background:#eee; padding:7px 10px; margin:0 10px 0 0; text-align:center; min-width:135px;}
 ul.workout-exercise-body-view-ul .workout-exercise-body-view-data-row>div strong { font-weight:500; width:100%; display:block; padding:5px 0 10px;}
@@ -1938,7 +1938,7 @@ ul.workout-exercise-body-view-ul .workout-exercise-head-view-edit button{ color:
 .workout-exercise-body-view + .workout-exercise-body-view { margin-top:10px; border-top: 10px solid rgba(0,0,0,.02); padding-top: 20px;}
 .workout-exercise-body-content-view-l {width: 22%;margin:auto;}
 .workout-exercise-body-content-view-r {width: 76%;margin-left: auto;}
-.workout-exercise-body-view-wrapper .workout-exercise-body-view {padding:15px 20px;}
+.workout-exercise-body-view-wrapper .workout-exercise-body-view {padding: 15px 20px;box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.15);margin-bottom: 20px;background: #fff;border-top: 0;}
 .workout-exercise-body-head-view.d-flex {margin-bottom: 15px;}
 .workout-exercises-view-wrapper {margin: 0 0 25px;}
 
@@ -2312,3 +2312,11 @@ h3.h3_msg_box {    background: #fafafa;padding: 15px 15px 10px 15px;margin: 0;di
 .title_edit_pop button svg {position: relative;top: -2px;}
 .title_edit_pop button { display: inline-block; vertical-align: top; margin-left: 5px; background: linear-gradient(123.28deg, #46E9C5 0%, #3FFBFC 100%); border: 0; width: 36px; height: 36px; text-align: center; border-radius: 40px; line-height: 36px; color: #fff; }
 .fitness-test-sub-category-block{height: 500px;}
+.workout-exercise-head-view-data-row-inner {width: 100%;}
+.workout-type-card-block-top {padding-right: 150px;position: relative;}
+.workout-type-card-block-top > div {width: 100%;}
+.workout-type-card-block-top > div:last-child {position: absolute;right: 0;    top: 0;width: auto;}
+.workout-exercises-view-wrapper {margin-top: -8px;}
+.workout-exercises-view-wrapper ul li {margin-top: 8px;}
+.app-footer p a {color: #7645c1;}
+.app-footer p {color: #232B41;font-size: 14px;line-height: 20px;margin: 0;background: #eee;padding: 15px;text-align: center;}

@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Field, reduxForm, FieldArray, formValueSelector } from "redux-form";
+import { reduxForm, FieldArray, formValueSelector } from "redux-form";
 import {
     SCHEDULED_WORKOUT_TYPE_EXERCISE,
     SCHEDULED_WORKOUT_TYPE_SUPERSET,
     SCHEDULED_WORKOUT_TYPE_CIRCUIT,
 } from '../../constants/consts';
-import { changeUsersWorkoutFormAction } from '../../actions/userScheduleWorkouts';
-import WorkoutTypeSingleCardUpdate from './WorkoutTypeSingleCardUpdate';
-import WorkoutTypeSupersetCardUpdate from './WorkoutTypeSupersetCardUpdate';
-import WorkoutTypeCircuitCardUpdate from './WorkoutTypeCircuitCardUpdate';
+import WorkoutTypeSingleCardUpdate from '../ScheduleWorkout/WorkoutTypeSingleCardUpdate';
+import WorkoutTypeSupersetCardUpdate from '../ScheduleWorkout/WorkoutTypeSupersetCardUpdate';
+import WorkoutTypeCircuitCardUpdate from '../ScheduleWorkout/WorkoutTypeCircuitCardUpdate';
+import { changeUsersProgramWorkoutFormAction } from '../../actions/userPrograms';
 
-class UpdateScheduleWorkoutForm extends Component {
+class UpdateScheduleProgramWorkoutForm extends Component {
     render() {
         const {
             handleSubmit,
@@ -71,14 +71,14 @@ class UpdateScheduleWorkoutForm extends Component {
 
     handleResetForm = () => {
         const { dispatch, reset } = this.props;
-        dispatch(changeUsersWorkoutFormAction('add', null));
+        dispatch(changeUsersProgramWorkoutFormAction('add', null));
         reset();
     }
 }
 
-UpdateScheduleWorkoutForm = reduxForm({
+UpdateScheduleProgramWorkoutForm = reduxForm({
     form: 'update_schedule_workout_form',
-})(UpdateScheduleWorkoutForm);
+})(UpdateScheduleProgramWorkoutForm);
 
 const selector = formValueSelector('update_schedule_workout_form');
 
@@ -95,4 +95,4 @@ const mapStateToProps = (state) => {
 
 export default connect(
     mapStateToProps,
-)(UpdateScheduleWorkoutForm);
+)(UpdateScheduleProgramWorkoutForm);

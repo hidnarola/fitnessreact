@@ -77,6 +77,15 @@ class ProgramSave extends Component {
                             <button type="button" onClick={this.handleShowUpdateProgramTitleAlert}><FaPencil /></button>
                             <p>{(program && program.description) ? program.description : ''}</p>
                         </div>
+                        <div className="body-head-r">
+                            <NavLink
+                                className="white-btn"
+                                to={routeCodes.PROGRAMS}
+                            >
+                                <span>Back</span>
+                                <i className="icon-arrow_back"></i>
+                            </NavLink>
+                        </div>
                     </div>
                     <div className="body-content d-flex row justify-content-start">
                         <div className="col-md-12">
@@ -205,7 +214,7 @@ class ProgramSave extends Component {
 
                 <SweetAlert
                     type="default"
-                    title=""
+                    title="Update Workout Title"
                     onConfirm={() => { }}
                     btnSize="sm"
                     cancelBtnBsStyle="danger"

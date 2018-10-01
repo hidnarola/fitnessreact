@@ -36,8 +36,9 @@ class Programs extends Component {
         const { programs } = this.props;
         const {
             showAddProgramAlert,
-            showDeleteProgramAlert,
+            showDeleteProgramAlert
         } = this.state;
+        const { loggedUserData } = this.props;
         return (
             <div className="fitness-body">
                 <FitnessHeader />
@@ -84,25 +85,30 @@ class Programs extends Component {
                                                                 <td>{program.name}</td>
                                                                 <td>{program.description}</td>
                                                                 <td>{program.totalWorkouts}</td>
-                                                                <td>
-                                                                    <ButtonToolbar>
-                                                                        <DropdownButton title="Actions" pullRight id="dropdown-size-medium">
-                                                                            <MenuItem
-                                                                                href={`${routeCodes.PROGRAM_SAVE}/${program._id}`}
-                                                                                eventKey="1"
-                                                                                onClick={(e) => this.handleEditNavigation(e, `${routeCodes.PROGRAM_SAVE}/${program._id}`)}
-                                                                            >
-                                                                                <FaPencil className="v-align-sub" /> Edit
+                                                                {program.userId && program.userId === loggedUserData.authId &&
+                                                                    <td>
+                                                                        <ButtonToolbar>
+                                                                            <DropdownButton title="Actions" pullRight id="dropdown-size-medium">
+                                                                                <MenuItem
+                                                                                    href={`${routeCodes.PROGRAM_SAVE}/${program._id}`}
+                                                                                    eventKey="1"
+                                                                                    onClick={(e) => this.handleEditNavigation(e, `${routeCodes.PROGRAM_SAVE}/${program._id}`)}
+                                                                                >
+                                                                                    <FaPencil className="v-align-sub" /> Edit
                                                                             </MenuItem>
-                                                                            <MenuItem
-                                                                                eventKey="2"
-                                                                                onClick={() => this.handleShowDeleteAlert(program._id)}
-                                                                            >
-                                                                                <FaTrash className="v-align-sub" /> Delete
+                                                                                <MenuItem
+                                                                                    eventKey="2"
+                                                                                    onClick={() => this.handleShowDeleteAlert(program._id)}
+                                                                                >
+                                                                                    <FaTrash className="v-align-sub" /> Delete
                                                                             </MenuItem>
-                                                                        </DropdownButton>
-                                                                    </ButtonToolbar>
-                                                                </td>
+                                                                            </DropdownButton>
+                                                                        </ButtonToolbar>
+                                                                    </td>
+                                                                }
+                                                                {(!program.userId || program.userId !== loggedUserData.authId) &&
+                                                                    <td></td>
+                                                                }
                                                             </tr>
                                                         )
                                                     })
@@ -240,7 +246,7 @@ class Programs extends Component {
 }
 
 const mapStateToProps = (state) => {
-    const { userPrograms } = state;
+    const { userPrograms, user } = state;
     return {
         loading: userPrograms.get('loading'),
         programs: userPrograms.get('programs'),
@@ -248,6 +254,7 @@ const mapStateToProps = (state) => {
         loadingMaster: userPrograms.get('loadingMaster'),
         programMaster: userPrograms.get('programMaster'),
         errorMaster: userPrograms.get('errorMaster'),
+        loggedUserData: user.get('loggedUserData'),
     };
 }
 

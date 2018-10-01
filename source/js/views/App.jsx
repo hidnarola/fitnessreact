@@ -290,6 +290,9 @@ class App extends Component {
                         }
                     </ScrollToTop>
                 </Router>
+                <div className="app-footer">
+                    <p>&copy; Copyright  <a href="#">Fitassist.com</a>. All Right Reserved.</p>
+                </div>
             </div>
         );
     }

@@ -43,7 +43,6 @@ import UpdateScheduleWorkoutForm from './UpdateScheduleWorkoutForm';
 import ReactCalender from 'react-calendar/dist/entry.nostyle';
 import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
 import SweetAlert from "react-bootstrap-sweetalert";
-import { FaCircleONotch } from "react-icons/lib/fa";
 import UpdateWorkoutTitleForm from './UpdateWorkoutTitleForm';
 import AddWorkoutTitleForm from './AddWorkoutTitleForm';
 
@@ -547,7 +546,7 @@ class SaveScheduleWorkout extends Component {
         dispatch(changeUsersWorkoutFormAction('add', null));
         dispatch(reset('update_schedule_workout_form'));
     }
-
+    
     prepareRequestDataForSingleWorkout = (data) => {
         const {
             exerciseMeasurements,
@@ -1165,7 +1164,7 @@ class TodaysWorkoutListCard extends Component {
         var today = moment().utc();
         var workoutDay = moment(workout.date);
         return (
-            <div className="" className={cns('todays-workout-list-card', { active: isActive })}>
+            <div className={cns('todays-workout-list-card', { active: isActive })}>
                 <button type="button" className="edit-title-btn" onClick={() => openEditExerciseTitleModal(workout)}><i className="icon-mode_edit"></i></button>
                 <NavLink to={routeCodes.SAVE_SCHEDULE_WORKOUT.replace(':id', workout._id)}>{workout.title}</NavLink>
                 <button type="button" onClick={() => handleWholeWorkoutDelete(workout._id)}><i className="icon-cancel"></i></button>

@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from "redux-form";
-import { required } from '../../formValidation/validationRules';
-import { addUserProgramMasterRequest } from '../../actions/userPrograms';
-import { te } from '../../helpers/funs';
-import { withRouter } from "react-router-dom";
-import { routeCodes } from '../../constants/routes';
+import { required, minLength, maxLength } from '../../formValidation/validationRules';
+
+const minLength2 = minLength(2);
+const maxLength20 = maxLength(20);
+const maxLength200 = maxLength(200);
 
 class UpdateProgramMasterForm extends Component {
     render() {
@@ -20,14 +20,16 @@ class UpdateProgramMasterForm extends Component {
                         placeholder="Title"
                         component={InputField}
                         errorClass="help-block"
-                        validate={[required]}
+                        validate={[required, minLength2, maxLength20]}
                     />
                     <Field
                         name="description"
-                        className="form-control"
+                        className="form-control resize-vertical min-height-80"
                         wrapperClass="form-group"
                         placeholder="Description"
                         component={TextAreaField}
+                        errorClass="help-block"
+                        validate={[maxLength200]}
                     />
                     <button type="button" onClick={onCancel} className="btn btn-sm btn-danger">Cancel</button>
                     <button type="submit" className="btn btn-sm btn-success">OK</button>

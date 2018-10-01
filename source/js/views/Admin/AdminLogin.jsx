@@ -22,10 +22,11 @@ class AdminLogin extends Component {
     }
 
     componentWillMount() {
-        const { match, history } = this.props;
+        const { match, history, dispatch } = this.props;
         if (match.path === (adminRootRoute + '/' + SESSION_EXPIRED_URL_TYPE)) {
             te('Session expired! Login again.');
             history.push(adminRootRoute);
+            dispatch(hidePageLoader());
         }
     }
 

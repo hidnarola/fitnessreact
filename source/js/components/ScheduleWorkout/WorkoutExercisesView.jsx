@@ -16,7 +16,6 @@ import { te, ts, prepareExerciseOptions, focusToControl } from '../../helpers/fu
 import { FaPencil, FaTrash } from "react-icons/lib/fa";
 import { ButtonToolbar, Dropdown, MenuItem } from "react-bootstrap";
 import ReactHtmlParser from "react-html-parser";
-import SixDots from 'svg/six-dots.svg';
 import SweetAlert from "react-bootstrap-sweetalert";
 import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
@@ -599,7 +598,6 @@ class WorkoutExerciseSingleView extends Component {
             <div className="workout-exercise-view">
                 <div className="workout-exercise-head-view d-flex">
                     <div className="workout-exercise-head-view-l">
-                        <button className="drag-drop-handler-button"><SixDots /></button>
                         <strong>{exercise.exercises.name}</strong>
                     </div>
                     <div className="workout-exercise-head-view-r">
@@ -683,7 +681,6 @@ class WorkoutExerciseSupersetView extends Component {
             <div className="workout-exercise-head-view-wrapper">
                 <div className="workout-exercise-head-view d-flex">
                     <div className="workout-exercise-head-view-l">
-                        <button className="drag-drop-handler-button"><SixDots /></button>
                         <strong>{'Superset'}</strong>
                     </div>
                     <div className="workout-exercise-head-view-r">
@@ -742,7 +739,6 @@ class WorkoutExerciseCircuitView extends Component {
             <div className="workout-exercise-head-view-wrapper">
                 <div className="workout-exercise-head-view d-flex">
                     <div className="workout-exercise-head-view-l">
-                        <button className="drag-drop-handler-button"><SixDots /></button>
                         <strong>{'Circuit'}</strong>
                     </div>
                     <div className="workout-exercise-head-view-r">

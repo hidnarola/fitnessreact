@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from "redux-form";
-import { required } from '../../formValidation/validationRules';
+import { required, minLength, maxLength } from '../../formValidation/validationRules';
+
+const minLength2 = minLength(2);
+const maxLength20 = maxLength(20);
+const maxLength200 = maxLength(200);
 
 class AddProgramWorkoutTitleForm extends Component {
     render() {
@@ -16,7 +20,7 @@ class AddProgramWorkoutTitleForm extends Component {
                         placeholder="Title"
                         component={InputField}
                         errorClass="help-block"
-                        validate={[required]}
+                        validate={[required, minLength2, maxLength20]}
                     />
                     <Field
                         name="description"
@@ -24,6 +28,8 @@ class AddProgramWorkoutTitleForm extends Component {
                         wrapperClass="form-group"
                         placeholder="Description"
                         component={TextAreaField}
+                        errorClass="help-block"
+                        validate={[maxLength200]}
                     />
                     <button type="button" onClick={onCancel} className="btn btn-sm btn-danger">Cancel</button>
                     <button type="submit" className="btn btn-sm btn-success">OK</button>

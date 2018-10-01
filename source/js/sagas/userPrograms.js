@@ -43,6 +43,15 @@ import {
     UPDATE_USER_PROGRAM_MASTER_REQUEST,
     updateUserProgramMasterSuccess,
     updateUserProgramMasterError,
+    getWorkoutsListByProgramDaySuccess,
+    getWorkoutsListByProgramDayError,
+    GET_WORKOUTS_LIST_BY_PROGRAM_DAY_REQUEST,
+    deleteUserProgramBulkExerciseSuccess,
+    deleteUserProgramBulkExerciseError,
+    DELETE_USER_PROGRAM_BULK_EXERCISE_REQUEST,
+    REORDER_PROGRAM_WORKOUT_EXERCISES_REQUEST,
+    reorderProgramWorkoutExercisesSuccess,
+    reorderProgramWorkoutExercisesError,
 } from '../actions/userPrograms';
 
 function getUserProgramsData() {
@@ -100,6 +109,18 @@ function deleteUsersProgramWorkoutScheduleData() {
             yield put(deleteUsersProgramWorkoutScheduleSuccess(data));
         } catch (error) {
             yield put(deleteUsersProgramWorkoutScheduleError(error));
+        }
+    }
+}
+
+function deleteUserProgramBulkExerciseData() {
+    return function* (action) {
+        try {
+            let requestData = action.requestData;
+            const data = yield call(() => api.deleteUserProgramBulkExercise(requestData));
+            yield put(deleteUserProgramBulkExerciseSuccess(data));
+        } catch (error) {
+            yield put(deleteUserProgramBulkExerciseError(error));
         }
     }
 }
@@ -214,6 +235,30 @@ function updateUserProgramMasterData() {
     }
 }
 
+function getWorkoutsListByProgramDay() {
+    return function* (action) {
+        try {
+            let requestData = action.requestData;
+            const data = yield call(() => api.getWorkoutsListByProgramDay(requestData));
+            yield put(getWorkoutsListByProgramDaySuccess(data))
+        } catch (error) {
+            yield put(getWorkoutsListByProgramDayError(error))
+        }
+    }
+}
+
+function reorderProgramWorkoutExercises() {
+    return function* (action) {
+        try {
+            let requestData = action.requestData;
+            const data = yield call(() => api.reorderProgramWorkoutExercises(requestData));
+            yield put(reorderProgramWorkoutExercisesSuccess(data))
+        } catch (error) {
+            yield put(reorderProgramWorkoutExercisesError(error))
+        }
+    }
+}
+
 export function* watchUserProgramsData() {
     yield takeLatest(GET_USER_PROGRAMS_REQUEST, getUserProgramsData());
     yield takeLatest(ADD_USER_PROGRAM_MASTER_REQUEST, addUserProgramMasterData());
@@ -227,8 +272,11 @@ export function* watchUserProgramsData() {
     yield takeLatest(UPDATE_USERS_PROGRAM_WORKOUT_SCHEDULE_REQUEST, updateUsersProgramWorkoutScheduleData());
     yield takeLatest(DELETE_USER_PROGRAM_SINGLE_EXERCISE_REQUEST, deleteUserProgramSingleExerciseData());
     yield takeLatest(DELETE_USER_PROGRAM_WHOLE_EXERCISE_REQUEST, deleteUserProgramWholeExerciseData());
+    yield takeLatest(DELETE_USER_PROGRAM_BULK_EXERCISE_REQUEST, deleteUserProgramBulkExerciseData());
     yield takeLatest(PASTE_USERS_PROGRAM_WORKOUT_SCHEDULE_REQUEST, pasteUsersProgramWorkoutScheduleData());
     yield takeLatest(UPDATE_USER_PROGRAM_MASTER_REQUEST, updateUserProgramMasterData());
+    yield takeLatest(GET_WORKOUTS_LIST_BY_PROGRAM_DAY_REQUEST, getWorkoutsListByProgramDay());
+    yield takeLatest(REORDER_PROGRAM_WORKOUT_EXERCISES_REQUEST, reorderProgramWorkoutExercises());
 }
 
 export default [

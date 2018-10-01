@@ -81,6 +81,11 @@ function deleteUserProgramWholeExercise(requestData) {
     return postFormData(requestUrl + '/delete', requestData, headers);
 }
 
+function deleteUserProgramBulkExercise(requestData) {
+    let headers = extraUserHeaders();
+    return postFormData(requestUrl + '/workout_delete', requestData, headers);
+}
+
 function pasteUsersProgramWorkoutSchedule(requestData) {
     let headers = extraUserHeaders();
     return postFormData(requestUrl + '/copy', requestData, headers);
@@ -89,6 +94,16 @@ function pasteUsersProgramWorkoutSchedule(requestData) {
 function updateUsersProgramMaster(_id, requestData) {
     let headers = extraUserHeaders();
     return putFormData(requestUrl + '/' + _id, requestData, headers);
+}
+
+function getWorkoutsListByProgramDay(requestData) {
+    let headers = extraUserHeaders();
+    return postFormData(requestUrl + '/workouts_list_by_program_day', requestData, headers);
+}
+
+function reorderProgramWorkoutExercises(requestData) {
+    let headers = extraUserHeaders();
+    return putFormData(requestUrl + '/reorder_exercises', requestData, headers);
 }
 
 export default {
@@ -104,6 +119,9 @@ export default {
     updateUsersProgramWorkoutSchedule,
     deleteUserProgramSingleExercise,
     deleteUserProgramWholeExercise,
+    deleteUserProgramBulkExercise,
     pasteUsersProgramWorkoutSchedule,
     updateUsersProgramMaster,
+    getWorkoutsListByProgramDay,
+    reorderProgramWorkoutExercises
 }

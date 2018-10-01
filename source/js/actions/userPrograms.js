@@ -53,6 +53,10 @@ export const DELETE_USER_PROGRAM_WHOLE_EXERCISE_REQUEST = 'DELETE_USER_PROGRAM_W
 export const DELETE_USER_PROGRAM_WHOLE_EXERCISE_SUCCESS = 'DELETE_USER_PROGRAM_WHOLE_EXERCISE_SUCCESS';
 export const DELETE_USER_PROGRAM_WHOLE_EXERCISE_ERROR = 'DELETE_USER_PROGRAM_WHOLE_EXERCISE_ERROR';
 
+export const DELETE_USER_PROGRAM_BULK_EXERCISE_REQUEST = 'DELETE_USER_PROGRAM_BULK_EXERCISE_REQUEST';
+export const DELETE_USER_PROGRAM_BULK_EXERCISE_SUCCESS = 'DELETE_USER_PROGRAM_BULK_EXERCISE_SUCCESS';
+export const DELETE_USER_PROGRAM_BULK_EXERCISE_ERROR = 'DELETE_USER_PROGRAM_BULK_EXERCISE_ERROR';
+
 export const COPY_USER_PROGRAM_WORKOUT_SCHEDULE = 'COPY_USER_PROGRAM_WORKOUT_SCHEDULE';
 
 export const PASTE_USERS_PROGRAM_WORKOUT_SCHEDULE_REQUEST = 'PASTE_USERS_PROGRAM_WORKOUT_SCHEDULE_REQUEST';
@@ -62,6 +66,16 @@ export const PASTE_USERS_PROGRAM_WORKOUT_SCHEDULE_ERROR = 'PASTE_USERS_PROGRAM_W
 export const UPDATE_USER_PROGRAM_MASTER_REQUEST = 'UPDATE_USER_PROGRAM_MASTER_REQUEST';
 export const UPDATE_USER_PROGRAM_MASTER_SUCCESS = 'UPDATE_USER_PROGRAM_MASTER_SUCCESS';
 export const UPDATE_USER_PROGRAM_MASTER_ERROR = 'UPDATE_USER_PROGRAM_MASTER_ERROR';
+
+export const GET_WORKOUTS_LIST_BY_PROGRAM_DAY_REQUEST = 'GET_WORKOUTS_LIST_BY_PROGRAM_DAY_REQUEST';
+export const GET_WORKOUTS_LIST_BY_PROGRAM_DAY_SUCCESS = 'GET_WORKOUTS_LIST_BY_PROGRAM_DAY_SUCCESS';
+export const GET_WORKOUTS_LIST_BY_PROGRAM_DAY_ERROR = 'GET_WORKOUTS_LIST_BY_PROGRAM_DAY_ERROR';
+
+export const REORDER_PROGRAM_WORKOUT_EXERCISES = 'REORDER_PROGRAM_WORKOUT_EXERCISES';
+
+export const REORDER_PROGRAM_WORKOUT_EXERCISES_REQUEST = 'REORDER_PROGRAM_WORKOUT_EXERCISES_REQUEST';
+export const REORDER_PROGRAM_WORKOUT_EXERCISES_SUCCESS = 'REORDER_PROGRAM_WORKOUT_EXERCISES_SUCCESS';
+export const REORDER_PROGRAM_WORKOUT_EXERCISES_ERROR = 'REORDER_PROGRAM_WORKOUT_EXERCISES_ERROR';
 
 export function getUserProgramsRequest() {
     return {
@@ -390,6 +404,76 @@ export function updateUserProgramMasterSuccess(data) {
 export function updateUserProgramMasterError(error) {
     return {
         type: UPDATE_USER_PROGRAM_MASTER_ERROR,
+        error
+    }
+}
+
+export function getWorkoutsListByProgramDayRequest(requestData) {
+    return {
+        type: GET_WORKOUTS_LIST_BY_PROGRAM_DAY_REQUEST,
+        requestData,
+    }
+}
+
+export function getWorkoutsListByProgramDaySuccess(data) {
+    return {
+        type: GET_WORKOUTS_LIST_BY_PROGRAM_DAY_SUCCESS,
+        data
+    }
+}
+
+export function getWorkoutsListByProgramDayError(error) {
+    return {
+        type: GET_WORKOUTS_LIST_BY_PROGRAM_DAY_ERROR,
+        error
+    }
+}
+
+export function deleteUserProgramBulkExerciseRequest(requestData) {
+    return {
+        type: DELETE_USER_PROGRAM_BULK_EXERCISE_REQUEST,
+        requestData,
+    }
+}
+
+export function deleteUserProgramBulkExerciseSuccess(data) {
+    return {
+        type: DELETE_USER_PROGRAM_BULK_EXERCISE_SUCCESS,
+        data,
+    }
+}
+
+export function deleteUserProgramBulkExerciseError(error) {
+    return {
+        type: DELETE_USER_PROGRAM_BULK_EXERCISE_ERROR,
+        error,
+    }
+}
+
+export function reorderProgramWorkoutExercises(newOrder) {
+    return {
+        type: REORDER_PROGRAM_WORKOUT_EXERCISES,
+        newOrder,
+    }
+}
+
+export function reorderProgramWorkoutExercisesRequest(requestData) {
+    return {
+        type: REORDER_PROGRAM_WORKOUT_EXERCISES_REQUEST,
+        requestData,
+    }
+}
+
+export function reorderProgramWorkoutExercisesSuccess(data) {
+    return {
+        type: REORDER_PROGRAM_WORKOUT_EXERCISES_SUCCESS,
+        data
+    }
+}
+
+export function reorderProgramWorkoutExercisesError(error) {
+    return {
+        type: REORDER_PROGRAM_WORKOUT_EXERCISES_ERROR,
         error
     }
 }
