@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Modal } from 'react-bootstrap';
+import { Modal, Alert } from 'react-bootstrap';
 import Dropzone from "react-dropzone";
 import Cropper from "react-cropper";
 
@@ -10,17 +10,13 @@ class ChangeProfilePhotoModal extends Component {
             selectedImage: null,
             croppedImg: null,
         }
+        this.showRejectedError = false;
     }
 
     render() {
-        const {
-            show,
-            handleSubmit,
-        } = this.props;
-        const {
-            selectedImage,
-            croppedImg,
-        } = this.state;
+        const { show, handleSubmit } = this.props;
+        const { selectedImage, croppedImg } = this.state;
+        console.log('this.showRejectedError => ', this.showRejectedError);
         return (
             <div className="change-profile-photo-modal-wrapper">
                 <Modal show={show} bsSize="large" className="gallery-popup profile-photo-update-modal">
@@ -30,6 +26,12 @@ class ChangeProfilePhotoModal extends Component {
                         </button>
                         <h3 className="title-h3">Select Photo</h3>
                     </div>
+
+                    {this.showRejectedError &&
+                        <Alert bsStyle="danger">
+                            <p>Invalid file(s). Please select jpg and png only.</p>
+                        </Alert>
+                    }
 
                     <div className="progress-popup-body">
                         {selectedImage &&
@@ -63,7 +65,7 @@ class ChangeProfilePhotoModal extends Component {
                                     <Dropzone
                                         name="profile_pic"
                                         className="no-padding"
-                                        accept={"image/jpeg, image/png, image/jpg, image/gif"}
+                                        accept={"image/jpeg, image/png, image/jpg"}
                                         onDrop={this.onDrop}
                                         multiple={false}
                                     >
@@ -91,11 +93,14 @@ class ChangeProfilePhotoModal extends Component {
         );
     }
 
-    onDrop = (filesToUpload, e) => {
-        this.setState({
-            selectedImage: filesToUpload[0],
-            croppedImg: null,
-        });
+    onDrop = (filesToUpload, rejectedFiles) => {
+        this.showRejectedError = (rejectedFiles && rejectedFiles.length > 0);
+        if (filesToUpload) {
+            this.setState({
+                selectedImage: filesToUpload[0],
+                croppedImg: null,
+            });
+        }
     }
 
     cancelSelectedImg = () => {
