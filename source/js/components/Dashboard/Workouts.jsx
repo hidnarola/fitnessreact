@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import WorkoutsListCard from './WorkoutsListCard';
-import NoDataFoundImg from "img/common/no_datafound.png";
 import { changeCompleteStatusOfWorkoutRequest } from '../../actions/dashboard';
+import NoRecordFound from '../Common/NoRecordFound';
 
 class Workouts extends Component {
     render() {
@@ -18,9 +18,7 @@ class Workouts extends Component {
                     )
                 }
                 {(!workouts || workouts.length <= 0) &&
-                    <div className="no-record-found-wrapper">
-                        <img src={NoDataFoundImg} />
-                    </div>
+                    <NoRecordFound />
                 }
             </div>
         );

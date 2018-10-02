@@ -29,7 +29,7 @@ import {
 } from '../../actions/profile';
 import moment from "moment";
 import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
-import { required, mobile, minLength, maxLength, min, max } from '../../formValidation/validationRules';
+import { required, mobile, minLength, maxLength, min, max, validNumber } from '../../formValidation/validationRules';
 import userFemale from 'img/common/user-female.png';
 import userMale from 'img/common/user-male.png';
 import home from 'img/common/home.png';
@@ -70,8 +70,8 @@ class UpdateProfileForm extends Component {
 
     render() {
         const { weightUnit, heightUnit } = this.state;
-        let validateWeight = (weightUnit !== MEASUREMENT_UNIT_POUND) ? [min20, max1000] : [min44, max2200];
-        let validateHeight = (heightUnit !== MEASUREMENT_UNIT_INCH) ? [min50, max600] : [min20, max240];
+        let validateWeight = (weightUnit !== MEASUREMENT_UNIT_POUND) ? [validNumber, min20, max1000] : [validNumber, min44, max2200];
+        let validateHeight = (heightUnit !== MEASUREMENT_UNIT_INCH) ? [validNumber, min50, max600] : [validNumber, min20, max240];
         return (
             <div className="update-profile-details-form col-md-12 no-padding">
                 <form>
@@ -188,7 +188,7 @@ class UpdateProfileForm extends Component {
                                                 wrapperClass="input-wrap weight-wrap input_unit"
                                                 placeholder="Height"
                                                 errorClass="help-block"
-                                                type="number"
+                                                type="text"
                                                 component={InputField}
                                                 units={(<label>{(heightUnit) ? heightUnit.toUpperCase() : MEASUREMENT_UNIT_CENTIMETER.toUpperCase()}</label>)}
                                                 validate={validateHeight}
@@ -208,7 +208,7 @@ class UpdateProfileForm extends Component {
                                                 name="weight"
                                                 wrapperClass="input-wrap weight-wrap input_unit"
                                                 errorClass="help-block"
-                                                type="number"
+                                                type="text"
                                                 placeholder="Weight"
                                                 component={InputField}
                                                 units={(<label>{(weightUnit) ? weightUnit.toUpperCase() : MEASUREMENT_UNIT_KILOGRAM.toUpperCase()}</label>)}
@@ -453,8 +453,6 @@ class UpdateProfileForm extends Component {
 
 const handleSubmit = (data, dispatch, props) => {
     const { handleSaveActionFlag } = props;
-    var heightUnit = data.heightUnit;
-    var weightUnit = data.weightUnit;
     var formData = {
         firstName: (data.first_name && data.first_name) ? capitalizeFirstLetter(data.first_name) : '',
         lastName: (data.last_name && data.last_name.trim()) ? capitalizeFirstLetter(data.last_name).trim() : '',
@@ -463,8 +461,10 @@ const handleSubmit = (data, dispatch, props) => {
         dateOfBirth: (data.dob) ? data.dob : '',
         goal: (data.primary_goal) ? data.primary_goal : null,
         aboutMe: (data.about_me) ? data.about_me : '',
-        height: (data.height) ? convertUnits(heightUnit, MEASUREMENT_UNIT_CENTIMETER, data.height) : 0,
-        weight: (data.weight) ? convertUnits(weightUnit, MEASUREMENT_UNIT_GRAM, data.weight) : 0,
+        height: (data.height) ? data.height : 0,
+        weight: (data.weight) ? data.weight : 0,
+        heightUnit: (data.heightUnit) ? data.heightUnit : '',
+        weightUnit: (data.weightUnit) ? data.weightUnit : '',
         workoutLocation: (data.workout_location) ? data.workout_location : WORKOUT_LOCATION_GYM,
     };
     handleSaveActionFlag(true);

@@ -9,18 +9,15 @@ import {
     loadMorePendingFriendsRequest
 } from '../../actions/friends';
 import ProfileFriendBlock from './ProfileFriendBlock';
-import { SET_LOGGED_USER_FROM_LOCALSTORAGE } from '../../actions/user';
-import _ from "lodash";
 import { FRIENDSHIP_STATUS_SELF } from '../../constants/consts';
 import ProfilePendingFriendBlock from './ProfilePendingFriendBlock';
 import CancelFriendRequestModal from './CancelFriendRequestModal';
 import { ts } from '../../helpers/funs';
-import UnfriendRequestModal from './UnfriendRequestModal';
 import { getUserChannelRequest } from '../../actions/userMessages';
 import SweetAlert from "react-bootstrap-sweetalert";
 import { FaCircleONotch } from "react-icons/lib/fa";
-import NoDataFoundImg from "img/common/no_datafound.png";
 import ErrorCloud from "svg/error-cloud.svg";
+import NoRecordFound from '../Common/NoRecordFound';
 
 class ProfileFriends extends Component {
     constructor(props) {
@@ -132,9 +129,7 @@ class ProfileFriends extends Component {
                             </div>
                         }
                         {!approvedLoading && (!approvedFriends || approvedFriends.length <= 0) && approvedError && approvedError.length <= 0 &&
-                            <div className="no-record-found-wrapper">
-                                <img src={NoDataFoundImg} />
-                            </div>
+                            <NoRecordFound />
                         }
                         {!approvedLoading && (!approvedFriends || approvedFriends.length <= 0) && approvedError && approvedError.length > 0 &&
                             <div className="server-error-wrapper">

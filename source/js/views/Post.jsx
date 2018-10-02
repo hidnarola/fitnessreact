@@ -5,7 +5,6 @@ import FitnessNav from '../components/global/FitnessNav';
 import { getUserSingleTimelineRequest, setTimelineState } from '../actions/userTimeline';
 import { FaCircleONotch } from "react-icons/lib/fa";
 import ErrorCloud from "svg/error-cloud.svg";
-import NoDataFoundImg from "img/common/no_datafound.png";
 import noProfileImg from 'img/common/no-profile-img.png'
 import noImg from 'img/common/no-img.png'
 import moment from "moment";
@@ -20,12 +19,18 @@ import { toggleLikeOnPostRequest } from '../actions/postLikes';
 import { te } from '../helpers/funs';
 import { commentOnPostRequest } from '../actions/postComments';
 import { reset } from "redux-form";
+import Lightbox from 'react-images';
+import NoRecordFound from '../components/Common/NoRecordFound';
 
 class Post extends Component {
     constructor(props) {
         super(props);
         this.state = {
             isLikedByLoggedUser: false,
+
+            lightBoxOpen: false,
+            currentImage: 0,
+            lightBoxImages: [],
         }
     }
 
@@ -37,7 +42,7 @@ class Post extends Component {
 
     render() {
         const { loading, postError, post, match } = this.props;
-        const { isLikedByLoggedUser } = this.state;
+        const { isLikedByLoggedUser, lightBoxOpen, currentImage, lightBoxImages } = this.state;
         let doRenderPost = true;
         if (!loading && post) {
             var createdBy = (post.created_by && Object.keys(post.created_by).length > 0) ? post.created_by : null;
@@ -147,13 +152,14 @@ class Post extends Component {
                                         {images && images.length > 0 &&
                                             images.map((imageD, imageI) => {
                                                 return (
-                                                    <img
-                                                        key={imageI}
-                                                        src={SERVER_BASE_URL + imageD.image}
-                                                        onError={(e) => {
-                                                            e.target.src = noImg
-                                                        }}
-                                                    />
+                                                    <a href="javascript:void(0)" key={imageI} onClick={() => this.handleOpenLightbox(images, imageI)}>
+                                                        <img
+                                                            src={SERVER_BASE_URL + imageD.image}
+                                                            onError={(e) => {
+                                                                e.target.src = noImg
+                                                            }}
+                                                        />
+                                                    </a>
                                                 )
                                             })
                                         }
@@ -208,15 +214,11 @@ class Post extends Component {
                     }
 
                     {!loading && post && !doRenderPost &&
-                        <div className="no-record-found-wrapper">
-                            <img src={NoDataFoundImg} />
-                        </div>
+                        <NoRecordFound />
                     }
 
                     {!loading && !post && typeof postError !== 'undefined' && postError && postError.length <= 0 &&
-                        <div className="no-record-found-wrapper">
-                            <img src={NoDataFoundImg} />
-                        </div>
+                        <NoRecordFound />
                     }
 
                     {!loading && typeof postError !== 'undefined' && postError && postError.length > 0 &&
@@ -226,6 +228,16 @@ class Post extends Component {
                         </div>
                     }
                 </section>
+                {lightBoxImages && lightBoxImages.length > 0 &&
+                    <Lightbox
+                        images={lightBoxImages}
+                        isOpen={lightBoxOpen}
+                        onClickPrev={() => this.handleNavigation('prev')}
+                        onClickNext={() => this.handleNavigation('next')}
+                        onClose={this.handleCloseLightbox}
+                        currentImage={currentImage}
+                    />
+                }
             </div>
         );
     }
@@ -280,6 +292,41 @@ class Post extends Component {
             };
             dispatch(commentOnPostRequest(requestData));
         }
+    }
+
+    handleOpenLightbox = (images, startFrom = 0) => {
+        let lightBoxImages = [];
+        images.map((photo) => {
+            lightBoxImages.push({ src: SERVER_BASE_URL + photo.image });
+        });
+        this.setState({ currentImage: startFrom, lightBoxOpen: true, lightBoxImages });
+    }
+
+    handleCloseLightbox = () => {
+        this.setState({
+            currentImage: 0,
+            lightBoxOpen: false,
+            lightBoxImages: [],
+        });
+    }
+
+    handleNavigation = (direction = 'next') => {
+        const { currentImage, lightBoxImages } = this.state;
+        let newCurrentImage = currentImage;
+        if (direction === 'prev') {
+            if (currentImage <= 0) {
+                newCurrentImage = (lightBoxImages.length - 1);
+            } else {
+                newCurrentImage -= 1;
+            }
+        } else if (direction === 'next') {
+            if (currentImage >= (lightBoxImages.length - 1)) {
+                newCurrentImage = 0;
+            } else {
+                newCurrentImage += 1;
+            }
+        }
+        this.setState({ currentImage: newCurrentImage });
     }
 }
 

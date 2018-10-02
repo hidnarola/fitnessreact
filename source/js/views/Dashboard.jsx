@@ -74,6 +74,7 @@ class Dashboard extends Component {
             changeBodyFatLoading,
             changeBodyFatError,
             widgetBadges,
+            loggedUserData,
         } = this.props;
         const { showWidgetsModal } = this.state;
         return (
@@ -110,26 +111,24 @@ class Dashboard extends Component {
                     {!loading &&
                         <div className="body-content row d-flex col-md-12">
                             <div className={cns(
-                                { 'col-md-8': (typeof userWidgets[WIDGET_ACTIVITY_FEED] !== 'undefined' && userWidgets[WIDGET_ACTIVITY_FEED] === 1) },
-                                { 'col-md-12': (typeof userWidgets[WIDGET_ACTIVITY_FEED] === 'undefined' || userWidgets[WIDGET_ACTIVITY_FEED] === 0) },
+                                { 'col-md-8': (userWidgets && typeof userWidgets[WIDGET_ACTIVITY_FEED] !== 'undefined' && userWidgets[WIDGET_ACTIVITY_FEED] === 1) },
+                                { 'col-md-12': (!userWidgets || typeof userWidgets[WIDGET_ACTIVITY_FEED] === 'undefined' || userWidgets[WIDGET_ACTIVITY_FEED] === 0) },
                             )}>
                                 <div className="row">
                                     {userWidgets && typeof userWidgets[WIDGET_TODAYS_WORKOUT] !== 'undefined' && userWidgets[WIDGET_TODAYS_WORKOUT] === 1 &&
                                         <div className={cns(
-                                            { 'col-md-12': (typeof userWidgets[WIDGET_BODY_FAT] === 'undefined') || !userWidgets[WIDGET_BODY_FAT] },
-                                            { 'col-md-6': (typeof userWidgets[WIDGET_BODY_FAT] !== 'undefined') && userWidgets[WIDGET_BODY_FAT] }
+                                            { 'col-md-12': (userWidgets && typeof userWidgets[WIDGET_BODY_FAT] === 'undefined') || !userWidgets[WIDGET_BODY_FAT] },
+                                            { 'col-md-6': (!userWidgets || typeof userWidgets[WIDGET_BODY_FAT] !== 'undefined') && userWidgets[WIDGET_BODY_FAT] }
                                         )}>
                                             <Workouts />
                                         </div>
                                     }
                                     {userWidgets && typeof userWidgets[WIDGET_BODY_FAT] !== 'undefined' && userWidgets[WIDGET_BODY_FAT] &&
                                         <div className={cns(
-                                            { 'col-md-6': (typeof userWidgets[WIDGET_TODAYS_WORKOUT] === 'undefined') || userWidgets[WIDGET_TODAYS_WORKOUT] === 0 },
-                                            { 'col-md-6': (typeof userWidgets[WIDGET_TODAYS_WORKOUT] !== 'undefined') && userWidgets[WIDGET_TODAYS_WORKOUT] === 1 }
+                                            { 'col-md-6': (userWidgets && typeof userWidgets[WIDGET_TODAYS_WORKOUT] === 'undefined') || userWidgets[WIDGET_TODAYS_WORKOUT] === 0 },
+                                            { 'col-md-6': (!userWidgets || typeof userWidgets[WIDGET_TODAYS_WORKOUT] !== 'undefined') && userWidgets[WIDGET_TODAYS_WORKOUT] === 1 }
                                         )}>
-                                            <WidgetProgressPhotoCard
-                                                progressPhoto={widgetProgressPhotos}
-                                            />
+                                            <WidgetProgressPhotoCard progressPhoto={widgetProgressPhotos} username={loggedUserData && loggedUserData.username ? loggedUserData.username : ''} />
                                         </div>
                                     }
                                     {userWidgets && typeof userWidgets[WIDGET_PROGRESS_PHOTO] !== 'undefined' && userWidgets[WIDGET_PROGRESS_PHOTO] === 1 &&
@@ -562,6 +561,7 @@ const mapStateToProps = (state) => {
     const { dashboard, user } = state;
     return {
         socket: user.get('socket'),
+        loggedUserData: user.get('loggedUserData'),
         loading: dashboard.get('loading'),
         error: dashboard.get('error'),
         profileComplete: dashboard.get('profileComplete'),

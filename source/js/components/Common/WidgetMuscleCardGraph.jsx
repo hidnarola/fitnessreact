@@ -8,9 +8,9 @@ import DateRangePicker from 'react-daterange-picker';
 import moment from "moment";
 import _ from "lodash";
 import { FaCircleONotch } from "react-icons/lib/fa";
-import NoDataFoundImg from "img/common/no_datafound.png";
 import ErrorCloud from "svg/error-cloud.svg";
 import cns from "classnames";
+import NoRecordFound from './NoRecordFound';
 
 class WidgetMuscleCardGraph extends Component {
     constructor(props) {
@@ -82,9 +82,7 @@ class WidgetMuscleCardGraph extends Component {
                     }
 
                     {data && !data.loading && (!data.graphData || data.graphData.length <= 0) && (!data.error || data.error.length <= 0) &&
-                        <div className="no-record-found-wrapper">
-                            <img src={NoDataFoundImg} />
-                        </div>
+                        <NoRecordFound />
                     }
 
                     {data && !data.loading && data.error && data.error.length > 0 &&

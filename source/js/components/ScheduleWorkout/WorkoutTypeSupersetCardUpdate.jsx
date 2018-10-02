@@ -8,7 +8,7 @@ import WorkoutInputField from './WorkoutInputField';
 import WorkoutDropdownField from './WorkoutDropdownField';
 import { prepareExerciseOptions, prepareFieldsOptions } from '../../helpers/funs';
 import { EXE_REST_TIME_UNITS, SCHEDULED_WORKOUT_TYPE_SUPERSET } from '../../constants/consts';
-import { requiredReactSelect, required, min, max } from '../../formValidation/validationRules';
+import { requiredReactSelect, required, min, max, validNumber } from '../../formValidation/validationRules';
 import SetsAdvanceViewUpdate from './SetsAdvanceViewUpdate';
 
 const min0 = min(0);
@@ -39,8 +39,8 @@ class WorkoutTypeSupersetCardUpdate extends Component {
                         name={`superset_sets`}
                         component={WorkoutInputField}
                         placeholder="Sets"
-                        type="number"
-                        validate={[required, min1, max12]}
+                        type="text"
+                        validate={[required, validNumber, min1, max12]}
                     />
                     <div className="set-div">Sets</div>
                     {typeof supersetSets !== 'undefined' && supersetSets > 1 &&
@@ -52,8 +52,8 @@ class WorkoutTypeSupersetCardUpdate extends Component {
                             name={`superset_rest_time`}
                             component={WorkoutInputField}
                             placeholder="Rest Time"
-                            type="number"
-                            validate={[required, min0]}
+                            type="text"
+                            validate={[required, validNumber, min0]}
                         />
                     }
                     {typeof supersetSets !== 'undefined' && supersetSets > 1 &&
@@ -134,8 +134,8 @@ class WorkoutTypeSupersetCardUpdate extends Component {
                                                                 name={`${field}.field1_value`}
                                                                 component={WorkoutInputField}
                                                                 placeholder=""
-                                                                type="number"
-                                                                validate={[required, min1]}
+                                                                type="text"
+                                                                validate={[required, validNumber, min1]}
                                                             />
                                                             <Field
                                                                 id={`${field}.field1_unit`}
@@ -153,8 +153,8 @@ class WorkoutTypeSupersetCardUpdate extends Component {
                                                                 name={`${field}.field2_value`}
                                                                 component={WorkoutInputField}
                                                                 placeholder=""
-                                                                type="number"
-                                                                validate={[required, min1]}
+                                                                type="text"
+                                                                validate={[required, validNumber, min1]}
                                                             />
                                                             <Field
                                                                 id={`${field}.field2_unit`}
@@ -172,8 +172,8 @@ class WorkoutTypeSupersetCardUpdate extends Component {
                                                                 name={`${field}.field3_value`}
                                                                 component={WorkoutInputField}
                                                                 placeholder=""
-                                                                type="number"
-                                                                validate={[required, min1]}
+                                                                type="text"
+                                                                validate={[required, validNumber, min1]}
                                                             />
                                                             <Field
                                                                 id={`${field}.field3_unit`}

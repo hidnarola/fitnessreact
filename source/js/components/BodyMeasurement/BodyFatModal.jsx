@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { Modal } from 'react-bootstrap';
 import { Field, reduxForm, formValueSelector } from "redux-form";
-import { required, min, max } from '../../formValidation/validationRules';
+import { required, min, max, validNumber } from '../../formValidation/validationRules';
 import { calculateBodyFatPercentage } from '../../helpers/funs';
 import { GENDER_FEMALE } from '../../constants/consts';
 import cns from "classnames";
 
 const min0 = min(0);
+const min18 = min(18);
 const max110 = max(110);
 const max200 = max(200);
 
@@ -32,52 +33,52 @@ class BodyFatModal extends Component {
                                 <li>
                                     <Field
                                         name="site1"
-                                        type="number"
+                                        type="text"
                                         label={(gender && gender === GENDER_FEMALE) ? 'Tricep' : 'Chest'}
                                         wrapperClass="grey-white remove-spinner"
                                         component={InputField}
                                         errorClass="help-block"
                                         placeholder={(gender && gender === GENDER_FEMALE) ? 'Tricep' : 'Chest'}
-                                        validate={[required, min0, max200]}
+                                        validate={[required, validNumber, min0, max200]}
                                         unitValue="mm"
                                     />
                                 </li>
                                 <li>
                                     <Field
                                         name="site2"
-                                        type="number"
+                                        type="text"
                                         label={(gender && gender === GENDER_FEMALE) ? 'Suprailiac' : 'Abdominal'}
                                         wrapperClass="grey-white remove-spinner"
                                         component={InputField}
                                         errorClass="help-block"
                                         placeholder={(gender && gender === GENDER_FEMALE) ? 'Suprailiac' : 'Abdominal'}
-                                        validate={[required, min0, max200]}
+                                        validate={[required, validNumber, min0, max200]}
                                         unitValue="mm"
                                     />
                                 </li>
                                 <li>
                                     <Field
                                         name="site3"
-                                        type="number"
+                                        type="text"
                                         label="Thigh"
                                         wrapperClass="grey-white remove-spinner"
                                         component={InputField}
                                         errorClass="help-block"
                                         placeholder="Thigh"
-                                        validate={[required, min0, max200]}
+                                        validate={[required, validNumber, min0, max200]}
                                         unitValue="mm"
                                     />
                                 </li>
                                 <li className={cns({ 'display_none': (typeof hidden_age !== 'undefined' && hidden_age > 0) })}>
                                     <Field
                                         name="age"
-                                        type="number"
+                                        type="text"
                                         label="Age"
                                         wrapperClass="grey-white remove-spinner"
                                         component={InputField}
                                         errorClass="help-block"
                                         placeholder="Age"
-                                        validate={[required, min0, max110]}
+                                        validate={[required, validNumber, min18, max110]}
                                         unitValue="years"
                                     />
                                     <Field
@@ -99,7 +100,7 @@ class BodyFatModal extends Component {
                                 <li className="body-fat-field-li">
                                     <Field
                                         name="bodyFat"
-                                        type="number"
+                                        type="text"
                                         label="Your Body Fat Percentage"
                                         wrapperClass="grey-white remove-spinner"
                                         component={InputField}

@@ -6,11 +6,11 @@ import { connect } from "react-redux";
 import { handleChangeUserSearchFor, getUsersPageSearchRequest } from '../actions/userSearch';
 import InfiniteScroll from 'react-infinite-scroller';
 import { FaCircleONotch } from "react-icons/lib/fa";
-import NoDataFoundImg from "img/common/no_datafound.png";
 import ErrorCloud from "svg/error-cloud.svg";
 import { NavLink } from "react-router-dom";
 import _ from "lodash";
 import { routeCodes } from '../constants/routes';
+import NoRecordFound from '../components/Common/NoRecordFound';
 
 class Users extends Component {
     constructor(props) {
@@ -77,9 +77,7 @@ class Users extends Component {
                                     }
 
                                     {!isFirstReq && (!allUsers || allUsers.length <= 0) && allUsersError && allUsersError.length <= 0 &&
-                                        <div className="no-record-found-wrapper">
-                                            <img src={NoDataFoundImg} />
-                                        </div>
+                                        <NoRecordFound />
                                     }
 
                                     {!isFirstReq && (!allUsers || allUsers.length <= 0) && allUsersError && allUsersError.length > 0 &&

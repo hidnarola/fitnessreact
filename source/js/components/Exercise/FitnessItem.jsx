@@ -9,6 +9,7 @@ import {
 import noImg from 'img/common/no-img.png'
 import cns from "classnames";
 import ReactHtmlParser from "react-html-parser";
+import { validNumber } from '../../formValidation/validationRules';
 
 class FitnessItem extends Component {
     constructor(props) {
@@ -59,12 +60,13 @@ class FitnessItem extends Component {
                                     <div className={cns('grey-white remove-spinner')} key={i}>
                                         <label>Rep Max : {val}</label>
                                         <input
-                                            type="number"
+                                            type="text"
                                             id={`${item._id}_max_rep_${i}`}
                                             name={`${item._id}_max_rep_${i}`}
                                             value={userVal}
                                             onChange={(e) => handleMaxRepChange(item._id, e, val)}
                                             placeholder="Max Rep"
+                                            validate={[validNumber]}
                                         />
                                     </div>
                                 )
@@ -161,12 +163,13 @@ class FitnessItem extends Component {
                         <div className={cns('grey-white remove-spinner')}>
                             <label>Value</label>
                             <input
-                                type="number"
+                                type="text"
                                 id={`${item._id}_text_field`}
                                 name={`${item._id}_text_field`}
                                 value={(userValue.value) ? userValue.value : ''}
                                 onChange={(e) => handleTextFieldChange(item._id, e)}
                                 placeholder="Value"
+                                validate={[validNumber]}
                             />
                         </div>
                     </div>

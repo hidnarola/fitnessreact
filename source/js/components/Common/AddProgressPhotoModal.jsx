@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Modal } from 'react-bootstrap';
+import { Modal, Alert } from 'react-bootstrap';
 import { reduxForm, Field } from "redux-form";
 import ReactCalender from 'react-calendar/dist/entry.nostyle';
 import Dropzone from 'react-dropzone';
@@ -14,6 +14,7 @@ class AddProgressPhotoModal extends Component {
         this.state = {
             photoDate: now,
         }
+        this.rejectedFiles = false;
     }
 
     componentWillMount() {
@@ -36,6 +37,12 @@ class AddProgressPhotoModal extends Component {
                             <h3 className="title-h3">New Progress Photo</h3>
                         </div>
 
+                        {this.rejectedFiles &&
+                            <Alert bsStyle="danger">
+                                <p>'Invalid file(s). Please select jpg, png, gif only'</p>
+                            </Alert>
+                        }
+
                         <div className="progress-popup-body d-flex">
                             <div className="progress-popup-body-l">
                                 <Field
@@ -46,6 +53,7 @@ class AddProgressPhotoModal extends Component {
                                     multiple={false}
                                     validate={[requiredImage]}
                                     errorClass="help-block"
+                                    handleRejectedError={this.handleRejectedError}
                                 />
                             </div>
                             <div className="progress-popup-body-m">
@@ -88,6 +96,10 @@ class AddProgressPhotoModal extends Component {
         });
         change('photo_date', date);
     }
+
+    handleRejectedError = (flag) => {
+        this.rejectedFiles = flag;
+    }
 }
 
 AddProgressPhotoModal = reduxForm({
@@ -100,7 +112,6 @@ class PhotoUploadField extends Component {
     constructor(props) {
         super(props);
         this.isImageSelected = false;
-        this.rejectedFiles = false;
     }
 
     render() {
@@ -111,6 +122,7 @@ class PhotoUploadField extends Component {
             className,
             errorClass,
             accept,
+            handleRejectedError,
         } = this.props;
         let filesArr = _.values(input.value);
         let images = [];
@@ -132,7 +144,8 @@ class PhotoUploadField extends Component {
                     accept={accept ? accept : "image/jpeg, image/png, image/jpg, image/gif"}
                     onClick={() => this.isImageSelected = false}
                     onDrop={(filesToUpload, rejectedFiles) => {
-                        this.rejectedFiles = (rejectedFiles && rejectedFiles.length > 0);
+                        let rejectedFlag = (rejectedFiles && rejectedFiles.length > 0);
+                        handleRejectedError(rejectedFlag)
                         this.isImageSelected = (filesToUpload && filesToUpload.length > 0);
                         input.onChange(filesToUpload);
                     }}
@@ -154,9 +167,6 @@ class PhotoUploadField extends Component {
                 </Dropzone>
                 {meta.touched &&
                     ((meta.error && <span className={errorClass}>{meta.error}</span>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))
-                }
-                {this.rejectedFiles &&
-                    <span className={errorClass}>Invalid File. Please select jpg, png, gif only</span>
                 }
             </div>
         );

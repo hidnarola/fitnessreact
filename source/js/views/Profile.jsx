@@ -400,6 +400,7 @@ class Profile extends Component {
             requestCancelError,
             requestAcceptLoading,
             requestAcceptError,
+            error
         } = this.props;
         const {
             loadProfileActionInit,
@@ -437,7 +438,7 @@ class Profile extends Component {
             });
             dispatch(getProfileDetailsRequest(username));
             if ((requestSendError && requestSendError.length > 0)) {
-                te(requestSendError[0]);
+                te('Something went wrong!');
             } else {
                 ts('Friend request send!');
             }
@@ -450,7 +451,7 @@ class Profile extends Component {
             this.handleHideCancelFriendRequestModal();
             dispatch(getProfileDetailsRequest(username));
             if ((requestCancelError && requestCancelError.length > 0)) {
-                te(requestCancelError[0]);
+                te('Something went wrong!');
             } else {
                 ts('Friend request canceled!');
             }
@@ -462,7 +463,7 @@ class Profile extends Component {
             });
             dispatch(getProfileDetailsRequest(username));
             if ((requestCancelError && requestCancelError.length > 0)) {
-                te(requestCancelError[0]);
+                te('Something went wrong!');
             } else {
                 ts('You are now no friends any more!');
             }
@@ -476,10 +477,9 @@ class Profile extends Component {
             });
             dispatch(getProfileDetailsRequest(username));
             if ((requestAcceptError && requestAcceptError.length > 0)) {
-                te(requestAcceptError[0]);
+                te('Something went wrong!');
             } else {
                 ts('Friend request accepted!');
-                // emit socket for sending notification
             }
             this.setForceUpdateChildComponents(true);
         }
@@ -491,7 +491,7 @@ class Profile extends Component {
             this.handleHideRejectFriendRequestModal();
             dispatch(getProfileDetailsRequest(username));
             if ((requestCancelError && requestCancelError.length > 0)) {
-                te(requestCancelError[0]);
+                te('Something went wrong!');
             } else {
                 ts('Friend request canceled!');
             }
@@ -502,9 +502,13 @@ class Profile extends Component {
                 updateAboutMeDetailsActionInit: false,
                 loadProfileActionInit: true
             });
+            if (error && error.length > 0) {
+                te('Something went wrong!');
+            } else {
+                ts('About me details updated!');
+            }
             dispatch(getProfileDetailsRequest(username));
             this.handleHideUpdateAboutMeModal();
-            // error and success message handling is remaining
         }
         if (updateProfilePhotoActionInit && !profileLoading) {
             this.setState({
@@ -512,10 +516,14 @@ class Profile extends Component {
                 loadProfileActionInit: true,
                 updateLocalStorageData: true,
             });
+            if (error && error.length > 0) {
+                te('Something went wrong!');
+            } else {
+                ts('Profile image updated!');
+            }
             dispatch(getProfileDetailsRequest(username));
             this.handleHideChangeProfilePhotoModal();
             this.setForceUpdateChildComponents(true);
-            // error and success message handling is remaining
         }
     }
 
@@ -719,6 +727,7 @@ const mapStateToProps = (state) => {
     return {
         profileLoading: profile.get('loading'),
         profile: profile.get('profile'),
+        error: profile.get('error'),
         settings: profile.get('settings'),
         requestSendLoading: friends.get('requestSendLoading'),
         requestSendError: friends.get('requestSendError'),

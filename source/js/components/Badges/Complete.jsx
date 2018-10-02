@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 import { BADGE_TYPE_COMPLETE } from '../../constants/consts';
 import { getUserBadgesByTypeRequest } from '../../actions/userBadges';
 import BadgeIndividualCard from './BadgeIndividualCard';
-import NoDataFoundImg from "img/common/no_datafound.png";
 import ErrorCloud from "svg/error-cloud.svg";
 import { FaCircleONotch } from "react-icons/lib/fa";
+import NoRecordFound from '../Common/NoRecordFound';
 
 class Complete extends Component {
     componentWillMount() {
@@ -40,9 +40,7 @@ class Complete extends Component {
                 }
 
                 {!loading && typeof badges !== 'undefined' && badges && badges.length <= 0 && error && error.length <= 0 &&
-                    <div className="no-record-found-wrapper">
-                        <img src={NoDataFoundImg} />
-                    </div>
+                    <NoRecordFound />
                 }
 
                 {!loading && typeof error !== 'undefined' && error && error.length > 0 &&

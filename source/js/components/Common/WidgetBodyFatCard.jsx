@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { ResponsiveContainer, AreaChart, XAxis, YAxis, Area, Tooltip } from "recharts";
 import DateRangePicker from 'react-daterange-picker';
-import { WIDGET_BODY_FAT } from '../../constants/consts';
+import { WIDGET_BODY_FAT, WIDGETS_TYPE_TIMELINE, FRIENDSHIP_STATUS_SELF, WIDGETS_TYPE_DASHBOARD } from '../../constants/consts';
 import moment from 'moment';
 import { FaCircleONotch } from "react-icons/lib/fa";
-import NoDataFoundImg from "img/common/no_datafound.png";
 import ErrorCloud from "svg/error-cloud.svg";
+import NoRecordFound from './NoRecordFound';
 
 class WidgetBodyFatCard extends Component {
     constructor(props) {
@@ -16,7 +17,7 @@ class WidgetBodyFatCard extends Component {
     }
 
     render() {
-        const { bodyFat, userWidgets, changeBodyFatLoading, changeBodyFatError } = this.props;
+        const { bodyFat, userWidgets, changeBodyFatLoading, changeBodyFatError, type, profile } = this.props;
         const { showCalendar } = this.state;
         let dateRange = null;
         if (userWidgets && typeof userWidgets[WIDGET_BODY_FAT] !== 'undefined' && userWidgets[WIDGET_BODY_FAT]) {
@@ -31,9 +32,23 @@ class WidgetBodyFatCard extends Component {
             <div className="white-box space-btm-30 dashboard-bodyfat-card min-height-373">
                 <div className="whitebox-head d-flex">
                     <h3 className="title-h3">Body Fat</h3>
-                    <div className="whitebox-head-r">
-                        <a href="javascript:void(0)" onClick={this.toggleCalendar} className="icon-date_range"></a>
-                    </div>
+                    {((type === WIDGETS_TYPE_TIMELINE && profile && profile.friendshipStatus && profile.friendshipStatus === FRIENDSHIP_STATUS_SELF) || (type === WIDGETS_TYPE_DASHBOARD)) &&
+                        <div className="whitebox-head-r">
+                            <a href="javascript:void(0)" onClick={this.toggleCalendar} className="icon-date_range"></a>
+                        </div>
+                    }
+                    {((type === WIDGETS_TYPE_TIMELINE && profile && profile.friendshipStatus && profile.friendshipStatus === FRIENDSHIP_STATUS_SELF) || (type === WIDGETS_TYPE_DASHBOARD)) && showCalendar &&
+                        <div className="bodyfat-date-range-picker">
+                            <DateRangePicker
+                                firstOfWeek={1}
+                                numberOfCalendars={1}
+                                selectionType='range'
+                                value={dateRange}
+                                onSelect={this.handleTimeDateRange}
+                                className="progress-date-range"
+                            />
+                        </div>
+                    }
                 </div>
 
                 {changeBodyFatLoading &&
@@ -60,27 +75,12 @@ class WidgetBodyFatCard extends Component {
                     </div>
                 }
                 {!changeBodyFatLoading && (!bodyFat || bodyFat.length <= 0) && changeBodyFatError && changeBodyFatError.length <= 0 &&
-                    <div className="no-record-found-wrapper">
-                        <img src={NoDataFoundImg} />
-                    </div>
+                    <NoRecordFound />
                 }
                 {!changeBodyFatLoading && changeBodyFatError && changeBodyFatError.length > 0 &&
                     <div className="server-error-wrapper">
                         <ErrorCloud />
                         <h4>Something went wrong! please try again.</h4>
-                    </div>
-                }
-
-                {showCalendar &&
-                    <div className="bodyfat-date-range-picker">
-                        <DateRangePicker
-                            firstOfWeek={1}
-                            numberOfCalendars={1}
-                            selectionType='range'
-                            value={dateRange}
-                            onSelect={this.handleTimeDateRange}
-                            className="progress-date-range"
-                        />
                     </div>
                 }
             </div>
@@ -103,7 +103,16 @@ class WidgetBodyFatCard extends Component {
     }
 }
 
-export default WidgetBodyFatCard;
+const mapStateToProps = (state) => {
+    const { profile } = state;
+    return {
+        profile: profile.get('profile'),
+    };
+}
+
+export default connect(
+    mapStateToProps,
+)(WidgetBodyFatCard);
 
 class CustomTooltip extends Component {
     render() {

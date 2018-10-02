@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
+import { Alert } from "react-bootstrap";
 import { reset, initialize } from "redux-form";
 import BodyMeasurementForm from './BodyMeasurementForm';
 import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
 import { saveUserBodyMeasurementRequest, saveUserBodyFatRequest } from '../../actions/userBodyMeasurement';
 import moment from 'moment';
-import { ts } from '../../helpers/funs';
+import { ts, te } from '../../helpers/funs';
 import { addUserProgressPhotoRequest } from '../../actions/userProgressPhotos';
 import AddProgressPhotoModal from '../Common/AddProgressPhotoModal';
 import BodyFatModal from './BodyFatModal';
@@ -29,8 +30,9 @@ class BodyMeasurement extends Component {
         const {
             refreshBodyMeasurementForm,
             showAddProgressPhotoModal,
-            showBodyFatModal,
+            showBodyFatModal
         } = this.state;
+        const { error } = this.props;
         return (
             <div className="body-measurement-list-section-wrapper">
                 <div className="body-head d-flex justify-content-start">
@@ -57,6 +59,12 @@ class BodyMeasurement extends Component {
                             <h3 className="title-h3">Body measurements</h3>
                         </div>
 
+                        {error && error.length > 0 &&
+                            <Alert bsStyle="danger">
+                                {error.map((o, i) => (<p key={i}>{o}</p>))}
+                            </Alert>
+                        }
+
                         <BodyMeasurementForm
                             refreshBodyMeasurementForm={refreshBodyMeasurementForm}
                             onSubmit={this.handleSubmit}
@@ -82,29 +90,31 @@ class BodyMeasurement extends Component {
 
     componentDidUpdate(prevProps, prevState) {
         const { saveActionInit, saveProgressPhotoActionInit, saveBodyFatInit } = this.state;
-        const { loading, dispatch, progressPhotoloading } = this.props;
+        const { loading, dispatch, progressPhotoloading, error } = this.props;
         if (saveActionInit && !loading) {
-            this.setState({
-                saveActionInit: false,
-                refreshBodyMeasurementForm: true,
-            });
-            ts('Body measurement saved successfully!');
+            let newState = { saveActionInit: false };
+            if (error && error.length <= 0) {
+                newState.refreshBodyMeasurementForm = true;
+                ts('Body measurement saved successfully!');
+            }
+            this.setState(newState);
             dispatch(hidePageLoader());
         }
         if (saveBodyFatInit && !loading) {
-            this.setState({
-                saveBodyFatInit: false,
-                refreshBodyMeasurementForm: true,
-            });
-            ts('Body fat saved successfully!');
+            let newState = { saveBodyFatInit: false };
+            if (error && error.length <= 0) {
+                newState.refreshBodyMeasurementForm = true;
+                ts('Body fat saved successfully!');
+            }
+            this.setState(newState);
             this.handleCloseBodyFatModal();
             dispatch(hidePageLoader());
         }
         if (saveProgressPhotoActionInit && !progressPhotoloading) {
-            this.setState({
-                saveProgressPhotoActionInit: false,
-            });
-            ts('Progress photo saved successfully!');
+            this.setState({ saveProgressPhotoActionInit: false });
+            if (error && error.length <= 0) {
+                ts('Progress photo saved successfully!');
+            }
             this.handleCloseAddProgressPhotoModal();
         }
     }

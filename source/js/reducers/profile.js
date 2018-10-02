@@ -137,12 +137,16 @@ const actionMap = {
     [SAVE_ABOUT_PROFILE_DETAILS_REQUEST]: (state, action) => {
         return state.merge(Map({
             loading: true,
+            error: [],
         }));
     },
     [SAVE_ABOUT_PROFILE_DETAILS_SUCCESS]: (state, action) => {
-        return state.merge(Map({
-            loading: false,
-        }));
+        let newState = { loading: false };
+        if (action.data && action.data.status && action.data.status === 0) {
+            let msg = action.data.message ? action.data.message : 'Something went wrong! please try again later';
+            newState.error = [msg];
+        }
+        return state.merge(Map(newState));
     },
     [SAVE_ABOUT_PROFILE_DETAILS_ERROR]: (state, action) => {
         let error = [];

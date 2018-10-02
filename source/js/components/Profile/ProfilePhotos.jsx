@@ -13,11 +13,11 @@ import AddGalleryPhotoModal from './AddGalleryPhotoModal';
 import { addUserGalleryPhotoRequest, getUserGalleryPhotoRequest } from '../../actions/userGalleryPhotos';
 import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
 import { FaCircleONotch } from "react-icons/lib/fa";
-import NoDataFoundImg from "img/common/no_datafound.png";
 import ErrorCloud from "svg/error-cloud.svg";
 import Lightbox from 'react-images';
 import { Link } from "react-router-dom";
 import { routeCodes } from '../../constants/routes';
+import NoRecordFound from '../Common/NoRecordFound';
 
 class ProfilePhotos extends Component {
     constructor(props) {
@@ -109,9 +109,7 @@ class ProfilePhotos extends Component {
                             </div>
                         }
                         {!progressPhotoloading && (!progressPhotos || progressPhotos.length <= 0) && progressPhotoError && progressPhotoError.length <= 0 &&
-                            <div className="no-record-found-wrapper">
-                                <img src={NoDataFoundImg} />
-                            </div>
+                            <NoRecordFound />
                         }
                         {!progressPhotoloading && (!progressPhotos || progressPhotos.length <= 0) && progressPhotoError && progressPhotoError.length > 0 &&
                             <div className="server-error-wrapper">
@@ -153,9 +151,7 @@ class ProfilePhotos extends Component {
                             </div>
                         }
                         {!galleryPhotoloading && (!galleryPhotos || galleryPhotos.length <= 0) && galleryPhotoError && galleryPhotoError.length <= 0 &&
-                            <div className="no-record-found-wrapper">
-                                <img src={NoDataFoundImg} />
-                            </div>
+                            <NoRecordFound />
                         }
                         {!galleryPhotoloading && (!galleryPhotos || galleryPhotos.length <= 0) && galleryPhotoError && galleryPhotoError.length > 0 &&
                             <div className="server-error-wrapper">

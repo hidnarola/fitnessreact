@@ -5,10 +5,10 @@ import { capitalizeFirstLetter } from '../../helpers/funs';
 import cns from "classnames";
 import { ResponsiveContainer, AreaChart, XAxis, YAxis, Area, Tooltip } from "recharts";
 import { FaCircleONotch } from "react-icons/lib/fa";
-import NoDataFoundImg from "img/common/no_datafound.png";
 import ErrorCloud from "svg/error-cloud.svg";
 import { EXE_SCATS } from '../../constants/consts';
 import DateRangePicker from 'react-daterange-picker';
+import NoRecordFound from '../Common/NoRecordFound';
 
 class StatsIndividualCard extends Component {
     constructor(props) {
@@ -96,9 +96,7 @@ class StatsIndividualCard extends Component {
                             })
                         }
                         {!o.fieldsLoading && (!o.fields || Object.keys(o.fields).length <= 0) && o.fieldsError && o.fieldsError.length <= 0 &&
-                            <div className="no-record-block">
-                                <img src={NoDataFoundImg} />
-                            </div>
+                            <NoRecordFound />
                         }
                         {!o.fieldsLoading && (!o.fields || Object.keys(o.fields).length <= 0) && o.fieldsError && o.fieldsError.length > 0 &&
                             <div className="error-block">
@@ -147,9 +145,7 @@ class StatsIndividualCard extends Component {
                             </div>
                         }
                         {!o.graphLoading && (!o.graphData || o.graphData.length <= 0) && o.graphError && o.graphError.length <= 0 &&
-                            <div className="no-record-block">
-                                <img src={NoDataFoundImg} />
-                            </div>
+                            <NoRecordFound />
                         }
                         {!o.graphLoading && (!o.graphData || o.graphData.length <= 0) && o.graphError && o.graphError.length > 0 &&
                             <div className="error-block">

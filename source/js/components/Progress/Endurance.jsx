@@ -4,9 +4,9 @@ import moment from "moment";
 import { PROGRESS_ENDURANCE } from '../../constants/consts';
 import { getUserProgressByCategoryAndDateRequest } from '../../actions/userProgress';
 import { FaCircleONotch } from "react-icons/lib/fa";
-import NoDataFoundImg from "img/common/no_datafound.png";
 import ErrorCloud from "svg/error-cloud.svg";
 import { capitalizeFirstLetter } from '../../helpers/funs';
+import NoRecordFound from '../Common/NoRecordFound';
 
 class Endurance extends Component {
     componentWillMount() {
@@ -62,9 +62,7 @@ class Endurance extends Component {
                 }
 
                 {!loading && (typeof progress === 'undefined' || !progress) && typeof error !== 'undefined' && error && error.length <= 0 &&
-                    <div className="no-record-found-wrapper">
-                        <img src={NoDataFoundImg} />
-                    </div>
+                    <NoRecordFound />
                 }
 
                 {!loading && typeof error !== 'undefined' && error && error.length > 0 &&

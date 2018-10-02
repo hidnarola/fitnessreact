@@ -4,9 +4,9 @@ import moment from "moment";
 import { STATS_STRENGTH, STATS_CARDIO } from '../../constants/consts';
 import { getUserStatsRequest, getUserGraphDataRequest, getUserSingleStatsRequest, setUserStatsState } from '../../actions/userStats';
 import { FaCircleONotch } from "react-icons/lib/fa";
-import NoDataFoundImg from "img/common/no_datafound.png";
 import ErrorCloud from "svg/error-cloud.svg";
 import StatsIndividualCard from './StatsIndividualCard';
+import NoRecordFound from '../Common/NoRecordFound';
 
 class StatsContent extends Component {
     constructor(props) {
@@ -49,9 +49,7 @@ class StatsContent extends Component {
                 }
 
                 {!loading && (!stats || !stats.data || stats.data.length <= 0) && error && error.length <= 0 &&
-                    <div className="no-record-found-wrapper">
-                        <img src={NoDataFoundImg} />
-                    </div>
+                    <NoRecordFound title_class="fs-20" title="No records found! Please add some exercises and complete them to see your statistics." />
                 }
 
                 {!loading && error && error.length > 0 &&

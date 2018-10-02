@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import FitnessHeader from '../components/global/FitnessHeader';
 import FitnessNav from '../components/global/FitnessNav';
 import { FaCircleONotch } from "react-icons/lib/fa";
-import NoDataFoundImg from "img/common/no_datafound.png";
 import ErrorCloud from "svg/error-cloud.svg";
 import ProfilePhotoBlock from '../components/Profile/ProfilePhotoBlock';
 import Lightbox from 'react-images';
@@ -11,6 +10,7 @@ import { SERVER_BASE_URL } from '../constants/consts';
 import { routeCodes } from '../constants/routes';
 import { Link } from "react-router-dom";
 import { getUserGalleryPhotoRequest, loadMoreUserGalleryPhotoRequest } from '../actions/userGalleryPhotos';
+import NoRecordFound from '../components/Common/NoRecordFound';
 
 class GalleryPhotos extends Component {
     constructor(props) {
@@ -88,9 +88,7 @@ class GalleryPhotos extends Component {
                     }
 
                     {!loading && (!galleryPhotosArr || galleryPhotosArr.length <= 0) && error && error.length <= 0 &&
-                        <div className="no-record-found-wrapper">
-                            <img src={NoDataFoundImg} />
-                        </div>
+                        <NoRecordFound />
                     }
 
                     {!loading && (!galleryPhotosArr || galleryPhotosArr.length <= 0) && error && error.length > 0 &&

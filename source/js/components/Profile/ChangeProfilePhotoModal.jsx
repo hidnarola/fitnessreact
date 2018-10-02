@@ -16,7 +16,6 @@ class ChangeProfilePhotoModal extends Component {
     render() {
         const { show, handleSubmit } = this.props;
         const { selectedImage, croppedImg } = this.state;
-        console.log('this.showRejectedError => ', this.showRejectedError);
         return (
             <div className="change-profile-photo-modal-wrapper">
                 <Modal show={show} bsSize="large" className="gallery-popup profile-photo-update-modal">

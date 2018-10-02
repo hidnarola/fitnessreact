@@ -5,10 +5,10 @@ import noProfileImg from 'img/common/no-profile-img.png'
 import cns from "classnames";
 import { openUserChatWindowRequest, loadMoreUserMessageChannelRequest } from '../../actions/userMessages';
 import { FaCircleONotch } from "react-icons/lib/fa";
-import NoDataFoundImg from "img/common/no_datafound.png";
 import ErrorCloud from "svg/error-cloud.svg";
 import { Scrollbars } from 'react-custom-scrollbars';
 import { loadMoreApprovedFriendsMessengerRequest } from '../../actions/friends';
+import NoRecordFound from '../Common/NoRecordFound';
 
 class UserMessagePanel extends Component {
     render() {
@@ -75,9 +75,7 @@ class UserMessagePanel extends Component {
                         }
 
                         {!panelChannelLoading && (typeof panelChannels === 'undefined' || !panelChannels || panelChannels.length <= 0) && typeof panelChannelError !== 'undefined' && panelChannelError && panelChannelError.length <= 0 &&
-                            <div className="no-record-found-wrapper">
-                                <img src={NoDataFoundImg} />
-                            </div>
+                            <NoRecordFound />
                         }
 
                         {!panelChannelLoading && typeof panelChannelError !== 'undefined' && panelChannelError && panelChannelError.length > 0 &&
@@ -125,9 +123,7 @@ class UserMessagePanel extends Component {
                         }
 
                         {!approvedMessLoading && (typeof approvedMessFriends === 'undefined' || !approvedMessFriends || approvedMessFriends.length <= 0) && typeof approvedMessError !== 'undefined' && approvedMessError && approvedMessError.length <= 0 &&
-                            <div className="no-record-found-wrapper">
-                                <img src={NoDataFoundImg} />
-                            </div>
+                            <NoRecordFound />
                         }
 
                         {!approvedMessLoading && typeof approvedMessError !== 'undefined' && approvedMessError && approvedMessError.length > 0 &&

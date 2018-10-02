@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import NoDataFoundImg from "img/common/no_datafound.png";
 import ActivityFeedListCard from './ActivityFeedListCard';
+import NoRecordFound from '../Common/NoRecordFound';
 
 class ActivityFeed extends Component {
     render() {
@@ -17,9 +17,7 @@ class ActivityFeed extends Component {
                     )
                 }
                 {(!activityFeed || activityFeed.length <= 0) &&
-                    <div className="no-record-found-wrapper">
-                        <img src={NoDataFoundImg} />
-                    </div>
+                    <NoRecordFound />
                 }
             </div>
         );

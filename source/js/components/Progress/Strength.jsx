@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 import { PROGRESS_STRENGTH } from '../../constants/consts';
 import { getUserProgressByCategoryAndDateRequest } from '../../actions/userProgress';
 import { FaCircleONotch } from "react-icons/lib/fa";
-import NoDataFoundImg from "img/common/no_datafound.png";
 import ErrorCloud from "svg/error-cloud.svg";
 import moment from "moment";
+import NoRecordFound from '../Common/NoRecordFound';
 
 class Strength extends Component {
     componentWillMount() {
@@ -61,9 +61,7 @@ class Strength extends Component {
                 }
 
                 {!loading && (typeof progress === 'undefined' || !progress || typeof progress.data == 'undefined' || !progress.data || progress.data.length <= 0) && typeof error !== 'undefined' && error && error.length <= 0 &&
-                    <div className="no-record-found-wrapper">
-                        <img src={NoDataFoundImg} />
-                    </div>
+                    <NoRecordFound />
                 }
 
                 {!loading && typeof error !== 'undefined' && error && error.length > 0 &&

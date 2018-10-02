@@ -6,7 +6,7 @@ import Dropzone from 'react-dropzone';
 import noImg from 'img/common/no-img.png'
 import moment from 'moment';
 import { InputField, SelectField_ReactSelect, DateField, EditorField } from '../../../helpers/FormControlHelper';
-import { required, requiredReactSelectStatus, minLength, maxLength, mobile, min, max } from '../../../formValidation/validationRules';
+import { required, requiredReactSelectStatus, minLength, maxLength, mobile, min, max, validNumber } from '../../../formValidation/validationRules';
 import { adminRouteCodes } from '../../../constants/adminRoutes';
 import { capitalizeFirstLetter, convertUnits } from '../../../helpers/funs';
 import {
@@ -78,8 +78,8 @@ class UserForm extends Component {
     render() {
         const { handleSubmit, selectUser } = this.props;
         const { aboutMe, heightUnit, weightUnit } = this.state;
-        let validateWeight = (weightUnit !== MEASUREMENT_UNIT_POUND) ? [min20, max1000] : [min44, max2200];
-        let validateHeight = (heightUnit !== MEASUREMENT_UNIT_INCH) ? [min50, max600] : [min20, max240];
+        let validateWeight = (weightUnit !== MEASUREMENT_UNIT_POUND) ? [validNumber, min20, max1000] : [validNumber, min44, max2200];
+        let validateHeight = (heightUnit !== MEASUREMENT_UNIT_INCH) ? [validNumber, min50, max600] : [validNumber, min20, max240];
         return (
             <div className="exercise-form-data">
                 <form onSubmit={handleSubmit}>
@@ -154,7 +154,7 @@ class UserForm extends Component {
                                 wrapperClass="form-group"
                                 placeholder={`Height (${heightUnit})`}
                                 component={InputField}
-                                type="number"
+                                type="text"
                                 errorClass="help-block"
                                 validate={validateHeight}
                             />
@@ -173,7 +173,7 @@ class UserForm extends Component {
                                 wrapperClass="form-group"
                                 placeholder={`Weight (${weightUnit})`}
                                 component={InputField}
-                                type="number"
+                                type="text"
                                 errorClass="help-block"
                                 validate={validateWeight}
                             />

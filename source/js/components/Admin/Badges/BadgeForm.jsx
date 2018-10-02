@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
 import { reduxForm, Field, formValueSelector, initialize } from 'redux-form';
 import { InputField, SelectField_ReactSelect, TextAreaField } from '../../../helpers/FormControlHelper';
-import { required, requiredReactSelect, requiredReactSelectStatus, min, minLength, maxLength } from '../../../formValidation/validationRules';
+import { required, requiredReactSelect, requiredReactSelectStatus, min, minLength, maxLength, validNumber } from '../../../formValidation/validationRules';
 import { adminRouteCodes } from '../../../constants/adminRoutes';
 import {
     TIME_TYPE_TIME_WINDOW,
@@ -75,7 +75,7 @@ class BadgeForm extends Component {
     }
 
     render() {
-        const {  timeType } = this.state;
+        const { timeType } = this.state;
         const { handleSubmit } = this.props;
         return (
             <div className="badge-form-data">
@@ -98,7 +98,7 @@ class BadgeForm extends Component {
                         <div className="col-md-4">
                             <Field
                                 name="target"
-                                type="number"
+                                type="text"
                                 className="form-control"
                                 label="Target"
                                 labelClass="control-label display_block"
@@ -107,7 +107,7 @@ class BadgeForm extends Component {
                                 component={InputField}
                                 errorClass="help-block"
                                 warningClass=""
-                                validate={[required, min1]}
+                                validate={[required, validNumber, min1]}
                                 requiredAstrisk={true}
                             />
                         </div>
@@ -130,7 +130,7 @@ class BadgeForm extends Component {
                         <div className="col-md-4">
                             <Field
                                 name="points"
-                                type="number"
+                                type="text"
                                 className="form-control"
                                 label="Points"
                                 labelClass="control-label display_block"
@@ -139,7 +139,7 @@ class BadgeForm extends Component {
                                 component={InputField}
                                 errorClass="help-block"
                                 warningClass=""
-                                validate={[required, min0]}
+                                validate={[required, validNumber, min0]}
                                 requiredAstrisk={true}
                             />
                         </div>
@@ -209,7 +209,7 @@ class BadgeForm extends Component {
                             <div className="col-md-4">
                                 <Field
                                     name="duration"
-                                    type="number"
+                                    type="text"
                                     className="form-control"
                                     label="Duration"
                                     labelClass="control-label display_block"
@@ -218,7 +218,7 @@ class BadgeForm extends Component {
                                     component={InputField}
                                     errorClass="help-block"
                                     warningClass=""
-                                    validate={[required, min0]}
+                                    validate={[required, validNumber, min0]}
                                     requiredAstrisk={true}
                                 />
                             </div>
@@ -237,7 +237,7 @@ class BadgeForm extends Component {
                             />
                         </div>
                         <div className="col-md-6">
-                        <Field
+                            <Field
                                 name="completeDescription"
                                 className="form-control resize-vertical min-height-80"
                                 label="Complete Description"

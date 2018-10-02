@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import noImg from 'img/common/no-img.png'
 import { SERVER_BASE_URL } from '../../constants/consts';
+import { routeCodes } from '../../constants/routes';
+import { Link } from "react-router-dom";
 
 class WidgetProgressPhotoCard extends Component {
     render() {
-        const { progressPhoto } = this.props;
+        const { progressPhoto, username } = this.props;
         if (progressPhoto) {
             return (
                 <div className="white-box space-btm-30">
@@ -16,34 +18,34 @@ class WidgetProgressPhotoCard extends Component {
                             <li>
                                 <div className="profile-list">
                                     <span>
-                                        <a href="javascript:void(0)">
+                                        <Link to={`${routeCodes.PROGRESS_PHOTOS}/${username}`}>
                                             <img
                                                 src={SERVER_BASE_URL + progressPhoto.current}
                                                 onError={(e) => {
                                                     e.target.src = noImg
                                                 }}
                                             />
-                                        </a>
+                                        </Link>
                                     </span>
                                     <h4>
-                                        <a href="javascript:void(0)">Current</a>
+                                        <Link to={`${routeCodes.PROGRESS_PHOTOS}/${username}`}>Current</Link>
                                     </h4>
                                 </div>
                             </li>
                             <li>
                                 <div className="profile-list">
                                     <span>
-                                        <a href="javascript:void(0)">
+                                        <Link to={`${routeCodes.PROGRESS_PHOTOS}/${username}`}>
                                             <img
                                                 src={SERVER_BASE_URL + progressPhoto.beginning}
                                                 onError={(e) => {
                                                     e.target.src = noImg
                                                 }}
                                             />
-                                        </a>
+                                        </Link>
                                     </span>
                                     <h4>
-                                        <a href="javascript:void(0)">Beginning</a>
+                                        <Link to={`${routeCodes.PROGRESS_PHOTOS}/${username}`}>Beginning</Link>
                                     </h4>
                                 </div>
                             </li>

@@ -5,7 +5,7 @@ import { Field, reduxForm, formValueSelector, reset } from 'redux-form';
 import { SelectField_ReactSelect, InputField } from '../../helpers/FormControlHelper';
 import { GOALS_DETAILS, MEASUREMENT_UNITS } from '../../constants/consts';
 import _ from "lodash";
-import { requiredReactSelect, required } from '../../formValidation/validationRules';
+import { requiredReactSelect, required, validNumber } from '../../formValidation/validationRules';
 
 class AddPersonalGoal extends Component {
     constructor(props) {
@@ -85,12 +85,12 @@ class AddPersonalGoal extends Component {
                                     <div className="col-md-4 pull-left">
                                         <Field
                                             name="target"
-                                            type="number"
+                                            type="text"
                                             wrapperClass="form-group"
                                             className="form-control remove-spinner"
                                             component={InputField}
                                             placeholder="Target"
-                                            validate={required}
+                                            validate={[required, validNumber]}
                                             errorClass="help-block"
                                             properties={{
                                                 min: 0

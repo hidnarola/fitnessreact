@@ -1986,6 +1986,8 @@ ul.workout-exercise-body-view-ul .workout-exercise-head-view-edit button{ color:
 .server-error-wrapper svg{width: 150px;}
 .no-record-found-wrapper{text-align: center;}
 .no-record-found-wrapper img{width: 350px;}
+.no-record-found-wrapper i { font-size: 100px; color: #ff337c; direction: ltr; }
+.no-record-found-wrapper h4 { font-size: 30px; color: #ff3370; direction: ltr; }
 .whitebox-head.d-flex.badge-category-card a i { position: absolute; right: 45px; }
 
 .tab-wrap{ background:#fff; padding:15px; }
@@ -2210,7 +2212,7 @@ ul.common-ul>li.body-fat-field-li{ width:50%; margin-left:auto;width: 55%;}
 .single-post-wrapper {background: transparent;margin: 0;box-sizing: border-box;}
 .single-post-left .posttype-body {padding: 15px;     background: #fff;}
 .auth0-lock-error-msg { width: -moz-max-content;}
-#user-message-panel button.btn-messages-loadmore { border: 1px solid #ddd; background: #fff; color: #000; padding: 10px 20px; width: 100%; border-radius: 5px; }
+#user-message-panel button.btn-messages-loadmore {border: 1px solid #ddd;background: #fff;color: #000;padding: 10px 20px;width: 100%;border-radius: 5px;margin-bottom: 2px;}
 #user-message-panel button.btn-messages-loadmore svg,
 #user-message-panel button.btn-messages-loadmore i,
 .photo-load-more-btn svg,
@@ -2320,3 +2322,8 @@ h3.h3_msg_box {    background: #fafafa;padding: 15px 15px 10px 15px;margin: 0;di
 .workout-exercises-view-wrapper ul li {margin-top: 8px;}
 .app-footer p a {color: #7645c1;}
 .app-footer p {color: #232B41;font-size: 14px;line-height: 20px;margin: 0;background: #eee;padding: 15px;text-align: center;}
+
+_::-webkit-full-page-media, _:future, :root .step-wrap {min-height: 888px;}   
+_::-webkit-full-page-media, _:future, :root .fitness-dashboard .row:before {display: none;}
+.body_footer_class .app-footer {position: fixed;bottom: 0;width: 100%;}
+.body_footer_class .no-content-loader {padding: 90px 0 0 0;}

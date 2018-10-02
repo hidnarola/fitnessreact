@@ -6,6 +6,13 @@ export const required = (value) => {
     return undefined;
 }
 
+export const validNumber = (value) => {
+    if (value && !/^\d+(?:\.\d{1,})?$/i.test(value)) {
+        return "Field should contain only numeric values.";
+    }
+    return undefined;
+}
+
 export const requiredReactSelect = (value) => {
     if (!value || !value.value) {
         return "Field is required";
@@ -34,15 +41,30 @@ export const requiredImage = (value) => {
     return undefined;
 }
 
+export const validImage = (value) => {
+    let isError = false;
+    if (value) {
+        Array.from(value).forEach(file => {
+            if (file.type !== 'image/jpeg' || file.type !== 'image/jpg' || file.type !== 'image/gif' || file.type !== 'image/png') {
+                isError = true;
+            }
+        });
+    }
+    if (isError) {
+        return "Invalid File. Please select jpg, png, gif only";
+    }
+    return undefined;
+}
+
 export const email = (value) => {
-    if (!value || !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,5}$/i.test(value)) {
+    if (value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,5}$/i.test(value)) {
         return "Invalid email address";
     }
     return undefined;
 }
 
 export const mobile = (value) => {
-    if (value || !/^(\+\d{1,3}[- ]?)?\d{10}$/i.test(value)) {
+    if (value && !/^(\+\d{1,3}[- ]?)?\d{10}$/i.test(value)) {
         return "Invalid mobile number";
     }
     return undefined;

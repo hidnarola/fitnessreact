@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import TrophyIcon from "svg/tropy-icon.svg";
-import NoDataFoundImg from "img/common/no_datafound.png";
 import moment from "moment";
+import NoRecordFound from './NoRecordFound';
 
 class WidgetBadgesCard extends Component {
     render() {
@@ -20,9 +20,7 @@ class WidgetBadgesCard extends Component {
                 </div>
 
                 {(!badges || badges.length <= 0) &&
-                    <div className="no-record-found-wrapper">
-                        <img src={NoDataFoundImg} />
-                    </div>
+                    <NoRecordFound />
                 }
             </div>
         );

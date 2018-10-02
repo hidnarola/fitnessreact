@@ -28,18 +28,20 @@ class ProfilePendingFriendBlock extends Component {
                         </NavLink>
                     </div>
                     <div className="friend-box-info">
-                        <h5 className="vertical-middle-c">
-                            {(typeof friend.firstName !== 'undefined') ? friend.firstName : ''}
-                            {(typeof friend.lastName !== 'undefined') ? ' ' + friend.lastName : ''}
-                            {friend.friendsCount > 0 &&
-                                <small>
-                                    {friend.friendsCount} Friend{friend.friendsCount > 1 && 's'}
-                                </small>
-                            }
-                            {friend.friendsCount <= 0 &&
-                                <small>No friends</small>
-                            }
-                        </h5>
+                        <NavLink to={`${routeCodes.PROFILE}/${friend.username}`}>
+                            <h5 className="vertical-middle-c">
+                                {(typeof friend.firstName !== 'undefined') ? friend.firstName : ''}
+                                {(typeof friend.lastName !== 'undefined') ? ' ' + friend.lastName : ''}
+                                {friend.friendsCount > 0 &&
+                                    <small>
+                                        {friend.friendsCount} Friend{friend.friendsCount > 1 && 's'}
+                                    </small>
+                                }
+                                {friend.friendsCount <= 0 &&
+                                    <small>No friends</small>
+                                }
+                            </h5>
+                        </NavLink>
                     </div>
                     <div className="friend-box-status pending-friends">
                         <ButtonToolbar>

@@ -6,8 +6,8 @@ import { getAllUserNotificationRequest, readOneUserNotificationRequest, loadMore
 import NotificationCard from '../components/global/NotificationCard';
 import { getToken } from '../helpers/funs';
 import { FaCircleONotch } from "react-icons/lib/fa";
-import NoDataFoundImg from "img/common/no_datafound.png";
 import ErrorCloud from "svg/error-cloud.svg";
+import NoRecordFound from '../components/Common/NoRecordFound';
 
 class Notifications extends Component {
     componentWillMount() {
@@ -73,9 +73,7 @@ class Notifications extends Component {
                                     }
 
                                     {!allLoading && (!allNotifications || allNotifications.length <= 0) && allError && allError.length <= 0 &&
-                                        <div className="no-record-found-wrapper">
-                                            <img src={NoDataFoundImg} />
-                                        </div>
+                                        <NoRecordFound />
                                     }
 
                                     {!allLoading && (!allNotifications || allNotifications.length <= 0) && allError && allError.length > 0 &&

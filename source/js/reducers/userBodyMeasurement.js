@@ -13,10 +13,12 @@ import {
     SAVE_USER_BODY_FAT_SUCCESS,
     SAVE_USER_BODY_FAT_ERROR
 } from "../actions/userBodyMeasurement";
+import { VALIDATION_FAILURE_STATUS } from "../constants/consts";
+import { generateValidationErrorMsgArr } from "../helpers/funs";
 
 const initialState = Map({
     loading: false,
-    error: null,
+    error: [],
     measurement: null,
     bodyFat: null,
     loadingLogDates: false,
@@ -28,70 +30,125 @@ const actionMap = {
     [GET_USER_BODY_MEASUREMENT_REQUEST]: (state, action) => {
         return state.merge(Map({
             loading: true,
+            measurement: null,
+            bodyFat: null,
+            error: [],
         }));
     },
     [GET_USER_BODY_MEASUREMENT_SUCCESS]: (state, action) => {
-        return state.merge(Map({
-            loading: false,
-            measurement: action.data.measurement,
-            bodyFat: action.data.body_fat_log,
-        }));
+        let newState = { loading: false };
+        if (action.data && action.data.status && action.data.status === 1) {
+            newState.measurement = action.data.measurement;
+            newState.bodyFat = action.data.body_fat_log;
+        } else {
+            let msg = (action.data.message) ? action.data.message : "Something went wrong! please try again later.";
+            newState.error = [msg];
+        }
+        return state.merge(Map(newState));
     },
     [GET_USER_BODY_MEASUREMENT_ERROR]: (state, action) => {
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
+        }
         return state.merge(Map({
             loading: false,
-            error: action.error,
+            error: error,
         }));
     },
     [GET_USER_BODY_MEASUREMENT_LOG_DATES_REQUEST]: (state, action) => {
         return state.merge(Map({
             loadingLogDates: true,
+            errorLogDates: null,
+            logDates: [],
         }));
     },
     [GET_USER_BODY_MEASUREMENT_LOG_DATES_SUCCESS]: (state, action) => {
-        return state.merge(Map({
-            loadingLogDates: false,
-            logDates: action.data.logdates,
-        }));
+        let newState = { loadingLogDates: false };
+        if (action.data && action.data.status && action.data.status === 1) {
+            newState.logDates = action.data.logdates;
+        } else {
+            let msg = "Log dates are not found. Please try later";
+            newState.errorLogDates = [msg];
+        }
+        return state.merge(Map(newState));
     },
     [GET_USER_BODY_MEASUREMENT_LOG_DATES_ERROR]: (state, action) => {
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
+        }
         return state.merge(Map({
             loadingLogDates: false,
-            errorLogDates: action.error,
+            errorLogDates: error,
         }));
     },
     [SAVE_USER_BODY_MEASUREMENT_REQUEST]: (state, action) => {
         return state.merge(Map({
             loading: true,
+            error: [],
         }));
     },
     [SAVE_USER_BODY_MEASUREMENT_SUCCESS]: (state, action) => {
-        return state.merge(Map({
-            loading: false,
-            measurement: action.data.measurement,
-        }));
+        let newState = { loading: false };
+        if (action.data && action.data.status && action.data.status === 1) {
+            newState.measurement = action.data.measurement;
+        } else {
+            let msg = (action.data.message) ? action.data.message : "Something went wrong! please try again later.";
+            newState.error = [msg];
+        }
+        return state.merge(Map(newState));
     },
     [SAVE_USER_BODY_MEASUREMENT_ERROR]: (state, action) => {
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
+        }
         return state.merge(Map({
             loading: false,
-            error: action.error,
+            error: error,
         }));
     },
     [SAVE_USER_BODY_FAT_REQUEST]: (state, action) => {
         return state.merge(Map({
             loading: true,
+            error: [],
         }));
     },
     [SAVE_USER_BODY_FAT_SUCCESS]: (state, action) => {
-        return state.merge(Map({
-            loading: false,
-            bodyFat: action.data.body_fat_log,
-        }));
+        let newState = { loading: false };
+        if (action.data && action.data.status && action.data.status === 1) {
+            newState.bodyFat = action.data.body_fat_log;
+        } else {
+            let msg = (action.data.message) ? action.data.message : "Something went wrong! please try again later.";
+            newState.error = [msg];
+        }
+        return state.merge(Map(newState));
     },
     [SAVE_USER_BODY_FAT_ERROR]: (state, action) => {
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
+        }
         return state.merge(Map({
             loading: false,
-            error: action.error,
+            error: error,
         }));
     },
 };

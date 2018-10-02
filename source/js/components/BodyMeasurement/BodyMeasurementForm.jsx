@@ -5,7 +5,7 @@ import _ from 'lodash';
 import moment from 'moment';
 import ReactCalender from 'react-calendar/dist/entry.nostyle';
 import bodyGraph from 'img/site/body-graph.png';
-import { required, min, max } from '../../formValidation/validationRules';
+import { required, min, max, validNumber } from '../../formValidation/validationRules';
 import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
 import { getUserBodyMeasurementRequest, getUserBodyMeasurementLogDatesRequest } from '../../actions/userBodyMeasurement';
 import { getLoggedUserProfileSettingsRequest } from '../../actions/profile';
@@ -17,6 +17,31 @@ import {
 } from '../../constants/consts';
 import { convertUnits } from '../../helpers/funs';
 
+const min0 = min(0);
+const min20 = min(20);
+const min50 = min(50);
+const min44 = min(44);
+const max60 = max(60);
+const max120 = max(120);
+const max270 = max(270);
+const max40 = max(40);
+const max240 = max(240);
+const max80 = max(80);
+const max310 = max(310);
+const max200 = max(200);
+const max100 = max(100);
+const max250 = max(250);
+const max1000 = max(1000);
+const max600 = max(600);
+const max24 = max(24);
+const max48 = max(48);
+const max108 = max(108);
+const max16 = max(16);
+const max96 = max(96);
+const max32 = max(32);
+const max124 = max(124);
+const max2200 = max(2200);
+
 class BodyMeasurementForm extends Component {
     constructor(props) {
         super(props);
@@ -25,7 +50,20 @@ class BodyMeasurementForm extends Component {
         this.state = {
             selectActionInit: false,
             logDate,
-            validationRules: {}
+            validationRules: {
+                neck: [required, validNumber, min0, max60],
+                shoulders: [required, validNumber, min0, max120],
+                chest: [required, validNumber, min0, max270],
+                upper_arm: [required, validNumber, min0, max40],
+                waist: [required, validNumber, min0, max240],
+                forearm: [required, validNumber, min0, max80],
+                hips: [required, validNumber, min0, max310],
+                thigh: [required, validNumber, min0, max200],
+                calf: [required, validNumber, min0, max100],
+                heartRate: [required, validNumber, min0, max250],
+                weight: [required, validNumber, min20, max1000],
+                height: [required, validNumber, min50, max600],
+            }
         }
     }
 
@@ -58,132 +96,142 @@ class BodyMeasurementForm extends Component {
                             <li>
                                 <Field
                                     name="neck"
-                                    type="number"
+                                    type="text"
                                     label="Neck"
                                     wrapperClass="grey-white"
                                     component={InputField}
                                     errorClass="help-block"
                                     placeholder="Neck"
-                                    validate={(validationRules.neck) ? validationRules.neck : [required]}
+                                    validate={(validationRules.neck) ? validationRules.neck : [required, validNumber]}
                                     unitValue={bodyMeasurement}
+                                    autoComplete="off"
                                 />
 
                             </li>
                             <li>
                                 <Field
                                     name="shoulders"
-                                    type="number"
+                                    type="text"
                                     label="Shoulders"
                                     wrapperClass="grey-white"
                                     component={InputField}
                                     errorClass="help-block"
                                     placeholder="Shoulders"
-                                    validate={(validationRules.shoulders) ? validationRules.shoulders : [required]}
+                                    validate={(validationRules.shoulders) ? validationRules.shoulders : [required, validNumber]}
                                     unitValue={bodyMeasurement}
+                                    autoComplete="off"
                                 />
                             </li>
                             <li>
                                 <Field
                                     name="chest"
-                                    type="number"
+                                    type="text"
                                     label="Chest"
                                     wrapperClass="grey-white"
                                     component={InputField}
                                     errorClass="help-block"
                                     placeholder="Chest"
-                                    validate={(validationRules.chest) ? validationRules.chest : [required]}
+                                    validate={(validationRules.chest) ? validationRules.chest : [required, validNumber]}
                                     unitValue={bodyMeasurement}
+                                    autoComplete="off"
                                 />
                             </li>
                             <li>
                                 <Field
                                     name="upper_arm"
-                                    type="number"
+                                    type="text"
                                     label="Upper Arm"
                                     wrapperClass="grey-white"
                                     component={InputField}
                                     errorClass="help-block"
                                     placeholder="Upper Arm"
-                                    validate={(validationRules.upper_arm) ? validationRules.upper_arm : [required]}
+                                    validate={(validationRules.upper_arm) ? validationRules.upper_arm : [required, validNumber]}
                                     unitValue={bodyMeasurement}
+                                    autoComplete="off"
                                 />
                             </li>
                             <li>
                                 <Field
                                     name="waist"
-                                    type="number"
+                                    type="text"
                                     label="Waist"
                                     wrapperClass="grey-white"
                                     component={InputField}
                                     errorClass="help-block"
                                     placeholder="Waist"
-                                    validate={(validationRules.waist) ? validationRules.waist : [required]}
+                                    validate={(validationRules.waist) ? validationRules.waist : [required, validNumber]}
                                     unitValue={bodyMeasurement}
+                                    autoComplete="off"
                                 />
                             </li>
                             <li>
                                 <Field
                                     name="forearm"
-                                    type="number"
+                                    type="text"
                                     label="Forearm"
                                     wrapperClass="grey-white"
                                     component={InputField}
                                     errorClass="help-block"
                                     placeholder="Forearm"
-                                    validate={(validationRules.forearm) ? validationRules.forearm : [required]}
+                                    validate={(validationRules.forearm) ? validationRules.forearm : [required, validNumber]}
                                     unitValue={bodyMeasurement}
+                                    autoComplete="off"
                                 />
                             </li>
                             <li>
                                 <Field
                                     name="hips"
-                                    type="number"
+                                    type="text"
                                     label="Hips"
                                     wrapperClass="grey-white"
                                     component={InputField}
                                     errorClass="help-block"
                                     placeholder="Hips"
-                                    validate={(validationRules.hips) ? validationRules.hips : [required]}
+                                    validate={(validationRules.hips) ? validationRules.hips : [required, validNumber]}
                                     unitValue={bodyMeasurement}
+                                    autoComplete="off"
                                 />
                             </li>
                             <li>
                                 <Field
                                     name="thigh"
-                                    type="number"
+                                    type="text"
                                     label="Thigh"
                                     wrapperClass="grey-white"
                                     component={InputField}
                                     errorClass="help-block"
                                     placeholder="Thigh"
-                                    validate={(validationRules.thigh) ? validationRules.thigh : [required]}
+                                    validate={(validationRules.thigh) ? validationRules.thigh : [required, validNumber]}
                                     unitValue={bodyMeasurement}
+                                    autoComplete="off"
                                 />
                             </li>
                             <li>
                                 <Field
                                     name="calf"
-                                    type="number"
+                                    type="text"
                                     label="Calf"
                                     wrapperClass="grey-white"
                                     component={InputField}
                                     errorClass="help-block"
                                     placeholder="Calf"
-                                    validate={(validationRules.calf) ? validationRules.calf : [required]}
+                                    validate={(validationRules.calf) ? validationRules.calf : [required, validNumber]}
                                     unitValue={bodyMeasurement}
+                                    autoComplete="off"
                                 />
                             </li>
                             <li>
                                 <Field
                                     name="heartRate"
-                                    type="number"
+                                    type="text"
                                     label="Heart Rate"
                                     wrapperClass="grey-white"
                                     component={InputField}
                                     errorClass="help-block"
                                     placeholder="Heart Rate"
-                                    validate={(validationRules.heartRate) ? validationRules.heartRate : [required]}
+                                    validate={(validationRules.heartRate) ? validationRules.heartRate : [required, validNumber]}
                                     unitValue={heartRateUnit}
+                                    autoComplete="off"
                                 />
                             </li>
                         </ul>
@@ -198,27 +246,29 @@ class BodyMeasurementForm extends Component {
                             <li>
                                 <Field
                                     name="weight"
-                                    type="number"
+                                    type="text"
                                     label="Weight"
                                     wrapperClass="grey-white"
                                     component={InputField}
                                     errorClass="help-block"
                                     placeholder="Weight"
-                                    validate={(validationRules.weight) ? validationRules.weight : [required]}
+                                    validate={(validationRules.weight) ? validationRules.weight : [required, validNumber]}
                                     unitValue={weighUnit}
+                                    autoComplete="off"
                                 />
                             </li>
                             <li>
                                 <Field
                                     name="height"
-                                    type="number"
+                                    type="text"
                                     label="Height"
                                     wrapperClass="grey-white"
                                     component={InputField}
                                     errorClass="help-block"
                                     placeholder="Height"
-                                    validate={(validationRules.height) ? validationRules.height : [required]}
+                                    validate={(validationRules.height) ? validationRules.height : [required, validNumber]}
                                     unitValue={bodyMeasurement}
+                                    autoComplete="off"
                                 />
                             </li>
                         </ul>
@@ -388,35 +438,34 @@ class BodyMeasurementForm extends Component {
     setValidationRules = () => {
         const { profileSettings } = this.props;
         var validationRules = {
-            neck: [required, min(0), max(60)],
-            shoulders: [required, min(0), max(120)],
-            chest: [required, min(0), max(270)],
-            upper_arm: [required, min(0), max(40)],
-            waist: [required, min(0), max(240)],
-            forearm: [required, min(0), max(80)],
-            hips: [required, min(0), max(310)],
-            thigh: [required, min(0), max(200)],
-            calf: [required, min(0), max(100)],
-            heartRate: [required, min(0), max(250)],
-            weight: [required, min(20), max(1000)],
-            height: [required, min(50), max(600)],
+            neck: [required, validNumber, min0, max60],
+            shoulders: [required, validNumber, min0, max120],
+            chest: [required, validNumber, min0, max270],
+            upper_arm: [required, validNumber, min0, max40],
+            waist: [required, validNumber, min0, max240],
+            forearm: [required, validNumber, min0, max80],
+            hips: [required, validNumber, min0, max310],
+            thigh: [required, validNumber, min0, max200],
+            calf: [required, validNumber, min0, max100],
+            heartRate: [required, validNumber, min0, max250],
+            weight: [required, validNumber, min20, max1000],
+            height: [required, validNumber, min50, max600],
         };
         if (profileSettings) {
             if (profileSettings.bodyMeasurement !== MEASUREMENT_UNIT_CENTIMETER) {
-                validationRules.neck = [required, min(0), max(24)];
-                validationRules.shoulders = [required, min(0), max(48)];
-                validationRules.chest = [required, min(0), max(108)];
-                validationRules.upper_arm = [required, min(0), max(16)];
-                validationRules.waist = [required, min(0), max(96)];
-                validationRules.forearm = [required, min(0), max(32)];
-                validationRules.hips = [required, min(0), max(124)];
-                validationRules.thigh = [required, min(0), max(80)];
-                validationRules.calf = [required, min(0), max(40)];
-                validationRules.height = [required, min(20), max(240)];
+                validationRules.neck = [required, validNumber, min0, max24];
+                validationRules.shoulders = [required, validNumber, min0, max48];
+                validationRules.chest = [required, validNumber, min0, max108];
+                validationRules.upper_arm = [required, validNumber, min0, max16];
+                validationRules.waist = [required, validNumber, min0, max96];
+                validationRules.forearm = [required, validNumber, min0, max32];
+                validationRules.hips = [required, validNumber, min0, max124];
+                validationRules.thigh = [required, validNumber, min0, max80];
+                validationRules.calf = [required, validNumber, min0, max40];
+                validationRules.height = [required, validNumber, min20, max240];
             }
             if (profileSettings.weight !== MEASUREMENT_UNIT_KILOGRAM) {
-                validationRules.weight = [required, min(44), max(2200)];
-
+                validationRules.weight = [required, validNumber, min44, max2200];
             }
         }
         this.setState({ validationRules });

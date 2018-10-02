@@ -4,7 +4,7 @@ import { reduxForm, Field, formValueSelector } from 'redux-form';
 import { Modal, Button } from 'react-bootstrap';
 import { EditorField, InputField } from '../../helpers/FormControlHelper';
 import { MEASUREMENT_UNIT_POUND, MEASUREMENT_UNIT_INCH } from '../../constants/consts';
-import { min, max } from '../../formValidation/validationRules';
+import { min, max, validNumber } from '../../formValidation/validationRules';
 
 const min50 = min(50);
 const min44 = min(44);
@@ -25,8 +25,8 @@ class UpdateAboutMeModal extends Component {
     render() {
         const { show, handleClose, handleSubmit, heightUnit, weightUnit } = this.props;
         const { aboutMe } = this.state;
-        let validateWeight = (weightUnit !== MEASUREMENT_UNIT_POUND) ? [min20, max1000] : [min44, max2200];
-        let validateHeight = (heightUnit !== MEASUREMENT_UNIT_INCH) ? [min50, max600] : [min20, max240];
+        let validateWeight = (weightUnit !== MEASUREMENT_UNIT_POUND) ? [validNumber, min20, max1000] : [validNumber, min44, max2200];
+        let validateHeight = (heightUnit !== MEASUREMENT_UNIT_INCH) ? [validNumber, min50, max600] : [validNumber, min20, max240];
         return (
             <div className="about-me-update-modal-save-form-wrapper">
                 <div className="about-me-update-modal-save-modal-wrapper">
@@ -52,7 +52,7 @@ class UpdateAboutMeModal extends Component {
                                         />
                                         <Field
                                             name="height"
-                                            type="number"
+                                            type="text"
                                             className="form-control"
                                             label={`Height (${heightUnit})`}
                                             labelClass="control-label"
@@ -69,7 +69,7 @@ class UpdateAboutMeModal extends Component {
                                         />
                                         <Field
                                             name="weight"
-                                            type="number"
+                                            type="text"
                                             className="form-control"
                                             label={`Weight (${weightUnit})`}
                                             labelClass="control-label"

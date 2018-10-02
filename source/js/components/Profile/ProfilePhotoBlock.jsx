@@ -20,7 +20,7 @@ const ProfilePhotoBlock = (props) => {
             </span>
             {caption &&
                 <h4>
-                    <a href="">{moment(caption).format('MMM Do')}</a>
+                    <a href="javascript:void(0)" onClick={() => handleOpenLightbox(blockFor, index)}>{moment(caption).format('MMM Do')}</a>
                 </h4>
             }
         </div>

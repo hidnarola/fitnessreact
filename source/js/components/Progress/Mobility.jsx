@@ -5,11 +5,11 @@ import { PROGRESS_MOBILITY } from '../../constants/consts';
 import moment from "moment";
 import { getUserProgressByCategoryAndDateRequest } from '../../actions/userProgress';
 import { FaCircleONotch } from "react-icons/lib/fa";
-import NoDataFoundImg from "img/common/no_datafound.png";
 import ErrorCloud from "svg/error-cloud.svg";
 import { ResponsiveContainer, AreaChart, XAxis, YAxis, Area, Tooltip } from "recharts";
 import { routeCodes } from '../../constants/routes';
 import CustomTooltip1 from './CustomTooltip1';
+import NoRecordFound from '../Common/NoRecordFound';
 
 class Mobility extends Component {
     componentWillMount() {
@@ -133,9 +133,7 @@ class Mobility extends Component {
                 }
 
                 {!loading && (typeof progress === 'undefined' || !progress) && error && error.length <= 0 &&
-                    <div className="no-record-found-wrapper">
-                        <img src={NoDataFoundImg} />
-                    </div>
+                    <NoRecordFound />
                 }
 
                 {!loading && typeof error !== 'undefined' && error && error.length > 0 &&

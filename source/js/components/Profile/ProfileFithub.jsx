@@ -60,6 +60,7 @@ import WidgetBodyFatCard from '../Common/WidgetBodyFatCard';
 import WidgetBadgesCard from '../Common/WidgetBadgesCard';
 import SweetAlert from "react-bootstrap-sweetalert";
 import ShowMore from "react-show-more";
+import Lightbox from 'react-images';
 
 class ProfileFithub extends Component {
     constructor(props) {
@@ -86,6 +87,10 @@ class ProfileFithub extends Component {
             selectedPostId: null,
             showPostAccessChangeModal: false,
             selectedPostAccessLevel: null,
+
+            lightBoxOpen: false,
+            currentImage: 0,
+            lightBoxImages: [],
         }
     }
 
@@ -128,7 +133,10 @@ class ProfileFithub extends Component {
             showPostDeleteModal,
             showPostAccessChangeModal,
             newPostActionInit,
-            postImagesError
+            postImagesError,
+            lightBoxOpen,
+            currentImage,
+            lightBoxImages
         } = this.state;
         const {
             loggedUserData,
@@ -177,7 +185,7 @@ class ProfileFithub extends Component {
                     }
 
                     {userWidgets && typeof userWidgets[WIDGET_PROGRESS_PHOTO] !== 'undefined' && userWidgets[WIDGET_PROGRESS_PHOTO] === 1 &&
-                        <WidgetProgressPhotoCard progressPhoto={widgetProgressPhotos} />
+                        <WidgetProgressPhotoCard progressPhoto={widgetProgressPhotos} username={match.params.username} />
                     }
 
                     {userWidgets && userWidgets[WIDGET_BODY_FAT] &&
@@ -353,7 +361,6 @@ class ProfileFithub extends Component {
                                                 likesStr += ' liked this';
                                             }
                                         }
-                                        let postDesc = ReactHtmlParser(description);
                                         return (
                                             <div className="post-type" key={index}>
                                                 <div className="posttype-head d-flex justify-content-start">
@@ -415,8 +422,7 @@ class ProfileFithub extends Component {
                                                                 less='Show less'
                                                                 anchorClass='show-more-less-link'
                                                             >
-                                                                {/* {ReactHtmlParser(description)} */}
-                                                                {/* {postDesc} */}
+                                                                {ReactHtmlParser(description)}
                                                             </ShowMore>
                                                         </div>
                                                     }
@@ -427,14 +433,16 @@ class ProfileFithub extends Component {
                                                                     return null;
                                                                 }
                                                                 return (
-                                                                    <span key={imageI}>
-                                                                        <img
-                                                                            src={SERVER_BASE_URL + imageD.image}
-                                                                            onError={(e) => {
-                                                                                e.target.src = noImg
-                                                                            }}
-                                                                        />
-                                                                    </span>
+                                                                    <a href="javascript:void(0)"  key={imageI} onClick={() => this.handleOpenLightbox(images, )}>
+                                                                        <span key={imageI}>
+                                                                            <img
+                                                                                src={SERVER_BASE_URL + imageD.image}
+                                                                                onError={(e) => {
+                                                                                    e.target.src = noImg
+                                                                                }}
+                                                                            />
+                                                                        </span>
+                                                                    </a>
                                                                 )
                                                             })
                                                         }
@@ -540,6 +548,17 @@ class ProfileFithub extends Component {
                 >
                     Your post privacy will be changed!
                 </SweetAlert>
+
+                {lightBoxImages && lightBoxImages.length > 0 &&
+                    <Lightbox
+                        images={lightBoxImages}
+                        isOpen={lightBoxOpen}
+                        onClickPrev={() => this.handleNavigation('prev')}
+                        onClickNext={() => this.handleNavigation('next')}
+                        onClose={this.handleCloseLightbox}
+                        currentImage={currentImage}
+                    />
+                }
             </div>
         );
     }
@@ -1158,6 +1177,41 @@ class ProfileFithub extends Component {
         this.handleCloseChangeAccessPostModal();
         let requestData = { privacy: selectedPostAccessLevel }
         dispatch(changeAccessLevelPostOfTimelineRequest(selectedPostId, requestData));
+    }
+
+    handleOpenLightbox = (images, startFrom = 0) => {
+        let lightBoxImages = [];
+        images.map((photo) => {
+            lightBoxImages.push({ src: SERVER_BASE_URL + photo.image });
+        });
+        this.setState({ currentImage: startFrom, lightBoxOpen: true, lightBoxImages });
+    }
+
+    handleCloseLightbox = () => {
+        this.setState({
+            currentImage: 0,
+            lightBoxOpen: false,
+            lightBoxImages: [],
+        });
+    }
+
+    handleNavigation = (direction = 'next') => {
+        const { currentImage, lightBoxImages } = this.state;
+        let newCurrentImage = currentImage;
+        if (direction === 'prev') {
+            if (currentImage <= 0) {
+                newCurrentImage = (lightBoxImages.length - 1);
+            } else {
+                newCurrentImage -= 1;
+            }
+        } else if (direction === 'next') {
+            if (currentImage >= (lightBoxImages.length - 1)) {
+                newCurrentImage = 0;
+            } else {
+                newCurrentImage += 1;
+            }
+        }
+        this.setState({ currentImage: newCurrentImage });
     }
 }
 
