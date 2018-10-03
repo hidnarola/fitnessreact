@@ -52,13 +52,12 @@ class Dashboard extends Component {
     }
 
     componentWillMount() {
-        const { socket, dispatch } = this.props;
+        const { socket } = this.props;
         let token = getToken();
         if (socket && token) {
             socket.emit('join', token);
         }
-        let today = moment().startOf('day').utc();
-        dispatch(getDashboardPageRequest({ today }));
+        this.requestDashboardData();
     }
 
     render() {
@@ -216,7 +215,7 @@ class Dashboard extends Component {
                 te('Something went wrong! please try again later.');
             }
             this.handleCloseWidgetsModal();
-            dispatch(getDashboardPageRequest());
+            this.requestDashboardData();
         }
     }
 
@@ -554,6 +553,20 @@ class Dashboard extends Component {
     requestBodyFatData = (requestData) => {
         const { dispatch } = this.props;
         dispatch(changeDashboardBodyFatWidgetRequest(requestData));
+    }
+
+    requestDashboardData = () => {
+        const { dispatch } = this.props;
+        let today = moment().startOf('day').utc();
+        let prevMonth = moment.range(
+            moment().subtract(2, 'month').startOf('day').utc(),
+            moment().startOf('day').utc()
+        );
+        let requestData = {
+            today,
+            ...prevMonth
+        };
+        dispatch(getDashboardPageRequest(requestData));
     }
 }
 

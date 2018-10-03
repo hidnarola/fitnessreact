@@ -24,14 +24,14 @@ class AddProgressPhotoModal extends Component {
     }
 
     render() {
-        const { show, handleClose, handleSubmit } = this.props;
+        const { show, handleSubmit, isLoading } = this.props;
         const { photoDate } = this.state;
         return (
             <div className="add-progress-photo-modal-wrapper">
                 <Modal show={show} bsSize="large" className="progress-popup">
                     <form onSubmit={handleSubmit}>
                         <div className="progress-popup-head">
-                            <button type="button" className="close-round" onClick={handleClose}>
+                            <button type="button" className="close-round" onClick={this.handleCloseModal}>
                                 <span aria-hidden="true">&times;</span>
                             </button>
                             <h3 className="title-h3">New Progress Photo</h3>
@@ -39,12 +39,12 @@ class AddProgressPhotoModal extends Component {
 
                         {this.rejectedFiles &&
                             <Alert bsStyle="danger">
-                                <p>'Invalid file(s). Please select jpg, png, gif only'</p>
+                                <p>Invalid file(s). Please select jpg, png, gif only</p>
                             </Alert>
                         }
 
                         <div className="progress-popup-body d-flex">
-                            <div className="progress-popup-body-l">
+                            <div className="progress-popup-body-l progress-l-wrap">
                                 <Field
                                     name="photo"
                                     mainWrapperClass="image-form-main-wrapper"
@@ -79,7 +79,7 @@ class AddProgressPhotoModal extends Component {
                                     </div>
                                 </div>
                                 <div className="pregres-submit">
-                                    <button type="submit">Save</button>
+                                    <button type="submit" disabled={isLoading}>Save</button>
                                 </div>
                             </div>
                         </div>
@@ -99,6 +99,12 @@ class AddProgressPhotoModal extends Component {
 
     handleRejectedError = (flag) => {
         this.rejectedFiles = flag;
+    }
+
+    handleCloseModal = () => {
+        const { handleClose } = this.props;
+        this.handleRejectedError(false);
+        handleClose();
     }
 }
 

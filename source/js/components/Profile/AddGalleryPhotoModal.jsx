@@ -11,6 +11,7 @@ import {
 } from '../../constants/consts';
 import _ from "lodash";
 import { Alert } from "react-bootstrap";
+import Weightlifting from "svg/weightlifting.svg";
 
 const accessLevelOptions = [
     { value: ACCESS_LEVEL_PUBLIC, label: ACCESS_LEVEL_PUBLIC_STR },
@@ -70,7 +71,7 @@ class AddGalleryPhotoModal extends Component {
                         </Alert>
                     }
                     <div className="progress-popup-body d-flex">
-                        <div className="gallery-popup-body-l">
+                        <div className="gallery-popup-body-l popup_upload">
                             <span>
                                 {images && images.length > 0 &&
                                     <div>
@@ -78,6 +79,12 @@ class AddGalleryPhotoModal extends Component {
                                             <button type="button" className="btn btn-danger no-margin" onClick={() => this.handleImageDelete(0)}>Delete</button>
                                         </div>
                                         <img src={images[0].preview} alt="" />
+                                    </div>
+                                }
+                                {(!images || images.length <= 0) &&
+                                    <div>
+                                        <Weightlifting />
+                                        <h4>Select an image</h4>
                                     </div>
                                 }
                             </span>

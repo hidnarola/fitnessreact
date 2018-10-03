@@ -17,10 +17,11 @@ import {
     setTodaysWorkoutDate,
     deleteUsersBulkWorkoutScheduleRequest,
     getWorkoutsListByDateRequest,
-    addUserWorkoutTitleRequest
+    addUserWorkoutTitleRequest,
+    setScheduleWorkoutsState
 } from '../../actions/userScheduleWorkouts';
 import { routeCodes } from '../../constants/routes';
-import { te, prepareFieldsOptions, ts, convertUnits } from '../../helpers/funs';
+import { te, prepareFieldsOptions, ts, convertUnits, capitalizeFirstLetter } from '../../helpers/funs';
 import FitnessHeader from '../global/FitnessHeader';
 import FitnessNav from '../global/FitnessNav';
 import moment from "moment";
@@ -90,6 +91,7 @@ class SaveScheduleWorkout extends Component {
             calendarList,
             workoutStat,
             match,
+            errorTitle,
         } = this.props;
         const {
             logDate,
@@ -334,6 +336,7 @@ class SaveScheduleWorkout extends Component {
                     <UpdateWorkoutTitleForm
                         onSubmit={this.handleTitleChangeSubmit}
                         onCancel={this.handleCloseEditExerciseTitleModal}
+                        errorArr={errorTitle}
                     />
                 </SweetAlert>
 
@@ -352,6 +355,7 @@ class SaveScheduleWorkout extends Component {
                     <AddWorkoutTitleForm
                         onSubmit={this.handleAddTitleSubmit}
                         onCancel={this.handleAddWorkoutTitleCancel}
+                        errorArr={errorTitle}
                     />
                 </SweetAlert>
             </div>
@@ -431,20 +435,18 @@ class SaveScheduleWorkout extends Component {
         }
         if (updateTitleActionInit && !loadingTitle) {
             this.setState({ updateTitleActionInit: false });
-            if (errorTitle && errorTitle.length > 0) {
-                te(errorTitle[0]);
-            } else {
+            if (errorTitle && errorTitle.length <= 0) {
                 ts('Updated!');
+                this.handleCloseEditExerciseTitleModal();
+                let date = (workout && workout.date) ? workout.date : null;
+                if (date) {
+                    let requestData = { date: date }
+                    dispatch(getWorkoutsListByDateRequest(requestData));
+                } else {
+                    history.push(routeCodes.EXERCISE);
+                }
             }
             dispatch(hidePageLoader());
-            this.handleCloseEditExerciseTitleModal();
-            let date = (workout && workout.date) ? workout.date : null;
-            if (date) {
-                let requestData = { date: date }
-                dispatch(getWorkoutsListByDateRequest(requestData));
-            } else {
-                history.push(routeCodes.EXERCISE);
-            }
         }
         if (firstWorkoutIdInit && !firstWorkoutLoading) {
             this.setState({ firstWorkoutIdInit: false });
@@ -482,14 +484,10 @@ class SaveScheduleWorkout extends Component {
         }
         if (addWorkoutTitleInit && !loadingTitle) {
             this.setState({ addWorkoutTitleInit: false });
-            this.handleAddWorkoutTitleCancel();
-            if (errorTitle && errorTitle.length > 0) {
-                te(errorTitle[0]);
-            } else if (workoutTitle) {
+            if (errorTitle && errorTitle.length <= 0 && workoutTitle) {
+                this.handleAddWorkoutTitleCancel();
                 var workoutTitleId = workoutTitle._id;
                 history.push(routeCodes.SAVE_SCHEDULE_WORKOUT.replace(':id', workoutTitleId));
-            } else {
-                te('Something went wrong! Please try after sometime');
             }
         }
     }
@@ -546,7 +544,7 @@ class SaveScheduleWorkout extends Component {
         dispatch(changeUsersWorkoutFormAction('add', null));
         dispatch(reset('update_schedule_workout_form'));
     }
-    
+
     prepareRequestDataForSingleWorkout = (data) => {
         const {
             exerciseMeasurements,
@@ -1069,13 +1067,15 @@ class SaveScheduleWorkout extends Component {
         const { dispatch } = this.props;
         dispatch(reset('update_workout_title_form'));
         this.setState({ showUpdateTitleModal: false });
+        let stateData = { errorTitle: [] }
+        dispatch(setScheduleWorkoutsState(stateData));
     }
 
     handleTitleChangeSubmit = (data) => {
         const { dispatch } = this.props;
         let requestData = {
-            title: (data.title) ? data.title : '',
-            description: (data.description) ? data.description : '',
+            title: (data.title && data.title.trim()) ? capitalizeFirstLetter(data.title.trim()) : '',
+            description: (data.description && data.description.trim()) ? capitalizeFirstLetter(data.description.trim()) : '',
         }
         this.setState({ updateTitleActionInit: true });
         dispatch(showPageLoader());
@@ -1087,7 +1087,10 @@ class SaveScheduleWorkout extends Component {
     }
 
     handleAddWorkoutTitleCancel = () => {
+        const { dispatch } = this.props;
         this.setState({ showAddWorkoutTitleAlert: false });
+        let stateData = { errorTitle: [] }
+        dispatch(setScheduleWorkoutsState(stateData));
     }
 
     handleAddTitleSubmit = (data) => {
@@ -1097,8 +1100,8 @@ class SaveScheduleWorkout extends Component {
             date = moment().startOf('day').utc();
         }
         var requestData = {
-            title: data.title,
-            description: (data.description) ? data.description : '',
+            title: (data.title && data.title.trim()) ? capitalizeFirstLetter(data.title.trim()) : '',
+            description: (data.description && data.description.trim()) ? capitalizeFirstLetter(data.description.trim()) : '',
             type: SCHEDULED_WORKOUT_TYPE_EXERCISE,
             date: date,
         }

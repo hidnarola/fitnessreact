@@ -79,6 +79,7 @@ class ProfilePhotos extends Component {
             lightBoxOpen,
             currentImage,
             lightBoxImages,
+            saveProgressPhotoActionInit,
         } = this.state;
         let galleryPhotosArr = [];
         if (galleryPhotos && galleryPhotos.length > 0) {
@@ -180,6 +181,7 @@ class ProfilePhotos extends Component {
                     onSubmit={this.handleProgressPhotoSubmit}
                     show={showAddProgressPhotoModal}
                     handleClose={this.handleCloseAddProgressPhotoModal}
+                    isLoading={saveProgressPhotoActionInit}
                 />
 
                 <AddGalleryPhotoModal

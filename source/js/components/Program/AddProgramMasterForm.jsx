@@ -21,7 +21,7 @@ class AddProgramMasterForm extends Component {
                         component={InputField}
                         errorClass="help-block"
                         validate={[required, minLength2, maxLength20]}
-                        />
+                    />
                     <Field
                         name="description"
                         className="form-control resize-vertical min-height-80"

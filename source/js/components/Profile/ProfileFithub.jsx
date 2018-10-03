@@ -319,7 +319,7 @@ class ProfileFithub extends Component {
                                         var lastComment = {};
                                         var lastCommentCreatedAt = null;
                                         if (totalComments > 0) {
-                                            lastComment = comments[(totalComments - 1)];
+                                            lastComment = comments[0];
                                             lastCommentCreatedAt = lastComment.create_date;
                                             lastCommentCreatedAt = moment.utc(lastCommentCreatedAt).toDate();
                                             lastCommentCreatedAt = moment(lastCommentCreatedAt).local().format('Do MMM [at] hh:mm');

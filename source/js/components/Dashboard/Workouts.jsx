@@ -18,7 +18,7 @@ class Workouts extends Component {
                     )
                 }
                 {(!workouts || workouts.length <= 0) &&
-                    <NoRecordFound />
+                    <NoRecordFound title="No workouts found for today." />
                 }
             </div>
         );

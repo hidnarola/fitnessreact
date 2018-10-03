@@ -93,6 +93,8 @@ export const REORDER_WORKOUT_EXERCISES_REQUEST = 'REORDER_WORKOUT_EXERCISES_REQU
 export const REORDER_WORKOUT_EXERCISES_SUCCESS = 'REORDER_WORKOUT_EXERCISES_SUCCESS';
 export const REORDER_WORKOUT_EXERCISES_ERROR = 'REORDER_WORKOUT_EXERCISES_ERROR';
 
+export const SET_SCHEDULE_WORKOUTS_STATE = 'SET_SCHEDULE_WORKOUTS_STATE';
+
 export function setSelectedSlotFromCalendar(slotInfo = null) {
     return {
         type: SET_SELECTED_SLOT_FROM_CALENDAR,
@@ -537,5 +539,12 @@ export function reorderWorkoutExercisesError(error) {
     return {
         type: REORDER_WORKOUT_EXERCISES_ERROR,
         error
+    }
+}
+
+export function setScheduleWorkoutsState(stateData) {
+    return {
+        type: SET_SCHEDULE_WORKOUTS_STATE,
+        stateData,
     }
 }

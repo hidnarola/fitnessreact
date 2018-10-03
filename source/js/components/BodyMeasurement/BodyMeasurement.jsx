@@ -30,7 +30,8 @@ class BodyMeasurement extends Component {
         const {
             refreshBodyMeasurementForm,
             showAddProgressPhotoModal,
-            showBodyFatModal
+            showBodyFatModal,
+            saveProgressPhotoActionInit
         } = this.state;
         const { error } = this.props;
         return (
@@ -75,6 +76,7 @@ class BodyMeasurement extends Component {
                             onSubmit={this.handleProgressPhotoSubmit}
                             show={showAddProgressPhotoModal}
                             handleClose={this.handleCloseAddProgressPhotoModal}
+                            isLoading={saveProgressPhotoActionInit}
                         />
 
                         <BodyFatModal

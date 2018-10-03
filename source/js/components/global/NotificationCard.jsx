@@ -5,7 +5,7 @@ import noProfileImg from 'img/common/no-profile-img.png'
 import { routeCodes } from '../../constants/routes';
 import { Link } from 'react-router-dom';
 import cns from "classnames";
-import { NOTIFICATION_TYPE_FRIEND_REQUEST_APPROVED, NOTIFICATION_TYPE_BADGE_AWARDED, NOTIFICATION_TYPE_LIKE_POST, NOTIFICATION_TYPE_COMMENT_POST } from '../../constants/consts';
+import { NOTIFICATION_TYPE_FRIEND_REQUEST_APPROVED, NOTIFICATION_TYPE_BADGE_AWARDED, NOTIFICATION_TYPE_LIKE_POST, NOTIFICATION_TYPE_COMMENT_POST, NOTIFICATION_TYPE_SUBMIT_POST } from '../../constants/consts';
 import BadgeIcon from "svg/badge-icon.svg";
 
 class NotificationCard extends Component {
@@ -57,6 +57,7 @@ class NotificationCard extends Component {
                 )
             case NOTIFICATION_TYPE_LIKE_POST:
             case NOTIFICATION_TYPE_COMMENT_POST:
+            case NOTIFICATION_TYPE_SUBMIT_POST:
                 var msg = (notification.body) ? `<small>${notification.body}</small>` : 'Your post is being liked by your friends.';
                 return (
                     <Link

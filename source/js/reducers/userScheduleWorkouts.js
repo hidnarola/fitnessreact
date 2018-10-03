@@ -62,6 +62,7 @@ import {
     REORDER_WORKOUT_EXERCISES_SUCCESS,
     REORDER_WORKOUT_EXERCISES_ERROR,
     REORDER_WORKOUT_EXERCISES,
+    SET_SCHEDULE_WORKOUTS_STATE,
 } from "../actions/userScheduleWorkouts";
 import { VALIDATION_FAILURE_STATUS, SCHEDULED_WORKOUT_TYPE_WARMUP, SCHEDULED_WORKOUT_TYPE_EXERCISE, SCHEDULED_WORKOUT_TYPE_COOLDOWN } from "../constants/consts";
 import { generateValidationErrorMsgArr, createNewStateForWorkout } from "../helpers/funs";
@@ -709,6 +710,9 @@ const actionMap = {
             reorderExercisesLoading: false,
             reorderExercisesError: error,
         }));
+    },
+    [SET_SCHEDULE_WORKOUTS_STATE]: (state, action) => {
+        return state.merge(Map(action.stateData));
     },
 }
 

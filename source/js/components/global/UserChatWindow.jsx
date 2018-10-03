@@ -156,17 +156,19 @@ class UserChatWindow extends Component {
         const {
             newMsg,
         } = this.state;
-        var data = {
-            channelId: channelId,
-            friendId: userDetails.authUserId,
-            message: newMsg,
-            token: getToken(),
-            createdAt: moment(),
-            timestamp: moment().valueOf(),
-        };
-        handleSendButton(data);
-        this.setState({ newMsg: '' });
-        scrollBottom(`#chat-history_${channelId}`, 'slow');
+        if (newMsg && newMsg.trim()) {
+            var data = {
+                channelId: channelId,
+                friendId: userDetails.authUserId,
+                message: newMsg,
+                token: getToken(),
+                createdAt: moment(),
+                timestamp: moment().valueOf(),
+            };
+            handleSendButton(data);
+            this.setState({ newMsg: '' });
+            scrollBottom(`#chat-history_${channelId}`, 'slow');
+        }
     }
 }
 

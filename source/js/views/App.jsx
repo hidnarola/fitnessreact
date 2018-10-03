@@ -143,153 +143,155 @@ class App extends Component {
         var chatWindowKeys = Object.keys(chatWindows);
         return (
             <div className="appWrapper">
-                <div id="loader" className={cns({ 'display_none': !showPageLoader })}>
-                    <FaCircleONotch className="loader-spinner fs-100" />
+                <div className="app-wrapper-content">
+                    <div id="loader" className={cns({ 'display_none': !showPageLoader })}>
+                        <FaCircleONotch className="loader-spinner fs-100" />
+                    </div>
+                    <Router history={history}>
+                        <ScrollToTop>
+                            <Switch>
+                                <Route exact path={routeCodes.HOME} component={Login} />
+                                <Route exact path={`${publicPath}${SESSION_EXPIRED_URL_TYPE}`} component={Login} />
+
+                                <PrivateRoute path={routeCodes.DASHBOARD} component={Dashboard} />
+
+                                <PrivateRoute path={`${routeCodes.STATSPAGE}`} component={StatsPage} />
+
+                                <PrivateRoute path={`${routeCodes.PROFILE}/:username`} component={ProfilePage} />
+                                <PrivateRoute path={routeCodes.UPDATE_PROFILE} component={UpdateProfile} />
+                                <PrivateRoute path={routeCodes.PROFILE_SETTINGS} component={ProfileSettings} />
+                                <PrivateRoute path={routeCodes.CHANGE_PASSWORD} component={UserChangePassword} />
+
+                                <PrivateRoute path={`${routeCodes.POST}/:username/:id`} component={Post} />
+
+                                <PrivateRoute path={routeCodes.BODY} component={Body} />
+
+                                <PrivateRoute exact path={routeCodes.EXERCISE} component={Exercise} />
+                                <PrivateRoute path={routeCodes.EXERCISEFITNESS} component={ExerciseSettings} />
+                                <PrivateRoute path={routeCodes.EXERCISEEQP} component={ExerciseSettings} />
+                                <PrivateRoute path={routeCodes.EXERCISEPREFERENCE} component={ExerciseSettings} />
+
+                                <PrivateRoute exact path={routeCodes.SCHEDULE_WORKOUT} component={ScheduleWorkout} />
+                                <PrivateRoute exact path={routeCodes.SAVE_SCHEDULE_WORKOUT} component={SaveScheduleWorkout} />
+                                <PrivateRoute exact path={routeCodes.VIEW_SCHEDULE_WORKOUT} component={ViewScheduleWorkout} />
+
+                                <PrivateRoute exact path={routeCodes.PROGRAMS} component={Programs} />
+                                <PrivateRoute exact path={`${routeCodes.PROGRAM_SAVE}/:id`} component={ProgramSave} />
+                                <PrivateRoute exact path={routeCodes.SAVE_PROGRAM_SCHEDULE_WORKOUT} component={SaveScheduleProgramWorkout} />
+                                <PrivateRoute exact path={routeCodes.VIEW_PROGRAM_SCHEDULE_WORKOUT} component={ViewProgramScheduleWorkout} />
+
+                                <PrivateRoute exact path={routeCodes.NUTRITION} component={NutritionMeal} />
+                                <PrivateRoute exact path={routeCodes.NUTRITION_ADD} component={NutritionMealAdd} />
+                                <PrivateRoute path={`${routeCodes.NUTRITION_RECIPE_DETAILS}/:id`} component={NutritionRecipeDetails} />
+                                <PrivateRoute path={routeCodes.NUTRITIONPREFERENCE} component={NutritionPreferences} />
+                                <PrivateRoute path={routeCodes.NUTRITIONSHOP} component={NutritionShopping} />
+
+                                <PrivateRoute exact path={routeCodes.CALENDAR} component={ScheduleWorkoutCalendarPage} />
+
+                                <PrivateRoute path={routeCodes.BADGES} component={Badges} />
+
+                                <PrivateRoute path={routeCodes.PROGRESS} component={Progress} />
+
+                                <PrivateRoute path={routeCodes.RECEIP} component={Receip} />
+
+                                <PrivateRoute path={routeCodes.USERS} component={FrontEndUsersList} />
+
+                                <PrivateRoute path={routeCodes.ALL_NOTIFICATIONS} component={Notifications} />
+
+                                <PrivateRoute path={`${routeCodes.PROGRESS_PHOTOS}/:username`} component={ProgressPhotos} />
+                                <PrivateRoute path={`${routeCodes.GALLERY_PHOTOS}/:username`} component={GalleryPhotos} />
+
+                                <Route exact path={adminRootRoute} component={AdminLogin} />
+                                <Route exact path={`${adminRootRoute}/${SESSION_EXPIRED_URL_TYPE}`} component={AdminLogin} />
+
+                                <AdminPrivateRoute path={adminRouteCodes.DASHBOARD} component={AdminDashboard} />
+
+                                <AdminPrivateRoute exact path={adminRouteCodes.USERS} component={Users} />
+                                <AdminPrivateRoute path={`${adminRouteCodes.USERS_SAVE}/:id`} component={Users} />
+
+                                <AdminPrivateRoute path={adminRouteCodes.EXERCISE} component={Exercises} />
+
+                                <AdminPrivateRoute path={adminRouteCodes.FITNESS_TESTS} component={FitnessTests} />
+
+                                <AdminPrivateRoute path={adminRouteCodes.EQUIPMENTS} component={Equipments} />
+
+                                <AdminPrivateRoute path={adminRouteCodes.EQUIPMENT_CATEGORIES} component={EquipmentCategories} />
+
+                                <AdminPrivateRoute path={adminRouteCodes.BADGES} component={AdminBadges} />
+
+                                <AdminPrivateRoute path={adminRouteCodes.BODY_PARTS} component={BodyParts} />
+
+                                <AdminPrivateRoute path={adminRouteCodes.PROFILE} component={Profile} />
+                                <AdminPrivateRoute path={adminRouteCodes.CHANGE_PASSWORD} component={ChangePassword} />
+
+                                <Route exact path={AUTH_CALLBACK_ROUTE} component={Callback} />
+
+                                <Route path='*' component={NotFound} />
+                            </Switch>
+
+
+                            <ToastContainer
+                                position="top-right"
+                                autoClose={3000}
+                                hideProgressBar
+                                newestOnTop
+                                closeOnClick
+                                rtl={false}
+                                pauseOnVisibilityChange
+                                draggable
+                                pauseOnHover
+                            />
+                            {loggedUserData &&
+                                <div>
+                                    <UserRightMenu
+                                        loggedUserData={loggedUserData}
+                                        handleLogout={this.handleLogout}
+                                    />
+
+                                    <UserNotificationPanel />
+
+                                    <UserMessagePanel />
+
+                                    {chatWindows && chatWindowKeys.length > 0 &&
+                                        chatWindowKeys.map((key, index) => {
+                                            var chatWindowWidth = $('.small-chat-window-wrapper').width();
+                                            var right = (chatWindowWidth) ? ((chatWindowWidth + 10) * index) : 0;
+                                            var style = { right };
+                                            var chatWindow = chatWindows[key];
+                                            var userDetails = chatWindow.userDetails;
+                                            var isTyping = (typeof chatWindow.isTyping !== 'undefined') ? chatWindow.isTyping : false;
+                                            var loadingMessages = chatWindow.loading;
+                                            var messages = chatWindow.messages;
+                                            return (
+                                                <UserChatWindow
+                                                    key={key}
+                                                    channelId={key}
+                                                    userDetails={userDetails}
+                                                    isTyping={isTyping}
+                                                    style={style}
+                                                    closeWindow={this.handleCloseUserChatWindow}
+                                                    messages={messages}
+                                                    loadingMessages={loadingMessages}
+                                                    handleSendButton={this.handleSendButton}
+                                                    handleStartTyping={this.handleStartTyping}
+                                                    handleStopTyping={this.handleStopTyping}
+                                                    handleToggleChatWindowMinimize={this.handleToggleChatWindowMinimize}
+                                                />
+                                            );
+                                        })
+                                    }
+                                </div>
+                            }
+                            {loggedAdminData &&
+                                <div>
+                                    <AdminRightMenu
+                                        handleLogout={this.handleAdminLogout}
+                                    />
+                                </div>
+                            }
+                        </ScrollToTop>
+                    </Router>
                 </div>
-                <Router history={history}>
-                    <ScrollToTop>
-                        <Switch>
-                            <Route exact path={routeCodes.HOME} component={Login} />
-                            <Route exact path={`${publicPath}${SESSION_EXPIRED_URL_TYPE}`} component={Login} />
-
-                            <PrivateRoute path={routeCodes.DASHBOARD} component={Dashboard} />
-
-                            <PrivateRoute path={`${routeCodes.STATSPAGE}`} component={StatsPage} />
-
-                            <PrivateRoute path={`${routeCodes.PROFILE}/:username`} component={ProfilePage} />
-                            <PrivateRoute path={routeCodes.UPDATE_PROFILE} component={UpdateProfile} />
-                            <PrivateRoute path={routeCodes.PROFILE_SETTINGS} component={ProfileSettings} />
-                            <PrivateRoute path={routeCodes.CHANGE_PASSWORD} component={UserChangePassword} />
-
-                            <PrivateRoute path={`${routeCodes.POST}/:username/:id`} component={Post} />
-
-                            <PrivateRoute path={routeCodes.BODY} component={Body} />
-
-                            <PrivateRoute exact path={routeCodes.EXERCISE} component={Exercise} />
-                            <PrivateRoute path={routeCodes.EXERCISEFITNESS} component={ExerciseSettings} />
-                            <PrivateRoute path={routeCodes.EXERCISEEQP} component={ExerciseSettings} />
-                            <PrivateRoute path={routeCodes.EXERCISEPREFERENCE} component={ExerciseSettings} />
-
-                            <PrivateRoute exact path={routeCodes.SCHEDULE_WORKOUT} component={ScheduleWorkout} />
-                            <PrivateRoute exact path={routeCodes.SAVE_SCHEDULE_WORKOUT} component={SaveScheduleWorkout} />
-                            <PrivateRoute exact path={routeCodes.VIEW_SCHEDULE_WORKOUT} component={ViewScheduleWorkout} />
-
-                            <PrivateRoute exact path={routeCodes.PROGRAMS} component={Programs} />
-                            <PrivateRoute exact path={`${routeCodes.PROGRAM_SAVE}/:id`} component={ProgramSave} />
-                            <PrivateRoute exact path={routeCodes.SAVE_PROGRAM_SCHEDULE_WORKOUT} component={SaveScheduleProgramWorkout} />
-                            <PrivateRoute exact path={routeCodes.VIEW_PROGRAM_SCHEDULE_WORKOUT} component={ViewProgramScheduleWorkout} />
-
-                            <PrivateRoute exact path={routeCodes.NUTRITION} component={NutritionMeal} />
-                            <PrivateRoute exact path={routeCodes.NUTRITION_ADD} component={NutritionMealAdd} />
-                            <PrivateRoute path={`${routeCodes.NUTRITION_RECIPE_DETAILS}/:id`} component={NutritionRecipeDetails} />
-                            <PrivateRoute path={routeCodes.NUTRITIONPREFERENCE} component={NutritionPreferences} />
-                            <PrivateRoute path={routeCodes.NUTRITIONSHOP} component={NutritionShopping} />
-
-                            <PrivateRoute exact path={routeCodes.CALENDAR} component={ScheduleWorkoutCalendarPage} />
-
-                            <PrivateRoute path={routeCodes.BADGES} component={Badges} />
-
-                            <PrivateRoute path={routeCodes.PROGRESS} component={Progress} />
-
-                            <PrivateRoute path={routeCodes.RECEIP} component={Receip} />
-
-                            <PrivateRoute path={routeCodes.USERS} component={FrontEndUsersList} />
-
-                            <PrivateRoute path={routeCodes.ALL_NOTIFICATIONS} component={Notifications} />
-
-                            <PrivateRoute path={`${routeCodes.PROGRESS_PHOTOS}/:username`} component={ProgressPhotos} />
-                            <PrivateRoute path={`${routeCodes.GALLERY_PHOTOS}/:username`} component={GalleryPhotos} />
-
-                            <Route exact path={adminRootRoute} component={AdminLogin} />
-                            <Route exact path={`${adminRootRoute}/${SESSION_EXPIRED_URL_TYPE}`} component={AdminLogin} />
-
-                            <AdminPrivateRoute path={adminRouteCodes.DASHBOARD} component={AdminDashboard} />
-
-                            <AdminPrivateRoute exact path={adminRouteCodes.USERS} component={Users} />
-                            <AdminPrivateRoute path={`${adminRouteCodes.USERS_SAVE}/:id`} component={Users} />
-
-                            <AdminPrivateRoute path={adminRouteCodes.EXERCISE} component={Exercises} />
-
-                            <AdminPrivateRoute path={adminRouteCodes.FITNESS_TESTS} component={FitnessTests} />
-
-                            <AdminPrivateRoute path={adminRouteCodes.EQUIPMENTS} component={Equipments} />
-
-                            <AdminPrivateRoute path={adminRouteCodes.EQUIPMENT_CATEGORIES} component={EquipmentCategories} />
-
-                            <AdminPrivateRoute path={adminRouteCodes.BADGES} component={AdminBadges} />
-
-                            <AdminPrivateRoute path={adminRouteCodes.BODY_PARTS} component={BodyParts} />
-
-                            <AdminPrivateRoute path={adminRouteCodes.PROFILE} component={Profile} />
-                            <AdminPrivateRoute path={adminRouteCodes.CHANGE_PASSWORD} component={ChangePassword} />
-
-                            <Route exact path={AUTH_CALLBACK_ROUTE} component={Callback} />
-
-                            <Route path='*' component={NotFound} />
-                        </Switch>
-
-
-                        <ToastContainer
-                            position="top-right"
-                            autoClose={3000}
-                            hideProgressBar
-                            newestOnTop
-                            closeOnClick
-                            rtl={false}
-                            pauseOnVisibilityChange
-                            draggable
-                            pauseOnHover
-                        />
-                        {loggedUserData &&
-                            <div>
-                                <UserRightMenu
-                                    loggedUserData={loggedUserData}
-                                    handleLogout={this.handleLogout}
-                                />
-
-                                <UserNotificationPanel />
-
-                                <UserMessagePanel />
-
-                                {chatWindows && chatWindowKeys.length > 0 &&
-                                    chatWindowKeys.map((key, index) => {
-                                        var chatWindowWidth = $('.small-chat-window-wrapper').width();
-                                        var right = (chatWindowWidth) ? ((chatWindowWidth + 10) * index) : 0;
-                                        var style = { right };
-                                        var chatWindow = chatWindows[key];
-                                        var userDetails = chatWindow.userDetails;
-                                        var isTyping = (typeof chatWindow.isTyping !== 'undefined') ? chatWindow.isTyping : false;
-                                        var loadingMessages = chatWindow.loading;
-                                        var messages = chatWindow.messages;
-                                        return (
-                                            <UserChatWindow
-                                                key={key}
-                                                channelId={key}
-                                                userDetails={userDetails}
-                                                isTyping={isTyping}
-                                                style={style}
-                                                closeWindow={this.handleCloseUserChatWindow}
-                                                messages={messages}
-                                                loadingMessages={loadingMessages}
-                                                handleSendButton={this.handleSendButton}
-                                                handleStartTyping={this.handleStartTyping}
-                                                handleStopTyping={this.handleStopTyping}
-                                                handleToggleChatWindowMinimize={this.handleToggleChatWindowMinimize}
-                                            />
-                                        );
-                                    })
-                                }
-                            </div>
-                        }
-                        {loggedAdminData &&
-                            <div>
-                                <AdminRightMenu
-                                    handleLogout={this.handleAdminLogout}
-                                />
-                            </div>
-                        }
-                    </ScrollToTop>
-                </Router>
                 <div className="app-footer">
                     <p>&copy; Copyright  <a href="#">Fitassist.com</a>. All Right Reserved.</p>
                 </div>

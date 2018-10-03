@@ -513,6 +513,7 @@ export const NOTIFICATION_TYPE_FRIEND_REQUEST_APPROVED = 'friend_request_approve
 export const NOTIFICATION_TYPE_BADGE_AWARDED = 'badge_awarded';
 export const NOTIFICATION_TYPE_LIKE_POST = 'like_post';
 export const NOTIFICATION_TYPE_COMMENT_POST = 'comment_post';
+export const NOTIFICATION_TYPE_SUBMIT_POST = 'submit_post';
 
 export const SCHEDULED_WORKOUT_TYPE_EXERCISE = 'exercise';
 export const SCHEDULED_WORKOUT_TYPE_CIRCUIT = 'circuit';

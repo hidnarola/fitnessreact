@@ -248,7 +248,8 @@ class Post extends Component {
             postLikeLoading, postLikePost, postLikeError,
             postCommentLoading, postCommentPost, postCommentError,
             loggedUserData,
-            dispatch
+            dispatch,
+            match,
         } = this.props;
         if (!loading && post && post !== prevProps.post) {
             let isLiked = false;
@@ -270,6 +271,10 @@ class Post extends Component {
             dispatch(reset('commentBoxForm'));
         } else if (!postCommentLoading && prevProps.postCommentLoading !== postCommentLoading && postCommentError && postCommentError.length > 0) {
             te('Something went wrong! please try again later.');
+        }
+        if (match.params && match.params.username && match.params.id && (match.params.username !== prevProps.match.params.username || match.params.id !== prevProps.match.params.id)) {
+            let id = match.params.id;
+            dispatch(getUserSingleTimelineRequest(id));
         }
     }
 

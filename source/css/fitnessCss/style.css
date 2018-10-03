@@ -562,7 +562,7 @@ display: flex; justify-content: center; flex-direction: column; text-align: cent
 .gallery-popup-body-r{width:71%;}
 .gallery-popup-body-r textarea{height:112px; width:100%; border: 2px solid #ddd; border-radius: 5px;margin:0 0 22px;padding:10px; font-size:12px; color:#bbb;resize:none;    box-shadow: none;}
 .upload-gallery{display:inline-block;margin-bottom:15px; vertical-align:top;}
-.upload-gallery span{height:140px; width:140px; background-color:#F9FAFA; text-align:center; display:block; position:relative; float:left; margin:5px; overflow:hidden;}
+.upload-gallery span{height:140px; width:140px; background-color:#F9FAFA; text-align:center; display:block; position:relative; float:left; margin:5px; overflow:hidden;cursor: pointer;}
 .upload-gallery span i{color:#606986; font-size:21px;	line-height: 21px;position:absolute;top:50%;left:50%; -webkit-transform:translate(-50%, -50%); -moz-transform:translate(-50%, -50%); transform:translate(-50%, -50%);}
 .upload-gallery span img {width: 100%;height: 100%;}
 .upload-gallery span:hover img{filter: blur(10px);}
@@ -1051,6 +1051,9 @@ display:-webkit-box; display:-webkit-flex; display:-ms-flex; display:flex; justi
 .messenger .mCS-3d-dark.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar,
 .messenger .mCS-3d.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar { background:linear-gradient(123.28deg, #46E9C5 0%, #3FFBFC 100%);}
 
+.messenger .messenger-body {background: #fafafa;padding: 0px 15px 15px 15px;}
+.messenger .messenger-body .messenger-box {background: #fff;margin-bottom: 5px;}
+
 .chat-wrap{position:fixed; top:0; right:0; z-index:100; height:100%; display:none;}
 .chat-bg{background:rgba(0,0,0,.4); position:fixed; top:0; left:0; width:100%; height:100%;}
 
@@ -1524,7 +1527,7 @@ ul.text-right.pager {text-align: right;}
 .pagination>li>a:focus, .pagination>li>a:hover, .pagination>li>span:focus, .pagination>li>span:hover {color: #000000;}
 .noselect {-webkit-touch-callout: none;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;}
 
-.notifications-box.un-seen-notification, .messenger-box.un-seen-message {background: linear-gradient(123.28deg, #adecec 0%, #e2fff9 100%);}
+.notifications-box.un-seen-notification, .messenger-box.un-seen-message {background: linear-gradient(123.28deg, #adecec 0%, #e2fff9 100%) !important;}
 .notifications-box span.badge-icon-wrapper svg { fill: #2e9696; }
 
 .small-chat-window-wrapper {z-index: 5;}
@@ -2285,8 +2288,6 @@ form.form_search button i { float: none; line-height: 36px; }
 .sweet-alert .help-block {font-size: 14px;text-align: left;}
 .default-dropzone-wrapper { width: 242px; height: 242px; display: inline-block; vertical-align: top; border: 1px solid #ccc; border-radius: 5px; }
 .has-error .default-dropzone-wrapper{border-color: #a94442;-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);}
-.messenger .messenger-body {background: #fafafa;padding: 0px 15px 15px 15px;}
-.messenger .messenger-body .messenger-box {background: #fff;margin-bottom: 5px;}
 h3.h3_msg_box {    background: #fafafa;padding: 15px 15px 10px 15px;margin: 0;display: block;color: #232B41;font-size: 16px;    line-height: 100%;text-transform: uppercase;margin-bottom: 0;}
 .friend-box.frd_fithub >div {margin-right: 0;}
 .friend-box.frd_fithub >div.friend-box-info h5 {padding-left: 26px;}
@@ -2327,3 +2328,35 @@ _::-webkit-full-page-media, _:future, :root .step-wrap {min-height: 888px;}
 _::-webkit-full-page-media, _:future, :root .fitness-dashboard .row:before {display: none;}
 .body_footer_class .app-footer {position: fixed;bottom: 0;width: 100%;}
 .body_footer_class .no-content-loader {padding: 90px 0 0 0;}
+
+
+a.profile-about-section { display: inline-block; background: transparent; color: #000; border-radius: 20px; margin: 0; }
+a.profile-about-section i { font-size: 20px; }
+.alert.alert-danger p { font-size: 15px; text-align: left; margin: 0; padding: 0; }
+.gallery-popup-body-l.popup_upload span {display: flex;justify-content: center;align-items: center;height: 280px;}
+.gallery-popup-body-l.popup_upload {text-align: center;}
+.popup_upload svg,
+.progress-l-wrap svg {width: 130px;height: 130px;}
+
+.app-wrapper-content {
+    padding: 100px 0 0 110px;
+}
+.app-footer {
+    grid-row-start: 2;
+    grid-row-end: 3;
+}
+.appWrapper {
+    display: grid;
+    grid-template-rows: 1fr auto;
+    padding: 0;
+    height: 100%;
+}
+body {
+    min-height: 100%;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    padding: 0;
+}
+html {
+    height: 100%;
+}

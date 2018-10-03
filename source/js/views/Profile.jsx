@@ -304,7 +304,9 @@ class Profile extends Component {
                                                 <h3 className="title-h3">About</h3>
                                                 {profile && profile.friendshipStatus && profile.friendshipStatus === FRIENDSHIP_STATUS_SELF &&
                                                     <div className="whitebox-head-r">
-                                                        <a href="javascript:void(0)" onClick={this.showUpdateAboutMeModal}>Edit</a>
+                                                        <a href="javascript:void(0)" className="profile-about-section" onClick={this.showUpdateAboutMeModal}>
+                                                            <i className="icon-mode_edit"></i>
+                                                        </a>
                                                     </div>
                                                 }
                                             </div>
@@ -400,7 +402,8 @@ class Profile extends Component {
             requestCancelError,
             requestAcceptLoading,
             requestAcceptError,
-            error
+            error,
+            settingsLoading
         } = this.props;
         const {
             loadProfileActionInit,
@@ -415,7 +418,7 @@ class Profile extends Component {
             updateLocalStorageData,
         } = this.state;
         var stateProfile = this.state.profile;
-        if (loadProfileActionInit && !profileLoading && (profile !== stateProfile)) {
+        if (loadProfileActionInit && !profileLoading && (profile !== stateProfile) && !settingsLoading) {
             var newProfileState = this.formatAboutDetails(profile);
             this.setState({
                 loadProfileActionInit: false,
@@ -728,7 +731,9 @@ const mapStateToProps = (state) => {
         profileLoading: profile.get('loading'),
         profile: profile.get('profile'),
         error: profile.get('error'),
+        settingsLoading: profile.get('settingsLoading'),
         settings: profile.get('settings'),
+        settingsError: profile.get('settingsError'),
         requestSendLoading: friends.get('requestSendLoading'),
         requestSendError: friends.get('requestSendError'),
         requestCancelLoading: friends.get('requestCancelLoading'),

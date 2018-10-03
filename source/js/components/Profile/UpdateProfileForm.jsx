@@ -108,7 +108,7 @@ class UpdateProfileForm extends Component {
                                                 errorClass="help-block"
                                                 type="text"
                                                 component={InputField}
-                                                validate={[required, minLength2, maxLength20]}
+                                                validate={[minLength2, maxLength20]}
                                             />
                                         </div>
                                     </li>
@@ -454,8 +454,8 @@ class UpdateProfileForm extends Component {
 const handleSubmit = (data, dispatch, props) => {
     const { handleSaveActionFlag } = props;
     var formData = {
-        firstName: (data.first_name && data.first_name) ? capitalizeFirstLetter(data.first_name) : '',
-        lastName: (data.last_name && data.last_name.trim()) ? capitalizeFirstLetter(data.last_name).trim() : '',
+        firstName: (data.first_name && data.first_name.trim()) ? capitalizeFirstLetter(data.first_name.trim()) : '',
+        lastName: (data.last_name && data.last_name.trim()) ? capitalizeFirstLetter(data.last_name.trim()) : '',
         mobileNumber: (data.mobile_no && data.mobile_no.trim()) ? data.mobile_no.trim() : '',
         gender: (data.gender) ? data.gender : GENDER_MALE,
         dateOfBirth: (data.dob) ? data.dob : '',

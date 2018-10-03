@@ -1,13 +1,25 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from "redux-form";
-import { required } from '../../formValidation/validationRules';
+import { required, minLength, maxLength } from '../../formValidation/validationRules';
+import { Alert } from "react-bootstrap";
+
+const minLength2 = minLength(2);
+const maxLength20 = maxLength(20);
+const maxLength200 = maxLength(200);
 
 class UpdateWorkoutTitleForm extends Component {
     render() {
-        const { handleSubmit, onCancel } = this.props;
+        const { handleSubmit, onCancel, errorArr } = this.props;
         return (
             <div className="update-workout-title-alert-form">
+                {errorArr && errorArr.length > 0 &&
+                    <Alert bsStyle="danger">
+                        {
+                            errorArr.map((o, i) => (<p key={i}>{o}</p>))
+                        }
+                    </Alert>
+                }
                 <form method="POST" onSubmit={handleSubmit}>
                     <Field
                         name="title"
@@ -16,7 +28,7 @@ class UpdateWorkoutTitleForm extends Component {
                         placeholder="Title"
                         component={InputField}
                         errorClass="help-block"
-                        validate={[required]}
+                        validate={[required, minLength2, maxLength20]}
                     />
                     <Field
                         name="description"
@@ -24,6 +36,8 @@ class UpdateWorkoutTitleForm extends Component {
                         wrapperClass="form-group"
                         placeholder="Description"
                         component={TextAreaField}
+                        errorClass="help-block"
+                        validate={[maxLength200]}
                     />
                     <Field
                         name="id"
