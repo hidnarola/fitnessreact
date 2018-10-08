@@ -40,7 +40,7 @@ class Complete extends Component {
                 }
 
                 {!loading && typeof badges !== 'undefined' && badges && badges.length <= 0 && error && error.length <= 0 &&
-                    <NoRecordFound />
+                    <NoRecordFound title="No badges awarded!" />
                 }
 
                 {!loading && typeof error !== 'undefined' && error && error.length > 0 &&

@@ -41,7 +41,7 @@ class InComplete extends Component {
                 }
 
                 {!loading && typeof badges !== 'undefined' && badges && badges.length <= 0 && error && error.length <= 0 &&
-                    <NoRecordFound />
+                    <NoRecordFound title="No badges are in-complete!" />
                 }
 
                 {!loading && typeof error !== 'undefined' && error && error.length > 0 &&

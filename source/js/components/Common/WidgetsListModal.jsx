@@ -305,8 +305,11 @@ class WidgetsListModal extends Component {
 
     handleModaClose = () => {
         const { handleClose } = this.props;
+        const { showMuscleSubMenu } = this.state;
         this.handleHideMuscleSubMenu();
-        handleClose();
+        if (!showMuscleSubMenu) {
+            handleClose();
+        }
     }
 
     handleShowMuscleSubMenu = () => {

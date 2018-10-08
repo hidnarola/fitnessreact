@@ -39,7 +39,7 @@ import jwt from "jwt-simple";
 import { setLoggedUserFromLocalStorage } from '../../actions/user';
 
 const minLength2 = minLength(2);
-const maxLength20 = maxLength(20);
+const maxLength15 = maxLength(15);
 const min50 = min(50);
 const min44 = min(44);
 const min20 = min(20);
@@ -93,7 +93,7 @@ class UpdateProfileForm extends Component {
                                                 errorClass="help-block"
                                                 type="text"
                                                 component={InputField}
-                                                validate={[required, minLength2, maxLength20]}
+                                                validate={[required, minLength2, maxLength15]}
                                             />
                                         </div>
                                     </li>
@@ -108,7 +108,7 @@ class UpdateProfileForm extends Component {
                                                 errorClass="help-block"
                                                 type="text"
                                                 component={InputField}
-                                                validate={[minLength2, maxLength20]}
+                                                validate={[minLength2, maxLength15]}
                                             />
                                         </div>
                                     </li>

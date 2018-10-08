@@ -24,6 +24,7 @@ import { getUserMessageChannelRequest } from '../../actions/userMessages';
 import logo from 'img/common/logo.png';
 import { publicPath } from '../../constants/routes';
 import { getApprovedFriendsMessengerRequest } from '../../actions/friends';
+import ReactTooltip from "react-tooltip";
 
 const auth = new Auth();
 
@@ -125,7 +126,7 @@ class FitnessHeader extends Component {
                                 </NavLink>
                             }
                         </div>
-                        <div className="header-friend-requests">
+                        <div className="header-friend-requests" data-for="header-icons-tooltip" data-tip="Friends">
                             {loggedUserData && loggedUserData.username &&
                                 <NavLink to={routeCodes.PROFILEFRIENDS.replace('{username}', loggedUserData.username)}>
                                     <FaFrnd />
@@ -135,7 +136,7 @@ class FitnessHeader extends Component {
                                 </NavLink>
                             }
                             {!(loggedUserData && loggedUserData.username) &&
-                                <NavLink to={routeCodes.HOME}>
+                                <NavLink to={routeCodes.HOME} data-for="header-icons-tooltip" data-tip="Friends">
                                     <FaFrnd />
                                     {(typeof pendingRequestsCount !== 'undefined' && pendingRequestsCount > 0) &&
                                         <span>{(pendingRequestsCount) ? pendingRequestsCount : ''}</span>
@@ -143,7 +144,7 @@ class FitnessHeader extends Component {
                                 </NavLink>
                             }
                         </div>
-                        <div className="header-alert">
+                        <div className="header-alert" data-for="header-icons-tooltip" data-tip="Notifications">
                             <a href="javascript:void(0)" onClick={() => {
                                 dispatch(getUserUnreadNotificationsRequest());
                                 toggleSideMenu('user-notification-panel', true);
@@ -154,7 +155,7 @@ class FitnessHeader extends Component {
                                 }
                             </a>
                         </div>
-                        <div className="header-email">
+                        <div className="header-email" data-for="header-icons-tooltip" data-tip="Messenger">
                             <a href="javascript:void(0)" onClick={this.handleMessagePanel}>
                                 <FaMail />
                                 {(typeof messagesCount !== 'undefined' && messagesCount > 0) &&
@@ -167,6 +168,7 @@ class FitnessHeader extends Component {
                                 <FaMenu size={24} />
                             </a>
                         </div>
+                        <ReactTooltip id='header-icons-tooltip' place="bottom" effect="solid" />
                     </div>
                 </header>
             </div >

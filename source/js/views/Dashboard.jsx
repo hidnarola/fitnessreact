@@ -122,7 +122,7 @@ class Dashboard extends Component {
                                             <Workouts />
                                         </div>
                                     }
-                                    {userWidgets && typeof userWidgets[WIDGET_BODY_FAT] !== 'undefined' && userWidgets[WIDGET_BODY_FAT] &&
+                                    {userWidgets && typeof userWidgets[WIDGET_PROGRESS_PHOTO] !== 'undefined' && userWidgets[WIDGET_PROGRESS_PHOTO] === 1 &&
                                         <div className={cns(
                                             { 'col-md-6': (userWidgets && typeof userWidgets[WIDGET_TODAYS_WORKOUT] === 'undefined') || userWidgets[WIDGET_TODAYS_WORKOUT] === 0 },
                                             { 'col-md-6': (!userWidgets || typeof userWidgets[WIDGET_TODAYS_WORKOUT] !== 'undefined') && userWidgets[WIDGET_TODAYS_WORKOUT] === 1 }
@@ -130,7 +130,7 @@ class Dashboard extends Component {
                                             <WidgetProgressPhotoCard progressPhoto={widgetProgressPhotos} username={loggedUserData && loggedUserData.username ? loggedUserData.username : ''} />
                                         </div>
                                     }
-                                    {userWidgets && typeof userWidgets[WIDGET_PROGRESS_PHOTO] !== 'undefined' && userWidgets[WIDGET_PROGRESS_PHOTO] === 1 &&
+                                    {userWidgets && typeof userWidgets[WIDGET_BODY_FAT] !== 'undefined' && userWidgets[WIDGET_BODY_FAT] &&
                                         <div className="col-md-12">
                                             <WidgetBodyFatCard
                                                 type={WIDGETS_TYPE_DASHBOARD}

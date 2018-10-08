@@ -35,10 +35,10 @@ class Login extends Component {
     componentWillMount() {
         const { match, history, dispatch, socket } = this.props;
         if (match.path === (publicPath + SESSION_EXPIRED_URL_TYPE)) {
+            dispatch(hidePageLoader());
             socket.emit('request_make_user_offline');
             te('Session expired! Login again.');
             history.push(publicPath);
-            dispatch(hidePageLoader());
         }
         toggleSideMenu('user-right-menu', false);
         toggleSideMenu('user-notification-panel', false);

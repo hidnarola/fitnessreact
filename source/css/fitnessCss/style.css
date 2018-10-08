@@ -1334,7 +1334,8 @@ flex-direction:row; display:-webkit-box; display:-webkit-flex; display:-ms-flex;
 .react-autosuggest__suggestion {cursor: pointer;padding: 10px 20px;}
 .react-autosuggest__suggestion--highlighted {background-color: #ddd;}
 #loader{text-align:center;z-index:9999;position:fixed;vertical-align:middle;width: 100%;filter: Alpha(Opacity=70);opacity: 0.5;background-color: #000000;height:100%;padding-top:320px;top:0; left:0;}
-.no-content-loader {text-align: center;width: 100%;height: 100%;display: block;padding: 220px 20px 20px 20px;position: fixed;}
+/* .no-content-loader {text-align: center;width: 100%;height: 100%;display: block;padding: 220px 20px 20px 20px;position: fixed;} */
+.no-content-loader { position: absolute; top: 50%; left: 50%; display: inline-block; transform: translate(-50%, -50%); }
 div#loader .loader-spinner, div.loaderloader .loader-spinner, div.no-content-loader .loader-spinner,div .loader-spinner
 {-webkit-animation-name: spin;-webkit-animation-duration: 1000ms;-webkit-animation-iteration-count: infinite;-webkit-animation-timing-function: linear;-moz-animation-name: spin;-moz-animation-duration: 1000ms;-moz-animation-iteration-count: infinite;-moz-animation-timing-function: linear;-ms-animation-name: spin;-ms-animation-duration: 1000ms;-ms-animation-iteration-count: infinite;-ms-animation-timing-function: linear;animation-name: spin;animation-duration: 1000ms;animation-iteration-count: infinite;animation-timing-function: linear;}
 @-ms-keyframes spin {from { -ms-transform: rotate(0deg); }to { -ms-transform: rotate(360deg); }}
@@ -2361,3 +2362,4 @@ body.with_login .app-wrapper-content{padding:0;}
 
 .my-img-has-error { border: 1px solid #a94442 !important; }
 .my-img-help-block-err {text-align: left;display: block;margin-top: 5px;margin-bottom: 3px;color: #a94442;font-weight: 400;}
+.rbc-toolbar button { text-transform: capitalize; }
