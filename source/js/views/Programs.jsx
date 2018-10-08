@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import FitnessHeader from '../components/global/FitnessHeader';
 import FitnessNav from '../components/global/FitnessNav';
-import { getUserProgramsRequest, deleteUserProgramRequest } from '../actions/userPrograms';
+import { getUserProgramsRequest, deleteUserProgramRequest, setUserProgramState } from '../actions/userPrograms';
 import {
     DropdownButton,
     ButtonToolbar,
@@ -13,8 +13,9 @@ import { FaPencil, FaTrash } from 'react-icons/lib/fa';
 import SweetAlert from "react-bootstrap-sweetalert";
 import AddProgramMasterForm from '../components/Program/AddProgramMasterForm';
 import { routeCodes } from '../constants/routes';
-import { te, ts } from '../helpers/funs';
+import { te, ts, capitalizeFirstLetter } from '../helpers/funs';
 import { addUserProgramMasterRequest } from '../actions/userPrograms';
+import { showPageLoader, hidePageLoader } from '../actions/pageLoader';
 
 class Programs extends Component {
     constructor(props) {
@@ -38,7 +39,7 @@ class Programs extends Component {
             showAddProgramAlert,
             showDeleteProgramAlert
         } = this.state;
-        const { loggedUserData } = this.props;
+        const { loggedUserData, errorMaster } = this.props;
         return (
             <div className="fitness-body">
                 <FitnessHeader />
@@ -144,6 +145,7 @@ class Programs extends Component {
                     <AddProgramMasterForm
                         onSubmit={this.handleAddProgramSubmit}
                         onCancel={this.handleAddProgramCancel}
+                        errorArr={errorMaster}
                     />
                 </SweetAlert>
 
@@ -188,12 +190,11 @@ class Programs extends Component {
                 te(error[0]);
             }
         }
-        if (!loadingMaster && programMaster && prevProps.programMaster !== programMaster) {
+        if (!loadingMaster && prevProps.loadingMaster !== loadingMaster) {
+            dispatch(hidePageLoader());
             if (errorMaster && errorMaster.length <= 0) {
                 var _id = programMaster._id;
                 history.push(`${routeCodes.PROGRAM_SAVE}/${_id}`);
-            } else {
-                te(errorMaster[0]);
             }
         }
     }
@@ -204,17 +205,21 @@ class Programs extends Component {
     }
 
     handleAddProgramCancel = () => {
+        const { dispatch } = this.props;
         this.setState({ showAddProgramAlert: false });
+        let stateData = { errorMaster: [] };
+        dispatch(setUserProgramState(stateData));
     }
 
     handleAddProgramSubmit = (data) => {
         const { dispatch } = this.props;
         var requestData = {
-            name: data.title,
-            description: (data.description) ? data.description : '',
+            name: (data.title && data.title.trim()) ? capitalizeFirstLetter(data.title.trim()) : '',
+            description: (data.description && data.description.trim()) ? capitalizeFirstLetter(data.description.trim()) : '',
             type: 'user',
         }
         dispatch(addUserProgramMasterRequest(requestData));
+        dispatch(showPageLoader());
     }
 
     handleEditNavigation = (e, href) => {

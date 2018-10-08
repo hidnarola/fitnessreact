@@ -7,7 +7,7 @@ import WorkoutAdvanceViewSwitch from './WorkoutAdvanceViewSwitch';
 import WorkoutInputField from './WorkoutInputField';
 import WorkoutDropdownField from './WorkoutDropdownField';
 import SetsAdvanceView from './SetsAdvanceView';
-import { prepareExerciseOptions, prepareFieldsOptions } from '../../helpers/funs';
+import { prepareExerciseOptions, prepareFieldsOptions, getExeMeasurementValidationRules } from '../../helpers/funs';
 import { EXE_REST_TIME_UNITS, SCHEDULED_WORKOUT_TYPE_EXERCISE } from '../../constants/consts';
 import { requiredReactSelect, required, max, min, validNumber } from '../../formValidation/validationRules';
 
@@ -20,9 +20,6 @@ class WorkoutTypeSingleCard extends Component {
         super(props);
         props.fields.removeAll();
         props.fields.push({});
-        this.state = {
-
-        }
     }
 
     render() {
@@ -48,6 +45,9 @@ class WorkoutTypeSingleCard extends Component {
                     let field1Options = [];
                     let field2Options = [];
                     let field3Options = [];
+                    let field1Validation = [];
+                    let field2Validation = [];
+                    let field3Validation = [];
                     if (exerciseMeasurements && exerciseMeasurements.length > 0 && selectedExerciseObj) {
                         let cat = (selectedExerciseObj.cat) ? selectedExerciseObj.cat : '';
                         let subCat = (selectedExerciseObj.subCat) ? selectedExerciseObj.subCat : '';
@@ -56,12 +56,21 @@ class WorkoutTypeSingleCard extends Component {
                             selectedExerciseMeasurementObj = measObj;
                             if (selectedExerciseMeasurementObj && selectedExerciseMeasurementObj.field1 && selectedExerciseMeasurementObj.field1.length > 0) {
                                 field1Options = prepareFieldsOptions(selectedExerciseMeasurementObj.field1);
+                                let selectedOption = (fieldData && fieldData.field1_unit) ? fieldData.field1_unit : selectedExerciseMeasurementObj.field1[0];
+                                let selectedFieldUnit = getExeMeasurementValidationRules(selectedOption);
+                                field1Validation = (selectedFieldUnit && selectedFieldUnit.validation) ? selectedFieldUnit.validation : [required, validNumber, min0];
                             }
                             if (selectedExerciseMeasurementObj && selectedExerciseMeasurementObj.field2 && selectedExerciseMeasurementObj.field2.length > 0) {
                                 field2Options = prepareFieldsOptions(selectedExerciseMeasurementObj.field2);
+                                let selectedOption = (fieldData && fieldData.field2_unit) ? fieldData.field2_unit : selectedExerciseMeasurementObj.field2[0];
+                                let selectedFieldUnit = getExeMeasurementValidationRules(selectedOption);
+                                field2Validation = (selectedFieldUnit && selectedFieldUnit.validation) ? selectedFieldUnit.validation : [required, validNumber, min0];
                             }
                             if (selectedExerciseMeasurementObj && selectedExerciseMeasurementObj.field3 && selectedExerciseMeasurementObj.field3.length > 0) {
                                 field3Options = prepareFieldsOptions(selectedExerciseMeasurementObj.field3);
+                                let selectedOption = (fieldData && fieldData.field3_unit) ? fieldData.field3_unit : selectedExerciseMeasurementObj.field3[0];
+                                let selectedFieldUnit = getExeMeasurementValidationRules(selectedOption);
+                                field3Validation = (selectedFieldUnit && selectedFieldUnit.validation) ? selectedFieldUnit.validation : [required, validNumber, min0];
                             }
                         }
                     }
@@ -76,6 +85,7 @@ class WorkoutTypeSingleCard extends Component {
                                         component={WorkoutSelectField_ReactSelect}
                                         options={exerciseOptions}
                                         validate={[requiredReactSelect]}
+                                        errorClass="help-block"
                                     />
                                 </div>
                                 <div className="col-md-2 single-exercise-switch">
@@ -101,6 +111,7 @@ class WorkoutTypeSingleCard extends Component {
                                                             component={WorkoutInputField}
                                                             placeholder="Sets"
                                                             type="text"
+                                                            errorClass="erro_msg_single"
                                                             validate={[required, validNumber, min1, max12]}
                                                         />
                                                         <div className="set-div single">Sets</div>
@@ -113,7 +124,8 @@ class WorkoutTypeSingleCard extends Component {
                                                                 component={WorkoutInputField}
                                                                 placeholder=""
                                                                 type="text"
-                                                                validate={[required, validNumber, min1]}
+                                                                errorClass="erro_msg_single"
+                                                                validate={field1Validation}
                                                             />
                                                             <Field
                                                                 id={`${field}.field1_unit`}
@@ -132,7 +144,8 @@ class WorkoutTypeSingleCard extends Component {
                                                                 component={WorkoutInputField}
                                                                 placeholder=""
                                                                 type="text"
-                                                                validate={[required, validNumber, min1]}
+                                                                errorClass="erro_msg_single"
+                                                                validate={field2Validation}
                                                             />
                                                             <Field
                                                                 id={`${field}.field2_unit`}
@@ -151,7 +164,8 @@ class WorkoutTypeSingleCard extends Component {
                                                                 component={WorkoutInputField}
                                                                 placeholder=""
                                                                 type="text"
-                                                                validate={[required, validNumber, min1]}
+                                                                errorClass="erro_msg_single"
+                                                                validate={field3Validation}
                                                             />
                                                             <Field
                                                                 id={`${field}.field3_unit`}
@@ -170,6 +184,7 @@ class WorkoutTypeSingleCard extends Component {
                                                                 component={WorkoutInputField}
                                                                 placeholder="Rest Time"
                                                                 type="text"
+                                                                errorClass="erro_msg_single"
                                                                 validate={[required, validNumber, min0]}
                                                             />
                                                             <Field
@@ -206,16 +221,7 @@ class WorkoutTypeSingleCard extends Component {
             </div>
         );
     }
-
-    componentDidUpdate(prevProps, prevState) {
-        const { fields } = this.props;
-        _.forEach(fields, (field, index) => {
-            var fieldData = fields.get(index);
-        });
-        console.log('prevProps => ', prevProps);
-    }
-
-}
+};
 
 const mapStateToProps = (state) => {
     const { userScheduleWorkouts } = state;

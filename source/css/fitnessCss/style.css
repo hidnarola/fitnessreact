@@ -2337,26 +2337,27 @@ a.profile-about-section i { font-size: 20px; }
 .gallery-popup-body-l.popup_upload {text-align: center;}
 .popup_upload svg,
 .progress-l-wrap svg {width: 130px;height: 130px;}
+.messenger-box h4 small {line-height: normal;}
+.erro_msg_single {border: 1px solid #a94442;width: 100%;position: absolute;height: 100%;top: 0;left: 0;}
+.workout-type-card-wrapper ul li {position: relative;}
+.workout-type-card-wrapper ul li > div > input {position: relative;z-index: 9;}
+.workout-type-card-wrapper ul li > div > select {position: relative;z-index: 9;}
+.progress-popup-body-m textarea {color: #424242;}
 
-.app-wrapper-content {
-    padding: 100px 0 0 110px;
-}
-.app-footer {
-    grid-row-start: 2;
-    grid-row-end: 3;
-}
-.appWrapper {
-    display: grid;
-    grid-template-rows: 1fr auto;
-    padding: 0;
-    height: 100%;
-}
-body {
-    min-height: 100%;
-    display: grid;
-    grid-template-rows: 1fr auto;
-    padding: 0;
-}
-html {
-    height: 100%;
-}
+
+.app-wrapper-content {padding: 100px 0 0 110px;}
+.app-footer {grid-row-start: 2;grid-row-end: 3;}
+.appWrapper {display: grid;grid-template-rows: 1fr auto;padding: 0;height: 100%;}
+body {min-height: 100%;display: grid;grid-template-rows: 1fr auto;padding: 0;}
+html {height: 100%;}
+
+
+body.with_login {min-height: initial;}
+body.with_login .appWrapper {display: block;height: auto;}
+body.with_login .app-footer {display: none;}
+body.with_login .app-wrapper-content{padding:0;}
+
+.workout-main-types-view-wrapper .Select-menu-outer{z-index:10;}
+
+.my-img-has-error { border: 1px solid #a94442 !important; }
+.my-img-help-block-err {text-align: left;display: block;margin-top: 5px;margin-bottom: 3px;color: #a94442;font-weight: 400;}

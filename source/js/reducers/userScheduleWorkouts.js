@@ -431,9 +431,7 @@ const actionMap = {
         }));
     },
     [ADD_USER_WORKOUT_TITLE_SUCCESS]: (state, action) => {
-        var newState = {
-            loadingTitle: false,
-        };
+        var newState = { loadingTitle: false };
         if (action.data.status === 1) {
             newState.workoutTitle = action.data.day;
         } else {

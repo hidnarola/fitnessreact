@@ -1,3 +1,5 @@
+import { required, validNumber, min, max } from "../formValidation/validationRules";
+
 export const LOCALSTORAGE_ID_TOKEN_KEY = 'id_token';
 export const LOCALSTORAGE_ACCESS_TOKEN_KEY = 'access_token';
 export const LOCALSTORAGE_REFRESH_TOKEN_KEY = 'refreshToken';
@@ -709,136 +711,89 @@ export const EXE_CAT_SCAT = [
     },
 ];
 
+const min0 = min(0);
+const max100 = max(100);
+
 export const EXE_MEASUREMENT_UNITS = [
     {
         value: MEASUREMENT_UNIT_SECONDS,
         label: 'Seconds',
-        validation: [
-            { required: true },
-            { min: 0 },
-        ],
+        validation: [required, validNumber, min0],
     },
     {
         value: MEASUREMENT_UNIT_MINUTES,
         label: 'Minutes',
-        validation: [
-            { required: true },
-            { min: 0 },
-        ],
+        validation: [required, validNumber, min0],
     },
     {
         value: MEASUREMENT_UNIT_HOURS,
         label: 'Hours',
-        validation: [
-            { required: true },
-            { min: 0 },
-        ],
+        validation: [required, validNumber, min0],
     },
     {
         value: MEASUREMENT_UNIT_METER,
         label: 'Meter',
-        validation: [
-            { required: true },
-            { min: 0 },
-        ],
+        validation: [required, validNumber, min0],
     },
     {
         value: MEASUREMENT_UNIT_FEET,
         label: 'Foot',
-        validation: [
-            { required: true },
-            { min: 0 },
-        ],
+        validation: [required, validNumber, min0],
     },
     {
         value: MEASUREMENT_UNIT_KILOMETER,
         label: 'KM',
-        validation: [
-            { required: true },
-            { min: 0 },
-        ],
+        validation: [required, validNumber, min0],
     },
     {
         value: MEASUREMENT_UNIT_MILE,
         label: 'Mile',
-        validation: [
-            { required: true },
-            { min: 0 },
-        ],
+        validation: [required, validNumber, min0],
     },
     {
         value: MEASUREMENT_UNIT_REPS,
         label: 'Reps',
-        validation: [
-            { required: true },
-            { min: 0 },
-        ],
+        validation: [required, validNumber, min0],
     },
     {
         value: MEASUREMENT_UNIT_EFFORT,
         label: 'Effort',
-        validation: [
-            { required: true },
-            { min: 0 },
-            { max: 100 },
-        ],
+        validation: [required, validNumber, min0, max100],
     },
     {
         value: MEASUREMENT_UNIT_KMPH,
         label: 'KMPH',
-        validation: [
-            { required: true },
-            { min: 0 },
-        ],
+        validation: [required, validNumber, min0],
     },
     {
         value: MEASUREMENT_UNIT_MPH,
         label: 'MPH',
-        validation: [
-            { required: true },
-            { min: 0 },
-        ],
+        validation: [required, validNumber, min0],
     },
     {
         value: MEASUREMENT_UNIT_POUND,
         label: 'LB',
-        validation: [
-            { required: true },
-            { min: 0 },
-        ],
+        validation: [required, validNumber, min0],
     },
     {
         value: MEASUREMENT_UNIT_KILOGRAM,
         label: 'KG',
-        validation: [
-            { required: true },
-            { min: 0 },
-        ],
+        validation: [required, validNumber, min0],
     },
     {
         value: MEASUREMENT_UNIT_ONE_RM,
         label: '% of 1rm',
-        validation: [
-            { required: true },
-            { min: 0 },
-            { max: 100 },
-        ],
+        validation: [required, validNumber, min0, max100],
     },
     {
         value: MEASUREMENT_UNIT_REP_TIME,
         label: 'Rep Time',
-        validation: [
-            { required: true },
-            { min: 0 },
-        ],
+        validation: [required, validNumber, min0],
     },
     {
         value: MEASUREMENT_UNIT_SET_TIME,
         label: 'Set Time',
-        validation: [
-            { required: true },
-            { min: 0 },
-        ],
+        validation: [required, validNumber, min0],
     },
 ];
 

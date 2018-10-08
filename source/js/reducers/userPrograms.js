@@ -56,7 +56,8 @@ import {
     REORDER_PROGRAM_WORKOUT_EXERCISES,
     REORDER_PROGRAM_WORKOUT_EXERCISES_REQUEST,
     REORDER_PROGRAM_WORKOUT_EXERCISES_SUCCESS,
-    REORDER_PROGRAM_WORKOUT_EXERCISES_ERROR
+    REORDER_PROGRAM_WORKOUT_EXERCISES_ERROR,
+    SET_USER_PROGRAM_STATE
 } from "../actions/userPrograms";
 import {
     VALIDATION_FAILURE_STATUS,
@@ -594,23 +595,24 @@ const actionMap = {
     },
     [UPDATE_USER_PROGRAM_MASTER_REQUEST]: (state, action) => {
         return state.merge(Map({
-            loading: true,
-            error: [],
+            loadingMaster: true,
+            programMaster: null,
+            errorMaster: [],
         }));
     },
     [UPDATE_USER_PROGRAM_MASTER_SUCCESS]: (state, action) => {
         var newState = {
-            loading: false,
+            loadingMaster: false,
         };
         if (action.data.status === 1) {
             var oldStateProgram = state.get('program');
             var newStateProgram = Object.assign({}, oldStateProgram);
             newStateProgram.programDetails.name = action.data.program.name;
             newStateProgram.programDetails.description = action.data.program.description;
-            newState.program = newStateProgram;
+            newState.programMaster = newStateProgram;
         } else {
             var msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
-            newState.error = [msg];
+            newState.errorMaster = [msg];
         }
         return state.merge(Map(newState));
     },
@@ -624,8 +626,8 @@ const actionMap = {
             error = ['Something went wrong! please try again later'];
         }
         return state.merge(Map({
-            loading: false,
-            error: error,
+            loadingMaster: false,
+            errorMaster: error,
         }));
     },
     [GET_WORKOUTS_LIST_BY_PROGRAM_DAY_REQUEST]: (state, action) => {
@@ -694,6 +696,9 @@ const actionMap = {
             reorderExercisesLoading: false,
             reorderExercisesError: error,
         }));
+    },
+    [SET_USER_PROGRAM_STATE]: (state, action) => {
+        return state.merge(Map(action.stateData));
     },
 }
 

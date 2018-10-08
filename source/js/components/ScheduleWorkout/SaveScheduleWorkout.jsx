@@ -25,7 +25,6 @@ import { te, prepareFieldsOptions, ts, convertUnits, capitalizeFirstLetter } fro
 import FitnessHeader from '../global/FitnessHeader';
 import FitnessNav from '../global/FitnessNav';
 import moment from "moment";
-import UpdateScheduleWorkoutTitleForm from './UpdateScheduleWorkoutTitleForm';
 import {
     SCHEDULED_WORKOUT_TYPE_WARMUP,
     SCHEDULED_WORKOUT_TYPE_EXERCISE,
@@ -409,13 +408,13 @@ class SaveScheduleWorkout extends Component {
         }
         if (loadWorkoutInit && !loading && error && error.length > 0) {
             this.setState({ loadWorkoutInit: false });
-            te(error[0]);
+            te("Something went wrong! please try again later.");
             history.push(routeCodes.SCHEDULE_WORKOUT);
         }
         if (saveWorkoutActionInit && !loading) {
             this.setState({ saveWorkoutActionInit: false });
             if (error && error.length > 0) {
-                te(error[0]);
+                te("Something went wrong! please try again later.");
             } else {
                 ts('Workout saved successfully!');
             }
@@ -425,7 +424,7 @@ class SaveScheduleWorkout extends Component {
         if (updateWorkoutActionInit && !loading) {
             this.setState({ updateWorkoutActionInit: false });
             if (error && error.length > 0) {
-                te(error[0]);
+                te("Something went wrong! please try again later.");
             } else {
                 ts('Workout updated successfully!');
             }
@@ -451,7 +450,7 @@ class SaveScheduleWorkout extends Component {
         if (firstWorkoutIdInit && !firstWorkoutLoading) {
             this.setState({ firstWorkoutIdInit: false });
             if (firstWorkoutError && firstWorkoutError.length > 0) {
-                te(firstWorkoutError[0]);
+                te("Something went wrong! please try again later.");
             } else if (firstWorkoutId) {
                 history.push(routeCodes.SAVE_SCHEDULE_WORKOUT.replace(':id', firstWorkoutId));
             } else {
@@ -462,7 +461,7 @@ class SaveScheduleWorkout extends Component {
         if (completeWorkoutActionInit && !loading) {
             this.setState({ completeWorkoutActionInit: false });
             if (error && error.length > 0) {
-                te(error[0]);
+                te("Something went wrong! please try again later.");
             }
             let date = (workout && workout.date) ? workout.date : null;
             if (date) {
@@ -484,6 +483,7 @@ class SaveScheduleWorkout extends Component {
         }
         if (addWorkoutTitleInit && !loadingTitle) {
             this.setState({ addWorkoutTitleInit: false });
+            dispatch(hidePageLoader());
             if (errorTitle && errorTitle.length <= 0 && workoutTitle) {
                 this.handleAddWorkoutTitleCancel();
                 var workoutTitleId = workoutTitle._id;
@@ -1107,6 +1107,7 @@ class SaveScheduleWorkout extends Component {
         }
         this.setState({ addWorkoutTitleInit: true });
         dispatch(addUserWorkoutTitleRequest(requestData));
+        dispatch(showPageLoader());
     }
 }
 
@@ -1168,10 +1169,12 @@ class TodaysWorkoutListCard extends Component {
         var workoutDay = moment(workout.date);
         return (
             <div className={cns('todays-workout-list-card', { active: isActive })}>
-                <button type="button" className="edit-title-btn" onClick={() => openEditExerciseTitleModal(workout)}><i className="icon-mode_edit"></i></button>
+                {workout.dayType === SCHEDULED_WORKOUT_TYPE_EXERCISE &&
+                    <button type="button" className="edit-title-btn" onClick={() => openEditExerciseTitleModal(workout)}><i className="icon-mode_edit"></i></button>
+                }
                 <NavLink to={routeCodes.SAVE_SCHEDULE_WORKOUT.replace(':id', workout._id)}>{workout.title}</NavLink>
                 <button type="button" onClick={() => handleWholeWorkoutDelete(workout._id)}><i className="icon-cancel"></i></button>
-                {workoutDay <= today && workout.dayType && workout.dayType === SCHEDULED_WORKOUT_TYPE_EXERCISE &&
+                {workoutDay <= today && workout.dayType && workout.dayType === SCHEDULED_WORKOUT_TYPE_EXERCISE && typeof workout.totalExercises !== 'undefined' && workout.totalExercises > 0 &&
                     <div className="switch-wrap">
                         <small>Workout complete</small>
                         <div className="material-switch">

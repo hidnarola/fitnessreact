@@ -11,7 +11,6 @@ class WorkoutInputField extends Component {
             max,
             meta,
             errorClass,
-            warningClass,
         } = this.props;
         return (
             <div className="">
@@ -26,9 +25,7 @@ class WorkoutInputField extends Component {
                     max={(typeof max !== 'undefined') ? max : ''}
                     onChange={(e) => input.onChange(e.target.value)}
                 />
-                {meta.touched &&
-                    ((meta.error && <div className={errorClass}>{meta.error}</div>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))
-                }
+                {meta.touched && (meta.error && <div className={errorClass}>{console.log('sb => ', meta.error)}</div>)}
             </div>
         );
     }

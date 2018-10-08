@@ -294,6 +294,14 @@ export function prepareFieldsOptions(fieldData) {
     return options;
 }
 
+export function getExeMeasurementValidationRules(value) {
+    let selectedFieldUnit = null;
+    if (value) {
+        selectedFieldUnit = _.find(EXE_MEASUREMENT_UNITS, ['value', value]);
+    }
+    return selectedFieldUnit;
+}
+
 export function createNewStateForWorkout(workouts) {
     var newState = {};
     newState.workout = workouts;

@@ -15,17 +15,19 @@ import {
     completeUsersBulkWorkoutScheduleRequest,
     pasteUsersWorkoutScheduleRequest,
     addUserWorkoutTitleRequest,
+    setScheduleWorkoutsState,
 } from '../actions/userScheduleWorkouts';
 import { NavLink } from "react-router-dom";
 import { routeCodes } from '../constants/routes';
 import _ from "lodash";
 import { SCHEDULED_WORKOUT_TYPE_RESTDAY, SCHEDULED_WORKOUT_TYPE_EXERCISE } from '../constants/consts';
-import { ts, te, prepareDropdownOptionsData } from '../helpers/funs';
+import { ts, te, prepareDropdownOptionsData, capitalizeFirstLetter } from '../helpers/funs';
 import { FaCopy, FaTrash, FaPencil, FaEye } from 'react-icons/lib/fa'
 import cns from "classnames";
 import Select from 'react-select';
 import AddWorkoutTitleForm from '../components/ScheduleWorkout/AddWorkoutTitleForm';
 import ReactTooltip from "react-tooltip";
+import { showPageLoader, hidePageLoader } from '../actions/pageLoader';
 
 BigCalendar.momentLocalizer(moment);
 
@@ -81,6 +83,7 @@ class ScheduleWorkout extends Component {
         const {
             selectedSlot,
             programs,
+            errorTitle
         } = this.props;
         var selectedSlotStateDate = null;
         if (selectedSlot) {
@@ -274,6 +277,7 @@ class ScheduleWorkout extends Component {
                     <AddWorkoutTitleForm
                         onSubmit={this.handleAddTitleSubmit}
                         onCancel={this.handleAddWorkoutTitleCancel}
+                        errorArr={errorTitle}
                     />
                 </SweetAlert>
             </div>
@@ -294,6 +298,7 @@ class ScheduleWorkout extends Component {
             workoutTitle,
             errorTitle,
             history,
+            dispatch
         } = this.props;
         const {
             workoutPasteAction,
@@ -320,6 +325,7 @@ class ScheduleWorkout extends Component {
                     isCompleted: (workout.isCompleted) ? workout.isCompleted : 0,
                     exercises: (workout.exercises && workout.exercises.length > 0) ? workout.exercises : [],
                     exerciseType: (workout.type) ? workout.type : null,
+                    totalExercises: (workout.totalExercises) ? workout.totalExercises : 0,
                     meta: workout,
                     description: (workout.description) ? workout.description : '',
                     isSelectedForBulkAction: false,
@@ -336,8 +342,9 @@ class ScheduleWorkout extends Component {
             this.setState({ workoutPasteAction: false });
             this.getWorkoutSchedulesByMonth();
             this.cancelSelectedSlotAction();
+            dispatch(hidePageLoader());
             if (error && error.length > 0) {
-                te(error[0]);
+                te('Something went wrong! please try again later.');
             } else {
                 ts('Workout pasted!');
             }
@@ -386,34 +393,34 @@ class ScheduleWorkout extends Component {
                 te('Cannot incomplete workouts. Please try again later!');
             }
         }
-
-        if (!assignProgramLoading && prevProps.assignProgram !== assignProgram) {
+        if (!assignProgramLoading && prevProps.assignProgramLoading !== assignProgramLoading) {
             this.getWorkoutSchedulesByMonth();
             this.handleCancelProgramAssignAlert();
+            dispatch(hidePageLoader());
             if (assignProgramError && assignProgramError.length <= 0) {
                 ts('Program assigned successfully!');
             } else {
-                te(assignProgramError[0]);
+                te('Something went wrong! please try again later.');
             }
         }
-        if (addRestDayInit && !loadingTitle && workoutTitle && prevProps.workoutTitle !== workoutTitle) {
+        if (addRestDayInit && !loadingTitle) {
             this.setState({ addRestDayInit: false });
             this.getWorkoutSchedulesByMonth();
             this.cancelSelectedSlotAction();
+            dispatch(hidePageLoader());
             if (errorTitle && errorTitle.length > 0) {
-                te(errorTitle[0]);
+                te('Something went wrong! please try again later.');
             } else {
                 ts('Rest day added!');
             }
         }
-        if (addWorkoutTitleInit && !loadingTitle && workoutTitle && prevProps.workoutTitle !== workoutTitle) {
+        if (addWorkoutTitleInit && !loadingTitle) {
             this.setState({ addWorkoutTitleInit: false });
+            dispatch(hidePageLoader());
             if (errorTitle && errorTitle.length <= 0) {
                 var _id = workoutTitle._id;
                 let url = routeCodes.SAVE_SCHEDULE_WORKOUT.replace(':id', _id);
                 history.push(url);
-            } else {
-                te(errorTitle[0]);
             }
         }
     }
@@ -472,6 +479,7 @@ class ScheduleWorkout extends Component {
         };
         this.setState({ addRestDayInit: true });
         dispatch(addUserWorkoutTitleRequest(requestData));
+        dispatch(showPageLoader());
     }
 
     handleCopy = (_id) => {
@@ -493,6 +501,7 @@ class ScheduleWorkout extends Component {
             };
             dispatch(pasteUsersWorkoutScheduleRequest(requestData));
             this.setState({ workoutPasteAction: true });
+            dispatch(showPageLoader());
         } else {
             te('There is no workout copied!');
         }
@@ -573,20 +582,14 @@ class ScheduleWorkout extends Component {
 
     handleAssignProgram = () => {
         const { selectedProgramIdToAssign } = this.state;
-        const {
-            selectedSlot,
-            dispatch,
-        } = this.props;
+        const { selectedSlot, dispatch } = this.props;
         var date = (selectedSlot) ? selectedSlot.start : null;
         var programId = (selectedProgramIdToAssign) ? selectedProgramIdToAssign.value : null;
         if (date && programId) {
-            var requestData = {
-                programId,
-                date,
-            }
+            var requestData = { programId, date }
             dispatch(userAssignProgramRequest(requestData));
         }
-
+        dispatch(showPageLoader());
     }
 
     handleSelectForBulkAction = (_id) => {
@@ -659,19 +662,15 @@ class ScheduleWorkout extends Component {
     }
 
     handleAddWorkout = () => {
-        this.setState({
-            showSelectEventAlert: false,
-            showAddWorkoutTitleAlert: true,
-        });
+        this.setState({ showSelectEventAlert: false, showAddWorkoutTitleAlert: true });
     }
 
     handleAddWorkoutTitleCancel = () => {
         const { dispatch } = this.props;
-        this.setState({
-            showSelectEventAlert: false,
-            showAddWorkoutTitleAlert: false,
-        });
+        this.setState({ showSelectEventAlert: false, showAddWorkoutTitleAlert: false });
         dispatch(setSelectedSlotFromCalendar(null));
+        let stateData = { errorTitle: [] }
+        dispatch(setScheduleWorkoutsState(stateData));
     }
 
     handleSelectAll = (e) => {
@@ -695,13 +694,14 @@ class ScheduleWorkout extends Component {
         var startDay = moment(selectedSlot.start).startOf('day');
         var date = moment.utc(startDay);
         var requestData = {
-            title: data.title,
-            description: (data.description) ? data.description : '',
+            title: (data.title && data.title.trim()) ? capitalizeFirstLetter(data.title.trim()) : '',
+            description: (data.description && data.description.trim()) ? capitalizeFirstLetter(data.description.trim()) : '',
             type: SCHEDULED_WORKOUT_TYPE_EXERCISE,
             date: date,
         }
         this.setState({ addWorkoutTitleInit: true });
         dispatch(addUserWorkoutTitleRequest(requestData));
+        dispatch(showPageLoader());
     }
 }
 
@@ -797,7 +797,7 @@ class CustomEventCard extends Component {
                         <a href="javascript:void(0)" data-tip="Delete" data-for="event-delete-tooltip" onClick={event.handleDelete} title=""><FaTrash /></a>
                     </div>
                 </div>
-                {event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE && showCompleteSwitch &&
+                {event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE && showCompleteSwitch && typeof event.totalExercises !== 'undefined' && event.totalExercises > 0 &&
                     <div className="big-calendar-custom-month-event-view-card-footer">
                         <div className="switch-wrap">
                             <small>Workout Completed</small>

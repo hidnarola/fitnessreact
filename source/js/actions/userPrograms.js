@@ -77,6 +77,8 @@ export const REORDER_PROGRAM_WORKOUT_EXERCISES_REQUEST = 'REORDER_PROGRAM_WORKOU
 export const REORDER_PROGRAM_WORKOUT_EXERCISES_SUCCESS = 'REORDER_PROGRAM_WORKOUT_EXERCISES_SUCCESS';
 export const REORDER_PROGRAM_WORKOUT_EXERCISES_ERROR = 'REORDER_PROGRAM_WORKOUT_EXERCISES_ERROR';
 
+export const SET_USER_PROGRAM_STATE = 'SET_USER_PROGRAM_STATE';
+
 export function getUserProgramsRequest() {
     return {
         type: GET_USER_PROGRAMS_REQUEST,
@@ -475,5 +477,12 @@ export function reorderProgramWorkoutExercisesError(error) {
     return {
         type: REORDER_PROGRAM_WORKOUT_EXERCISES_ERROR,
         error
+    }
+}
+
+export function setUserProgramState(stateData) {
+    return {
+        type: SET_USER_PROGRAM_STATE,
+        stateData
     }
 }

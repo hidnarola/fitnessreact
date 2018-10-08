@@ -6,8 +6,8 @@ import { routeCodes } from '../constants/routes';
 import { NavLink } from "react-router-dom";
 import moment from "moment";
 import { showPageLoader, hidePageLoader } from '../actions/pageLoader';
-import { getUserFirstWorkoutByDateRequest, addUserWorkoutTitleRequest, setTodaysWorkoutDate, getUserWorkoutCalendarListRequest } from '../actions/userScheduleWorkouts';
-import { te } from '../helpers/funs';
+import { getUserFirstWorkoutByDateRequest, addUserWorkoutTitleRequest, setTodaysWorkoutDate, getUserWorkoutCalendarListRequest, setScheduleWorkoutsState } from '../actions/userScheduleWorkouts';
+import { te, capitalizeFirstLetter } from '../helpers/funs';
 import SweetAlert from "react-bootstrap-sweetalert";
 import AddWorkoutTitleForm from '../components/ScheduleWorkout/AddWorkoutTitleForm';
 import { SCHEDULED_WORKOUT_TYPE_EXERCISE, SCHEDULED_WORKOUT_TYPE_RESTDAY } from '../constants/consts';
@@ -49,7 +49,7 @@ class Exercise extends Component {
 
     render() {
         const { showAddWorkoutTitleAlert, loadWorkoutsInit, logDate } = this.state;
-        const { todaysWorkoutDate, firstWorkoutLoading, firstWorkoutError, firstWorkoutId, calendarList } = this.props;
+        const { todaysWorkoutDate, firstWorkoutLoading, firstWorkoutError, firstWorkoutId, calendarList, errorTitle } = this.props;
         var date = todaysWorkoutDate;
         return (
             <div className='stat-page'>
@@ -78,7 +78,7 @@ class Exercise extends Component {
                                 </NavLink>
                             </div>
                         </div>
-                        
+
                         <div className="body-content d-flex row justify-content-start profilephoto-content">
                             <div className="col-md-9">
                                 <div className="white-exercise-block">
@@ -148,6 +148,7 @@ class Exercise extends Component {
                     <AddWorkoutTitleForm
                         onSubmit={this.handleAddTitleSubmit}
                         onCancel={this.handleAddWorkoutTitleCancel}
+                        errorArr={errorTitle}
                     />
                 </SweetAlert>
 
@@ -178,21 +179,17 @@ class Exercise extends Component {
         }
         if (addWorkoutTitleInit && !loadingTitle) {
             this.setState({ addWorkoutTitleInit: false });
-            this.handleAddWorkoutTitleCancel();
-            if (errorTitle && errorTitle.length > 0) {
-                te(errorTitle[0]);
-            } else if (workoutTitle) {
+            dispatch(hidePageLoader());
+            if (errorTitle && errorTitle.length <= 0 && workoutTitle) {
+                this.handleAddWorkoutTitleCancel();
                 var workoutTitleId = workoutTitle._id;
                 history.push(routeCodes.SAVE_SCHEDULE_WORKOUT.replace(':id', workoutTitleId));
-            } else {
-                te('Something went wrong! Please try after sometime');
             }
         }
         if (addRestDayInit && !loadingTitle) {
             this.setState({ addRestDayInit: false });
-            if (errorTitle && errorTitle.length > 0) {
-                te(errorTitle[0]);
-            } else if (workoutTitle) {
+            dispatch(hidePageLoader());
+            if (errorTitle && errorTitle.length <= 0 && workoutTitle) {
                 var workoutTitleId = workoutTitle._id;
                 history.push(routeCodes.SAVE_SCHEDULE_WORKOUT.replace(':id', workoutTitleId));
             } else {
@@ -229,7 +226,10 @@ class Exercise extends Component {
     }
 
     handleAddWorkoutTitleCancel = () => {
+        const { dispatch } = this.props;
         this.setState({ showAddWorkoutTitleAlert: false });
+        let stateData = { errorTitle: [] }
+        dispatch(setScheduleWorkoutsState(stateData));
     }
 
     handleAddTitleSubmit = (data) => {
@@ -239,13 +239,14 @@ class Exercise extends Component {
             date = moment().startOf('day').utc();
         }
         var requestData = {
-            title: data.title,
-            description: (data.description) ? data.description : '',
+            title: (data.title && data.title.trim()) ? capitalizeFirstLetter(data.title.trim()) : '',
+            description: (data.description && data.description.trim()) ? capitalizeFirstLetter(data.description.trim()) : '',
             type: SCHEDULED_WORKOUT_TYPE_EXERCISE,
             date: date,
         }
         this.setState({ addWorkoutTitleInit: true });
         dispatch(addUserWorkoutTitleRequest(requestData));
+        dispatch(showPageLoader());
     }
 
     handleNewRestDay = () => {
@@ -262,6 +263,7 @@ class Exercise extends Component {
         };
         this.setState({ addRestDayInit: true });
         dispatch(addUserWorkoutTitleRequest(requestData));
+        dispatch(showPageLoader());
     }
 
     handleGoToToday = () => {
@@ -278,6 +280,7 @@ class Exercise extends Component {
             dispatch(showPageLoader());
             dispatch(setTodaysWorkoutDate(requestData.date));
             dispatch(getUserFirstWorkoutByDateRequest(requestData));
+            dispatch(getUserWorkoutCalendarListRequest(requestData));
         }
     }
 

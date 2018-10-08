@@ -12,6 +12,7 @@ import {
 import _ from "lodash";
 import { Alert } from "react-bootstrap";
 import Weightlifting from "svg/weightlifting.svg";
+import cns from "classnames";
 
 const accessLevelOptions = [
     { value: ACCESS_LEVEL_PUBLIC, label: ACCESS_LEVEL_PUBLIC_STR },
@@ -26,7 +27,8 @@ class AddGalleryPhotoModal extends Component {
             images: [],
             description: "",
             accessLevel: accessLevelOptions[0].value,
-            noImageError: [],
+            noImageError: null,
+            invalidImage: [],
         }
     }
 
@@ -48,6 +50,7 @@ class AddGalleryPhotoModal extends Component {
             description,
             accessLevel,
             noImageError,
+            invalidImage,
         } = this.state;
         const {
             show,
@@ -61,10 +64,10 @@ class AddGalleryPhotoModal extends Component {
                         </button>
                         <h3 className="title-h3">New Gallery Photos</h3>
                     </div>
-                    {noImageError && noImageError.length > 0 &&
+                    {invalidImage && invalidImage.length > 0 &&
                         <Alert bsStyle="danger">
                             {
-                                noImageError.map((e, i) => {
+                                invalidImage.map((e, i) => {
                                     return <p key={i}>{e}</p>
                                 })
                             }
@@ -72,7 +75,7 @@ class AddGalleryPhotoModal extends Component {
                     }
                     <div className="progress-popup-body d-flex">
                         <div className="gallery-popup-body-l popup_upload">
-                            <span>
+                            <span className={cns({ 'my-img-has-error': (noImageError) })}>
                                 {images && images.length > 0 &&
                                     <div>
                                         <div className="">
@@ -88,6 +91,7 @@ class AddGalleryPhotoModal extends Component {
                                     </div>
                                 }
                             </span>
+                            {noImageError && <label className="my-img-help-block-err">{noImageError}</label>}
                         </div>
                         <div className="gallery-popup-body-r">
                             <textarea
@@ -120,11 +124,12 @@ class AddGalleryPhotoModal extends Component {
                                     accept={"image/jpeg, image/png, image/jpg, image/gif"}
                                     onDrop={(filesToUpload, rejectedFiles) => {
                                         if (rejectedFiles && rejectedFiles.length > 0) {
-                                            let noImageError = ['Invalid file(s). Please select jpg, png, gif only'];
-                                            this.setState({ noImageError });
+                                            let invalidImage = ['Invalid file(s). Please select jpg, png, gif only'];
+                                            this.setState({ invalidImage });
                                         } else {
-                                            let noImageError = [];
-                                            this.setState({ noImageError });
+                                            let noImageError = null;
+                                            let invalidImage = [];
+                                            this.setState({ invalidImage, noImageError });
                                         }
                                         var allImages = _.concat(images, filesToUpload);
                                         this.handleImagesSelection(allImages);
@@ -184,10 +189,10 @@ class AddGalleryPhotoModal extends Component {
         const { images } = this.state;
         const { handlePost } = this.props;
         if (images && images.length <= 0) {
-            let noImageError = ["Please select atleast one image"];
+            let noImageError = "Please select atleast one image";
             this.setState({ noImageError });
         } else if (images && images.length > 0) {
-            let noImageError = [];
+            let noImageError = null;
             this.setState({ noImageError });
             handlePost({ ...this.state });
         }
@@ -196,8 +201,9 @@ class AddGalleryPhotoModal extends Component {
     handleClose = () => {
         const { handleClose } = this.props;
         handleClose();
-        let noImageError = [];
-        this.setState({ noImageError });
+        let noImageError = null;
+        let invalidImage = [];
+        this.setState({ noImageError, invalidImage });
     }
 }
 

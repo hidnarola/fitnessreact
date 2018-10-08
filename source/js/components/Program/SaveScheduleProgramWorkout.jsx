@@ -337,6 +337,11 @@ class SaveScheduleProgramWorkout extends Component {
         if (loadWorkoutInit && !loading && error && error.length > 0) {
             this.setState({ loadWorkoutInit: false });
             te('Something went wrong! please try later.');
+            if (match && match.params && match.params.id) {
+                history.push(`${routeCodes.PROGRAM_SAVE}/${match.params.id}`);
+            } else {
+                history.push(routeCodes.PROGRAMS);
+            }
         }
         if (match && match.params && match.params.id && match.params.workout_id && prevProps.match.params.workout_id !== match.params.workout_id) {
             let _id = match.params.id;
@@ -359,7 +364,7 @@ class SaveScheduleProgramWorkout extends Component {
         if (updateWorkoutActionInit && !loading) {
             this.setState({ updateWorkoutActionInit: false });
             if (error && error.length > 0) {
-                te(error[0]);
+                te("Something went wrong! please try again later.");
             } else {
                 ts('Workout updated successfully!');
             }
@@ -370,7 +375,7 @@ class SaveScheduleProgramWorkout extends Component {
         if (updateTitleActionInit && !loadingTitle) {
             this.setState({ updateTitleActionInit: false });
             if (errorTitle && errorTitle.length > 0) {
-                te(errorTitle[0]);
+                te("Something went wrong! please try again later.");
             } else {
                 ts('Updated!');
             }
@@ -411,7 +416,7 @@ class SaveScheduleProgramWorkout extends Component {
             this.setState({ addWorkoutTitleInit: false });
             this.handleAddWorkoutTitleCancel();
             if (errorTitle && errorTitle.length > 0) {
-                te(errorTitle[0]);
+                te("Something went wrong! please try again later.");
             } else if (workoutTitle) {
                 history.push(routeCodes.SAVE_PROGRAM_SCHEDULE_WORKOUT.replace(':id', workoutTitle.programId).replace(':workout_id', workoutTitle._id));
             } else {
@@ -985,7 +990,9 @@ class TodaysWorkoutListCard extends Component {
         const { workout, handleWholeWorkoutDelete, isActive, openEditExerciseTitleModal } = this.props;
         return (
             <div className={cns('todays-workout-list-card', { active: isActive })}>
-                <button type="button" className="edit-title-btn" onClick={() => openEditExerciseTitleModal(workout)}><i className="icon-mode_edit"></i></button>
+                {workout.dayType === SCHEDULED_WORKOUT_TYPE_EXERCISE &&
+                    <button type="button" className="edit-title-btn" onClick={() => openEditExerciseTitleModal(workout)}><i className="icon-mode_edit"></i></button>
+                }
                 <NavLink to={routeCodes.SAVE_PROGRAM_SCHEDULE_WORKOUT.replace(':id', workout.programId).replace(':workout_id', workout._id)}>{workout.title}</NavLink>
                 <button type="button" onClick={() => handleWholeWorkoutDelete(workout)}><i className="icon-cancel"></i></button>
             </div>

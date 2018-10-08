@@ -87,10 +87,12 @@ class Login extends Component {
 
     componentDidMount() {
         $('body').addClass('no-padding');
+        $('body').addClass('with_login');
     }
-
+    
     componentWillUnmount() {
         $('body').removeClass('no-padding');
+        $('body').removeClass('with_login');
     }
 }
 
