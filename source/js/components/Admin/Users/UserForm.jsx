@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
-import Dropzone from 'react-dropzone';
 import noImg from 'img/common/no-img.png'
 import moment from 'moment';
 import { InputField, SelectField_ReactSelect, DateField, EditorField } from '../../../helpers/FormControlHelper';
@@ -317,7 +316,7 @@ class UserForm extends Component {
                 weight_unit: weightUnit,
                 gender: selectUser.gender,
                 workout_location: selectUser.workoutLocation,
-                goal: (selectUser.goal) ? selectUser.goal.name : null,
+                goal: _.find(goalOptions, ['value', selectUser.goal]),
                 status: _.find(userStatusOptions, (o) => { return (o.value === selectUser.status) }),
                 about_me: selectUser.aboutMe,
             }

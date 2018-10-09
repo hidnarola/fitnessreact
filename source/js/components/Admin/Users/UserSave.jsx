@@ -83,7 +83,7 @@ class UserSave extends Component {
                 weightUnit: (data.weight_unit) ? data.weight_unit : '',
                 gender: (data.gender) ? data.gender : '',
                 workoutLocation: (data.workout_location) ? data.workout_location : '',
-                goal: (data.goal) ? { name: data.goal.value, start: 0 } : '',
+                goal: (data.goal && data.goal.value) ? data.goal.value : '',
                 aboutMe: (data.about_me) ? data.about_me : '',
                 status: (data.status) ? data.status.value : '',
             }
@@ -100,7 +100,7 @@ class UserSave extends Component {
             formData.append('weightUnit', userData.weightUnit);
             formData.append('gender', userData.gender);
             formData.append('workoutLocation', userData.workoutLocation);
-            formData.append('goal', JSON.stringify(userData.goal));
+            formData.append('goal', userData.goal);
             formData.append('aboutMe', userData.aboutMe);
             formData.append('status', userData.status);
             dispatch(showPageLoader());

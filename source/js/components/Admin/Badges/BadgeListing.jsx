@@ -62,7 +62,7 @@ class BadgeListing extends Component {
                     <div className="col-md-12">
                         <div className="white-box">
                             <div className="whitebox-head">
-                                <h3 className="title-h3">Bagde List</h3>
+                                <h3 className="title-h3">Badge List</h3>
                                 <Link to={adminRouteCodes.BADGES_SAVE} className="add-new-btn">
                                     <span>Add Badge</span>
                                     <i className="icon-add_circle"></i>
