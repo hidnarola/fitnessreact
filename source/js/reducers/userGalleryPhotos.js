@@ -35,10 +35,14 @@ const actionMap = {
         }));
     },
     [GET_USER_GALLERY_PHOTO_SUCCESS]: (state, action) => {
+        let prevPhotoLimit = state.get('photoLimit');
         let newState = { loading: false };
         if (action.data && action.data.status && action.data.status === 1) {
             newState.galleryPhotos = action.data.user_gallery_photos;
             if (action.data.user_gallery_photos && action.data.user_gallery_photos.length <= 0) {
+                newState.photoDataOver = true;
+            }
+            if (action.data.total_records && (action.data.total_records <= 0 || action.data.total_records <= prevPhotoLimit)) {
                 newState.photoDataOver = true;
             }
         } else {
@@ -77,6 +81,9 @@ const actionMap = {
         if (action.data && action.data.status && action.data.status === 1) {
             if (action.data.user_gallery_photos && action.data.user_gallery_photos.length > 0) {
                 newState.galleryPhotos = prevPhotos.concat(action.data.user_gallery_photos);
+                if (action.data.total_records && (action.data.total_records <= 0 || action.data.total_records <= newState.galleryPhotos.length)) {
+                    newState.photoDataOver = true;
+                }
             } else {
                 newState.photoDataOver = true;
             }
