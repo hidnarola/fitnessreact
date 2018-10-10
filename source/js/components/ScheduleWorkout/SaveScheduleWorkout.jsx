@@ -65,6 +65,7 @@ class SaveScheduleWorkout extends Component {
             deleteWorkoutActionInit: false,
             showAddWorkoutTitleAlert: false,
             addWorkoutTitleInit: false,
+            forceGetUsersWorkoutScheduleRequest: false,
         }
     }
 
@@ -385,11 +386,13 @@ class SaveScheduleWorkout extends Component {
             completeWorkoutActionInit,
             deleteWorkoutActionInit,
             addWorkoutTitleInit,
+            forceGetUsersWorkoutScheduleRequest
         } = this.state;
         if (loadWorkoutInit && !loading) {
             dispatch(hidePageLoader());
         }
-        if (match && match.params && match.params.id && prevProps.match.params.id !== match.params.id) {
+        if ((match && match.params && match.params.id && prevProps.match.params.id !== match.params.id) || forceGetUsersWorkoutScheduleRequest) {
+            this.setState({ forceGetUsersWorkoutScheduleRequest: false });
             let _id = match.params.id;
             dispatch(showPageLoader());
             dispatch(getUsersWorkoutScheduleRequest(_id));
@@ -969,7 +972,7 @@ class SaveScheduleWorkout extends Component {
             var requestData = {
                 date: _date,
             };
-            this.setState({ logDate: date, firstWorkoutIdInit: true });
+            this.setState({ logDate: date, firstWorkoutIdInit: true, forceGetUsersWorkoutScheduleRequest: true });
             dispatch(showPageLoader());
             dispatch(setTodaysWorkoutDate(requestData.date));
             dispatch(getUserFirstWorkoutByDateRequest(requestData));
@@ -984,7 +987,7 @@ class SaveScheduleWorkout extends Component {
             var requestData = {
                 date: _date,
             };
-            this.setState({ logDate: date, firstWorkoutIdInit: true });
+            this.setState({ logDate: date, firstWorkoutIdInit: true, forceGetUsersWorkoutScheduleRequest: true });
             dispatch(showPageLoader());
             dispatch(setTodaysWorkoutDate(requestData.date));
             dispatch(getUserFirstWorkoutByDateRequest(requestData));
@@ -1152,6 +1155,7 @@ class TodaysWorkoutListCard extends Component {
         const { workout } = this.props;
         if (workout && workout.isCompleted) {
             this.setState({ isCompleted: (workout.isCompleted) ? true : false });
+            console.log('(workout.isCompleted) ? true : false  => ', (workout.isCompleted) ? true : false);
         }
     }
 

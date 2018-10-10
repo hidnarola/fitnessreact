@@ -456,7 +456,7 @@ class ScheduleWorkout extends Component {
         const {
             dispatch
         } = this.props;
-        var requestObj = { _date }
+        var requestObj = { date: _date }
         dispatch(getUsersWorkoutSchedulesRequest(requestObj));
     }
 
