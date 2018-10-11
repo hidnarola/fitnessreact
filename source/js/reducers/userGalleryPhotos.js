@@ -8,7 +8,10 @@ import {
     GET_USER_GALLERY_PHOTO_ERROR,
     LOAD_MORE_USER_GALLERY_PHOTO_REQUEST,
     LOAD_MORE_USER_GALLERY_PHOTO_SUCCESS,
-    LOAD_MORE_USER_GALLERY_PHOTO_ERROR
+    LOAD_MORE_USER_GALLERY_PHOTO_ERROR,
+    DELETE_USER_GALLERY_PHOTO_REQUEST,
+    DELETE_USER_GALLERY_PHOTO_ERROR,
+    DELETE_USER_GALLERY_PHOTO_SUCCESS
 } from "../actions/userGalleryPhotos";
 import { VALIDATION_FAILURE_STATUS } from "../constants/consts";
 import { generateValidationErrorMsgArr } from "../helpers/funs";
@@ -21,6 +24,11 @@ const initialState = Map({
     photoStart: 0,
     photoLimit: 10,
     photoDataOver: false,
+
+    deleteLoading: false,
+    deleteId: null,
+    deleteParentId: null,
+    deleteError: [],
 });
 
 const actionMap = {
@@ -141,6 +149,52 @@ const actionMap = {
             loading: false,
             error: error,
         }));
+    },
+    [DELETE_USER_GALLERY_PHOTO_REQUEST]: (state, action) => {
+        return state.merge(Map({
+            deleteLoading: true,
+            deleteId: action.id,
+            deleteParentId: action.postId,
+            deleteError: [],
+        }));
+    },
+    [DELETE_USER_GALLERY_PHOTO_SUCCESS]: (state, action) => {
+        let prevDeleteId = state.get('deleteId');
+        let prevDeleteParentId = state.get('deleteParentId');
+        let prevGalleryPhotos = state.get('galleryPhotos');
+        let newState = { deleteLoading: false, deleteId: null, deleteParentId: null };
+        if (action.data && action.data.status && action.data.status === 1) {
+            let index = -1;
+            prevGalleryPhotos.map((o, i) => {
+                let subObj = o.images ? o.images : null;
+                if (subObj && subObj._id === prevDeleteId && subObj.postId === prevDeleteParentId) {
+                    index = i;
+                }
+            });
+            if (index >= 0) {
+                prevGalleryPhotos.splice(index, 1);
+                newState.galleryPhotos = prevGalleryPhotos;
+            }
+        } else {
+            let msg = action.data.message ? action.data.message : 'Something went wrong! please try again later.'
+            newState.deleteError = [msg];
+        }
+        return state.merge(Map(newState));
+    },
+    [DELETE_USER_GALLERY_PHOTO_ERROR]: (state, action) => {
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
+        }
+        var newState = {
+            deleteLoading: false,
+            deleteError: error,
+        }
+        return state.merge(Map(newState));
     },
 }
 

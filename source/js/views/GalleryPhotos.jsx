@@ -9,8 +9,11 @@ import Lightbox from 'react-images';
 import { SERVER_BASE_URL } from '../constants/consts';
 import { routeCodes } from '../constants/routes';
 import { Link } from "react-router-dom";
-import { getUserGalleryPhotoRequest, loadMoreUserGalleryPhotoRequest } from '../actions/userGalleryPhotos';
+import { getUserGalleryPhotoRequest, loadMoreUserGalleryPhotoRequest, deleteUserGalleryPhotoRequest } from '../actions/userGalleryPhotos';
 import NoRecordFound from '../components/Common/NoRecordFound';
+import SweetAlert from "react-bootstrap-sweetalert";
+import { showPageLoader, hidePageLoader } from '../actions/pageLoader';
+import { te, ts } from '../helpers/funs';
 
 class GalleryPhotos extends Component {
     constructor(props) {
@@ -19,6 +22,10 @@ class GalleryPhotos extends Component {
             lightBoxOpen: false,
             currentImage: 0,
             lightBoxImages: [],
+
+            showImageDeleteAlert: false,
+            typeOfImageToDelete: null,
+            deleteImageData: null,
         };
     }
 
@@ -28,16 +35,8 @@ class GalleryPhotos extends Component {
     }
 
     render() {
-        const { loading, galleryPhotos, error, photoLoadMoreLoading, photoDataOver, match } = this.props;
-        const { lightBoxOpen, currentImage, lightBoxImages } = this.state;
-        let galleryPhotosArr = [];
-        if (galleryPhotos && galleryPhotos.length > 0) {
-            galleryPhotos.map((galleryPhoto) => {
-                galleryPhoto.images.map((photo) => {
-                    galleryPhotosArr.push(photo);
-                });
-            });
-        }
+        const { loading, galleryPhotos, error, photoLoadMoreLoading, photoDataOver, match, loggedUserData } = this.props;
+        const { lightBoxOpen, currentImage, lightBoxImages, showImageDeleteAlert } = this.state;
         return (
             <div className="fitness-gallery-photos-wrapper">
                 <FitnessHeader />
@@ -64,14 +63,27 @@ class GalleryPhotos extends Component {
                         </div>
                     }
 
-                    {!loading && galleryPhotosArr && galleryPhotosArr.length > 0 &&
+                    {!loading && galleryPhotos && galleryPhotos.length > 0 &&
                         <div className="white-box">
                             <ul className="d-flex profile-list-ul">
-                                {galleryPhotosArr.map((photo, index) => (
-                                    <li key={index}>
-                                        <ProfilePhotoBlock image={photo.image} caption={photo.date} handleOpenLightbox={this.handleOpenLightbox} index={index} blockFor="gallery_photos" />
-                                    </li>
-                                ))}
+                                {galleryPhotos.map((o, index) => {
+                                    let photo = o.images ? o.images : null;
+                                    if (!photo) return;
+                                    return (
+                                        <li key={index}>
+                                            <ProfilePhotoBlock
+                                                imageData={photo}
+                                                image={photo.image}
+                                                caption={photo.date}
+                                                handleOpenLightbox={this.handleOpenLightbox}
+                                                index={index}
+                                                blockFor="gallery_photos"
+                                                handleShowDeleteImageAlert={this.handleShowDeleteImageAlert}
+                                                allowDelete={(loggedUserData && match.params && loggedUserData.username && match.params.username && loggedUserData.username === match.params.username)}
+                                            />
+                                        </li>
+                                    )
+                                })}
                             </ul>
                             {!photoLoadMoreLoading && !photoDataOver &&
                                 <button type="button" className="photo-load-more-btn gallery-photos" onClick={this.handleLoadMore}>
@@ -87,17 +99,30 @@ class GalleryPhotos extends Component {
                         </div>
                     }
 
-                    {!loading && (!galleryPhotosArr || galleryPhotosArr.length <= 0) && error && error.length <= 0 &&
+                    {!loading && (!galleryPhotos || galleryPhotos.length <= 0) && error && error.length <= 0 &&
                         <NoRecordFound />
                     }
 
-                    {!loading && (!galleryPhotosArr || galleryPhotosArr.length <= 0) && error && error.length > 0 &&
+                    {!loading && (!galleryPhotos || galleryPhotos.length <= 0) && error && error.length > 0 &&
                         <div className="server-error-wrapper">
                             <ErrorCloud />
                             <h4>Something went wrong! please try again.</h4>
                         </div>
                     }
                 </section>
+                <SweetAlert
+                    show={showImageDeleteAlert}
+                    danger
+                    showCancel
+                    confirmBtnText="Yes, delete it!"
+                    confirmBtnBsStyle="danger"
+                    cancelBtnBsStyle="default"
+                    title="Are you sure?"
+                    onConfirm={this.handleDeleteImage}
+                    onCancel={this.handleCancelDeleteImage}
+                >
+                    You will not be able to recover it!
+                </SweetAlert>
                 {lightBoxImages && lightBoxImages.length > 0 &&
                     <Lightbox
                         images={lightBoxImages}
@@ -112,22 +137,30 @@ class GalleryPhotos extends Component {
         );
     }
 
+    componentDidUpdate(prevProps, prevState) {
+        const { dispatch, deleteLoading, deleteError } = this.props;
+        if (!deleteLoading && prevProps.deleteLoading !== deleteLoading) {
+            this.handleCancelDeleteImage();
+            dispatch(hidePageLoader());
+            if (deleteError && deleteError.length > 0) {
+                te('Something went wrong! please try again later.');
+            } else {
+                ts('Progress photo deleted successfully.');
+            }
+        }
+    }
+
     handleOpenLightbox = (openFor = 'gallery_photos', startFrom = 0) => {
         const { galleryPhotos } = this.props;
         let lightBoxImages = [];
         let setState = false;
         if (openFor === 'gallery_photos' && galleryPhotos && galleryPhotos.length > 0) {
             setState = true;
-            let galleryPhotosArr = [];
-            if (galleryPhotos && galleryPhotos.length > 0) {
-                galleryPhotos.map((galleryPhoto) => {
-                    galleryPhoto.images.map((photo) => {
-                        galleryPhotosArr.push(photo);
-                    });
-                });
-            }
-            galleryPhotosArr.map((photo) => {
-                lightBoxImages.push({ src: SERVER_BASE_URL + photo.image });
+            galleryPhotos.map((o) => {
+                let photo = o.images ? o.images : null;
+                if (photo) {
+                    lightBoxImages.push({ src: SERVER_BASE_URL + photo.image });
+                }
             });
         }
         if (setState) {
@@ -171,10 +204,30 @@ class GalleryPhotos extends Component {
         let _photoStart = parseInt(photoStart) + parseInt(photoLimit);
         dispatch(loadMoreUserGalleryPhotoRequest(match.params.username, _photoStart, photoLimit, -1));
     }
+
+    handleShowDeleteImageAlert = (type, imageData) => {
+        this.setState({ showImageDeleteAlert: true, typeOfImageToDelete: type, deleteImageData: imageData });
+    }
+
+    handleCancelDeleteImage = () => {
+        this.setState({ showImageDeleteAlert: false, typeOfImageToDelete: null, deleteImageData: null });
+    }
+
+    handleDeleteImage = () => {
+        const { typeOfImageToDelete, deleteImageData } = this.state;
+        const { dispatch } = this.props;
+        if (typeOfImageToDelete === 'gallery_photos' && deleteImageData && deleteImageData._id) {
+            dispatch(showPageLoader());
+            dispatch(deleteUserGalleryPhotoRequest(deleteImageData._id, deleteImageData.postId));
+        } else {
+            te('Something went wrong! please try again later.');
+        }
+        this.handleCancelDeleteImage();
+    }
 }
 
 const mapStateToProps = (state) => {
-    const { userGalleryPhotos } = state;
+    const { userGalleryPhotos, user } = state;
     return {
         loading: userGalleryPhotos.get('loading'),
         galleryPhotos: userGalleryPhotos.get('galleryPhotos'),
@@ -183,6 +236,10 @@ const mapStateToProps = (state) => {
         photoStart: userGalleryPhotos.get('photoStart'),
         photoLimit: userGalleryPhotos.get('photoLimit'),
         photoDataOver: userGalleryPhotos.get('photoDataOver'),
+        deleteLoading: userGalleryPhotos.get('deleteLoading'),
+        deleteError: userGalleryPhotos.get('deleteError'),
+
+        loggedUserData: user.get('loggedUserData'),
     };
 }
 

@@ -6,11 +6,12 @@ import AddProgressPhotoModal from '../Common/AddProgressPhotoModal';
 import {
     addUserProgressPhotoRequest,
     getUserProgressPhotoRequest,
+    deleteUserProgressPhotoRequest,
 } from '../../actions/userProgressPhotos';
-import { ts } from '../../helpers/funs';
+import { ts, te } from '../../helpers/funs';
 import { FRIENDSHIP_STATUS_SELF, POST_TYPE_GALLERY, SERVER_BASE_URL } from '../../constants/consts';
 import AddGalleryPhotoModal from './AddGalleryPhotoModal';
-import { addUserGalleryPhotoRequest, getUserGalleryPhotoRequest } from '../../actions/userGalleryPhotos';
+import { addUserGalleryPhotoRequest, getUserGalleryPhotoRequest, deleteUserGalleryPhotoRequest } from '../../actions/userGalleryPhotos';
 import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
 import { FaCircleONotch } from "react-icons/lib/fa";
 import ErrorCloud from "svg/error-cloud.svg";
@@ -18,6 +19,7 @@ import Lightbox from 'react-images';
 import { Link } from "react-router-dom";
 import { routeCodes } from '../../constants/routes';
 import NoRecordFound from '../Common/NoRecordFound';
+import SweetAlert from "react-bootstrap-sweetalert";
 
 class ProfilePhotos extends Component {
     constructor(props) {
@@ -38,6 +40,10 @@ class ProfilePhotos extends Component {
             lightBoxOpen: false,
             currentImage: 0,
             lightBoxImages: [],
+
+            showImageDeleteAlert: false,
+            typeOfImageToDelete: null,
+            deleteImageData: null,
         }
     }
 
@@ -53,7 +59,7 @@ class ProfilePhotos extends Component {
                 initGalleryPhotosAction: true,
             });
             dispatch(getUserProgressPhotoRequest(username));
-            dispatch(getUserGalleryPhotoRequest(username));
+            dispatch(getUserGalleryPhotoRequest(username, 0, 10));
         } else {
             this.setState({
                 doLoadProgressPhotos: true,
@@ -69,6 +75,8 @@ class ProfilePhotos extends Component {
             progressPhotoError,
             galleryPhotoloading,
             galleryPhotoError,
+            progressPhotoDataOver,
+            galleryPhotoDataOver,
         } = this.props;
         const {
             progressPhotos,
@@ -80,15 +88,8 @@ class ProfilePhotos extends Component {
             currentImage,
             lightBoxImages,
             saveProgressPhotoActionInit,
+            showImageDeleteAlert
         } = this.state;
-        let galleryPhotosArr = [];
-        if (galleryPhotos && galleryPhotos.length > 0) {
-            galleryPhotos.map((galleryPhoto) => {
-                galleryPhoto.images.map((photo) => {
-                    galleryPhotosArr.push(photo);
-                });
-            });
-        }
         return (
             <div className="profilePhotosComponentWrapper">
                 <div className="white-box space-btm-20">
@@ -110,7 +111,7 @@ class ProfilePhotos extends Component {
                             </div>
                         }
                         {!progressPhotoloading && (!progressPhotos || progressPhotos.length <= 0) && progressPhotoError && progressPhotoError.length <= 0 &&
-                            <NoRecordFound />
+                            <NoRecordFound title="Please add some progress photos" />
                         }
                         {!progressPhotoloading && (!progressPhotos || progressPhotos.length <= 0) && progressPhotoError && progressPhotoError.length > 0 &&
                             <div className="server-error-wrapper">
@@ -122,12 +123,21 @@ class ProfilePhotos extends Component {
                             <ul className="d-flex profile-list-ul">
                                 {progressPhotos.map((photo, index) => (
                                     <li key={index}>
-                                        <ProfilePhotoBlock image={photo.image} caption={photo.date} handleOpenLightbox={this.handleOpenLightbox} index={index} blockFor="progress_photos" />
+                                        <ProfilePhotoBlock
+                                            imageData={photo}
+                                            image={photo.image}
+                                            caption={photo.date}
+                                            handleOpenLightbox={this.handleOpenLightbox}
+                                            index={index}
+                                            blockFor="progress_photos"
+                                            handleShowDeleteImageAlert={this.handleShowDeleteImageAlert}
+                                            allowDelete={(profile && profile.friendshipStatus && profile.friendshipStatus === FRIENDSHIP_STATUS_SELF)}
+                                        />
                                     </li>
                                 ))}
                             </ul>
                         }
-                        {profile && profile.username && !progressPhotoloading && progressPhotos && progressPhotos.length > 0 &&
+                        {profile && profile.username && !progressPhotoloading && progressPhotos && progressPhotos.length > 0 && (!progressPhotoDataOver) &&
                             <Link to={`${routeCodes.PROGRESS_PHOTOS}/${profile.username}`} className="fithub-photos-view-all-link">View All</Link>
                         }
                     </div>
@@ -152,7 +162,7 @@ class ProfilePhotos extends Component {
                             </div>
                         }
                         {!galleryPhotoloading && (!galleryPhotos || galleryPhotos.length <= 0) && galleryPhotoError && galleryPhotoError.length <= 0 &&
-                            <NoRecordFound />
+                            <NoRecordFound title="Please add some gallery photos" />
                         }
                         {!galleryPhotoloading && (!galleryPhotos || galleryPhotos.length <= 0) && galleryPhotoError && galleryPhotoError.length > 0 &&
                             <div className="server-error-wrapper">
@@ -162,16 +172,27 @@ class ProfilePhotos extends Component {
                         }
                         {!galleryPhotoloading && galleryPhotos && galleryPhotos.length > 0 &&
                             <ul className="d-flex profile-list-ul">
-                                {galleryPhotosArr.map((photo, i) => {
+                                {galleryPhotos.map((o, i) => {
+                                    let photo = o.images ? o.images : null;
+                                    if (!photo) return;
                                     return (
                                         <li key={i}>
-                                            <ProfilePhotoBlock image={photo.image} caption={photo.logDate} handleOpenLightbox={this.handleOpenLightbox} index={i} blockFor="gallery_photos" />
+                                            <ProfilePhotoBlock
+                                                imageData={photo}
+                                                image={photo.image}
+                                                caption={photo.logDate}
+                                                handleOpenLightbox={this.handleOpenLightbox}
+                                                index={i}
+                                                blockFor="gallery_photos"
+                                                handleShowDeleteImageAlert={this.handleShowDeleteImageAlert}
+                                                allowDelete={(profile && profile.friendshipStatus && profile.friendshipStatus === FRIENDSHIP_STATUS_SELF)}
+                                            />
                                         </li>
                                     )
                                 })}
                             </ul>
                         }
-                        {!galleryPhotoloading && galleryPhotos && galleryPhotos.length > 0 &&
+                        {!galleryPhotoloading && galleryPhotos && galleryPhotos.length > 0 && (!galleryPhotoDataOver) &&
                             <Link to={`${routeCodes.GALLERY_PHOTOS}/${profile.username}`} className="fithub-photos-view-all-link">View All</Link>
                         }
                     </div>
@@ -191,6 +212,20 @@ class ProfilePhotos extends Component {
                     doResetState={forceResetGalleryModalState}
                     resetState={this.handleForceResetGalleryModalState}
                 />
+
+                <SweetAlert
+                    show={showImageDeleteAlert}
+                    danger
+                    showCancel
+                    confirmBtnText="Yes, delete it!"
+                    confirmBtnBsStyle="danger"
+                    cancelBtnBsStyle="default"
+                    title="Are you sure?"
+                    onConfirm={this.handleDeleteImage}
+                    onCancel={this.handleCancelDeleteImage}
+                >
+                    You will not be able to recover it!
+                </SweetAlert>
 
                 {lightBoxImages && lightBoxImages.length > 0 &&
                     <Lightbox
@@ -247,6 +282,10 @@ class ProfilePhotos extends Component {
             setForceUpdateChildComponents,
             galleryPhotoloading,
             galleryPhotos,
+            progressDeleteLoading,
+            progressDeleteError,
+            galleryDeleteLoading,
+            galleryDeleteError,
         } = this.props;
         const progressPhotosState = this.state.progressPhotos;
         const galleryPhotosState = this.state.galleryPhotos;
@@ -286,6 +325,34 @@ class ProfilePhotos extends Component {
                 initGalleryPhotosAction: true,
             });
             dispatch(getUserGalleryPhotoRequest(username, 0, 10));
+        }
+        if (!progressDeleteLoading && prevProps.progressDeleteLoading !== progressDeleteLoading) {
+            this.handleCancelDeleteImage();
+            dispatch(hidePageLoader());
+            if (progressDeleteError && progressDeleteError.length > 0) {
+                te('Something went wrong! please try again later.');
+            } else {
+                ts('Progress photo deleted successfully.');
+            }
+            if (profile && Object.keys(profile).length > 0) {
+                var username = profile.username;
+                this.setState({ initProgressPhotosAction: true });
+                dispatch(getUserProgressPhotoRequest(username));
+            }
+        }
+        if (!galleryDeleteLoading && prevProps.galleryDeleteLoading !== galleryDeleteLoading) {
+            this.handleCancelDeleteImage();
+            dispatch(hidePageLoader());
+            if (galleryDeleteError && galleryDeleteError.length > 0) {
+                te('Something went wrong! please try again later.');
+            } else {
+                ts('Gallery photo deleted successfully.');
+            }
+            if (profile && Object.keys(profile).length > 0) {
+                var username = profile.username;
+                this.setState({ initGalleryPhotosAction: true });
+                dispatch(getUserGalleryPhotoRequest(username, 0, 10));
+            }
         }
         if (forceUpdateChildComponents) {
             var username = profile.username;
@@ -382,9 +449,10 @@ class ProfilePhotos extends Component {
         } else if (openFor === 'gallery_photos' && galleryPhotos && galleryPhotos.length > 0) {
             setState = true;
             galleryPhotos.map((galleryPhoto) => {
-                return galleryPhoto.images.map((photo) => {
+                let photo = galleryPhoto.images
+                if (photo) {
                     lightBoxImages.push({ src: SERVER_BASE_URL + photo.image });
-                })
+                }
             })
         }
         if (setState) {
@@ -422,6 +490,29 @@ class ProfilePhotos extends Component {
         }
         this.setState({ currentImage: newCurrentImage });
     }
+
+    handleShowDeleteImageAlert = (type, imageData) => {
+        this.setState({ showImageDeleteAlert: true, typeOfImageToDelete: type, deleteImageData: imageData });
+    }
+
+    handleCancelDeleteImage = () => {
+        this.setState({ showImageDeleteAlert: false, typeOfImageToDelete: null, deleteImageData: null });
+    }
+
+    handleDeleteImage = () => {
+        const { typeOfImageToDelete, deleteImageData } = this.state;
+        const { dispatch } = this.props;
+        if (typeOfImageToDelete === 'progress_photos' && deleteImageData && deleteImageData._id) {
+            dispatch(showPageLoader());
+            dispatch(deleteUserProgressPhotoRequest(deleteImageData._id));
+        } else if (typeOfImageToDelete === 'gallery_photos' && deleteImageData && deleteImageData._id) {
+            dispatch(showPageLoader());
+            dispatch(deleteUserGalleryPhotoRequest(deleteImageData._id, deleteImageData.postId));
+        } else {
+            te('Something went wrong! please try again later.');
+        }
+        this.handleCancelDeleteImage();
+    }
     //#endregion
 }
 
@@ -431,9 +522,17 @@ const mapStateToProps = (state) => {
         progressPhotoloading: userProgressPhotos.get('loading'),
         progressPhotoError: userProgressPhotos.get('error'),
         progressPhotos: userProgressPhotos.get('progressPhotos'),
+        progressDeleteLoading: userProgressPhotos.get('deleteLoading'),
+        progressDeleteError: userProgressPhotos.get('deleteError'),
+        progressPhotoDataOver: userProgressPhotos.get('photoDataOver'),
+
         galleryPhotoloading: userGalleryPhotos.get('loading'),
         galleryPhotoError: userGalleryPhotos.get('error'),
         galleryPhotos: userGalleryPhotos.get('galleryPhotos'),
+        galleryDeleteLoading: userGalleryPhotos.get('deleteLoading'),
+        galleryDeleteError: userGalleryPhotos.get('deleteError'),
+        galleryPhotoDataOver: userGalleryPhotos.get('photoDataOver'),
+
     }
 }
 

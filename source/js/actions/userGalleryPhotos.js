@@ -10,6 +10,10 @@ export const ADD_USER_GALLERY_PHOTO_REQUEST = 'ADD_USER_GALLERY_PHOTO_REQUEST';
 export const ADD_USER_GALLERY_PHOTO_SUCCESS = 'ADD_USER_GALLERY_PHOTO_SUCCESS';
 export const ADD_USER_GALLERY_PHOTO_ERROR = 'ADD_USER_GALLERY_PHOTO_ERROR';
 
+export const DELETE_USER_GALLERY_PHOTO_REQUEST = 'DELETE_USER_GALLERY_PHOTO_REQUEST';
+export const DELETE_USER_GALLERY_PHOTO_SUCCESS = 'DELETE_USER_GALLERY_PHOTO_SUCCESS';
+export const DELETE_USER_GALLERY_PHOTO_ERROR = 'DELETE_USER_GALLERY_PHOTO_ERROR';
+
 export function getUserGalleryPhotoRequest(username, start = 0, offset = 5, sort = -1) {
     return {
         type: GET_USER_GALLERY_PHOTO_REQUEST,
@@ -75,6 +79,28 @@ export function addUserGalleryPhotoSuccess(data) {
 export function addUserGalleryPhotoError(error) {
     return {
         type: ADD_USER_GALLERY_PHOTO_ERROR,
+        error,
+    }
+}
+
+export function deleteUserGalleryPhotoRequest(id, postId) {
+    return {
+        type: DELETE_USER_GALLERY_PHOTO_REQUEST,
+        id,
+        postId,
+    }
+}
+
+export function deleteUserGalleryPhotoSuccess(data) {
+    return {
+        type: DELETE_USER_GALLERY_PHOTO_SUCCESS,
+        data,
+    }
+}
+
+export function deleteUserGalleryPhotoError(error) {
+    return {
+        type: DELETE_USER_GALLERY_PHOTO_ERROR,
         error,
     }
 }

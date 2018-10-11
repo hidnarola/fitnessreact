@@ -18,6 +18,7 @@ import {
 } from "../actions/dashboard";
 import { VALIDATION_FAILURE_STATUS } from "../constants/consts";
 import { generateValidationErrorMsgArr } from "../helpers/funs";
+import moment from "moment";
 
 const initialState = Map({
     loading: false,
@@ -59,10 +60,10 @@ const actionMap = {
             newState.workouts = action.data.data.workouts;
             newState.userWidgets = action.data.data.userWidgets;
             newState.profileComplete = action.data.data.profileComplete;
-            newState.badges = action.data.data.badges;
+            newState.badges = transformBadgeData(action.data.data.badges);
             newState.muscle = prepareMuscleData(action.data.data.muscle);
             newState.progressPhoto = action.data.data.progressPhoto;
-            newState.bodyFat = action.data.data.bodyFat;
+            newState.bodyFat = transformBodyFatData(action.data.data.bodyFat);
             newState.activityFeed = action.data.data.activityFeed;
         } else {
             let msg = (newState.data.message) ? newState.data.message : 'Something went wrong! please try again later';
@@ -109,7 +110,7 @@ const actionMap = {
         let newState = { changeBodyFatLoading: false };
         if (action.data && action.data.status && action.data.status === 1) {
             newState.userWidgets = action.data.data.widgets;
-            newState.bodyFat = action.data.data.bodyFat;
+            newState.bodyFat = transformBodyFatData(action.data.data.bodyFat);
         } else {
             let msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later';
             newState.changeBodyFatError = [msg];
@@ -167,6 +168,11 @@ const actionMap = {
             if (k === action.data.data.bodypart) {
                 if (action.data.data.muscle) {
                     _o = action.data.data.muscle;
+                    if (_o.graphData) {
+                        _o.graphData.map((o) => {
+                            o.date = moment(o.date).local().format('DD/MM/YYYY');
+                        });
+                    }
                     _o.loading = false;
                     _o.error = [];
                 } else {
@@ -219,11 +225,38 @@ function prepareMuscleData(data) {
     let _data = {};
     Object.keys(data).map((k, i) => {
         let _o = Object.assign({}, data[k]);
+        if (_o.graphData) {
+            _o.graphData.map((o) => {
+                o.date = moment(o.date).local().format('DD/MM/YYYY');
+            });
+        }
         _o.loading = false;
         _o.error = [];
         _data[k] = _o;
     });
     return _data;
+}
+
+function transformBodyFatData(data) {
+    let newData = [];
+    if (data) {
+        data.map((o) => {
+            o.date = moment(o.date).local().format('DD/MM/YYYY');
+            newData.push(o);
+        });
+    }
+    return newData;
+}
+
+function transformBadgeData(data) {
+    let newData = [];
+    if (data) {
+        data.map((o) => {
+            o.createdAt = moment(o.createdAt).local().toString();
+            newData.push(o);
+        });
+    }
+    return newData;
 }
 
 export default function reducer(state = initialState, action = {}) {

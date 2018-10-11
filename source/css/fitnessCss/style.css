@@ -1268,6 +1268,7 @@ flex-direction:row; display:-webkit-box; display:-webkit-flex; display:-ms-flex;
 .resize-vertical{resize: vertical;}
 .min-height-80{min-height: 80px;}
 .min-height-373{min-height: 373px; position: relative;}
+.min-height-339 { min-height: 339px; position: relative; }
 
 .has-error .Select-control{border-color: #a94442;-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);}
 .has-error .Select-control span.Select-arrow {border-color: #a94442 transparent transparent;}
@@ -2363,3 +2364,32 @@ body.with_login .app-wrapper-content{padding:0;}
 .my-img-has-error { border: 1px solid #a94442 !important; }
 .my-img-help-block-err {text-align: left;display: block;margin-top: 5px;margin-bottom: 3px;color: #a94442;font-weight: 400;}
 .rbc-toolbar button { text-transform: capitalize; }
+.no-padding .app-wrapper-content {padding: 0;}
+.timeline-infinite-scroll .posttype-head>h4 big {font-size: 13px;display: block;line-height: 10px;margin-bottom: 5px;}
+.timeline-infinite-scroll .posttype-head>h4 big a.post_added {color: #999;margin-left: 5px;}
+
+.chat-head {position: relative;padding-right: 30px;    min-height: 50px;}
+.chat-head h3 {width: 100%;}
+.chat-head h3 small {word-break: break-all;}
+.chat-head>a {position: absolute;right: -20px;top: 0;}
+.profile-list {overflow: visible;}
+button.close_btn {padding: 0;border-radius: 80%;border: 0;height: 20px;background: #fff;color: #ff3371;position: absolute;right: -9px;top: -10px;z-index: 9;display: none;}
+.profile-list span {overflow: visible;position: relative;}
+.profile-list span:hover button {display: block;}
+
+.change-password-form .change-password-fields-wrapper { position: relative; }
+.change-password-form .change-password-fields-wrapper .pwd-info-wrapper { display: inline-block; position: absolute; right: -20px; top: 28px; padding: 0px; margin: 0px; }
+.change-password-form .change-password-fields-wrapper .pwd-info-wrapper { color: #4d31b6; cursor: pointer; }
+.change-password-form .pwd-info-tt-wrapper{max-width: 250px;font-size: 12px; font-weight: 500;}
+.change-password-form .pwd-info-tt-wrapper p { color: #ff3e3e; }
+.change-password-form .pwd-info-tt-wrapper p i { font-size: 12px; }
+.change-password-form .pwd-info-tt-wrapper ul { text-decoration: none; margin: 0 0 10px 20px; }
+
+/*
+.sets-advance-view-block {position: relative;padding-left: 45px;padding-right: 30px;}
+.sets-advance-view-block > label {position: absolute;left: 3px;top: 9px;margin: 0;}
+.sets-advance-view-block > div {float: left;width: 25%;position: relative;padding: 0 5px;}
+.sets-advance-view-block > div input {width: 100%;}
+.sets-advance-view-block > div select {margin: 0;position: absolute;right: 5px;top: 0;}
+.sets-advance-view-block button.sets-advance-view-cBtn {position: absolute;right: 0;top: 25px;}
+.sets-advance-view-block:After {content: " ";display: block;clear: both;}*/

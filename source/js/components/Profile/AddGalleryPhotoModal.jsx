@@ -55,6 +55,7 @@ class AddGalleryPhotoModal extends Component {
         const {
             show,
         } = this.props;
+        let dropzoneRef;
         return (
             <div className="add-galary-photo-modal-wrapper">
                 <Modal show={show} bsSize="large" className="gallery-popup">
@@ -75,11 +76,11 @@ class AddGalleryPhotoModal extends Component {
                     }
                     <div className="progress-popup-body d-flex">
                         <div className="gallery-popup-body-l popup_upload">
-                            <span className={cns({ 'my-img-has-error': (noImageError) })}>
+                            <span className={cns('cursor-pointer', { 'my-img-has-error': (noImageError) })} onClick={() => { (!images || images.length <= 0) ? dropzoneRef.open() : null }}>
                                 {images && images.length > 0 &&
                                     <div>
                                         <div className="">
-                                            <button type="button" className="btn btn-danger no-margin" onClick={() => this.handleImageDelete(0)}>Delete</button>
+                                            <button type="button" className="btn btn-danger no-margin" onClick={(e) => { e.stopPropagation(); this.handleImageDelete(0) }}>Delete</button>
                                         </div>
                                         <img src={images[0].preview} alt="" />
                                     </div>
@@ -135,6 +136,7 @@ class AddGalleryPhotoModal extends Component {
                                         this.handleImagesSelection(allImages);
                                     }}
                                     multiple={true}
+                                    ref={(node) => { dropzoneRef = node; }}
                                 >
                                     <span>
                                         <i className="icon-add_a_photo"></i>

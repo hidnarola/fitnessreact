@@ -28,8 +28,19 @@ function postUserProgressPhoto(formData) {
     return postFormData(requestUrl, formData, headers);
 }
 
+function deleteUserProgressPhoto(id) {
+    let headers = extraUserHeaders();
+    var options = {
+        method: 'DELETE',
+        headers: headers,
+    }
+
+    return fetchResource(requestUrl + '/' + id, options);
+}
+
 export default {
     getUserProgressPhotos,
     getUserLatestProgressPhotos,
     postUserProgressPhoto,
+    deleteUserProgressPhoto,
 }

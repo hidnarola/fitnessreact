@@ -12,7 +12,10 @@ import {
     GET_USER_LATEST_PROGRESS_PHOTO_REQUEST,
     LOAD_MORE_USER_PROGRESS_PHOTO_REQUEST,
     loadMoreUserProgressPhotoSuccess,
-    loadMoreUserProgressPhotoError
+    loadMoreUserProgressPhotoError,
+    deleteUserProgressPhotoSuccess,
+    deleteUserProgressPhotoError,
+    DELETE_USER_PROGRESS_PHOTO_REQUEST
 } from '../actions/userProgressPhotos';
 
 function fetchUserProgressPhotosData() {
@@ -70,11 +73,24 @@ function addUserProgressPhotoData() {
     }
 }
 
+function deleteUserProgressPhotoData() {
+    return function* (action) {
+        try {
+            let id = action.id;
+            const data = yield call(() => api.deleteUserProgressPhoto(id));
+            yield put(deleteUserProgressPhotoSuccess(data));
+        } catch (error) {
+            yield put(deleteUserProgressPhotoError(error));
+        }
+    }
+}
+
 export function* watchUserProgressPhotosData() {
     yield takeLatest(GET_USER_PROGRESS_PHOTO_REQUEST, fetchUserProgressPhotosData());
     yield takeLatest(LOAD_MORE_USER_PROGRESS_PHOTO_REQUEST, loadMoreUserProgressPhotosData());
     yield takeLatest(GET_USER_LATEST_PROGRESS_PHOTO_REQUEST, fetchUserLatestProgressPhotosData());
     yield takeLatest(ADD_USER_PROGRESS_PHOTO_REQUEST, addUserProgressPhotoData());
+    yield takeLatest(DELETE_USER_PROGRESS_PHOTO_REQUEST, deleteUserProgressPhotoData());
 }
 
 export default [

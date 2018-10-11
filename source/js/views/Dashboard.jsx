@@ -116,8 +116,8 @@ class Dashboard extends Component {
                                 <div className="row">
                                     {userWidgets && typeof userWidgets[WIDGET_TODAYS_WORKOUT] !== 'undefined' && userWidgets[WIDGET_TODAYS_WORKOUT] === 1 &&
                                         <div className={cns(
-                                            { 'col-md-12': (userWidgets && typeof userWidgets[WIDGET_BODY_FAT] === 'undefined') || !userWidgets[WIDGET_BODY_FAT] },
-                                            { 'col-md-6': (!userWidgets || typeof userWidgets[WIDGET_BODY_FAT] !== 'undefined') && userWidgets[WIDGET_BODY_FAT] }
+                                            { 'col-md-12': (userWidgets && typeof userWidgets[WIDGET_PROGRESS_PHOTO] === 'undefined') || !userWidgets[WIDGET_PROGRESS_PHOTO] },
+                                            { 'col-md-6': (!userWidgets || typeof userWidgets[WIDGET_PROGRESS_PHOTO] !== 'undefined') && userWidgets[WIDGET_PROGRESS_PHOTO] }
                                         )}>
                                             <Workouts />
                                         </div>

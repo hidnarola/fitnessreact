@@ -80,6 +80,7 @@ class StatsIndividualCard extends Component {
                             Object.keys(o.fields).map((key, j) => {
                                 let field = o.fields[key];
                                 if (typeof field.total !== 'undefined' && field.total > 0) {
+                                    console.log('field => ', field);
                                     return (
                                         <button
                                             key={j}

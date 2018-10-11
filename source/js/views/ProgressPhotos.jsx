@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import FitnessHeader from '../components/global/FitnessHeader';
 import FitnessNav from '../components/global/FitnessNav';
-import { getUserProgressPhotoRequest, loadMoreUserProgressPhotoRequest } from '../actions/userProgressPhotos';
+import { getUserProgressPhotoRequest, loadMoreUserProgressPhotoRequest, deleteUserProgressPhotoRequest } from '../actions/userProgressPhotos';
 import { FaCircleONotch } from "react-icons/lib/fa";
 import ErrorCloud from "svg/error-cloud.svg";
 import ProfilePhotoBlock from '../components/Profile/ProfilePhotoBlock';
@@ -11,6 +11,9 @@ import { SERVER_BASE_URL } from '../constants/consts';
 import { routeCodes } from '../constants/routes';
 import { Link } from "react-router-dom";
 import NoRecordFound from '../components/Common/NoRecordFound';
+import SweetAlert from "react-bootstrap-sweetalert";
+import { showPageLoader, hidePageLoader } from '../actions/pageLoader';
+import { te, ts } from '../helpers/funs';
 
 class ProgressPhotos extends Component {
     constructor(props) {
@@ -19,6 +22,10 @@ class ProgressPhotos extends Component {
             lightBoxOpen: false,
             currentImage: 0,
             lightBoxImages: [],
+
+            showImageDeleteAlert: false,
+            typeOfImageToDelete: null,
+            deleteImageData: null,
         };
     }
 
@@ -28,8 +35,8 @@ class ProgressPhotos extends Component {
     }
 
     render() {
-        const { loading, progressPhotos, error, photoLoadMoreLoading, photoDataOver, match } = this.props;
-        const { lightBoxOpen, currentImage, lightBoxImages } = this.state;
+        const { loading, progressPhotos, error, photoLoadMoreLoading, photoDataOver, match, loggedUserData } = this.props;
+        const { lightBoxOpen, currentImage, lightBoxImages, showImageDeleteAlert } = this.state;
         return (
             <div className="fitness-progress-photos-wrapper">
                 <FitnessHeader />
@@ -61,7 +68,16 @@ class ProgressPhotos extends Component {
                             <ul className="d-flex profile-list-ul">
                                 {progressPhotos.map((photo, index) => (
                                     <li key={index}>
-                                        <ProfilePhotoBlock image={photo.image} caption={photo.date} handleOpenLightbox={this.handleOpenLightbox} index={index} blockFor="progress_photos" />
+                                        <ProfilePhotoBlock
+                                            imageData={photo}
+                                            image={photo.image}
+                                            caption={photo.date}
+                                            handleOpenLightbox={this.handleOpenLightbox}
+                                            index={index}
+                                            blockFor="progress_photos"
+                                            handleShowDeleteImageAlert={this.handleShowDeleteImageAlert}
+                                            allowDelete={(loggedUserData && match.params && loggedUserData.username && match.params.username && loggedUserData.username === match.params.username)}
+                                        />
                                     </li>
                                 ))}
                             </ul>
@@ -90,6 +106,19 @@ class ProgressPhotos extends Component {
                         </div>
                     }
                 </section>
+                <SweetAlert
+                    show={showImageDeleteAlert}
+                    danger
+                    showCancel
+                    confirmBtnText="Yes, delete it!"
+                    confirmBtnBsStyle="danger"
+                    cancelBtnBsStyle="default"
+                    title="Are you sure?"
+                    onConfirm={this.handleDeleteImage}
+                    onCancel={this.handleCancelDeleteImage}
+                >
+                    You will not be able to recover it!
+                </SweetAlert>
                 {lightBoxImages && lightBoxImages.length > 0 &&
                     <Lightbox
                         images={lightBoxImages}
@@ -102,6 +131,19 @@ class ProgressPhotos extends Component {
                 }
             </div>
         );
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        const { dispatch, deleteLoading, deleteError } = this.props;
+        if (!deleteLoading && prevProps.deleteLoading !== deleteLoading) {
+            this.handleCancelDeleteImage();
+            dispatch(hidePageLoader());
+            if (deleteError && deleteError.length > 0) {
+                te('Something went wrong! please try again later.');
+            } else {
+                ts('Progress photo deleted successfully.');
+            }
+        }
     }
 
     handleOpenLightbox = (openFor = 'progress_photos', startFrom = 0) => {
@@ -155,10 +197,30 @@ class ProgressPhotos extends Component {
         let _photoStart = parseInt(photoStart) + parseInt(photoLimit);
         dispatch(loadMoreUserProgressPhotoRequest(match.params.username, _photoStart, photoLimit, -1));
     }
+
+    handleShowDeleteImageAlert = (type, imageData) => {
+        this.setState({ showImageDeleteAlert: true, typeOfImageToDelete: type, deleteImageData: imageData });
+    }
+
+    handleCancelDeleteImage = () => {
+        this.setState({ showImageDeleteAlert: false, typeOfImageToDelete: null, deleteImageData: null });
+    }
+
+    handleDeleteImage = () => {
+        const { typeOfImageToDelete, deleteImageData } = this.state;
+        const { dispatch } = this.props;
+        if (typeOfImageToDelete === 'progress_photos' && deleteImageData && deleteImageData._id) {
+            dispatch(showPageLoader());
+            dispatch(deleteUserProgressPhotoRequest(deleteImageData._id));
+        } else {
+            te('Something went wrong! please try again later.');
+        }
+        this.handleCancelDeleteImage();
+    }
 }
 
 const mapStateToProps = (state) => {
-    const { userProgressPhotos } = state;
+    const { userProgressPhotos, user } = state;
     return {
         loading: userProgressPhotos.get('loading'),
         progressPhotos: userProgressPhotos.get('progressPhotos'),
@@ -167,6 +229,10 @@ const mapStateToProps = (state) => {
         photoStart: userProgressPhotos.get('photoStart'),
         photoLimit: userProgressPhotos.get('photoLimit'),
         photoDataOver: userProgressPhotos.get('photoDataOver'),
+        deleteLoading: userProgressPhotos.get('deleteLoading'),
+        deleteError: userProgressPhotos.get('deleteError'),
+
+        loggedUserData: user.get('loggedUserData'),
     };
 }
 

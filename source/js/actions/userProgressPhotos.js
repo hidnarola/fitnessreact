@@ -14,6 +14,10 @@ export const ADD_USER_PROGRESS_PHOTO_REQUEST = 'ADD_USER_PROGRESS_PHOTO_REQUEST'
 export const ADD_USER_PROGRESS_PHOTO_SUCCESS = 'ADD_USER_PROGRESS_PHOTO_SUCCESS';
 export const ADD_USER_PROGRESS_PHOTO_ERROR = 'ADD_USER_PROGRESS_PHOTO_ERROR';
 
+export const DELETE_USER_PROGRESS_PHOTO_REQUEST = 'DELETE_USER_PROGRESS_PHOTO_REQUEST';
+export const DELETE_USER_PROGRESS_PHOTO_SUCCESS = 'DELETE_USER_PROGRESS_PHOTO_SUCCESS';
+export const DELETE_USER_PROGRESS_PHOTO_ERROR = 'DELETE_USER_PROGRESS_PHOTO_ERROR';
+
 export function getUserProgressPhotoRequest(username, start = 0, noOfPhotos = 5, sort = -1) {
     return {
         type: GET_USER_PROGRESS_PHOTO_REQUEST,
@@ -101,6 +105,27 @@ export function addUserProgressPhotoSuccess(data) {
 export function addUserProgressPhotoError(error) {
     return {
         type: ADD_USER_PROGRESS_PHOTO_ERROR,
+        error,
+    }
+}
+
+export function deleteUserProgressPhotoRequest(id) {
+    return {
+        type: DELETE_USER_PROGRESS_PHOTO_REQUEST,
+        id,
+    }
+}
+
+export function deleteUserProgressPhotoSuccess(data) {
+    return {
+        type: DELETE_USER_PROGRESS_PHOTO_SUCCESS,
+        data,
+    }
+}
+
+export function deleteUserProgressPhotoError(error) {
+    return {
+        type: DELETE_USER_PROGRESS_PHOTO_ERROR,
         error,
     }
 }

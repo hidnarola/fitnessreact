@@ -34,7 +34,7 @@ class WidgetMuscleCardGraph extends Component {
         }
         return (
             <div className={cns({ [bodyWrapperClass]: (bodyWrapperClass) ? true : false })}>
-                <div className={cns('white-box space-btm-30 p-relative widget-graph-card-wrapper')}>
+                <div className={cns('white-box space-btm-30 p-relative widget-graph-card-wrapper  min-height-339')}>
                     <div className="whitebox-head d-flex">
                         <h3 className="title-h3">{capitalizeFirstLetter(cardKey.replace(/([a-z])([A-Z])/g, '$1 $2').replace('_', ' '))}</h3>
                         {((type === WIDGETS_TYPE_TIMELINE && profile && profile.friendshipStatus && profile.friendshipStatus === FRIENDSHIP_STATUS_SELF) || (type === WIDGETS_TYPE_DASHBOARD)) &&

@@ -132,8 +132,8 @@ class Post extends Component {
                                             <NavLink to={`${routeCodes.PROFILE}/${createdBy.username}`}>
                                                 {`${createdBy.firstName} ${(createdBy.lastName) ? createdBy.lastName : ''}`}
                                             </NavLink>
+                                        <Link to={`${routeCodes.POST}/${match.params.username}/${post._id}`} className="pull-right post_added">{(post.tag_line) ? post.tag_line : ''}</Link>
                                         </big>
-                                        <small><Link to={`${routeCodes.POST}/${match.params.username}/${post._id}`} className="pull-right">{(post.tag_line) ? post.tag_line : ''}</Link></small>
                                         <p className="">
                                             {postCreatedAt}
                                             {post.privacy == ACCESS_LEVEL_PUBLIC && <FaGlobe />}

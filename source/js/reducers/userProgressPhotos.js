@@ -11,7 +11,10 @@ import {
     GET_USER_LATEST_PROGRESS_PHOTO_ERROR,
     LOAD_MORE_USER_PROGRESS_PHOTO_REQUEST,
     LOAD_MORE_USER_PROGRESS_PHOTO_SUCCESS,
-    LOAD_MORE_USER_PROGRESS_PHOTO_ERROR
+    LOAD_MORE_USER_PROGRESS_PHOTO_ERROR,
+    DELETE_USER_PROGRESS_PHOTO_REQUEST,
+    DELETE_USER_PROGRESS_PHOTO_SUCCESS,
+    DELETE_USER_PROGRESS_PHOTO_ERROR
 } from "../actions/userProgressPhotos";
 import { VALIDATION_FAILURE_STATUS } from "../constants/consts";
 import { generateValidationErrorMsgArr } from "../helpers/funs";
@@ -24,6 +27,10 @@ const initialState = Map({
     photoStart: 0,
     photoLimit: 10,
     photoDataOver: false,
+
+    deleteLoading: false,
+    deleteId: null,
+    deleteError: [],
 });
 
 const actionMap = {
@@ -172,6 +179,50 @@ const actionMap = {
         var newState = {
             loading: false,
             error: error,
+        }
+        return state.merge(Map(newState));
+    },
+    [DELETE_USER_PROGRESS_PHOTO_REQUEST]: (state, action) => {
+        return state.merge(Map({
+            deleteLoading: true,
+            deleteId: action.id,
+            deleteError: [],
+        }));
+    },
+    [DELETE_USER_PROGRESS_PHOTO_SUCCESS]: (state, action) => {
+        let prevDeleteId = state.get('deleteId');
+        let prevProgressPhotos = state.get('progressPhotos');
+        let newState = { deleteLoading: false, deleteId: null };
+        if (action.data && action.data.status && action.data.status === 1) {
+            let index = -1;
+            prevProgressPhotos.map((o, i) => {
+                if (o._id === prevDeleteId) {
+                    index = i;
+                }
+            });
+            if (index >= 0) {
+                prevProgressPhotos.splice(index, 1);
+                newState.progressPhotos = prevProgressPhotos;
+            }
+        } else {
+            let msg = action.data.message ? action.data.message : 'Something went wrong! please try again later.'
+            newState.deleteError = [msg];
+        }
+        return state.merge(Map(newState));
+    },
+    [DELETE_USER_PROGRESS_PHOTO_ERROR]: (state, action) => {
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
+        }
+        var newState = {
+            deleteLoading: false,
+            deleteId: null,
+            deleteError: error,
         }
         return state.merge(Map(newState));
     },

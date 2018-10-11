@@ -60,7 +60,7 @@ class StatsPage extends Component {
                         </div>
                         {dateRange &&
                             <div className="body-head-r">
-                                <a href="javascript:void(0)" onClick={() => this.setState({ showSearch: !showSearch })} className="pink-btn">{`${dateRange.start.format('DD/MM/YYYY')} - ${dateRange.end.format('DD/MM/YYYY')}`}<i className="icon-date_range"></i></a>
+                                <a href="javascript:void(0)" onClick={() => this.setState({ showSearch: !showSearch })} className="pink-btn">{`${dateRange.start.local().format('DD/MM/YYYY')} - ${dateRange.end.local().format('DD/MM/YYYY')}`}<i className="icon-date_range"></i></a>
                             </div>
                         }
                     </div>

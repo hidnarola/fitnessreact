@@ -62,12 +62,14 @@ class AdminLogin extends Component {
 
     componentDidMount() {
         $('body').addClass('no-padding');
+        $('body').addClass('with_login');
     }
 
     componentWillUnmount() {
         const { dispatch } = this.props;
         dispatch(freeLoginLogoutState());
         $('body').removeClass('no-padding');
+        $('body').removeClass('with_login');
     }
 
     handleSubmit = (data) => {

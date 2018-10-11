@@ -378,8 +378,8 @@ class ProfileFithub extends Component {
                                                             <NavLink to={`${routeCodes.PROFILE}/${createdBy.username}`}>
                                                                 {`${createdBy.firstName} ${(createdBy.lastName) ? createdBy.lastName : ''}`}
                                                             </NavLink>
+                                                            <Link to={`${routeCodes.POST}/${match.params.username}/${post._id}`} className="pull-right post_added">{(post.tag_line) ? post.tag_line : ''}</Link>
                                                         </big>
-                                                        <small><Link to={`${routeCodes.POST}/${match.params.username}/${post._id}`} className="pull-right">{(post.tag_line) ? post.tag_line : ''}</Link></small>
                                                         <div className="post-bottom-info">
                                                             <p className="">
                                                                 {postCreatedAt}
@@ -433,7 +433,7 @@ class ProfileFithub extends Component {
                                                                     return null;
                                                                 }
                                                                 return (
-                                                                    <a href="javascript:void(0)"  key={imageI} onClick={() => this.handleOpenLightbox(images, )}>
+                                                                    <a href="javascript:void(0)" key={imageI} onClick={() => this.handleOpenLightbox(images, )}>
                                                                         <span key={imageI}>
                                                                             <img
                                                                                 src={SERVER_BASE_URL + imageD.image}

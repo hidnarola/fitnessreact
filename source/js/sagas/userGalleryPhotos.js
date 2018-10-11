@@ -10,6 +10,9 @@ import {
     loadMoreUserGalleryPhotoSuccess,
     loadMoreUserGalleryPhotoError,
     LOAD_MORE_USER_GALLERY_PHOTO_REQUEST,
+    deleteUserGalleryPhotoSuccess,
+    deleteUserGalleryPhotoError,
+    DELETE_USER_GALLERY_PHOTO_REQUEST,
 } from '../actions/userGalleryPhotos';
 
 function fetchUserGalleryPhotosData() {
@@ -54,10 +57,24 @@ function addUserGalleryPhotoData() {
     }
 }
 
+function deleteUserGalleryPhotoData() {
+    return function* (action) {
+        try {
+            let id = action.id;
+            let postId = action.postId;
+            const data = yield call(() => api.deleteUserGalleryPhoto(id, postId));
+            yield put(deleteUserGalleryPhotoSuccess(data));
+        } catch (error) {
+            yield put(deleteUserGalleryPhotoError(error));
+        }
+    }
+}
+
 export function* watchUserGalleryPhotosData() {
     yield takeLatest(GET_USER_GALLERY_PHOTO_REQUEST, fetchUserGalleryPhotosData());
     yield takeLatest(LOAD_MORE_USER_GALLERY_PHOTO_REQUEST, loadMoreUserGalleryPhotosData());
     yield takeLatest(ADD_USER_GALLERY_PHOTO_REQUEST, addUserGalleryPhotoData());
+    yield takeLatest(DELETE_USER_GALLERY_PHOTO_REQUEST, deleteUserGalleryPhotoData());
 }
 
 export default [

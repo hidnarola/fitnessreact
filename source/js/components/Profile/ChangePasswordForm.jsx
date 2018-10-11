@@ -5,6 +5,7 @@ import { InputField } from '../../helpers/FormControlHelper';
 import { FaSpinner } from 'react-icons/lib/fa';
 import { Alert } from "react-bootstrap";
 import { required, minLength } from '../../formValidation/validationRules';
+import ReactTooltip from "react-tooltip";
 
 const min8 = minLength(8);
 
@@ -26,7 +27,8 @@ class ChangePasswordForm extends Component {
                 }
                 <form onSubmit={handleSubmit}>
                     <div className="row">
-                        <div className="col-md-12">
+                        <div className="col-md-12 change-password-fields-wrapper">
+                            <div className="pwd-info-wrapper"><span><i className="icon-info" data-tip data-for="password_strength_tooltip"></i></span></div>
                             <Field
                                 name="new_password"
                                 label="New Password"
@@ -61,6 +63,18 @@ class ChangePasswordForm extends Component {
                         </div>
                     </div>
                 </form>
+                <ReactTooltip id="password_strength_tooltip" place="top" type="dark" effect="solid">
+                    <div className="pwd-info-tt-wrapper">
+                        <p><i className="icon-cancel"></i> At least 8 characters in length</p>
+                        <p><i className="icon-cancel"></i> Contain at  least 3 of the following 4 types of characters:</p>
+                        <ul>
+                            <li>Lower case letters (a-z)</li>
+                            <li>Upper case letters (A-Z)</li>
+                            <li>Numbers (i.e. 0-9)</li>
+                            <li>Special characters (e.g. !@#$%^&*)</li>
+                        </ul>
+                    </div>
+                </ReactTooltip>
             </div>
         );
     }

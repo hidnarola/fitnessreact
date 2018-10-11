@@ -175,6 +175,9 @@ function prepareStateDataForGraphResponse(statistics, responseData) {
                 if (o.subCategory === res.subCategory) {
                     _o.graphLoading = false;
                     _o.graphData = (res.graphData) ? res.graphData : [];
+                    _o.graphData.map((o) => {
+                        o.date = moment(o.date).local().format('DD/MM/YYYY')
+                    });
                 }
             });
             newData.push(_o);
