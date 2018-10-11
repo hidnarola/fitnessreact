@@ -7,7 +7,7 @@ import moment from 'moment';
 import { InputField, SelectField_ReactSelect, DateField, EditorField } from '../../../helpers/FormControlHelper';
 import { required, requiredReactSelectStatus, minLength, maxLength, mobile, min, max, validNumber } from '../../../formValidation/validationRules';
 import { adminRouteCodes } from '../../../constants/adminRoutes';
-import { capitalizeFirstLetter, convertUnits } from '../../../helpers/funs';
+import { capitalizeFirstLetter, convertUnits, te } from '../../../helpers/funs';
 import {
     GOAL_GAIN_MUSCLE,
     GOAL_IMPROVE_MOBILITY,
@@ -295,7 +295,7 @@ class UserForm extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        const { selectLoading, selectUser, selectError, initialize, dispatch, selectUserPref } = this.props;
+        const { selectLoading, selectUser, selectError, initialize, dispatch, selectUserPref, history } = this.props;
         if (!selectLoading && prevProps.selectLoading !== selectLoading && selectUser && prevProps.selectUser !== selectUser) {
             let dob = null;
             if (selectUser.dateOfBirth) {
@@ -329,6 +329,11 @@ class UserForm extends Component {
                 weightUnit
             });
             dispatch(hidePageLoader());
+        }
+        if (!selectLoading && prevProps.selectLoading !== selectLoading && selectError && selectError.length > 0) {
+            te('Something went wrong! please try again later.');
+            dispatch(hidePageLoader());
+            history.push(adminRouteCodes.USERS);
         }
     }
 

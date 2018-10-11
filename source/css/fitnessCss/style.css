@@ -2385,6 +2385,8 @@ button.close_btn {padding: 0;border-radius: 80%;border: 0;height: 20px;backgroun
 .change-password-form .pwd-info-tt-wrapper p i { font-size: 12px; }
 .change-password-form .pwd-info-tt-wrapper ul { text-decoration: none; margin: 0 0 10px 20px; }
 
+.workout-exercises-view-wrapper ul.dropdown-menu li { margin-top: 0px; }
+
 /*
 .sets-advance-view-block {position: relative;padding-left: 45px;padding-right: 30px;}
 .sets-advance-view-block > label {position: absolute;left: 3px;top: 9px;margin: 0;}

@@ -77,10 +77,14 @@ const actionMap = {
         }));
     },
     [GET_APPROVED_FRIENDS_SUCCESS]: (state, action) => {
+        let prevApprovedLimit = state.get('approvedLimit');
         let newState = { approvedLoading: false };
         if (action.data && action.data.status && action.data.status === 1) {
             newState.approvedFriends = action.data.friends;
             if (action.data.friends && action.data.friends.length <= 0) {
+                newState.approvedNoMoreData = true;
+            }
+            if (action.data.total_records && (action.data.total_records <= 0 || action.data.total_records <= prevApprovedLimit)) {
                 newState.approvedNoMoreData = true;
             }
         } else {
@@ -118,6 +122,9 @@ const actionMap = {
         if (action.data && action.data.status && action.data.status === 1) {
             if (action.data.friends && action.data.friends.length > 0) {
                 newState.approvedFriends = prevApprovedFriends.concat(action.data.friends);
+                if (action.data.total_records && (action.data.total_records <= 0 || action.data.total_records <= newState.approvedFriends.length)) {
+                    newState.approvedNoMoreData = true;
+                }
             } else {
                 newState.approvedNoMoreData = true;
             }
@@ -154,10 +161,14 @@ const actionMap = {
         }));
     },
     [GET_APPROVED_FRIENDS_MESSENGER_SUCCESS]: (state, action) => {
+        let prevApprovedMessLimit = state.get('approvedMessLimit');
         let newState = { approvedMessLoading: false };
         if (action.data && action.data.status && action.data.status === 1) {
             newState.approvedMessFriends = action.data.friends;
             if (action.data.friends && action.data.friends.length <= 0) {
+                newState.approvedMessNoMoreData = true;
+            }
+            if (action.data.total_records && (action.data.total_records <= 0 || action.data.total_records <= prevApprovedMessLimit)) {
                 newState.approvedMessNoMoreData = true;
             }
         } else {
@@ -195,6 +206,9 @@ const actionMap = {
         if (action.data && action.data.status && action.data.status === 1) {
             if (action.data.friends && action.data.friends.length > 0) {
                 newState.approvedMessFriends = prevApprovedFriends.concat(action.data.friends);
+                if (action.data.total_records && (action.data.total_records <= 0 || action.data.total_records <= newState.approvedMessFriends.length)) {
+                    newState.approvedMessNoMoreData = true;
+                }
             } else {
                 newState.approvedMessNoMoreData = true;
             }
@@ -231,10 +245,14 @@ const actionMap = {
         }));
     },
     [GET_PENDING_FRIENDS_SUCCESS]: (state, action) => {
+        let prevPendingLimit = state.get('pendingLimit');
         let newState = { pendingLoading: false };
         if (action.data && action.data.status && action.data.status === 1) {
             newState.pendingFriends = action.data.friends;
             if (action.data.friends && action.data.friends.length <= 0) {
+                newState.pendingNoMoreData = true;
+            }
+            if (action.data.total_records && (action.data.total_records <= 0 || action.data.total_records <= prevPendingLimit)) {
                 newState.pendingNoMoreData = true;
             }
         } else {
@@ -272,6 +290,9 @@ const actionMap = {
         if (action.data && action.data.status && action.data.status === 1) {
             if (action.data.friends && action.data.friends.length > 0) {
                 newState.pendingFriends = prevPendingFriends.concat(action.data.friends);
+                if (action.data.total_records && (action.data.total_records <= 0 || action.data.total_records <= newState.pendingFriends.length)) {
+                    newState.pendingNoMoreData = true;
+                }
             } else {
                 newState.pendingNoMoreData = true;
             }

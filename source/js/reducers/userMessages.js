@@ -50,12 +50,14 @@ const actionMap = {
         return state.merge(Map(newState));
     },
     [GET_USER_MESSAGE_CHANNEL_SUCCESS]: (state, action) => {
-        var newState = {
-            panelChannelLoading: false,
-        };
+        let prevPanelChannelLimit = state.get('panelChannelLimit');
+        var newState = { panelChannelLoading: false };
         if (action.data.status === 1) {
             newState.panelChannels = action.data.channels;
             if (action.data.channels && action.data.channels.length <= 0) {
+                newState.panelChannelDataOver = true;
+            }
+            if (action.data.total_records && (action.data.total_records <= 0 || action.data.total_records <= prevPanelChannelLimit)) {
                 newState.panelChannelDataOver = true;
             }
         } else {
@@ -97,6 +99,9 @@ const actionMap = {
         if (action.data.status === 1) {
             if (action.data.channels && action.data.channels.length > 0) {
                 newState.panelChannels = prevChannels.concat(action.data.channels);
+                if (action.data.total_records && (action.data.total_records <= 0 || action.data.total_records <= newState.panelChannels.length)) {
+                    newState.panelChannelDataOver = true;
+                }
             } else {
                 newState.panelChannelDataOver = true;
             }

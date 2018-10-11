@@ -37,7 +37,7 @@ const actionMap = {
             loading: false,
         };
         if (typeof action.data.status !== 'undefined' && action.data.status === 1) {
-            newState.progress = action.data.progress;
+            newState.progress = transformBodyfatData(action.data.progress);
         } else if (typeof action.data.status !== 'undefined' && action.data.status === 0) {
             var msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
             newState.error = [msg];
@@ -59,6 +59,27 @@ const actionMap = {
         }));
     },
 };
+
+function transformBodyfatData(data) {
+    if (data && data.data) {
+        for (let key in data.data) {
+            if (data.data.hasOwnProperty(key)) {
+                let subData = data.data[key];
+                for (let subKey in subData) {
+                    if (subData.hasOwnProperty(subKey) && (subKey === 'graph_data' || subKey === 'graphData')) {
+                        let graphData = subData[subKey];
+                        graphData.map((o) => {
+                            if (o.date) {
+                                o.date = moment(o.date).local().format('DD/MM/YYYY');
+                            }
+                        });
+                    }
+                }
+            }
+        }
+    }
+    return data;
+}
 
 export default function reducer(state = initialState, action = {}) {
     if (action && action.type) {

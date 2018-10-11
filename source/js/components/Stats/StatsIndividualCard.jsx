@@ -79,8 +79,8 @@ class StatsIndividualCard extends Component {
                         {!o.fieldsLoading && o.fields && Object.keys(o.fields).length > 0 &&
                             Object.keys(o.fields).map((key, j) => {
                                 let field = o.fields[key];
-                                if (typeof field.total !== 'undefined' && field.total > 0) {
-                                    console.log('field => ', field);
+                                // if (typeof field.total !== 'undefined' && field.total > 0) {
+                                if (typeof field.total !== 'undefined' && (typeof field.total === 'number' && field.total > 0) || (typeof field.total === 'string' && field.total !== '')) {
                                     return (
                                         <button
                                             key={j}
@@ -190,7 +190,6 @@ export default connect(
 class CustomTooltip extends Component {
     render() {
         const { payload, label, active } = this.props;
-        console.log('payload => ', payload);
         if (active) {
             return (
                 <div className="custom-graph-tooltip-wrapper">
