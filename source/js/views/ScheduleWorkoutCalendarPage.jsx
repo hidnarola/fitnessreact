@@ -613,12 +613,14 @@ class ScheduleWorkoutCalendarPage extends Component {
         const { dispatch } = this.props;
         const { workoutEvents } = this.state;
         var selectedEvents = _.filter(workoutEvents, ['isSelectedForBulkAction', true]);
-        let today = moment().utc();
+        let today = moment().startOf('day').utc();
         var selectedIds = [];
         _.forEach(selectedEvents, (obj) => {
-            let eventDate = moment(obj.start);
+            let eventDate = moment(obj.start).startOf('day').utc();
             if (eventDate <= today) {
-                selectedIds.push(obj.id);
+                if (typeof obj.totalExercises !== 'undefined' && obj.totalExercises > 0) {
+                    selectedIds.push(obj.id);
+                }
             }
         });
         var requestData = {

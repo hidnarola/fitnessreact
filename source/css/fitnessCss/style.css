@@ -2392,6 +2392,9 @@ button.close_btn {padding: 0;border-radius: 80%;border: 0;height: 20px;backgroun
 .assign-program-form-wrapper .form-group label { display: inline-block; max-width: 100%; margin-bottom: 5px; font-weight: 700; color: #333; }
 .assign-program-form-wrapper .Select-input > input{line-height:0}
 .sweet-alert {overflow: visible !important;}
+.rbc-month-view { height: initial !important; }
+.workout-schedule-save .body-head-l-btm a{position: relative;}
+.workout-schedule-save .body-head-l-btm a span{ position: absolute; top: -5px; right: -5px; width: 25px; height: 25px; background: #ffffff; border-radius: 50%; font-size: 12px; font-weight: 500; line-height: 24px; color: #ff3389; border: 1px solid #ff3389; }
 
 /*
 .sets-advance-view-block {position: relative;padding-left: 45px;padding-right: 30px;}

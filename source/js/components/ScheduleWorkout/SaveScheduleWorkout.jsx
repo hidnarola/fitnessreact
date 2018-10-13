@@ -104,7 +104,7 @@ class SaveScheduleWorkout extends Component {
             <div className="fitness-body">
                 <FitnessHeader />
                 <FitnessNav />
-                <section className="body-wrap">
+                <section className="body-wrap workout-schedule-save">
                     <div className="body-head d-flex justify-content-start">
                         <div className="body-head-l">
                             {(workout && workout.date && workout.type && workout.type === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
@@ -121,9 +121,9 @@ class SaveScheduleWorkout extends Component {
                             }
                             {workout && Object.keys(workout).length > 0 && workout.type && workout.type === SCHEDULED_WORKOUT_TYPE_EXERCISE &&
                                 <div className="body-head-l-btm">
-                                    <a href="javascript:void(0)" className={cns('white-btn', { 'active': (selectedWorkoutMainType === SCHEDULED_WORKOUT_TYPE_WARMUP) })} onClick={() => this.handleWorkoutMainTypeChange(SCHEDULED_WORKOUT_TYPE_WARMUP)}>Warmup</a>
-                                    <a href="javascript:void(0)" className={cns('white-btn', { 'active': (selectedWorkoutMainType === SCHEDULED_WORKOUT_TYPE_EXERCISE) })} onClick={() => this.handleWorkoutMainTypeChange(SCHEDULED_WORKOUT_TYPE_EXERCISE)}>Workout</a>
-                                    <a href="javascript:void(0)" className={cns('white-btn', { 'active': (selectedWorkoutMainType === SCHEDULED_WORKOUT_TYPE_COOLDOWN) })} onClick={() => this.handleWorkoutMainTypeChange(SCHEDULED_WORKOUT_TYPE_COOLDOWN)}>Cooldown</a>
+                                    <a href="javascript:void(0)" className={cns('white-btn', { 'active': (selectedWorkoutMainType === SCHEDULED_WORKOUT_TYPE_WARMUP) })} onClick={() => this.handleWorkoutMainTypeChange(SCHEDULED_WORKOUT_TYPE_WARMUP)}>Warmup <span>{workout && workout.warmup && workout.warmup.length}</span></a>
+                                    <a href="javascript:void(0)" className={cns('white-btn', { 'active': (selectedWorkoutMainType === SCHEDULED_WORKOUT_TYPE_EXERCISE) })} onClick={() => this.handleWorkoutMainTypeChange(SCHEDULED_WORKOUT_TYPE_EXERCISE)}>Workout <span>{workout && workout.exercise && workout.exercise.length}</span></a>
+                                    <a href="javascript:void(0)" className={cns('white-btn', { 'active': (selectedWorkoutMainType === SCHEDULED_WORKOUT_TYPE_COOLDOWN) })} onClick={() => this.handleWorkoutMainTypeChange(SCHEDULED_WORKOUT_TYPE_COOLDOWN)}>Cooldown <span>{workout && workout.cooldown && workout.cooldown.length}</span></a>
                                 </div>
                             }
                         </div>
@@ -1153,9 +1153,15 @@ class TodaysWorkoutListCard extends Component {
 
     componentWillMount() {
         const { workout } = this.props;
-        if (workout && workout.isCompleted) {
+        if (workout && typeof workout.isCompleted !== 'undefined') {
             this.setState({ isCompleted: (workout.isCompleted) ? true : false });
-            console.log('(workout.isCompleted) ? true : false  => ', (workout.isCompleted) ? true : false);
+        }
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        const { workout } = this.props;
+        if (workout && typeof workout.isCompleted !== 'undefined' && prevProps.workout.isCompleted !== workout.isCompleted) {
+            this.setState({ isCompleted: (workout.isCompleted) ? true : false });
         }
     }
 
