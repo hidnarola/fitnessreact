@@ -138,9 +138,9 @@ class UserMessagePanel extends Component {
         );
     }
 
-    handleOpenChatWindow = (userDetails, channelId) => {
+    handleOpenChatWindow = (userDetails, channelId, userPreferences) => {
         const { dispatch, socket } = this.props;
-        dispatch(openUserChatWindowRequest(userDetails, channelId));
+        dispatch(openUserChatWindowRequest(userDetails, channelId, userPreferences));
         var requestData = {
             token: getToken(),
             channel_id: channelId,
@@ -217,10 +217,13 @@ class ChannelMessageCard extends Component {
         const { channel, loggedUserData, handleOpenChatWindow, handleMessageSeen } = this.props;
         var message = channel.conversation.message;
         var channelFor = null;
+        var channelForPreferences = null;
         if (channel.userData && channel.userData.authUserId !== loggedUserData.authId) {
             channelFor = channel.userData;
+            channelForPreferences = channel.userPreferences;
         } else if (channel.friendData && channel.friendData.authUserId !== loggedUserData.authId) {
             channelFor = channel.friendData;
+            channelForPreferences = channel.friendPreferences;
         }
         var isSeen = true;
         if (channel.conversation.userId !== loggedUserData.authId && channel.conversation.isSeen === 0) {
@@ -230,7 +233,7 @@ class ChannelMessageCard extends Component {
             return (
                 <a href="javascript:void(0)" onClick={() => {
                     handleMessageSeen(channelFor, channel._id);
-                    handleOpenChatWindow(channelFor, channel._id);
+                    handleOpenChatWindow(channelFor, channel._id, channelForPreferences);
                 }}>
                     <div className={cns("messenger-box", { 'un-seen-message': !isSeen })}>
                         <span>

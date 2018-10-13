@@ -28,6 +28,7 @@ import Select from 'react-select';
 import AddWorkoutTitleForm from '../components/ScheduleWorkout/AddWorkoutTitleForm';
 import ReactTooltip from "react-tooltip";
 import { showPageLoader, hidePageLoader } from '../actions/pageLoader';
+import SelectAssignProgramForm from '../components/ScheduleWorkout/SelectAssignProgramForm';
 
 BigCalendar.momentLocalizer(moment);
 
@@ -43,7 +44,6 @@ class ScheduleWorkoutCalendarPage extends Component {
             selectedWorkoutDate: null,
             deleteWorkoutActionInit: false,
             showProgramAssignAlert: false,
-            selectedProgramIdToAssign: null,
             deleteBulkActionAlert: false,
             deleteBulkActionInit: false,
             completeBulkActionAlert: false,
@@ -73,7 +73,6 @@ class ScheduleWorkoutCalendarPage extends Component {
             workoutEvents,
             deleteWorkoutAlert,
             showProgramAssignAlert,
-            selectedProgramIdToAssign,
             deleteBulkActionAlert,
             completeBulkActionAlert,
             incompleteBulkActionAlert,
@@ -154,7 +153,7 @@ class ScheduleWorkoutCalendarPage extends Component {
                 </section>
                 <SweetAlert
                     type="default"
-                    title={`Select event for - ${(selectedSlotStateDate) ? moment(selectedSlotStateDate).format('MM/DD/YYYY') : ''}`}
+                    title={`Select event for - ${(selectedSlotStateDate) ? moment(selectedSlotStateDate).format('DD/MM/YYYY') : ''}`}
                     onCancel={this.cancelSelectedSlotAction}
                     onConfirm={() => { }}
                     btnSize="sm"
@@ -227,35 +226,25 @@ class ScheduleWorkoutCalendarPage extends Component {
                 >
                     This will mark all workouts as incompleted
                 </SweetAlert>
-
                 <SweetAlert
                     type="default"
-                    title={`Select program start from - ${(selectedSlotStateDate) ? moment(selectedSlotStateDate).format('MM/DD/YYYY') : ''}`}
-                    onCancel={this.handleCancelProgramAssignAlert}
-                    onConfirm={this.handleAssignProgram}
-                    btnSize="sm"
-                    cancelBtnBsStyle="danger"
-                    confirmBtnBsStyle="success"
+                    title={`Select program start from - ${(selectedSlotStateDate) ? moment(selectedSlotStateDate).format('DD/MM/YYYY') : ''}`}
+                    onConfirm={() => { }}
                     show={showProgramAssignAlert}
-                    showConfirm={true}
-                    showCancel={true}
+                    showConfirm={false}
+                    showCancel={false}
                     closeOnClickOutside={false}
                 >
-                    <Select
-                        id="program_id"
-                        name="program_id"
-                        value={selectedProgramIdToAssign}
+                    <SelectAssignProgramForm
                         options={programOptions}
-                        placeholder="Select Program"
-                        onChange={this.handleProgramAssignChange}
-                        multi={false}
-                        clearable={true}
+                        onSubmit={this.handleAssignProgram}
+                        onCancel={this.handleCancelProgramAssignAlert}
                     />
                 </SweetAlert>
 
                 <SweetAlert
                     type="default"
-                    title={`Add workout for - ${(selectedSlotStateDate) ? moment(selectedSlotStateDate).format('MM/DD/YYYY') : ''}`}
+                    title={`Add workout for - ${(selectedSlotStateDate) ? moment(selectedSlotStateDate).format('DD/MM/YYYY') : ''}`}
                     onConfirm={() => { }}
                     btnSize="sm"
                     cancelBtnBsStyle="danger"
@@ -309,7 +298,7 @@ class ScheduleWorkoutCalendarPage extends Component {
             _.forEach(workouts, (workout, index) => {
                 var newWorkout = {
                     id: workout._id,
-                    title: (workout.title) ? workout.title : `Workout on ${(workout.date) ? moment(workout.date).format('MM/DD/YYYY') : ''}`,
+                    title: (workout.title) ? workout.title : `Workout on ${(workout.date) ? moment(workout.date).format('DD/MM/YYYY') : ''}`,
                     start: workout.date,
                     end: workout.date,
                     allDay: true,
@@ -342,6 +331,7 @@ class ScheduleWorkoutCalendarPage extends Component {
         }
         if (deleteWorkoutActionInit && selectedWorkoutId && !loading) {
             this.setState({ deleteWorkoutActionInit: false, selectedWorkoutId: null, selectedWorkoutDate: null });
+            dispatch(hidePageLoader());
             this.getWorkoutSchedulesByMonth();
             if (error.length <= 0) {
                 ts('Workout deleted successfully!');
@@ -351,6 +341,7 @@ class ScheduleWorkoutCalendarPage extends Component {
         }
         if (deleteBulkActionInit && !loading) {
             this.setState({ deleteBulkActionInit: false });
+            dispatch(hidePageLoader());
             this.getWorkoutSchedulesByMonth();
             if (error.length <= 0) {
                 ts('Workouts deleted successfully!');
@@ -521,6 +512,7 @@ class ScheduleWorkoutCalendarPage extends Component {
             var requestData = {
                 exerciseIds: [selectedWorkoutId],
             };
+            dispatch(showPageLoader());
             dispatch(deleteUsersBulkWorkoutScheduleRequest(requestData));
             this.setState({ deleteWorkoutAlert: false, deleteWorkoutActionInit: true });
         }
@@ -555,18 +547,12 @@ class ScheduleWorkoutCalendarPage extends Component {
 
     handleCancelProgramAssignAlert = () => {
         const { dispatch } = this.props;
-        this.setState({ showProgramAssignAlert: false, selectedProgramIdToAssign: null });
+        this.setState({ showProgramAssignAlert: false });
         dispatch(setSelectedSlotFromCalendar(null));
     }
 
-    handleProgramAssignChange = (value) => {
-        this.setState({
-            selectedProgramIdToAssign: value,
-        });
-    }
-
-    handleAssignProgram = () => {
-        const { selectedProgramIdToAssign } = this.state;
+    handleAssignProgram = (data) => {
+        let selectedProgramIdToAssign = (data.program_id) ? data.program_id : '';
         const { selectedSlot, dispatch } = this.props;
         var date = (selectedSlot) ? selectedSlot.start : null;
         var programId = (selectedProgramIdToAssign) ? selectedProgramIdToAssign.value : null;
@@ -618,6 +604,7 @@ class ScheduleWorkoutCalendarPage extends Component {
         var requestData = {
             exerciseIds: selectedIds,
         };
+        dispatch(showPageLoader());
         dispatch(deleteUsersBulkWorkoutScheduleRequest(requestData));
         this.setState({ deleteBulkActionInit: true, deleteBulkActionAlert: false });
     }
@@ -746,7 +733,7 @@ class CustomEventCard extends Component {
         let titleClassName = '';
         let showCompleteSwitch = false;
         if (today > eventDate) {
-            if (event.isCompleted === 1) {
+            if (event.isCompleted === 1 && event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE) {
                 titleClassName = 'color-completed';
             } else if (event.isCompleted === 0 && yesturday > eventDate && event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE) {
                 titleClassName = 'color-in-completed';

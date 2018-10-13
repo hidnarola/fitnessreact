@@ -223,7 +223,7 @@ class FitnessHeader extends Component {
     //#region Common functions
     handleSearchChange = (event, { newValue, method }) => {
         const { dispatch } = this.props;
-        if (method === 'type' && newValue !== '') {
+        if (method === 'type' && newValue !== '' && newValue.trim() !== '') {
             this.setState({ showSearchLoader: true });
         }
         dispatch(handleChangeUserSearchFor('searchValue', newValue));
@@ -231,7 +231,9 @@ class FitnessHeader extends Component {
 
     handleSuggestionsFetchRequested = ({ value }) => {
         this.searchDebounce.cancel;
-        this.searchDebounce(value);
+        if (value && value.trim()) {
+            this.searchDebounce(value.trim());
+        }
     };
 
     searchUsers = (value) => {

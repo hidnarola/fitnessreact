@@ -46,7 +46,7 @@ class ViewScheduleWorkout extends Component {
                     <section className="body-wrap">
                         <div className="body-head d-flex justify-content-start">
                             <div className="">
-                                <h2>{`${workout.title} on ${moment(workout.date).format('MM/DD/YYYY')}`}</h2>
+                                <h2>{`${workout.title} on ${moment(workout.date).format('DD/MM/YYYY')}`}</h2>
                                 <p>{`${workout.description}`}</p>
                             </div>
                         </div>

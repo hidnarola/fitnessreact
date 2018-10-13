@@ -295,7 +295,7 @@ class Profile extends Component {
                                                 }
                                             </span>
                                         }
-                                        <a href="" data-toggle="modal" data-target="#level-gallery">Lavel 13</a>
+                                        {/* <a href="" data-toggle="modal" data-target="#level-gallery">Level 13</a> */}
                                     </div>
 
                                     {profile && (profile.height > 0 || profile.weight > 0 || profile.aboutMe !== '') &&

@@ -2387,6 +2387,12 @@ button.close_btn {padding: 0;border-radius: 80%;border: 0;height: 20px;backgroun
 
 .workout-exercises-view-wrapper ul.dropdown-menu li { margin-top: 0px; }
 
+.assign-program-form-wrapper { font-size: 14px; }
+.assign-program-form-wrapper .form-group { text-align: left; }
+.assign-program-form-wrapper .form-group label { display: inline-block; max-width: 100%; margin-bottom: 5px; font-weight: 700; color: #333; }
+.assign-program-form-wrapper .Select-input > input{line-height:0}
+.sweet-alert {overflow: visible !important;}
+
 /*
 .sets-advance-view-block {position: relative;padding-left: 45px;padding-right: 30px;}
 .sets-advance-view-block > label {position: absolute;left: 3px;top: 9px;margin: 0;}

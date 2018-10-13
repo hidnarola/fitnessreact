@@ -259,6 +259,7 @@ class App extends Component {
                                             var style = { right };
                                             var chatWindow = chatWindows[key];
                                             var userDetails = chatWindow.userDetails;
+                                            var userPreferences = chatWindow.userPreferences;
                                             var isTyping = (typeof chatWindow.isTyping !== 'undefined') ? chatWindow.isTyping : false;
                                             var loadingMessages = chatWindow.loading;
                                             var messages = chatWindow.messages;
@@ -267,6 +268,7 @@ class App extends Component {
                                                     key={key}
                                                     channelId={key}
                                                     userDetails={userDetails}
+                                                    userPreferences={userPreferences}
                                                     isTyping={isTyping}
                                                     style={style}
                                                     closeWindow={this.handleCloseUserChatWindow}

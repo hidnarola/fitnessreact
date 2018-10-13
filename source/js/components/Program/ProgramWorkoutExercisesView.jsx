@@ -89,7 +89,7 @@ class ProgramWorkoutExercisesView extends Component {
                     show={showDeleteAlert}
                     danger
                     showCancel
-                    confirmBtnText="Yes, change it!"
+                    confirmBtnText="Yes, delete it!"
                     confirmBtnBsStyle="danger"
                     cancelBtnBsStyle="default"
                     title="Are you sure?"
@@ -102,7 +102,7 @@ class ProgramWorkoutExercisesView extends Component {
                     show={showDeleteSingleAlert}
                     danger
                     showCancel
-                    confirmBtnText="Yes, change it!"
+                    confirmBtnText="Yes, delete it!"
                     confirmBtnBsStyle="danger"
                     cancelBtnBsStyle="default"
                     title="Are you sure?"

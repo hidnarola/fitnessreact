@@ -129,10 +129,12 @@ const actionMap = {
     [OPEN_USER_CHAT_WINDOW_REQUEST]: (state, action) => {
         var chatWindows = Object.assign({}, state.get('chatWindows'));
         var userDetails = action.userDetails;
+        var userPreferences = action.userPreferences;
         var channelId = action.channelId;
         var obj = {
             loading: true,
             userDetails,
+            userPreferences,
             messages: [],
             isMinimized: false,
             isTyping: false,
@@ -151,11 +153,13 @@ const actionMap = {
                 var chatWindow = chatWindows[channelId];
                 var messages = chatWindow['messages'];
                 var userDetails = chatWindow['userDetails'];
+                var userPreferences = chatWindow['userPreferences'];
                 var newMessages = channel.messages;
                 var allMessages = _.concat(messages, newMessages);
                 var obj = {
                     loading: false,
                     userDetails,
+                    userPreferences,
                     messages: allMessages,
                     isMinimized: false,
                     isTyping: false,

@@ -3,6 +3,7 @@ import { toggleSmallChatWindow, getToken, scrollBottom } from '../../helpers/fun
 import moment from "moment";
 import noProfileImg from 'img/common/no-profile-img.png';
 import _ from "lodash";
+import { ACCESS_LEVEL_NONE, ACCESS_LEVEL_PUBLIC, ACCESS_LEVEL_FRIENDS_OF_FRIENDS } from '../../constants/consts';
 
 class UserChatWindow extends Component {
     constructor(props) {
@@ -19,6 +20,7 @@ class UserChatWindow extends Component {
         const {
             channelId,
             userDetails,
+            userPreferences,
             loadingMessages,
             messages,
             style,
@@ -81,14 +83,22 @@ class UserChatWindow extends Component {
                         <p className="chat-feedback">{`${userDetails.firstName}`} is typing…</p>
                     }
                     <div className="p-10">
-                        <form method="POST" onSubmit={this.handleSend}>
-                            <fieldset>
-                                <input type="text" name='newMsg' value={newMsg} onChange={this.handleChange} placeholder="Type your message…" autoFocus={true} autoComplete="off" />
-                                <button type="submit">
-                                    <i className="icon-send"></i>
-                                </button>
-                            </fieldset>
-                        </form>
+                        {userPreferences && userPreferences.messageAccessibility == ACCESS_LEVEL_NONE &&
+                            <span>You are not able to send message.</span>
+                        }
+                        {userPreferences && userPreferences.messageAccessibility == ACCESS_LEVEL_FRIENDS_OF_FRIENDS &&
+                            <span>You are not able to send message.</span>
+                        }
+                        {userPreferences && userPreferences.messageAccessibility == ACCESS_LEVEL_PUBLIC &&
+                            <form method="POST" onSubmit={this.handleSend}>
+                                <fieldset>
+                                    <input type="text" name='newMsg' value={newMsg} onChange={this.handleChange} placeholder="Type your message…" autoFocus={true} autoComplete="off" />
+                                    <button type="submit">
+                                        <i className="icon-send"></i>
+                                    </button>
+                                </fieldset>
+                            </form>
+                        }
                     </div>
                 </div>
             </div>

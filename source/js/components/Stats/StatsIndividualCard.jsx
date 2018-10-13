@@ -167,7 +167,8 @@ class StatsIndividualCard extends Component {
     }
 
     handleOpenCalendar = () => {
-        this.setState({ openCalendar: true });
+        const { openCalendar } = this.state;
+        this.setState({ openCalendar: !openCalendar });
     }
 
     handleDateRange = (range, state) => {

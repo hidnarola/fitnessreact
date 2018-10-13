@@ -43,6 +43,7 @@ class Post extends Component {
     render() {
         const { loading, postError, post, match } = this.props;
         const { isLikedByLoggedUser, lightBoxOpen, currentImage, lightBoxImages } = this.state;
+        console.log('post => ', post.owner_by.userPreferences);
         let doRenderPost = true;
         if (!loading && post) {
             var createdBy = (post.created_by && Object.keys(post.created_by).length > 0) ? post.created_by : null;
@@ -132,7 +133,7 @@ class Post extends Component {
                                             <NavLink to={`${routeCodes.PROFILE}/${createdBy.username}`}>
                                                 {`${createdBy.firstName} ${(createdBy.lastName) ? createdBy.lastName : ''}`}
                                             </NavLink>
-                                        <Link to={`${routeCodes.POST}/${match.params.username}/${post._id}`} className="pull-right post_added">{(post.tag_line) ? post.tag_line : ''}</Link>
+                                            <Link to={`${routeCodes.POST}/${match.params.username}/${post._id}`} className="pull-right post_added">{(post.tag_line) ? post.tag_line : ''}</Link>
                                         </big>
                                         <p className="">
                                             {postCreatedAt}
@@ -177,10 +178,12 @@ class Post extends Component {
                                 </div>
                             </div>
                             <div className="single-post-right">
-                                <CommentBoxForm
-                                    postId={post._id}
-                                    onSubmit={this.handleComment}
-                                />
+                                {post && post.owner_by && post.owner_by.userPreferences && post.owner_by.userPreferences.commentAccessibility && post.owner_by.userPreferences.commentAccessibility === ACCESS_LEVEL_PUBLIC &&
+                                    <CommentBoxForm
+                                        postId={post._id}
+                                        onSubmit={this.handleComment}
+                                    />
+                                }
                                 {post.comments && post.comments.length > 0 &&
                                     post.comments.map((o, i) => {
                                         return (

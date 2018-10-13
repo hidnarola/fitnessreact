@@ -552,7 +552,7 @@ const actionMap = {
     },
     [DELETE_USER_SINGLE_EXERCISE_REQUEST]: (state, action) => {
         return state.merge(Map({
-            loading: false,
+            loading: true,
             error: [],
         }));
     },
