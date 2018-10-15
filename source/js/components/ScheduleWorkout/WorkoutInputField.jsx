@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactTooltip from "react-tooltip";
 
 class WorkoutInputField extends Component {
     render() {
@@ -24,8 +25,15 @@ class WorkoutInputField extends Component {
                     min={(typeof min !== 'undefined') ? min : ''}
                     max={(typeof max !== 'undefined') ? max : ''}
                     onChange={(e) => input.onChange(e.target.value)}
+                    data-tip
+                    data-for={id}
                 />
-                {meta.touched && (meta.error && <div className={errorClass}>{console.log('sb => ', meta.error)}</div>)}
+                {meta.touched && (meta.error && <div className={errorClass}></div>)}
+                {meta.touched && meta.error &&
+                    <ReactTooltip id={id} place="top" type="error" effect="solid">
+                        {meta.error}
+                    </ReactTooltip>
+                }
             </div>
         );
     }

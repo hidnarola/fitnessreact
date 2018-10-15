@@ -140,6 +140,7 @@ class SetsAdvanceView extends Component {
                                     component={WorkoutInputField}
                                     placeholder=""
                                     type="text"
+                                    errorClass="erro_msg_single"
                                     validate={[required, validNumber, min1]}
                                 />
                             }
@@ -159,6 +160,7 @@ class SetsAdvanceView extends Component {
                                     component={WorkoutInputField}
                                     placeholder=""
                                     type="text"
+                                    errorClass="erro_msg_single"
                                     validate={[required, validNumber, min1]}
                                 />
                             }
@@ -178,6 +180,7 @@ class SetsAdvanceView extends Component {
                                     component={WorkoutInputField}
                                     placeholder=""
                                     type="text"
+                                    errorClass="erro_msg_single"
                                     validate={[required, validNumber, min1]}
                                 />
                             }
@@ -197,6 +200,7 @@ class SetsAdvanceView extends Component {
                                     component={WorkoutInputField}
                                     placeholder="Rest Time"
                                     type="text"
+                                    errorClass="erro_msg_single"
                                     validate={[required, validNumber, min0]}
                                 />
                             }

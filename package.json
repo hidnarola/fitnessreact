@@ -121,7 +121,7 @@
     "react-tooltip": "^3.6.0",
     "recharts": "^1.1.0",
     "redux": "^3.7.2",
-    "redux-form": "^7.2.3",
+    "redux-form": "^7.4.2",
     "redux-form-website-template": "0.0.103",
     "redux-saga": "^0.16.0",
     "remotedev-serialize": "^0.1.0",

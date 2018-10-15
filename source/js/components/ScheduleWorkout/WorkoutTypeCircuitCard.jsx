@@ -7,7 +7,7 @@ import WorkoutAdvanceViewSwitch from './WorkoutAdvanceViewSwitch';
 import WorkoutInputField from './WorkoutInputField';
 import WorkoutDropdownField from './WorkoutDropdownField';
 import SetsAdvanceView from './SetsAdvanceView';
-import { prepareExerciseOptions, prepareFieldsOptions } from '../../helpers/funs';
+import { prepareExerciseOptions, prepareFieldsOptions, getExeMeasurementValidationRules } from '../../helpers/funs';
 import { EXE_REST_TIME_UNITS, SCHEDULED_WORKOUT_TYPE_CIRCUIT } from '../../constants/consts';
 import { required, requiredReactSelect, min, max, validNumber } from '../../formValidation/validationRules';
 
@@ -20,6 +20,9 @@ class WorkoutTypeCircuitCard extends Component {
         super(props);
         props.fields.removeAll();
         props.fields.push({});
+        this.state = {
+            validations: []
+        };
     }
 
     render() {
@@ -29,6 +32,7 @@ class WorkoutTypeCircuitCard extends Component {
             exerciseMeasurements,
             circuitSets,
         } = this.props;
+        const { validations } = this.state;
         var exerciseOptions = prepareExerciseOptions(exercises);
         return (
             <div className="workout-type-card-wrapper">
@@ -40,6 +44,7 @@ class WorkoutTypeCircuitCard extends Component {
                         component={WorkoutInputField}
                         placeholder="Sets"
                         type="text"
+                        // errorClass="erro_msg_single"
                         validate={[required, validNumber, min1, max12]}
                     />
                     <div className="set-div">Sets</div>
@@ -53,6 +58,7 @@ class WorkoutTypeCircuitCard extends Component {
                             component={WorkoutInputField}
                             placeholder="Rest Time"
                             type="text"
+                            // errorClass="erro_msg_single"
                             validate={[required, validNumber, min0]}
                         />
                     }
@@ -95,6 +101,14 @@ class WorkoutTypeCircuitCard extends Component {
                             }
                         }
                     }
+                    let _field1Validation = [required, validNumber, min1];
+                    let _field2Validation = [required, validNumber, min1];
+                    let _field3Validation = [required, validNumber, min1];
+                    if (fieldData) {
+                        _field1Validation = (validations && validations[index] && validations[index].field1Validation) ? validations[index].field1Validation : [required, validNumber, min1];
+                        _field2Validation = (validations && validations[index] && validations[index].field2Validation) ? validations[index].field2Validation : [required, validNumber, min1];
+                        _field3Validation = (validations && validations[index] && validations[index].field3Validation) ? validations[index].field3Validation : [required, validNumber, min1];
+                    }
                     return (
                         <div key={index} className="workout-type-card-block  pos-relative">
                             {/* <strong>Exercise # {(index + 1)}</strong> */}
@@ -106,6 +120,7 @@ class WorkoutTypeCircuitCard extends Component {
                                         placeholder="Exercise"
                                         component={WorkoutSelectField_ReactSelect}
                                         options={exerciseOptions}
+                                        errorClass="help-block"
                                         validate={[requiredReactSelect]}
                                     />
                                 </div>
@@ -133,7 +148,8 @@ class WorkoutTypeCircuitCard extends Component {
                                                                 component={WorkoutInputField}
                                                                 placeholder=""
                                                                 type="text"
-                                                                validate={[required, validNumber, min1]}
+                                                                errorClass="erro_msg_single"
+                                                                validate={_field1Validation}
                                                             />
                                                             <Field
                                                                 id={`${field}.field1_unit`}
@@ -152,7 +168,8 @@ class WorkoutTypeCircuitCard extends Component {
                                                                 component={WorkoutInputField}
                                                                 placeholder=""
                                                                 type="text"
-                                                                validate={[required, validNumber, min1]}
+                                                                errorClass="erro_msg_single"
+                                                                validate={_field2Validation}
                                                             />
                                                             <Field
                                                                 id={`${field}.field2_unit`}
@@ -171,7 +188,8 @@ class WorkoutTypeCircuitCard extends Component {
                                                                 component={WorkoutInputField}
                                                                 placeholder=""
                                                                 type="text"
-                                                                validate={[required, validNumber, min1]}
+                                                                errorClass="erro_msg_single"
+                                                                validate={_field3Validation}
                                                             />
                                                             <Field
                                                                 id={`${field}.field3_unit`}
@@ -215,6 +233,54 @@ class WorkoutTypeCircuitCard extends Component {
                 </div>
             </div>
         );
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        const { fields, exerciseMeasurements } = this.props;
+        const { validations } = this.state;
+        let newValidations = [];
+        fields.map((field, index) => {
+            let selectedExerciseObj = null;
+            let fieldData = fields.get(index);
+            if (fieldData) {
+                selectedExerciseObj = (fieldData.exercise_id) ? fieldData.exercise_id : null;
+            }
+            let selectedExerciseMeasurementObj = null;
+            let _field1Validation = [];
+            let _field2Validation = [];
+            let _field3Validation = [];
+            if (exerciseMeasurements && exerciseMeasurements.length > 0 && selectedExerciseObj) {
+                let cat = (selectedExerciseObj.cat) ? selectedExerciseObj.cat : '';
+                let subCat = (selectedExerciseObj.subCat) ? selectedExerciseObj.subCat : '';
+                let measObj = _.find(exerciseMeasurements, { 'category': cat, 'subCategory': subCat });
+                if (measObj) {
+                    selectedExerciseMeasurementObj = measObj;
+                    if (selectedExerciseMeasurementObj && selectedExerciseMeasurementObj.field1 && selectedExerciseMeasurementObj.field1.length > 0) {
+                        let selectedOption = (fieldData && fieldData.field1_unit) ? fieldData.field1_unit : selectedExerciseMeasurementObj.field1[0];
+                        let selectedFieldUnit = getExeMeasurementValidationRules(selectedOption);
+                        _field1Validation = (selectedFieldUnit && selectedFieldUnit.validation) ? selectedFieldUnit.validation : [required, validNumber, min1];
+                    }
+                    if (selectedExerciseMeasurementObj && selectedExerciseMeasurementObj.field2 && selectedExerciseMeasurementObj.field2.length > 0) {
+                        let selectedOption = (fieldData && fieldData.field2_unit) ? fieldData.field2_unit : selectedExerciseMeasurementObj.field2[0];
+                        let selectedFieldUnit = getExeMeasurementValidationRules(selectedOption);
+                        _field2Validation = (selectedFieldUnit && selectedFieldUnit.validation) ? selectedFieldUnit.validation : [required, validNumber, min1];
+                    }
+                    if (selectedExerciseMeasurementObj && selectedExerciseMeasurementObj.field3 && selectedExerciseMeasurementObj.field3.length > 0) {
+                        let selectedOption = (fieldData && fieldData.field3_unit) ? fieldData.field3_unit : selectedExerciseMeasurementObj.field3[0];
+                        let selectedFieldUnit = getExeMeasurementValidationRules(selectedOption);
+                        _field3Validation = (selectedFieldUnit && selectedFieldUnit.validation) ? selectedFieldUnit.validation : [required, validNumber, min1];
+                    }
+                }
+            }
+            newValidations[index] = {
+                field1Validation: _field1Validation,
+                field2Validation: _field2Validation,
+                field3Validation: _field3Validation
+            };
+        });
+        if (validations !== newValidations && validations === prevState.validations) {
+            this.setState({ validations: newValidations });
+        }
     }
 }
 
