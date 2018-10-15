@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
-import { Field, FieldArray } from "redux-form";
+import { Field, FieldArray, change } from "redux-form";
 import _ from "lodash";
 import WorkoutSelectField_ReactSelect from './WorkoutSelectField_ReactSelect';
 import WorkoutAdvanceViewSwitch from './WorkoutAdvanceViewSwitch';
@@ -20,6 +20,11 @@ class WorkoutTypeSingleCard extends Component {
         super(props);
         props.fields.removeAll();
         props.fields.push({});
+        this.state = {
+            field1Validation: [required, validNumber, min0],
+            field2Validation: [required, validNumber, min0],
+            field3Validation: [required, validNumber, min0],
+        };
     }
 
     render() {
@@ -28,6 +33,7 @@ class WorkoutTypeSingleCard extends Component {
             exercises,
             exerciseMeasurements
         } = this.props;
+        const { field1Validation, field2Validation, field3Validation } = this.state;
         var exerciseOptions = prepareExerciseOptions(exercises);
         return (
             <div className="workout-type-card-wrapper">
@@ -45,9 +51,9 @@ class WorkoutTypeSingleCard extends Component {
                     let field1Options = [];
                     let field2Options = [];
                     let field3Options = [];
-                    let field1Validation = [];
-                    let field2Validation = [];
-                    let field3Validation = [];
+                    // let field1Validation = [];
+                    // let field2Validation = [];
+                    // let field3Validation = [];
                     if (exerciseMeasurements && exerciseMeasurements.length > 0 && selectedExerciseObj) {
                         let cat = (selectedExerciseObj.cat) ? selectedExerciseObj.cat : '';
                         let subCat = (selectedExerciseObj.subCat) ? selectedExerciseObj.subCat : '';
@@ -56,21 +62,21 @@ class WorkoutTypeSingleCard extends Component {
                             selectedExerciseMeasurementObj = measObj;
                             if (selectedExerciseMeasurementObj && selectedExerciseMeasurementObj.field1 && selectedExerciseMeasurementObj.field1.length > 0) {
                                 field1Options = prepareFieldsOptions(selectedExerciseMeasurementObj.field1);
-                                let selectedOption = (fieldData && fieldData.field1_unit) ? fieldData.field1_unit : selectedExerciseMeasurementObj.field1[0];
-                                let selectedFieldUnit = getExeMeasurementValidationRules(selectedOption);
-                                field1Validation = (selectedFieldUnit && selectedFieldUnit.validation) ? selectedFieldUnit.validation : [required, validNumber, min0];
+                                // let selectedOption = (fieldData && fieldData.field1_unit) ? fieldData.field1_unit : selectedExerciseMeasurementObj.field1[0];
+                                // let selectedFieldUnit = getExeMeasurementValidationRules(selectedOption);
+                                // field1Validation = (selectedFieldUnit && selectedFieldUnit.validation) ? selectedFieldUnit.validation : [required, validNumber, min0];
                             }
                             if (selectedExerciseMeasurementObj && selectedExerciseMeasurementObj.field2 && selectedExerciseMeasurementObj.field2.length > 0) {
                                 field2Options = prepareFieldsOptions(selectedExerciseMeasurementObj.field2);
-                                let selectedOption = (fieldData && fieldData.field2_unit) ? fieldData.field2_unit : selectedExerciseMeasurementObj.field2[0];
-                                let selectedFieldUnit = getExeMeasurementValidationRules(selectedOption);
-                                field2Validation = (selectedFieldUnit && selectedFieldUnit.validation) ? selectedFieldUnit.validation : [required, validNumber, min0];
+                                // let selectedOption = (fieldData && fieldData.field2_unit) ? fieldData.field2_unit : selectedExerciseMeasurementObj.field2[0];
+                                // let selectedFieldUnit = getExeMeasurementValidationRules(selectedOption);
+                                // field2Validation = (selectedFieldUnit && selectedFieldUnit.validation) ? selectedFieldUnit.validation : [required, validNumber, min0];
                             }
                             if (selectedExerciseMeasurementObj && selectedExerciseMeasurementObj.field3 && selectedExerciseMeasurementObj.field3.length > 0) {
                                 field3Options = prepareFieldsOptions(selectedExerciseMeasurementObj.field3);
-                                let selectedOption = (fieldData && fieldData.field3_unit) ? fieldData.field3_unit : selectedExerciseMeasurementObj.field3[0];
-                                let selectedFieldUnit = getExeMeasurementValidationRules(selectedOption);
-                                field3Validation = (selectedFieldUnit && selectedFieldUnit.validation) ? selectedFieldUnit.validation : [required, validNumber, min0];
+                                // let selectedOption = (fieldData && fieldData.field3_unit) ? fieldData.field3_unit : selectedExerciseMeasurementObj.field3[0];
+                                // let selectedFieldUnit = getExeMeasurementValidationRules(selectedOption);
+                                // field3Validation = (selectedFieldUnit && selectedFieldUnit.validation) ? selectedFieldUnit.validation : [required, validNumber, min0];
                             }
                         }
                     }
@@ -221,6 +227,57 @@ class WorkoutTypeSingleCard extends Component {
             </div>
         );
     }
+
+    componentDidUpdate(prevProps, prevState) {
+        const { fields, exerciseMeasurements, dispatch } = this.props;
+        const { field1Validation, field2Validation, field3Validation } = this.state;
+        fields.map((field, index) => {
+            let selectedExerciseObj = null;
+            let field2_value = '';
+            let fieldData = fields.get(index);
+            if (fieldData) {
+                selectedExerciseObj = (fieldData.exercise_id) ? fieldData.exercise_id : null;
+                field2_value = (fieldData[`${field}.field2_value`]) ? fieldData[`${field}.field2_value`] : '';
+            }
+            let selectedExerciseMeasurementObj = null;
+            let _field1Validation = [];
+            let _field2Validation = [];
+            let _field3Validation = [];
+            if (exerciseMeasurements && exerciseMeasurements.length > 0 && selectedExerciseObj) {
+                let cat = (selectedExerciseObj.cat) ? selectedExerciseObj.cat : '';
+                let subCat = (selectedExerciseObj.subCat) ? selectedExerciseObj.subCat : '';
+                let measObj = _.find(exerciseMeasurements, { 'category': cat, 'subCategory': subCat });
+                if (measObj) {
+                    selectedExerciseMeasurementObj = measObj;
+                    if (selectedExerciseMeasurementObj && selectedExerciseMeasurementObj.field1 && selectedExerciseMeasurementObj.field1.length > 0) {
+                        let selectedOption = (fieldData && fieldData.field1_unit) ? fieldData.field1_unit : selectedExerciseMeasurementObj.field1[0];
+                        let selectedFieldUnit = getExeMeasurementValidationRules(selectedOption);
+                        _field1Validation = (selectedFieldUnit && selectedFieldUnit.validation) ? selectedFieldUnit.validation : [required, validNumber, min0];
+                    }
+                    if (selectedExerciseMeasurementObj && selectedExerciseMeasurementObj.field2 && selectedExerciseMeasurementObj.field2.length > 0) {
+                        let selectedOption = (fieldData && fieldData.field2_unit) ? fieldData.field2_unit : selectedExerciseMeasurementObj.field2[0];
+                        let selectedFieldUnit = getExeMeasurementValidationRules(selectedOption);
+                        _field2Validation = (selectedFieldUnit && selectedFieldUnit.validation) ? selectedFieldUnit.validation : [required, validNumber, min0];
+                    }
+                    if (selectedExerciseMeasurementObj && selectedExerciseMeasurementObj.field3 && selectedExerciseMeasurementObj.field3.length > 0) {
+                        let selectedOption = (fieldData && fieldData.field3_unit) ? fieldData.field3_unit : selectedExerciseMeasurementObj.field3[0];
+                        let selectedFieldUnit = getExeMeasurementValidationRules(selectedOption);
+                        _field3Validation = (selectedFieldUnit && selectedFieldUnit.validation) ? selectedFieldUnit.validation : [required, validNumber, min0];
+                    }
+                }
+            }
+            if (field1Validation !== _field1Validation && prevState.field1Validation === field1Validation) {
+                this.setState({ field1Validation: _field1Validation });
+            }
+            if (field2Validation !== _field2Validation && prevState.field2Validation === field2Validation) {
+                this.setState({ field2Validation: _field2Validation });
+            }
+            if (field3Validation !== _field3Validation && prevState.field3Validation === field3Validation) {
+                this.setState({ field3Validation: _field3Validation });
+            }
+        });
+    }
+
 };
 
 const mapStateToProps = (state) => {

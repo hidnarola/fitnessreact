@@ -116,7 +116,7 @@ class SaveScheduleWorkoutForm extends Component {
 }
 
 SaveScheduleWorkoutForm = reduxForm({
-    form: 'save_schedule_workout_form',
+    form: 'save_schedule_workout_form'
 })(SaveScheduleWorkoutForm);
 
 const selector = formValueSelector('save_schedule_workout_form');
