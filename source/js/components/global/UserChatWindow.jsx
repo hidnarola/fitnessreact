@@ -82,14 +82,18 @@ class UserChatWindow extends Component {
                     {isTyping &&
                         <p className="chat-feedback">{`${userDetails.firstName}`} is typing…</p>
                     }
-                    <div className="p-10">
-                        {userPreferences && userPreferences.messageAccessibility == ACCESS_LEVEL_NONE &&
+                    {userPreferences && userPreferences.messageAccessibility == ACCESS_LEVEL_NONE &&
+                        <div className="p-10 text-mute">
                             <span>You are not able to send message.</span>
-                        }
-                        {userPreferences && userPreferences.messageAccessibility == ACCESS_LEVEL_FRIENDS_OF_FRIENDS &&
+                        </div>
+                    }
+                    {userPreferences && userPreferences.messageAccessibility == ACCESS_LEVEL_FRIENDS_OF_FRIENDS &&
+                        <div className="p-10 text-mute">
                             <span>You are not able to send message.</span>
-                        }
-                        {userPreferences && userPreferences.messageAccessibility == ACCESS_LEVEL_PUBLIC &&
+                        </div>
+                    }
+                    {userPreferences && userPreferences.messageAccessibility == ACCESS_LEVEL_PUBLIC &&
+                        <div className="p-10">
                             <form method="POST" onSubmit={this.handleSend}>
                                 <fieldset>
                                     <input type="text" name='newMsg' value={newMsg} onChange={this.handleChange} placeholder="Type your message…" autoFocus={true} autoComplete="off" />
@@ -98,8 +102,8 @@ class UserChatWindow extends Component {
                                     </button>
                                 </fieldset>
                             </form>
-                        }
-                    </div>
+                        </div>
+                    }
                 </div>
             </div>
         );

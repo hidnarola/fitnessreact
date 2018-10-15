@@ -43,7 +43,7 @@ class Post extends Component {
     render() {
         const { loading, postError, post, match } = this.props;
         const { isLikedByLoggedUser, lightBoxOpen, currentImage, lightBoxImages } = this.state;
-        console.log('post => ', post.owner_by.userPreferences);
+        console.log('post => ', post);
         let doRenderPost = true;
         if (!loading && post) {
             var createdBy = (post.created_by && Object.keys(post.created_by).length > 0) ? post.created_by : null;
@@ -178,12 +178,12 @@ class Post extends Component {
                                 </div>
                             </div>
                             <div className="single-post-right">
-                                {post && post.owner_by && post.owner_by.userPreferences && post.owner_by.userPreferences.commentAccessibility && post.owner_by.userPreferences.commentAccessibility === ACCESS_LEVEL_PUBLIC &&
+                                {/* {post && post.owner_by && post.owner_by.userPreferences && post.owner_by.userPreferences.commentAccessibility && post.owner_by.userPreferences.commentAccessibility === ACCESS_LEVEL_PUBLIC && */}
                                     <CommentBoxForm
                                         postId={post._id}
                                         onSubmit={this.handleComment}
                                     />
-                                }
+                                {/* } */}
                                 {post.comments && post.comments.length > 0 &&
                                     post.comments.map((o, i) => {
                                         return (

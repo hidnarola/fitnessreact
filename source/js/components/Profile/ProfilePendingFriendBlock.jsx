@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 import { routeCodes } from '../../constants/routes';
 import noProfileImg from 'img/common/no-profile-img.png'
 import { ButtonToolbar, Dropdown, MenuItem } from "react-bootstrap";
+import { ACCESS_LEVEL_PUBLIC } from '../../constants/consts';
 
 class ProfilePendingFriendBlock extends Component {
     render() {
@@ -57,7 +58,9 @@ class ProfilePendingFriendBlock extends Component {
                                 <Dropdown.Menu className="">
                                     <MenuItem eventKey="1" href="javascript:void(0)" onClick={() => handleAcceptFriendRequest(friend.friendshipId)}>Accept</MenuItem>
                                     <MenuItem eventKey="2" href="javascript:void(0)" onClick={() => handleShowRejectFriendRequest(friend.friendshipId)}>Reject</MenuItem>
-                                    <MenuItem eventKey="3" href="javascript:void(0)" onClick={() => handleRequestMessageChannel(friend)}>Send message</MenuItem>
+                                    {friend.userSettings && friend.userSettings.messageAccessibility && (friend.userSettings.messageAccessibility == ACCESS_LEVEL_PUBLIC) &&
+                                        <MenuItem eventKey="3" href="javascript:void(0)" onClick={() => handleRequestMessageChannel(friend)}>Send message</MenuItem>
+                                    }
                                 </Dropdown.Menu>
                             </Dropdown>
                         </ButtonToolbar>
