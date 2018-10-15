@@ -10,7 +10,7 @@ const maxLength200 = maxLength(200);
 
 class UpdateProgramMasterForm extends Component {
     render() {
-        const { handleSubmit, onCancel, errorArr } = this.props;
+        const { handleSubmit, onCancel, errorArr, loadingMaster } = this.props;
         return (
             <div className="add-program-master-form-alert-form">
                 {errorArr && errorArr.length > 0 &&
@@ -40,7 +40,7 @@ class UpdateProgramMasterForm extends Component {
                         validate={[maxLength200]}
                     />
                     <button type="button" onClick={onCancel} className="btn btn-sm btn-danger">Cancel</button>
-                    <button type="submit" className="btn btn-sm btn-success">OK</button>
+                    <button type="submit" disabled={loadingMaster} className="btn btn-sm btn-success">OK</button>
                 </form>
             </div>
         );
@@ -51,7 +51,14 @@ UpdateProgramMasterForm = reduxForm({
     form: 'update_program_title_form',
 })(UpdateProgramMasterForm)
 
-export default connect()(UpdateProgramMasterForm);
+const mapStateToProps = (state) => {
+    const { userPrograms } = state;
+    return {
+        loadingMaster: userPrograms.get('loadingMaster')
+    };
+}
+
+export default connect(mapStateToProps)(UpdateProgramMasterForm);
 
 const TextAreaField = (props) => {
     const { input, meta, wrapperClass, className, placeholder, errorClass } = props;

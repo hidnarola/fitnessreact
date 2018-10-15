@@ -10,7 +10,7 @@ const maxLength200 = maxLength(200);
 
 class AddProgramWorkoutTitleForm extends Component {
     render() {
-        const { handleSubmit, onCancel, errorArr } = this.props;
+        const { handleSubmit, onCancel, errorArr, loadingTitle } = this.props;
         return (
             <div className="add-workout-title-alert-form">
                 {errorArr && errorArr.length > 0 &&
@@ -40,7 +40,7 @@ class AddProgramWorkoutTitleForm extends Component {
                         validate={[maxLength200]}
                     />
                     <button type="button" onClick={onCancel} className="btn btn-sm btn-danger">Cancel</button>
-                    <button type="submit" className="btn btn-sm btn-success">OK</button>
+                    <button type="submit" disabled={loadingTitle} className="btn btn-sm btn-success">OK</button>
                 </form>
             </div>
         );
@@ -51,7 +51,14 @@ AddProgramWorkoutTitleForm = reduxForm({
     form: 'add_program_workout_title_form',
 })(AddProgramWorkoutTitleForm)
 
-export default connect()(AddProgramWorkoutTitleForm);
+const mapStateToProps = (state) => {
+    const { userPrograms } = state;
+    return {
+        loadingTitle: userPrograms.get('loadingTitle')
+    }
+}
+
+export default connect(mapStateToProps)(AddProgramWorkoutTitleForm);
 
 const TextAreaField = (props) => {
     const { input, meta, wrapperClass, className, placeholder, errorClass } = props;
