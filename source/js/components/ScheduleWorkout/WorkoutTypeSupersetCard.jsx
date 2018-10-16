@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
-import { Field, FieldArray, formValueSelector } from "redux-form";
+import { Field, FieldArray, formValueSelector, change } from "redux-form";
 import _ from "lodash";
 import WorkoutSelectField_ReactSelect from './WorkoutSelectField_ReactSelect';
 import WorkoutAdvanceViewSwitch from './WorkoutAdvanceViewSwitch';
@@ -45,7 +45,7 @@ class WorkoutTypeSupersetCard extends Component {
                         component={WorkoutInputField}
                         placeholder="Sets"
                         type="text"
-                        // errorClass="erro_msg_single"
+                        errorClass="erro_msg_single"
                         validate={[required, validNumber, min1, max12]}
                     />
                     <div className="set-div">Sets</div>
@@ -59,7 +59,7 @@ class WorkoutTypeSupersetCard extends Component {
                             component={WorkoutInputField}
                             placeholder="Rest Time"
                             type="text"
-                            // errorClass="erro_msg_single"
+                            errorClass="erro_msg_single"
                             validate={[required, validNumber, min0]}
                         />
                     }
@@ -228,11 +228,14 @@ class WorkoutTypeSupersetCard extends Component {
             </div>
         );
     }
-    
+
     componentDidUpdate(prevProps, prevState) {
-        const { fields, exerciseMeasurements } = this.props;
+        const { fields, exerciseMeasurements, supersetSets, dispatch } = this.props;
         const { validations } = this.state;
         let newValidations = [];
+        if (supersetSets && supersetSets > 12) {
+            dispatch(change('save_schedule_workout_form', 'superset_sets', '12'));
+        }
         fields.map((field, index) => {
             let selectedExerciseObj = null;
             let fieldData = fields.get(index);

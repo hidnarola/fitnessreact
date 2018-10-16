@@ -452,16 +452,19 @@ class App extends Component {
         if (data && typeof data.resp_data !== 'undefined' && typeof data.resp_data.channel !== 'undefined' && data.resp_data.channel) {
             var channel = data.resp_data.channel;
             var channelId = channel._id;
-            var userDetails = null;
             var friendData = channel.friendData;
             var userData = channel.userData;
+            var userDetails = null;
+            var channelForPreferences = null;
             if (typeof friendData !== 'undefined' && friendData && friendData.authUserId !== loggedUserId) {
                 userDetails = friendData;
+                channelForPreferences = (channel.friendPreferences) ? channel.friendPreferences : null;
             } else if (typeof userData !== 'undefined' && userData && userData.authUserId !== loggedUserId) {
                 userDetails = userData;
+                channelForPreferences = (channel.userPreferences) ? channel.userPreferences : null;
             }
             if (channelId && userDetails) {
-                dispatch(openUserChatWindowRequest(userDetails, channelId));
+                dispatch(openUserChatWindowRequest(userDetails, channelId, channelForPreferences));
                 var requestData = {
                     token: getToken(),
                     channel_id: channelId,

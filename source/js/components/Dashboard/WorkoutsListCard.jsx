@@ -20,6 +20,13 @@ class WorkoutsListCard extends Component {
         }
     }
 
+    componentDidUpdate(prevProps, prevState) {
+        const { workout } = this.props;
+        if (workout && typeof workout.isCompleted !== 'undefined' && prevProps.workout.isCompleted !== workout.isCompleted) {
+            this.setState({ isCompleted: (workout.isCompleted) ? true : false });
+        }
+    }
+
     render() {
         const { workout, handleCompleteWorkout } = this.props;
         const { isCompleted } = this.state;
@@ -28,7 +35,7 @@ class WorkoutsListCard extends Component {
         return (
             <div className="todays-workout-list-card">
                 <NavLink to={routeCodes.SAVE_SCHEDULE_WORKOUT.replace(':id', workout._id)}>{workout.title}</NavLink>
-                {workoutDay <= today && workout.dayType && workout.dayType === SCHEDULED_WORKOUT_TYPE_EXERCISE &&
+                {workoutDay <= today && workout.dayType && workout.dayType === SCHEDULED_WORKOUT_TYPE_EXERCISE && typeof workout.totalExercises !== 'undefined' && workout.totalExercises > 0 &&
                     <div className="switch-wrap">
                         <small>Workout complete</small>
                         <div className="material-switch">

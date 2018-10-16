@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
-import { Field, FieldArray } from "redux-form";
+import { Field, FieldArray, change } from "redux-form";
 import _ from "lodash";
 import WorkoutSelectField_ReactSelect from './WorkoutSelectField_ReactSelect';
 import WorkoutAdvanceViewSwitch from './WorkoutAdvanceViewSwitch';
@@ -223,7 +223,7 @@ class WorkoutTypeSingleCard extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        const { fields, exerciseMeasurements } = this.props;
+        const { fields, exerciseMeasurements, dispatch } = this.props;
         const { validations } = this.state;
         let newValidations = [];
         fields.map((field, index) => {
@@ -231,6 +231,9 @@ class WorkoutTypeSingleCard extends Component {
             let fieldData = fields.get(index);
             if (fieldData) {
                 selectedExerciseObj = (fieldData.exercise_id) ? fieldData.exercise_id : null;
+                if (fieldData.sets > 12) {
+                    dispatch(change('save_schedule_workout_form', `${field}.sets`, '12'));
+                }
             }
             let selectedExerciseMeasurementObj = null;
             let _field1Validation = [];
@@ -269,7 +272,6 @@ class WorkoutTypeSingleCard extends Component {
             this.setState({ validations: newValidations });
         }
     }
-
 };
 
 const mapStateToProps = (state) => {

@@ -3,7 +3,7 @@ import { toggleSmallChatWindow, getToken, scrollBottom } from '../../helpers/fun
 import moment from "moment";
 import noProfileImg from 'img/common/no-profile-img.png';
 import _ from "lodash";
-import { ACCESS_LEVEL_NONE, ACCESS_LEVEL_PUBLIC, ACCESS_LEVEL_FRIENDS_OF_FRIENDS } from '../../constants/consts';
+import { ACCESS_LEVEL_NONE, ACCESS_LEVEL_PUBLIC, ACCESS_LEVEL_FRIENDS_OF_FRIENDS, ACCESS_LEVEL_PRIVATE, ACCESS_LEVEL_FRIENDS } from '../../constants/consts';
 
 class UserChatWindow extends Component {
     constructor(props) {
@@ -31,6 +31,7 @@ class UserChatWindow extends Component {
         const {
             newMsg,
         } = this.state;
+        console.log('userPreferences => ', userPreferences);
         return (
             <div className="small-chat-window-wrapper" style={style}>
                 <header
@@ -82,14 +83,21 @@ class UserChatWindow extends Component {
                     {isTyping &&
                         <p className="chat-feedback">{`${userDetails.firstName}`} is typing…</p>
                     }
-                    {userPreferences && userPreferences.messageAccessibility == ACCESS_LEVEL_NONE &&
+                    {userPreferences && (userPreferences.messageAccessibility == ACCESS_LEVEL_NONE || userPreferences.messageAccessibility == ACCESS_LEVEL_FRIENDS_OF_FRIENDS || userPreferences.messageAccessibility == ACCESS_LEVEL_PRIVATE) &&
                         <div className="p-10 text-mute">
                             <span>You are not able to send message.</span>
                         </div>
                     }
-                    {userPreferences && userPreferences.messageAccessibility == ACCESS_LEVEL_FRIENDS_OF_FRIENDS &&
-                        <div className="p-10 text-mute">
-                            <span>You are not able to send message.</span>
+                    {userPreferences && userPreferences.messageAccessibility == ACCESS_LEVEL_FRIENDS &&
+                        <div className="p-10">
+                            <form method="POST" onSubmit={this.handleSend}>
+                                <fieldset>
+                                    <input type="text" name='newMsg' value={newMsg} onChange={this.handleChange} placeholder="Type your message…" autoFocus={true} autoComplete="off" />
+                                    <button type="submit">
+                                        <i className="icon-send"></i>
+                                    </button>
+                                </fieldset>
+                            </form>
                         </div>
                     }
                     {userPreferences && userPreferences.messageAccessibility == ACCESS_LEVEL_PUBLIC &&

@@ -28,7 +28,7 @@ class WorkoutInputField extends Component {
                     data-tip
                     data-for={id}
                 />
-                {meta.touched && (meta.error && <div className={errorClass}></div>)}
+                {/* {meta.touched && (meta.error && <div className={errorClass}></div>)} */}
                 {meta.touched && meta.error &&
                     <ReactTooltip id={id} place="top" type="error" effect="solid">
                         {meta.error}
