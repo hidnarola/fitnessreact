@@ -3,7 +3,7 @@ import { toggleSmallChatWindow, getToken, scrollBottom } from '../../helpers/fun
 import moment from "moment";
 import noProfileImg from 'img/common/no-profile-img.png';
 import _ from "lodash";
-import { ACCESS_LEVEL_NONE, ACCESS_LEVEL_PUBLIC, ACCESS_LEVEL_FRIENDS_OF_FRIENDS, ACCESS_LEVEL_PRIVATE, ACCESS_LEVEL_FRIENDS } from '../../constants/consts';
+import { ACCESS_LEVEL_NONE, ACCESS_LEVEL_PUBLIC, ACCESS_LEVEL_FRIENDS_OF_FRIENDS, ACCESS_LEVEL_PRIVATE, ACCESS_LEVEL_FRIENDS, FRIENDSHIP_STATUS_FRIEND } from '../../constants/consts';
 
 class UserChatWindow extends Component {
     constructor(props) {
@@ -21,6 +21,7 @@ class UserChatWindow extends Component {
             channelId,
             userDetails,
             userPreferences,
+            friendshipStatus,
             loadingMessages,
             messages,
             style,
@@ -31,7 +32,6 @@ class UserChatWindow extends Component {
         const {
             newMsg,
         } = this.state;
-        console.log('userPreferences => ', userPreferences);
         return (
             <div className="small-chat-window-wrapper" style={style}>
                 <header
@@ -88,7 +88,7 @@ class UserChatWindow extends Component {
                             <span>You are not able to send message.</span>
                         </div>
                     }
-                    {userPreferences && userPreferences.messageAccessibility == ACCESS_LEVEL_FRIENDS &&
+                    {userPreferences && userPreferences.messageAccessibility == ACCESS_LEVEL_FRIENDS && friendshipStatus && friendshipStatus === FRIENDSHIP_STATUS_FRIEND &&
                         <div className="p-10">
                             <form method="POST" onSubmit={this.handleSend}>
                                 <fieldset>

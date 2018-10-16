@@ -130,11 +130,13 @@ const actionMap = {
         var chatWindows = Object.assign({}, state.get('chatWindows'));
         var userDetails = action.userDetails;
         var userPreferences = action.userPreferences;
+        var friendshipStatus = action.friendshipStatus;
         var channelId = action.channelId;
         var obj = {
             loading: true,
             userDetails,
             userPreferences,
+            friendshipStatus,
             messages: [],
             isMinimized: false,
             isTyping: false,
@@ -154,12 +156,14 @@ const actionMap = {
                 var messages = chatWindow['messages'];
                 var userDetails = chatWindow['userDetails'];
                 var userPreferences = chatWindow['userPreferences'];
+                var friendshipStatus = chatWindow['friendshipStatus'];
                 var newMessages = channel.messages;
                 var allMessages = _.concat(messages, newMessages);
                 var obj = {
                     loading: false,
                     userDetails,
                     userPreferences,
+                    friendshipStatus,
                     messages: allMessages,
                     isMinimized: false,
                     isTyping: false,

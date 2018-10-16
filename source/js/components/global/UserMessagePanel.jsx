@@ -9,6 +9,7 @@ import ErrorCloud from "svg/error-cloud.svg";
 import { Scrollbars } from 'react-custom-scrollbars';
 import { loadMoreApprovedFriendsMessengerRequest } from '../../actions/friends';
 import NoRecordFound from '../Common/NoRecordFound';
+import { FRIENDSHIP_STATUS_UNKNOWN } from '../../constants/consts';
 
 class UserMessagePanel extends Component {
     render() {
@@ -138,9 +139,9 @@ class UserMessagePanel extends Component {
         );
     }
 
-    handleOpenChatWindow = (userDetails, channelId, userPreferences) => {
+    handleOpenChatWindow = (userDetails, channelId, userPreferences, friendshipStatus) => {
         const { dispatch, socket } = this.props;
-        dispatch(openUserChatWindowRequest(userDetails, channelId, userPreferences));
+        dispatch(openUserChatWindowRequest(userDetails, channelId, userPreferences, friendshipStatus));
         var requestData = {
             token: getToken(),
             channel_id: channelId,
@@ -218,6 +219,7 @@ class ChannelMessageCard extends Component {
         var message = channel.conversation.message;
         var channelFor = null;
         var channelForPreferences = null;
+        var friendshipStatus = (channel.friendshipStatus) ? channel.friendshipStatus : FRIENDSHIP_STATUS_UNKNOWN;
         if (channel.userData && channel.userData.authUserId !== loggedUserData.authId) {
             channelFor = channel.userData;
             channelForPreferences = channel.userPreferences;
@@ -233,7 +235,7 @@ class ChannelMessageCard extends Component {
             return (
                 <a href="javascript:void(0)" onClick={() => {
                     handleMessageSeen(channelFor, channel._id);
-                    handleOpenChatWindow(channelFor, channel._id, channelForPreferences);
+                    handleOpenChatWindow(channelFor, channel._id, channelForPreferences, friendshipStatus);
                 }}>
                     <div className={cns("messenger-box", { 'un-seen-message': !isSeen })}>
                         <span>

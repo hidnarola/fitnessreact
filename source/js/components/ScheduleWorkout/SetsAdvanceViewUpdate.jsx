@@ -284,6 +284,9 @@ class SetsAdvanceViewUpdate extends Component {
                 field3Validation: _field3Validation
             };
         });
+        if (validations !== newValidations && validations === prevState.validations) {
+            this.setState({ validations: newValidations });
+        }
         if (selectedWorkoutForEdit.subType === SCHEDULED_WORKOUT_TYPE_SUPERSET) {
             if (superset_sets > fields.length) {
                 var diff = superset_sets - fields.length;

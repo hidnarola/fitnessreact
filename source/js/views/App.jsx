@@ -31,7 +31,7 @@ import history from '../config/history';
 import { ToastContainer } from "react-toastify";
 import NutritionPreferences from '../components/Nutrition/NutritionPreferences'
 import { publicPath, routeCodes } from '../constants/routes';
-import { SESSION_EXPIRED_URL_TYPE, SERVER_BASE_URL } from '../constants/consts';
+import { SESSION_EXPIRED_URL_TYPE, SERVER_BASE_URL, FRIENDSHIP_STATUS_UNKNOWN } from '../constants/consts';
 import { FaCircleONotch } from "react-icons/lib/fa";
 import FitnessTests from './Admin/FitnessTests';
 import NutritionRecipeDetails from '../components/Nutrition/NutritionRecipeDetails';
@@ -456,6 +456,7 @@ class App extends Component {
             var userData = channel.userData;
             var userDetails = null;
             var channelForPreferences = null;
+            var friendshipStatus = (channel.friendshipStatus) ? channel.friendshipStatus : FRIENDSHIP_STATUS_UNKNOWN;
             if (typeof friendData !== 'undefined' && friendData && friendData.authUserId !== loggedUserId) {
                 userDetails = friendData;
                 channelForPreferences = (channel.friendPreferences) ? channel.friendPreferences : null;
@@ -464,7 +465,7 @@ class App extends Component {
                 channelForPreferences = (channel.userPreferences) ? channel.userPreferences : null;
             }
             if (channelId && userDetails) {
-                dispatch(openUserChatWindowRequest(userDetails, channelId, channelForPreferences));
+                dispatch(openUserChatWindowRequest(userDetails, channelId, channelForPreferences, friendshipStatus));
                 var requestData = {
                     token: getToken(),
                     channel_id: channelId,

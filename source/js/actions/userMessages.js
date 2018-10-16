@@ -72,12 +72,13 @@ export function loadMoreUserMessageChannelError(error) {
     }
 }
 
-export function openUserChatWindowRequest(userDetails, channelId, userPreferences) {
+export function openUserChatWindowRequest(userDetails, channelId, userPreferences, friendshipStatus) {
     return {
         type: OPEN_USER_CHAT_WINDOW_REQUEST,
         userDetails,
         channelId,
         userPreferences,
+        friendshipStatus,
     }
 }
 
