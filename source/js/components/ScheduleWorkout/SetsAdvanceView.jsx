@@ -4,9 +4,9 @@ import { Field, formValueSelector } from "redux-form";
 import WorkoutInputField from './WorkoutInputField';
 import WorkoutDropdownField from './WorkoutDropdownField';
 import _ from "lodash";
-import { prepareFieldsOptions } from '../../helpers/funs';
+import { prepareFieldsOptions, getExeMeasurementValidationRules } from '../../helpers/funs';
 import { EXE_REST_TIME_UNITS, SCHEDULED_WORKOUT_TYPE_EXERCISE, SCHEDULED_WORKOUT_TYPE_SUPERSET, SCHEDULED_WORKOUT_TYPE_CIRCUIT } from '../../constants/consts';
-import { required, min, max, validNumber } from '../../formValidation/validationRules';
+import { required, min, validNumber } from '../../formValidation/validationRules';
 
 const min0 = min(0);
 const min1 = min(1);
@@ -14,6 +14,9 @@ const min1 = min(1);
 class SetsAdvanceView extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            validations: []
+        };
     }
 
     componentWillMount() {
@@ -106,6 +109,7 @@ class SetsAdvanceView extends Component {
             allowAddRemoveSets,
             workoutType,
         } = this.props;
+        const { validations } = this.state;
         let selectedExerciseMeasurementObj = null;
         let field1Options = [];
         let field2Options = [];
@@ -141,7 +145,7 @@ class SetsAdvanceView extends Component {
                                     placeholder=""
                                     type="text"
                                     errorClass="erro_msg_single"
-                                    validate={[required, validNumber, min1]}
+                                    validate={(validations && validations[index] && validations[index].field1Validation) ? validations[index].field1Validation : [required, validNumber, min1]}
                                 />
                             }
                             {field1Options && field1Options.length > 0 &&
@@ -161,7 +165,7 @@ class SetsAdvanceView extends Component {
                                     placeholder=""
                                     type="text"
                                     errorClass="erro_msg_single"
-                                    validate={[required, validNumber, min1]}
+                                    validate={(validations && validations[index] && validations[index].field2Validation) ? validations[index].field2Validation : [required, validNumber, min1]}
                                 />
                             }
                             {field2Options && field2Options.length > 0 &&
@@ -181,7 +185,7 @@ class SetsAdvanceView extends Component {
                                     placeholder=""
                                     type="text"
                                     errorClass="erro_msg_single"
-                                    validate={[required, validNumber, min1]}
+                                    validate={(validations && validations[index] && validations[index].field3Validation) ? validations[index].field3Validation : [required, validNumber, min1]}
                                 />
                             }
                             {field3Options && field3Options.length > 0 &&
@@ -229,7 +233,47 @@ class SetsAdvanceView extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        const { workout_type, superset_sets, circuit_sets, fields } = this.props;
+        const { workout_type, superset_sets, circuit_sets, fields, exerciseMeasurements, selectedSingleExerciseObj } = this.props;
+        const { validations } = this.state;
+        let newValidations = [];
+        fields.map((field, index) => {
+            let fieldData = fields.get(index);
+            let selectedExerciseMeasurementObj = null;
+            let _field1Validation = [];
+            let _field2Validation = [];
+            let _field3Validation = [];
+            if (exerciseMeasurements && exerciseMeasurements.length > 0 && selectedSingleExerciseObj) {
+                let cat = (selectedSingleExerciseObj.cat) ? selectedSingleExerciseObj.cat : '';
+                let subCat = (selectedSingleExerciseObj.subCat) ? selectedSingleExerciseObj.subCat : '';
+                let measObj = _.find(exerciseMeasurements, { 'category': cat, 'subCategory': subCat });
+                if (measObj) {
+                    selectedExerciseMeasurementObj = measObj;
+                    if (selectedExerciseMeasurementObj && selectedExerciseMeasurementObj.field1 && selectedExerciseMeasurementObj.field1.length > 0) {
+                        let selectedOption = (fieldData && fieldData.field1_unit) ? fieldData.field1_unit : selectedExerciseMeasurementObj.field1[0];
+                        let selectedFieldUnit = getExeMeasurementValidationRules(selectedOption);
+                        _field1Validation = (selectedFieldUnit && selectedFieldUnit.validation) ? selectedFieldUnit.validation : [required, validNumber, min1];
+                    }
+                    if (selectedExerciseMeasurementObj && selectedExerciseMeasurementObj.field2 && selectedExerciseMeasurementObj.field2.length > 0) {
+                        let selectedOption = (fieldData && fieldData.field2_unit) ? fieldData.field2_unit : selectedExerciseMeasurementObj.field2[0];
+                        let selectedFieldUnit = getExeMeasurementValidationRules(selectedOption);
+                        _field2Validation = (selectedFieldUnit && selectedFieldUnit.validation) ? selectedFieldUnit.validation : [required, validNumber, min1];
+                    }
+                    if (selectedExerciseMeasurementObj && selectedExerciseMeasurementObj.field3 && selectedExerciseMeasurementObj.field3.length > 0) {
+                        let selectedOption = (fieldData && fieldData.field3_unit) ? fieldData.field3_unit : selectedExerciseMeasurementObj.field3[0];
+                        let selectedFieldUnit = getExeMeasurementValidationRules(selectedOption);
+                        _field3Validation = (selectedFieldUnit && selectedFieldUnit.validation) ? selectedFieldUnit.validation : [required, validNumber, min1];
+                    }
+                }
+            }
+            newValidations[index] = {
+                field1Validation: _field1Validation,
+                field2Validation: _field2Validation,
+                field3Validation: _field3Validation
+            };
+        });
+        if (validations !== newValidations && validations === prevState.validations) {
+            this.setState({ validations: newValidations });
+        }
         if (workout_type === SCHEDULED_WORKOUT_TYPE_SUPERSET) {
             if (superset_sets > fields.length) {
                 var diff = superset_sets - fields.length;
