@@ -38,39 +38,44 @@ class WorkoutTypeSupersetCardUpdate extends Component {
             <div className="workout-type-card-wrapper">
                 <div className="workout-type-card-block multiple-sets-header">
                     <label>Superset Sets</label>
-                    <Field
-                        id={`superset_sets`}
-                        name={`superset_sets`}
-                        component={WorkoutInputField}
-                        placeholder="Sets"
-                        type="text"
-                        errorClass="erro_msg_single"
-                        validate={[required, validNumber, min1, max12]}
-                    />
-                    <div className="set-div">Sets</div>
+                    <div className="sim-view-field-wrap">
+                        <Field
+                            id={`superset_sets`}
+                            name={`superset_sets`}
+                            component={WorkoutInputField}
+                            placeholder="Sets"
+                            type="text"
+                            errorClass="erro_msg_single"
+                            validate={[required, validNumber, min1, max12]}
+                        />
+                        <div className="set-div">Sets</div>
+                    </div>
                     {typeof supersetSets !== 'undefined' && supersetSets > 1 &&
                         <label>Rest Between Sets</label>
                     }
-                    {typeof supersetSets !== 'undefined' && supersetSets > 1 &&
-                        <Field
-                            id={`superset_rest_time`}
-                            name={`superset_rest_time`}
-                            component={WorkoutInputField}
-                            placeholder="Rest Time"
-                            type="text"
-                            errorClass="erro_msg_single"
-                            validate={[required, validNumber, min0]}
-                        />
-                    }
-                    {typeof supersetSets !== 'undefined' && supersetSets > 1 &&
-                        <Field
-                            id={`superset_rest_time_unit`}
-                            name={`superset_rest_time_unit`}
-                            component={WorkoutDropdownField}
-                            options={EXE_REST_TIME_UNITS}
-                            tabIndex={-1}
-                        />
-                    }
+                    <div className="sim-view-field-wrap">
+                        {typeof supersetSets !== 'undefined' && supersetSets > 1 &&
+                            <Field
+                                id={`superset_rest_time`}
+                                name={`superset_rest_time`}
+                                component={WorkoutInputField}
+                                placeholder="Rest Time"
+                                type="text"
+                                errorClass="erro_msg_single"
+                                fieldWrapperErrorClass="erro_msg_super_wrapper"
+                                validate={[required, validNumber, min0]}
+                            />
+                        }
+                        {typeof supersetSets !== 'undefined' && supersetSets > 1 &&
+                            <Field
+                                id={`superset_rest_time_unit`}
+                                name={`superset_rest_time_unit`}
+                                component={WorkoutDropdownField}
+                                options={EXE_REST_TIME_UNITS}
+                                tabIndex={-1}
+                            />
+                        }
+                    </div>
                 </div>
                 {fields.map((field, index) => {
                     let selectedExerciseObj = null;

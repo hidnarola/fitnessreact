@@ -34,7 +34,7 @@ class WorkoutsListCard extends Component {
         var workoutDay = moment(workout.date);
         return (
             <div className="todays-workout-list-card">
-                <NavLink to={routeCodes.SAVE_SCHEDULE_WORKOUT.replace(':id', workout._id)}>{workout.title}</NavLink>
+                <NavLink to={routeCodes.SAVE_SCHEDULE_WORKOUT.replace(':id', workout._id)} className="width-100-per d-inline-block">{workout.title}</NavLink>
                 {workoutDay <= today && workout.dayType && workout.dayType === SCHEDULED_WORKOUT_TYPE_EXERCISE && typeof workout.totalExercises !== 'undefined' && workout.totalExercises > 0 &&
                     <div className="switch-wrap">
                         <small>Workout complete</small>

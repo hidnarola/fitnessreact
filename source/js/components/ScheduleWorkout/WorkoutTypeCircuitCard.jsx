@@ -38,39 +38,44 @@ class WorkoutTypeCircuitCard extends Component {
             <div className="workout-type-card-wrapper">
                 <div className="workout-type-card-block multiple-sets-header">
                     <label>Circuit Sets</label>
-                    <Field
-                        id={`circuit_sets`}
-                        name={`circuit_sets`}
-                        component={WorkoutInputField}
-                        placeholder="Sets"
-                        type="text"
-                        errorClass="erro_msg_single"
-                        validate={[required, validNumber, min1, max12]}
-                    />
-                    <div className="set-div">Sets</div>
+                    <div className="sim-view-field-wrap">
+                        <Field
+                            id={`circuit_sets`}
+                            name={`circuit_sets`}
+                            component={WorkoutInputField}
+                            placeholder="Sets"
+                            type="text"
+                            errorClass="erro_msg_single"
+                            validate={[required, validNumber, min1, max12]}
+                        />
+                        <div className="set-div">Sets</div>
+                    </div>
                     {typeof circuitSets !== 'undefined' && circuitSets > 1 &&
                         <label>Rest Between Sets</label>
                     }
-                    {typeof circuitSets !== 'undefined' && circuitSets > 1 &&
-                        <Field
-                            id={`circuit_rest_time`}
-                            name={`circuit_rest_time`}
-                            component={WorkoutInputField}
-                            placeholder="Rest Time"
-                            type="text"
-                            errorClass="erro_msg_single"
-                            validate={[required, validNumber, min0]}
-                        />
-                    }
-                    {typeof circuitSets !== 'undefined' && circuitSets > 1 &&
-                        <Field
-                            id={`circuit_rest_time_unit`}
-                            name={`circuit_rest_time_unit`}
-                            component={WorkoutDropdownField}
-                            options={EXE_REST_TIME_UNITS}
-                            tabIndex={-1}
-                        />
-                    }
+                    <div className="sim-view-field-wrap">
+                        {typeof circuitSets !== 'undefined' && circuitSets > 1 &&
+                            <Field
+                                id={`circuit_rest_time`}
+                                name={`circuit_rest_time`}
+                                component={WorkoutInputField}
+                                placeholder="Rest Time"
+                                type="text"
+                                errorClass="erro_msg_single"
+                                fieldWrapperErrorClass="erro_msg_super_wrapper"
+                                validate={[required, validNumber, min0]}
+                            />
+                        }
+                        {typeof circuitSets !== 'undefined' && circuitSets > 1 &&
+                            <Field
+                                id={`circuit_rest_time_unit`}
+                                name={`circuit_rest_time_unit`}
+                                component={WorkoutDropdownField}
+                                options={EXE_REST_TIME_UNITS}
+                                tabIndex={-1}
+                            />
+                        }
+                    </div>
                 </div>
                 {fields.map((field, index) => {
                     let selectedExerciseObj = null;

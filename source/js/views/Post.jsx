@@ -9,7 +9,7 @@ import noProfileImg from 'img/common/no-profile-img.png'
 import noImg from 'img/common/no-img.png'
 import moment from "moment";
 import { routeCodes } from '../constants/routes';
-import { ACCESS_LEVEL_PUBLIC, ACCESS_LEVEL_FRIENDS, ACCESS_LEVEL_PRIVATE, SERVER_BASE_URL, POST_TYPE_TIMELINE, POST_TYPE_GALLERY, POST_TYPE_PROGRESS_PHOTO } from '../constants/consts';
+import { ACCESS_LEVEL_PUBLIC, ACCESS_LEVEL_FRIENDS, ACCESS_LEVEL_PRIVATE, SERVER_BASE_URL, POST_TYPE_TIMELINE, POST_TYPE_GALLERY, POST_TYPE_PROGRESS_PHOTO, FRIENDSHIP_STATUS_FRIEND } from '../constants/consts';
 import { FaGlobe, FaLock, FaGroup } from 'react-icons/lib/fa';
 import ReactHtmlParser from "react-html-parser";
 import cns from "classnames";
@@ -178,12 +178,27 @@ class Post extends Component {
                                 </div>
                             </div>
                             <div className="single-post-right">
-                                {/* {post && post.owner_by && post.owner_by.userPreferences && post.owner_by.userPreferences.commentAccessibility && post.owner_by.userPreferences.commentAccessibility === ACCESS_LEVEL_PUBLIC && */}
+                                {
+                                    post && post.owner_by &&
+                                    post.owner_by.userPreferences &&
+                                    post.owner_by.userPreferences.commentAccessibility &&
+                                    post.owner_by.userPreferences.commentAccessibility == ACCESS_LEVEL_PUBLIC &&
                                     <CommentBoxForm
                                         postId={post._id}
                                         onSubmit={this.handleComment}
                                     />
-                                {/* } */}
+                                }
+                                {
+                                    post && post.owner_by &&
+                                    post.owner_by.userPreferences &&
+                                    post.owner_by.userPreferences.commentAccessibility &&
+                                    post.owner_by.userPreferences.commentAccessibility == ACCESS_LEVEL_FRIENDS &&
+                                    post.friendshipStatus && post.friendshipStatus == FRIENDSHIP_STATUS_FRIEND &&
+                                    <CommentBoxForm
+                                        postId={post._id}
+                                        onSubmit={this.handleComment}
+                                    />
+                                }
                                 {post.comments && post.comments.length > 0 &&
                                     post.comments.map((o, i) => {
                                         return (

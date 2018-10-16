@@ -1219,6 +1219,7 @@ flex-direction:row; display:-webkit-box; display:-webkit-flex; display:-ms-flex;
 .mt-20{margin-top: 20px !important;}
 .mb-10{margin-bottom: 10px !important;}
 .p-relative{position: relative;}
+.d-inline-block{display: inline-block !important;}
 
 .table-listing-image-view-wrapper span {flex-direction: row;width: 60%;padding-left: 15px;padding-right: 15px;width: 28%;display: -webkit-box;display: -webkit-flex;display: -ms-flex;display: flex;justify-content: center;flex-direction: column;}
 .table-listing-image-view-wrapper span img{min-height: 100px;max-width: 100%;min-width: 150px;max-width: 150px;border-radius: 2px;}
@@ -2396,12 +2397,24 @@ button.close_btn {padding: 0;border-radius: 80%;border: 0;height: 20px;backgroun
 .workout-schedule-save .body-head-l-btm a{position: relative;}
 .workout-types-count-badge{ position: absolute; top: -5px; right: -5px; width: 25px; height: 25px; background: #ffffff; border-radius: 50%; font-size: 12px; font-weight: 500; line-height: 24px; color: #ff3389; border: 1px solid #ff3389; }
 .text-mute { text-align: center; font-size: 12px; font-weight: 500; color: #aaa; }
+.no-msg-allow { text-align: center; font-size: 12px; font-weight: 500; color: #aaa;padding: 18px 10px !important; }
 
-/*
+
 .sets-advance-view-block {position: relative;padding-left: 45px;padding-right: 30px;}
 .sets-advance-view-block > label {position: absolute;left: 3px;top: 9px;margin: 0;}
 .sets-advance-view-block > div {float: left;width: 25%;position: relative;padding: 0 5px;}
 .sets-advance-view-block > div input {width: 100%;}
 .sets-advance-view-block > div select {margin: 0;position: absolute;right: 5px;top: 0;}
 .sets-advance-view-block button.sets-advance-view-cBtn {position: absolute;right: 0;top: 25px;}
-.sets-advance-view-block:After {content: " ";display: block;clear: both;}*/
+.sets-advance-view-block:After {content: " ";display: block;clear: both;} 
+.erro_msg_single_wrapper + div select {top: 1px;right: 6px;}
+.erro_msg_single_wrapper {border: 1px solid #a94442;}
+.erro_msg_single_wrapper .erro_msg_single {display: none;}
+.multiple-sets-header>div.sim-view-field-wrap .erro_msg_single {height: calc(100% + 1px);top: -1px;width: calc(100% + 1px);left: -1px;}
+.multiple-sets-header>div.sim-view-field-wrap .set-div {margin-right: 0;}
+.multiple-sets-header>div.sim-view-field-wrap input {z-index: 9;position: relative;}
+.multiple-sets-header>div.sim-view-field-wrap > div {display: inline-block;z-index: 9;vertical-align: top;}
+.multiple-sets-header>div.sim-view-field-wrap {position: relative;margin-right: 10px;}
+.erro_msg_super_wrapper .erro_msg_single {display: none;}
+.erro_msg_super_wrapper {border-left: 1px solid #a94442;border-bottom: 1px solid #a94442;border-top: 1px solid #a94442;line-height: 100%;}
+.erro_msg_super_wrapper + div {border-right: 1px solid #a94442;border-bottom: 1px solid #a94442;border-top: 1px solid #a94442;}

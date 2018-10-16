@@ -12,9 +12,12 @@ class WorkoutInputField extends Component {
             max,
             meta,
             errorClass,
+            fieldWrapperErrorClass,
         } = this.props;
         return (
-            <div className="">
+            <div className={
+                (fieldWrapperErrorClass && meta.touched && meta.error) ? fieldWrapperErrorClass : ''
+            }>
                 <input
                     type="text"
                     name={input.name}
@@ -28,7 +31,7 @@ class WorkoutInputField extends Component {
                     data-tip
                     data-for={id}
                 />
-                {/* {meta.touched && (meta.error && <div className={errorClass}></div>)} */}
+                {meta.touched && (meta.error && <div className={errorClass}></div>)}
                 {meta.touched && meta.error &&
                     <ReactTooltip id={id} place="top" type="error" effect="solid">
                         {meta.error}

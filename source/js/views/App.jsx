@@ -260,6 +260,7 @@ class App extends Component {
                                             var chatWindow = chatWindows[key];
                                             var userDetails = chatWindow.userDetails;
                                             var userPreferences = chatWindow.userPreferences;
+                                            var friendshipStatus = chatWindow.friendshipStatus;
                                             var isTyping = (typeof chatWindow.isTyping !== 'undefined') ? chatWindow.isTyping : false;
                                             var loadingMessages = chatWindow.loading;
                                             var messages = chatWindow.messages;
@@ -269,6 +270,7 @@ class App extends Component {
                                                     channelId={key}
                                                     userDetails={userDetails}
                                                     userPreferences={userPreferences}
+                                                    friendshipStatus={friendshipStatus}
                                                     isTyping={isTyping}
                                                     style={style}
                                                     closeWindow={this.handleCloseUserChatWindow}

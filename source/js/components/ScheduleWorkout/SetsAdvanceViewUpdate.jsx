@@ -151,85 +151,98 @@ class SetsAdvanceViewUpdate extends Component {
                     return (
                         <div key={index} className="sets-advance-view-block">
                             <label>Set {(index + 1)}</label>
-                            {field1Options && field1Options.length > 0 &&
-                                <Field
-                                    id={`${field}.field1_value`}
-                                    name={`${field}.field1_value`}
-                                    component={WorkoutInputField}
-                                    placeholder=""
-                                    type="text"
-                                    errorClass="erro_msg_single"
-                                    validate={(validations && validations[index] && validations[index].field1Validation) ? validations[index].field1Validation : [required, validNumber, min1]}
-                                />
-                            }
-                            {field1Options && field1Options.length > 0 &&
-                                <Field
-                                    id={`${field}.field1_unit`}
-                                    name={`${field}.field1_unit`}
-                                    component={WorkoutDropdownField}
-                                    options={field1Options}
-                                    tabIndex={-1}
-                                />
-                            }
-                            {field2Options && field2Options.length > 0 &&
-                                <Field
-                                    id={`${field}.field2_value`}
-                                    name={`${field}.field2_value`}
-                                    component={WorkoutInputField}
-                                    placeholder=""
-                                    type="text"
-                                    errorClass="erro_msg_single"
-                                    validate={(validations && validations[index] && validations[index].field2Validation) ? validations[index].field2Validation : [required, validNumber, min1]}
-                                />
-                            }
-                            {field2Options && field2Options.length > 0 &&
-                                <Field
-                                    id={`${field}.field2_unit`}
-                                    name={`${field}.field2_unit`}
-                                    component={WorkoutDropdownField}
-                                    options={field2Options}
-                                    tabIndex={-1}
-                                />
-                            }
-                            {field3Options && field3Options.length > 0 &&
-                                <Field
-                                    id={`${field}.field3_value`}
-                                    name={`${field}.field3_value`}
-                                    component={WorkoutInputField}
-                                    placeholder=""
-                                    type="text"
-                                    errorClass="erro_msg_single"
-                                    validate={(validations && validations[index] && validations[index].field3Validation) ? validations[index].field3Validation : [required, validNumber, min1]}
-                                />
-                            }
-                            {field3Options && field3Options.length > 0 &&
-                                <Field
-                                    id={`${field}.field3_unit`}
-                                    name={`${field}.field3_unit`}
-                                    component={WorkoutDropdownField}
-                                    options={field3Options}
-                                    tabIndex={-1}
-                                />
-                            }
-                            {index < (fields.length - 1) && (workoutType && workoutType === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
-                                <Field
-                                    id={`${field}.rest_time`}
-                                    name={`${field}.rest_time`}
-                                    component={WorkoutInputField}
-                                    placeholder="Rest Time"
-                                    type="text"
-                                    validate={[required, validNumber, min0]}
-                                />
-                            }
-                            {index < (fields.length - 1) && (workoutType && workoutType === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
-                                <Field
-                                    id={`${field}.rest_time_unit`}
-                                    name={`${field}.rest_time_unit`}
-                                    component={WorkoutDropdownField}
-                                    options={EXE_REST_TIME_UNITS}
-                                    tabIndex={-1}
-                                />
-                            }
+                            <div className="adv-view-field-wrap">
+                                {field1Options && field1Options.length > 0 &&
+                                    <Field
+                                        id={`${field}.field1_value`}
+                                        name={`${field}.field1_value`}
+                                        component={WorkoutInputField}
+                                        placeholder=""
+                                        type="text"
+                                        errorClass="erro_msg_single"
+                                        fieldWrapperErrorClass="erro_msg_single_wrapper"
+                                        validate={(validations && validations[index] && validations[index].field1Validation) ? validations[index].field1Validation : [required, validNumber, min1]}
+                                    />
+                                }
+                                {field1Options && field1Options.length > 0 &&
+                                    <Field
+                                        id={`${field}.field1_unit`}
+                                        name={`${field}.field1_unit`}
+                                        component={WorkoutDropdownField}
+                                        options={field1Options}
+                                        tabIndex={-1}
+                                    />
+                                }
+                            </div>
+                            <div className="adv-view-field-wrap">
+                                {field2Options && field2Options.length > 0 &&
+                                    <Field
+                                        id={`${field}.field2_value`}
+                                        name={`${field}.field2_value`}
+                                        component={WorkoutInputField}
+                                        placeholder=""
+                                        type="text"
+                                        errorClass="erro_msg_single"
+                                        fieldWrapperErrorClass="erro_msg_single_wrapper"
+                                        validate={(validations && validations[index] && validations[index].field2Validation) ? validations[index].field2Validation : [required, validNumber, min1]}
+                                    />
+                                }
+                                {field2Options && field2Options.length > 0 &&
+                                    <Field
+                                        id={`${field}.field2_unit`}
+                                        name={`${field}.field2_unit`}
+                                        component={WorkoutDropdownField}
+                                        options={field2Options}
+                                        tabIndex={-1}
+                                    />
+                                }
+                            </div>
+                            <div className="adv-view-field-wrap">
+                                {field3Options && field3Options.length > 0 &&
+                                    <Field
+                                        id={`${field}.field3_value`}
+                                        name={`${field}.field3_value`}
+                                        component={WorkoutInputField}
+                                        placeholder=""
+                                        type="text"
+                                        errorClass="erro_msg_single"
+                                        fieldWrapperErrorClass="erro_msg_single_wrapper"
+                                        validate={(validations && validations[index] && validations[index].field3Validation) ? validations[index].field3Validation : [required, validNumber, min1]}
+                                    />
+                                }
+                                {field3Options && field3Options.length > 0 &&
+                                    <Field
+                                        id={`${field}.field3_unit`}
+                                        name={`${field}.field3_unit`}
+                                        component={WorkoutDropdownField}
+                                        options={field3Options}
+                                        tabIndex={-1}
+                                    />
+                                }
+                            </div>
+                            <div className="adv-view-field-wrap">
+                                {index < (fields.length - 1) && (workoutType && workoutType === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
+                                    <Field
+                                        id={`${field}.rest_time`}
+                                        name={`${field}.rest_time`}
+                                        component={WorkoutInputField}
+                                        placeholder="Rest Time"
+                                        type="text"
+                                        errorClass="erro_msg_single"
+                                        fieldWrapperErrorClass="erro_msg_single_wrapper"
+                                        validate={[required, validNumber, min0]}
+                                    />
+                                }
+                                {index < (fields.length - 1) && (workoutType && workoutType === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
+                                    <Field
+                                        id={`${field}.rest_time_unit`}
+                                        name={`${field}.rest_time_unit`}
+                                        component={WorkoutDropdownField}
+                                        options={EXE_REST_TIME_UNITS}
+                                        tabIndex={-1}
+                                    />
+                                }
+                            </div>
                             {(index > 0) && (allowAddRemoveSets) &&
                                 <button type="button" className="sets-advance-view-cBtn" onClick={() => fields.remove(index)} tabIndex={-1}><i className="icon-cancel"></i></button>
                             }

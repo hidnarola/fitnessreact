@@ -84,7 +84,7 @@ class UserChatWindow extends Component {
                         <p className="chat-feedback">{`${userDetails.firstName}`} is typing…</p>
                     }
                     {userPreferences && (userPreferences.messageAccessibility == ACCESS_LEVEL_NONE || userPreferences.messageAccessibility == ACCESS_LEVEL_FRIENDS_OF_FRIENDS || userPreferences.messageAccessibility == ACCESS_LEVEL_PRIVATE) &&
-                        <div className="p-10 text-mute">
+                        <div className="no-msg-allow">
                             <span>You are not able to send message.</span>
                         </div>
                     }
