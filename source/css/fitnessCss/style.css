@@ -2418,3 +2418,4 @@ button.close_btn {padding: 0;border-radius: 80%;border: 0;height: 20px;backgroun
 .erro_msg_super_wrapper .erro_msg_single {display: none;}
 .erro_msg_super_wrapper {border-left: 1px solid #a94442;border-bottom: 1px solid #a94442;border-top: 1px solid #a94442;line-height: 100%;}
 .erro_msg_super_wrapper + div {border-right: 1px solid #a94442;border-bottom: 1px solid #a94442;border-top: 1px solid #a94442;}
+.progress-popup.update-prfl-dbt-modal .modal-content { padding: 30px 40px; }

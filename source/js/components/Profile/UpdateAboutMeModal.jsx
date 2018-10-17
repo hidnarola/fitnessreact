@@ -28,73 +28,78 @@ class UpdateAboutMeModal extends Component {
         let validateWeight = (weightUnit !== MEASUREMENT_UNIT_POUND) ? [validNumber, min20, max1000] : [validNumber, min44, max2200];
         let validateHeight = (heightUnit !== MEASUREMENT_UNIT_INCH) ? [validNumber, min50, max600] : [validNumber, min20, max240];
         return (
-            <div className="about-me-update-modal-save-form-wrapper">
-                <div className="about-me-update-modal-save-modal-wrapper">
-                    <Modal show={show}>
-                        <form onSubmit={handleSubmit}>
-                            <Modal.Header>
-                                <Modal.Title>Update Details</Modal.Title>
-                            </Modal.Header>
+            <div className="about-me-update-modal-save-modal-wrapper">
+                <Modal show={show} bsSize="large" className="progress-popup update-prfl-dbt-modal">
+                    <form onSubmit={handleSubmit}>
+                        <div className="progress-popup-head">
+                            <button type="button" className="close-round" onClick={handleClose}>
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h3 className="title-h3">Update Details</h3>
+                        </div>
 
-                            <Modal.Body>
-                                <div className="row">
-                                    <div className="col-md-12">
-                                        <Field
-                                            name="about_me"
-                                            value={aboutMe}
-                                            handleChange={this.handleChangeTextEditor}
-                                            className="editor-min-height-200"
-                                            label="About me"
-                                            labelClass="control-label display_block"
-                                            wrapperClass="form-group"
-                                            placeholder="Description"
-                                            component={EditorField}
-                                        />
-                                        <Field
-                                            name="height"
-                                            type="text"
-                                            className="form-control"
-                                            label={`Height (${heightUnit})`}
-                                            labelClass="control-label"
-                                            wrapperClass="form-group"
-                                            placeholder={`Height (${heightUnit})`}
-                                            component={InputField}
-                                            errorClass="help-block"
-                                            validate={validateHeight}
-                                        />
-                                        <Field
-                                            name="heightUnit"
-                                            component="input"
-                                            type="hidden"
-                                        />
-                                        <Field
-                                            name="weight"
-                                            type="text"
-                                            className="form-control"
-                                            label={`Weight (${weightUnit})`}
-                                            labelClass="control-label"
-                                            wrapperClass="form-group"
-                                            placeholder={`Weight (${weightUnit})`}
-                                            component={InputField}
-                                            errorClass="help-block"
-                                            validate={validateWeight}
-                                        />
-                                        <Field
-                                            name="weightUnit"
-                                            component="input"
-                                            type="hidden"
-                                        />
+                        <div className="progress-popup-body">
+                            <ul className="common-ul">
+                                <li>
+                                    <Field
+                                        name="about_me"
+                                        value={aboutMe}
+                                        handleChange={this.handleChangeTextEditor}
+                                        className="editor-min-height-200"
+                                        label="About me"
+                                        labelClass="control-label display_block"
+                                        wrapperClass="form-group"
+                                        placeholder="Description"
+                                        component={EditorField}
+                                    />
+                                </li>
+                                <li>
+                                    <Field
+                                        name="height"
+                                        type="text"
+                                        className="form-control"
+                                        label={`Height (${heightUnit})`}
+                                        labelClass="control-label"
+                                        wrapperClass="form-group"
+                                        placeholder={`Height (${heightUnit})`}
+                                        component={InputField}
+                                        errorClass="help-block"
+                                        validate={validateHeight}
+                                    />
+                                    <Field
+                                        name="heightUnit"
+                                        component="input"
+                                        type="hidden"
+                                    />
+                                </li>
+                                <li>
+                                    <Field
+                                        name="weight"
+                                        type="text"
+                                        className="form-control"
+                                        label={`Weight (${weightUnit})`}
+                                        labelClass="control-label"
+                                        wrapperClass="form-group"
+                                        placeholder={`Weight (${weightUnit})`}
+                                        component={InputField}
+                                        errorClass="help-block"
+                                        validate={validateWeight}
+                                    />
+                                    <Field
+                                        name="weightUnit"
+                                        component="input"
+                                        type="hidden"
+                                    />
+                                </li>
+                                <li>
+                                    <div className="add-log d-flex">
+                                        <button type="submit" className="ml-auto">Save Log <i className="icon-control_point"></i></button>
                                     </div>
-                                </div>
-                            </Modal.Body>
-
-                            <Modal.Footer>
-                                <Button onClick={handleClose}>Close</Button>
-                                <Button type="submit" bsStyle="primary">Save</Button>
-                            </Modal.Footer>
-                        </form>
-                    </Modal>
-                </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </form>
+                </Modal>
             </div>
         );
     }
