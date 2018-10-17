@@ -64,7 +64,7 @@ class Muscle extends Component {
                 }
 
                 {!loading && (typeof progress === 'undefined' || !progress) && typeof error !== 'undefined' && error && error.length <= 0 &&
-                    <NoRecordFound />
+                    <NoRecordFound title="Body data are not available for these days" />
                 }
 
                 {!loading && typeof error !== 'undefined' && error && error.length > 0 &&

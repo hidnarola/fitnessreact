@@ -21,6 +21,7 @@ import {
     LOAD_MORE_USER_MESSAGE_CHANNEL_ERROR,
     SET_USER_MESSAGES_STATE,
     RESET_USER_MESSAGES_STATE,
+    MOVE_TO_GROUND_USER_CHAT_WINDOW,
 } from "../actions/userMessages";
 import _ from "lodash";
 
@@ -132,6 +133,7 @@ const actionMap = {
         var userPreferences = action.userPreferences;
         var friendshipStatus = action.friendshipStatus;
         var channelId = action.channelId;
+        let isOnGround = (chatWindows && chatWindows[channelId] && chatWindows[channelId].isOnGround) ? true : false;
         var obj = {
             loading: true,
             userDetails,
@@ -140,6 +142,7 @@ const actionMap = {
             messages: [],
             isMinimized: false,
             isTyping: false,
+            isOnGround: isOnGround,
         };
         chatWindows[channelId] = obj;
         return state.merge(Map({
@@ -167,11 +170,11 @@ const actionMap = {
                     messages: allMessages,
                     isMinimized: false,
                     isTyping: false,
+                    isOnGround: true,
                 };
                 chatWindows[channelId] = obj;
+                chatWindows = manageOnGround(chatWindows, channelId);
             }
-        } else {
-
         }
         return state.merge(Map({
             chatWindows,
@@ -189,6 +192,7 @@ const actionMap = {
         var isWindowOpen = chatWindows.hasOwnProperty(channelId);
         if (isWindowOpen) {
             delete chatWindows[channelId];
+            chatWindows = manageOnGroundWhileClose(chatWindows);
         }
         return state.merge(Map({
             chatWindows,
@@ -241,8 +245,6 @@ const actionMap = {
                     messages.splice(localAppendedMsgIndex, 1, channel.message);
                 }
             }
-        } else {
-
         }
         return state.merge(Map({
             chatWindows,
@@ -266,8 +268,6 @@ const actionMap = {
                     messages.push(channel.message);
                 }
             }
-        } else {
-
         }
         return state.merge(Map({
             chatWindows,
@@ -318,12 +318,66 @@ const actionMap = {
             requestChannelLoading: false,
         }));
     },
+    [MOVE_TO_GROUND_USER_CHAT_WINDOW]: (state, action) => {
+        var chatWindows = Object.assign({}, state.get('chatWindows'));
+        var channelId = action.channelId;
+        chatWindows[channelId] = { ...chatWindows[channelId], isOnGround: true };
+        chatWindows = manageOnGround(chatWindows, channelId);
+        return state.merge(Map({
+            chatWindows,
+        }));
+    },
     [SET_USER_MESSAGES_STATE]: (state, action) => {
         return state.merge(Map(action.stateData));
     },
     [RESET_USER_MESSAGES_STATE]: (state, action) => {
         return initialState;
     },
+}
+
+function manageOnGround(chatWindows, recentOnGroundChannelId) {
+    let _chatWindows = Object.assign({}, chatWindows);
+    let onGrounds = _.pickBy(_chatWindows, (o) => {
+        return o.isOnGround === true;
+    });
+    if (onGrounds && Object.keys(onGrounds).length > 3) {
+        let isManagedOnGroud = false;
+        let randomNumber = _.random(0, 2);
+        let loopCounter = 0;
+        for (const channelId in _chatWindows) {
+            if (_chatWindows.hasOwnProperty(channelId) && channelId !== recentOnGroundChannelId) {
+                let chatWindow = _chatWindows[channelId];
+                if (chatWindow.isOnGround && !isManagedOnGroud) {
+                    if (randomNumber === loopCounter) {
+                        chatWindow.isOnGround = false;
+                        isManagedOnGroud = true;
+                    }
+                    loopCounter++;
+                }
+            }
+        }
+    }
+    return _chatWindows;
+}
+
+function manageOnGroundWhileClose(chatWindows) {
+    let _chatWindows = Object.assign({}, chatWindows);
+    let onGrounds = _.pickBy(_chatWindows, (o) => {
+        return o.isOnGround === true;
+    });
+    if (onGrounds && Object.keys(onGrounds).length < 3) {
+        let isManagedOnGroud = false;
+        for (const channelId in _chatWindows) {
+            if (_chatWindows.hasOwnProperty(channelId)) {
+                let chatWindow = _chatWindows[channelId];
+                if (!chatWindow.isOnGround && !isManagedOnGroud) {
+                    chatWindow.isOnGround = true;
+                    isManagedOnGroud = true;
+                }
+            }
+        }
+    }
+    return _chatWindows;
 }
 
 export default function reducer(state = initialState, action = {}) {

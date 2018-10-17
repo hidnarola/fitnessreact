@@ -74,7 +74,8 @@ import {
     setUserMessagesCount,
     getUserChannelResponse,
     openUserChatWindowRequest,
-    loadMoreUserMessageChannelSuccess
+    loadMoreUserMessageChannelSuccess,
+    moveToGroundUserChatWindow
 } from '../actions/userMessages';
 import $ from "jquery";
 import UserChatWindow from '../components/global/UserChatWindow';
@@ -98,6 +99,7 @@ import Profile from './Admin/Profile';
 import Post from './Post';
 import ProgressPhotos from './ProgressPhotos';
 import GalleryPhotos from './GalleryPhotos';
+import UserChatOffGroundBubble from '../components/global/UserChatOffGroundBubble';
 
 const auth = new Auth();
 
@@ -141,6 +143,7 @@ class App extends Component {
             loggedAdminData,
         } = this.props;
         var chatWindowKeys = Object.keys(chatWindows);
+        let onGroundChatWindowsCounterFlag = 0;
         return (
             <div className="appWrapper">
                 <div className="app-wrapper-content">
@@ -254,36 +257,49 @@ class App extends Component {
 
                                     {chatWindows && chatWindowKeys.length > 0 &&
                                         chatWindowKeys.map((key, index) => {
-                                            var chatWindowWidth = $('.small-chat-window-wrapper').width();
-                                            var right = (chatWindowWidth) ? ((chatWindowWidth + 10) * index) : 0;
-                                            var style = { right };
                                             var chatWindow = chatWindows[key];
-                                            var userDetails = chatWindow.userDetails;
-                                            var userPreferences = chatWindow.userPreferences;
-                                            var friendshipStatus = chatWindow.friendshipStatus;
-                                            var isTyping = (typeof chatWindow.isTyping !== 'undefined') ? chatWindow.isTyping : false;
-                                            var loadingMessages = chatWindow.loading;
-                                            var messages = chatWindow.messages;
-                                            return (
-                                                <UserChatWindow
-                                                    key={key}
-                                                    channelId={key}
-                                                    userDetails={userDetails}
-                                                    userPreferences={userPreferences}
-                                                    friendshipStatus={friendshipStatus}
-                                                    isTyping={isTyping}
-                                                    style={style}
-                                                    closeWindow={this.handleCloseUserChatWindow}
-                                                    messages={messages}
-                                                    loadingMessages={loadingMessages}
-                                                    handleSendButton={this.handleSendButton}
-                                                    handleStartTyping={this.handleStartTyping}
-                                                    handleStopTyping={this.handleStopTyping}
-                                                    handleToggleChatWindowMinimize={this.handleToggleChatWindowMinimize}
-                                                />
-                                            );
+                                            if (chatWindow && chatWindow.isOnGround) {
+                                                var chatWindowWidth = $('.small-chat-window-wrapper').width();
+                                                var right = (chatWindowWidth) ? ((chatWindowWidth + 10) * onGroundChatWindowsCounterFlag) : 0;
+                                                var style = { right };
+                                                var userDetails = chatWindow.userDetails;
+                                                var userPreferences = chatWindow.userPreferences;
+                                                var friendshipStatus = chatWindow.friendshipStatus;
+                                                var isTyping = (typeof chatWindow.isTyping !== 'undefined') ? chatWindow.isTyping : false;
+                                                var loadingMessages = chatWindow.loading;
+                                                var messages = chatWindow.messages;
+                                                onGroundChatWindowsCounterFlag++;
+                                                return (
+                                                    <UserChatWindow
+                                                        key={key}
+                                                        channelId={key}
+                                                        userDetails={userDetails}
+                                                        userPreferences={userPreferences}
+                                                        friendshipStatus={friendshipStatus}
+                                                        isTyping={isTyping}
+                                                        style={style}
+                                                        closeWindow={this.handleCloseUserChatWindow}
+                                                        messages={messages}
+                                                        loadingMessages={loadingMessages}
+                                                        handleSendButton={this.handleSendButton}
+                                                        handleStartTyping={this.handleStartTyping}
+                                                        handleStopTyping={this.handleStopTyping}
+                                                        handleToggleChatWindowMinimize={this.handleToggleChatWindowMinimize}
+                                                    />
+                                                );
+                                            }
                                         })
                                     }
+
+                                    {chatWindows && chatWindowKeys.length > 3 &&
+                                        <UserChatOffGroundBubble
+                                            chatWindows={chatWindows}
+                                            chatWindowKeys={chatWindowKeys}
+                                            handleMoveToGround={this.handleMoveToGround}
+                                            closeWindow={this.handleCloseUserChatWindow}
+                                        />
+                                    }
+
                                 </div>
                             }
                             {loggedAdminData &&
@@ -444,6 +460,11 @@ class App extends Component {
             socket.emit('user_messages_count', getToken());
             $(`#chat-history_${channelId}`).animate({ scrollTop: 1000000 }, 'slow');
         }
+    }
+
+    handleMoveToGround = (channelId) => {
+        const { dispatch } = this.props;
+        dispatch(moveToGroundUserChatWindow(channelId));
     }
 
     handleReceiveChannelId = (data) => {

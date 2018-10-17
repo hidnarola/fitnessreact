@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { toggleSideMenu, getToken } from '../../helpers/funs';
 import noProfileImg from 'img/common/no-profile-img.png'
 import cns from "classnames";
-import { openUserChatWindowRequest, loadMoreUserMessageChannelRequest } from '../../actions/userMessages';
+import { openUserChatWindowRequest, loadMoreUserMessageChannelRequest, getUserChannelRequest } from '../../actions/userMessages';
 import { FaCircleONotch } from "react-icons/lib/fa";
 import ErrorCloud from "svg/error-cloud.svg";
 import { Scrollbars } from 'react-custom-scrollbars';
@@ -103,6 +103,7 @@ class UserMessagePanel extends Component {
                                                     <UsersFriendCard
                                                         key={index}
                                                         friend={friend}
+                                                        handleRequestMessageChannel={this.handleRequestMessageChannel}
                                                     />
                                                 )
                                             })
@@ -184,6 +185,27 @@ class UserMessagePanel extends Component {
         dispatch(loadMoreApprovedFriendsMessengerRequest(requestData));
         socket.emit('request_logged_user_friends', requestData);
     }
+
+    handleRequestMessageChannel = (profile) => {
+        const { loggedUserData, dispatch, socket } = this.props;
+        var profileId = '';
+        var userId = '';
+        if (profile && profile.authUserId) {
+            profileId = profile.authUserId;
+        }
+        if (loggedUserData && loggedUserData.userDetails && loggedUserData.userDetails.authUserId) {
+            userId = loggedUserData.userDetails.authUserId;
+        }
+        if (profileId && userId) {
+            dispatch(getUserChannelRequest());
+            var requestData = {
+                friendId: profileId,
+                userId,
+            };
+            socket.emit('get_channel_id', requestData);
+            toggleSideMenu('user-message-panel', false);
+        }
+    }
 }
 
 const mapStateToProps = (state) => {
@@ -262,9 +284,9 @@ class ChannelMessageCard extends Component {
 
 class UsersFriendCard extends Component {
     render() {
-        const { friend } = this.props;
+        const { friend, handleRequestMessageChannel } = this.props;
         return (
-            <a href="javascript:void(0)" className="messenger-box">
+            <a href="javascript:void(0)" className="messenger-box" onClick={() => handleRequestMessageChannel(friend)}>
                 <span className="p-relative">
                     <img
                         src={friend.avatar}

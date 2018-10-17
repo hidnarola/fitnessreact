@@ -27,6 +27,8 @@ export const SET_USER_MESSAGES_COUNT = 'SET_USER_MESSAGES_COUNT';
 export const GET_CHANNEL_REQUEST = 'GET_CHANNEL_REQUEST';
 export const GET_CHANNEL_RESPONSE = 'GET_CHANNEL_RESPONSE';
 
+export const MOVE_TO_GROUND_USER_CHAT_WINDOW = 'MOVE_TO_GROUND_USER_CHAT_WINDOW';
+
 export const SET_USER_MESSAGES_STATE = 'SET_USER_MESSAGES_STATE';
 export const RESET_USER_MESSAGES_STATE = 'RESET_USER_MESSAGES_STATE';
 
@@ -162,6 +164,13 @@ export function getUserChannelRequest() {
 export function getUserChannelResponse() {
     return {
         type: GET_CHANNEL_RESPONSE,
+    }
+}
+
+export function moveToGroundUserChatWindow(channelId) {
+    return {
+        type: MOVE_TO_GROUND_USER_CHAT_WINDOW,
+        channelId
     }
 }
 

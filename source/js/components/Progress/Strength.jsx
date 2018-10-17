@@ -61,7 +61,7 @@ class Strength extends Component {
                 }
 
                 {!loading && (typeof progress === 'undefined' || !progress || typeof progress.data == 'undefined' || !progress.data || progress.data.length <= 0) && typeof error !== 'undefined' && error && error.length <= 0 &&
-                    <NoRecordFound />
+                    <NoRecordFound title="Strength data are not available for these days" />
                 }
 
                 {!loading && typeof error !== 'undefined' && error && error.length > 0 &&

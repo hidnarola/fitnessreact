@@ -42,7 +42,7 @@ const actionMap = {
         if (action.data && typeof action.data.status !== 'undefined' && action.data.status === 1) {
             newState.stats = prepareStatsData(action.data.statistics);
         } else {
-            let msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
+            let msg = (action.message) ? action.message : 'Something went wrong! please try again later.';
             newState.error = [msg];
         }
         return state.merge(Map(newState));
