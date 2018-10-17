@@ -118,7 +118,7 @@ class Users extends Component {
                                                                 <div className="friend-box-info">
                                                                     <NavLink to={`${routeCodes.PROFILE}/${u.username}`}>
                                                                         <h5 className="vertical-middle-c ml-20">
-                                                                            {u.firstName}
+                                                                            {u.firstName} {(u.lastName) ? u.lastName : ''}
                                                                             {u.friendsCount > 0 &&
                                                                                 <small>{u.friendsCount} Friends</small>
                                                                             }

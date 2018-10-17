@@ -10,6 +10,8 @@ import { Scrollbars } from 'react-custom-scrollbars';
 import { loadMoreApprovedFriendsMessengerRequest } from '../../actions/friends';
 import NoRecordFound from '../Common/NoRecordFound';
 import { FRIENDSHIP_STATUS_UNKNOWN } from '../../constants/consts';
+import moment from "moment";
+import ReactTimeAgo from 'react-time-ago'
 
 class UserMessagePanel extends Component {
     render() {
@@ -270,7 +272,14 @@ class ChannelMessageCard extends Component {
                             />
                         </span>
                         <h4>
-                            <strong>{`${channelFor.firstName} ${(channelFor.lastName) ? channelFor.lastName : ''}`}</strong>
+                            <strong>
+                                {`${channelFor.firstName} ${(channelFor.lastName) ? channelFor.lastName : ''}`}
+                                {channel && channel.lastReplyAt &&
+                                    <span className="text-mute noti-time"> 
+                                        <ReactTimeAgo>{new Date(channel.lastReplyAt)}</ReactTimeAgo>
+                                    </span>
+                                }
+                            </strong>
                             <small>{message}</small>
                         </h4>
                     </div>

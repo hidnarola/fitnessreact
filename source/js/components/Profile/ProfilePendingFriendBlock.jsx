@@ -4,6 +4,7 @@ import { routeCodes } from '../../constants/routes';
 import noProfileImg from 'img/common/no-profile-img.png'
 import { ButtonToolbar, Dropdown, MenuItem } from "react-bootstrap";
 import { ACCESS_LEVEL_PUBLIC } from '../../constants/consts';
+import { capitalizeFirstLetter } from '../../helpers/funs';
 
 class ProfilePendingFriendBlock extends Component {
     render() {
@@ -31,8 +32,8 @@ class ProfilePendingFriendBlock extends Component {
                     <div className="friend-box-info">
                         <NavLink to={`${routeCodes.PROFILE}/${friend.username}`}>
                             <h5 className="vertical-middle-c">
-                                {(typeof friend.firstName !== 'undefined') ? friend.firstName : ''}
-                                {(typeof friend.lastName !== 'undefined') ? ' ' + friend.lastName : ''}
+                                {(typeof friend.firstName !== 'undefined' && friend.firstName) ? capitalizeFirstLetter(friend.firstName) : ''}
+                                {(typeof friend.lastName !== 'undefined' && friend.lastName) ? ' ' + capitalizeFirstLetter(friend.lastName) : ''}
                                 {friend.friendsCount > 0 &&
                                     <small>
                                         {friend.friendsCount} Friend{friend.friendsCount > 1 && 's'}

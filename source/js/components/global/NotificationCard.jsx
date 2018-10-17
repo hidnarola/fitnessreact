@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import cns from "classnames";
 import { NOTIFICATION_TYPE_FRIEND_REQUEST_APPROVED, NOTIFICATION_TYPE_BADGE_AWARDED, NOTIFICATION_TYPE_LIKE_POST, NOTIFICATION_TYPE_COMMENT_POST, NOTIFICATION_TYPE_SUBMIT_POST } from '../../constants/consts';
 import BadgeIcon from "svg/badge-icon.svg";
+import moment from "moment";
 
 class NotificationCard extends Component {
     render() {
@@ -36,7 +37,12 @@ class NotificationCard extends Component {
                                     }}
                                 />
                             </span>
-                            <h4>{ReactHtmlParser(msg)}</h4>
+                            <h4 className="time_under">
+                                {ReactHtmlParser(msg)}
+                                {notification && notification.createdAt &&
+                                    <span className="text-mute noti-time">{moment(notification.createdAt).local().format('Do MMM YYYY, HH:mm')}</span>
+                                }
+                            </h4>
                         </div>
                     </Link>
                 )
@@ -51,7 +57,12 @@ class NotificationCard extends Component {
                             <span className="badge-icon-wrapper">
                                 <BadgeIcon />
                             </span>
-                            <h4>{ReactHtmlParser(msg)}</h4>
+                            <h4 className="time_under">
+                                {ReactHtmlParser(msg)}
+                                {notification && notification.createdAt &&
+                                    <span className="text-mute noti-time">{moment(notification.createdAt).local().format('Do MMM YYYY, HH:mm')}</span>
+                                }
+                            </h4>
                         </div>
                     </Link>
                 )
@@ -74,7 +85,12 @@ class NotificationCard extends Component {
                                     }}
                                 />
                             </span>
-                            <h4>{ReactHtmlParser(msg)}</h4>
+                            <h4 className="time_under">
+                                {ReactHtmlParser(msg)}
+                                {notification && notification.createdAt &&
+                                    <span className="text-mute noti-time">{moment(notification.createdAt).local().format('Do MMM YYYY, HH:mm')}</span>
+                                }
+                            </h4>
                         </div>
                     </Link>
                 )
@@ -91,7 +107,12 @@ class NotificationCard extends Component {
                                     }}
                                 />
                             </span>
-                            <h4><small>{notification.body}</small></h4>
+                            <h4 className="time_under">
+                                <small>{notification.body}</small>
+                                {notification && notification.createdAt &&
+                                    <span className="text-mute noti-time">{moment(notification.createdAt).local().format('Do MMM YYYY, HH:mm')}</span>
+                                }
+                            </h4>
                         </div>
                     );
                 } else {

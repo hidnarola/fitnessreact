@@ -143,10 +143,14 @@ const actionMap = {
         }));
     },
     [GET_ALL_USER_NOTIFICATION_SUCCESS]: (state, action) => {
+        let prevAllNotificationsLimit = state.get('allNotificationsLimit');
         var newState = { allLoading: false };
         if (action.data.status === 1) {
             newState.allNotifications = action.data.notifications;
             if (action.data.notifications && action.data.notifications.length <= 0) {
+                newState.allNotificationsNoLoadMore = true;
+            }
+            if (action.data.total_records && (action.data.total_records <= 0 || action.data.total_records <= prevAllNotificationsLimit)) {
                 newState.allNotificationsNoLoadMore = true;
             }
         } else {
@@ -184,6 +188,9 @@ const actionMap = {
         if (action.data.status === 1) {
             if (action.data.notifications && action.data.notifications.length > 0) {
                 newState.allNotifications = prevNotifications.concat(action.data.notifications);
+                if (action.data.total_records && (action.data.total_records <= 0 || action.data.total_records <= newState.allNotifications.length)) {
+                    newState.allNotificationsNoLoadMore = true;
+                }
             } else {
                 newState.allNotificationsNoLoadMore = true;
             }

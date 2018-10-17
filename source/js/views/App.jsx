@@ -100,6 +100,9 @@ import Post from './Post';
 import ProgressPhotos from './ProgressPhotos';
 import GalleryPhotos from './GalleryPhotos';
 import UserChatOffGroundBubble from '../components/global/UserChatOffGroundBubble';
+import JavascriptTimeAgo from 'javascript-time-ago';
+import en from 'javascript-time-ago/locale/en'
+JavascriptTimeAgo.locale(en);
 
 const auth = new Auth();
 
