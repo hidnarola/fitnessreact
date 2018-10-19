@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
+import { connect } from "react-redux";
 import { Modal, Alert } from 'react-bootstrap';
 import Dropzone from "react-dropzone";
 import Cropper from "react-cropper";
+import { MAX_IMAGE_FILE_SIZE_ALLOWED } from '../../constants/consts';
+import { hidePageLoader, showPageLoader } from '../../actions/pageLoader';
 
 class ChangeProfilePhotoModal extends Component {
     constructor(props) {
@@ -9,13 +12,14 @@ class ChangeProfilePhotoModal extends Component {
         this.state = {
             selectedImage: null,
             croppedImg: null,
+            imageSizeError: false,
+            showRejectedError: false
         }
-        this.showRejectedError = false;
     }
 
     render() {
-        const { show, handleSubmit } = this.props;
-        const { selectedImage, croppedImg } = this.state;
+        const { show } = this.props;
+        const { selectedImage, croppedImg, imageSizeError, showRejectedError } = this.state;
         return (
             <div className="change-profile-photo-modal-wrapper">
                 <Modal show={show} bsSize="large" className="gallery-popup profile-photo-update-modal">
@@ -26,9 +30,14 @@ class ChangeProfilePhotoModal extends Component {
                         <h3 className="title-h3">Select Photo</h3>
                     </div>
 
-                    {this.showRejectedError &&
+                    {showRejectedError &&
                         <Alert bsStyle="danger">
                             <p>Invalid file(s). Please select jpg and png only.</p>
+                        </Alert>
+                    }
+                    {imageSizeError &&
+                        <Alert bsStyle="danger">
+                            <p>File size should be less than or equal to {(MAX_IMAGE_FILE_SIZE_ALLOWED / 1024 / 1024)} MBs</p>
                         </Alert>
                     }
 
@@ -82,7 +91,7 @@ class ChangeProfilePhotoModal extends Component {
                                     <button className="gradient-color-3 mt-10" type="button" onClick={this.cropImg}>Crop</button>
                                 }
                                 {croppedImg &&
-                                    <button type="button" onClick={() => handleSubmit({ ...this.state })}>Save</button>
+                                    <button type="button" onClick={this.handleSubmit}>Save</button>
                                 }
                             </div>
                         </div>
@@ -93,12 +102,17 @@ class ChangeProfilePhotoModal extends Component {
     }
 
     onDrop = (filesToUpload, rejectedFiles) => {
-        this.showRejectedError = (rejectedFiles && rejectedFiles.length > 0);
-        if (filesToUpload) {
-            this.setState({
-                selectedImage: filesToUpload[0],
-                croppedImg: null,
-            });
+        this.setState({ showRejectedError: (rejectedFiles && rejectedFiles.length > 0) });
+        if (filesToUpload && filesToUpload.length > 0) {
+            if (filesToUpload[0].size > 0 && filesToUpload[0].size <= MAX_IMAGE_FILE_SIZE_ALLOWED) {
+                this.setState({
+                    selectedImage: filesToUpload[0],
+                    croppedImg: null,
+                    imageSizeError: false
+                });
+            } else {
+                this.setState({ imageSizeError: true });
+            }
         }
     }
 
@@ -110,19 +124,34 @@ class ChangeProfilePhotoModal extends Component {
     }
 
     cropImg = () => {
-        this.setState({
-            croppedImg: this.refs.cropper.getCroppedCanvas().toDataURL(),
-            selectedImage: null,
-        });
+        var self = this;
+        const { dispatch } = self.props;
+        dispatch(showPageLoader());
+        setTimeout(() => {
+            self.setState({
+                croppedImg: self.refs.cropper.getCroppedCanvas().toDataURL(),
+                selectedImage: null,
+            }, () => {
+                dispatch(hidePageLoader());
+            });
+        }, 100);
     }
 
     handleClose = () => {
         this.setState({
             croppedImg: null,
             selectedImage: null,
+            imageSizeError: false,
+            showRejectedError: false,
         });
         this.props.handleClose();
     }
+
+    handleSubmit = () => {
+        const { handleSubmit } = this.props;
+        handleSubmit({ ...this.state });
+        this.handleClose();
+    }
 }
 
-export default ChangeProfilePhotoModal;
+export default connect()(ChangeProfilePhotoModal);

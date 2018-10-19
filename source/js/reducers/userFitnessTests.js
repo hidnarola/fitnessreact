@@ -17,6 +17,7 @@ import {
 import { VALIDATION_FAILURE_STATUS, MAX_REPS_CONST_1, MAX_REPS_CONST_2, FITNESS_TEST_FORMAT_MAX_REP, FITNESS_TEST_FORMAT_MULTISELECT } from "../constants/consts";
 import { generateValidationErrorMsgArr } from "../helpers/funs";
 import _ from "lodash";
+import { validNumber } from "../formValidation/validationRules";
 
 const initialState = Map({
     loading: false,
@@ -110,7 +111,9 @@ const actionMap = {
     },
     [USER_FITNESS_TESTS_TEXT_FIELD]: (state, action) => {
         var newSyncedUserFitnessTests = Object.assign({}, state.get('syncedUserFitnessTests'));
-        newSyncedUserFitnessTests[action._id].value = action.value;
+        if (validNumber(action.value) === undefined) {
+            newSyncedUserFitnessTests[action._id].value = action.value;
+        }
         return state.merge(Map({
             syncedUserFitnessTests: newSyncedUserFitnessTests,
         }));

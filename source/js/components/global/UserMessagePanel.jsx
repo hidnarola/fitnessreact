@@ -251,6 +251,7 @@ class ChannelMessageCard extends Component {
             channelFor = channel.friendData;
             channelForPreferences = channel.friendPreferences;
         }
+        console.log('channel => ', channel);
         var isSeen = true;
         if (channel.conversation.userId !== loggedUserData.authId && channel.conversation.isSeen === 0) {
             isSeen = false;

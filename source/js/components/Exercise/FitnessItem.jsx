@@ -9,7 +9,6 @@ import {
 import noImg from 'img/common/no-img.png'
 import cns from "classnames";
 import ReactHtmlParser from "react-html-parser";
-import { validNumber } from '../../formValidation/validationRules';
 
 class FitnessItem extends Component {
     constructor(props) {
@@ -66,7 +65,6 @@ class FitnessItem extends Component {
                                             value={userVal}
                                             onChange={(e) => handleMaxRepChange(item._id, e, val)}
                                             placeholder="Max Rep"
-                                            validate={[validNumber]}
                                         />
                                     </div>
                                 )
@@ -87,13 +85,13 @@ class FitnessItem extends Component {
                                     return (
                                         <div className="push-ups" key={i}>
                                             <input
-                                                    type="radio"
-                                                    id={`${item._id}_multiselect_${i}`}
-                                                    name={`${item._id}_multiselect`}
-                                                    value={i}
-                                                    checked={userVal}
-                                                    onChange={(e) => handleMultiselectChange(item._id, e)}
-                                                />
+                                                type="radio"
+                                                id={`${item._id}_multiselect_${i}`}
+                                                name={`${item._id}_multiselect`}
+                                                value={i}
+                                                checked={userVal}
+                                                onChange={(e) => handleMultiselectChange(item._id, e)}
+                                            />
                                             <label className="d-flex cursor-pointer" htmlFor={`${item._id}_multiselect_${i}`}>
                                                 <h5>{val.title}</h5>
                                                 <img
@@ -160,7 +158,7 @@ class FitnessItem extends Component {
                 {item && item.format && item.format === FITNESS_TEST_FORMAT_TEXT_FIELD &&
                     <div className="dropdown-menu" aria-labelledby="test-03">
                         {ReactHtmlParser(item.description)}
-                        <div className={cns('grey-white remove-spinner')}>
+                        <div className={cns('grey-white remove-spinner', { 'has-error': (userValue && userValue.error) })}>
                             <label>Value</label>
                             <input
                                 type="text"
@@ -169,7 +167,6 @@ class FitnessItem extends Component {
                                 value={(userValue.value) ? userValue.value : ''}
                                 onChange={(e) => handleTextFieldChange(item._id, e)}
                                 placeholder="Value"
-                                validate={[validNumber]}
                             />
                         </div>
                     </div>

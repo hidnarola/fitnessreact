@@ -257,7 +257,7 @@ export class FileField_Dropzone_Single extends Component {
                 >
                     <Dropzone
                         {...input}
-                        accept={accept ? accept : "image/jpeg, image/png, image/jpg, image/gif"}
+                        accept={accept ? accept : "image/jpeg, image/png, image/jpg"}
                         onClick={() => this.isFileSelected = false}
                         onDrop={(filesToUpload, rejectedFiles) => {
                             this.rejectedFiles = (rejectedFiles && rejectedFiles.length > 0);
@@ -275,122 +275,24 @@ export class FileField_Dropzone_Single extends Component {
                         className={className ? className : 'default-dropzone-wrapper'}
                     >
                         {input.value && images}
+                        {!input.value &&
+                            <div className="dz-singl-default-wrapper">
+                                <i className="icon-add_a_photo"></i>
+                                <span>Select Image</span>
+                            </div>
+                        }
                     </Dropzone>
                     {meta.touched &&
                         ((meta.error && <span className={errorClass ? errorClass : 'help-block'}>{meta.error}</span>) || (meta.warning && <span className={warningClass ? warningClass : 'help-block'}>{meta.warning}</span>))
                     }
                     {this.rejectedFiles &&
-                        <span className={errorClass ? errorClass : 'help-block'}>Invalid file(s). Please select jpg, png, gif only.</span>
+                        <span className={errorClass ? errorClass : 'help-block'}>Invalid file(s). Please select jpg and png only.</span>
                     }
                 </div>
             </div>
         );
     }
 }
-
-// export class FileField_Dropzone_Single extends Component {
-//     constructor(props) {
-//         super(props);
-//         this.isFileSelected = false;
-//         this.rejectedFiles = false;
-//         this.state = {
-//             selectedFileData: null,
-//         };
-//     }
-
-//     render() {
-//         console.log('Render');
-//         const {
-//             label,
-//             input,
-//             meta,
-//             mainWrapperClass,
-//             wrapperClass,
-//             className,
-//             labelClass,
-//             errorClass,
-//             accept,
-//             existingImages,
-//             requiredAstrisk
-//         } = this.props;
-//         const { selectedFileData } = this.state;
-//         // let filesArr = _.values(selectedFileData);
-//         console.log('selectedFileData => ', selectedFileData);
-//         // console.log('filesArr => ', filesArr);
-//         let images = [];
-//         let _existingImages = [];
-//         _.forEach(existingImages, (path, key) => {
-//             if (path) {
-//                 _existingImages.push(
-//                     <div className="image-preview-wrapper" key={key}>
-//                         <img
-//                             src={SERVER_BASE_URL + path}
-//                             alt="Image"
-//                             onError={(e) => {
-//                                 e.target.src = noImg
-//                             }}
-//                         />
-//                     </div>
-//                 )
-//             }
-//         });
-//         _.forEach(selectedFileData, (file, key) => {
-//             images.push(
-//                 <div className="image-preview-wrapper" key={key}>
-//                     <img src={file.preview} />
-//                 </div>
-//             )
-//         });
-//         return (
-//             <div
-//                 className={
-//                     `${mainWrapperClass} ${(meta.touched && meta.error) ? 'has-error' : ''} ${this.rejectedFiles ? 'has-error' : ''}`
-//                 }
-//             >
-//                 <label htmlFor={input.name} className={labelClass}>{label} {requiredAstrisk && <span style={{ color: "red" }}>*</span>}</label>
-//                 {_existingImages}
-//                 <div
-//                     className={
-//                         `${wrapperClass} ${(meta.touched && meta.error) ? 'has-error' : ''} ${this.rejectedFiles ? 'has-error' : ''}`
-//                     }
-//                 >
-//                     <Dropzone
-//                         {...input}
-//                         accept={accept ? accept : "image/jpeg, image/png, image/jpg, image/gif"}
-//                         onClick={() => { this.isFileSelected = false }}
-//                         onDrop={(filesToUpload, rejectedFiles) => {
-//                             this.rejectedFiles = (rejectedFiles && rejectedFiles.length > 0);
-//                             if (filesToUpload && filesToUpload.length > 0) {
-//                                 this.isFileSelected = true;
-//                             }
-//                             this.setState({ selectedFileData: filesToUpload });
-//                             input.onChange(filesToUpload);
-//                             this.forceUpdate();
-//                         }}
-//                         onFileDialogCancel={() => {
-//                             if (!this.isFileSelected) {
-//                                 input.onChange('');
-//                                 this.setState({ selectedFileData: null });
-//                                 this.forceUpdate();
-//                             }
-//                         }}
-//                         multiple={false}
-//                         className={className ? className : 'default-dropzone-wrapper'}
-//                     >
-//                         {selectedFileData && images}
-//                     </Dropzone>
-//                     {meta.touched &&
-//                         ((meta.error && <span className={errorClass ? errorClass : 'help-block'}>{meta.error}</span>) || (meta.warning && <span className={warningClass ? warningClass : 'help-block'}>{meta.warning}</span>))
-//                     }
-//                     {this.rejectedFiles &&
-//                         <span className={errorClass ? errorClass : 'help-block'}>Invalid file(s). Please select jpg, png, gif only.</span>
-//                     }
-//                 </div>
-//             </div >
-//         );
-//     }
-// }
-
 
 export const StarRating = (props) => {
     const {
@@ -435,6 +337,10 @@ export const DateField = (props) => {
         selectedDate,
         handleChange,
         dateFormat,
+        showYearDropdown,
+        showMonthDropdown,
+        scrollableYearDropdown,
+        dropdownMode,
         requiredAstrisk
     } = props;
     return (
@@ -447,6 +353,10 @@ export const DateField = (props) => {
                 dateFormat={dateFormat ? dateFormat : "DD/MM/YYYY"}
                 className={className}
                 placeholderText={placeholder}
+                showYearDropdown={(showYearDropdown) ? showYearDropdown : true}
+                showMonthDropdown={(showMonthDropdown) ? showMonthDropdown : true}
+                scrollableYearDropdown={(scrollableYearDropdown) ? scrollableYearDropdown : true}
+                dropdownMode={(dropdownMode) ? dropdownMode : 'select'}
             />
             {meta.touched &&
                 ((meta.error && <span className={errorClass}>{meta.error}</span>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))

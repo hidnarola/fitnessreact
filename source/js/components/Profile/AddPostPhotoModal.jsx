@@ -46,7 +46,7 @@ class AddPostPhotoModal extends Component {
                             <Dropzone
                                 name="images"
                                 className="no-padding"
-                                accept={"image/jpeg, image/png, image/jpg, image/gif"}
+                                accept={"image/jpeg, image/png, image/jpg"}
                                 onDrop={handleAddPostImages}
                                 multiple={true}
                             >

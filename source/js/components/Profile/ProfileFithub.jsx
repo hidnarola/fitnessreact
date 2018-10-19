@@ -813,7 +813,7 @@ class ProfileFithub extends Component {
         const { postImages } = this.state;
         let postImagesError = [];
         if (rejectedFiles && rejectedFiles.length > 0) {
-            postImagesError = ['Invalid file(s). Please select jpg, png, gif only'];
+            postImagesError = ['Invalid file(s). Please select jpg and png only'];
         }
         var allImages = _.concat(postImages, filesToUpload);
         this.setState({ postImages: allImages, postImagesError });

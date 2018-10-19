@@ -32,6 +32,7 @@ class UserChatWindow extends Component {
         const {
             newMsg,
         } = this.state;
+        console.log('friendshipStatus => ', friendshipStatus);
         return (
             <div className="small-chat-window-wrapper" style={style}>
                 <header
@@ -84,6 +85,11 @@ class UserChatWindow extends Component {
                         <p className="chat-feedback">{`${userDetails.firstName}`} is typing…</p>
                     }
                     {userPreferences && (userPreferences.messageAccessibility == ACCESS_LEVEL_NONE || userPreferences.messageAccessibility == ACCESS_LEVEL_FRIENDS_OF_FRIENDS || userPreferences.messageAccessibility == ACCESS_LEVEL_PRIVATE) &&
+                        <div className="no-msg-allow">
+                            <span>You are not able to send message.</span>
+                        </div>
+                    }
+                    {userPreferences && userPreferences.messageAccessibility == ACCESS_LEVEL_FRIENDS && (!friendshipStatus || friendshipStatus !== FRIENDSHIP_STATUS_FRIEND) &&
                         <div className="no-msg-allow">
                             <span>You are not able to send message.</span>
                         </div>

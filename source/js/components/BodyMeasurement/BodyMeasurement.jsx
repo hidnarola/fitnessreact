@@ -118,6 +118,7 @@ class BodyMeasurement extends Component {
                 ts('Progress photo saved successfully!');
             }
             this.handleCloseAddProgressPhotoModal();
+            dispatch(hidePageLoader());
         }
     }
 
@@ -184,6 +185,7 @@ class BodyMeasurement extends Component {
         if (data.photo) {
             formData.append('image', data.photo[0]);
         }
+        dispatch(showPageLoader());
         dispatch(addUserProgressPhotoRequest(formData));
     }
 
@@ -205,6 +207,9 @@ class BodyMeasurement extends Component {
         if (diff) {
             formData.age = diff;
             formData.hidden_age = diff;
+            formData.gender = gender;
+        } else {
+            formData.age = (bodyFat.age) ? bodyFat.age : '';;
             formData.gender = gender;
         }
         dispatch(initialize('saveBodyFatForm', formData));

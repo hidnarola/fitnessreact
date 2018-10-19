@@ -540,6 +540,10 @@ class DateField extends Component {
             selectedDate,
             handleChange,
             dateFormat,
+            showYearDropdown,
+            showMonthDropdown,
+            scrollableYearDropdown,
+            dropdownMode,
         } = this.props;
         return (
             <div className={wrapperClass}>
@@ -550,6 +554,10 @@ class DateField extends Component {
                     dateFormat={dateFormat ? dateFormat : "DD/MM/YYYY"}
                     className={className}
                     placeholderText={placeholder}
+                    showYearDropdown={(showYearDropdown) ? showYearDropdown : true}
+                    showMonthDropdown={(showMonthDropdown) ? showMonthDropdown : true}
+                    scrollableYearDropdown={(scrollableYearDropdown) ? scrollableYearDropdown : true}
+                    dropdownMode={(dropdownMode) ? dropdownMode : 'select'}
                 />
                 {meta.touched &&
                     ((meta.error && <span className={errorClass}>{meta.error}</span>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))

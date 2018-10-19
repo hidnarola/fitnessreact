@@ -307,6 +307,7 @@ class ProfilePhotos extends Component {
             this.setState({ saveProgressPhotoActionInit: false });
             ts('Progress photo saved successfully!');
             this.handleCloseAddProgressPhotoModal();
+            dispatch(hidePageLoader());
             if (profile && Object.keys(profile).length > 0) {
                 var username = profile.username;
                 this.setState({
@@ -398,6 +399,7 @@ class ProfilePhotos extends Component {
         if (data.photo) {
             formData.append('image', data.photo[0]);
         }
+        dispatch(showPageLoader());
         dispatch(addUserProgressPhotoRequest(formData));
     }
 

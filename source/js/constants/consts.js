@@ -10,6 +10,7 @@ export const LOCALSTORAGE_USER_DETAILS_KEY = 'id_data_token';
 export const FITASSIST_USER_DETAILS_TOKEN_KEY = '697BE4E2355E75EA41F62BAB675F1';
 export const AUTH0_ACCESS_DENIED_ERR_STR = 'error=access_denied';
 export const AUTH0_UNVERIFIED_ERR_STR = 'error=unauthorized';
+export const AUTH0_SERVER_ERR_STR = 'error=server_error';
 
 export const AUTH_STATE_ACTION_LOGIN = 'login';
 export const AUTH_STATE_ACTION_SIGNUP = 'signup';
@@ -158,6 +159,22 @@ export const FITNESS_TEST_FORMAT_MAX_REP_STR = 'Max Reps';
 export const FITNESS_TEST_FORMAT_MULTISELECT_STR = 'Multiselect';
 export const FITNESS_TEST_FORMAT_TEXT_FIELD_STR = 'Text Field';
 export const FITNESS_TEST_FORMAT_A_OR_B_STR = 'A or B';
+
+export const FITNESS_FORMAT_OPTIONS = {
+    [FITNESS_TEST_CAT_STRENGTH]: [
+        { value: FITNESS_TEST_FORMAT_MAX_REP, label: FITNESS_TEST_FORMAT_MAX_REP_STR }
+    ],
+    [FITNESS_TEST_CAT_FLEXIBILITY]: [
+        { value: FITNESS_TEST_FORMAT_MULTISELECT, label: FITNESS_TEST_FORMAT_MULTISELECT_STR },
+        { value: FITNESS_TEST_FORMAT_A_OR_B, label: FITNESS_TEST_FORMAT_A_OR_B_STR }
+    ],
+    [FITNESS_TEST_CAT_POSTURE]: [
+        { value: FITNESS_TEST_FORMAT_A_OR_B, label: FITNESS_TEST_FORMAT_A_OR_B_STR }
+    ],
+    [FITNESS_TEST_CAT_CARDIO]: [
+        { value: FITNESS_TEST_FORMAT_TEXT_FIELD, label: FITNESS_TEST_FORMAT_TEXT_FIELD_STR }
+    ],
+}
 
 export const MAX_REPS_CONST_1 = 1.0278;
 export const MAX_REPS_CONST_2 = 0.0278;
@@ -860,3 +877,5 @@ export const MUSCLE_WIDGET_CALF = 'calf';
 export const MUSCLE_WIDGET_HEART_RATE = 'heartRate';
 export const MUSCLE_WIDGET_WEIGHT = 'weight';
 export const MUSCLE_WIDGET_HEIGHT = 'height';
+
+export const MAX_IMAGE_FILE_SIZE_ALLOWED = 2097152;

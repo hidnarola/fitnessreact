@@ -2329,6 +2329,7 @@ h3.h3_msg_box {    background: #fafafa;padding: 15px 15px 10px 15px;margin: 0;di
 
 _::-webkit-full-page-media, _:future, :root .step-wrap {min-height: 888px;}   
 _::-webkit-full-page-media, _:future, :root .fitness-dashboard .row:before {display: none;}
+_::-webkit-full-page-media, _:future, :root  .d-flex.row:before,:root  .d-flex .row:before {display: none;}
 .body_footer_class .app-footer {position: fixed;bottom: 0;width: 100%;}
 .body_footer_class .no-content-loader {padding: 90px 0 0 0;}
 
@@ -2434,3 +2435,12 @@ button.close_btn {padding: 0;border-radius: 80%;border: 0;height: 20px;backgroun
 span.text-mute.noti-time { display: block; height: auto; width: auto; text-align: left; margin: 0; line-height: 14px; }
 .notifications-box h4.time_under small { margin-bottom: 5px; }
 .notifications-box h4.time_under { flex-direction: column; }
+.dz-singl-default-wrapper i { font-size: 60px; color: #929292; display: block; text-align: center; margin-top: calc(100% - 70%); }
+.dz-singl-default-wrapper span { font-size: 18px; font-weight: 500; color: #929292; text-align: center; display: block; margin-top: 10px; }
+.progress-popup .progress-popup-body .progress-popup-body-l .progress-dropzone {justify-content: start;align-items: baseline;}
+.progress-popup .progress-popup-body .progress-popup-body-l .progress-dropzone .image-preview-wrapper {width: auto;height: auto;}
+.image-preview-wrapper img {width: auto;height: auto;}
+.progress-popup .progress-popup-body .progress-popup-body-l .progress-dropzone {justify-content: center;}
+.gallery-popup-body-l.popup_upload span {justify-content: baseline;align-items: baseline;}
+.gallery-popup-body-l.popup_upload span {height: auto;}
+.gallery-popup-body-l span img {min-height: auto;height: auto;;}

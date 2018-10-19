@@ -23,7 +23,8 @@ import {
     FITNESS_TEST_FORMAT_TEXT_FIELD_STR,
     FITNESS_TEST_FORMAT_A_OR_B,
     FITNESS_TEST_FORMAT_A_OR_B_STR,
-    SERVER_BASE_URL
+    SERVER_BASE_URL,
+    FITNESS_FORMAT_OPTIONS
 } from '../../../constants/consts';
 import { capitalizeFirstLetter, te } from '../../../helpers/funs';
 import FitnessTestMaxRep from './FitnessTestMaxRep';
@@ -45,12 +46,12 @@ const subCategoryOptions = [
     { value: FITNESS_TEST_SUB_CAT_CARDIO, label: capitalizeFirstLetter(FITNESS_TEST_SUB_CAT_CARDIO.replace('_', ' ')) },
 ];
 
-const formatOptions = [
-    { value: FITNESS_TEST_FORMAT_TEXT_FIELD, label: FITNESS_TEST_FORMAT_TEXT_FIELD_STR },
-    { value: FITNESS_TEST_FORMAT_MAX_REP, label: FITNESS_TEST_FORMAT_MAX_REP_STR },
-    { value: FITNESS_TEST_FORMAT_MULTISELECT, label: FITNESS_TEST_FORMAT_MULTISELECT_STR },
-    { value: FITNESS_TEST_FORMAT_A_OR_B, label: FITNESS_TEST_FORMAT_A_OR_B_STR },
-];
+// const formatOptions = [
+//     { value: FITNESS_TEST_FORMAT_TEXT_FIELD, label: FITNESS_TEST_FORMAT_TEXT_FIELD_STR },
+//     { value: FITNESS_TEST_FORMAT_MAX_REP, label: FITNESS_TEST_FORMAT_MAX_REP_STR },
+//     { value: FITNESS_TEST_FORMAT_MULTISELECT, label: FITNESS_TEST_FORMAT_MULTISELECT_STR },
+//     { value: FITNESS_TEST_FORMAT_A_OR_B, label: FITNESS_TEST_FORMAT_A_OR_B_STR },
+// ];
 
 const statusOptions = [
     { value: 1, label: 'Active' },
@@ -78,6 +79,7 @@ class FitnessTestForm extends Component {
             existingImageB: [],
             existingMultiselectData: [],
             deletedMultiselectIds: [],
+            formatOptions: [],
         }
         this.validationRules = {
             category: [requiredReactSelect],
@@ -117,6 +119,7 @@ class FitnessTestForm extends Component {
             existingImageB,
             existingMultiselectData,
             deletedMultiselectIds,
+            formatOptions,
         } = this.state;
         const {
             format,
@@ -156,6 +159,7 @@ class FitnessTestForm extends Component {
                                         errorClass="help-block"
                                         validate={this.validationRules.category}
                                         requiredAstrisk={true}
+                                        onChange={this.handleChangeCategory}
                                     />
                                 </div>
                                 <div className="col-md-6">
@@ -403,7 +407,7 @@ class FitnessTestForm extends Component {
         );
     }
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps) {
         const {
             selectActionInit,
         } = this.state;
@@ -413,19 +417,25 @@ class FitnessTestForm extends Component {
             initialize,
             fitnessTestError,
             history,
+            category,
+            change,
         } = this.props;
         if (selectActionInit && !loading) {
             if (fitnessTestError && fitnessTestError.length > 0) {
                 te('No fitness test found! Please try again');
                 history.push(adminRouteCodes.FITNESS_TESTS);
             } else {
-                this.setState({ selectActionInit: false });
+                let _formatOptions = [];
+                if (fitnessTest && fitnessTest.category) {
+                    _formatOptions = (FITNESS_FORMAT_OPTIONS[fitnessTest.category]) ? FITNESS_FORMAT_OPTIONS[fitnessTest.category] : [];
+                }
+                this.setState({ selectActionInit: false, formatOptions: _formatOptions });
                 var maxRepsData = [];
                 var formDataInit = {
                     category: _.find(categoryOptions, { value: fitnessTest.category }),
                     subCategory: _.find(subCategoryOptions, { value: fitnessTest.subCategory }),
                     name: fitnessTest.name,
-                    format: _.find(formatOptions, { value: fitnessTest.format }),
+                    format: _.find(_formatOptions, { value: fitnessTest.format }),
                     status: _.find(statusOptions, { value: fitnessTest.status }),
                     description: fitnessTest.description,
                     instructions: fitnessTest.instructions,
@@ -456,6 +466,18 @@ class FitnessTestForm extends Component {
                     });
                 }
                 initialize(formDataInit);
+            }
+        }
+        if (category !== prevProps.category) {
+            if (category && category.value) {
+                let formatOptions = (FITNESS_FORMAT_OPTIONS[category.value]) ? FITNESS_FORMAT_OPTIONS[category.value] : [];
+                this.setState({ formatOptions: formatOptions });
+                if (prevProps.category && prevProps.category.value && prevProps.category.value !== category.value) {
+                    change('format', null);
+                }
+            } else {
+                this.setState({ formatOptions: [] });
+                change('format', null);
             }
         }
     }
@@ -519,6 +541,7 @@ const formSelector = formValueSelector('fitnessTestForm');
 const mapStateToProps = (state) => {
     const { adminFitnessTests } = state;
     return {
+        category: formSelector(state, 'category'),
         format: formSelector(state, 'format'),
         loading: adminFitnessTests.get('loading'),
         fitnessTestError: adminFitnessTests.get('error'),

@@ -122,10 +122,10 @@ class AddGalleryPhotoModal extends Component {
                                 <Dropzone
                                     name="images"
                                     className="no-padding"
-                                    accept={"image/jpeg, image/png, image/jpg, image/gif"}
+                                    accept={"image/jpeg, image/png, image/jpg"}
                                     onDrop={(filesToUpload, rejectedFiles) => {
                                         if (rejectedFiles && rejectedFiles.length > 0) {
-                                            let invalidImage = ['Invalid file(s). Please select jpg, png, gif only'];
+                                            let invalidImage = ['Invalid file(s). Please select jpg and png only'];
                                             this.setState({ invalidImage });
                                         } else {
                                             let noImageError = null;

@@ -45,13 +45,13 @@ export const validImage = (value) => {
     let isError = false;
     if (value) {
         Array.from(value).forEach(file => {
-            if (file.type !== 'image/jpeg' || file.type !== 'image/jpg' || file.type !== 'image/gif' || file.type !== 'image/png') {
+            if (file.type !== 'image/jpeg' || file.type !== 'image/jpg' || file.type !== 'image/png') {
                 isError = true;
             }
         });
     }
     if (isError) {
-        return "Invalid File. Please select jpg, png, gif only";
+        return "Invalid File. Please select jpg and png only";
     }
     return undefined;
 }

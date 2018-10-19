@@ -23,6 +23,7 @@ import { FaCircleONotch } from "react-icons/lib/fa";
 import { getUserChannelRequest } from '../actions/userMessages';
 import SweetAlert from "react-bootstrap-sweetalert";
 import { getPrivacyOfTimelineUserRequest } from '../actions/userTimeline';
+import { showPageLoader, hidePageLoader } from '../actions/pageLoader';
 
 class Profile extends Component {
     constructor(props) {
@@ -524,6 +525,7 @@ class Profile extends Component {
             } else {
                 ts('Profile image updated!');
             }
+            dispatch(hidePageLoader(username));
             dispatch(getProfileDetailsRequest(username));
             this.handleHideChangeProfilePhotoModal();
             this.setForceUpdateChildComponents(true);
@@ -676,6 +678,7 @@ class Profile extends Component {
         var formData = new FormData();
         formData.append('user_img', data.croppedImg);
         dispatch(saveLoggedUserProfilePhotoRequest(formData));
+        dispatch(showPageLoader());
         this.setState({ updateProfilePhotoActionInit: true });
     }
 

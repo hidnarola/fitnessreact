@@ -39,7 +39,7 @@ class AddProgressPhotoModal extends Component {
 
                         {this.rejectedFiles &&
                             <Alert bsStyle="danger">
-                                <p>Invalid file(s). Please select jpg, png, gif only</p>
+                                <p>Invalid file(s). Please select jpg and png only</p>
                             </Alert>
                         }
 
