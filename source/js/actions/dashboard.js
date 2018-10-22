@@ -18,6 +18,8 @@ export const CHANGE_DASHBOARD_MUSCLE_INNER_DATA_REQUEST = 'CHANGE_DASHBOARD_MUSC
 export const CHANGE_DASHBOARD_MUSCLE_INNER_DATA_SUCCESS = 'CHANGE_DASHBOARD_MUSCLE_INNER_DATA_SUCCESS';
 export const CHANGE_DASHBOARD_MUSCLE_INNER_DATA_ERROR = 'CHANGE_DASHBOARD_MUSCLE_INNER_DATA_ERROR';
 
+export const SET_NEW_STATE_OF_SINGLE_POST = 'SET_NEW_STATE_OF_SINGLE_POST';
+
 export function getDashboardPageRequest(requestData) {
     return {
         type: GET_DASHBOARD_PAGE_REQUEST,
@@ -120,5 +122,12 @@ export function changeDashboardMuscleInnerDataError(error) {
     return {
         type: CHANGE_DASHBOARD_MUSCLE_INNER_DATA_ERROR,
         error
+    }
+}
+
+export function setNewStateOfSinglePost(singlePost) {
+    return {
+        type: SET_NEW_STATE_OF_SINGLE_POST,
+        singlePost
     }
 }

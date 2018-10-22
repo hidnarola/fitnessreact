@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { NavLink, Link } from 'react-router-dom';
 import moment from 'moment';
-import { POST_TYPE_TIMELINE, POST_TYPE_GALLERY, POST_TYPE_PROGRESS_PHOTO, ACCESS_LEVEL_PUBLIC, ACCESS_LEVEL_FRIENDS, ACCESS_LEVEL_PRIVATE, SERVER_BASE_URL } from '../../constants/consts';
+import { POST_TYPE_TIMELINE, POST_TYPE_GALLERY, POST_TYPE_PROGRESS_PHOTO, ACCESS_LEVEL_PUBLIC, ACCESS_LEVEL_FRIENDS, ACCESS_LEVEL_PRIVATE, SERVER_BASE_URL, FRIENDSHIP_STATUS_FRIEND } from '../../constants/consts';
 import _ from "lodash";
 import noProfileImg from 'img/common/no-profile-img.png';
 import noImg from 'img/common/no-img.png';
@@ -12,6 +12,8 @@ import ReactHtmlParser from "react-html-parser";
 import cns from 'classnames';
 import ShowMore from "react-show-more";
 import Lightbox from 'react-images';
+import LikeButton from '../Profile/LikeButton';
+import CommentBoxForm from '../Profile/CommentBoxForm';
 
 class ActivityFeedListCard extends Component {
     constructor(props) {
@@ -25,7 +27,7 @@ class ActivityFeedListCard extends Component {
 
     render() {
         const { lightBoxOpen, currentImage, lightBoxImages } = this.state;
-        const { post, loggedUserData } = this.props;
+        const { post, loggedUserData, index } = this.props;
         if (!post) {
             return null;
         }
@@ -64,7 +66,7 @@ class ActivityFeedListCard extends Component {
         var lastComment = {};
         var lastCommentCreatedAt = null;
         if (totalComments > 0) {
-            lastComment = comments[(totalComments - 1)];
+            lastComment = comments[0];
             lastCommentCreatedAt = lastComment.create_date;
             lastCommentCreatedAt = moment.utc(lastCommentCreatedAt).toDate();
             lastCommentCreatedAt = moment(lastCommentCreatedAt).local().format('Do MMM [at] hh:mm');
@@ -178,6 +180,15 @@ class ActivityFeedListCard extends Component {
                         }
                     </div>
                 </div>
+                <div className="posttype-btm d-flex">
+                    <LikeButton
+                        index={index}
+                        postId={post._id}
+                        isLikedByLoggedUser={isLikedByLoggedUser}
+                        handleToggleLike={this.handleToggleLike}
+                    />
+                    <Link to={`${routeCodes.POST}/${createdBy.username}/${post._id}`} className="icon-chat"></Link>
+                </div>
                 {totalComments > 0 &&
                     <div className="post-comment d-flex">
                         <span>
@@ -200,6 +211,29 @@ class ActivityFeedListCard extends Component {
                             </div>
                         </div>
                     </div>
+                }
+                {
+                    post && post.owner_by &&
+                    post.owner_by.userPreferences &&
+                    post.owner_by.userPreferences.commentAccessibility &&
+                    post.owner_by.userPreferences.commentAccessibility == ACCESS_LEVEL_PUBLIC &&
+                    <CommentBoxForm
+                        postId={post._id}
+                        index={index}
+                        onSubmit={this.handleComment}
+                    />
+                }
+                {
+                    post && post.owner_by &&
+                    post.owner_by.userPreferences &&
+                    post.owner_by.userPreferences.commentAccessibility &&
+                    post.owner_by.userPreferences.commentAccessibility == ACCESS_LEVEL_FRIENDS &&
+                    post.friendshipStatus && post.friendshipStatus == FRIENDSHIP_STATUS_FRIEND &&
+                    <CommentBoxForm
+                        postId={post._id}
+                        index={index}
+                        onSubmit={this.handleComment}
+                    />
                 }
                 {lightBoxImages && lightBoxImages.length > 0 &&
                     <Lightbox
@@ -248,6 +282,16 @@ class ActivityFeedListCard extends Component {
             }
         }
         this.setState({ currentImage: newCurrentImage });
+    }
+
+    handleToggleLike = (index, postId) => {
+        const { handleToggleLike } = this.props;
+        handleToggleLike(index, postId);
+    }
+
+    handleComment = (data, actionGenerator, props) => {
+        const { handleComment } = this.props;
+        handleComment(data, actionGenerator, props);
     }
 }
 

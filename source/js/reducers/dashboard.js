@@ -14,7 +14,8 @@ import {
     CHANGE_COMPLETE_STATUS_OF_WORKOUT_ERROR,
     CHANGE_DASHBOARD_MUSCLE_INNER_DATA_REQUEST,
     CHANGE_DASHBOARD_MUSCLE_INNER_DATA_SUCCESS,
-    CHANGE_DASHBOARD_MUSCLE_INNER_DATA_ERROR
+    CHANGE_DASHBOARD_MUSCLE_INNER_DATA_ERROR,
+    SET_NEW_STATE_OF_SINGLE_POST
 } from "../actions/dashboard";
 import { VALIDATION_FAILURE_STATUS } from "../constants/consts";
 import { generateValidationErrorMsgArr } from "../helpers/funs";
@@ -204,6 +205,23 @@ const actionMap = {
             muscle: nextMuscleState,
         }));
     },
+    [SET_NEW_STATE_OF_SINGLE_POST]: (state, action) => {
+        const prevActivityFeed = state.get('activityFeed');
+        let newActivityFeed = [];
+        const { singlePost } = action;
+        if (singlePost) {
+            prevActivityFeed.map((o, i) => {
+                let newSinglePost = o;
+                if (singlePost._id && singlePost._id === o._id) {
+                    newSinglePost = singlePost;
+                }
+                newActivityFeed.push(newSinglePost);
+            });
+        }
+        return state.merge(Map({
+            activityFeed: newActivityFeed,
+        }));
+    }
 };
 
 function prepareResponseError(action) {

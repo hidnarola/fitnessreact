@@ -123,8 +123,8 @@ class ActivityFeedListCard extends Component {
                             <NavLink to={`${routeCodes.PROFILE}/${createdBy.username}`}>
                                 {`${createdBy.firstName} ${(createdBy.lastName) ? createdBy.lastName : ''}`}
                             </NavLink>
+                            <Link className="post_added" to={`${routeCodes.POST}/${createdBy.username}/${post._id}`}>{(post.tag_line) ? post.tag_line : ''}</Link>
                         </big>
-                        <small><Link to={`${routeCodes.POST}/${createdBy.username}/${post._id}`}>{(post.tag_line) ? post.tag_line : ''}</Link></small>
                         <p className="">
                             {postCreatedAt}
                             {post.privacy == ACCESS_LEVEL_PUBLIC && <FaGlobe />}
