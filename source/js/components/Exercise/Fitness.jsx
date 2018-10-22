@@ -159,12 +159,18 @@ class Fitness extends Component {
     handleTextFieldChange = (_id, e) => {
         const { dispatch } = this.props;
         var val = e.target.value;
+        if (val > 9999) {
+            val = 9999;
+        }
         dispatch(userFitnessTestsTextField(_id, val));
     }
 
     handleMaxRepChange = (_id, e, rep) => {
         const { dispatch } = this.props;
         var val = e.target.value;
+        if (val > 9999) {
+            val = 9999;
+        }
         dispatch(userFitnessTestsMaxRep(_id, val, rep));
     }
 

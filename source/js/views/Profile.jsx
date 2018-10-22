@@ -675,8 +675,9 @@ class Profile extends Component {
 
     saveProfilePhoto = (data) => {
         const { dispatch } = this.props;
-        var formData = new FormData();
-        formData.append('user_img', data.croppedImg);
+        var formData = {
+            user_img: data.croppedImg,
+        };
         dispatch(saveLoggedUserProfilePhotoRequest(formData));
         dispatch(showPageLoader());
         this.setState({ updateProfilePhotoActionInit: true });
