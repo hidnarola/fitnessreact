@@ -6,7 +6,7 @@ import FitnessHeader from '../global/FitnessHeader';
 import FitnessNav from '../global/FitnessNav';
 import moment from "moment";
 import { getUserTodaysMealRequest, deleteUserRecipeRequest } from '../../actions/userNutritions';
-import noProfileImg from 'img/common/no-profile-img.png'
+import noImg from 'img/common/no-img.png'
 import { capitalizeFirstLetter, ts, te } from '../../helpers/funs';
 import {
     DAY_DRIVE_BREAKFAST,
@@ -141,7 +141,7 @@ class NutritionMeal extends Component {
                                                             src={meal.image}
                                                             alt="Recipe"
                                                             onError={(e) => {
-                                                                e.target.src = noProfileImg
+                                                                e.target.src = noImg
                                                             }}
                                                         />
                                                     </div>

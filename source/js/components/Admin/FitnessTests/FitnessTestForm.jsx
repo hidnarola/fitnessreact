@@ -16,13 +16,8 @@ import {
     FITNESS_TEST_SUB_CAT_LOWER_BODY,
     FITNESS_TEST_SUB_CAT_CARDIO,
     FITNESS_TEST_FORMAT_MAX_REP,
-    FITNESS_TEST_FORMAT_MAX_REP_STR,
     FITNESS_TEST_FORMAT_MULTISELECT,
-    FITNESS_TEST_FORMAT_MULTISELECT_STR,
-    FITNESS_TEST_FORMAT_TEXT_FIELD,
-    FITNESS_TEST_FORMAT_TEXT_FIELD_STR,
     FITNESS_TEST_FORMAT_A_OR_B,
-    FITNESS_TEST_FORMAT_A_OR_B_STR,
     SERVER_BASE_URL,
     FITNESS_FORMAT_OPTIONS
 } from '../../../constants/consts';
@@ -30,7 +25,7 @@ import { capitalizeFirstLetter, te } from '../../../helpers/funs';
 import FitnessTestMaxRep from './FitnessTestMaxRep';
 import FitnessTestMultiselect from './FitnessTestMultiselect';
 import { fitnessTestsSelectOneRequest } from '../../../actions/admin/fitnessTests';
-import noProfileImg from 'img/common/no-profile-img.png'
+import noImg from 'img/common/no-img.png'
 
 const categoryOptions = [
     { value: FITNESS_TEST_CAT_STRENGTH, label: capitalizeFirstLetter(FITNESS_TEST_CAT_STRENGTH.replace('_', ' ')) },
@@ -45,13 +40,6 @@ const subCategoryOptions = [
     { value: FITNESS_TEST_SUB_CAT_LOWER_BODY, label: capitalizeFirstLetter(FITNESS_TEST_SUB_CAT_LOWER_BODY.replace('_', ' ')) },
     { value: FITNESS_TEST_SUB_CAT_CARDIO, label: capitalizeFirstLetter(FITNESS_TEST_SUB_CAT_CARDIO.replace('_', ' ')) },
 ];
-
-// const formatOptions = [
-//     { value: FITNESS_TEST_FORMAT_TEXT_FIELD, label: FITNESS_TEST_FORMAT_TEXT_FIELD_STR },
-//     { value: FITNESS_TEST_FORMAT_MAX_REP, label: FITNESS_TEST_FORMAT_MAX_REP_STR },
-//     { value: FITNESS_TEST_FORMAT_MULTISELECT, label: FITNESS_TEST_FORMAT_MULTISELECT_STR },
-//     { value: FITNESS_TEST_FORMAT_A_OR_B, label: FITNESS_TEST_FORMAT_A_OR_B_STR },
-// ];
 
 const statusOptions = [
     { value: 1, label: 'Active' },
@@ -274,7 +262,7 @@ class FitnessTestForm extends Component {
                                 <div className="fitness-test-multiselect-wrapper">
                                     {existingMultiselectData && existingMultiselectData.length > 0 &&
                                         <div className="fitness-test-existing">
-                                            <div className="multiselect-wrapper dynamic-control-generator-wrapper">
+                                            <div className="multiselect-wrapper dynamic-control-generator-wrapper mb-10">
                                                 <label className="control-label">Multiselect Options</label>
                                                 <div className="row pull-left width-100-per step-fields-wrapper">
                                                     {existingMultiselectData.map((data, index) => {
@@ -289,7 +277,7 @@ class FitnessTestForm extends Component {
                                                                         alt="Multiselect Image"
                                                                         className="avatar"
                                                                         onError={(e) => {
-                                                                            e.target.src = noProfileImg
+                                                                            e.target.src = noImg
                                                                         }}
                                                                     />
                                                                 </div>

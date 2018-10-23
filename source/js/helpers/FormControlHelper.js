@@ -250,45 +250,47 @@ export class FileField_Dropzone_Single extends Component {
                 }
             >
                 <label htmlFor={input.name} className={labelClass}>{label} {requiredAstrisk && <span style={{ color: "red" }}>*</span>}</label>
-                {_existingImages}
-                <div
-                    className={
-                        `${wrapperClass} ${(meta.touched && meta.error) ? 'has-error' : ''} ${this.rejectedFiles ? 'has-error' : ''}`
-                    }
-                >
-                    <Dropzone
-                        {...input}
-                        accept={accept ? accept : "image/jpeg, image/png, image/jpg"}
-                        onClick={() => this.isFileSelected = false}
-                        onDrop={(filesToUpload, rejectedFiles) => {
-                            this.rejectedFiles = (rejectedFiles && rejectedFiles.length > 0);
-                            if (filesToUpload && filesToUpload.length > 0) {
-                                this.isFileSelected = true;
-                            }
-                            input.onChange(filesToUpload);
-                        }}
-                        onFileDialogCancel={() => {
-                            if (!this.isFileSelected) {
-                                input.onChange('');
-                            }
-                        }}
-                        multiple={false}
-                        className={className ? className : 'default-dropzone-wrapper'}
-                    >
-                        {input.value && images}
-                        {!input.value &&
-                            <div className="dz-singl-default-wrapper">
-                                <i className="icon-add_a_photo"></i>
-                                <span>Select Image</span>
-                            </div>
+                <div className="image-form-flex-wrapper">
+                    {_existingImages}
+                    <div
+                        className={
+                            `${wrapperClass} ${(meta.touched && meta.error) ? 'has-error' : ''} ${this.rejectedFiles ? 'has-error' : ''}`
                         }
-                    </Dropzone>
-                    {meta.touched &&
-                        ((meta.error && <span className={errorClass ? errorClass : 'help-block'}>{meta.error}</span>) || (meta.warning && <span className={warningClass ? warningClass : 'help-block'}>{meta.warning}</span>))
-                    }
-                    {this.rejectedFiles &&
-                        <span className={errorClass ? errorClass : 'help-block'}>Invalid file(s). Please select jpg and png only.</span>
-                    }
+                    >
+                        <Dropzone
+                            {...input}
+                            accept={accept ? accept : "image/jpeg, image/png, image/jpg"}
+                            onClick={() => this.isFileSelected = false}
+                            onDrop={(filesToUpload, rejectedFiles) => {
+                                this.rejectedFiles = (rejectedFiles && rejectedFiles.length > 0);
+                                if (filesToUpload && filesToUpload.length > 0) {
+                                    this.isFileSelected = true;
+                                }
+                                input.onChange(filesToUpload);
+                            }}
+                            onFileDialogCancel={() => {
+                                if (!this.isFileSelected) {
+                                    input.onChange('');
+                                }
+                            }}
+                            multiple={false}
+                            className={className ? className : 'default-dropzone-wrapper'}
+                        >
+                            {input.value && images}
+                            {!input.value &&
+                                <div className="dz-singl-default-wrapper">
+                                    <i className="icon-add_a_photo"></i>
+                                    <span>Select Image</span>
+                                </div>
+                            }
+                        </Dropzone>
+                        {meta.touched &&
+                            ((meta.error && <span className={errorClass ? errorClass : 'help-block'}>{meta.error}</span>) || (meta.warning && <span className={warningClass ? warningClass : 'help-block'}>{meta.warning}</span>))
+                        }
+                        {this.rejectedFiles &&
+                            <span className={errorClass ? errorClass : 'help-block'}>Invalid file(s). Please select jpg and png only.</span>
+                        }
+                    </div>
                 </div>
             </div>
         );

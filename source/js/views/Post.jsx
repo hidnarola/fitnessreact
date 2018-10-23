@@ -9,7 +9,7 @@ import noProfileImg from 'img/common/no-profile-img.png'
 import noImg from 'img/common/no-img.png'
 import moment from "moment";
 import { routeCodes } from '../constants/routes';
-import { ACCESS_LEVEL_PUBLIC, ACCESS_LEVEL_FRIENDS, ACCESS_LEVEL_PRIVATE, SERVER_BASE_URL, POST_TYPE_TIMELINE, POST_TYPE_GALLERY, POST_TYPE_PROGRESS_PHOTO, FRIENDSHIP_STATUS_FRIEND } from '../constants/consts';
+import { ACCESS_LEVEL_PUBLIC, ACCESS_LEVEL_FRIENDS, ACCESS_LEVEL_PRIVATE, SERVER_BASE_URL, POST_TYPE_TIMELINE, POST_TYPE_GALLERY, POST_TYPE_PROGRESS_PHOTO, FRIENDSHIP_STATUS_FRIEND, FRIENDSHIP_STATUS_SELF } from '../constants/consts';
 import { FaGlobe, FaLock, FaGroup } from 'react-icons/lib/fa';
 import ReactHtmlParser from "react-html-parser";
 import cns from "classnames";
@@ -43,7 +43,6 @@ class Post extends Component {
     render() {
         const { loading, postError, post, match } = this.props;
         const { isLikedByLoggedUser, lightBoxOpen, currentImage, lightBoxImages } = this.state;
-        console.log('post => ', post);
         let doRenderPost = true;
         if (!loading && post) {
             var createdBy = (post.created_by && Object.keys(post.created_by).length > 0) ? post.created_by : null;
@@ -64,6 +63,11 @@ class Post extends Component {
                 images = post.progress_photos;
             } else {
                 doRenderPost = false;
+            }
+            var imagesCount = images.length;
+            var postImageDisplayClass = '';
+            if (imagesCount === 1) {
+                postImageDisplayClass = 'single';
             }
             var likes = post.likes;
             var totalLikes = likes.length;
@@ -98,6 +102,7 @@ class Post extends Component {
                 }
             }
         }
+        console.log('post => ', post);
         return (
             <div className="post-details-wrapper">
                 <FitnessHeader />
@@ -149,18 +154,20 @@ class Post extends Component {
                                             {ReactHtmlParser(description)}
                                         </div>
                                     }
-                                    <div className={cns("posttype-body-grey text-c")}>
+                                    <div className={cns("posttype-body-grey text-c masonry", postImageDisplayClass)}>
                                         {images && images.length > 0 &&
                                             images.map((imageD, imageI) => {
                                                 return (
-                                                    <a href="javascript:void(0)" key={imageI} onClick={() => this.handleOpenLightbox(images, imageI)}>
-                                                        <img
-                                                            src={SERVER_BASE_URL + imageD.image}
-                                                            onError={(e) => {
-                                                                e.target.src = noImg
-                                                            }}
-                                                        />
-                                                    </a>
+                                                    <div className="item" key={imageD._id}>
+                                                        <a href="javascript:void(0)" key={imageI} onClick={() => this.handleOpenLightbox(images, imageI)}>
+                                                            <img
+                                                                src={SERVER_BASE_URL + imageD.image}
+                                                                onError={(e) => {
+                                                                    e.target.src = noImg
+                                                                }}
+                                                            />
+                                                        </a>
+                                                    </div>
                                                 )
                                             })
                                         }
@@ -194,6 +201,13 @@ class Post extends Component {
                                     post.owner_by.userPreferences.commentAccessibility &&
                                     post.owner_by.userPreferences.commentAccessibility == ACCESS_LEVEL_FRIENDS &&
                                     post.friendshipStatus && post.friendshipStatus == FRIENDSHIP_STATUS_FRIEND &&
+                                    <CommentBoxForm
+                                        postId={post._id}
+                                        onSubmit={this.handleComment}
+                                    />
+                                }
+                                {
+                                    post && post.friendshipStatus && post.friendshipStatus == FRIENDSHIP_STATUS_SELF &&
                                     <CommentBoxForm
                                         postId={post._id}
                                         onSubmit={this.handleComment}

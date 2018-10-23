@@ -305,14 +305,8 @@ class ProfileFithub extends Component {
                                         }
                                         var imagesCount = images.length;
                                         var postImageDisplayClass = '';
-                                        if (imagesCount === 2) {
-                                            postImageDisplayClass = 'second_row';
-                                        } else if (imagesCount === 3) {
-                                            postImageDisplayClass = 'third_row';
-                                        } else if (imagesCount === 4) {
-                                            postImageDisplayClass = 'forth_row';
-                                        } else if (imagesCount > 4) {
-                                            postImageDisplayClass = 'forth_row';
+                                        if (imagesCount === 1) {
+                                            postImageDisplayClass = 'single';
                                         }
                                         var comments = post.comments;
                                         var totalComments = comments.length;
@@ -426,23 +420,25 @@ class ProfileFithub extends Component {
                                                             </ShowMore>
                                                         </div>
                                                     }
-                                                    <div className={cns("posttype-body-grey", postImageDisplayClass)}>
+                                                    <div className={cns("posttype-body-grey masonry", postImageDisplayClass)}>
                                                         {images && images.length > 0 &&
                                                             images.map((imageD, imageI) => {
-                                                                if (imageI >= 4) {
+                                                                if (imageI >= 5) {
                                                                     return null;
                                                                 }
                                                                 return (
-                                                                    <a href="javascript:void(0)" key={imageI} onClick={() => this.handleOpenLightbox(images, )}>
-                                                                        <span key={imageI}>
-                                                                            <img
-                                                                                src={SERVER_BASE_URL + imageD.image}
-                                                                                onError={(e) => {
-                                                                                    e.target.src = noImg
-                                                                                }}
-                                                                            />
-                                                                        </span>
-                                                                    </a>
+                                                                    <div className="item">
+                                                                        <a href="javascript:void(0)" key={imageD._id} onClick={() => this.handleOpenLightbox(images, imageI)}>
+                                                                            <span key={imageI}>
+                                                                                <img
+                                                                                    src={SERVER_BASE_URL + imageD.image}
+                                                                                    onError={(e) => {
+                                                                                        e.target.src = noImg
+                                                                                    }}
+                                                                                />
+                                                                            </span>
+                                                                        </a>
+                                                                    </div>
                                                                 )
                                                             })
                                                         }
