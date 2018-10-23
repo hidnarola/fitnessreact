@@ -238,7 +238,7 @@ class BodyMeasurementForm extends Component {
                     </div>
                     <div className="col-md-4">
                         <div className="whitebody-graph">
-                            <img src={bodyGraph} alt="" />
+                            <img src={bodyGraph} alt="Body" />
                         </div>
                     </div>
                     <div className="col-md-4">

@@ -23,7 +23,7 @@ class AdminHeader extends Component {
                 <header className="header d-flex justify-content-start">
                     <div className="logo">
                         <Link to={adminRootRoute}>
-                            <img src={logo} />
+                            <img src={logo} alt="Logo" />
                         </Link>
                     </div>
                     <div className="header-r d-flex">

@@ -362,7 +362,7 @@ class ProfileFithub extends Component {
                                             }
                                         }
                                         return (
-                                            <div className="post-type" key={index}>
+                                            <div className="post-type" key={post._id}>
                                                 <div className="posttype-head d-flex justify-content-start">
                                                     <span>
                                                         <img

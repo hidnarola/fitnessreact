@@ -215,7 +215,8 @@ export class FileField_Dropzone_Single extends Component {
             errorClass,
             accept,
             existingImages,
-            requiredAstrisk
+            requiredAstrisk,
+            alt
         } = this.props;
         let filesArr = _.values(input.value);
         let images = [];
@@ -238,7 +239,7 @@ export class FileField_Dropzone_Single extends Component {
         _.forEach(filesArr, (file, key) => {
             images.push(
                 <div className="image-preview-wrapper" key={key}>
-                    <img src={file.preview} />
+                    <img src={file.preview} alt={alt ? alt : ''} />
                 </div>
             )
         })
