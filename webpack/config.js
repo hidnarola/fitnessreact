@@ -3,6 +3,10 @@ const path = require('path');
 
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
+const ManifestPlugin = require('webpack-manifest-plugin');
+const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+
 const paths = {
     source: path.join(__dirname, '../source'),
     assets: path.join(__dirname, '../source/assets/'),
@@ -38,6 +42,26 @@ const plugins = [
             HYDRATE: JSON.stringify(HYDRATE) === 'true',
         },
     }),
+    new ManifestPlugin({
+        fileName: 'asset-manifest.json',
+    }),
+    new SWPrecacheWebpackPlugin({
+        dontCacheBustUrlsMatching: /\.\w{8}\./,
+        filename: 'service-worker.js',
+        logger(message) {
+            if (message.indexOf('Total precache size is') === 0) {
+                return;
+            }
+            console.log(message);
+        },
+        minify: true,
+        navigateFallback: '/index.html',
+        staticFileGlobsIgnorePatterns: [/\.map$/, /asset-manifest\.json$/],
+    }),
+    new CopyWebpackPlugin([
+        { from: '../manifest.json' },
+        { from: '../favicon/*', to: 'build/' },
+    ])
 ];
 
 if (IS_PRODUCTION) {

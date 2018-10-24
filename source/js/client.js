@@ -10,6 +10,8 @@ import { Provider } from 'react-redux';
 import configureStore from 'config/store';
 import App from 'views/App';
 
+import registerServiceWorker from "./registerServiceWorker";
+
 // Load CSS
 import 'index.css';
 
@@ -20,11 +22,13 @@ const renderMethod = process.env.HYDRATE ? ReactDOM.hydrate : ReactDOM.render;
 
 renderMethod(
     <AppContainer>
-        <Provider store={ store }>
+        <Provider store={store}>
             <BrowserRouter>
-                <App />                
+                <App />
             </BrowserRouter>
         </Provider>
     </AppContainer>,
     document.getElementById('root')
 );
+
+registerServiceWorker();
