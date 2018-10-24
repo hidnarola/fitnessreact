@@ -2018,6 +2018,7 @@ span.text-mute.noti-time { display: block; height: auto; width: auto; text-align
 .progress-popup .progress-popup-body .progress-popup-body-l .progress-dropzone {justify-content: center;}
 .gallery-popup-body-l.popup_upload span {justify-content: baseline;align-items: baseline;}
 .gallery-popup-body-l.popup_upload span {height: auto;}
+.gallery-popup-body-l.popup_upload span > div { margin: 0 auto; }
 .gallery-popup-body-l span img {min-height: auto;height: auto;}
 .default-dropzone-wrapper {cursor: pointer;}
 .image-form-flex-wrapper{    display: table;}
