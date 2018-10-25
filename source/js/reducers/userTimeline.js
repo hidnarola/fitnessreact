@@ -18,7 +18,8 @@ import {
     DELETE_POST_OF_TIMELINE_ERROR,
     CHANGE_ACCESS_LEVEL_POST_OF_TIMELINE_REQUEST,
     CHANGE_ACCESS_LEVEL_POST_OF_TIMELINE_SUCCESS,
-    CHANGE_ACCESS_LEVEL_POST_OF_TIMELINE_ERROR
+    CHANGE_ACCESS_LEVEL_POST_OF_TIMELINE_ERROR,
+    TOGGLE_LIKES_LIST_MODAL
 } from "../actions/userTimeline";
 import { VALIDATION_FAILURE_STATUS } from "../constants/consts";
 import { generateValidationErrorMsgArr } from "../helpers/funs";

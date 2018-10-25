@@ -21,6 +21,7 @@ import { commentOnPostRequest } from '../actions/postComments';
 import { reset } from "redux-form";
 import Lightbox from 'react-images';
 import NoRecordFound from '../components/Common/NoRecordFound';
+import LikesListModal from '../components/Common/LikesListModal';
 
 class Post extends Component {
     constructor(props) {
@@ -31,6 +32,8 @@ class Post extends Component {
             lightBoxOpen: false,
             currentImage: 0,
             lightBoxImages: [],
+
+            showLikes: false,
         }
     }
 
@@ -42,7 +45,7 @@ class Post extends Component {
 
     render() {
         const { loading, postError, post, match } = this.props;
-        const { isLikedByLoggedUser, lightBoxOpen, currentImage, lightBoxImages } = this.state;
+        const { isLikedByLoggedUser, lightBoxOpen, currentImage, lightBoxImages, showLikes } = this.state;
         let doRenderPost = true;
         if (!loading && post) {
             var createdBy = (post.created_by && Object.keys(post.created_by).length > 0) ? post.created_by : null;
@@ -65,9 +68,11 @@ class Post extends Component {
                 doRenderPost = false;
             }
             var imagesCount = images.length;
-            var postImageDisplayClass = '';
+            var postImageDisplayClass = 'masonry';
             if (imagesCount === 1) {
-                postImageDisplayClass = 'single';
+                postImageDisplayClass += ' single';
+            } else if (imagesCount <= 0) {
+                postImageDisplayClass = '';
             }
             var likes = post.likes;
             var totalLikes = likes.length;
@@ -102,7 +107,6 @@ class Post extends Component {
                 }
             }
         }
-        console.log('post => ', post);
         return (
             <div className="post-details-wrapper">
                 <FitnessHeader />
@@ -154,7 +158,7 @@ class Post extends Component {
                                             {ReactHtmlParser(description)}
                                         </div>
                                     }
-                                    <div className={cns("posttype-body-grey text-c masonry", postImageDisplayClass)}>
+                                    <div className={cns("posttype-body-grey text-c", postImageDisplayClass)}>
                                         {images && images.length > 0 &&
                                             images.map((imageD, imageI) => {
                                                 return (
@@ -171,13 +175,15 @@ class Post extends Component {
                                                 )
                                             })
                                         }
-                                        {(likesStr || (post.comments && post.comments.length > 0)) &&
-                                            <p>
-                                                {likesStr && <span>{likesStr}</span>}
-                                                {post.comments.length > 0 && <span>Comments {post.comments.length}</span>}
-                                            </p>
-                                        }
                                     </div>
+                                    {(likesStr || (post.comments && post.comments.length > 0)) &&
+                                        <div className={cns("posttype-body-grey text-c single-post-cntline")}>
+                                            <p>
+                                                <span onClick={this.handleOpenLikesModal} className="cursor-pointer">{likesStr}</span>
+                                                <span>{post.comments.length > 0 && 'Comments ' + post.comments.length}</span>
+                                            </p>
+                                        </div>
+                                    }
                                 </div>
                                 <div className="posttype-btm d-flex">
                                     <a href="javascript:void(0)" className={cns('icon-thumb_up', { 'liked-color': isLikedByLoggedUser })} onClick={this.handleLike}></a>
@@ -241,6 +247,11 @@ class Post extends Component {
                                         );
                                     })
                                 }
+                                <LikesListModal
+                                    show={showLikes}
+                                    handleClose={this.handleCloseLikesModal}
+                                    likes={likes}
+                                />
                             </div>
                         </div>
                     }
@@ -364,6 +375,14 @@ class Post extends Component {
             }
         }
         this.setState({ currentImage: newCurrentImage });
+    }
+
+    handleOpenLikesModal = () => {
+        this.setState({ showLikes: true });
+    }
+
+    handleCloseLikesModal = () => {
+        this.setState({ showLikes: false });
     }
 }
 

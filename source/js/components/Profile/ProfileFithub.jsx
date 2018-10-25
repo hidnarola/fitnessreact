@@ -61,6 +61,7 @@ import WidgetBadgesCard from '../Common/WidgetBadgesCard';
 import SweetAlert from "react-bootstrap-sweetalert";
 import ShowMore from "react-show-more";
 import Lightbox from 'react-images';
+import LikesListModal from '../Common/LikesListModal';
 
 class ProfileFithub extends Component {
     constructor(props) {
@@ -304,9 +305,11 @@ class ProfileFithub extends Component {
                                             return null;
                                         }
                                         var imagesCount = images.length;
-                                        var postImageDisplayClass = '';
+                                        var postImageDisplayClass = 'masonry';
                                         if (imagesCount === 1) {
-                                            postImageDisplayClass = 'single';
+                                            postImageDisplayClass += ' single';
+                                        } else if (imagesCount <= 0) {
+                                            postImageDisplayClass = '';
                                         }
                                         var comments = post.comments;
                                         var totalComments = comments.length;
@@ -420,15 +423,15 @@ class ProfileFithub extends Component {
                                                             </ShowMore>
                                                         </div>
                                                     }
-                                                    <div className={cns("posttype-body-grey masonry", postImageDisplayClass)}>
+                                                    <div className={cns("posttype-body-grey", postImageDisplayClass)}>
                                                         {images && images.length > 0 &&
                                                             images.map((imageD, imageI) => {
                                                                 if (imageI >= 5) {
                                                                     return null;
                                                                 }
                                                                 return (
-                                                                    <div className="item">
-                                                                        <a href="javascript:void(0)" key={imageD._id} onClick={() => this.handleOpenLightbox(images, imageI)}>
+                                                                    <div className="item" key={imageD._id}>
+                                                                        <a href="javascript:void(0)" onClick={() => this.handleOpenLightbox(images, imageI)}>
                                                                             <span key={imageI}>
                                                                                 <img
                                                                                     src={SERVER_BASE_URL + imageD.image}
@@ -442,16 +445,19 @@ class ProfileFithub extends Component {
                                                                 )
                                                             })
                                                         }
+                                                    </div>
+                                                    <div className={cns("posttype-body-grey")}>
                                                         {(likesStr || totalComments > 0) &&
                                                             <p>
                                                                 {likesStr &&
-                                                                    <a href="javascript:void(0)" onClick={() => { }}>{likesStr}</a>
+                                                                    <a href="javascript:void(0)" onClick={() => this.toggleShowLikesModal(post._id)}>{likesStr}</a>
                                                                 }
                                                                 {totalComments > 0 &&
                                                                     <Link to={`${routeCodes.POST}/${match.params.username}/${post._id}`} className="pull-right">Comments {totalComments}</Link>
                                                                 }
                                                             </p>
                                                         }
+
                                                     </div>
                                                 </div>
                                                 <div className="posttype-btm d-flex">
@@ -494,6 +500,11 @@ class ProfileFithub extends Component {
                                                         onSubmit={this.handleComment}
                                                     />
                                                 }
+                                                <LikesListModal
+                                                    show={post.showLikesModal ? post.showLikesModal : false}
+                                                    handleClose={() => this.toggleShowLikesModal(post._id)}
+                                                    likes={likes}
+                                                />
                                             </div>
                                         );
                                     })
@@ -1208,6 +1219,22 @@ class ProfileFithub extends Component {
             }
         }
         this.setState({ currentImage: newCurrentImage });
+    }
+
+    toggleShowLikesModal = (postId) => {
+        const { posts } = this.state;
+        let newPosts = [];
+        posts.map((o) => {
+            if (o._id === postId) {
+                if (o.showLikesModal) {
+                    o.showLikesModal = false;
+                } else {
+                    o.showLikesModal = true;
+                }
+            }
+            newPosts.push(o);
+        });
+        this.setState({ posts: newPosts });
     }
 }
 

@@ -14,6 +14,7 @@ import ShowMore from "react-show-more";
 import Lightbox from 'react-images';
 import LikeButton from '../Profile/LikeButton';
 import CommentBoxForm from '../Profile/CommentBoxForm';
+import LikesListModal from '../Common/LikesListModal';
 
 class ActivityFeedListCard extends Component {
     constructor(props) {
@@ -22,11 +23,13 @@ class ActivityFeedListCard extends Component {
             lightBoxOpen: false,
             currentImage: 0,
             lightBoxImages: [],
+
+            showLikes: false,
         }
     }
 
     render() {
-        const { lightBoxOpen, currentImage, lightBoxImages } = this.state;
+        const { lightBoxOpen, currentImage, lightBoxImages, showLikes } = this.state;
         const { post, loggedUserData, index } = this.props;
         if (!post) {
             return null;
@@ -51,9 +54,11 @@ class ActivityFeedListCard extends Component {
             return null;
         }
         var imagesCount = images.length;
-        var postImageDisplayClass = '';
+        var postImageDisplayClass = 'masonry';
         if (imagesCount === 1) {
-            postImageDisplayClass = 'single';
+            postImageDisplayClass += ' single';
+        } else if (imagesCount <= 0) {
+            postImageDisplayClass = '';
         }
         var comments = post.comments;
         var totalComments = comments.length;
@@ -142,7 +147,7 @@ class ActivityFeedListCard extends Component {
                             </ShowMore>
                         </div>
                     }
-                    <div className={cns("posttype-body-grey masonry", postImageDisplayClass)}>
+                    <div className={cns("posttype-body-grey ", postImageDisplayClass)}>
                         {images && images.length > 0 &&
                             images.map((imageD, imageI) => {
                                 if (imageI >= 5) {
@@ -162,17 +167,19 @@ class ActivityFeedListCard extends Component {
                                 )
                             })
                         }
-                        {(likesStr || totalComments > 0) &&
+                    </div>
+                    {(likesStr || totalComments > 0) &&
+                        <div className={cns("posttype-body-grey")}>
                             <p>
                                 {likesStr &&
-                                    <Link to={`${routeCodes.POST}/${createdBy.username}/${post._id}`}>{likesStr}</Link>
+                                    <a href="javascript:void(0)" onClick={this.handleOpenLikesModal}>{likesStr}</a>
                                 }
                                 {totalComments > 0 &&
                                     <Link to={`${routeCodes.POST}/${createdBy.username}/${post._id}`} className="pull-right">Comments {totalComments}</Link>
                                 }
                             </p>
-                        }
-                    </div>
+                        </div>
+                    }
                 </div>
                 <div className="posttype-btm d-flex">
                     <LikeButton
@@ -239,6 +246,11 @@ class ActivityFeedListCard extends Component {
                         currentImage={currentImage}
                     />
                 }
+                <LikesListModal
+                    show={showLikes}
+                    handleClose={this.handleCloseLikesModal}
+                    likes={likes}
+                />
             </div>
         );
     }
@@ -286,6 +298,14 @@ class ActivityFeedListCard extends Component {
     handleComment = (data, actionGenerator, props) => {
         const { handleComment } = this.props;
         handleComment(data, actionGenerator, props);
+    }
+
+    handleOpenLikesModal = () => {
+        this.setState({ showLikes: true });
+    }
+
+    handleCloseLikesModal = () => {
+        this.setState({ showLikes: false });
     }
 }
 
