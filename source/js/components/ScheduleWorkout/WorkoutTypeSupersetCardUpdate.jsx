@@ -245,6 +245,10 @@ class WorkoutTypeSupersetCardUpdate extends Component {
         let newValidations = [];
         if (supersetSets && supersetSets > 12) {
             dispatch(change('update_schedule_workout_form', 'superset_sets', '12'));
+        } else if (supersetSets % 1 > 0) {
+            dispatch(change('update_schedule_workout_form', 'superset_sets', Math.round(supersetSets)));
+        } else if (supersetSets && isNaN(supersetSets * 1)) {
+            dispatch(change('update_schedule_workout_form', 'superset_sets', ''));
         }
         fields.map((field, index) => {
             let selectedExerciseObj = null;

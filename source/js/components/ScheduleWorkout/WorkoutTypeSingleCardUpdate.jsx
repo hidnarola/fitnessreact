@@ -237,6 +237,10 @@ class WorkoutTypeSingleCardUpdate extends Component {
                 selectedExerciseObj = (fieldData.exercise_id) ? fieldData.exercise_id : null;
                 if (fieldData.sets > 12) {
                     dispatch(change('update_schedule_workout_form', `${field}.sets`, '12'));
+                } else if (fieldData.sets % 1 > 0) {
+                    dispatch(change('update_schedule_workout_form', `${field}.sets`, Math.round(fieldData.sets)));
+                } else if (fieldData.sets && isNaN(fieldData.sets * 1)) {
+                    dispatch(change('update_schedule_workout_form', `${field}.sets`, ''));
                 }
             }
             let selectedExerciseMeasurementObj = null;

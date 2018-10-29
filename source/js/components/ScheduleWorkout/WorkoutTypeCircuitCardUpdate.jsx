@@ -251,6 +251,10 @@ class WorkoutTypeCircuitCardUpdate extends Component {
         let newValidations = [];
         if (circuitSets && circuitSets > 12) {
             dispatch(change('update_schedule_workout_form', 'circuit_sets', '12'));
+        } else if (circuitSets % 1 > 0) {
+            dispatch(change('update_schedule_workout_form', 'circuit_sets', Math.round(circuitSets)));
+        } else if (circuitSets && isNaN(circuitSets * 1)) {
+            dispatch(change('update_schedule_workout_form', 'circuit_sets', ''));
         }
         fields.map((field, index) => {
             let selectedExerciseObj = null;
