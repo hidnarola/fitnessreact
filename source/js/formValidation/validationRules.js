@@ -20,6 +20,13 @@ export const requiredReactSelect = (value) => {
     return undefined;
 }
 
+export const requiredReactSelectNumberOptions = (value) => {
+    if (!value || typeof value.value === 'undefined') {
+        return "Field is required";
+    }
+    return undefined;
+}
+
 export const requiredReactSelectStatus = (value) => {
     if (!value || Object.keys(value).length <= 0 || value.value === '') {
         return "Field is required";

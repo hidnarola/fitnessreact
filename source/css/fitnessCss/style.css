@@ -1147,6 +1147,7 @@ div#loader .loader-spinner, div.loaderloader .loader-spinner, div.no-content-loa
 .timeline-new-post-editor .quill {background-color: #fff;}
 .timeline-new-post-editor .quill .ql-toolbar.ql-snow {border: none;border-bottom: 2px solid #f9fafa;}
 .timeline-new-post-editor .quill .ql-container.ql-snow {height: 100px;border: none;border-bottom: 3px solid #f9fafa;}
+.has-error .ql-toolbar.ql-snow, .has-error .ql-container.ql-snow { border: 1px solid #a94442; }
 .search div.search-form .react-autosuggest__suggestion a {width: 100%;display: inline-block;padding: 10px 20px;border-bottom: 1px solid #aaa;color: #000;}
 .search div.search-form .react-autosuggest__suggestion a img {width: 40px;height: 40px;margin-right: 10px;}
 .search div.search-form .react-autosuggest__suggestion {padding: 0;}
@@ -1327,20 +1328,62 @@ ul.text-right.pager {text-align: right;}
 .programs-table-wrapper .table>tbody>tr>td, .programs-table-wrapper .table>tbody>tr>th, 
 .programs-table-wrapper .table>tfoot>tr>td, .programs-table-wrapper .table>tfoot>tr>th, 
 .programs-table-wrapper .table>thead>tr>td, .programs-table-wrapper .table>thead>tr>th{border:0;}
-.programs-table-wrapper .table>thead>tr>th{ background:#eee;}
+.programs-table-wrapper .table>thead>tr>th{ background:#f9fafa;}
 .programs-table-wrapper .table>tbody>tr:nth-child(2n+2)> td{ background:rgba(0,0,0,.03);}
-.programs-table-wrapper .table>thead>tr>th{border:0; vertical-align:middle;padding:25px 15px;}
+.programs-table-wrapper .table>thead>tr>th{border:0; vertical-align:middle;padding: 8px 5px 8px 0;}
+.programs-table-wrapper .table>thead>tr>th:first-child{padding-left: 8px;}
+.programs-table-wrapper .table>thead>tr>th:last-child{padding-right: 8px;}
+.programs-table-wrapper .table>thead>tr>th > span {    width: 100%;    height: 100%;    display: block;    background-color: #fff;    padding: 10px 15px;}
 .programs-table-wrapper .table>tbody>tr>td{border:0; vertical-align:middle;padding:15px 15px;}
-.programs-table-wrapper .table>tbody>tr>th:nth-child(1),
-.programs-table-wrapper .table>tbody>tr>td:nth-child(1){ width:30%;}
-.programs-table-wrapper .table>tbody>tr>th:nth-child(2),
-.programs-table-wrapper .table>tbody>tr>td:nth-child(2){ width:54%;}
-.programs-table-wrapper .table>tbody>tr>th:nth-child(3),
-.programs-table-wrapper .table>tbody>tr>td:nth-child(3){ width:6%; text-align:center; }
-.programs-table-wrapper .table>tbody>tr>th:nth-child(4),
-.programs-table-wrapper .table>tbody>tr>td:nth-child(4){ width:10%;}
+
+.programs-table-wrapper .table>thead>tr>th:nth-child(2),
+.programs-table-wrapper .table>tbody>tr>td:nth-child(2),
+.programs-table-wrapper .table>thead>tr>th:nth-child(3),
+.programs-table-wrapper .table>tbody>tr>td:nth-child(3){
+    width:6%; text-align:center;
+}
+.programs-table-wrapper .table>thead>tr>th:nth-child(4),
+.programs-table-wrapper .table>tbody>tr>td:nth-child(4),
+.programs-table-wrapper .table>thead>tr>th:nth-child(5),
+.programs-table-wrapper .table>tbody>tr>td:nth-child(5),
+.programs-table-wrapper .table>thead>tr>th:nth-child(6),
+.programs-table-wrapper .table>tbody>tr>td:nth-child(6){ width:12%; text-align:center; }
+.programs-table-wrapper .table>thead>tr>th:last-child,
+.programs-table-wrapper .table>tbody>tr>td:last-child{ width:8%; text-align:center;}
+.programs-table-wrapper .table>tbody>tr>td:first-child > span p,
+.programs-table-wrapper .table>thead>tr>th:first-child > span p{
+    max-width: 520px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 0;
+}
+
 .color-in-completed, .color-in-completed p{color:#ccc !important;}
 .color-completed, .color-completed p{color:#ff337a !important;}
+.programs-table-wrapper .table>tbody>tr>td{    border: 0;
+    vertical-align: middle;
+    padding: 8px 5px 8px 0;
+    background-color: #f9fafa;}
+.programs-table-wrapper .table>tbody>tr>td > span {
+    background-color: #fff;
+    display: block;
+    padding: 0px 15px;
+    height: 100%;
+    width: 100%;
+    min-height: 54px;
+    line-height: 54px;
+    vertical-align: middle;
+    }
+    .programs-table-wrapper .table>tbody>tr:nth-child(2n+2)> td{
+        background: #f9fafa;
+    }
+    .programs-table-wrapper .table>tbody>tr>td:first-child {
+        padding-left: 8px;
+    }
+    .programs-table-wrapper .table>tbody>tr>td:last-child .btn-toolbar .dropdown{
+        margin-top: 10px;
+    }
 .program-save-custom-days-wrapper .program-save-custom-days-row .program-save-custom-days-block { width: 14.28%; border: 1px solid #eee; padding: 3px 10px; /*height: 100%; float: left;*/    display: -ms-flexbox; display: -webkit-box; display: flex; -ms-flex-direction: row; -webkit-box-orient: horizontal; -webkit-box-direction: normal; flex-direction: column;}
 .program-save-custom-days-wrapper .program-save-custom-days-row .program-save-custom-days-block .program-save-custom-days-block-title { text-align: right; }
 .program-save-custom-days-wrapper .program-save-custom-days-row .program-save-custom-days-block .program-save-custom-days-block-content { width: 100%; min-height: 150px; }
@@ -1912,8 +1955,8 @@ h3.h3_msg_box {    background: #fafafa;padding: 15px 15px 10px 15px;margin: 0;di
 .ReactTable .rt-th, .ReactTable .rt-td {overflow: hidden;}
 .body-head-l.title_edit_pop h2 {display: inline-block;vertical-align: middle;}
 .body-head-l.title_edit_pop div.pop_content {display: inline-block;vertical-align: middle;}
-.title_edit_pop button svg {position: relative;top: -2px;}
-.title_edit_pop button { display: inline-block; vertical-align: top; margin-left: 5px; background: linear-gradient(123.28deg, #46E9C5 0%, #3FFBFC 100%); border: 0; width: 36px; height: 36px; text-align: center; border-radius: 40px; line-height: 36px; color: #fff; }
+.title_edit_pop button svg, .title_edit_pop a svg {position: relative;top: -2px;}
+.title_edit_pop button, .title_edit_pop a { display: inline-block; vertical-align: top; margin-left: 10px; background: linear-gradient(123.28deg, #46E9C5 0%, #3FFBFC 100%); border: 0; width: 36px; height: 36px; text-align: center; border-radius: 40px; line-height: 36px; color: #fff; }
 .fitness-test-sub-category-block{height: 500px;}
 .workout-exercise-head-view-data-row-inner {width: 100%;}
 .workout-type-card-block-top {padding-right: 150px;position: relative;}

@@ -1,21 +1,27 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import FitnessHeader from '../components/global/FitnessHeader';
 import FitnessNav from '../components/global/FitnessNav';
-import { getUserProgramsRequest, deleteUserProgramRequest } from '../actions/userPrograms';
-import { DropdownButton, ButtonToolbar, MenuItem } from "react-bootstrap";
+import { getUserProgramsRequest, deleteUserProgramRequest, setUserProgramState } from '../actions/userPrograms';
+import {
+    DropdownButton,
+    ButtonToolbar,
+    MenuItem
+} from "react-bootstrap";
 import { FaPencil, FaTrash } from 'react-icons/lib/fa';
 import SweetAlert from "react-bootstrap-sweetalert";
+import AddProgramMasterForm from '../components/Program/AddProgramMasterForm';
 import { routeCodes } from '../constants/routes';
-import { te, ts } from '../helpers/funs';
-import ReactHtmlParser from "react-html-parser";
+import { te, ts, capitalizeFirstLetter } from '../helpers/funs';
+import { addUserProgramMasterRequest } from '../actions/userPrograms';
 import { showPageLoader, hidePageLoader } from '../actions/pageLoader';
 
 class Programs extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            showAddProgramAlert: false,
             showDeleteProgramAlert: false,
             deleteActionInit: false,
             selectedProgramId: null,
@@ -30,6 +36,7 @@ class Programs extends Component {
     render() {
         const { programs } = this.props;
         const {
+            showAddProgramAlert,
             showDeleteProgramAlert
         } = this.state;
         const { loggedUserData, errorMaster } = this.props;
@@ -44,14 +51,17 @@ class Programs extends Component {
                             <p>Your goal choice shapes how your fitness assistant will ceate your meal and exercise plans, it’s important that you set goals which are achieveable. Keep updating your profile and your fitness assistant will keep you on track and meeting the goals you’ve set out for yourself.</p>
                         </div>
                         <div className="body-head-r">
-                            <Link className="pink-btn" to={routeCodes.PROGRAM_MASTER_SAVE}>
+                            <a href="javascript:void(0)" onClick={this.handleShowAddProgramAlert} className="pink-btn">
                                 <span>Add Program</span>
                                 <i className="icon-add_circle"></i>
-                            </Link>
-                            <Link className="white-btn" to={routeCodes.EXERCISE} >
+                            </a>
+                            <NavLink
+                                className="white-btn"
+                                to={routeCodes.EXERCISE}
+                            >
                                 <span>Back</span>
                                 <i className="icon-arrow_back"></i>
-                            </Link>
+                            </NavLink>
                         </div>
                     </div>
                     <div className="body-content d-flex row justify-content-start profilephoto-content">
@@ -61,13 +71,10 @@ class Programs extends Component {
                                     <table className="table">
                                         <thead>
                                             <tr>
-                                                <th><span><p>Name</p></span></th>
-                                                <th><span>Workouts</span></th>
-                                                <th><span>Frequency</span></th>
-                                                <th><span>Type</span></th>
-                                                <th><span>Difficulty</span></th>
-                                                <th><span>Rating</span></th>
-                                                <th><span>Actions</span></th>
+                                                <th>Name</th>
+                                                <th>Description</th>
+                                                <th>Workouts</th>
+                                                <th>Actions</th>
                                             </tr>
                                         </thead>
                                         {programs && programs.length > 0 &&
@@ -76,35 +83,33 @@ class Programs extends Component {
                                                     programs.map((program, index) => {
                                                         return (
                                                             <tr key={index}>
-                                                                <td><span><p>{program.name}</p></span></td>
-                                                                <td><span>{program.totalWorkouts}</span></td>
-                                                                <td><span>{program.totalWorkouts}</span></td>
-                                                                <td><span>{program.totalWorkouts}</span></td>
-                                                                <td><span>{program.totalWorkouts}</span></td>
-                                                                <td><span>{program.totalWorkouts}</span></td>
-                                                                <td>
-                                                                    <span>
-                                                                        {program.userId && program.userId === loggedUserData.authId &&
-                                                                            <ButtonToolbar>
-                                                                                <DropdownButton title="Actions" pullRight id="dropdown-size-medium">
-                                                                                    <MenuItem
-                                                                                        href={`${routeCodes.PROGRAM_SAVE}/${program._id}`}
-                                                                                        eventKey="1"
-                                                                                        onClick={(e) => this.handleEditNavigation(e, `${routeCodes.PROGRAM_SAVE}/${program._id}`)}
-                                                                                    >
-                                                                                        <FaPencil className="v-align-sub" /> Edit
+                                                                <td>{program.name}</td>
+                                                                <td>{program.description}</td>
+                                                                <td>{program.totalWorkouts}</td>
+                                                                {program.userId && program.userId === loggedUserData.authId &&
+                                                                    <td>
+                                                                        <ButtonToolbar>
+                                                                            <DropdownButton title="Actions" pullRight id="dropdown-size-medium">
+                                                                                <MenuItem
+                                                                                    href={`${routeCodes.PROGRAM_SAVE}/${program._id}`}
+                                                                                    eventKey="1"
+                                                                                    onClick={(e) => this.handleEditNavigation(e, `${routeCodes.PROGRAM_SAVE}/${program._id}`)}
+                                                                                >
+                                                                                    <FaPencil className="v-align-sub" /> Edit
                                                                             </MenuItem>
-                                                                                    <MenuItem
-                                                                                        eventKey="2"
-                                                                                        onClick={() => this.handleShowDeleteAlert(program._id)}
-                                                                                    >
-                                                                                        <FaTrash className="v-align-sub" /> Delete
+                                                                                <MenuItem
+                                                                                    eventKey="2"
+                                                                                    onClick={() => this.handleShowDeleteAlert(program._id)}
+                                                                                >
+                                                                                    <FaTrash className="v-align-sub" /> Delete
                                                                             </MenuItem>
-                                                                                </DropdownButton>
-                                                                            </ButtonToolbar>
-                                                                        }
-                                                                    </span>
-                                                                </td>
+                                                                            </DropdownButton>
+                                                                        </ButtonToolbar>
+                                                                    </td>
+                                                                }
+                                                                {(!program.userId || program.userId !== loggedUserData.authId) &&
+                                                                    <td></td>
+                                                                }
                                                             </tr>
                                                         )
                                                     })
@@ -126,6 +131,25 @@ class Programs extends Component {
                 </section>
 
                 <SweetAlert
+                    type="default"
+                    title={'Add Program'}
+                    onConfirm={() => { }}
+                    btnSize="sm"
+                    cancelBtnBsStyle="danger"
+                    confirmBtnBsStyle="success"
+                    show={showAddProgramAlert}
+                    showConfirm={false}
+                    showCancel={false}
+                    closeOnClickOutside={false}
+                >
+                    <AddProgramMasterForm
+                        onSubmit={this.handleAddProgramSubmit}
+                        onCancel={this.handleAddProgramCancel}
+                        errorArr={errorMaster}
+                    />
+                </SweetAlert>
+
+                <SweetAlert
                     show={showDeleteProgramAlert}
                     danger
                     showCancel
@@ -144,8 +168,18 @@ class Programs extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        const { loading, error, dispatch, } = this.props;
-        const { deleteActionInit, } = this.state;
+        const {
+            loading,
+            error,
+            dispatch,
+            loadingMaster,
+            programMaster,
+            errorMaster,
+            history,
+        } = this.props;
+        const {
+            deleteActionInit,
+        } = this.state;
         if (!loading && deleteActionInit) {
             this.setState({ deleteActionInit: false });
             this.handleCancelDelete();
@@ -155,8 +189,37 @@ class Programs extends Component {
             } else {
                 te(error[0]);
             }
-            dispatch(hidePageLoader());
         }
+        if (!loadingMaster && prevProps.loadingMaster !== loadingMaster) {
+            dispatch(hidePageLoader());
+            if (errorMaster && errorMaster.length <= 0) {
+                var _id = programMaster._id;
+                history.push(`${routeCodes.PROGRAM_SAVE}/${_id}`);
+            }
+        }
+    }
+
+
+    handleShowAddProgramAlert = () => {
+        this.setState({ showAddProgramAlert: true });
+    }
+
+    handleAddProgramCancel = () => {
+        const { dispatch } = this.props;
+        this.setState({ showAddProgramAlert: false });
+        let stateData = { errorMaster: [] };
+        dispatch(setUserProgramState(stateData));
+    }
+
+    handleAddProgramSubmit = (data) => {
+        const { dispatch } = this.props;
+        var requestData = {
+            name: (data.title && data.title.trim()) ? capitalizeFirstLetter(data.title.trim()) : '',
+            description: (data.description && data.description.trim()) ? capitalizeFirstLetter(data.description.trim()) : '',
+            type: 'user',
+        }
+        dispatch(addUserProgramMasterRequest(requestData));
+        dispatch(showPageLoader());
     }
 
     handleEditNavigation = (e, href) => {
@@ -166,17 +229,22 @@ class Programs extends Component {
     }
 
     handleShowDeleteAlert = (_id) => {
-        this.setState({ showDeleteProgramAlert: true, selectedProgramId: _id, });
+        this.setState({
+            showDeleteProgramAlert: true,
+            selectedProgramId: _id,
+        });
     }
 
     handleCancelDelete = () => {
-        this.setState({ showDeleteProgramAlert: false, selectedProgramId: null, });
+        this.setState({
+            showDeleteProgramAlert: false,
+            selectedProgramId: null,
+        });
     }
 
     handleDeleteProgram = () => {
         const { dispatch } = this.props;
         const { selectedProgramId } = this.state;
-        dispatch(showPageLoader());
         dispatch(deleteUserProgramRequest(selectedProgramId));
         this.setState({ deleteActionInit: true });
     }

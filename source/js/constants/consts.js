@@ -879,3 +879,20 @@ export const MUSCLE_WIDGET_WEIGHT = 'weight';
 export const MUSCLE_WIDGET_HEIGHT = 'height';
 
 export const MAX_IMAGE_FILE_SIZE_ALLOWED = 2097152;
+
+export const PROGRAM_PRIVATE = 1;
+export const PROGRAM_PUBLIC = 0;
+export const PROGRAM_PRIVATE_STR = 'Private';
+export const PROGRAM_PUBLIC_STR = 'Public';
+
+export const PROGRAM_DIFFICULTY_BEGINNER = 'beginner';
+export const PROGRAM_DIFFICULTY_INTERMEDIATE = 'intermediate';
+export const PROGRAM_DIFFICULTY_ADVANCED = 'advanced';
+export const PROGRAM_DIFFICULTY_EXPERT = 'expert';
+
+export const PROGRAM_DIFFICULTY_LEVEL_OBJ = [
+    { value: PROGRAM_DIFFICULTY_BEGINNER, label: 'Beginner' },
+    { value: PROGRAM_DIFFICULTY_INTERMEDIATE, label: 'Intermediate' },
+    { value: PROGRAM_DIFFICULTY_ADVANCED, label: 'Advanced' },
+    { value: PROGRAM_DIFFICULTY_EXPERT, label: 'Expert' },
+]

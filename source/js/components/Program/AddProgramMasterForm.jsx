@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from "redux-form";
-import { required, minLength, maxLength } from '../../formValidation/validationRules';
+import { required, minLength, maxLength, requiredReactSelect } from '../../formValidation/validationRules';
 import { Alert } from "react-bootstrap";
+import { SelectField_ReactSelect } from '../../helpers/FormControlHelper';
 
 const minLength2 = minLength(2);
 const maxLength20 = maxLength(20);
@@ -10,7 +11,7 @@ const maxLength200 = maxLength(200);
 
 class AddProgramMasterForm extends Component {
     render() {
-        const { handleSubmit, onCancel, errorArr, loadingMaster } = this.props;
+        const { handleSubmit, onCancel, errorArr, loadingMaster, privacyOptions, goalOptions, levelOptions } = this.props;
         return (
             <div className="add-program-master-form-alert-form">
                 {errorArr && errorArr.length > 0 &&
@@ -38,6 +39,39 @@ class AddProgramMasterForm extends Component {
                         component={TextAreaField}
                         errorClass="help-block"
                         validate={[maxLength200]}
+                    />
+                    <Field
+                        id="privacy"
+                        name="privacy"
+                        className=""
+                        wrapperClass="form-group"
+                        placeholder="Select Privacy"
+                        component={SelectField_ReactSelect}
+                        options={privacyOptions}
+                        errorClass="help-block"
+                        validate={[requiredReactSelect]}
+                    />
+                    <Field
+                        id="goal"
+                        name="goal"
+                        className=""
+                        wrapperClass="form-group"
+                        placeholder="Select Goal"
+                        component={SelectField_ReactSelect}
+                        options={goalOptions}
+                        errorClass="help-block"
+                        validate={[requiredReactSelect]}
+                    />
+                    <Field
+                        id="level"
+                        name="level"
+                        className=""
+                        wrapperClass="form-group"
+                        placeholder="Select Difficulty Level"
+                        component={SelectField_ReactSelect}
+                        options={levelOptions}
+                        errorClass="help-block"
+                        validate={[requiredReactSelect]}
                     />
                     <button type="button" onClick={onCancel} className="btn btn-sm btn-danger">Cancel</button>
                     <button type="submit" disabled={loadingMaster} className="btn btn-sm btn-success">OK</button>

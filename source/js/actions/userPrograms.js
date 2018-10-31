@@ -16,6 +16,10 @@ export const GET_USER_PROGRAM_REQUEST = 'GET_USER_PROGRAM_REQUEST';
 export const GET_USER_PROGRAM_SUCCESS = 'GET_USER_PROGRAM_SUCCESS';
 export const GET_USER_PROGRAM_ERROR = 'GET_USER_PROGRAM_ERROR';
 
+export const GET_USER_PROGRAM_MASTER_REQUEST = 'GET_USER_PROGRAM_MASTER_REQUEST';
+export const GET_USER_PROGRAM_MASTER_SUCCESS = 'GET_USER_PROGRAM_MASTER_SUCCESS';
+export const GET_USER_PROGRAM_MASTER_ERROR = 'GET_USER_PROGRAM_MASTER_ERROR';
+
 export const DELETE_USERS_PROGRAM_WORKOUT_SCHEDULE_REQUEST = 'DELETE_USERS_PROGRAM_WORKOUT_SCHEDULE_REQUEST';
 export const DELETE_USERS_PROGRAM_WORKOUT_SCHEDULE_SUCCESS = 'DELETE_USERS_PROGRAM_WORKOUT_SCHEDULE_SUCCESS';
 export const DELETE_USERS_PROGRAM_WORKOUT_SCHEDULE_ERROR = 'DELETE_USERS_PROGRAM_WORKOUT_SCHEDULE_ERROR';
@@ -165,6 +169,27 @@ export function getUserProgramSuccess(data) {
 export function getUserProgramError(error) {
     return {
         type: GET_USER_PROGRAM_ERROR,
+        error
+    }
+}
+
+export function getUserProgramMasterRequest(_id) {
+    return {
+        type: GET_USER_PROGRAM_MASTER_REQUEST,
+        _id
+    }
+}
+
+export function getUserProgramMasterSuccess(data) {
+    return {
+        type: GET_USER_PROGRAM_MASTER_SUCCESS,
+        data,
+    }
+}
+
+export function getUserProgramMasterError(error) {
+    return {
+        type: GET_USER_PROGRAM_MASTER_ERROR,
         error
     }
 }

@@ -36,6 +36,15 @@ function getUserProgram(_id) {
     return fetchResource(requestUrl + '/' + _id, options);
 }
 
+function getUserProgramMaster(_id) {
+    var headers = extraUserHeaders();
+    var options = {
+        method: 'GET',
+        headers: headers,
+    }
+    return fetchResource(requestUrl + '/master/' + _id, options);
+}
+
 function deleteUsersProgramWorkoutSchedule(requestData) {
     let headers = extraUserHeaders();
     return postFormData(requestUrl + '/delete/exercises', requestData, headers);
@@ -111,6 +120,7 @@ export default {
     addUserProgramMaster,
     deleteUserProgram,
     getUserProgram,
+    getUserProgramMaster,
     deleteUsersProgramWorkoutSchedule,
     addUserProgramWorkoutTitle,
     getUsersProgramWorkoutSchedule,

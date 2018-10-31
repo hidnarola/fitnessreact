@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import FitnessHeader from '../global/FitnessHeader';
 import FitnessNav from '../global/FitnessNav';
-import { getUserProgramRequest, setSelectedDayForProgram, copyUserProgramWorkoutSchedule, deleteUsersProgramWorkoutScheduleRequest, selectUsersProgramWorkoutScheduleForEdit, addUserProgramWorkoutTitleRequest, pasteUsersProgramWorkoutScheduleRequest, setUserProgramState } from '../../actions/userPrograms';
+import { getUserProgramRequest, setSelectedDayForProgram, addUsersProgramWorkoutScheduleRequest, copyUserProgramWorkoutSchedule, deleteUsersProgramWorkoutScheduleRequest, selectUsersProgramWorkoutScheduleForEdit, addUserProgramWorkoutTitleRequest, pasteUsersProgramWorkoutScheduleRequest, updateUserProgramMasterRequest, setUserProgramState } from '../../actions/userPrograms';
 import { routeCodes } from '../../constants/routes';
 import { te, ts, capitalizeFirstLetter } from '../../helpers/funs';
 import _ from "lodash";
@@ -12,8 +12,10 @@ import { getProgramsNameRequest } from '../../actions/userScheduleWorkouts';
 import { SCHEDULED_WORKOUT_TYPE_RESTDAY, SCHEDULED_WORKOUT_TYPE_EXERCISE } from '../../constants/consts';
 import cns from "classnames";
 import AddProgramWorkoutTitleForm from './AddProgramWorkoutTitleForm';
-import { NavLink, Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import ReactTooltip from "react-tooltip";
+import UpdateProgramMasterForm from './UpdateProgramMasterForm';
+import { initialize, reset } from "redux-form";
 import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
 import ReactHtmlParser from "react-html-parser";
 
@@ -38,6 +40,8 @@ class ProgramSave extends Component {
             addWorkoutTitleInit: false,
             addRestDayInit: false,
             selectAllChecked: false,
+            showUpdateProgramTitleAlert: false,
+            updateProgramTitleInit: false,
         }
     }
 
@@ -48,8 +52,23 @@ class ProgramSave extends Component {
     }
 
     render() {
-        const { program, totalDays, workouts, showSelectEventAlert, deleteWorkoutAlert, deleteWeekAlert, deleteBulkActionAlert, showAddWorkoutTitleAlert, selectAllChecked } = this.state;
-        const { selectedDay, errorTitle } = this.props;
+        const {
+            program,
+            totalDays,
+            workouts,
+            showSelectEventAlert,
+            deleteWorkoutAlert,
+            deleteWeekAlert,
+            deleteBulkActionAlert,
+            showAddWorkoutTitleAlert,
+            selectAllChecked,
+            showUpdateProgramTitleAlert,
+        } = this.state;
+        const {
+            selectedDay,
+            errorTitle,
+            errorMaster
+        } = this.props;
         var selectedEvents = _.filter(workouts, ['isSelectedForBulkAction', true]);
         return (
             <div className="fitness-body">
@@ -57,16 +76,12 @@ class ProgramSave extends Component {
                 <FitnessNav />
                 <section className="body-wrap">
                     <div className="body-head d-flex justify-content-start">
-                        {program && program.name &&
-                            <div className="body-head-l title_edit_pop">
-                                <h2>{program.name}</h2>
-                                <Link to={`${routeCodes.PROGRAM_MASTER_SAVE}/${program._id}`} data-for="edit-program-tooltip" data-tip="Edit"><FaPencil /></Link>
-                                <ReactTooltip id='edit-program-tooltip' place="top" effect="solid" />
-                                {program && program.description &&
-                                    ReactHtmlParser(program.description)
-                                }
-                            </div>
-                        }
+                        <div className="body-head-l title_edit_pop">
+                            <h2>{(program && program.name) ? program.name : ''}</h2>
+                            <button type="button" onClick={this.handleShowUpdateProgramTitleAlert} data-for="edit-program-tooltip" data-tip="Edit"><FaPencil /></button>
+                            <ReactTooltip id='edit-program-tooltip' place="top" effect="solid" />
+                            <p>{(program && program.description) ? ReactHtmlParser(program.description) : ''}</p>
+                        </div>
                         <div className="body-head-r">
                             <NavLink
                                 className="white-btn"
@@ -202,6 +217,26 @@ class ProgramSave extends Component {
                         errorArr={errorTitle}
                     />
                 </SweetAlert>
+
+                <SweetAlert
+                    type="default"
+                    title="Update Workout Name"
+                    onConfirm={() => { }}
+                    btnSize="sm"
+                    cancelBtnBsStyle="danger"
+                    confirmBtnBsStyle="success"
+                    show={showUpdateProgramTitleAlert}
+                    showConfirm={false}
+                    showCancel={false}
+                    closeOnClickOutside={false}
+                >
+                    <UpdateProgramMasterForm
+                        onSubmit={this.handleUpdateProgramTitle}
+                        onCancel={this.handleCloseUpdateProgramTitleAlert}
+                        errorArr={errorMaster}
+                    />
+                </SweetAlert>
+
             </div>
         );
     }
@@ -217,6 +252,8 @@ class ProgramSave extends Component {
             workoutTitle,
             errorTitle,
             dispatch,
+            loadingMaster,
+            errorMaster
         } = this.props;
         const {
             workoutPasteAction,
@@ -226,6 +263,7 @@ class ProgramSave extends Component {
             deleteBulkActionInit,
             addWorkoutTitleInit,
             addRestDayInit,
+            updateProgramTitleInit,
         } = this.state;
         if (!loading && error && error.length > 0) {
             te("Something went wrong! please try again later.");
@@ -313,6 +351,14 @@ class ProgramSave extends Component {
                 te('Something went wrong! please try again later.');
             } else {
                 ts('Rest day added!');
+            }
+        }
+        if (updateProgramTitleInit && !loadingMaster) {
+            this.setState({ updateProgramTitleInit: false });
+            dispatch(hidePageLoader());
+            if (errorMaster && errorMaster.length <= 0) {
+                this.handleCloseUpdateProgramTitleAlert();
+                ts('Updated!');
             }
         }
     }
@@ -536,6 +582,36 @@ class ProgramSave extends Component {
             newWorkouts.push(newObj);
         });
         this.setState({ workouts: newWorkouts, selectAllChecked: selectStatus });
+    }
+
+    handleShowUpdateProgramTitleAlert = () => {
+        const { program, dispatch } = this.props;
+        var formData = {
+            title: program.programDetails.name,
+            description: program.programDetails.description,
+        }
+        dispatch(initialize('update_program_title_form', formData));
+        this.setState({ showUpdateProgramTitleAlert: true });
+    }
+
+    handleCloseUpdateProgramTitleAlert = () => {
+        const { dispatch } = this.props;
+        dispatch(reset('update_program_title_form'));
+        this.setState({ showUpdateProgramTitleAlert: false });
+        let stateData = { errorMaster: [] };
+        dispatch(setUserProgramState(stateData));
+    }
+
+    handleUpdateProgramTitle = (data) => {
+        const { dispatch, program } = this.props;
+        var requestData = {
+            name: (data.title && data.title.trim()) ? capitalizeFirstLetter(data.title.trim()) : '',
+            description: (data.description && data.description.trim()) ? capitalizeFirstLetter(data.description.trim()) : '',
+        }
+        var _id = program.programDetails._id;
+        dispatch(updateUserProgramMasterRequest(_id, requestData));
+        this.setState({ updateProgramTitleInit: true });
+        dispatch(showPageLoader());
     }
 }
 

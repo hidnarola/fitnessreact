@@ -57,7 +57,10 @@ import {
     REORDER_PROGRAM_WORKOUT_EXERCISES_REQUEST,
     REORDER_PROGRAM_WORKOUT_EXERCISES_SUCCESS,
     REORDER_PROGRAM_WORKOUT_EXERCISES_ERROR,
-    SET_USER_PROGRAM_STATE
+    SET_USER_PROGRAM_STATE,
+    GET_USER_PROGRAM_MASTER_REQUEST,
+    GET_USER_PROGRAM_MASTER_SUCCESS,
+    GET_USER_PROGRAM_MASTER_ERROR
 } from "../actions/userPrograms";
 import {
     VALIDATION_FAILURE_STATUS,
@@ -79,6 +82,9 @@ const initialState = Map({
     loadingMaster: false,
     programMaster: null,
     errorMaster: [],
+    loadingMasterData: false,
+    programMasterData: null,
+    errorMasterData: [],
     loadingTitle: false,
     workoutTitle: null,
     errorTitle: [],
@@ -601,15 +607,9 @@ const actionMap = {
         }));
     },
     [UPDATE_USER_PROGRAM_MASTER_SUCCESS]: (state, action) => {
-        var newState = {
-            loadingMaster: false,
-        };
+        var newState = { loadingMaster: false, };
         if (action.data.status === 1) {
-            var oldStateProgram = state.get('program');
-            var newStateProgram = Object.assign({}, oldStateProgram);
-            newStateProgram.programDetails.name = action.data.program.name;
-            newStateProgram.programDetails.description = action.data.program.description;
-            newState.programMaster = newStateProgram;
+            newState.programMaster = action.data.program;
         } else {
             var msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
             newState.errorMaster = [msg];
@@ -695,6 +695,37 @@ const actionMap = {
         return state.merge(Map({
             reorderExercisesLoading: false,
             reorderExercisesError: error,
+        }));
+    },
+    [GET_USER_PROGRAM_MASTER_REQUEST]: (state, action) => {
+        return state.merge(Map({
+            loadingMasterData: true,
+            programMasterData: null,
+            errorMasterData: []
+        }));
+    },
+    [GET_USER_PROGRAM_MASTER_SUCCESS]: (state, action) => {
+        let newState = { loadingMasterData: false };
+        if (action.data && action.data.status && action.data.status === 1) {
+            newState.programMasterData = action.data.program;
+        } else {
+            let msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
+            newState.errorMasterData = [msg];
+        }
+        return state.merge(Map(newState));
+    },
+    [GET_USER_PROGRAM_MASTER_ERROR]: (state, action) => {
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
+        }
+        return state.merge(Map({
+            loadingMasterData: false,
+            errorMasterData: error
         }));
     },
     [SET_USER_PROGRAM_STATE]: (state, action) => {
