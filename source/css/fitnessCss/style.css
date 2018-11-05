@@ -1333,14 +1333,14 @@ ul.text-right.pager {text-align: right;}
 .programs-table-wrapper .table>thead>tr>th{border:0; vertical-align:middle;padding: 8px 5px 8px 0;}
 .programs-table-wrapper .table>thead>tr>th:first-child{padding-left: 8px;}
 .programs-table-wrapper .table>thead>tr>th:last-child{padding-right: 8px;}
-.programs-table-wrapper .table>thead>tr>th > span {    width: 100%;    height: 100%;    display: block;    background-color: #fff;    padding: 10px 15px;}
+.programs-table-wrapper .table>thead>tr>th > span {    width: 100%;    height: 100%;    display: block;    background-color: #fff;    padding: 15px 15px;}
 .programs-table-wrapper .table>tbody>tr>td{border:0; vertical-align:middle;padding:15px 15px;}
 
 .programs-table-wrapper .table>thead>tr>th:nth-child(2),
 .programs-table-wrapper .table>tbody>tr>td:nth-child(2),
 .programs-table-wrapper .table>thead>tr>th:nth-child(3),
 .programs-table-wrapper .table>tbody>tr>td:nth-child(3){
-    width:6%; text-align:center;
+    width:12%; text-align:center;
 }
 .programs-table-wrapper .table>thead>tr>th:nth-child(4),
 .programs-table-wrapper .table>tbody>tr>td:nth-child(4),
@@ -2080,17 +2080,40 @@ span.text-mute.noti-time { display: block; height: auto; width: auto; text-align
 .item { background: #fff; padding: 1em; margin: 0; border: 5px solid #f9fafa; }
 .masonry.single { column-count: 1; }
 .single-post-cntline{max-width: 768px; margin: 0 auto;}
+
+.program-search {text-align: right;margin-bottom: 20px;}
+.program-search input {color: #000;border: 0;background: #f9fafa;padding: 10px 10px;max-width: 400px;width: 100%;border-radius: 4px;line-height: normal;}
+.programs-table-wrapper table.table thead tr {border-bottom: 5px solid #fff;}
+.whitebox-body.profile-body.programs-table-wrapper table.table thead tr th {padding: 15px 0 15px 5px ;    position: relative;}
+.whitebox-body.profile-body.programs-table-wrapper table.table thead tr th:first-child {padding-left: 15px ;}
+.whitebox-body.profile-body.programs-table-wrapper table.table thead tr th:last-child {padding-right: 15px ;}
+.whitebox-body.profile-body.programs-table-wrapper tbody tr:first-child td {padding-top: 15px ;}
+.whitebox-body.profile-body.programs-table-wrapper tbody tr td:first-child {padding-left: 15px ;}
+.whitebox-body.profile-body.programs-table-wrapper tbody tr td {padding: 5px 0 0px 5px ;}
+.whitebox-body.profile-body.programs-table-wrapper tbody tr:last-child td {padding-bottom: 15px ;}
+.whitebox-body.profile-body.programs-table-wrapper tbody tr td:first-child {padding-left: 15px ;}
+.whitebox-body.profile-body.programs-table-wrapper tbody tr td:last-child {padding-right: 15px;}
+ul.program-pager-wrap.pager li a {border: 1px solid #9f59cc;color: #ad60cf;padding: 4px 24px;transition: ease-in-out .5s;}
+ul.program-pager-wrap.pager li.disabled {opacity: 0.3;}
+ul.program-pager-wrap.pager li {display: inline-block;margin: 0;}
+ul.program-pager-wrap.pager li.previous {padding-right: 15px;}
+ul.program-pager-wrap.pager {margin: 0;text-align: right;}
+ul.program-pager-wrap.pager li a:hover {background: #ad60cf;color: #fff;}
+.div_search_program span.search-icon {position: absolute;left: 8px;top: 8px;}
+.div_search_program span.search-icon svg {width: 16px;height: 16px;}
+.div_search_program {max-width: 400px;float: right;width: 100%;position: relative;}
+.program-search:After {content: " ";display: block;clear: both;}
+.program-search input {padding-left: 30px;}
+.whitebox-body.profile-body.programs-table-wrapper table.table thead tr th i {position: absolute;right: 10px;top: 27px;}
+.whitebox-body.profile-body.programs-table-wrapper {min-height: 300px;position: relative;}
+.program-tbl-loader {position: absolute;left: 0;top: 86px;width: 100%;height: calc(100% - 86px);background: rgba(0, 0, 0, 0.25);}
+.program-tbl-loader span {position: absolute;left: 50%;top: 50%;transform: translate(-50% , -50%);}
+.program-tbl-loader span svg {fill: #fff;}
+
+
 @media(min-width: 992px){
-    body.with_login .app-wrapper-content{
-        width: 100%;
-    }
-    body.with_login .appWrapper{    
-        display: -ms-flexbox;
-        display: flex;
-        -ms-flex-align: center;
-        align-items: center;
-        height: 100vh;
-    }
+    body.with_login .app-wrapper-content{ width: 100%; }
+    body.with_login .appWrapper{ display: -ms-flexbox; display: flex; -ms-flex-align: center; align-items: center; height: 100vh; }
 }
 @media only screen and (min-width: 1024px) {
     .masonry { column-count: 2; }

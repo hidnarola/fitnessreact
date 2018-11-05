@@ -117,6 +117,7 @@ const actionMap = {
         };
         if (action.data.status === 1) {
             newState.programs = action.data.programs;
+            newState.totalRecords = action.data.totalRecords;
         } else {
             var msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
             newState.error = [msg];

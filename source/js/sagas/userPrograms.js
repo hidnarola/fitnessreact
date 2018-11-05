@@ -60,7 +60,8 @@ import {
 function getUserProgramsData() {
     return function* (action) {
         try {
-            const data = yield call(() => api.getUserPrograms());
+            const filterData = action.filterData;
+            const data = yield call(() => api.getUserPrograms(filterData));
             yield put(getUserProgramsSuccess(data));
         } catch (error) {
             yield put(getUserProgramsError(error));

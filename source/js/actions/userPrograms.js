@@ -83,9 +83,10 @@ export const REORDER_PROGRAM_WORKOUT_EXERCISES_ERROR = 'REORDER_PROGRAM_WORKOUT_
 
 export const SET_USER_PROGRAM_STATE = 'SET_USER_PROGRAM_STATE';
 
-export function getUserProgramsRequest() {
+export function getUserProgramsRequest(filterData) {
     return {
         type: GET_USER_PROGRAMS_REQUEST,
+        filterData
     }
 }
 

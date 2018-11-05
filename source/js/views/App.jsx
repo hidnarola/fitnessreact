@@ -183,6 +183,7 @@ class App extends Component {
                                 <PrivateRoute exact path={routeCodes.VIEW_SCHEDULE_WORKOUT} component={ViewScheduleWorkout} />
 
                                 <PrivateRoute exact path={routeCodes.PROGRAMS} component={Programs} />
+                                <PrivateRoute exact path={routeCodes.PROGRAMS_PUBLIC} component={Programs} />
                                 <PrivateRoute exact path={`${routeCodes.PROGRAM_MASTER_SAVE}/:id?`} component={SaveProgramMasterPage} />
                                 <PrivateRoute exact path={`${routeCodes.PROGRAM_SAVE}/:id`} component={ProgramSave} />
                                 <PrivateRoute exact path={routeCodes.SAVE_PROGRAM_SCHEDULE_WORKOUT} component={SaveScheduleProgramWorkout} />
