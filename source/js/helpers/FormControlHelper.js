@@ -306,19 +306,18 @@ export const StarRating = (props) => {
         labelClass,
         errorClass,
         starCount,
-        onStarClick,
-        starRating,
-        requiredAstrisk
+        requiredAstrisk,
+        className
     } = props;
     return (
         <div className={wrapperClass}>
             <label htmlFor={input.name} className={labelClass}>{label} {requiredAstrisk && <span style={{ color: "red" }}>*</span>}</label>
             <StarRatingComponent
                 {...input}
+                starRating={input.value}
                 starCount={starCount}
-                value={parseInt(starRating)}
-                onStarClick={(value) => (onStarClick(input.name, value))}
-                initialRate={starRating}
+                onStarClick={(value) => input.onChange(value)}
+                className={className ? className : ''}
             />
             {meta.touched &&
                 ((meta.error && <span className={errorClass}>{meta.error}</span>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))

@@ -2109,6 +2109,7 @@ ul.program-pager-wrap.pager li a:hover {background: #ad60cf;color: #fff;}
 .program-tbl-loader {position: absolute;left: 0;top: 86px;width: 100%;height: calc(100% - 86px);background: rgba(0, 0, 0, 0.25);}
 .program-tbl-loader span {position: absolute;left: 50%;top: 50%;transform: translate(-50% , -50%);}
 .program-tbl-loader span svg {fill: #fff;}
+.dv-star-rating.program-rating label { font-size: 35px; margin: 0 5px; }
 
 
 @media(min-width: 992px){

@@ -11,6 +11,9 @@ import SweetAlert from "react-bootstrap-sweetalert";
 import { ts, te } from "../../helpers/funs";
 import { hidePageLoader, showPageLoader } from "../../actions/pageLoader";
 import RatingStarsDisplay from '../Common/RatingStarsDisplay';
+import _ from "lodash";
+import ProgramRatingModal from './ProgramRatingModal';
+import { initialize, reset } from "redux-form";
 
 class ProgramListing extends Component {
     constructor(props) {
@@ -19,6 +22,7 @@ class ProgramListing extends Component {
             showDeleteProgramAlert: false,
             deleteActionInit: false,
             selectedProgramId: null,
+            showRating: false,
             filterData: {
                 search: "",
                 searchColumns: [
@@ -40,7 +44,7 @@ class ProgramListing extends Component {
 
     render() {
         const { loggedUserData, programs, totalRecords, loading } = this.props;
-        const { filterData, showDeleteProgramAlert } = this.state;
+        const { filterData, showDeleteProgramAlert, showRating } = this.state;
         return (
             <div className="body-content d-flex row justify-content-start profilephoto-content">
                 <div className="col-md-12">
@@ -134,7 +138,7 @@ class ProgramListing extends Component {
                                                     <td><span>{frequencyLabel}</span></td>
                                                     <td><span>{goalLabel}</span></td>
                                                     <td><span>{levelLabel}</span></td>
-                                                    <td><span><RatingStarsDisplay rating={program.rating} name={program._id} /></span></td>
+                                                    <td><span><a href="javascript:void(0)" onClick={() => this.showRatingForm(program._id)}><RatingStarsDisplay rating={program.rating} name={program._id} /></a></span></td>
                                                     <td>
                                                         <span>
                                                             {program.userId && program.userId === loggedUserData.authId &&
@@ -199,6 +203,11 @@ class ProgramListing extends Component {
                 >
                     You will not be able to recover this file!
                 </SweetAlert>
+                <ProgramRatingModal
+                    show={showRating}
+                    onSubmit={this.handleSaveRating}
+                    handleClose={this.hideRatingForm}
+                />
             </div>
         )
     }
@@ -297,6 +306,34 @@ class ProgramListing extends Component {
         dispatch(showPageLoader());
         dispatch(deleteUserProgramRequest(selectedProgramId));
         this.setState({ deleteActionInit: true });
+    }
+
+    showRatingForm = (programId) => {
+        const { programs, dispatch } = this.props;
+        if (programId) {
+            let selectedProgram = _.find(programs, ['_id', programId]);
+            if (selectedProgram) {
+                let ratingArr = selectedProgram['programsRating'];
+                let loggedUserRating = {};
+                if (ratingArr && ratingArr.length > 0) {
+                    loggedUserRating.rating = ratingArr[0].rating ? ratingArr[0].rating : 0;
+                    loggedUserRating.feedback = ratingArr[0].comment ? ratingArr[0].comment : "";
+                }
+                dispatch(initialize('program_rating_form', loggedUserRating));
+                this.setState({ showRating: true });
+            } else {
+                te('Something went wrong! Please try again later.');
+            }
+        }
+    }
+
+    hideRatingForm = () => {
+        const { dispatch } = this.props;
+        dispatch(reset('program_rating_form'));
+        this.setState({ showRating: false });
+    }
+
+    handleSaveRating = (data) => {
     }
 }
 
