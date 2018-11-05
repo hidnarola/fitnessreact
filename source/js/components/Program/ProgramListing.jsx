@@ -10,6 +10,7 @@ import { Pager } from "react-bootstrap";
 import SweetAlert from "react-bootstrap-sweetalert";
 import { ts, te } from "../../helpers/funs";
 import { hidePageLoader, showPageLoader } from "../../actions/pageLoader";
+import RatingStarsDisplay from '../Common/RatingStarsDisplay';
 
 class ProgramListing extends Component {
     constructor(props) {
@@ -133,7 +134,7 @@ class ProgramListing extends Component {
                                                     <td><span>{frequencyLabel}</span></td>
                                                     <td><span>{goalLabel}</span></td>
                                                     <td><span>{levelLabel}</span></td>
-                                                    <td><span>0</span></td>
+                                                    <td><span><RatingStarsDisplay rating={program.rating} name={program._id} /></span></td>
                                                     <td>
                                                         <span>
                                                             {program.userId && program.userId === loggedUserData.authId &&
