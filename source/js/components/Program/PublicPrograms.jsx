@@ -6,7 +6,10 @@ class PublicPrograms extends Component {
     render() {
         return (
             <ProgramListing
-                privacy={PROGRAM_PUBLIC}
+                condition={{
+                    privacy: PROGRAM_PUBLIC,
+                }}
+                showRatingInList={true}
             />
         )
     };

@@ -14,6 +14,7 @@ import RatingStarsDisplay from '../Common/RatingStarsDisplay';
 import _ from "lodash";
 import ProgramRatingModal from './ProgramRatingModal';
 import { initialize, reset } from "redux-form";
+import { saveUserProgramsRatingRequest } from '../../actions/userProgramsRating';
 
 class ProgramListing extends Component {
     constructor(props) {
@@ -31,9 +32,7 @@ class ProgramListing extends Component {
                 sort: {},
                 noOfRecords: 10,
                 startFrom: 0,
-                condition: {
-                    'privacy': props.privacy
-                }
+                condition: props.condition
             }
         };
     }
@@ -43,7 +42,7 @@ class ProgramListing extends Component {
     }
 
     render() {
-        const { loggedUserData, programs, totalRecords, loading } = this.props;
+        const { loggedUserData, programs, totalRecords, loading, showRatingInList } = this.props;
         const { filterData, showDeleteProgramAlert, showRating } = this.state;
         return (
             <div className="body-content d-flex row justify-content-start profilephoto-content">
@@ -107,15 +106,17 @@ class ProgramListing extends Component {
                                                 <i className="icon-arrow_downward"></i>
                                             }
                                         </th>
-                                        <th className="cursor-pointer" onClick={() => this.handleSort('rating')}>
-                                            <span>Rating</span>
-                                            {filterData && filterData.sort && typeof filterData.sort.rating !== 'undefined' && filterData.sort.rating === 1 &&
-                                                <i className="icon-arrow_upward"></i>
-                                            }
-                                            {filterData && filterData.sort && typeof filterData.sort.rating !== 'undefined' && filterData.sort.rating === -1 &&
-                                                <i className="icon-arrow_downward"></i>
-                                            }
-                                        </th>
+                                        {showRatingInList &&
+                                            <th className="cursor-pointer" onClick={() => this.handleSort('rating')}>
+                                                <span>Rating</span>
+                                                {filterData && filterData.sort && typeof filterData.sort.rating !== 'undefined' && filterData.sort.rating === 1 &&
+                                                    <i className="icon-arrow_upward"></i>
+                                                }
+                                                {filterData && filterData.sort && typeof filterData.sort.rating !== 'undefined' && filterData.sort.rating === -1 &&
+                                                    <i className="icon-arrow_downward"></i>
+                                                }
+                                            </th>
+                                        }
                                         <th><span>Actions</span></th>
                                     </tr>
                                 </thead>
@@ -138,7 +139,9 @@ class ProgramListing extends Component {
                                                     <td><span>{frequencyLabel}</span></td>
                                                     <td><span>{goalLabel}</span></td>
                                                     <td><span>{levelLabel}</span></td>
-                                                    <td><span><a href="javascript:void(0)" onClick={() => this.showRatingForm(program._id)}><RatingStarsDisplay rating={program.rating} name={program._id} /></a></span></td>
+                                                    {showRatingInList &&
+                                                        <td><span><a href="javascript:void(0)" onClick={() => this.showRatingForm(program._id)}><RatingStarsDisplay rating={program.rating} name={program._id} /></a></span></td>
+                                                    }
                                                     <td>
                                                         <span>
                                                             {program.userId && program.userId === loggedUserData.authId &&
@@ -213,7 +216,7 @@ class ProgramListing extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        const { loading, error, dispatch } = this.props;
+        const { loading, error, dispatch, saveRatingLoading, saveRatingError } = this.props;
         const { deleteActionInit } = this.state;
 
         if (!loading && deleteActionInit) {
@@ -226,6 +229,15 @@ class ProgramListing extends Component {
                 te(error[0]);
             }
             dispatch(hidePageLoader());
+        }
+        if (!saveRatingLoading && prevProps.saveRatingLoading !== saveRatingLoading) {
+            if (saveRatingError && saveRatingError.length > 0) {
+                te('Something went wrong! Please try again later.');
+            } else {
+                ts('Thank you for your feedback');
+            }
+            dispatch(hidePageLoader());
+            this.getFilterPrograms();
         }
     }
 
@@ -309,15 +321,17 @@ class ProgramListing extends Component {
     }
 
     showRatingForm = (programId) => {
-        const { programs, dispatch } = this.props;
+        const { programs, dispatch, loggedUserData } = this.props;
         if (programId) {
             let selectedProgram = _.find(programs, ['_id', programId]);
             if (selectedProgram) {
                 let ratingArr = selectedProgram['programsRating'];
-                let loggedUserRating = {};
+                let loggedUserRating = { userId: loggedUserData.authId, programId: programId };
                 if (ratingArr && ratingArr.length > 0) {
+                    loggedUserRating.userId = ratingArr[0].userId ? ratingArr[0].userId : "";
+                    loggedUserRating.programId = ratingArr[0].programId ? ratingArr[0].programId : "";
                     loggedUserRating.rating = ratingArr[0].rating ? ratingArr[0].rating : 0;
-                    loggedUserRating.feedback = ratingArr[0].comment ? ratingArr[0].comment : "";
+                    loggedUserRating.comment = ratingArr[0].comment ? ratingArr[0].comment : "";
                 }
                 dispatch(initialize('program_rating_form', loggedUserRating));
                 this.setState({ showRating: true });
@@ -334,17 +348,27 @@ class ProgramListing extends Component {
     }
 
     handleSaveRating = (data) => {
+        const { dispatch } = this.props;
+        if (data && data.userId && data.programId) {
+            dispatch(showPageLoader());
+            dispatch(saveUserProgramsRatingRequest(data));
+        } else {
+            te("Something went wrong! Please try again later.");
+        }
+        this.hideRatingForm();
     }
 }
 
 const mapStateToProps = (state) => {
-    const { userPrograms, user } = state;
+    const { userPrograms, userProgramsRating, user } = state;
     return {
         loading: userPrograms.get('loading'),
         programs: userPrograms.get('programs'),
         totalRecords: userPrograms.get('totalRecords'),
         error: userPrograms.get('error'),
         loggedUserData: user.get('loggedUserData'),
+        saveRatingLoading: userProgramsRating.get('saveLoading'),
+        saveRatingError: userProgramsRating.get('saveError'),
     };
 }
 

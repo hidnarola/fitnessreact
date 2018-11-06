@@ -310,7 +310,11 @@ export const StarRating = (props) => {
         className
     } = props;
     return (
-        <div className={wrapperClass}>
+        <div
+            className={
+                `${wrapperClass} ${(meta.touched && meta.error) ? 'has-error' : ''}`
+            }
+        >
             <label htmlFor={input.name} className={labelClass}>{label} {requiredAstrisk && <span style={{ color: "red" }}>*</span>}</label>
             <StarRatingComponent
                 {...input}
