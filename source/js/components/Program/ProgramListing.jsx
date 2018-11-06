@@ -15,6 +15,7 @@ import _ from "lodash";
 import ProgramRatingModal from './ProgramRatingModal';
 import { initialize, reset } from "redux-form";
 import { saveUserProgramsRatingRequest } from '../../actions/userProgramsRating';
+import unitize from "unitize";
 
 class ProgramListing extends Component {
     constructor(props) {
@@ -140,7 +141,14 @@ class ProgramListing extends Component {
                                                     <td><span>{goalLabel}</span></td>
                                                     <td><span>{levelLabel}</span></td>
                                                     {showRatingInList &&
-                                                        <td><span><a href="javascript:void(0)" onClick={() => this.showRatingForm(program._id)}><RatingStarsDisplay rating={program.rating} name={program._id} /></a></span></td>
+                                                        <td>
+                                                            <span>
+                                                                <a href="javascript:void(0)" onClick={() => this.showRatingForm(program._id)}>
+                                                                    <RatingStarsDisplay rating={program.rating} name={program._id} />
+                                                                </a>
+                                                                <a href="javascript:void(0)">{program.programsRatingCount ? `${unitize(program.programsRatingCount).capitalize().precision(0).toString(false)} reviews` : ''}</a>
+                                                            </span>
+                                                        </td>
                                                     }
                                                     <td>
                                                         <span>
