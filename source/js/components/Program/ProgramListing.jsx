@@ -142,11 +142,11 @@ class ProgramListing extends Component {
                                                     <td><span>{levelLabel}</span></td>
                                                     {showRatingInList &&
                                                         <td>
-                                                            <span>
+                                                            <span className="prog-rating-span-warp">
                                                                 <a href="javascript:void(0)" onClick={() => this.showRatingForm(program._id)}>
                                                                     <RatingStarsDisplay rating={program.rating} name={program._id} />
                                                                 </a>
-                                                                <a href="javascript:void(0)">{program.programsRatingCount ? `${unitize(program.programsRatingCount).capitalize().precision(0).toString(false)} reviews` : ''}</a>
+                                                                <span>{program.programsRatingCount ? `${unitize(program.programsRatingCount).capitalize().precision(0).toString(false)} reviews` : ''}</span>
                                                             </span>
                                                         </td>
                                                     }
