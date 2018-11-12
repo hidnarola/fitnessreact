@@ -55,6 +55,9 @@ import {
     getUserProgramMasterSuccess,
     getUserProgramMasterError,
     GET_USER_PROGRAM_MASTER_REQUEST,
+    viewUserPublicProgramSuccess,
+    viewUserPublicProgramError,
+    VIEW_USER_PUBLIC_PROGRAM_REQUEST,
 } from '../actions/userPrograms';
 
 function getUserProgramsData() {
@@ -101,6 +104,18 @@ function getUserProgramData() {
             yield put(getUserProgramSuccess(data));
         } catch (error) {
             yield put(getUserProgramError(error));
+        }
+    }
+}
+
+function viewUserPublicProgramData() {
+    return function* (action) {
+        try {
+            var _id = action._id;
+            const data = yield call(() => api.viewUserPublicProgram(_id));
+            yield put(viewUserPublicProgramSuccess(data));
+        } catch (error) {
+            yield put(viewUserPublicProgramError(error));
         }
     }
 }
@@ -280,6 +295,7 @@ export function* watchUserProgramsData() {
     yield takeLatest(ADD_USER_PROGRAM_MASTER_REQUEST, addUserProgramMasterData());
     yield takeLatest(DELETE_USER_PROGRAM_REQUEST, deleteUserProgramData());
     yield takeLatest(GET_USER_PROGRAM_REQUEST, getUserProgramData());
+    yield takeLatest(VIEW_USER_PUBLIC_PROGRAM_REQUEST, viewUserPublicProgramData());
     yield takeLatest(GET_USER_PROGRAM_MASTER_REQUEST, getUserProgramMasterData());
     yield takeLatest(DELETE_USERS_PROGRAM_WORKOUT_SCHEDULE_REQUEST, deleteUsersProgramWorkoutScheduleData());
     yield takeLatest(ADD_USER_PROGRAM_WORKOUT_TITLE_REQUEST, addUserProgramWorkoutTitleData());

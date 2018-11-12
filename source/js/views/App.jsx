@@ -103,6 +103,7 @@ import UserChatOffGroundBubble from '../components/global/UserChatOffGroundBubbl
 import JavascriptTimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en'
 import SaveProgramMasterPage from '../components/Program/SaveProgramMasterPage';
+import ProgramView from '../components/Program/ProgramView';
 JavascriptTimeAgo.locale(en);
 
 const auth = new Auth();
@@ -186,6 +187,7 @@ class App extends Component {
                                 <PrivateRoute exact path={routeCodes.PROGRAMS_PUBLIC} component={Programs} />
                                 <PrivateRoute exact path={`${routeCodes.PROGRAM_MASTER_SAVE}/:id?`} component={SaveProgramMasterPage} />
                                 <PrivateRoute exact path={`${routeCodes.PROGRAM_SAVE}/:id`} component={ProgramSave} />
+                                <PrivateRoute exact path={`${routeCodes.PROGRAM_VIEW}/:id`} component={ProgramView} />
                                 <PrivateRoute exact path={routeCodes.SAVE_PROGRAM_SCHEDULE_WORKOUT} component={SaveScheduleProgramWorkout} />
                                 <PrivateRoute exact path={routeCodes.VIEW_PROGRAM_SCHEDULE_WORKOUT} component={ViewProgramScheduleWorkout} />
 

@@ -35,7 +35,8 @@ class ProgramWorkoutExercisesView extends Component {
     render() {
         const {
             exercises,
-            workoutType
+            workoutType,
+            isViewMode
         } = this.props;
         const { showDeleteAlert, showDeleteSingleAlert } = this.state;
         return (
@@ -56,6 +57,7 @@ class ProgramWorkoutExercisesView extends Component {
                                                                 exerciseObj={o}
                                                                 handleWholeExeDelete={this.handleShowExeDeleteAlert}
                                                                 handleFillFormForEdit={this.handleFillFormForEdit}
+                                                                isViewMode={isViewMode}
                                                             />
                                                         }
                                                         {o.subType === SCHEDULED_WORKOUT_TYPE_SUPERSET &&
@@ -64,6 +66,7 @@ class ProgramWorkoutExercisesView extends Component {
                                                                 exerciseObj={o}
                                                                 handleWholeExeDelete={this.handleShowExeDeleteAlert}
                                                                 handleFillFormForEdit={this.handleFillFormForEdit}
+                                                                isViewMode={isViewMode}
                                                             />
                                                         }
                                                         {o.subType === SCHEDULED_WORKOUT_TYPE_CIRCUIT &&
@@ -73,6 +76,7 @@ class ProgramWorkoutExercisesView extends Component {
                                                                 handleWholeExeDelete={this.handleShowExeDeleteAlert}
                                                                 handleSingleExeDelete={this.handleShowExeDeleteSingleAlert}
                                                                 handleFillFormForEdit={this.handleFillFormForEdit}
+                                                                isViewMode={isViewMode}
                                                             />
                                                         }
                                                     </li>
@@ -586,6 +590,7 @@ class WorkoutExerciseSingleView extends Component {
             exerciseObj,
             handleWholeExeDelete,
             handleFillFormForEdit,
+            isViewMode
         } = this.props;
         const { showAdvance } = this.state;
         return (
@@ -598,15 +603,17 @@ class WorkoutExerciseSingleView extends Component {
                         {exercise.differentSets === 1 &&
                             <ToggleAdvanceSwitch exercise={exercise} showAdvance={showAdvance} handleAdvanceViewChange={() => this.setState({ showAdvance: !showAdvance })} />
                         }
-                        <ButtonToolbar>
-                            <Dropdown id={`workout-actions-${exercise._id}`} pullRight>
-                                <Dropdown.Toggle noCaret><i className="icon-more_horiz"></i></Dropdown.Toggle>
-                                <Dropdown.Menu>
-                                    <MenuItem eventKey="1" onClick={() => handleFillFormForEdit(exerciseObj)}><FaPencil /> Edit</MenuItem>
-                                    <MenuItem eventKey="2" onClick={() => handleWholeExeDelete(exerciseObj)}><FaTrash /> Delete</MenuItem>
-                                </Dropdown.Menu>
-                            </Dropdown>
-                        </ButtonToolbar>
+                        {isViewMode &&
+                            <ButtonToolbar>
+                                <Dropdown id={`workout-actions-${exercise._id}`} pullRight>
+                                    <Dropdown.Toggle noCaret><i className="icon-more_horiz"></i></Dropdown.Toggle>
+                                    <Dropdown.Menu>
+                                        <MenuItem eventKey="1" onClick={() => handleFillFormForEdit(exerciseObj)}><FaPencil /> Edit</MenuItem>
+                                        <MenuItem eventKey="2" onClick={() => handleWholeExeDelete(exerciseObj)}><FaTrash /> Delete</MenuItem>
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                            </ButtonToolbar>
+                        }
                     </div>
                 </div>
                 <div className="workout-exercise-body-view d-flex">
@@ -690,15 +697,17 @@ class WorkoutExerciseSupersetView extends Component {
                                 </div>
                             }
                         </div>
-                        <ButtonToolbar>
-                            <Dropdown id={`workout-actions-${exercises[0]._id}`} pullRight>
-                                <Dropdown.Toggle noCaret><i className="icon-more_horiz"></i></Dropdown.Toggle>
-                                <Dropdown.Menu>
-                                    <MenuItem eventKey="1" onClick={() => handleFillFormForEdit(exerciseObj)}><FaPencil /> Edit</MenuItem>
-                                    <MenuItem eventKey="2" onClick={() => handleWholeExeDelete(exerciseObj)}><FaTrash /> Delete</MenuItem>
-                                </Dropdown.Menu>
-                            </Dropdown>
-                        </ButtonToolbar>
+                        {isViewMode &&
+                            <ButtonToolbar>
+                                <Dropdown id={`workout-actions-${exercises[0]._id}`} pullRight>
+                                    <Dropdown.Toggle noCaret><i className="icon-more_horiz"></i></Dropdown.Toggle>
+                                    <Dropdown.Menu>
+                                        <MenuItem eventKey="1" onClick={() => handleFillFormForEdit(exerciseObj)}><FaPencil /> Edit</MenuItem>
+                                        <MenuItem eventKey="2" onClick={() => handleWholeExeDelete(exerciseObj)}><FaTrash /> Delete</MenuItem>
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                            </ButtonToolbar>
+                        }
                     </div>
 
                 </div>
@@ -748,15 +757,17 @@ class WorkoutExerciseCircuitView extends Component {
                                 </div>
                             }
                         </div>
-                        <ButtonToolbar>
-                            <Dropdown id={`workout-actions-${exercises[0]._id}`} pullRight>
-                                <Dropdown.Toggle noCaret><i className="icon-more_horiz"></i></Dropdown.Toggle>
-                                <Dropdown.Menu>
-                                    <MenuItem eventKey="1" onClick={() => handleFillFormForEdit(exerciseObj)}><FaPencil /> Edit</MenuItem>
-                                    <MenuItem eventKey="2" onClick={() => handleWholeExeDelete(exerciseObj)}><FaTrash /> Delete</MenuItem>
-                                </Dropdown.Menu>
-                            </Dropdown>
-                        </ButtonToolbar>
+                        {isViewMode &&
+                            <ButtonToolbar>
+                                <Dropdown id={`workout-actions-${exercises[0]._id}`} pullRight>
+                                    <Dropdown.Toggle noCaret><i className="icon-more_horiz"></i></Dropdown.Toggle>
+                                    <Dropdown.Menu>
+                                        <MenuItem eventKey="1" onClick={() => handleFillFormForEdit(exerciseObj)}><FaPencil /> Edit</MenuItem>
+                                        <MenuItem eventKey="2" onClick={() => handleWholeExeDelete(exerciseObj)}><FaTrash /> Delete</MenuItem>
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                            </ButtonToolbar>
+                        }
                     </div>
                 </div>
                 <ul className="workout-exercise-body-view-ul">

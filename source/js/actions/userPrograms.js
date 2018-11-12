@@ -16,6 +16,10 @@ export const GET_USER_PROGRAM_REQUEST = 'GET_USER_PROGRAM_REQUEST';
 export const GET_USER_PROGRAM_SUCCESS = 'GET_USER_PROGRAM_SUCCESS';
 export const GET_USER_PROGRAM_ERROR = 'GET_USER_PROGRAM_ERROR';
 
+export const VIEW_USER_PUBLIC_PROGRAM_REQUEST = 'VIEW_USER_PUBLIC_PROGRAM_REQUEST';
+export const VIEW_USER_PUBLIC_PROGRAM_SUCCESS = 'VIEW_USER_PUBLIC_PROGRAM_SUCCESS';
+export const VIEW_USER_PUBLIC_PROGRAM_ERROR = 'VIEW_USER_PUBLIC_PROGRAM_ERROR';
+
 export const GET_USER_PROGRAM_MASTER_REQUEST = 'GET_USER_PROGRAM_MASTER_REQUEST';
 export const GET_USER_PROGRAM_MASTER_SUCCESS = 'GET_USER_PROGRAM_MASTER_SUCCESS';
 export const GET_USER_PROGRAM_MASTER_ERROR = 'GET_USER_PROGRAM_MASTER_ERROR';
@@ -170,6 +174,27 @@ export function getUserProgramSuccess(data) {
 export function getUserProgramError(error) {
     return {
         type: GET_USER_PROGRAM_ERROR,
+        error
+    }
+}
+
+export function viewUserPublicProgramRequest(_id) {
+    return {
+        type: VIEW_USER_PUBLIC_PROGRAM_REQUEST,
+        _id
+    }
+}
+
+export function viewUserPublicProgramSuccess(data) {
+    return {
+        type: VIEW_USER_PUBLIC_PROGRAM_SUCCESS,
+        data,
+    }
+}
+
+export function viewUserPublicProgramError(error) {
+    return {
+        type: VIEW_USER_PUBLIC_PROGRAM_ERROR,
         error
     }
 }

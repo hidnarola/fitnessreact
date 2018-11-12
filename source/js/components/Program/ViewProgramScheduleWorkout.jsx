@@ -1,33 +1,42 @@
 import React, { Component } from 'react';
+import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { routeCodes } from '../../constants/routes';
-import { te } from '../../helpers/funs';
-import FitnessHeader from '../global/FitnessHeader';
-import FitnessNav from '../global/FitnessNav';
-import moment from "moment";
+import {
+    getUsersProgramWorkoutScheduleRequest,
+    changeProgramWorkoutMainType
+} from '../../actions/userPrograms';
+import {
+    getExercisesNameRequest,
+    getExerciseMeasurementRequest
+} from '../../actions/userScheduleWorkouts';
 import {
     SCHEDULED_WORKOUT_TYPE_WARMUP,
     SCHEDULED_WORKOUT_TYPE_EXERCISE,
     SCHEDULED_WORKOUT_TYPE_COOLDOWN,
+    SCHEDULED_WORKOUT_TYPE_RESTDAY
 } from '../../constants/consts';
 import cns from "classnames";
-import { getUsersProgramWorkoutScheduleRequest, changeProgramWorkoutMainTypeDetails } from '../../actions/userPrograms';
-import WorkoutExercisesDetailsView from '../ScheduleWorkout/WorkoutExercisesDetailsView';
-import { NavLink } from "react-router-dom";
+import FitnessHeader from '../global/FitnessHeader';
+import FitnessNav from '../global/FitnessNav';
+import { te } from '../../helpers/funs';
+import ProgramWorkoutExercisesView from './ProgramWorkoutExercisesView';
+import { routeCodes } from '../../constants/routes';
+import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
 
 class ViewProgramScheduleWorkout extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            loadWorkoutInit: false,
-        }
+        this.state = { loadWorkoutInit: false }
     }
 
     componentWillMount() {
         const { match, dispatch } = this.props;
-        if (match && match.params && match.params.workout_id) {
-            let _id = match.params.workout_id;
-            dispatch(getUsersProgramWorkoutScheduleRequest(_id));
+        if (match && match.params && match.params.id && match.params.workout_id) {
+            let _id = match.params.id;
+            let workoutId = match.params.workout_id;
+            dispatch(getUsersProgramWorkoutScheduleRequest(workoutId));
+            dispatch(getExercisesNameRequest());
+            dispatch(getExerciseMeasurementRequest());
             this.setState({ loadWorkoutInit: true });
         }
     }
@@ -35,92 +44,204 @@ class ViewProgramScheduleWorkout extends Component {
     render() {
         const {
             workout,
+            selectedWorkoutMainType,
             match,
-            selectedWorkoutMainTypeDetails,
+            workoutsList,
+            workoutStat
         } = this.props;
         return (
             <div className="fitness-body">
                 <FitnessHeader />
                 <FitnessNav />
-                {workout && Object.keys(workout).length > 0 &&
-                    <section className="body-wrap">
-                        <div className="body-head d-flex justify-content-start">
-                            <div className="">
-                                <h2>{`${workout.title} on ${moment(workout.date).format('DD/MM/YYYY')}`}</h2>
-                                <p>{`${workout.description}`}</p>
-                            </div>
-                            <div className="body-head-r">
-                                <NavLink
-                                    className='pink-btn'
-                                    to={`${routeCodes.PROGRAM_SAVE}/${match.params.id}`}>
-                                    <i className="icon-arrow_back"></i> Back
-                                </NavLink>
-                            </div>
+                <section className="body-wrap">
+                    <div className="body-head d-flex justify-content-start">
+                        <div className="body-head-l">
+                            {(workout && typeof workout.day !== 'undefined' && workout.type && workout.type === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
+                                <h2>{`Workout - ${(workout && typeof workout.day !== 'undefined') ? `Day ${(workout.day + 1)}` : ''}`}</h2>
+                            }
+                            {(workout && typeof workout.day !== 'undefined' && workout.type && workout.type === SCHEDULED_WORKOUT_TYPE_RESTDAY) &&
+                                <h2>{`${(workout.title) ? workout.title : 'Rest Day'}`}</h2>
+                            }
+                            {(workout && typeof workout.day !== 'undefined' && workout.type && workout.type === SCHEDULED_WORKOUT_TYPE_RESTDAY) &&
+                                <p>{`${(workout.description) ? workout.description : 'Hey its rest day! Take total rest.'}`}</p>
+                            }
+                            {(!workout || typeof workout.day === 'undefined' || workout.day < 0) &&
+                                <h2>{`Workout - Day 0`}</h2>
+                            }
+                            {workout && Object.keys(workout).length > 0 && workout.type && workout.type === SCHEDULED_WORKOUT_TYPE_EXERCISE &&
+                                <div className="body-head-l-btm">
+                                    <a href="javascript:void(0)" className={cns('white-btn p-relative', { 'active': (selectedWorkoutMainType === SCHEDULED_WORKOUT_TYPE_WARMUP) })} onClick={() => this.handleWorkoutMainTypeChange(SCHEDULED_WORKOUT_TYPE_WARMUP)}>Warmup <span className="workout-types-count-badge">{workout && workout.warmup && workout.warmup.length}</span></a>
+                                    <a href="javascript:void(0)" className={cns('white-btn p-relative', { 'active': (selectedWorkoutMainType === SCHEDULED_WORKOUT_TYPE_EXERCISE) })} onClick={() => this.handleWorkoutMainTypeChange(SCHEDULED_WORKOUT_TYPE_EXERCISE)}>Workout <span className="workout-types-count-badge">{workout && workout.exercise && workout.exercise.length}</span></a>
+                                    <a href="javascript:void(0)" className={cns('white-btn p-relative', { 'active': (selectedWorkoutMainType === SCHEDULED_WORKOUT_TYPE_COOLDOWN) })} onClick={() => this.handleWorkoutMainTypeChange(SCHEDULED_WORKOUT_TYPE_COOLDOWN)}>Cooldown <span className="workout-types-count-badge">{workout && workout.cooldown && workout.cooldown.length}</span></a>
+                                </div>
+                            }
                         </div>
-                        <div className="body-content d-flex row justify-content-start profilephoto-content">
-                            <div className="col-md-12">
-                                <div className="white-box space-btm-20">
+                        <div className="body-head-r">
+                            <NavLink
+                                className='white-btn'
+                                to={`${routeCodes.PROGRAM_SAVE}/${match.params.id}`}
+                            >
+                                <i className="icon-arrow_back"></i> Back
+                            </NavLink>
+                        </div>
+                    </div>
+                    <div className="body-content d-flex row justify-content-start profilephoto-content">
+                        <div className="col-md-9">
+                            {workout && Object.keys(workout).length > 0 && workout.type && workout.type === SCHEDULED_WORKOUT_TYPE_EXERCISE &&
+                                <div className="">
                                     <div className="whitebox-body profile-body">
-                                        <div className="workout-main-types-wrapper">
-                                            <ul>
-                                                <li className={cns({ 'active': (selectedWorkoutMainTypeDetails === SCHEDULED_WORKOUT_TYPE_WARMUP) })}><a href="javascript:void(0)" className="" onClick={() => this.handleWorkoutMainTypeChange(SCHEDULED_WORKOUT_TYPE_WARMUP)}>Warmup</a></li>
-                                                <li className={cns({ 'active': (selectedWorkoutMainTypeDetails === SCHEDULED_WORKOUT_TYPE_EXERCISE) })}><a href="javascript:void(0)" className="" onClick={() => this.handleWorkoutMainTypeChange(SCHEDULED_WORKOUT_TYPE_EXERCISE)}>Workout</a></li>
-                                                <li className={cns({ 'active': (selectedWorkoutMainTypeDetails === SCHEDULED_WORKOUT_TYPE_COOLDOWN) })}><a href="javascript:void(0)" className="" onClick={() => this.handleWorkoutMainTypeChange(SCHEDULED_WORKOUT_TYPE_COOLDOWN)}>Cooldown</a></li>
-                                            </ul>
-                                        </div>
-                                        {selectedWorkoutMainTypeDetails &&
+                                        {selectedWorkoutMainType &&
                                             <div className="workout-main-types-view-wrapper">
-                                                {selectedWorkoutMainTypeDetails === SCHEDULED_WORKOUT_TYPE_WARMUP &&
-                                                    <WorkoutExercisesDetailsView
+                                                {selectedWorkoutMainType === SCHEDULED_WORKOUT_TYPE_WARMUP &&
+                                                    <ProgramWorkoutExercisesView
+                                                        workoutType={SCHEDULED_WORKOUT_TYPE_WARMUP}
                                                         exercises={workout.warmup}
+                                                        isViewMode={true}
                                                     />
                                                 }
-                                                {selectedWorkoutMainTypeDetails === SCHEDULED_WORKOUT_TYPE_EXERCISE &&
-                                                    <WorkoutExercisesDetailsView
+                                                {selectedWorkoutMainType === SCHEDULED_WORKOUT_TYPE_EXERCISE &&
+                                                    <ProgramWorkoutExercisesView
+                                                        workoutType={SCHEDULED_WORKOUT_TYPE_EXERCISE}
                                                         exercises={workout.exercise}
+                                                        isViewMode={true}
                                                     />
                                                 }
-                                                {selectedWorkoutMainTypeDetails === SCHEDULED_WORKOUT_TYPE_COOLDOWN &&
-                                                    <WorkoutExercisesDetailsView
+                                                {selectedWorkoutMainType === SCHEDULED_WORKOUT_TYPE_COOLDOWN &&
+                                                    <ProgramWorkoutExercisesView
+                                                        workoutType={SCHEDULED_WORKOUT_TYPE_COOLDOWN}
                                                         exercises={workout.cooldown}
+                                                        isViewMode={true}
                                                     />
                                                 }
                                             </div>
                                         }
                                     </div>
                                 </div>
-                            </div>
+                            }
                         </div>
-                    </section>
-                }
+
+                        <div className="col-md-3">
+                            {typeof workoutsList !== 'undefined' && workoutsList && workoutsList.length > 0 &&
+                                <div className="white-box space-btm-20 todays-workout-box-wrapper">
+                                    <div className="whitebox-head d-flex">
+                                        <h3 className="title-h3 size-14">Today's Workouts</h3>
+                                    </div>
+                                    <div className="whitebox-body text-c">
+                                        {workoutsList.map((o, i) => {
+                                            let isActive = false;
+                                            if (match && match.params && match.params.id && match.params.workout_id && match.params.workout_id === o._id) {
+                                                isActive = true;
+                                            }
+                                            return (
+                                                <TodaysWorkoutListCard
+                                                    key={i}
+                                                    workout={o}
+                                                    isActive={isActive}
+                                                />
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            }
+
+                            {workout && Object.keys(workout).length > 0 && workout.type && workout.type === SCHEDULED_WORKOUT_TYPE_EXERCISE && workoutStat &&
+                                <div className="white-box space-btm-20 padding-20">
+                                    <div className="whitebox-head">
+                                        <h3 className="title-h3 size-14 text-c">Workout Stats</h3>
+                                    </div>
+                                    <div className="whitebox-body">
+                                        {typeof workoutStat.total_workout !== 'undefined' && workoutStat.total_workout > 0 &&
+                                            <div className="workout-status">
+                                                <div className="workoutstatus-top">
+                                                    <h4>Total Exercises</h4>
+                                                    <h5>{workoutStat.total_workout}</h5>
+                                                </div>
+                                            </div>
+                                        }
+                                        {typeof workoutStat.total_reps !== 'undefined' && workoutStat.total_reps > 0 &&
+                                            <div className="workout-status">
+                                                <div className="workoutstatus-top">
+                                                    <h4>Total Reps</h4>
+                                                    <h5>{workoutStat.total_reps}</h5>
+                                                </div>
+                                            </div>
+                                        }
+                                        {typeof workoutStat.total_sets !== 'undefined' && workoutStat.total_sets > 0 &&
+                                            <div className="workout-status">
+                                                <div className="workoutstatus-top">
+                                                    <h4>Total Sets</h4>
+                                                    <h5>{workoutStat.total_sets}</h5>
+                                                </div>
+                                            </div>
+                                        }
+                                        {typeof workoutStat.total_weight_lifted !== 'undefined' && workoutStat.total_weight_lifted > 0 &&
+                                            <div className="workout-status">
+                                                <div className="workoutstatus-top">
+                                                    <h4>Weight Lifted</h4>
+                                                    <h5>
+                                                        {convertUnits(MEASUREMENT_UNIT_GRAM, MEASUREMENT_UNIT_KILOGRAM, workoutStat.total_weight_lifted).toFixed(2)}
+                                                        {MEASUREMENT_UNIT_KILOGRAM}
+                                                    </h5>
+                                                </div>
+                                            </div>
+                                        }
+                                        {typeof workoutStat.muscle_work !== 'undefined' && workoutStat.muscle_work && workoutStat.muscle_work.length > 0 &&
+                                            <div className="workout-status">
+                                                <div className="workoutstatus-top">
+                                                    <h4>Muscles Worked</h4>
+                                                    <h5>{workoutStat.muscle_work.length}</h5>
+                                                </div>
+                                                <div className="workoutstatus-btm">
+                                                    <p>
+                                                        {workoutStat.muscle_work.join(', ')}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </section>
             </div>
         );
     }
 
     componentDidUpdate(prevProps, prevState) {
         const {
-            workout,
             loading,
             error,
-            history,
+            dispatch,
+            match,
+            history
         } = this.props;
-        const {
-            loadWorkoutInit,
-        } = this.state;
-        if (loadWorkoutInit && !loading && workout && Object.keys(workout).length <= 0) {
-            this.setState({ loadWorkoutInit: false });
-            history.push(routeCodes.SCHEDULE_WORKOUT);
+        const { loadWorkoutInit } = this.state;
+        if (loadWorkoutInit && !loading) {
+            dispatch(hidePageLoader());
         }
         if (loadWorkoutInit && !loading && error && error.length > 0) {
             this.setState({ loadWorkoutInit: false });
-            te(error[0]);
-            history.push(routeCodes.SCHEDULE_WORKOUT);
+            te('Something went wrong! please try later.');
+            if (match && match.params && match.params.id) {
+                history.push(`${routeCodes.PROGRAM_SAVE}/${match.params.id}`);
+            } else {
+                history.push(routeCodes.PROGRAMS);
+            }
+        }
+        if (match && match.params && match.params.id && match.params.workout_id && prevProps.match.params.workout_id !== match.params.workout_id) {
+            let _id = match.params.id;
+            let workoutId = match.params.workout_id;
+            dispatch(showPageLoader());
+            dispatch(getUsersProgramWorkoutScheduleRequest(workoutId));
+            this.setState({ loadWorkoutInit: true });
+
         }
     }
 
     handleWorkoutMainTypeChange = (mainType) => {
         const { dispatch } = this.props;
-        dispatch(changeProgramWorkoutMainTypeDetails(mainType));
+        dispatch(changeProgramWorkoutMainType(mainType));
     }
 }
 
@@ -130,10 +251,23 @@ const mapStateToProps = (state) => {
         workout: userPrograms.get('workout'),
         loading: userPrograms.get('loading'),
         error: userPrograms.get('error'),
-        selectedWorkoutMainTypeDetails: userPrograms.get('selectedWorkoutMainTypeDetails'),
+        selectedWorkoutMainType: userPrograms.get('selectedWorkoutMainType'),
+        workoutsList: userPrograms.get('workoutsList'),
+        workoutStat: userPrograms.get('workoutStat'),
     };
 }
 
 export default connect(
     mapStateToProps,
 )(ViewProgramScheduleWorkout);
+
+class TodaysWorkoutListCard extends Component {
+    render() {
+        const { workout, isActive } = this.props;
+        return (
+            <div className={cns('todays-workout-list-card', { active: isActive })}>
+                <NavLink to={routeCodes.SAVE_PROGRAM_SCHEDULE_WORKOUT.replace(':id', workout.programId).replace(':workout_id', workout._id)}>{workout.title}</NavLink>
+            </div>
+        );
+    }
+}

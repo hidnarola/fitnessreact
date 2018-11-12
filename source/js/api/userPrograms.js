@@ -32,6 +32,15 @@ function getUserProgram(_id) {
     return fetchResource(requestUrl + '/' + _id, options);
 }
 
+function viewUserPublicProgram(_id) {
+    var headers = extraUserHeaders();
+    var options = {
+        method: 'GET',
+        headers: headers,
+    }
+    return fetchResource(requestUrl + '/view/' + _id, options);
+}
+
 function getUserProgramMaster(_id) {
     var headers = extraUserHeaders();
     var options = {
@@ -116,6 +125,7 @@ export default {
     addUserProgramMaster,
     deleteUserProgram,
     getUserProgram,
+    viewUserPublicProgram,
     getUserProgramMaster,
     deleteUsersProgramWorkoutSchedule,
     addUserProgramWorkoutTitle,

@@ -158,16 +158,29 @@ class ProgramListing extends Component {
                                                                         <MenuItem
                                                                             href={`${routeCodes.PROGRAM_SAVE}/${program._id}`}
                                                                             eventKey="1"
-                                                                            onClick={(e) => this.handleEditNavigation(e, `${routeCodes.PROGRAM_SAVE}/${program._id}`)}
+                                                                            onClick={(e) => this.handleNavigation(e, `${routeCodes.PROGRAM_SAVE}/${program._id}`)}
                                                                         >
                                                                             <FaPencil className="v-align-sub" /> Edit
-                                                                            </MenuItem>
+                                                                        </MenuItem>
                                                                         <MenuItem
                                                                             eventKey="2"
                                                                             onClick={() => this.handleShowDeleteAlert(program._id)}
                                                                         >
                                                                             <FaTrash className="v-align-sub" /> Delete
-                                                                            </MenuItem>
+                                                                        </MenuItem>
+                                                                    </DropdownButton>
+                                                                </ButtonToolbar>
+                                                            }
+                                                            {program.userId && program.userId !== loggedUserData.authId &&
+                                                                <ButtonToolbar>
+                                                                    <DropdownButton title="Actions" pullRight id="public-program-actions">
+                                                                        <MenuItem
+                                                                            href={`${routeCodes.PROGRAM_VIEW}/${program._id}`}
+                                                                            eventKey="1"
+                                                                            onClick={(e) => this.handleNavigation(e, `${routeCodes.PROGRAM_VIEW}/${program._id}`)}
+                                                                        >
+                                                                            <FaPencil className="v-align-sub" /> View
+                                                                        </MenuItem>
                                                                     </DropdownButton>
                                                                 </ButtonToolbar>
                                                             }
@@ -179,7 +192,7 @@ class ProgramListing extends Component {
                                     }
                                     {!loading && !(programs && programs.length > 0) &&
                                         <tr>
-                                            <td colSpan="7"><span>No records found.</span></td>
+                                            <td colSpan={(showRatingInList) ? '7' : '6'}><span>No records found.</span></td>
                                         </tr>
                                     }
                                 </tbody>
@@ -306,7 +319,7 @@ class ProgramListing extends Component {
         dispatch(getUserProgramsRequest(filterData));
     }
 
-    handleEditNavigation = (e, href) => {
+    handleNavigation = (e, href) => {
         const { history } = this.props;
         e.preventDefault();
         history.push(href);

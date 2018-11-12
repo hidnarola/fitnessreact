@@ -51,6 +51,7 @@ export const routeCodes = {
     PROGRAMS_PUBLIC: `${publicPath}exercise/programs/public`,
     PROGRAM_MASTER_SAVE: `${publicPath}exercise/programs/save_program`,
     PROGRAM_SAVE: `${publicPath}exercise/programs/save`,
+    PROGRAM_VIEW: `${publicPath}exercise/programs/view`,
     SAVE_PROGRAM_SCHEDULE_WORKOUT: `${publicPath}exercise/programs/save/:id/:workout_id`,
     VIEW_PROGRAM_SCHEDULE_WORKOUT: `${publicPath}exercise/programs/details/:id/:workout_id`,
 

@@ -60,7 +60,10 @@ import {
     SET_USER_PROGRAM_STATE,
     GET_USER_PROGRAM_MASTER_REQUEST,
     GET_USER_PROGRAM_MASTER_SUCCESS,
-    GET_USER_PROGRAM_MASTER_ERROR
+    GET_USER_PROGRAM_MASTER_ERROR,
+    VIEW_USER_PUBLIC_PROGRAM_REQUEST,
+    VIEW_USER_PUBLIC_PROGRAM_SUCCESS,
+    VIEW_USER_PUBLIC_PROGRAM_ERROR
 } from "../actions/userPrograms";
 import {
     VALIDATION_FAILURE_STATUS,
@@ -226,6 +229,39 @@ const actionMap = {
         return state.merge(Map(newState));
     },
     [GET_USER_PROGRAM_ERROR]: (state, action) => {
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
+        }
+        return state.merge(Map({
+            loading: false,
+            error: error,
+        }));
+    },
+    [VIEW_USER_PUBLIC_PROGRAM_REQUEST]: (state, action) => {
+        return state.merge(Map({
+            loading: true,
+            program: null,
+            error: [],
+        }));
+    },
+    [VIEW_USER_PUBLIC_PROGRAM_SUCCESS]: (state, action) => {
+        var newState = {
+            loading: false,
+        };
+        if (action.data.status === 1) {
+            newState.program = action.data.program;
+        } else {
+            var msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
+            newState.error = [msg];
+        }
+        return state.merge(Map(newState));
+    },
+    [VIEW_USER_PUBLIC_PROGRAM_ERROR]: (state, action) => {
         let error = [];
         if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
             error = generateValidationErrorMsgArr(action.error.response.message);
