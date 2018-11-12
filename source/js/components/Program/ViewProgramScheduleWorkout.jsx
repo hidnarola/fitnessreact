@@ -224,7 +224,7 @@ class ViewProgramScheduleWorkout extends Component {
             this.setState({ loadWorkoutInit: false });
             te('Something went wrong! please try later.');
             if (match && match.params && match.params.id) {
-                history.push(`${routeCodes.PROGRAM_SAVE}/${match.params.id}`);
+                history.push(`${routeCodes.PROGRAM_VIEW}/${match.params.id}`);
             } else {
                 history.push(routeCodes.PROGRAMS);
             }
@@ -266,7 +266,7 @@ class TodaysWorkoutListCard extends Component {
         const { workout, isActive } = this.props;
         return (
             <div className={cns('todays-workout-list-card', { active: isActive })}>
-                <NavLink to={routeCodes.SAVE_PROGRAM_SCHEDULE_WORKOUT.replace(':id', workout.programId).replace(':workout_id', workout._id)}>{workout.title}</NavLink>
+                <NavLink to={routeCodes.VIEW_PROGRAM_SCHEDULE_WORKOUT.replace(':id', workout.programId).replace(':workout_id', workout._id)}>{workout.title}</NavLink>
             </div>
         );
     }
