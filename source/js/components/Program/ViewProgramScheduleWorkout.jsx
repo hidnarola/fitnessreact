@@ -79,7 +79,7 @@ class ViewProgramScheduleWorkout extends Component {
                         <div className="body-head-r">
                             <NavLink
                                 className='white-btn'
-                                to={`${routeCodes.PROGRAM_SAVE}/${match.params.id}`}
+                                to={`${routeCodes.PROGRAM_VIEW}/${match.params.id}`}
                             >
                                 <i className="icon-arrow_back"></i> Back
                             </NavLink>
@@ -96,21 +96,21 @@ class ViewProgramScheduleWorkout extends Component {
                                                     <ProgramWorkoutExercisesView
                                                         workoutType={SCHEDULED_WORKOUT_TYPE_WARMUP}
                                                         exercises={workout.warmup}
-                                                        isViewMode={true}
+                                                        allowEdit={false}
                                                     />
                                                 }
                                                 {selectedWorkoutMainType === SCHEDULED_WORKOUT_TYPE_EXERCISE &&
                                                     <ProgramWorkoutExercisesView
                                                         workoutType={SCHEDULED_WORKOUT_TYPE_EXERCISE}
                                                         exercises={workout.exercise}
-                                                        isViewMode={true}
+                                                        allowEdit={false}
                                                     />
                                                 }
                                                 {selectedWorkoutMainType === SCHEDULED_WORKOUT_TYPE_COOLDOWN &&
                                                     <ProgramWorkoutExercisesView
                                                         workoutType={SCHEDULED_WORKOUT_TYPE_COOLDOWN}
                                                         exercises={workout.cooldown}
-                                                        isViewMode={true}
+                                                        allowEdit={false}
                                                     />
                                                 }
                                             </div>

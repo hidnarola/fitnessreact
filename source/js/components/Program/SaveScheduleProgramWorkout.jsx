@@ -133,18 +133,21 @@ class SaveScheduleProgramWorkout extends Component {
                                                     <ProgramWorkoutExercisesView
                                                         workoutType={SCHEDULED_WORKOUT_TYPE_WARMUP}
                                                         exercises={workout.warmup}
+                                                        allowEdit={true}
                                                     />
                                                 }
                                                 {selectedWorkoutMainType === SCHEDULED_WORKOUT_TYPE_EXERCISE &&
                                                     <ProgramWorkoutExercisesView
                                                         workoutType={SCHEDULED_WORKOUT_TYPE_EXERCISE}
                                                         exercises={workout.exercise}
+                                                        allowEdit={true}
                                                     />
                                                 }
                                                 {selectedWorkoutMainType === SCHEDULED_WORKOUT_TYPE_COOLDOWN &&
                                                     <ProgramWorkoutExercisesView
                                                         workoutType={SCHEDULED_WORKOUT_TYPE_COOLDOWN}
                                                         exercises={workout.cooldown}
+                                                        allowEdit={true}
                                                     />
                                                 }
                                                 {workoutFormAction && workoutFormAction === 'add' &&

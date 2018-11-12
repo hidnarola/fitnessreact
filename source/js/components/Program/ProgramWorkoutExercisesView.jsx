@@ -36,7 +36,7 @@ class ProgramWorkoutExercisesView extends Component {
         const {
             exercises,
             workoutType,
-            isViewMode
+            allowEdit
         } = this.props;
         const { showDeleteAlert, showDeleteSingleAlert } = this.state;
         return (
@@ -57,7 +57,7 @@ class ProgramWorkoutExercisesView extends Component {
                                                                 exerciseObj={o}
                                                                 handleWholeExeDelete={this.handleShowExeDeleteAlert}
                                                                 handleFillFormForEdit={this.handleFillFormForEdit}
-                                                                isViewMode={isViewMode}
+                                                                allowEdit={allowEdit}
                                                             />
                                                         }
                                                         {o.subType === SCHEDULED_WORKOUT_TYPE_SUPERSET &&
@@ -66,7 +66,7 @@ class ProgramWorkoutExercisesView extends Component {
                                                                 exerciseObj={o}
                                                                 handleWholeExeDelete={this.handleShowExeDeleteAlert}
                                                                 handleFillFormForEdit={this.handleFillFormForEdit}
-                                                                isViewMode={isViewMode}
+                                                                allowEdit={allowEdit}
                                                             />
                                                         }
                                                         {o.subType === SCHEDULED_WORKOUT_TYPE_CIRCUIT &&
@@ -76,7 +76,7 @@ class ProgramWorkoutExercisesView extends Component {
                                                                 handleWholeExeDelete={this.handleShowExeDeleteAlert}
                                                                 handleSingleExeDelete={this.handleShowExeDeleteSingleAlert}
                                                                 handleFillFormForEdit={this.handleFillFormForEdit}
-                                                                isViewMode={isViewMode}
+                                                                allowEdit={allowEdit}
                                                             />
                                                         }
                                                     </li>
@@ -590,7 +590,7 @@ class WorkoutExerciseSingleView extends Component {
             exerciseObj,
             handleWholeExeDelete,
             handleFillFormForEdit,
-            isViewMode
+            allowEdit
         } = this.props;
         const { showAdvance } = this.state;
         return (
@@ -603,7 +603,7 @@ class WorkoutExerciseSingleView extends Component {
                         {exercise.differentSets === 1 &&
                             <ToggleAdvanceSwitch exercise={exercise} showAdvance={showAdvance} handleAdvanceViewChange={() => this.setState({ showAdvance: !showAdvance })} />
                         }
-                        {isViewMode &&
+                        {allowEdit &&
                             <ButtonToolbar>
                                 <Dropdown id={`workout-actions-${exercise._id}`} pullRight>
                                     <Dropdown.Toggle noCaret><i className="icon-more_horiz"></i></Dropdown.Toggle>
@@ -697,7 +697,7 @@ class WorkoutExerciseSupersetView extends Component {
                                 </div>
                             }
                         </div>
-                        {isViewMode &&
+                        {allowEdit &&
                             <ButtonToolbar>
                                 <Dropdown id={`workout-actions-${exercises[0]._id}`} pullRight>
                                     <Dropdown.Toggle noCaret><i className="icon-more_horiz"></i></Dropdown.Toggle>
@@ -757,7 +757,7 @@ class WorkoutExerciseCircuitView extends Component {
                                 </div>
                             }
                         </div>
-                        {isViewMode &&
+                        {allowEdit &&
                             <ButtonToolbar>
                                 <Dropdown id={`workout-actions-${exercises[0]._id}`} pullRight>
                                     <Dropdown.Toggle noCaret><i className="icon-more_horiz"></i></Dropdown.Toggle>
