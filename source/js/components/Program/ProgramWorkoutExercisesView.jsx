@@ -547,15 +547,18 @@ class ProgramWorkoutExercisesView extends Component {
     }
 
     handleRearrange = (result, provider) => {
-        if (result && result.source && result.destination && result.source.index !== result.destination.index) {
-            const { dispatch } = this.props;
-            let newOrder = {
-                workoutType: result.source.droppableId,
-                source: result.source.index,
-                destination: result.destination.index,
-            };
-            dispatch(reorderProgramWorkoutExercises(newOrder));
-            this.setState({ reorderInit: true });
+        const { allowEdit } = this.props;
+        if (allowEdit) {
+            if (result && result.source && result.destination && result.source.index !== result.destination.index) {
+                const { dispatch } = this.props;
+                let newOrder = {
+                    workoutType: result.source.droppableId,
+                    source: result.source.index,
+                    destination: result.destination.index,
+                };
+                dispatch(reorderProgramWorkoutExercises(newOrder));
+                this.setState({ reorderInit: true });
+            }
         }
     }
 }
