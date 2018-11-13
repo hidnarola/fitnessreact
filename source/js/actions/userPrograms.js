@@ -36,6 +36,10 @@ export const GET_USERS_PROGRAM_WORKOUT_SCHEDULE_REQUEST = 'GET_USERS_PROGRAM_WOR
 export const GET_USERS_PROGRAM_WORKOUT_SCHEDULE_SUCCESS = 'GET_USERS_PROGRAM_WORKOUT_SCHEDULE_SUCCESS';
 export const GET_USERS_PROGRAM_WORKOUT_SCHEDULE_ERROR = 'GET_USERS_PROGRAM_WORKOUT_SCHEDULE_ERROR';
 
+export const VIEW_USERS_PUBLIC_PROGRAM_WORKOUT_SCHEDULE_REQUEST = 'VIEW_USERS_PUBLIC_PROGRAM_WORKOUT_SCHEDULE_REQUEST';
+export const VIEW_USERS_PUBLIC_PROGRAM_WORKOUT_SCHEDULE_SUCCESS = 'VIEW_USERS_PUBLIC_PROGRAM_WORKOUT_SCHEDULE_SUCCESS';
+export const VIEW_USERS_PUBLIC_PROGRAM_WORKOUT_SCHEDULE_ERROR = 'VIEW_USERS_PUBLIC_PROGRAM_WORKOUT_SCHEDULE_ERROR';
+
 export const CHANGE_PROGRAM_WORKOUT_MAIN_TYPE = 'CHANGE_PROGRAM_WORKOUT_MAIN_TYPE';
 export const CHANGE_PROGRAM_WORKOUT_MAIN_TYPE_DETAILS = 'CHANGE_PROGRAM_WORKOUT_MAIN_TYPE_DETAILS';
 
@@ -279,6 +283,27 @@ export function getUsersProgramWorkoutScheduleSuccess(data) {
 export function getUsersProgramWorkoutScheduleError(error) {
     return {
         type: GET_USERS_PROGRAM_WORKOUT_SCHEDULE_ERROR,
+        error,
+    }
+}
+
+export function viewUsersPublicProgramWorkoutScheduleRequest(_id) {
+    return {
+        type: VIEW_USERS_PUBLIC_PROGRAM_WORKOUT_SCHEDULE_REQUEST,
+        _id,
+    }
+}
+
+export function viewUsersPublicProgramWorkoutScheduleSuccess(data) {
+    return {
+        type: VIEW_USERS_PUBLIC_PROGRAM_WORKOUT_SCHEDULE_SUCCESS,
+        data,
+    }
+}
+
+export function viewUsersPublicProgramWorkoutScheduleError(error) {
+    return {
+        type: VIEW_USERS_PUBLIC_PROGRAM_WORKOUT_SCHEDULE_ERROR,
         error,
     }
 }

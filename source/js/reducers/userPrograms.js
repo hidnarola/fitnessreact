@@ -63,7 +63,10 @@ import {
     GET_USER_PROGRAM_MASTER_ERROR,
     VIEW_USER_PUBLIC_PROGRAM_REQUEST,
     VIEW_USER_PUBLIC_PROGRAM_SUCCESS,
-    VIEW_USER_PUBLIC_PROGRAM_ERROR
+    VIEW_USER_PUBLIC_PROGRAM_ERROR,
+    VIEW_USERS_PUBLIC_PROGRAM_WORKOUT_SCHEDULE_SUCCESS,
+    VIEW_USERS_PUBLIC_PROGRAM_WORKOUT_SCHEDULE_REQUEST,
+    VIEW_USERS_PUBLIC_PROGRAM_WORKOUT_SCHEDULE_ERROR
 } from "../actions/userPrograms";
 import {
     VALIDATION_FAILURE_STATUS,
@@ -364,6 +367,45 @@ const actionMap = {
         return state.merge(Map(newState));
     },
     [GET_USERS_PROGRAM_WORKOUT_SCHEDULE_ERROR]: (state, action) => {
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
+        }
+        return state.merge(Map({
+            loading: false,
+            error: error,
+        }));
+    },
+    [VIEW_USERS_PUBLIC_PROGRAM_WORKOUT_SCHEDULE_REQUEST]: (state, action) => {
+        return state.merge(Map({
+            loading: true,
+            workout: null,
+            error: [],
+        }));
+    },
+    [VIEW_USERS_PUBLIC_PROGRAM_WORKOUT_SCHEDULE_SUCCESS]: (state, action) => {
+        var newState = {
+            loading: false,
+        };
+        if (action.data.status === 1) {
+            var newSt = createNewStateForWorkout(action.data.workouts);
+            newState.workout = newSt.workout;
+            newState.workoutsList = action.data.workouts_list;
+            newState.workoutStat = action.data.workouts_stat;
+            newState.workoutWarmupSequence = newSt.workoutWarmupSequence;
+            newState.workoutSequence = newSt.workoutSequence;
+            newState.workoutCooldownSequence = newSt.workoutCooldownSequence;
+        } else {
+            var msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
+            newState.error = [msg];
+        }
+        return state.merge(Map(newState));
+    },
+    [VIEW_USERS_PUBLIC_PROGRAM_WORKOUT_SCHEDULE_ERROR]: (state, action) => {
         let error = [];
         if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
             error = generateValidationErrorMsgArr(action.error.response.message);

@@ -3,7 +3,8 @@ import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import {
     getUsersProgramWorkoutScheduleRequest,
-    changeProgramWorkoutMainType
+    changeProgramWorkoutMainType,
+    viewUsersPublicProgramWorkoutScheduleRequest
 } from '../../actions/userPrograms';
 import {
     getExercisesNameRequest,
@@ -34,7 +35,7 @@ class ViewProgramScheduleWorkout extends Component {
         if (match && match.params && match.params.id && match.params.workout_id) {
             let _id = match.params.id;
             let workoutId = match.params.workout_id;
-            dispatch(getUsersProgramWorkoutScheduleRequest(workoutId));
+            dispatch(viewUsersPublicProgramWorkoutScheduleRequest(workoutId));
             dispatch(getExercisesNameRequest());
             dispatch(getExerciseMeasurementRequest());
             this.setState({ loadWorkoutInit: true });

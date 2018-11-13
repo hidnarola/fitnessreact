@@ -70,6 +70,16 @@ function getUsersProgramWorkoutSchedule(_id) {
     return fetchResource(requestUrl + '/workout/' + _id, options);
 }
 
+function viewUsersPublicProgramWorkoutSchedule(_id) {
+    let headers = extraUserHeaders();
+    var options = {
+        method: 'GET',
+        headers: headers,
+    }
+
+    return fetchResource(requestUrl + '/view_workout/' + _id, options);
+}
+
 function addUsersProgramWorkoutSchedule(requestData) {
     let headers = extraUserHeaders();
     return postFormData(requestUrl + '/workout', requestData, headers);
@@ -130,6 +140,7 @@ export default {
     deleteUsersProgramWorkoutSchedule,
     addUserProgramWorkoutTitle,
     getUsersProgramWorkoutSchedule,
+    viewUsersPublicProgramWorkoutSchedule,
     addUsersProgramWorkoutSchedule,
     updateUserProgramWorkoutTitle,
     updateUsersProgramWorkoutSchedule,

@@ -2116,7 +2116,7 @@ ul.program-pager-wrap.pager li a:hover {background: #ad60cf;color: #fff;}
 .program-tbl-loader span svg {fill: #fff;}
 .dv-star-rating.program-rating label { font-size: 35px; margin: 0 5px; }
 .prog-rating-span-warp{position: relative;}
-.prog-rating-span-warp > span {position: absolute; width: 100%; top: 18px; left: 0;}
+.prog-rating-span-warp > span {position: absolute; width: 100%; top: 30px; left: 0;line-height: 20px;}
 
 
 @media(min-width: 992px){
