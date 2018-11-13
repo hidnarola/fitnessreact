@@ -61,6 +61,9 @@ import {
     VIEW_USERS_PUBLIC_PROGRAM_WORKOUT_SCHEDULE_REQUEST,
     viewUsersPublicProgramWorkoutScheduleSuccess,
     viewUsersPublicProgramWorkoutScheduleError,
+    GET_USER_PROGRAM_RATING_REQUEST,
+    getUserProgramRatingSuccess,
+    getUserProgramRatingError,
 } from '../actions/userPrograms';
 
 function getUserProgramsData() {
@@ -305,6 +308,18 @@ function reorderProgramWorkoutExercises() {
     }
 }
 
+function getUserProgramRatingData() {
+    return function* (action) {
+        try {
+            let _id = action._id;
+            const data = yield call(() => api.getUserProgramRating(_id));
+            yield put(getUserProgramRatingSuccess(data))
+        } catch (error) {
+            yield put(getUserProgramRatingError(error))
+        }
+    }
+}
+
 export function* watchUserProgramsData() {
     yield takeLatest(GET_USER_PROGRAMS_REQUEST, getUserProgramsData());
     yield takeLatest(ADD_USER_PROGRAM_MASTER_REQUEST, addUserProgramMasterData());
@@ -326,6 +341,7 @@ export function* watchUserProgramsData() {
     yield takeLatest(UPDATE_USER_PROGRAM_MASTER_REQUEST, updateUserProgramMasterData());
     yield takeLatest(GET_WORKOUTS_LIST_BY_PROGRAM_DAY_REQUEST, getWorkoutsListByProgramDay());
     yield takeLatest(REORDER_PROGRAM_WORKOUT_EXERCISES_REQUEST, reorderProgramWorkoutExercises());
+    yield takeLatest(GET_USER_PROGRAM_RATING_REQUEST, getUserProgramRatingData());
 }
 
 export default [

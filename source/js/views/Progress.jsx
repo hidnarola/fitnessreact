@@ -120,7 +120,7 @@ class Progress extends Component {
                         <Route exact path={routeCodes.PROGRESS_ENDURANCE} component={Endurance} />
                     </Switch>
                 </section>
-            </div >
+            </div>
         );
     }
 

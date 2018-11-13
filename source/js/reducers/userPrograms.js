@@ -66,7 +66,10 @@ import {
     VIEW_USER_PUBLIC_PROGRAM_ERROR,
     VIEW_USERS_PUBLIC_PROGRAM_WORKOUT_SCHEDULE_SUCCESS,
     VIEW_USERS_PUBLIC_PROGRAM_WORKOUT_SCHEDULE_REQUEST,
-    VIEW_USERS_PUBLIC_PROGRAM_WORKOUT_SCHEDULE_ERROR
+    VIEW_USERS_PUBLIC_PROGRAM_WORKOUT_SCHEDULE_ERROR,
+    GET_USER_PROGRAM_RATING_REQUEST,
+    GET_USER_PROGRAM_RATING_SUCCESS,
+    GET_USER_PROGRAM_RATING_ERROR
 } from "../actions/userPrograms";
 import {
     VALIDATION_FAILURE_STATUS,
@@ -107,6 +110,9 @@ const initialState = Map({
     remainingWorkouts: [],
     reorderExercisesLoading: false,
     reorderExercisesError: [],
+    loadingRatings: false,
+    ratings: null,
+    errorRatings: [],
 });
 
 const actionMap = {
@@ -805,6 +811,37 @@ const actionMap = {
         return state.merge(Map({
             loadingMasterData: false,
             errorMasterData: error
+        }));
+    },
+    [GET_USER_PROGRAM_RATING_REQUEST]: (state, action) => {
+        return state.merge(Map({
+            loadingRatings: true,
+            ratings: null,
+            errorRatings: [],
+        }));
+    },
+    [GET_USER_PROGRAM_RATING_SUCCESS]: (state, action) => {
+        var newState = { loadingRatings: false };
+        if (action.data.status === 1) {
+            newState.ratings = action.data.program;
+        } else {
+            var msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
+            newState.errorRatings = [msg];
+        }
+        return state.merge(Map(newState));
+    },
+    [GET_USER_PROGRAM_RATING_ERROR]: (state, action) => {
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
+        }
+        return state.merge(Map({
+            loadingRatings: false,
+            errorRatings: error,
         }));
     },
     [SET_USER_PROGRAM_STATE]: (state, action) => {

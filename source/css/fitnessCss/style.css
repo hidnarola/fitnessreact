@@ -2117,6 +2117,10 @@ ul.program-pager-wrap.pager li a:hover {background: #ad60cf;color: #fff;}
 .dv-star-rating.program-rating label { font-size: 35px; margin: 0 5px; }
 .prog-rating-span-warp{position: relative;}
 .prog-rating-span-warp > span {position: absolute; width: 100%; top: 30px; left: 0;line-height: 20px;}
+.rating-card-wrap { margin: 0px 5px 10px 5px; box-shadow: -4px 0 0px #ff337e; padding: 10px 20px; display: block; }
+.rating-card-h-left { display: inline-block; }
+.rating-card-h-right { padding: 0 10px; display: inline-block; }
+.rating-card-body p { margin: 10px 0; }
 
 
 @media(min-width: 992px){

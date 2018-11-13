@@ -130,6 +130,15 @@ function reorderProgramWorkoutExercises(requestData) {
     return putFormData(requestUrl + '/reorder_exercises', requestData, headers);
 }
 
+function getUserProgramRating(_id) {
+    var headers = extraUserHeaders();
+    var options = {
+        method: 'GET',
+        headers: headers,
+    }
+    return fetchResource(requestUrl + '/rating/' + _id, options);
+}
+
 export default {
     getUserPrograms,
     addUserProgramMaster,
@@ -150,5 +159,6 @@ export default {
     pasteUsersProgramWorkoutSchedule,
     updateUsersProgramMaster,
     getWorkoutsListByProgramDay,
-    reorderProgramWorkoutExercises
+    reorderProgramWorkoutExercises,
+    getUserProgramRating
 }

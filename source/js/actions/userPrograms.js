@@ -89,6 +89,10 @@ export const REORDER_PROGRAM_WORKOUT_EXERCISES_REQUEST = 'REORDER_PROGRAM_WORKOU
 export const REORDER_PROGRAM_WORKOUT_EXERCISES_SUCCESS = 'REORDER_PROGRAM_WORKOUT_EXERCISES_SUCCESS';
 export const REORDER_PROGRAM_WORKOUT_EXERCISES_ERROR = 'REORDER_PROGRAM_WORKOUT_EXERCISES_ERROR';
 
+export const GET_USER_PROGRAM_RATING_REQUEST = 'GET_USER_PROGRAM_RATING_REQUEST';
+export const GET_USER_PROGRAM_RATING_SUCCESS = 'GET_USER_PROGRAM_RATING_SUCCESS';
+export const GET_USER_PROGRAM_RATING_ERROR = 'GET_USER_PROGRAM_RATING_ERROR';
+
 export const SET_USER_PROGRAM_STATE = 'SET_USER_PROGRAM_STATE';
 
 export function getUserProgramsRequest(filterData) {
@@ -552,6 +556,27 @@ export function reorderProgramWorkoutExercisesSuccess(data) {
 export function reorderProgramWorkoutExercisesError(error) {
     return {
         type: REORDER_PROGRAM_WORKOUT_EXERCISES_ERROR,
+        error
+    }
+}
+
+export function getUserProgramRatingRequest(_id) {
+    return {
+        type: GET_USER_PROGRAM_RATING_REQUEST,
+        _id,
+    }
+}
+
+export function getUserProgramRatingSuccess(data) {
+    return {
+        type: GET_USER_PROGRAM_RATING_SUCCESS,
+        data
+    }
+}
+
+export function getUserProgramRatingError(error) {
+    return {
+        type: GET_USER_PROGRAM_RATING_ERROR,
         error
     }
 }

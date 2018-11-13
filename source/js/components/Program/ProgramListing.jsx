@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { withRouter } from "react-router-dom";
+import { withRouter, Link } from "react-router-dom";
 import { connect } from 'react-redux';
 import { routeCodes } from "../../constants/routes";
 import { DropdownButton, ButtonToolbar, MenuItem } from "react-bootstrap";
@@ -12,9 +12,6 @@ import { ts, te } from "../../helpers/funs";
 import { hidePageLoader, showPageLoader } from "../../actions/pageLoader";
 import RatingStarsDisplay from '../Common/RatingStarsDisplay';
 import _ from "lodash";
-import ProgramRatingModal from './ProgramRatingModal';
-import { initialize, reset } from "redux-form";
-import { saveUserProgramsRatingRequest } from '../../actions/userProgramsRating';
 import unitize from "unitize";
 
 class ProgramListing extends Component {
@@ -24,7 +21,6 @@ class ProgramListing extends Component {
             showDeleteProgramAlert: false,
             deleteActionInit: false,
             selectedProgramId: null,
-            showRating: false,
             filterData: {
                 search: "",
                 searchColumns: [
@@ -44,7 +40,7 @@ class ProgramListing extends Component {
 
     render() {
         const { loggedUserData, programs, totalRecords, loading, showRatingInList } = this.props;
-        const { filterData, showDeleteProgramAlert, showRating } = this.state;
+        const { filterData, showDeleteProgramAlert } = this.state;
         return (
             <div className="body-content d-flex row justify-content-start profilephoto-content">
                 <div className="col-md-12">
@@ -143,9 +139,9 @@ class ProgramListing extends Component {
                                                     {showRatingInList &&
                                                         <td>
                                                             <span className="prog-rating-span-warp">
-                                                                <a href="javascript:void(0)" onClick={() => this.showRatingForm(program._id)}>
+                                                                <Link to={`${routeCodes.PROGRAMS_RATING_VIEW}/${program._id}`}>
                                                                     <RatingStarsDisplay rating={program.rating} name={program._id} />
-                                                                </a>
+                                                                </Link>
                                                                 <span>{program.programsRatingCount ? `${unitize(program.programsRatingCount).capitalize().precision(0).toString(false)} reviews` : ''}</span>
                                                             </span>
                                                         </td>
@@ -227,17 +223,12 @@ class ProgramListing extends Component {
                 >
                     You will not be able to recover this file!
                 </SweetAlert>
-                <ProgramRatingModal
-                    show={showRating}
-                    onSubmit={this.handleSaveRating}
-                    handleClose={this.hideRatingForm}
-                />
             </div>
         )
     }
 
     componentDidUpdate(prevProps, prevState) {
-        const { loading, error, dispatch, saveRatingLoading, saveRatingError } = this.props;
+        const { loading, error, dispatch } = this.props;
         const { deleteActionInit } = this.state;
 
         if (!loading && deleteActionInit) {
@@ -250,15 +241,6 @@ class ProgramListing extends Component {
                 te(error[0]);
             }
             dispatch(hidePageLoader());
-        }
-        if (!saveRatingLoading && prevProps.saveRatingLoading !== saveRatingLoading) {
-            if (saveRatingError && saveRatingError.length > 0) {
-                te('Something went wrong! Please try again later.');
-            } else {
-                ts('Thank you for your feedback');
-            }
-            dispatch(hidePageLoader());
-            this.getFilterPrograms();
         }
     }
 
@@ -340,56 +322,16 @@ class ProgramListing extends Component {
         dispatch(deleteUserProgramRequest(selectedProgramId));
         this.setState({ deleteActionInit: true });
     }
-
-    showRatingForm = (programId) => {
-        const { programs, dispatch, loggedUserData } = this.props;
-        if (programId) {
-            let selectedProgram = _.find(programs, ['_id', programId]);
-            if (selectedProgram) {
-                let ratingArr = selectedProgram['programsRating'];
-                let loggedUserRating = { userId: loggedUserData.authId, programId: programId };
-                if (ratingArr && ratingArr.length > 0) {
-                    loggedUserRating.userId = ratingArr[0].userId ? ratingArr[0].userId : "";
-                    loggedUserRating.programId = ratingArr[0].programId ? ratingArr[0].programId : "";
-                    loggedUserRating.rating = ratingArr[0].rating ? ratingArr[0].rating : 0;
-                    loggedUserRating.comment = ratingArr[0].comment ? ratingArr[0].comment : "";
-                }
-                dispatch(initialize('program_rating_form', loggedUserRating));
-                this.setState({ showRating: true });
-            } else {
-                te('Something went wrong! Please try again later.');
-            }
-        }
-    }
-
-    hideRatingForm = () => {
-        const { dispatch } = this.props;
-        dispatch(reset('program_rating_form'));
-        this.setState({ showRating: false });
-    }
-
-    handleSaveRating = (data) => {
-        const { dispatch } = this.props;
-        if (data && data.userId && data.programId) {
-            dispatch(showPageLoader());
-            dispatch(saveUserProgramsRatingRequest(data));
-        } else {
-            te("Something went wrong! Please try again later.");
-        }
-        this.hideRatingForm();
-    }
 }
 
 const mapStateToProps = (state) => {
-    const { userPrograms, userProgramsRating, user } = state;
+    const { userPrograms, user } = state;
     return {
         loading: userPrograms.get('loading'),
         programs: userPrograms.get('programs'),
         totalRecords: userPrograms.get('totalRecords'),
         error: userPrograms.get('error'),
         loggedUserData: user.get('loggedUserData'),
-        saveRatingLoading: userProgramsRating.get('saveLoading'),
-        saveRatingError: userProgramsRating.get('saveError'),
     };
 }
 

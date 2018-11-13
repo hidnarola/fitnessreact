@@ -49,6 +49,7 @@ export const routeCodes = {
 
     PROGRAMS: `${publicPath}exercise/programs`,
     PROGRAMS_PUBLIC: `${publicPath}exercise/programs/public`,
+    PROGRAMS_RATING_VIEW: `${publicPath}exercise/programs/rating`,
     PROGRAM_MASTER_SAVE: `${publicPath}exercise/programs/save_program`,
     PROGRAM_SAVE: `${publicPath}exercise/programs/save`,
     PROGRAM_VIEW: `${publicPath}exercise/programs/view`,
