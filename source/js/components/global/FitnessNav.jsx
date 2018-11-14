@@ -11,6 +11,7 @@ import { faDumbbell } from '@fortawesome/free-solid-svg-icons';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { faChartPie } from '@fortawesome/free-solid-svg-icons';
 import { faThLarge } from '@fortawesome/free-solid-svg-icons';
+import ReactTooltip from "react-tooltip";
 
 export default class FitnessNav extends Component {
 
@@ -25,6 +26,8 @@ export default class FitnessNav extends Component {
                                     activeClassName='active'
                                     className='Menu-link'
                                     to={routeCodes.DASHBOARD}
+                                    data-tip="Dashboard"
+                                    data-for="menu-title-tooltip"
                                 >
                                     <FontAwesomeIcon icon={faThLarge} />
                                     <span>Dashboard</span>
@@ -35,6 +38,8 @@ export default class FitnessNav extends Component {
                                     activeClassName='active'
                                     className='Menu-link'
                                     to={routeCodes.STATSPAGE}
+                                    data-tip="Stats"
+                                    data-for="menu-title-tooltip"
                                 >
                                     <FontAwesomeIcon icon={faChartPie} />
                                     <span>Stats</span>
@@ -46,6 +51,8 @@ export default class FitnessNav extends Component {
                                     activeClassName='active'
                                     className='Menu-link'
                                     to={routeCodes.BODY}
+                                    data-tip="Body"
+                                    data-for="menu-title-tooltip"
                                 >
                                     <FontAwesomeIcon icon={faUser} />
                                     <span>Body</span>
@@ -57,6 +64,8 @@ export default class FitnessNav extends Component {
                                     activeClassName='active'
                                     className='Menu-link'
                                     to={routeCodes.EXERCISE}
+                                    data-tip="Exercise"
+                                    data-for="menu-title-tooltip"
                                 >
                                     <FontAwesomeIcon icon={faDumbbell} />
                                     <span>Exercise</span>
@@ -67,6 +76,8 @@ export default class FitnessNav extends Component {
                                     activeClassName='active'
                                     className='Menu-link'
                                     to={routeCodes.NUTRITION}
+                                    data-tip="Nutrition"
+                                    data-for="menu-title-tooltip"
                                 >
                                     <FontAwesomeIcon icon={faUtensils} />
                                     <span>Nutrition</span>
@@ -77,6 +88,8 @@ export default class FitnessNav extends Component {
                                     activeClassName='active'
                                     className='Menu-link'
                                     to={routeCodes.CALENDAR}
+                                    data-tip="Calendar"
+                                    data-for="menu-title-tooltip"
                                 >
                                     <FontAwesomeIcon icon={faCalendar} />
                                     <span>Calendar</span>
@@ -87,6 +100,8 @@ export default class FitnessNav extends Component {
                                     activeClassName='active'
                                     className='Menu-link'
                                     to={routeCodes.PROGRESS}
+                                    data-tip="Progress"
+                                    data-for="menu-title-tooltip"
                                 >
                                     <FontAwesomeIcon icon={faChartLine} />
                                     <span>Progress</span>
@@ -97,6 +112,8 @@ export default class FitnessNav extends Component {
                                     activeClassName='active'
                                     className='Menu-link'
                                     to={routeCodes.BADGES}
+                                    data-tip="Badges"
+                                    data-for="menu-title-tooltip"
                                 >
                                     <FontAwesomeIcon icon={faTrophy} />
                                     <span>Badges</span>
@@ -105,6 +122,7 @@ export default class FitnessNav extends Component {
                         </ul>
                     </Scrollbars>
                 </nav>
+                <ReactTooltip id="menu-title-tooltip" place="right" type="light" effect="solid" />
             </div>
         );
     }

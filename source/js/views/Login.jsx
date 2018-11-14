@@ -61,7 +61,7 @@ class Login extends Component {
                 <div className="step-box step-box_expried">
                     <div className="logo_login_page">
                         <Link to={routeCodes.HOME}>
-                            <img src={logo} />Fit-Assist
+                            <img src={logo} />Fitly
                         </Link>
                     </div>
                     <div className="step-box-l">

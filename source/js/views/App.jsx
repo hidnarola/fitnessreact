@@ -104,6 +104,7 @@ import en from 'javascript-time-ago/locale/en'
 import SaveProgramMasterPage from '../components/Program/SaveProgramMasterPage';
 import ProgramView from '../components/Program/ProgramView';
 import RatingView from '../components/Program/RatingView';
+import moment from "moment";
 JavascriptTimeAgo.locale(en);
 
 const auth = new Auth();
@@ -321,7 +322,7 @@ class App extends Component {
                     </Router>
                 </div>
                 <div className="app-footer">
-                    <p>&copy; Copyright  <a href="#">Fitassist.com</a>. All Right Reserved.</p>
+                    <p>&copy; Copyright <a href="http://fitly.co/">fitly.co</a>. All Right Reserved.</p>
                 </div>
             </div>
         );

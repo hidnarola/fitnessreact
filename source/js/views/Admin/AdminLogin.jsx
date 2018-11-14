@@ -51,7 +51,7 @@ class AdminLogin extends Component {
                 <div className="step-box">
                     <div className="logo_login_page">
                         <Link to={adminRouteCodes.LOGIN}>
-                            <img src={logo} />Fit-Assist
+                            <img src={logo} />Fitly
                         </Link>
                     </div>
                     <AdminLoginForm onSubmit={this.handleSubmit} />
