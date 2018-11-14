@@ -101,7 +101,7 @@ class Goals extends Component {
                                     <i className="icon-control_point"></i>
                                 </a>
                             }
-                            <a href="javascript:void(0)" onClick={this.handleShowAddPersonalGoalModal} className="green-blue-btn">Add Personal Goal
+                            <a href="javascript:void(0)" onClick={this.handleShowAddPersonalGoalModal} className="pink-btn">Add Personal Goal
                                 <i className="icon-control_point"></i>
                             </a>
                         </div>

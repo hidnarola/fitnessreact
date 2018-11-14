@@ -83,7 +83,6 @@ import ScheduleWorkout from './ScheduleWorkout';
 import SaveScheduleWorkout from '../components/ScheduleWorkout/SaveScheduleWorkout';
 import Programs from './Programs';
 import ProgramSave from '../components/Program/ProgramSave';
-import ViewScheduleWorkout from '../components/ScheduleWorkout/ViewScheduleWorkout';
 import SaveScheduleProgramWorkout from '../components/Program/SaveScheduleProgramWorkout';
 import ViewProgramScheduleWorkout from '../components/Program/ViewProgramScheduleWorkout';
 import Progress from './Progress';
@@ -182,7 +181,6 @@ class App extends Component {
 
                                 <PrivateRoute exact path={routeCodes.SCHEDULE_WORKOUT} component={ScheduleWorkout} />
                                 <PrivateRoute exact path={routeCodes.SAVE_SCHEDULE_WORKOUT} component={SaveScheduleWorkout} />
-                                <PrivateRoute exact path={routeCodes.VIEW_SCHEDULE_WORKOUT} component={ViewScheduleWorkout} />
 
                                 <PrivateRoute exact path={routeCodes.PROGRAMS} component={Programs} />
                                 <PrivateRoute exact path={routeCodes.PROGRAMS_PUBLIC} component={Programs} />

@@ -64,8 +64,7 @@ class Exercise extends Component {
                             </div>
                             <div className="body-head-r">
                                 <NavLink
-                                    activeClassName='pink-btn'
-                                    className='green-blue-btn'
+                                    className='pink-btn'
                                     to={routeCodes.EXERCISEFITNESS}
                                 >
                                     <span>Fitness Tests</span>

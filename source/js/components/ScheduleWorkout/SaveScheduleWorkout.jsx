@@ -129,8 +129,7 @@ class SaveScheduleWorkout extends Component {
                         </div>
                         <div className="body-head-r">
                             <NavLink
-                                activeClassName='pink-btn'
-                                className='green-blue-btn'
+                                className='pink-btn'
                                 to={routeCodes.EXERCISEFITNESS}
                             >
                                 <span>Fitness Tests</span>
@@ -262,6 +261,14 @@ class SaveScheduleWorkout extends Component {
                                                 </div>
                                             </div>
                                         }
+                                        {!(typeof workoutStat.total_workout !== 'undefined' && workoutStat.total_workout > 0) &&
+                                            <div className="workout-status">
+                                                <div className="workoutstatus-top">
+                                                    <h4>Total Exercises</h4>
+                                                    <h5>0</h5>
+                                                </div>
+                                            </div>
+                                        }
                                         {typeof workoutStat.total_reps !== 'undefined' && workoutStat.total_reps > 0 &&
                                             <div className="workout-status">
                                                 <div className="workoutstatus-top">
@@ -270,11 +277,27 @@ class SaveScheduleWorkout extends Component {
                                                 </div>
                                             </div>
                                         }
+                                        {!(typeof workoutStat.total_reps !== 'undefined' && workoutStat.total_reps > 0) &&
+                                            <div className="workout-status">
+                                                <div className="workoutstatus-top">
+                                                    <h4>Total Reps</h4>
+                                                    <h5>0</h5>
+                                                </div>
+                                            </div>
+                                        }
                                         {typeof workoutStat.total_sets !== 'undefined' && workoutStat.total_sets > 0 &&
                                             <div className="workout-status">
                                                 <div className="workoutstatus-top">
                                                     <h4>Total Sets</h4>
                                                     <h5>{workoutStat.total_sets}</h5>
+                                                </div>
+                                            </div>
+                                        }
+                                        {!(typeof workoutStat.total_sets !== 'undefined' && workoutStat.total_sets > 0) &&
+                                            <div className="workout-status">
+                                                <div className="workoutstatus-top">
+                                                    <h4>Total Sets</h4>
+                                                    <h5>0</h5>
                                                 </div>
                                             </div>
                                         }
@@ -289,6 +312,16 @@ class SaveScheduleWorkout extends Component {
                                                 </div>
                                             </div>
                                         }
+                                        {!(typeof workoutStat.total_weight_lifted !== 'undefined' && workoutStat.total_weight_lifted > 0) &&
+                                            <div className="workout-status">
+                                                <div className="workoutstatus-top">
+                                                    <h4>Weight Lifted</h4>
+                                                    <h5>
+                                                        0
+                                                    </h5>
+                                                </div>
+                                            </div>
+                                        }
                                         {typeof workoutStat.muscle_work !== 'undefined' && workoutStat.muscle_work && workoutStat.muscle_work.length > 0 &&
                                             <div className="workout-status">
                                                 <div className="workoutstatus-top">
@@ -299,6 +332,14 @@ class SaveScheduleWorkout extends Component {
                                                     <p>
                                                         {workoutStat.muscle_work.join(', ')}
                                                     </p>
+                                                </div>
+                                            </div>
+                                        }
+                                        {!(typeof workoutStat.muscle_work !== 'undefined' && workoutStat.muscle_work && workoutStat.muscle_work.length > 0) &&
+                                            <div className="workout-status">
+                                                <div className="workoutstatus-top">
+                                                    <h4>Muscles Worked</h4>
+                                                    <h5>0</h5>
                                                 </div>
                                             </div>
                                         }

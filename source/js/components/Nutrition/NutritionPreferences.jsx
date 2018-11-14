@@ -99,7 +99,7 @@ class NutritionPreferences extends Component {
                             <a href="javascript:void(0)" className="white-btn" onClick={this.handleShowResetModal}>Reset
                                 <i className="icon-settings_backup_restore"></i>
                             </a>
-                            <a href="javascript:void(0)" className="green-blue-btn" onClick={this.handleSave}>Update Changes
+                            <a href="javascript:void(0)" className="pink-btn" onClick={this.handleSave}>Update Changes
                                 <i className="icon-update"></i>
                             </a>
                         </div>

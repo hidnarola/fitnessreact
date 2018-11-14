@@ -77,7 +77,7 @@ class ExerciseSettings extends Component {
                             <a className="white-btn" href="javascript:void(0)" onClick={this.handleShowResetModal}>Reset
                                 <i className="icon-settings_backup_restore"></i>
                             </a>
-                            <a className="green-blue-btn" href="javascript:void(0)" onClick={this.handleExerciseSettings}>Update Changes
+                            <a className="pink-btn" href="javascript:void(0)" onClick={this.handleExerciseSettings}>Update Changes
                                 <i className="icon-update"></i>
                             </a>
                         </div>
