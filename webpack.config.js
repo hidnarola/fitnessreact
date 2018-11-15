@@ -86,7 +86,6 @@ plugins.push(
                 "react-router",
                 "react-router-dom",
                 "react-select",
-                "react-show-more",
                 "react-star-rating-component",
                 "react-table",
                 "react-tagsinput",

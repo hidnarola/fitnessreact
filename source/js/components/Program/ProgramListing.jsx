@@ -3,7 +3,7 @@ import { withRouter, Link } from "react-router-dom";
 import { connect } from 'react-redux';
 import { routeCodes } from "../../constants/routes";
 import { DropdownButton, ButtonToolbar, MenuItem } from "react-bootstrap";
-import { FaPencil, FaTrash, FaSearch, FaCircleONotch } from 'react-icons/lib/fa';
+import { FaPencil, FaTrash, FaSearch, FaCircleONotch, FaEye } from 'react-icons/lib/fa';
 import { getUserProgramsRequest, deleteUserProgramRequest } from "../../actions/userPrograms";
 import { SECONDARY_GOALS, PROGRAM_DIFFICULTY_LEVEL_OBJ } from "../../constants/consts";
 import { Pager } from "react-bootstrap";
@@ -175,7 +175,7 @@ class ProgramListing extends Component {
                                                                             eventKey="1"
                                                                             onClick={(e) => this.handleNavigation(e, `${routeCodes.PROGRAM_VIEW}/${program._id}`)}
                                                                         >
-                                                                            <FaPencil className="v-align-sub" /> View
+                                                                            <FaEye className="v-align-sub" /> View
                                                                         </MenuItem>
                                                                     </DropdownButton>
                                                                 </ButtonToolbar>

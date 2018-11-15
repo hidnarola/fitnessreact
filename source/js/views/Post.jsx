@@ -9,7 +9,7 @@ import noProfileImg from 'img/common/no-profile-img.png'
 import noImg from 'img/common/no-img.png'
 import moment from "moment";
 import { routeCodes } from '../constants/routes';
-import { ACCESS_LEVEL_PUBLIC, ACCESS_LEVEL_FRIENDS, ACCESS_LEVEL_PRIVATE, SERVER_BASE_URL, POST_TYPE_TIMELINE, POST_TYPE_GALLERY, POST_TYPE_PROGRESS_PHOTO, FRIENDSHIP_STATUS_FRIEND, FRIENDSHIP_STATUS_SELF } from '../constants/consts';
+import { ACCESS_LEVEL_PUBLIC, ACCESS_LEVEL_FRIENDS, ACCESS_LEVEL_PRIVATE, SERVER_BASE_URL, POST_TYPE_TIMELINE, POST_TYPE_GALLERY, POST_TYPE_PROGRESS_PHOTO, FRIENDSHIP_STATUS_FRIEND, FRIENDSHIP_STATUS_SELF, POST_TYPE_WORKOUT } from '../constants/consts';
 import { FaGlobe, FaLock, FaGroup } from 'react-icons/lib/fa';
 import ReactHtmlParser from "react-html-parser";
 import cns from "classnames";
@@ -64,6 +64,8 @@ class Post extends Component {
             } else if (type === POST_TYPE_PROGRESS_PHOTO) {
                 description = post.progress_description;
                 images = post.progress_photos;
+            } else if (type === POST_TYPE_WORKOUT) {
+                description = post.post_description;
             } else {
                 doRenderPost = false;
             }

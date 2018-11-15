@@ -198,6 +198,7 @@ export const ACCESS_LEVEL_NONE_STR = 'No one';
 export const POST_TYPE_TIMELINE = 'timeline';
 export const POST_TYPE_GALLERY = 'gallery';
 export const POST_TYPE_PROGRESS_PHOTO = 'progress_photo';
+export const POST_TYPE_WORKOUT = 'workout';
 
 export const WORKOUT_LOCATION_HOME = 'home';
 export const WORKOUT_LOCATION_GYM = 'gym';

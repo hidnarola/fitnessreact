@@ -35,7 +35,8 @@ import {
     MUSCLE_WIDGET_WEIGHT,
     MUSCLE_WIDGET_HEIGHT,
     WIDGETS_TYPE_TIMELINE,
-    FRIENDSHIP_STATUS_FRIEND
+    FRIENDSHIP_STATUS_FRIEND,
+    POST_TYPE_WORKOUT
 } from '../../constants/consts';
 import cns from "classnames";
 import { routeCodes } from '../../constants/routes';
@@ -59,7 +60,6 @@ import WidgetMuscleCard from '../Common/WidgetMuscleCard';
 import WidgetBodyFatCard from '../Common/WidgetBodyFatCard';
 import WidgetBadgesCard from '../Common/WidgetBadgesCard';
 import SweetAlert from "react-bootstrap-sweetalert";
-import ShowMore from "react-show-more";
 import Lightbox from 'react-images';
 import LikesListModal from '../Common/LikesListModal';
 
@@ -301,6 +301,8 @@ class ProfileFithub extends Component {
                                         } else if (type === POST_TYPE_PROGRESS_PHOTO) {
                                             description = post.progress_description;
                                             images = post.progress_photos;
+                                        } else if (type === POST_TYPE_WORKOUT) {
+                                            description = post.post_description;
                                         } else {
                                             return null;
                                         }
@@ -413,14 +415,7 @@ class ProfileFithub extends Component {
                                                 <div className="posttype-body">
                                                     {description &&
                                                         <div className="posttype-body-white">
-                                                            <ShowMore
-                                                                lines={3}
-                                                                more='Show more'
-                                                                less='Show less'
-                                                                anchorClass='show-more-less-link'
-                                                            >
-                                                                {ReactHtmlParser(description)}
-                                                            </ShowMore>
+                                                            {ReactHtmlParser(description)}
                                                         </div>
                                                     }
                                                     <div className={cns("posttype-body-grey", postImageDisplayClass)}>

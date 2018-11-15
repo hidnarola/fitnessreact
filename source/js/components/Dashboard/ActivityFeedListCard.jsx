@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { NavLink, Link } from 'react-router-dom';
 import moment from 'moment';
-import { POST_TYPE_TIMELINE, POST_TYPE_GALLERY, POST_TYPE_PROGRESS_PHOTO, ACCESS_LEVEL_PUBLIC, ACCESS_LEVEL_FRIENDS, ACCESS_LEVEL_PRIVATE, SERVER_BASE_URL, FRIENDSHIP_STATUS_FRIEND } from '../../constants/consts';
+import { POST_TYPE_TIMELINE, POST_TYPE_GALLERY, POST_TYPE_PROGRESS_PHOTO, ACCESS_LEVEL_PUBLIC, ACCESS_LEVEL_FRIENDS, ACCESS_LEVEL_PRIVATE, SERVER_BASE_URL, FRIENDSHIP_STATUS_FRIEND, POST_TYPE_WORKOUT } from '../../constants/consts';
 import _ from "lodash";
 import noProfileImg from 'img/common/no-profile-img.png';
 import noImg from 'img/common/no-img.png';
@@ -10,7 +10,6 @@ import { routeCodes } from '../../constants/routes';
 import { FaGlobe, FaLock, FaGroup } from 'react-icons/lib/fa';
 import ReactHtmlParser from "react-html-parser";
 import cns from 'classnames';
-import ShowMore from "react-show-more";
 import Lightbox from 'react-images';
 import LikeButton from '../Profile/LikeButton';
 import CommentBoxForm from '../Profile/CommentBoxForm';
@@ -50,6 +49,8 @@ class ActivityFeedListCard extends Component {
         } else if (type === POST_TYPE_PROGRESS_PHOTO) {
             description = post.progress_description;
             images = post.progress_photos;
+        } else if (type === POST_TYPE_WORKOUT) {
+            description = post.post_description;
         } else {
             return null;
         }
@@ -137,14 +138,7 @@ class ActivityFeedListCard extends Component {
                 <div className="posttype-body">
                     {description &&
                         <div className="posttype-body-white">
-                            <ShowMore
-                                lines={3}
-                                more='Show more'
-                                less='Show less'
-                                anchorClass='show-more-less-link'
-                            >
-                                {ReactHtmlParser(description)}
-                            </ShowMore>
+                            {ReactHtmlParser(description)}
                         </div>
                     }
                     <div className={cns("posttype-body-grey ", postImageDisplayClass)}>
