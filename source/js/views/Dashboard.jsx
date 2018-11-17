@@ -559,8 +559,8 @@ class Dashboard extends Component {
         const { dispatch } = this.props;
         let today = moment().startOf('day').utc();
         let prevMonth = moment.range(
-            moment().subtract(2, 'month').startOf('day').utc(),
-            moment().startOf('day').utc()
+            moment().startOf('month').startOf('day').subtract(3, 'months').utc(),
+            moment().subtract(1, 'months').endOf('month').endOf('day').utc()
         );
         let requestData = {
             today,

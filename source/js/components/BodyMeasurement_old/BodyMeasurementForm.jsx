@@ -91,7 +91,7 @@ class BodyMeasurementForm extends Component {
         return (
             <form onSubmit={handleSubmit}>
                 <div className="row d-flex whitebox-body">
-                    <div className="col-md-6">
+                    <div className="col-md-4">
                         <ul className="common-ul">
                             <li>
                                 <Field
@@ -236,9 +236,73 @@ class BodyMeasurementForm extends Component {
                             </li>
                         </ul>
                     </div>
-                    <div className="col-md-6">
+                    <div className="col-md-4">
                         <div className="whitebody-graph">
                             <img src={bodyGraph} alt="Body" />
+                        </div>
+                    </div>
+                    <div className="col-md-4">
+                        <ul className="common-ul">
+                            <li>
+                                <Field
+                                    name="weight"
+                                    type="text"
+                                    label="Weight"
+                                    wrapperClass="grey-white"
+                                    component={InputField}
+                                    errorClass="help-block"
+                                    placeholder="Weight"
+                                    validate={(validationRules.weight) ? validationRules.weight : [required, validNumber]}
+                                    unitValue={weighUnit}
+                                    autoComplete="off"
+                                />
+                            </li>
+                            <li>
+                                <Field
+                                    name="height"
+                                    type="text"
+                                    label="Height"
+                                    wrapperClass="grey-white"
+                                    component={InputField}
+                                    errorClass="help-block"
+                                    placeholder="Height"
+                                    validate={(validationRules.height) ? validationRules.height : [required, validNumber]}
+                                    unitValue={bodyMeasurement}
+                                    autoComplete="off"
+                                />
+                            </li>
+                        </ul>
+                        <div className="log-date">
+                            <div className="log-date-head d-flex">
+                                <h4>Log Date</h4>
+                                {/* <a href="" className="ml-auto">October</a> */}
+                            </div>
+                            <div className="log-date-wrap">
+                                <ReactCalender
+                                    name="log_date"
+                                    onChange={this.onChangeLogDate}
+                                    onActiveDateChange={this.onActiveDateChange}
+                                    onClickMonth={this.onMonthClick}
+                                    value={logDate}
+                                    maxDate={new Date()}
+                                    tileContent={({ date, view }) => {
+                                        if (view !== 'month') {
+                                            return '';
+                                        }
+                                        return _.map(logDates, (o, key) => {
+                                            let calDate = moment(date).format('YYYY-MM-DD');
+                                            let logDate = moment(o.logDate).format('YYYY-MM-DD');
+                                            if (calDate === logDate) {
+                                                return (<span key={key} className="react-calendar__tile--highlight"></span>)
+                                            }
+                                            return '';
+                                        })
+                                    }}
+                                />
+                            </div>
+                        </div>
+                        <div className="add-log d-flex">
+                            <button type="submit" className="ml-auto">Save Log <i className="icon-control_point"></i></button>
                         </div>
                     </div>
                 </div>

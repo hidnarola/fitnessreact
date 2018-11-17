@@ -9,6 +9,8 @@ import ErrorCloud from "svg/error-cloud.svg";
 import { EXE_SCATS } from '../../constants/consts';
 import DateRangePicker from 'react-daterange-picker';
 import NoRecordFound from '../Common/NoRecordFound';
+import DateRangePickerCustomPeriod from '../Common/DateRangePickerCustomPeriod';
+import moment from "moment";
 
 class StatsIndividualCard extends Component {
     constructor(props) {
@@ -57,7 +59,11 @@ class StatsIndividualCard extends Component {
                         <button type="button" className={cns('calendar-toggle', { 'active': (o.activeCalendarBtn && o.activeCalendarBtn === 'calendar') })} onClick={this.handleOpenCalendar}><i className="icon-date_range vertical-middle-c"></i></button>
                     </div>
                     {openCalendar &&
-                        <div className="date-range-picker">
+                        <div className="date-range-picker custom_date_pdl">
+                            <DateRangePickerCustomPeriod
+                                dateRange={o.dateRange}
+                                changeCallback={this.handleCustomDateRange}
+                            />
                             <DateRangePicker
                                 firstOfWeek={1}
                                 numberOfCalendars={2}
@@ -173,6 +179,13 @@ class StatsIndividualCard extends Component {
 
     handleDateRange = (range, state) => {
         const { o, handleDateRangeChange } = this.props;
+        handleDateRangeChange(o, range);
+        this.setState({ openCalendar: false });
+    }
+
+    handleCustomDateRange = (start, end) => {
+        const { o, handleDateRangeChange } = this.props;
+        let range = moment.range(start, end);
         handleDateRangeChange(o, range);
         this.setState({ openCalendar: false });
     }

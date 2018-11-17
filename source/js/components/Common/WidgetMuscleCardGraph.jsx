@@ -11,6 +11,7 @@ import { FaCircleONotch } from "react-icons/lib/fa";
 import ErrorCloud from "svg/error-cloud.svg";
 import cns from "classnames";
 import NoRecordFound from './NoRecordFound';
+import DateRangePickerCustomPeriod from './DateRangePickerCustomPeriod';
 
 class WidgetMuscleCardGraph extends Component {
     constructor(props) {
@@ -32,9 +33,10 @@ class WidgetMuscleCardGraph extends Component {
                 moment(selectedWidget.end)
             );
         }
+
         return (
             <div className={cns({ [bodyWrapperClass]: (bodyWrapperClass) ? true : false })}>
-                <div className={cns('white-box space-btm-30 p-relative widget-graph-card-wrapper  min-height-339')}>
+                <div className={cns('white-box space-btm-30 p-relative widget-graph-card-wrapper min-height-339')}>
                     <div className="whitebox-head d-flex">
                         <h3 className="title-h3">{capitalizeFirstLetter(cardKey.replace(/([a-z])([A-Z])/g, '$1 $2').replace('_', ' '))}</h3>
                         {((type === WIDGETS_TYPE_TIMELINE && profile && profile.friendshipStatus && profile.friendshipStatus === FRIENDSHIP_STATUS_SELF) || (type === WIDGETS_TYPE_DASHBOARD)) &&
@@ -43,7 +45,11 @@ class WidgetMuscleCardGraph extends Component {
                             </div>
                         }
                         {((type === WIDGETS_TYPE_TIMELINE && profile && profile.friendshipStatus && profile.friendshipStatus === FRIENDSHIP_STATUS_SELF) || (type === WIDGETS_TYPE_DASHBOARD)) && showDatePicker &&
-                            <div className="fithub-widget-date-range">
+                            <div className="fithub-widget-date-range custom_date_pdl">
+                                <DateRangePickerCustomPeriod
+                                    dateRange={dateRange}
+                                    changeCallback={this.handleCustomDateRange}
+                                />
                                 <DateRangePicker
                                     firstOfWeek={1}
                                     numberOfCalendars={1}
@@ -108,6 +114,13 @@ class WidgetMuscleCardGraph extends Component {
             start: range.start,
             end: range.end,
         };
+        requestGraphData(requestData);
+        this.toggleCalendar();
+    }
+
+    handleCustomDateRange = (start, end) => {
+        const { cardKey, requestGraphData } = this.props;
+        let requestData = { bodypart: cardKey, start, end };
         requestGraphData(requestData);
         this.toggleCalendar();
     }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { Alert } from "react-bootstrap";
-import { reset, Field, reduxForm, initialize } from "redux-form";
+import { reset, initialize } from "redux-form";
 import BodyMeasurementForm from './BodyMeasurementForm';
 import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
 import { saveUserBodyMeasurementRequest, saveUserBodyFatRequest } from '../../actions/userBodyMeasurement';
@@ -11,10 +11,7 @@ import { addUserProgressPhotoRequest } from '../../actions/userProgressPhotos';
 import AddProgressPhotoModal from '../Common/AddProgressPhotoModal';
 import BodyFatModal from './BodyFatModal';
 import { LOCALSTORAGE_USER_DETAILS_KEY, FITASSIST_USER_DETAILS_TOKEN_KEY, GENDER_MALE } from '../../constants/consts';
-import ReactCalender from 'react-calendar/dist/entry.nostyle';
-import _ from 'lodash';
 import jwt from "jwt-simple";
-import CalculatorIcon from "svg/calculator.svg";
 
 class BodyMeasurement extends Component {
     constructor(props) {
@@ -57,94 +54,36 @@ class BodyMeasurement extends Component {
                         </a>
                     </div>
                 </div>
-                <div className="body-content d-flex">
-                    <div className="row">
-                    <div className="col-md-8">
-                        <ul className="common-ul common_ul_body">
-                            <li>
-                                <Field
-                                    name="weight"
-                                    type="text"
-                                    label="Weight"
-                                    wrapperClass="grey-white"
-                                    component={InputField}
-                                    errorClass="help-block"
-                                    placeholder="Weight"
-                                    unitValue={"kg"}
-                                    autoComplete="off"
-                                />
-                            </li>
-                            <li>
-                                <Field
-                                    name="height"
-                                    type="text"
-                                    label="Body Fat"
-                                    parentWrapper="body-fat-control-wrap"
-                                    wrapperClass="grey-white"
-                                    component={InputField}
-                                    errorClass="help-block"
-                                    placeholder="Body Fat"
-                                    unitValue={"%"}
-                                    autoComplete="off"
-                                >
-                                    <span className="body-pg-calc"><CalculatorIcon /></span>
-                                </Field>
-                            </li>
-                        </ul>
-                        <div className="white-box">
-                            <div className="whitebox-head">
-                                <h3 className="title-h3">Body measurements</h3>
-                            </div>
-
-                            {error && error.length > 0 &&
-                                <Alert bsStyle="danger">
-                                    {error.map((o, i) => (<p key={i}>{o}</p>))}
-                                </Alert>
-                            }
-
-                            <BodyMeasurementForm
-                                refreshBodyMeasurementForm={refreshBodyMeasurementForm}
-                                onSubmit={this.handleSubmit}
-                                resetRefreshBodyMeasurementForm={this.resetRefreshBodyMeasurementForm}
-                            />
-
-                            <AddProgressPhotoModal
-                                onSubmit={this.handleProgressPhotoSubmit}
-                                show={showAddProgressPhotoModal}
-                                handleClose={this.handleCloseAddProgressPhotoModal}
-                                isLoading={saveProgressPhotoActionInit}
-                            />
-
-                            <BodyFatModal
-                                show={showBodyFatModal}
-                                handleClose={this.handleCloseBodyFatModal}
-                                onSubmit={this.handleBodyFatSubmit}
-                            />
+                <div className="body-content">
+                    <div className="white-box">
+                        <div className="whitebox-head">
+                            <h3 className="title-h3">Body measurements</h3>
                         </div>
-                    </div>
-                    <div className="col-md-4">
-                           <div className="daily_img_wrapper">
-                            <div class="whitebox-head"><h3 class="title-h3">Body measurements</h3></div>
-                            <div class="add-log d-flex"><button type="submit" class="ml-auto">Add Photo</button></div>
-                           </div> 
-                        <div className="log-date">
-                            <div className="log-date-head d-flex">
-                                <h4>Log Date</h4>
-                                {/* <a href="" className="ml-auto">October</a> */}
-                            </div>
-                            <div className="log-date-wrap">
-                                <ReactCalender
-                                    name="log_date"
-                                    onChange={() => this.onChangeLogDate}
-                                    onActiveDateChange={() => this.onActiveDateChange}
-                                    onClickMonth={() => this.onMonthClick}
-                                />
-                            </div>
-                        </div>
-                        <div className="add-log d-flex add-log_change">
-                            <button type="submit" className="ml-auto">Save Log <i className="icon-control_point"></i></button>
-                        </div>
-                    </div>
+
+                        {error && error.length > 0 &&
+                            <Alert bsStyle="danger">
+                                {error.map((o, i) => (<p key={i}>{o}</p>))}
+                            </Alert>
+                        }
+
+                        <BodyMeasurementForm
+                            refreshBodyMeasurementForm={refreshBodyMeasurementForm}
+                            onSubmit={this.handleSubmit}
+                            resetRefreshBodyMeasurementForm={this.resetRefreshBodyMeasurementForm}
+                        />
+
+                        <AddProgressPhotoModal
+                            onSubmit={this.handleProgressPhotoSubmit}
+                            show={showAddProgressPhotoModal}
+                            handleClose={this.handleCloseAddProgressPhotoModal}
+                            isLoading={saveProgressPhotoActionInit}
+                        />
+
+                        <BodyFatModal
+                            show={showBodyFatModal}
+                            handleClose={this.handleCloseBodyFatModal}
+                            onSubmit={this.handleBodyFatSubmit}
+                        />
                     </div>
                 </div>
             </div>
@@ -309,36 +248,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-BodyMeasurement = reduxForm({
-    form: "testing"
-})(BodyMeasurement)
-
 export default connect(mapStateToProps)(BodyMeasurement);
-
-const InputField = (props) => {
-    const { label, input, meta, parentWrapper, wrapperClass, className, labelClass, placeholder, errorClass, type, unitValue, children } = props;
-    return (
-        <div className={
-            `${parentWrapper ? parentWrapper : ''}`
-        }>
-            <div
-                className={
-                    `${wrapperClass} ${(meta.touched && meta.error) ? 'has-error' : ''}`
-                }
-            >
-                <label htmlFor={input.name} className={labelClass}>{label}</label>
-                <input
-                    {...input}
-                    type={type ? type : 'text'}
-                    className={className}
-                    placeholder={placeholder}
-                />
-                <div className="cm-kg">{unitValue}</div>
-            </div>
-            {meta.touched &&
-                ((meta.error && <div className={errorClass}>{meta.error}</div>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))
-            }
-            {children}
-        </div>
-    );
-}

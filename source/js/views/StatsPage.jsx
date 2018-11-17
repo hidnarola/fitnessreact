@@ -9,6 +9,8 @@ import { STATS_STRENGTH, STATS_CARDIO } from '../constants/consts';
 import StatsContent from '../components/Stats/StatsContent';
 import DateRangePicker from 'react-daterange-picker';
 import { setUserStatsState } from '../actions/userStats';
+import DateRangePickerCustomPeriod from '../components/Common/DateRangePickerCustomPeriod';
+import moment from "moment";
 
 class StatsPage extends Component {
     constructor(props) {
@@ -66,7 +68,11 @@ class StatsPage extends Component {
                     </div>
 
                     {showSearch &&
-                        <div className="progress-date-range-picker">
+                        <div className="progress-date-range-picker custom_date_pdl">
+                            <DateRangePickerCustomPeriod
+                                dateRange={dateRange}
+                                changeCallback={this.handleCustomDateRange}
+                            />
                             <DateRangePicker
                                 firstOfWeek={1}
                                 numberOfCalendars={2}
@@ -96,6 +102,17 @@ class StatsPage extends Component {
 
     handleTimeDateRange = (range, state) => {
         const { dispatch } = this.props;
+        let stateData = {
+            dateRange: range,
+            regetStats: true
+        };
+        dispatch(setUserStatsState(stateData));
+        this.setState({ showSearch: false });
+    }
+
+    handleCustomDateRange = (start, end) => {
+        const { dispatch } = this.props;
+        let range = moment.range(start, end);
         let stateData = {
             dateRange: range,
             regetStats: true

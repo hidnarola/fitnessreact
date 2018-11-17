@@ -12,6 +12,7 @@ import Endurance from '../components/Progress/Endurance';
 import DateRangePicker from 'react-daterange-picker';
 import moment from "moment";
 import { setUserProgresDateRange } from '../actions/userProgress';
+import DateRangePickerCustomPeriod from '../components/Common/DateRangePickerCustomPeriod';
 
 class Progress extends Component {
     constructor(props) {
@@ -100,7 +101,11 @@ class Progress extends Component {
                     </div>
 
                     {showSearch &&
-                        <div className="progress-date-range-picker">
+                        <div className="progress-date-range-picker custom_date_pdl">
+                            <DateRangePickerCustomPeriod
+                                dateRange={dateRange}
+                                changeCallback={this.handleCustomDateRange}
+                            />
                             <DateRangePicker
                                 firstOfWeek={1}
                                 numberOfCalendars={2}
@@ -133,6 +138,13 @@ class Progress extends Component {
 
     handleTimeDateRange = (range, state) => {
         const { dispatch } = this.props;
+        dispatch(setUserProgresDateRange(range));
+        this.setState({ showSearch: false });
+    }
+
+    handleCustomDateRange = (start, end) => {
+        const { dispatch } = this.props;
+        let range = moment.range(start, end);
         dispatch(setUserProgresDateRange(range));
         this.setState({ showSearch: false });
     }

@@ -7,6 +7,7 @@ import moment from 'moment';
 import { FaCircleONotch } from "react-icons/lib/fa";
 import ErrorCloud from "svg/error-cloud.svg";
 import NoRecordFound from './NoRecordFound';
+import DateRangePickerCustomPeriod from './DateRangePickerCustomPeriod';
 
 class WidgetBodyFatCard extends Component {
     constructor(props) {
@@ -28,6 +29,7 @@ class WidgetBodyFatCard extends Component {
                 end
             );
         }
+
         return (
             <div className="white-box space-btm-30 dashboard-bodyfat-card min-height-373">
                 <div className="whitebox-head d-flex">
@@ -38,7 +40,11 @@ class WidgetBodyFatCard extends Component {
                         </div>
                     }
                     {((type === WIDGETS_TYPE_TIMELINE && profile && profile.friendshipStatus && profile.friendshipStatus === FRIENDSHIP_STATUS_SELF) || (type === WIDGETS_TYPE_DASHBOARD)) && showCalendar &&
-                        <div className="bodyfat-date-range-picker">
+                        <div className="bodyfat-date-range-picker custom_date_pdl">
+                            <DateRangePickerCustomPeriod
+                                dateRange={dateRange}
+                                changeCallback={this.handleCustomDateRange}
+                            />
                             <DateRangePicker
                                 firstOfWeek={1}
                                 numberOfCalendars={1}
@@ -98,6 +104,13 @@ class WidgetBodyFatCard extends Component {
             start: range.start,
             end: range.end,
         };
+        requestBodyFatData(requestData);
+        this.toggleCalendar();
+    }
+
+    handleCustomDateRange = (start, end) => {
+        const { requestBodyFatData } = this.props;
+        let requestData = { start, end };
         requestBodyFatData(requestData);
         this.toggleCalendar();
     }
