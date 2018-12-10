@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Field, reduxForm, initialize } from "redux-form";
+import { Field, reduxForm } from "redux-form";
 import _ from 'lodash';
 import moment from 'moment';
 import ReactCalender from 'react-calendar/dist/entry.nostyle';
@@ -9,13 +9,11 @@ import { required, min, max, validNumber } from '../../formValidation/validation
 import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
 import { getUserBodyMeasurementRequest, getUserBodyMeasurementLogDatesRequest } from '../../actions/userBodyMeasurement';
 import { getLoggedUserProfileSettingsRequest } from '../../actions/profile';
-import {
-    MEASUREMENT_UNIT_CENTIMETER,
-    MEASUREMENT_UNIT_KILOGRAM,
-    MEASUREMENT_UNIT_GRAM,
-    MEASUREMENT_UNIT_BPM,
-} from '../../constants/consts';
+import { MEASUREMENT_UNIT_CENTIMETER, MEASUREMENT_UNIT_KILOGRAM, MEASUREMENT_UNIT_GRAM, MEASUREMENT_UNIT_BPM } from '../../constants/consts';
 import { convertUnits } from '../../helpers/funs';
+import CalculatorIcon from "svg/calculator.svg";
+import { Alert } from "react-bootstrap";
+import SlickSlider from '../Common/SlickSlider';
 
 const min0 = min(0);
 const min20 = min(20);
@@ -71,16 +69,14 @@ class BodyMeasurementForm extends Component {
         const { logDate } = this.state;
         const { change, dispatch } = this.props;
         change('log_date', logDate);
-        let requestData = {
-            logDate
-        }
+        let requestData = { logDate }
         this.getBodyMeasurementLogData(requestData);
         dispatch(getLoggedUserProfileSettingsRequest());
     }
 
     render() {
         const { logDate, validationRules } = this.state;
-        const { logDates, handleSubmit, profileSettings } = this.props;
+        const { logDates, handleSubmit, profileSettings, error, handleShowBodyFatModal, handleShowAddProgressPhotoModal } = this.props;
         var bodyMeasurement = MEASUREMENT_UNIT_CENTIMETER;
         var weighUnit = MEASUREMENT_UNIT_KILOGRAM;
         var heartRateUnit = MEASUREMENT_UNIT_BPM;
@@ -90,155 +86,252 @@ class BodyMeasurementForm extends Component {
         }
         return (
             <form onSubmit={handleSubmit}>
-                <div className="row d-flex whitebox-body">
-                    <div className="col-md-6">
-                        <ul className="common-ul">
+                {error && error.length > 0 &&
+                    <Alert bsStyle="danger">
+                        {error.map((o, i) => (<p key={i}>{o}</p>))}
+                    </Alert>
+                }
+                <div className="row">
+                    <div className="col-md-8">
+                        <ul className="common-ul common_ul_body">
                             <li>
                                 <Field
-                                    name="neck"
+                                    name="weight"
                                     type="text"
-                                    label="Neck"
+                                    label="Weight"
                                     wrapperClass="grey-white"
                                     component={InputField}
                                     errorClass="help-block"
-                                    placeholder="Neck"
-                                    validate={(validationRules.neck) ? validationRules.neck : [required, validNumber]}
-                                    unitValue={bodyMeasurement}
-                                    autoComplete="off"
-                                />
-
-                            </li>
-                            <li>
-                                <Field
-                                    name="shoulders"
-                                    type="text"
-                                    label="Shoulders"
-                                    wrapperClass="grey-white"
-                                    component={InputField}
-                                    errorClass="help-block"
-                                    placeholder="Shoulders"
-                                    validate={(validationRules.shoulders) ? validationRules.shoulders : [required, validNumber]}
-                                    unitValue={bodyMeasurement}
+                                    placeholder="Weight"
+                                    validate={(validationRules.weight) ? validationRules.weight : [required, validNumber]}
+                                    unitValue={weighUnit}
                                     autoComplete="off"
                                 />
                             </li>
                             <li>
                                 <Field
-                                    name="chest"
+                                    name="bodyfat_readonly"
                                     type="text"
-                                    label="Chest"
+                                    label="Body Fat"
+                                    parentWrapper="body-fat-control-wrap"
                                     wrapperClass="grey-white"
                                     component={InputField}
-                                    errorClass="help-block"
-                                    placeholder="Chest"
-                                    validate={(validationRules.chest) ? validationRules.chest : [required, validNumber]}
-                                    unitValue={bodyMeasurement}
-                                    autoComplete="off"
-                                />
-                            </li>
-                            <li>
-                                <Field
-                                    name="upper_arm"
-                                    type="text"
-                                    label="Upper Arm"
-                                    wrapperClass="grey-white"
-                                    component={InputField}
-                                    errorClass="help-block"
-                                    placeholder="Upper Arm"
-                                    validate={(validationRules.upper_arm) ? validationRules.upper_arm : [required, validNumber]}
-                                    unitValue={bodyMeasurement}
-                                    autoComplete="off"
-                                />
-                            </li>
-                            <li>
-                                <Field
-                                    name="waist"
-                                    type="text"
-                                    label="Waist"
-                                    wrapperClass="grey-white"
-                                    component={InputField}
-                                    errorClass="help-block"
-                                    placeholder="Waist"
-                                    validate={(validationRules.waist) ? validationRules.waist : [required, validNumber]}
-                                    unitValue={bodyMeasurement}
-                                    autoComplete="off"
-                                />
-                            </li>
-                            <li>
-                                <Field
-                                    name="forearm"
-                                    type="text"
-                                    label="Forearm"
-                                    wrapperClass="grey-white"
-                                    component={InputField}
-                                    errorClass="help-block"
-                                    placeholder="Forearm"
-                                    validate={(validationRules.forearm) ? validationRules.forearm : [required, validNumber]}
-                                    unitValue={bodyMeasurement}
-                                    autoComplete="off"
-                                />
-                            </li>
-                            <li>
-                                <Field
-                                    name="hips"
-                                    type="text"
-                                    label="Hips"
-                                    wrapperClass="grey-white"
-                                    component={InputField}
-                                    errorClass="help-block"
-                                    placeholder="Hips"
-                                    validate={(validationRules.hips) ? validationRules.hips : [required, validNumber]}
-                                    unitValue={bodyMeasurement}
-                                    autoComplete="off"
-                                />
-                            </li>
-                            <li>
-                                <Field
-                                    name="thigh"
-                                    type="text"
-                                    label="Thigh"
-                                    wrapperClass="grey-white"
-                                    component={InputField}
-                                    errorClass="help-block"
-                                    placeholder="Thigh"
-                                    validate={(validationRules.thigh) ? validationRules.thigh : [required, validNumber]}
-                                    unitValue={bodyMeasurement}
-                                    autoComplete="off"
-                                />
-                            </li>
-                            <li>
-                                <Field
-                                    name="calf"
-                                    type="text"
-                                    label="Calf"
-                                    wrapperClass="grey-white"
-                                    component={InputField}
-                                    errorClass="help-block"
-                                    placeholder="Calf"
-                                    validate={(validationRules.calf) ? validationRules.calf : [required, validNumber]}
-                                    unitValue={bodyMeasurement}
-                                    autoComplete="off"
-                                />
-                            </li>
-                            <li>
-                                <Field
-                                    name="heartRate"
-                                    type="text"
-                                    label="Heart Rate"
-                                    wrapperClass="grey-white"
-                                    component={InputField}
-                                    errorClass="help-block"
-                                    placeholder="Heart Rate"
-                                    validate={(validationRules.heartRate) ? validationRules.heartRate : [required, validNumber]}
-                                    unitValue={heartRateUnit}
-                                    autoComplete="off"
-                                />
+                                    placeholder="Body Fat"
+                                    unitValue={"%"}
+                                    readOnly="readOnly"
+                                >
+                                    <span className="body-pg-calc cursor-pointer" onClick={handleShowBodyFatModal}><CalculatorIcon /></span>
+                                </Field>
                             </li>
                         </ul>
+                        <div className="white-box">
+                            <div className="whitebox-head">
+                                <h3 className="title-h3">Measurements</h3>
+                            </div>
+
+                            <div className="row d-flex whitebox-body">
+                                <div className="col-md-6">
+                                    <ul className="common-ul">
+                                        <li>
+                                            <Field
+                                                name="neck"
+                                                type="text"
+                                                label="Neck"
+                                                wrapperClass="grey-white"
+                                                component={InputField}
+                                                errorClass="help-block"
+                                                placeholder="Neck"
+                                                validate={(validationRules.neck) ? validationRules.neck : [required, validNumber]}
+                                                unitValue={bodyMeasurement}
+                                                autoComplete="off"
+                                            />
+                                        </li>
+                                        <li>
+                                            <Field
+                                                name="shoulders"
+                                                type="text"
+                                                label="Shoulders"
+                                                wrapperClass="grey-white"
+                                                component={InputField}
+                                                errorClass="help-block"
+                                                placeholder="Shoulders"
+                                                validate={(validationRules.shoulders) ? validationRules.shoulders : [required, validNumber]}
+                                                unitValue={bodyMeasurement}
+                                                autoComplete="off"
+                                            />
+                                        </li>
+                                        <li>
+                                            <Field
+                                                name="chest"
+                                                type="text"
+                                                label="Chest"
+                                                wrapperClass="grey-white"
+                                                component={InputField}
+                                                errorClass="help-block"
+                                                placeholder="Chest"
+                                                validate={(validationRules.chest) ? validationRules.chest : [required, validNumber]}
+                                                unitValue={bodyMeasurement}
+                                                autoComplete="off"
+                                            />
+                                        </li>
+                                        <li>
+                                            <Field
+                                                name="upper_arm"
+                                                type="text"
+                                                label="Upper Arm"
+                                                wrapperClass="grey-white"
+                                                component={InputField}
+                                                errorClass="help-block"
+                                                placeholder="Upper Arm"
+                                                validate={(validationRules.upper_arm) ? validationRules.upper_arm : [required, validNumber]}
+                                                unitValue={bodyMeasurement}
+                                                autoComplete="off"
+                                            />
+                                        </li>
+                                        <li>
+                                            <Field
+                                                name="waist"
+                                                type="text"
+                                                label="Waist"
+                                                wrapperClass="grey-white"
+                                                component={InputField}
+                                                errorClass="help-block"
+                                                placeholder="Waist"
+                                                validate={(validationRules.waist) ? validationRules.waist : [required, validNumber]}
+                                                unitValue={bodyMeasurement}
+                                                autoComplete="off"
+                                            />
+                                        </li>
+                                        <li>
+                                            <Field
+                                                name="forearm"
+                                                type="text"
+                                                label="Forearm"
+                                                wrapperClass="grey-white"
+                                                component={InputField}
+                                                errorClass="help-block"
+                                                placeholder="Forearm"
+                                                validate={(validationRules.forearm) ? validationRules.forearm : [required, validNumber]}
+                                                unitValue={bodyMeasurement}
+                                                autoComplete="off"
+                                            />
+                                        </li>
+                                        <li>
+                                            <Field
+                                                name="hips"
+                                                type="text"
+                                                label="Hips"
+                                                wrapperClass="grey-white"
+                                                component={InputField}
+                                                errorClass="help-block"
+                                                placeholder="Hips"
+                                                validate={(validationRules.hips) ? validationRules.hips : [required, validNumber]}
+                                                unitValue={bodyMeasurement}
+                                                autoComplete="off"
+                                            />
+                                        </li>
+                                        <li>
+                                            <Field
+                                                name="thigh"
+                                                type="text"
+                                                label="Thigh"
+                                                wrapperClass="grey-white"
+                                                component={InputField}
+                                                errorClass="help-block"
+                                                placeholder="Thigh"
+                                                validate={(validationRules.thigh) ? validationRules.thigh : [required, validNumber]}
+                                                unitValue={bodyMeasurement}
+                                                autoComplete="off"
+                                            />
+                                        </li>
+                                        <li>
+                                            <Field
+                                                name="calf"
+                                                type="text"
+                                                label="Calf"
+                                                wrapperClass="grey-white"
+                                                component={InputField}
+                                                errorClass="help-block"
+                                                placeholder="Calf"
+                                                validate={(validationRules.calf) ? validationRules.calf : [required, validNumber]}
+                                                unitValue={bodyMeasurement}
+                                                autoComplete="off"
+                                            />
+                                        </li>
+                                        <li>
+                                            <Field
+                                                name="height"
+                                                type="text"
+                                                label="Height"
+                                                wrapperClass="grey-white"
+                                                component={InputField}
+                                                errorClass="help-block"
+                                                placeholder="Height"
+                                                validate={(validationRules.height) ? validationRules.height : [required, validNumber]}
+                                                unitValue={bodyMeasurement}
+                                                autoComplete="off"
+                                            />
+                                        </li>
+                                        <li>
+                                            <Field
+                                                name="heartRate"
+                                                type="text"
+                                                label="Heart Rate"
+                                                wrapperClass="grey-white"
+                                                component={InputField}
+                                                errorClass="help-block"
+                                                placeholder="Heart Rate"
+                                                validate={(validationRules.heartRate) ? validationRules.heartRate : [required, validNumber]}
+                                                unitValue={heartRateUnit}
+                                                autoComplete="off"
+                                            />
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div className="col-md-6">
+                                    <div className="whitebody-graph">
+                                        <img src={bodyGraph} alt="Body" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div className="col-md-6">
-                        <div className="whitebody-graph">
-                            <img src={bodyGraph} alt="Body" />
+                    <div className="col-md-4">
+                        <div className="daily_img_wrapper">
+                            <div className="whitebox-head"><h3 className="title-h3">Progress Photos</h3></div>
+                            <SlickSlider />
+                            <div className="add-log d-flex"><button type="button" onClick={handleShowAddProgressPhotoModal} className="ml-auto">Add Photo</button></div>
+                        </div>
+                        <div className="log-date">
+                            <div className="log-date-head d-flex">
+                                <h4>Log Date</h4>
+                            </div>
+                            <div className="log-date-wrap">
+                                <ReactCalender
+                                    name="log_date"
+                                    onChange={this.onChangeLogDate}
+                                    onActiveDateChange={this.onActiveDateChange}
+                                    onClickMonth={this.onMonthClick}
+                                    value={logDate}
+                                    maxDate={new Date()}
+                                    tileContent={({ date, view }) => {
+                                        if (view !== 'month') {
+                                            return '';
+                                        }
+                                        return _.map(logDates, (o, key) => {
+                                            let calDate = moment(date).format('YYYY-MM-DD');
+                                            let logDate = moment(o.logDate).format('YYYY-MM-DD');
+                                            if (calDate === logDate) {
+                                                return (<span key={key} className="react-calendar__tile--highlight"></span>)
+                                            }
+                                            return '';
+                                        })
+                                    }}
+                                />
+                            </div>
+                        </div>
+                        <div className="add-log d-flex add-log_change">
+                            <button type="submit" className="ml-auto">Save Log <i className="icon-control_point"></i></button>
                         </div>
                     </div>
                 </div>
@@ -247,21 +340,8 @@ class BodyMeasurementForm extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        const {
-            selectActionInit,
-            logDate
-        } = this.state;
-        const {
-            loading,
-            loadingLogDates,
-            measurement,
-            initialize,
-            change,
-            refreshBodyMeasurementForm,
-            resetRefreshBodyMeasurementForm,
-            dispatch,
-            profileSettings,
-        } = this.props;
+        const { selectActionInit, logDate } = this.state;
+        const { loading, measurement, initialize, change, refreshBodyMeasurementForm, resetRefreshBodyMeasurementForm, dispatch, profileSettings, bodyFat } = this.props;
         var bodyUnit = MEASUREMENT_UNIT_CENTIMETER;
         var weightUnit = MEASUREMENT_UNIT_KILOGRAM;
         if (profileSettings) {
@@ -285,6 +365,7 @@ class BodyMeasurementForm extends Component {
                     weight: convertUnits(MEASUREMENT_UNIT_GRAM, weightUnit, measurement.weight).toFixed(2),
                     height: convertUnits(MEASUREMENT_UNIT_CENTIMETER, bodyUnit, measurement.height).toFixed(2),
                     log_date: new Date(measurement.logDate),
+                    bodyfat_readonly: (bodyFat && bodyFat.bodyFatPer) ? bodyFat.bodyFatPer : '',
                 }
                 initialize(measurementData);
             } else {
@@ -297,9 +378,7 @@ class BodyMeasurementForm extends Component {
         }
         if (refreshBodyMeasurementForm && !loading) {
             resetRefreshBodyMeasurementForm();
-            let requestData = {
-                logDate,
-            }
+            let requestData = { logDate }
             this.getBodyMeasurementLogData(requestData);
         }
     }
@@ -317,13 +396,9 @@ class BodyMeasurementForm extends Component {
     onChangeLogDate = (date) => {
         const { logDate } = this.state;
         if (moment(logDate).format('YYYY-MM-DD') !== moment(date).format('YYYY-MM-DD')) {
-            this.setState({
-                logDate: date
-            });
+            this.setState({ logDate: date });
             this.props.change('log_date', date);
-            let requestData = {
-                logDate: date,
-            }
+            let requestData = { logDate: date }
             this.getBodyMeasurementLogData(requestData);
         }
     }
@@ -335,15 +410,11 @@ class BodyMeasurementForm extends Component {
         if (now.getMonth() === date.getMonth() && now.getFullYear() === date.getFullYear()) {
             this.setState({ logDate: now });
             change('log_date', now);
-            requestData = {
-                logDate: now,
-            }
+            requestData = { logDate: now }
         } else {
             this.setState({ logDate: date });
             change('log_date', date);
-            requestData = {
-                logDate: date,
-            }
+            requestData = { logDate: date }
         }
         this.getBodyMeasurementLogData(requestData);
     }
@@ -357,15 +428,11 @@ class BodyMeasurementForm extends Component {
             if (now.getMonth() === date.getMonth() && now.getFullYear() === date.getFullYear()) {
                 this.setState({ logDate: now });
                 change('log_date', now);
-                requestData = {
-                    logDate: now,
-                }
+                requestData = { logDate: now }
             } else {
                 this.setState({ logDate: date });
                 change('log_date', date);
-                requestData = {
-                    logDate: date,
-                }
+                requestData = { logDate: date }
             }
             this.getBodyMeasurementLogData(requestData);
         }
@@ -418,6 +485,7 @@ const mapStateToProps = (state) => {
         loading: userBodyMeasurement.get('loading'),
         error: userBodyMeasurement.get('error'),
         measurement: userBodyMeasurement.get('measurement'),
+        bodyFat: userBodyMeasurement.get('bodyFat'),
         loadingLogDates: userBodyMeasurement.get('loadingLogDates'),
         errorLogDates: userBodyMeasurement.get('errorLogDates'),
         logDates: userBodyMeasurement.get('logDates'),
@@ -428,9 +496,11 @@ const mapStateToProps = (state) => {
 export default connect(mapStateToProps)(BodyMeasurementForm);
 
 const InputField = (props) => {
-    const { label, input, meta, wrapperClass, className, labelClass, placeholder, errorClass, type, unitValue } = props;
+    const { label, input, meta, parentWrapper, wrapperClass, className, labelClass, placeholder, errorClass, type, unitValue, children, readOnly } = props;
     return (
-        <div>
+        <div className={
+            `${parentWrapper ? parentWrapper : ''}`
+        }>
             <div
                 className={
                     `${wrapperClass} ${(meta.touched && meta.error) ? 'has-error' : ''}`
@@ -442,12 +512,14 @@ const InputField = (props) => {
                     type={type ? type : 'text'}
                     className={className}
                     placeholder={placeholder}
+                    readOnly={readOnly ? readOnly : false}
                 />
                 <div className="cm-kg">{unitValue}</div>
             </div>
             {meta.touched &&
                 ((meta.error && <div className={errorClass}>{meta.error}</div>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))
             }
+            {children}
         </div>
     );
 }

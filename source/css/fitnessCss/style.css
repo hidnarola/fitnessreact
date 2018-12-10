@@ -353,7 +353,7 @@ input.full-width{width:100%;}
 {float:right;line-height:20px;position:absolute;top:50%;right:15px; -webkit-transform:translateY(-50%); -moz-transform:translateY(-50%); transform:translateY(-50%);}
 .add-log a:hover,
 .add-log button:hover
-{border:2px solid #46e9c5;}
+{border:2px solid #40f9f7;}
 .goal-content{border:3px solid #f9fafa;}
 .goal-content .part-l{border-right:3px solid #f9fafa;}
 .goal-head{padding:30px;}
@@ -2141,6 +2141,8 @@ ul.common-ul.common_ul_body .grey-white {border: 6px solid #ffffff;background: #
 ul.common-ul.common_ul_body .body-fat-control-wrap .grey-white {border-radius: 6px 0px 0px 6px;}
 ul.common-ul.common_ul_body .grey-white input {background: #F9FAFA;border-radius: 6px;}
 .add-log.d-flex.add-log_change button {background: #721efd;max-width: 100%;font-size: 20px;padding: 12px 0;}
+.add-log.d-flex.add-log_change button:hover {border: 2px solid #721efd;}
+.react-slick-container {width: 400px;margin: auto;padding: 0px 20px 40px 20px;}
 
 @media(min-width: 992px){
     body.with_login .app-wrapper-content{ width: 100%; }

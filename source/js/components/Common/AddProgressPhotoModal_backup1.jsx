@@ -160,7 +160,7 @@ class PhotoUploadField extends Component {
                             input.onChange('');
                         }
                     }}
-                    multiple={true}
+                    multiple={false}
                     className={className}
                 >
                     {!(input.value) &&

@@ -28,7 +28,7 @@ import Body from './Body';
 import { AUTH_CALLBACK_ROUTE } from '../auth/auth0-variables';
 import Callback from '../auth/callback/Callback';
 import history from '../config/history';
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, Flip } from "react-toastify";
 import NutritionPreferences from '../components/Nutrition/NutritionPreferences'
 import { publicPath, routeCodes } from '../constants/routes';
 import { SESSION_EXPIRED_URL_TYPE, SERVER_BASE_URL, FRIENDSHIP_STATUS_UNKNOWN } from '../constants/consts';
@@ -104,7 +104,6 @@ import en from 'javascript-time-ago/locale/en'
 import SaveProgramMasterPage from '../components/Program/SaveProgramMasterPage';
 import ProgramView from '../components/Program/ProgramView';
 import RatingView from '../components/Program/RatingView';
-import moment from "moment";
 JavascriptTimeAgo.locale(en);
 
 const auth = new Auth();
@@ -244,6 +243,7 @@ class App extends Component {
 
                             <ToastContainer
                                 position="top-right"
+                                transition={Flip}
                                 autoClose={3000}
                                 hideProgressBar
                                 newestOnTop
