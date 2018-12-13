@@ -5,6 +5,7 @@ import ReactCalender from 'react-calendar/dist/entry.nostyle';
 import Dropzone from 'react-dropzone';
 import { requiredImage } from '../../formValidation/validationRules';
 import Weightlifting from "svg/weightlifting.svg";
+import { InputField } from '../../helpers/FormControlHelper';
 
 class AddProgressPhotoModal extends Component {
     constructor(props) {
@@ -43,31 +44,43 @@ class AddProgressPhotoModal extends Component {
                             </Alert>
                         }
 
-                        <div className="progress-popup-body new-progress-popup">
-                            <div className="progress-popup-body-m">
-                                <Field
-                                    name="description"
-                                    component="textarea"
-                                    placeholder="Say something about this photo..."
-                                    className="form-control"
-                                />
-                            </div>
-                            <div className="progress-popup-body-l progress-l-wrap">
-                                <Field
-                                    name="photo"
-                                    mainWrapperClass="image-form-main-wrapper"
-                                    component={PhotoUploadField}
-                                    className="progress-dropzone"
-                                    multiple={false}
-                                    validate={[requiredImage]}
-                                    errorClass="help-block"
-                                    handleRejectedError={this.handleRejectedError}
-                                />
-                            </div>
-                            <div className="progress-popup-body-r">
-                                <div className="pregres-submit">
-                                    <button type="submit" disabled={isLoading}>Save</button>
-                                </div>
+                        <div className="progress-popup-body d-flex">
+                            <Field
+                                name="photo"
+                                mainWrapperClass="image-form-main-wrapper"
+                                component={PhotoUploadField}
+                                className="progress-dropzone"
+                                multiple={false}
+                                validate={[requiredImage]}
+                                errorClass="help-block"
+                                handleRejectedError={this.handleRejectedError}
+                            />
+                            <Field
+                                name="description"
+                                component="textarea"
+                                placeholder="Say something about this photo..."
+                                className="form-control"
+                            />
+                            <Field
+                                name="body"
+                                component={InputField}
+                                placeholder="Body"
+                                className="form-control"
+                            />
+                            <Field
+                                name="isolation"
+                                component={InputField}
+                                placeholder="isolation"
+                                className="form-control"
+                            />
+                            <Field
+                                name="posed"
+                                component={InputField}
+                                placeholder="posed"
+                                className="form-control"
+                            />
+                            <div className="pregres-submit">
+                                <button type="submit" disabled={isLoading}>Save</button>
                             </div>
                         </div>
                     </form>

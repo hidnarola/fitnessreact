@@ -2128,8 +2128,8 @@ ul.custom-date-period { position: relative; left: 0; top: 0; list-style: none; t
 ul.custom-date-period li button {font-size: 13px;background: transparent;border: 0;padding: 4px 10px 4px 10px;margin-bottom: 5px;}
 ul.custom-date-period li button.date_active {background: #5736b9;color: #fff;border-radius: 4px;}
 ul.custom-date-period li button:hover { background: #5736b9bd; color: #fff; border-radius: 4px; }
-span.body-pg-calc {position: absolute;right: 0;top: 0;background: #721efd;height: 100%;width: 40px;padding: 9px 0;text-align: center;border-radius: 0 6px 6px 0px;}
-span.body-pg-calc svg {width: 30px;height: 30px;fill: #fff;}
+span.body-pg-calc {position: absolute;right: 0;top: 0;background: #721efd;height:56px;width: 40px;padding: 9px 0;text-align: center;border-radius: 0 6px 6px 0px;}
+span.body-pg-calc svg {width:30px; height:30px; fill:#fff; position:absolute; left:50%; top:50%; transform:translate(-50%, -50%);}
 ul.common-ul.common_ul_body li div {position: relative;}
 ul.common-ul.common_ul_body > li {width: 50%;padding: 0 10px;}
 ul.common-ul.common_ul_body {display: flex;margin: 0 -10px;}

@@ -8,6 +8,7 @@ import moment from 'moment';
 import { ts } from '../../helpers/funs';
 import { addUserProgressPhotoRequest } from '../../actions/userProgressPhotos';
 import AddProgressPhotoModal from '../Common/AddProgressPhotoModal';
+import SelectProgressPhotoModal from '../Common/SelectProgressPhotoModal';
 import BodyFatModal from './BodyFatModal';
 import { LOCALSTORAGE_USER_DETAILS_KEY, FITASSIST_USER_DETAILS_TOKEN_KEY, GENDER_MALE } from '../../constants/consts';
 import jwt from "jwt-simple";
@@ -52,6 +53,13 @@ class BodyMeasurement extends Component {
                         handleClose={this.handleCloseAddProgressPhotoModal}
                         isLoading={saveProgressPhotoActionInit}
                     />
+
+                    {/* <SelectProgressPhotoModal
+                        onSubmit={this.handleProgressPhotoSubmit}
+                        show={showAddProgressPhotoModal}
+                        handleClose={this.handleCloseAddProgressPhotoModal}
+                        isLoading={saveProgressPhotoActionInit}
+                    /> */}
 
                     <BodyFatModal
                         show={showBodyFatModal}
@@ -112,6 +120,7 @@ class BodyMeasurement extends Component {
             heartRate: data.heartRate,
             weight: data.weight,
             height: data.height,
+            bodyFatPer: data.bodyfat,
         }
         dispatch(showPageLoader());
         dispatch(saveUserBodyMeasurementRequest(measurementData));

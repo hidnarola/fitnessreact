@@ -6,9 +6,6 @@
 .goal-progress svg {width: 234px;height: 234px;margin: 0 auto;}
 .body-head-l-btm a.pink-btn {color: #fff;background: linear-gradient(148.66deg, #FF3366 0%, #FF339A 100%);}
 .for_cursor{ cursor: pointer }
-
-
-
 .custom_checkbox input[type=checkbox] {position: absolute;left: -9999px;}
 .custom_checkbox input+label {margin-bottom: 0px;font-weight: 400;line-height: 20px;font-family: lato;padding: 12px 0;cursor: pointer;position: relative;font-size: 16px;-webkit-transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);width: 100%;color: #666;background-color: #F8F9F9;border-radius: 100px;text-align: center;width: 194px;height: 194px;display: -webkit-box;display: -ms-flex;display: -ms-flexbox;display: flex;-webkit-box-orient: vertical;-webkit-box-direction: normal;-ms-flex-direction: column;flex-direction: column;-webkit-box-pack: center;-ms-flex-pack: center;justify-content: center;}
 .custom_checkbox input[type=checkbox]:checked+label {background: linear-gradient(148.66deg, #FF3366 0%, #FF339A 100%);}
@@ -19,3 +16,13 @@
 .widget-popup .modal-content .modal-body {padding: 0;}
 .static_text:After {position: absolute;left: 50%;top: 57%;transform: translate(-50%,-50%);width:100%;height:100%;}
 .static_text {position: relative;display: inline-block;}
+
+.new-progress-popup .progress-popup-body-m{margin:0 0 30px; width:100%; padding:0;}
+.new-progress-popup .progress-popup-body-m textarea {color: #424242;height: 180px;box-shadow: none;}
+.new-progress-popup .progress-popup-body-l {width: 30%; padding:0; margin:0 0 30px; position: relative; height: auto;}
+.new-progress-popup .progress-popup-body-r {width: 100%;}
+.new-progress-popup .pregres-submit {text-align: right; margin: 0;}
+.new-progress-popup .pregres-submit button{ border-radius:5px; }
+
+ul.common-ul.common_ul_body.body-log-upper-textbox> li{ margin-bottom:25px; }
+ul.common-ul.common_ul_body.body-log-upper-textbox .help-block{ position:absolute; bottom:-21px; right:0;}

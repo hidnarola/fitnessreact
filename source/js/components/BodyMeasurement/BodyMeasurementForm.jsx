@@ -61,6 +61,7 @@ class BodyMeasurementForm extends Component {
                 heartRate: [required, validNumber, min0, max250],
                 weight: [required, validNumber, min20, max1000],
                 height: [required, validNumber, min50, max600],
+                body_fat: [validNumber, min0, max100],
             }
         }
     }
@@ -93,7 +94,7 @@ class BodyMeasurementForm extends Component {
                 }
                 <div className="row">
                     <div className="col-md-8">
-                        <ul className="common-ul common_ul_body">
+                        <ul className="common-ul common_ul_body body-log-upper-textbox">
                             <li>
                                 <Field
                                     name="weight"
@@ -110,18 +111,24 @@ class BodyMeasurementForm extends Component {
                             </li>
                             <li>
                                 <Field
-                                    name="bodyfat_readonly"
+                                    name="bodyfat"
                                     type="text"
                                     label="Body Fat"
                                     parentWrapper="body-fat-control-wrap"
                                     wrapperClass="grey-white"
                                     component={InputField}
+                                    errorClass="help-block"
                                     placeholder="Body Fat"
+                                    validate={(validationRules.body_fat) ? validationRules.body_fat : [validNumber]}
                                     unitValue={"%"}
-                                    readOnly="readOnly"
+                                    autoComplete="off"
                                 >
                                     <span className="body-pg-calc cursor-pointer" onClick={handleShowBodyFatModal}><CalculatorIcon /></span>
                                 </Field>
+                                <Field name="age" type="hidden" component="input" />
+                                <Field name="site1" type="hidden" component="input" />
+                                <Field name="site2" type="hidden" component="input" />
+                                <Field name="site3" type="hidden" component="input" />
                             </li>
                         </ul>
                         <div className="white-box">
@@ -365,7 +372,11 @@ class BodyMeasurementForm extends Component {
                     weight: convertUnits(MEASUREMENT_UNIT_GRAM, weightUnit, measurement.weight).toFixed(2),
                     height: convertUnits(MEASUREMENT_UNIT_CENTIMETER, bodyUnit, measurement.height).toFixed(2),
                     log_date: new Date(measurement.logDate),
-                    bodyfat_readonly: (bodyFat && bodyFat.bodyFatPer) ? bodyFat.bodyFatPer : '',
+                    bodyfat: (bodyFat && bodyFat.bodyFatPer) ? bodyFat.bodyFatPer : '',
+                    age: (bodyFat && bodyFat.age) ? bodyFat.age : '',
+                    site1: (bodyFat && bodyFat.site1) ? bodyFat.site1 : '',
+                    site2: (bodyFat && bodyFat.site2) ? bodyFat.site2 : '',
+                    site3: (bodyFat && bodyFat.site3) ? bodyFat.site3 : '',
                 }
                 initialize(measurementData);
             } else {
@@ -453,6 +464,7 @@ class BodyMeasurementForm extends Component {
             heartRate: [required, validNumber, min0, max250],
             weight: [required, validNumber, min20, max1000],
             height: [required, validNumber, min50, max600],
+            body_fat: [validNumber, min0, max100],
         };
         if (profileSettings) {
             if (profileSettings.bodyMeasurement !== MEASUREMENT_UNIT_CENTIMETER) {
