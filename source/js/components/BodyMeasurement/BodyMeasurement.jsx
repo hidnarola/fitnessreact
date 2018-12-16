@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
-import { reset, initialize } from "redux-form";
+import { reset, initialize, formValueSelector } from "redux-form";
 import BodyMeasurementForm from './BodyMeasurementForm';
 import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
 import { saveUserBodyMeasurementRequest, saveUserBodyFatRequest } from '../../actions/userBodyMeasurement';
 import moment from 'moment';
-import { ts } from '../../helpers/funs';
-import { addUserProgressPhotoRequest } from '../../actions/userProgressPhotos';
+import { ts, te } from '../../helpers/funs';
+import { addUserProgressPhotoRequest, removeSelectedProgressPhotosToUpload } from '../../actions/userProgressPhotos';
 import AddProgressPhotoModal from '../Common/AddProgressPhotoModal';
-import SelectProgressPhotoModal from '../Common/SelectProgressPhotoModal';
 import BodyFatModal from './BodyFatModal';
 import { LOCALSTORAGE_USER_DETAILS_KEY, FITASSIST_USER_DETAILS_TOKEN_KEY, GENDER_MALE } from '../../constants/consts';
 import jwt from "jwt-simple";
+import { getUserBodypartsRequest } from '../../actions/userBodyparts';
 
 class BodyMeasurement extends Component {
     constructor(props) {
@@ -24,6 +24,11 @@ class BodyMeasurement extends Component {
             showBodyFatModal: false,
             saveBodyFatInit: false,
         }
+    }
+
+    componentWillMount() {
+        const { dispatch } = this.props;
+        dispatch(getUserBodypartsRequest());
     }
 
     render() {
@@ -50,16 +55,10 @@ class BodyMeasurement extends Component {
                     <AddProgressPhotoModal
                         onSubmit={this.handleProgressPhotoSubmit}
                         show={showAddProgressPhotoModal}
+                        handleOpen={this.handleShowAddProgressPhotoModal}
                         handleClose={this.handleCloseAddProgressPhotoModal}
                         isLoading={saveProgressPhotoActionInit}
                     />
-
-                    {/* <SelectProgressPhotoModal
-                        onSubmit={this.handleProgressPhotoSubmit}
-                        show={showAddProgressPhotoModal}
-                        handleClose={this.handleCloseAddProgressPhotoModal}
-                        isLoading={saveProgressPhotoActionInit}
-                    /> */}
 
                     <BodyFatModal
                         show={showBodyFatModal}
@@ -73,7 +72,7 @@ class BodyMeasurement extends Component {
 
     componentDidUpdate(prevProps, prevState) {
         const { saveActionInit, saveProgressPhotoActionInit, saveBodyFatInit } = this.state;
-        const { loading, dispatch, progressPhotoloading, error } = this.props;
+        const { loading, dispatch, progressPhotoloading, error, progressPhotoError } = this.props;
         if (saveActionInit && !loading) {
             let newState = { saveActionInit: false };
             if (error && error.length <= 0) {
@@ -95,8 +94,10 @@ class BodyMeasurement extends Component {
         }
         if (saveProgressPhotoActionInit && !progressPhotoloading) {
             this.setState({ saveProgressPhotoActionInit: false });
-            if (error && error.length <= 0) {
+            if (progressPhotoError && progressPhotoError.length <= 0) {
                 ts('Progress photo saved successfully!');
+            } else {
+                te('Something went wrong while adding progress photo! Please try again.');
             }
             this.handleCloseAddProgressPhotoModal();
             dispatch(hidePageLoader());
@@ -144,33 +145,25 @@ class BodyMeasurement extends Component {
         dispatch(initialize('addProgressPhotoModalForm', initialFormData));
     }
 
-    handleCloseAddProgressPhotoModal = () => {
+    handleCloseAddProgressPhotoModal = (resetFormData = true) => {
         const { dispatch } = this.props;
-        this.setState({
-            showAddProgressPhotoModal: false
-        });
-        dispatch(reset('addProgressPhotoModalForm'));
-        var now = new Date();
-        now.setHours(0, 0, 0, 0);
-        var initialFormData = {
-            photo_date: now,
+        this.setState({ showAddProgressPhotoModal: false });
+        if (resetFormData) {
+            dispatch(reset('add_progress_photo_modal_form'));
+            dispatch(removeSelectedProgressPhotosToUpload());
         }
-        dispatch(initialize('addProgressPhotoModalForm', initialFormData));
     }
 
     handleProgressPhotoSubmit = (data) => {
-        const { dispatch } = this.props;
-        var formData = new FormData();
-        formData.append('description', (data.description) ? data.description : '');
-        formData.append('date', data.photo_date);
-        if (data.photo) {
-            data.photo.map((image) => {
-                formData.append('image', image);
-            });
-        }
+        const { dispatch, body_fat_log_date, selectedPhotos } = this.props;
+        let requestData = {
+            description: data.description ? data.description : '',
+            date: body_fat_log_date,
+            progressPhotosData: selectedPhotos
+        };
         this.setState({ saveProgressPhotoActionInit: true });
         dispatch(showPageLoader());
-        dispatch(addUserProgressPhotoRequest(formData));
+        dispatch(addUserProgressPhotoRequest(requestData));
     }
 
     handleShowBodyFatModal = () => {
@@ -222,6 +215,8 @@ class BodyMeasurement extends Component {
 
 }
 
+const selector1 = formValueSelector('userBodyMeasurement')
+
 const mapStateToProps = (state) => {
     const { userBodyMeasurement, userProgressPhotos } = state;
     return {
@@ -229,6 +224,9 @@ const mapStateToProps = (state) => {
         error: userBodyMeasurement.get('error'),
         bodyFat: userBodyMeasurement.get('bodyFat'),
         progressPhotoloading: userProgressPhotos.get('loading'),
+        progressPhotoError: userProgressPhotos.get('error'),
+        body_fat_log_date: selector1(state, 'log_date'),
+        selectedPhotos: userProgressPhotos.get('selectedProgressPhotos'),
     }
 }
 

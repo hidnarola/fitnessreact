@@ -1,31 +1,23 @@
-import React, { Component } from 'react';
-import { Modal, Alert } from 'react-bootstrap';
-import { reduxForm, Field } from "redux-form";
-import ReactCalender from 'react-calendar/dist/entry.nostyle';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { Modal, Alert } from "react-bootstrap";
+import { Field, reduxForm, reset } from "redux-form";
 import Dropzone from 'react-dropzone';
-import { requiredImage } from '../../formValidation/validationRules';
-import Weightlifting from "svg/weightlifting.svg";
+import SelectProgressPhotoModal from "./SelectProgressPhotoModal";
+import { forwardImageToDetailsPage, cancelImageSelectedFromDetailsPage } from "../../actions/userProgressPhotos";
 
 class AddProgressPhotoModal extends Component {
     constructor(props) {
         super(props);
-        var now = new Date();
-        now.setHours(0, 0, 0, 0);
         this.state = {
-            photoDate: now,
-        }
-        this.rejectedFiles = false;
-    }
-
-    componentWillMount() {
-        const { photoDate } = this.state;
-        const { change } = this.props;
-        change('photo_date', photoDate);
+            invalidFile: false,
+            detailsModalShow: false
+        };
     }
 
     render() {
-        const { show, handleSubmit, isLoading } = this.props;
-        const { photoDate } = this.state;
+        const { show, handleSubmit, isLoading, selectedPhotos } = this.props;
+        const { invalidFile, detailsModalShow } = this.state;
         return (
             <div className="add-progress-photo-modal-wrapper">
                 <Modal show={show} bsSize="large" className="progress-popup">
@@ -37,131 +29,135 @@ class AddProgressPhotoModal extends Component {
                             <h3 className="title-h3">New Progress Photo</h3>
                         </div>
 
-                        {this.rejectedFiles &&
+                        {invalidFile &&
                             <Alert bsStyle="danger">
-                                <p>Invalid file(s). Please select jpg and png only</p>
+                                Please select jpg, jpeg and gif files only.
                             </Alert>
                         }
 
                         <div className="progress-popup-body new-progress-popup">
                             <div className="progress-popup-body-m">
                                 <Field
+                                    id="description"
                                     name="description"
                                     component="textarea"
-                                    placeholder="Say something about this photo..."
+                                    placeholder="Say something about photos..."
                                     className="form-control"
                                 />
                             </div>
                             <div className="progress-popup-body-l progress-l-wrap">
+                                {selectedPhotos && selectedPhotos.length > 0 &&
+                                    selectedPhotos.map((o, i) => {
+                                        return (
+                                            <div className="" key={i}>
+                                                <a href="javascript:void(0)">
+                                                    <img src={o.image} />
+                                                </a>
+                                            </div>
+                                        );
+                                    })
+                                }
                                 <Field
-                                    name="photo"
-                                    mainWrapperClass="image-form-main-wrapper"
-                                    component={PhotoUploadField}
-                                    className="progress-dropzone"
-                                    multiple={false}
-                                    validate={[requiredImage]}
-                                    errorClass="help-block"
-                                    handleRejectedError={this.handleRejectedError}
+                                    id="select_image"
+                                    name="select_image"
+                                    component={SelectImageComponent}
+                                    handleCloseModal={this.handleCloseModal}
+                                    setInvalidFile={this.setInvalidFile}
+                                    openSelectProgressPhotoModal={this.openSelectProgressPhotoModal}
                                 />
                             </div>
-                            <div className="progress-popup-body-r">
-                                <div className="pregres-submit">
-                                    <button type="submit" disabled={isLoading}>Save</button>
-                                </div>
+                            <div className="pregres-submit">
+                                <button type="submit" disabled={isLoading}>Save</button>
                             </div>
                         </div>
                     </form>
                 </Modal>
+                <SelectProgressPhotoModal
+                    show={detailsModalShow}
+                    handleClose={this.handleSelectProgressPhotoModalClose}
+                />
             </div>
         );
     }
 
-    onChangePhotoDate = (date) => {
-        const { change } = this.props;
-        this.setState({
-            photoDate: date
-        });
-        change('photo_date', date);
-    }
-
-    handleRejectedError = (flag) => {
-        this.rejectedFiles = flag;
-    }
-
-    handleCloseModal = () => {
+    handleCloseModal = (resetParentModalForm = true) => {
         const { handleClose } = this.props;
-        this.handleRejectedError(false);
-        handleClose();
+        this.setInvalidFile(false);
+        handleClose(resetParentModalForm);
+    }
+
+    setInvalidFile = (flag) => {
+        this.setState({ invalidFile: flag });
+    }
+
+    openSelectProgressPhotoModal = () => {
+        const { dispatch } = this.props;
+        this.setState({ detailsModalShow: true });
+        dispatch(reset('add_details_progress_photo_form'));
+    }
+
+    handleSelectProgressPhotoModalClose = () => {
+        const { dispatch, handleOpen } = this.props;
+        dispatch(cancelImageSelectedFromDetailsPage());
+        this.setState({ detailsModalShow: false });
+        handleOpen();
     }
 }
 
 AddProgressPhotoModal = reduxForm({
-    form: 'addProgressPhotoModalForm',
-})(AddProgressPhotoModal)
+    form: "add_progress_photo_modal_form"
+})(AddProgressPhotoModal);
+
+const mapStateToProps = (state) => {
+    const { userProgressPhotos } = state;
+    return {
+        selectedPhotos: userProgressPhotos.get('selectedProgressPhotos'),
+    }
+}
+
+AddProgressPhotoModal = connect(
+    mapStateToProps
+)(AddProgressPhotoModal);
 
 export default AddProgressPhotoModal;
 
-class PhotoUploadField extends Component {
+class SelectImageComponent extends Component {
     constructor(props) {
         super(props);
-        this.isImageSelected = false;
+        this.isValidFileSelected = false;
+        this.isFileSelected = false;
     }
 
     render() {
         const {
-            input,
-            meta,
-            wrapperClass,
-            className,
-            errorClass,
-            accept,
-            handleRejectedError,
+            handleCloseModal,
+            setInvalidFile,
+            openSelectProgressPhotoModal,
+            dispatch
         } = this.props;
-        let filesArr = _.values(input.value);
-        let images = [];
-        _.forEach(filesArr, (file, key) => {
-            images.push(
-                <div className="image-preview-wrapper" key={key}>
-                    <img src={file.preview} />
-                </div>
-            )
-        })
         return (
-            <div
-                className={
-                    `${wrapperClass ? wrapperClass : ''} ${(meta.touched && meta.error) ? 'has-error' : ''} ${this.rejectedFiles ? 'has-error' : ''}`
-                }
-            >
-                <Dropzone
-                    {...input}
-                    accept={accept ? accept : "image/jpeg, image/png, image/jpg, image/gif"}
-                    onClick={() => this.isImageSelected = false}
-                    onDrop={(filesToUpload, rejectedFiles) => {
-                        let rejectedFlag = (rejectedFiles && rejectedFiles.length > 0);
-                        handleRejectedError(rejectedFlag)
-                        this.isImageSelected = (filesToUpload && filesToUpload.length > 0);
-                        input.onChange(filesToUpload);
-                    }}
-                    onFileDialogCancel={() => {
-                        if (!this.isImageSelected) {
-                            input.onChange('');
-                        }
-                    }}
-                    multiple={true}
-                    className={className}
-                >
-                    {!(input.value) &&
-                        <div>
-                            <Weightlifting />
-                            <h4>Select an image</h4>
-                        </div>
+            <Dropzone
+                accept={['image/jpeg', 'image/jpg', 'image/png']}
+                onDrop={(accepted, rejected) => {
+                    this.isFileSelected = false;
+                    this.isValidFileSelected = false;
+                    if (accepted && accepted.length > 0) {
+                        this.isValidFileSelected = true;
+                        this.isFileSelected = true;
+                        handleCloseModal(false);
+                        openSelectProgressPhotoModal(true);
+                        dispatch(forwardImageToDetailsPage(accepted));
                     }
-                    {input.value && images}
-                </Dropzone>
-                {meta.touched &&
-                    ((meta.error && <span className={errorClass}>{meta.error}</span>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))
-                }
-            </div>
-        );
+                }}
+                onFileDialogCancel={() => {
+                    if (this.isFileSelected) {
+                        setInvalidFile(!this.isValidFileSelected);
+                    }
+                }}
+            >
+            </Dropzone>
+        )
     }
 }
+
+SelectImageComponent = connect()(SelectImageComponent)

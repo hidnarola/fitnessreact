@@ -1,86 +1,104 @@
 import React, { Component } from 'react';
-import { Modal, Alert } from 'react-bootstrap';
-import { reduxForm, Field } from "redux-form";
-import ReactCalender from 'react-calendar/dist/entry.nostyle';
-import Dropzone from 'react-dropzone';
-import { requiredImage } from '../../formValidation/validationRules';
-import Weightlifting from "svg/weightlifting.svg";
-import { InputField } from '../../helpers/FormControlHelper';
+import { connect } from "react-redux";
+import { Field, reduxForm, formValueSelector } from "redux-form";
+import { Modal } from "react-bootstrap";
+import Cropper from "react-cropper";
+import { SelectField_ReactSelect, InputField, TextAreaField } from '../../helpers/FormControlHelper';
+import { PROGRESS_PHOTO_BASICS } from '../../constants/consts';
+import { addImageSelectedFromDetailsPage } from '../../actions/userProgressPhotos';
 
-class AddProgressPhotoModal extends Component {
-    constructor(props) {
-        super(props);
-        var now = new Date();
-        now.setHours(0, 0, 0, 0);
-        this.state = {
-            photoDate: now,
-        }
-        this.rejectedFiles = false;
-    }
-
-    componentWillMount() {
-        const { photoDate } = this.state;
-        const { change } = this.props;
-        change('photo_date', photoDate);
-    }
-
+class SelectProgressPhotoModal extends Component {
     render() {
-        const { show, handleSubmit, isLoading } = this.props;
-        const { photoDate } = this.state;
+        const { show, selectedImage, handleClose, bodyparts } = this.props;
+        let bodypartOptions = [];
+        if (bodyparts && bodyparts.length > 0) {
+            bodyparts.map((o) => {
+                bodypartOptions.push({ value: o._id, label: o.bodypart });
+            });
+        }
         return (
-            <div className="add-progress-photo-modal-wrapper">
+            <div className="add-details-progress-photo-modal-wrapper">
                 <Modal show={show} bsSize="large" className="progress-popup">
-                    <form onSubmit={handleSubmit}>
+                    <form>
                         <div className="progress-popup-head">
-                            <button type="button" className="close-round" onClick={this.handleCloseModal}>
+                            <button type="button" className="close-round" onClick={handleClose}>
                                 <span aria-hidden="true">&times;</span>
                             </button>
                             <h3 className="title-h3">New Progress Photo</h3>
                         </div>
 
-                        {this.rejectedFiles &&
-                            <Alert bsStyle="danger">
-                                <p>Invalid file(s). Please select jpg and png only</p>
-                            </Alert>
-                        }
-
-                        <div className="progress-popup-body d-flex">
-                            <Field
-                                name="photo"
-                                mainWrapperClass="image-form-main-wrapper"
-                                component={PhotoUploadField}
-                                className="progress-dropzone"
-                                multiple={false}
-                                validate={[requiredImage]}
-                                errorClass="help-block"
-                                handleRejectedError={this.handleRejectedError}
-                            />
-                            <Field
-                                name="description"
-                                component="textarea"
-                                placeholder="Say something about this photo..."
-                                className="form-control"
-                            />
-                            <Field
-                                name="body"
-                                component={InputField}
-                                placeholder="Body"
-                                className="form-control"
-                            />
-                            <Field
-                                name="isolation"
-                                component={InputField}
-                                placeholder="isolation"
-                                className="form-control"
-                            />
-                            <Field
-                                name="posed"
-                                component={InputField}
-                                placeholder="posed"
-                                className="form-control"
-                            />
+                        <div className="progress-popup-body">
+                            <div className="col-md-6">
+                                {selectedImage && selectedImage.length > 0 &&
+                                    <Cropper
+                                        ref='cropper'
+                                        src={selectedImage[0].preview}
+                                        alt="Selected Progress Image"
+                                        aspectRatio={50 / 50}
+                                        guides={false}
+                                        responsive={true}
+                                        restore={true}
+                                        center={true}
+                                        minCropBoxWidth={300}
+                                        minCropBoxHeight={300}
+                                        viewMode={3}
+                                    />
+                                }
+                                <Field
+                                    id="image_data"
+                                    name="image_data"
+                                    component="input"
+                                    type="hidden"
+                                />
+                            </div>
+                            <div className="col-md-6">
+                                <Field
+                                    id="caption"
+                                    name="caption"
+                                    className="form-control resize-vertical min-height-80"
+                                    label="Caption"
+                                    labelClass="control-label display_block"
+                                    wrapperClass="form-group"
+                                    placeholder="Caption"
+                                    component={TextAreaField}
+                                />
+                                <Field
+                                    id="basic"
+                                    name="basic"
+                                    label="Basic"
+                                    labelClass="control-label display_block"
+                                    wrapperClass="form-group"
+                                    placeholder="Basic"
+                                    component={SelectField_ReactSelect}
+                                    options={PROGRESS_PHOTO_BASICS}
+                                    errorClass="help-block"
+                                />
+                                <Field
+                                    id="isolation"
+                                    name="isolation"
+                                    label="Isolation"
+                                    labelClass="control-label display_block"
+                                    wrapperClass="form-group"
+                                    placeholder="Isolation"
+                                    component={SelectField_ReactSelect}
+                                    options={bodypartOptions}
+                                    errorClass="help-block"
+                                />
+                                <Field
+                                    id="posed"
+                                    name="posed"
+                                    type="text"
+                                    className="form-control"
+                                    label="Posed"
+                                    labelClass="control-label display_block"
+                                    wrapperClass="form-group"
+                                    placeholder="Posed"
+                                    component={InputField}
+                                    errorClass="help-block"
+                                />
+                            </div>
                             <div className="pregres-submit">
-                                <button type="submit" disabled={isLoading}>Save</button>
+                                <button type="button" onClick={this.selectProgressImage}>Save</button>
                             </div>
                         </div>
                     </form>
@@ -89,92 +107,48 @@ class AddProgressPhotoModal extends Component {
         );
     }
 
-    onChangePhotoDate = (date) => {
-        const { change } = this.props;
-        this.setState({
-            photoDate: date
-        });
-        change('photo_date', date);
-    }
-
-    handleRejectedError = (flag) => {
-        this.rejectedFiles = flag;
-    }
-
-    handleCloseModal = () => {
-        const { handleClose } = this.props;
-        this.handleRejectedError(false);
+    selectProgressImage = () => {
+        const { caption, basic, isolation, posed, dispatch, handleClose } = this.props;
+        let image = this.refs.cropper.getCroppedCanvas().toDataURL();
+        let requrestData = {
+            image,
+            caption: caption ? caption : null,
+            basic: basic && basic.value ? basic.value : null,
+            isolation: isolation && isolation.value ? isolation.value : null,
+            posed: posed ? posed : null
+        };
+        dispatch(addImageSelectedFromDetailsPage(requrestData));
         handleClose();
     }
 }
 
-AddProgressPhotoModal = reduxForm({
-    form: 'addProgressPhotoModalForm',
-})(AddProgressPhotoModal)
+const selector = formValueSelector('add_details_progress_photo_form');
 
-export default AddProgressPhotoModal;
-
-class PhotoUploadField extends Component {
-    constructor(props) {
-        super(props);
-        this.isImageSelected = false;
+const mapStateToProps = (state) => {
+    const { userProgressPhotos, userBodyparts } = state;
+    return {
+        selectedImage: userProgressPhotos.get('selectedImage'),
+        bodyparts: userBodyparts.get('bodyparts'),
+        caption: selector(state, 'caption'),
+        basic: selector(state, 'basic'),
+        isolation: selector(state, 'isolation'),
+        posed: selector(state, 'posed'),
     }
+}
 
-    render() {
-        const {
-            input,
-            meta,
-            wrapperClass,
-            className,
-            errorClass,
-            accept,
-            handleRejectedError,
-        } = this.props;
-        let filesArr = _.values(input.value);
-        let images = [];
-        _.forEach(filesArr, (file, key) => {
-            images.push(
-                <div className="image-preview-wrapper" key={key}>
-                    <img src={file.preview} />
-                </div>
-            )
-        })
-        return (
-            <div
-                className={
-                    `${wrapperClass ? wrapperClass : ''} ${(meta.touched && meta.error) ? 'has-error' : ''} ${this.rejectedFiles ? 'has-error' : ''}`
-                }
-            >
-                <Dropzone
-                    {...input}
-                    accept={accept ? accept : "image/jpeg, image/png, image/jpg, image/gif"}
-                    onClick={() => this.isImageSelected = false}
-                    onDrop={(filesToUpload, rejectedFiles) => {
-                        let rejectedFlag = (rejectedFiles && rejectedFiles.length > 0);
-                        handleRejectedError(rejectedFlag)
-                        this.isImageSelected = (filesToUpload && filesToUpload.length > 0);
-                        input.onChange(filesToUpload);
-                    }}
-                    onFileDialogCancel={() => {
-                        if (!this.isImageSelected) {
-                            input.onChange('');
-                        }
-                    }}
-                    multiple={true}
-                    className={className}
-                >
-                    {!(input.value) &&
-                        <div>
-                            <Weightlifting />
-                            <h4>Select an image</h4>
-                        </div>
-                    }
-                    {input.value && images}
-                </Dropzone>
-                {meta.touched &&
-                    ((meta.error && <span className={errorClass}>{meta.error}</span>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))
-                }
-            </div>
-        );
-    }
+SelectProgressPhotoModal = reduxForm({
+    form: "add_details_progress_photo_form"
+})(SelectProgressPhotoModal);
+
+SelectProgressPhotoModal = connect(
+    mapStateToProps
+)(SelectProgressPhotoModal)
+
+export default SelectProgressPhotoModal;
+
+const submitSelectProgressPhotoData = (param1, param2, param3, param4) => {
+    console.log('param1 => ', param1);
+    console.log('param2 => ', param2);
+    console.log('param3 => ', param3);
+    console.log('param4 => ', param4);
 }

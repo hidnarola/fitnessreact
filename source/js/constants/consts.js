@@ -897,3 +897,9 @@ export const PROGRAM_DIFFICULTY_LEVEL_OBJ = [
     { value: PROGRAM_DIFFICULTY_ADVANCED, label: 'Advanced' },
     { value: PROGRAM_DIFFICULTY_EXPERT, label: 'Expert' },
 ]
+
+export const PROGRESS_PHOTO_BASICS = [
+    { value: 'front', label: 'Front' },
+    { value: 'side', label: 'Side' },
+    { value: 'back', label: 'Back' }
+];

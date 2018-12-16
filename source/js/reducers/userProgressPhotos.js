@@ -14,7 +14,11 @@ import {
     LOAD_MORE_USER_PROGRESS_PHOTO_ERROR,
     DELETE_USER_PROGRESS_PHOTO_REQUEST,
     DELETE_USER_PROGRESS_PHOTO_SUCCESS,
-    DELETE_USER_PROGRESS_PHOTO_ERROR
+    DELETE_USER_PROGRESS_PHOTO_ERROR,
+    FORWARD_IMAGE_TO_DETAILS_PAGE,
+    CANCEL_IMAGE_SELECTED_FROM_DETAILS_PAGE,
+    ADD_IMAGE_SELECTED_FROM_DETAILS_PAGE,
+    REMOVE_SELECTED_PROGRESS_PHOTOS_TO_UPLOAD
 } from "../actions/userProgressPhotos";
 import { VALIDATION_FAILURE_STATUS } from "../constants/consts";
 import { generateValidationErrorMsgArr } from "../helpers/funs";
@@ -31,6 +35,9 @@ const initialState = Map({
     deleteLoading: false,
     deleteId: null,
     deleteError: [],
+
+    selectedImage: null,
+    selectedProgressPhotos: []
 });
 
 const actionMap = {
@@ -226,6 +233,28 @@ const actionMap = {
         }
         return state.merge(Map(newState));
     },
+    [FORWARD_IMAGE_TO_DETAILS_PAGE]: (state, action) => {
+        const { image } = action;
+        let newState = { selectedImage: image }
+        return state.merge(Map(newState));
+    },
+    [CANCEL_IMAGE_SELECTED_FROM_DETAILS_PAGE]: (state, action) => {
+        let newState = { selectedImage: null }
+        return state.merge(Map(newState));
+    },
+    [ADD_IMAGE_SELECTED_FROM_DETAILS_PAGE]: (state, action) => {
+        let imageData = action.imageData;
+        let prevSelectedImages = state.get('selectedProgressPhotos');
+        prevSelectedImages.push(imageData);
+        return state.merge(Map({
+            selectedProgressPhotos: prevSelectedImages
+        }));
+    },
+    [REMOVE_SELECTED_PROGRESS_PHOTOS_TO_UPLOAD]: (state, action) => {
+        return state.merge(Map({
+            selectedProgressPhotos: []
+        }));
+    }
 }
 
 export default function reducer(state = initialState, action = {}) {

@@ -18,6 +18,11 @@ export const DELETE_USER_PROGRESS_PHOTO_REQUEST = 'DELETE_USER_PROGRESS_PHOTO_RE
 export const DELETE_USER_PROGRESS_PHOTO_SUCCESS = 'DELETE_USER_PROGRESS_PHOTO_SUCCESS';
 export const DELETE_USER_PROGRESS_PHOTO_ERROR = 'DELETE_USER_PROGRESS_PHOTO_ERROR';
 
+export const FORWARD_IMAGE_TO_DETAILS_PAGE = 'FORWARD_IMAGE_TO_DETAILS_PAGE';
+export const CANCEL_IMAGE_SELECTED_FROM_DETAILS_PAGE = 'CANCEL_IMAGE_SELECTED_FROM_DETAILS_PAGE';
+export const ADD_IMAGE_SELECTED_FROM_DETAILS_PAGE = 'ADD_IMAGE_SELECTED_FROM_DETAILS_PAGE';
+export const REMOVE_SELECTED_PROGRESS_PHOTOS_TO_UPLOAD = 'REMOVE_SELECTED_PROGRESS_PHOTOS_TO_UPLOAD';
+
 export function getUserProgressPhotoRequest(username, start = 0, noOfPhotos = 5, sort = -1) {
     return {
         type: GET_USER_PROGRESS_PHOTO_REQUEST,
@@ -127,5 +132,31 @@ export function deleteUserProgressPhotoError(error) {
     return {
         type: DELETE_USER_PROGRESS_PHOTO_ERROR,
         error,
+    }
+}
+
+export function forwardImageToDetailsPage(image) {
+    return {
+        type: FORWARD_IMAGE_TO_DETAILS_PAGE,
+        image,
+    }
+}
+
+export function cancelImageSelectedFromDetailsPage() {
+    return {
+        type: CANCEL_IMAGE_SELECTED_FROM_DETAILS_PAGE
+    }
+}
+
+export function addImageSelectedFromDetailsPage(imageData) {
+    return {
+        type: ADD_IMAGE_SELECTED_FROM_DETAILS_PAGE,
+        imageData
+    }
+}
+
+export function removeSelectedProgressPhotosToUpload() {
+    return {
+        type: REMOVE_SELECTED_PROGRESS_PHOTOS_TO_UPLOAD
     }
 }
