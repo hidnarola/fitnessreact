@@ -5,6 +5,7 @@ import { Field, reduxForm, reset } from "redux-form";
 import Dropzone from 'react-dropzone';
 import SelectProgressPhotoModal from "./SelectProgressPhotoModal";
 import { forwardImageToDetailsPage, cancelImageSelectedFromDetailsPage } from "../../actions/userProgressPhotos";
+import ProgressPlaceholder from "img/common/body-progress-img-placeholder.jpg";
 
 class AddProgressPhotoModal extends Component {
     constructor(props) {
@@ -45,13 +46,18 @@ class AddProgressPhotoModal extends Component {
                                     className="form-control"
                                 />
                             </div>
-                            <div className="progress-popup-body-l progress-l-wrap">
+                            <div className="progress-popup-body-l progress-l-wrap upload-display-img">
                                 {selectedPhotos && selectedPhotos.length > 0 &&
                                     selectedPhotos.map((o, i) => {
                                         return (
                                             <div className="" key={i}>
                                                 <a href="javascript:void(0)">
                                                     <img src={o.image} />
+                                                    <ul className="uploade-data">
+                                                        <li>Data 01</li>
+                                                        <li>Data 02</li>
+                                                        <li>Data 03</li>
+                                                    </ul>
                                                 </a>
                                             </div>
                                         );
@@ -138,6 +144,8 @@ class SelectImageComponent extends Component {
         return (
             <Dropzone
                 accept={['image/jpeg', 'image/jpg', 'image/png']}
+                className="dropzone-div"
+                multiple={false}
                 onDrop={(accepted, rejected) => {
                     this.isFileSelected = false;
                     this.isValidFileSelected = false;
@@ -155,6 +163,8 @@ class SelectImageComponent extends Component {
                     }
                 }}
             >
+                <img src={ProgressPlaceholder} />
+                <div className="icon-plus"><i class="icon-control_point"></i></div>
             </Dropzone>
         )
     }

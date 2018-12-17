@@ -2143,6 +2143,27 @@ ul.common-ul.common_ul_body .grey-white input {background: #F9FAFA;border-radius
 .add-log.d-flex.add-log_change button {background: #721efd;max-width: 100%;font-size: 20px;padding: 12px 0;}
 .add-log.d-flex.add-log_change button:hover {border: 2px solid #721efd;}
 .react-slick-container {width: 400px;margin: auto;padding: 0px 20px 40px 20px;}
+.dropzone-div { position:relative; width:200px; height:auto; border:2px dashed #FF339A; border-radius:0; }
+.dropzone-div img{max-height:198px; }
+.dropzone-div .icon-plus{ color:#FF339A; position:absolute; top:15px; left:15px;}
+
+.crop-l{ width:50%;}
+.crop-r{ margin-left:auto; width:49%;}
+.crop-l .cropper-crop {cursor: crosshair;max-height: 416px;}
+.crop-r .pregres-submit button{ border-radius:4px;}
+.crop-r button{ position:relative; padding:10px 20px;}
+.crop-r button i{  position:absolute; top:50%; right:15px; transform:translateY(-50%); }
+.progress-l-wrap.upload-display-img{ width:100% !important;}
+.progress-l-wrap>div{ display: inline-block;vertical-align: middle; margin: 0 15px 15px 0; max-width: 200px;width: 100%; border: 1px solid #eee; height: 200px;  text-align: center; position: relative;background: #f2f2f2;}
+.progress-l-wrap>div a{width:100%; height:100%; position:relative; display:block;}
+.progress-l-wrap>div a img{position:absolute; top:50%; left:50%;transform:translate(-50%, -50%);}
+
+.progress-l-wrap>div a:hover:before{content:''; width:100%; height:100%; background:rgba(0,0,0,.8); position:absolute; top:50%; left:50%;transform:translate(-50%, -50%);}
+ul.uploade-data{ position: absolute; top:50%; left:50%;transform:translate(-50%, -50%); margin:0; display:none;}
+ul.uploade-data li{ line-height: normal; color: #fff; font-size: 14px; display: block;margin: 5px 0; text-transform: uppercase;  font-weight: 500;}
+.progress-l-wrap>div a:hover ul.uploade-data{ display:block;}
+.progress-l-wrap>div a:hover img{webkit-filter: blur(4px); filter: blur(4px);opacity:.2;}
+
 
 @media(min-width: 992px){
     body.with_login .app-wrapper-content{ width: 100%; }

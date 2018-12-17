@@ -27,8 +27,8 @@ class SelectProgressPhotoModal extends Component {
                             <h3 className="title-h3">New Progress Photo</h3>
                         </div>
 
-                        <div className="progress-popup-body">
-                            <div className="col-md-6">
+                        <div className="progress-popup-body crop-wrap d-flex">
+                            <div className="crop-l">
                                 {selectedImage && selectedImage.length > 0 &&
                                     <Cropper
                                         ref='cropper'
@@ -51,7 +51,7 @@ class SelectProgressPhotoModal extends Component {
                                     type="hidden"
                                 />
                             </div>
-                            <div className="col-md-6">
+                            <div className="crop-r">
                                 <Field
                                     id="caption"
                                     name="caption"
@@ -96,10 +96,11 @@ class SelectProgressPhotoModal extends Component {
                                     component={InputField}
                                     errorClass="help-block"
                                 />
+                                <div className="pregres-submit">
+                                    <button type="button" onClick={this.selectProgressImage}>Add Photos <i class="icon-control_point"></i></button>
+                                </div>
                             </div>
-                            <div className="pregres-submit">
-                                <button type="button" onClick={this.selectProgressImage}>Save</button>
-                            </div>
+                            
                         </div>
                     </form>
                 </Modal>
