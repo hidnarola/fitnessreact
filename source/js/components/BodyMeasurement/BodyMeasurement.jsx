@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { reset, initialize, formValueSelector } from "redux-form";
 import BodyMeasurementForm from './BodyMeasurementForm';
 import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
-import { saveUserBodyMeasurementRequest, saveUserBodyFatRequest } from '../../actions/userBodyMeasurement';
+import { saveUserBodyMeasurementRequest, saveUserBodyFatRequest, getProgressPhotosByDateRequest } from '../../actions/userBodyMeasurement';
 import moment from 'moment';
 import { ts, te } from '../../helpers/funs';
 import { addUserProgressPhotoRequest, removeSelectedProgressPhotosToUpload } from '../../actions/userProgressPhotos';
@@ -101,6 +101,7 @@ class BodyMeasurement extends Component {
             }
             this.handleCloseAddProgressPhotoModal();
             dispatch(hidePageLoader());
+            this.getProgressPhotosByDate();
         }
     }
 
@@ -132,17 +133,7 @@ class BodyMeasurement extends Component {
     }
 
     handleShowAddProgressPhotoModal = () => {
-        const { dispatch } = this.props;
-        this.setState({
-            showAddProgressPhotoModal: true
-        });
-        dispatch(reset('addProgressPhotoModalForm'));
-        var now = new Date();
-        now.setHours(0, 0, 0, 0);
-        var initialFormData = {
-            photo_date: now,
-        }
-        dispatch(initialize('addProgressPhotoModalForm', initialFormData));
+        this.setState({ showAddProgressPhotoModal: true });
     }
 
     handleCloseAddProgressPhotoModal = (resetFormData = true) => {
@@ -211,6 +202,12 @@ class BodyMeasurement extends Component {
         }
         dispatch(showPageLoader());
         dispatch(saveUserBodyFatRequest(requestData));
+    }
+
+    getProgressPhotosByDate = () => {
+        const { body_fat_log_date, dispatch } = this.props;
+        let requestData = { logDate: body_fat_log_date };
+        dispatch(getProgressPhotosByDateRequest(requestData));
     }
 
 }

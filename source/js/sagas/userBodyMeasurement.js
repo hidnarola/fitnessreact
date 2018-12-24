@@ -13,7 +13,10 @@ import {
     GET_USER_BODY_MEASUREMENT_LOG_DATES_REQUEST,
     SAVE_USER_BODY_FAT_REQUEST,
     saveUserBodyFatSuccess,
-    saveUserBodyFatError
+    saveUserBodyFatError,
+    GET_PROGRESS_PHOTOS_BY_DATE_REQUEST,
+    getProgressPhotosByDateSuccess,
+    getProgressPhotosByDateError
 } from '../actions/userBodyMeasurement';
 
 function fetchBodyMeasurementData() {
@@ -60,11 +63,23 @@ function saveUserBodyFatData() {
     }
 }
 
+function getProgressPhotosByDateData() {
+    return function* (action) {
+        try {
+            const data = yield call(() => api.getProgressPhotosByDateData(action.requestData));
+            yield put(getProgressPhotosByDateSuccess(data));
+        } catch (error) {
+            yield put(getProgressPhotosByDateError(error));
+        }
+    }
+}
+
 export function* watchBodyMeasurementData() {
     yield takeLatest(GET_USER_BODY_MEASUREMENT_REQUEST, fetchBodyMeasurementData());
     yield takeLatest(GET_USER_BODY_MEASUREMENT_LOG_DATES_REQUEST, fetchBodyMeasurementLogDatesData());
     yield takeLatest(SAVE_USER_BODY_MEASUREMENT_REQUEST, saveBodyMeasurementData());
     yield takeLatest(SAVE_USER_BODY_FAT_REQUEST, saveUserBodyFatData());
+    yield takeLatest(GET_PROGRESS_PHOTOS_BY_DATE_REQUEST, getProgressPhotosByDateData());
 }
 
 export default [

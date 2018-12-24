@@ -6,6 +6,7 @@ import Dropzone from 'react-dropzone';
 import SelectProgressPhotoModal from "./SelectProgressPhotoModal";
 import { forwardImageToDetailsPage, cancelImageSelectedFromDetailsPage } from "../../actions/userProgressPhotos";
 import ProgressPlaceholder from "img/common/body-progress-img-placeholder.jpg";
+import { PROGRESS_PHOTO_CATEGORIES, PROGRESS_PHOTO_BASICS, PROGRESS_PHOTO_POSED } from "../../constants/consts";
 
 class AddProgressPhotoModal extends Component {
     constructor(props) {
@@ -17,7 +18,7 @@ class AddProgressPhotoModal extends Component {
     }
 
     render() {
-        const { show, handleSubmit, isLoading, selectedPhotos } = this.props;
+        const { show, handleSubmit, isLoading, selectedPhotos, bodyparts } = this.props;
         const { invalidFile, detailsModalShow } = this.state;
         return (
             <div className="add-progress-photo-modal-wrapper">
@@ -49,14 +50,36 @@ class AddProgressPhotoModal extends Component {
                             <div className="progress-popup-body-l progress-l-wrap upload-display-img">
                                 {selectedPhotos && selectedPhotos.length > 0 &&
                                     selectedPhotos.map((o, i) => {
+                                        let category = o.category ? o.category : "";
+                                        let subCategory = o.subCategory ? o.subCategory : "";
+                                        let selectedCategory = _.find(PROGRESS_PHOTO_CATEGORIES, ["value", category]);
+                                        let selectedSubCategory = null;
+                                        if (selectedCategory) {
+                                            switch (selectedCategory.value) {
+                                                case "basic":
+                                                    selectedSubCategory = _.find(PROGRESS_PHOTO_BASICS, ["value", subCategory]);
+                                                    break;
+                                                case "isolation":
+                                                    let bodypartOptions = [];
+                                                    if (bodyparts && bodyparts.length > 0) {
+                                                        bodyparts.map((o) => {
+                                                            bodypartOptions.push({ value: o._id, label: o.bodypart });
+                                                        });
+                                                    }
+                                                    selectedSubCategory = _.find(bodypartOptions, ["value", subCategory]);
+                                                    break;
+                                                case "posed":
+                                                    selectedSubCategory = _.find(PROGRESS_PHOTO_POSED, ["value", subCategory]);
+                                                    break;
+                                            }
+                                        }
                                         return (
                                             <div className="" key={i}>
                                                 <a href="javascript:void(0)">
                                                     <img src={o.image} />
                                                     <ul className="uploade-data">
-                                                        <li>Data 01</li>
-                                                        <li>Data 02</li>
-                                                        <li>Data 03</li>
+                                                        <li>{selectedCategory ? selectedCategory.label : ""}</li>
+                                                        <li>{selectedSubCategory ? selectedSubCategory.label : ""}</li>
                                                     </ul>
                                                 </a>
                                             </div>
@@ -115,9 +138,10 @@ AddProgressPhotoModal = reduxForm({
 })(AddProgressPhotoModal);
 
 const mapStateToProps = (state) => {
-    const { userProgressPhotos } = state;
+    const { userProgressPhotos, userBodyparts } = state;
     return {
         selectedPhotos: userProgressPhotos.get('selectedProgressPhotos'),
+        bodyparts: userBodyparts.get('bodyparts'),
     }
 }
 
@@ -164,7 +188,7 @@ class SelectImageComponent extends Component {
                 }}
             >
                 <img src={ProgressPlaceholder} />
-                <div className="icon-plus"><i class="icon-control_point"></i></div>
+                <div className="icon-plus"><i className="icon-control_point"></i></div>
             </Dropzone>
         )
     }

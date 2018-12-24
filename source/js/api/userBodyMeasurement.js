@@ -3,6 +3,7 @@ import { extraUserHeaders } from '../helpers/funs';
 
 const requestUrl = 'user/measurement';
 const requestUrl1 = 'user/body_fat_log';
+const requestUrl2 = 'user/progress_photo';
 
 function getBodyMeasurementData(requestData) {
     let headers = extraUserHeaders();
@@ -24,9 +25,15 @@ function saveBodyFatData(requestData) {
     return postFormData(requestUrl1, requestData, headers);
 }
 
+function getProgressPhotosByDateData(requestData) {
+    let headers = extraUserHeaders();
+    return postFormData(requestUrl2 + '/get_by_date', requestData, headers);
+}
+
 export default {
     getBodyMeasurementData,
     getBodyMeasurementLogDatesData,
     saveBodyMeasurementData,
     saveBodyFatData,
+    getProgressPhotosByDateData
 }

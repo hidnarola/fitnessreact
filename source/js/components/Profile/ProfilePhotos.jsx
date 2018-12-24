@@ -7,6 +7,7 @@ import {
     addUserProgressPhotoRequest,
     getUserProgressPhotoRequest,
     deleteUserProgressPhotoRequest,
+    removeSelectedProgressPhotosToUpload,
 } from '../../actions/userProgressPhotos';
 import { ts, te } from '../../helpers/funs';
 import { FRIENDSHIP_STATUS_SELF, POST_TYPE_GALLERY, SERVER_BASE_URL } from '../../constants/consts';
@@ -20,6 +21,7 @@ import { Link } from "react-router-dom";
 import { routeCodes } from '../../constants/routes';
 import NoRecordFound from '../Common/NoRecordFound';
 import SweetAlert from "react-bootstrap-sweetalert";
+import moment from "moment";
 
 class ProfilePhotos extends Component {
     constructor(props) {
@@ -201,6 +203,7 @@ class ProfilePhotos extends Component {
                 <AddProgressPhotoModal
                     onSubmit={this.handleProgressPhotoSubmit}
                     show={showAddProgressPhotoModal}
+                    handleOpen={this.handleShowAddProgressPhotoModal}
                     handleClose={this.handleCloseAddProgressPhotoModal}
                     isLoading={saveProgressPhotoActionInit}
                 />
@@ -286,6 +289,7 @@ class ProfilePhotos extends Component {
             progressDeleteError,
             galleryDeleteLoading,
             galleryDeleteError,
+            progressPhotoError
         } = this.props;
         const progressPhotosState = this.state.progressPhotos;
         const galleryPhotosState = this.state.galleryPhotos;
@@ -305,7 +309,11 @@ class ProfilePhotos extends Component {
         }
         if (saveProgressPhotoActionInit && !progressPhotoloading) {
             this.setState({ saveProgressPhotoActionInit: false });
-            ts('Progress photo saved successfully!');
+            if (progressPhotoError && progressPhotoError.length <= 0) {
+                ts('Progress photo saved successfully!');
+            } else {
+                te('Something went wrong while adding progress photo! Please try again.');
+            }
             this.handleCloseAddProgressPhotoModal();
             dispatch(hidePageLoader());
             if (profile && Object.keys(profile).length > 0) {
@@ -367,40 +375,29 @@ class ProfilePhotos extends Component {
 
     //#region funs
     handleShowAddProgressPhotoModal = () => {
-        const { dispatch } = this.props;
         this.setState({ showAddProgressPhotoModal: true });
-        dispatch(reset('addProgressPhotoModalForm'));
-        var now = new Date();
-        now.setHours(0, 0, 0, 0);
-        var initialFormData = {
-            photo_date: now,
-        }
-        dispatch(initialize('addProgressPhotoModalForm', initialFormData));
     }
 
-    handleCloseAddProgressPhotoModal = () => {
+    handleCloseAddProgressPhotoModal = (resetFormData = true) => {
         const { dispatch } = this.props;
         this.setState({ showAddProgressPhotoModal: false });
-        dispatch(reset('addProgressPhotoModalForm'));
-        var now = new Date();
-        now.setHours(0, 0, 0, 0);
-        var initialFormData = {
-            photo_date: now,
+        if (resetFormData) {
+            dispatch(reset('add_progress_photo_modal_form'));
+            dispatch(removeSelectedProgressPhotosToUpload());
         }
-        dispatch(initialize('addProgressPhotoModalForm', initialFormData));
     }
 
     handleProgressPhotoSubmit = (data) => {
-        const { dispatch } = this.props;
+        const { dispatch, selectedPhotos } = this.props;
+        let logDate = moment();
+        let requestData = {
+            description: data.description ? data.description : '',
+            date: logDate,
+            progressPhotosData: selectedPhotos
+        };
         this.setState({ saveProgressPhotoActionInit: true });
-        var formData = new FormData();
-        formData.append('description', (data.description) ? data.description : '');
-        formData.append('date', data.photo_date);
-        if (data.photo) {
-            formData.append('image', data.photo[0]);
-        }
         dispatch(showPageLoader());
-        dispatch(addUserProgressPhotoRequest(formData));
+        dispatch(addUserProgressPhotoRequest(requestData));
     }
 
     handleGalleryPhotoSubmit = (data) => {
@@ -527,6 +524,7 @@ const mapStateToProps = (state) => {
         progressDeleteLoading: userProgressPhotos.get('deleteLoading'),
         progressDeleteError: userProgressPhotos.get('deleteError'),
         progressPhotoDataOver: userProgressPhotos.get('photoDataOver'),
+        selectedPhotos: userProgressPhotos.get('selectedProgressPhotos'),
 
         galleryPhotoloading: userGalleryPhotos.get('loading'),
         galleryPhotoError: userGalleryPhotos.get('error'),

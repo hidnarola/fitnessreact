@@ -903,3 +903,14 @@ export const PROGRESS_PHOTO_BASICS = [
     { value: 'side', label: 'Side' },
     { value: 'back', label: 'Back' }
 ];
+
+export const PROGRESS_PHOTO_POSED = [
+    { value: 'front_lat_spread', label: 'Front Lat Spread' },
+    { value: 'front_double_biceps', label: 'Front Double Biceps' }
+];
+
+export const PROGRESS_PHOTO_CATEGORIES = [
+    { value: 'basic', label: 'Basic' },
+    { value: 'isolation', label: 'Isolation' },
+    { value: 'posed', label: 'Posed' }
+];

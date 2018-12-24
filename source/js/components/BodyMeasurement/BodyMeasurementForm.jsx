@@ -9,11 +9,12 @@ import { required, min, max, validNumber } from '../../formValidation/validation
 import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
 import { getUserBodyMeasurementRequest, getUserBodyMeasurementLogDatesRequest } from '../../actions/userBodyMeasurement';
 import { getLoggedUserProfileSettingsRequest } from '../../actions/profile';
-import { MEASUREMENT_UNIT_CENTIMETER, MEASUREMENT_UNIT_KILOGRAM, MEASUREMENT_UNIT_GRAM, MEASUREMENT_UNIT_BPM } from '../../constants/consts';
+import { MEASUREMENT_UNIT_CENTIMETER, MEASUREMENT_UNIT_KILOGRAM, MEASUREMENT_UNIT_GRAM, MEASUREMENT_UNIT_BPM, SERVER_BASE_URL, PROGRESS_PHOTO_CATEGORIES, PROGRESS_PHOTO_BASICS, PROGRESS_PHOTO_POSED } from '../../constants/consts';
 import { convertUnits } from '../../helpers/funs';
 import CalculatorIcon from "svg/calculator.svg";
 import { Alert } from "react-bootstrap";
 import SlickSlider from '../Common/SlickSlider';
+import NoRecordFound from '../Common/NoRecordFound';
 
 const min0 = min(0);
 const min20 = min(20);
@@ -77,7 +78,17 @@ class BodyMeasurementForm extends Component {
 
     render() {
         const { logDate, validationRules } = this.state;
-        const { logDates, handleSubmit, profileSettings, error, handleShowBodyFatModal, handleShowAddProgressPhotoModal } = this.props;
+        const {
+            logDates,
+            handleSubmit,
+            profileSettings,
+            error,
+            handleShowBodyFatModal,
+            handleShowAddProgressPhotoModal,
+            userProgressPhotos,
+            loadingProgressPhotos,
+            bodyparts
+        } = this.props;
         var bodyMeasurement = MEASUREMENT_UNIT_CENTIMETER;
         var weighUnit = MEASUREMENT_UNIT_KILOGRAM;
         var heartRateUnit = MEASUREMENT_UNIT_BPM;
@@ -306,7 +317,53 @@ class BodyMeasurementForm extends Component {
                     <div className="col-md-4">
                         <div className="daily_img_wrapper">
                             <div className="whitebox-head"><h3 className="title-h3">Progress Photos</h3></div>
-                            <SlickSlider />
+                            {!loadingProgressPhotos && userProgressPhotos && userProgressPhotos.length > 0 &&
+                                <SlickSlider>
+                                    {
+                                        userProgressPhotos.map((o) => {
+                                            let photos = o.user_progress_photos ? o.user_progress_photos : [];
+                                            return photos.map((co) => {
+                                                let category = co.category ? co.category : "";
+                                                let selectedCategory = _.find(PROGRESS_PHOTO_CATEGORIES, ["value", category]);
+                                                let selectedSubCategory = null;
+                                                if (selectedCategory) {
+                                                    switch (selectedCategory.value) {
+                                                        case "basic":
+                                                            selectedSubCategory = _.find(PROGRESS_PHOTO_BASICS, ["value", co.basic]);
+                                                            break;
+                                                        case "isolation":
+                                                            let bodypartOptions = [];
+                                                            if (bodyparts && bodyparts.length > 0) {
+                                                                bodyparts.map((o) => {
+                                                                    bodypartOptions.push({ value: o._id, label: o.bodypart });
+                                                                });
+                                                            }
+                                                            selectedSubCategory = _.find(bodypartOptions, ["value", co.isolation]);
+                                                            break;
+                                                        case "posed":
+                                                            selectedSubCategory = _.find(PROGRESS_PHOTO_POSED, ["value", co.posed]);
+                                                            break;
+                                                    }
+                                                }
+                                                return (
+                                                    <div className="fitly-slick-slider-item" key={co._id}>
+                                                        <a href="javascript:void(0)">
+                                                            <img src={`${SERVER_BASE_URL}${co.image}`} alt="" height="200" />
+                                                            <ul className="uploade-data">
+                                                                <li>{selectedCategory ? selectedCategory.label : ""}</li>
+                                                                <li>{selectedSubCategory ? selectedSubCategory.label : ""}</li>
+                                                            </ul>
+                                                        </a>
+                                                    </div>
+                                                )
+                                            });
+                                        })
+                                    }
+                                </SlickSlider>
+                            }
+                            {!loadingProgressPhotos && userProgressPhotos && userProgressPhotos.length <= 0 &&
+                                <NoRecordFound title_class="fs-20" title="No progress photos for the day" />
+                            }
                             <div className="add-log d-flex"><button type="button" onClick={handleShowAddProgressPhotoModal} className="ml-auto">Add Photo</button></div>
                         </div>
                         <div className="log-date">
@@ -492,16 +549,19 @@ BodyMeasurementForm = reduxForm({
 })(BodyMeasurementForm);
 
 const mapStateToProps = (state) => {
-    const { userBodyMeasurement, profile } = state;
+    const { userBodyMeasurement, profile, userBodyparts } = state;
     return {
         loading: userBodyMeasurement.get('loading'),
         error: userBodyMeasurement.get('error'),
         measurement: userBodyMeasurement.get('measurement'),
         bodyFat: userBodyMeasurement.get('bodyFat'),
+        userProgressPhotos: userBodyMeasurement.get('userProgressPhotos'),
+        loadingProgressPhotos: userBodyMeasurement.get('loadingProgressPhotos'),
         loadingLogDates: userBodyMeasurement.get('loadingLogDates'),
         errorLogDates: userBodyMeasurement.get('errorLogDates'),
         logDates: userBodyMeasurement.get('logDates'),
         profileSettings: profile.get('settings'),
+        bodyparts: userBodyparts.get('bodyparts'),
     }
 }
 

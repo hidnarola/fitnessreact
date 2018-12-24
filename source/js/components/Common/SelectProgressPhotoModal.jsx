@@ -3,18 +3,28 @@ import { connect } from "react-redux";
 import { Field, reduxForm, formValueSelector } from "redux-form";
 import { Modal } from "react-bootstrap";
 import Cropper from "react-cropper";
-import { SelectField_ReactSelect, InputField, TextAreaField } from '../../helpers/FormControlHelper';
-import { PROGRESS_PHOTO_BASICS } from '../../constants/consts';
+import { SelectField_ReactSelect, TextAreaField } from '../../helpers/FormControlHelper';
+import { PROGRESS_PHOTO_BASICS, PROGRESS_PHOTO_CATEGORIES, PROGRESS_PHOTO_POSED } from '../../constants/consts';
 import { addImageSelectedFromDetailsPage } from '../../actions/userProgressPhotos';
 
 class SelectProgressPhotoModal extends Component {
     render() {
-        const { show, selectedImage, handleClose, bodyparts } = this.props;
+        const { show, selectedImage, handleClose, bodyparts, photoCategory } = this.props;
         let bodypartOptions = [];
         if (bodyparts && bodyparts.length > 0) {
             bodyparts.map((o) => {
                 bodypartOptions.push({ value: o._id, label: o.bodypart });
             });
+        }
+        let subCategoryOptions = [];
+        if (photoCategory) {
+            if (photoCategory.value === 'basic') {
+                subCategoryOptions = PROGRESS_PHOTO_BASICS;
+            } else if (photoCategory.value === 'isolation') {
+                subCategoryOptions = bodypartOptions;
+            } else if (photoCategory.value === 'posed') {
+                subCategoryOptions = PROGRESS_PHOTO_POSED;
+            }
         }
         return (
             <div className="add-details-progress-photo-modal-wrapper">
@@ -27,21 +37,20 @@ class SelectProgressPhotoModal extends Component {
                             <h3 className="title-h3">New Progress Photo</h3>
                         </div>
 
-                        <div className="progress-popup-body crop-wrap d-flex">
+                        <div className="progress-popup-body d-flex">
                             <div className="crop-l">
                                 {selectedImage && selectedImage.length > 0 &&
                                     <Cropper
                                         ref='cropper'
                                         src={selectedImage[0].preview}
-                                        alt="Selected Progress Image"
-                                        aspectRatio={50 / 50}
+                                        viewMode={0}
+                                        aspectRatio={1}
                                         guides={false}
-                                        responsive={true}
-                                        restore={true}
-                                        center={true}
+                                        autoCropArea={0.8}
+                                        cropBoxResizable={true}
                                         minCropBoxWidth={300}
                                         minCropBoxHeight={300}
-                                        viewMode={3}
+                                        alt="Selected Progress Image"
                                     />
                                 }
                                 <Field
@@ -63,44 +72,32 @@ class SelectProgressPhotoModal extends Component {
                                     component={TextAreaField}
                                 />
                                 <Field
-                                    id="basic"
-                                    name="basic"
-                                    label="Basic"
+                                    id="category"
+                                    name="category"
+                                    label="Category"
                                     labelClass="control-label display_block"
                                     wrapperClass="form-group"
-                                    placeholder="Basic"
+                                    placeholder="Category"
                                     component={SelectField_ReactSelect}
-                                    options={PROGRESS_PHOTO_BASICS}
+                                    options={PROGRESS_PHOTO_CATEGORIES}
                                     errorClass="help-block"
                                 />
                                 <Field
-                                    id="isolation"
-                                    name="isolation"
-                                    label="Isolation"
+                                    id="sub_category"
+                                    name="sub_category"
+                                    label="Sub Category"
                                     labelClass="control-label display_block"
                                     wrapperClass="form-group"
-                                    placeholder="Isolation"
+                                    placeholder="Sub Category"
                                     component={SelectField_ReactSelect}
-                                    options={bodypartOptions}
-                                    errorClass="help-block"
-                                />
-                                <Field
-                                    id="posed"
-                                    name="posed"
-                                    type="text"
-                                    className="form-control"
-                                    label="Posed"
-                                    labelClass="control-label display_block"
-                                    wrapperClass="form-group"
-                                    placeholder="Posed"
-                                    component={InputField}
+                                    options={subCategoryOptions}
                                     errorClass="help-block"
                                 />
                                 <div className="pregres-submit">
-                                    <button type="button" onClick={this.selectProgressImage}>Add Photos <i class="icon-control_point"></i></button>
+                                    <button type="button" onClick={this.selectProgressImage}>Add Photos <i className="icon-control_point"></i></button>
                                 </div>
                             </div>
-                            
+
                         </div>
                     </form>
                 </Modal>
@@ -108,15 +105,23 @@ class SelectProgressPhotoModal extends Component {
         );
     }
 
+    componentDidUpdate(prevProps, prevState) {
+        const { photoCategory, change } = this.props;
+        if (photoCategory && prevProps.photoCategory && photoCategory.value && prevProps.photoCategory.value && prevProps.photoCategory.value !== photoCategory.value) {
+            change('sub_category', null);
+        } else if (!photoCategory) {
+            change('sub_category', null);
+        }
+    }
+
     selectProgressImage = () => {
-        const { caption, basic, isolation, posed, dispatch, handleClose } = this.props;
+        const { caption, photoCategory, sub_category, dispatch, handleClose } = this.props;
         let image = this.refs.cropper.getCroppedCanvas().toDataURL();
         let requrestData = {
             image,
             caption: caption ? caption : null,
-            basic: basic && basic.value ? basic.value : null,
-            isolation: isolation && isolation.value ? isolation.value : null,
-            posed: posed ? posed : null
+            category: photoCategory && photoCategory.value ? photoCategory.value : null,
+            subCategory: sub_category && sub_category.value ? sub_category.value : null
         };
         dispatch(addImageSelectedFromDetailsPage(requrestData));
         handleClose();
@@ -131,9 +136,8 @@ const mapStateToProps = (state) => {
         selectedImage: userProgressPhotos.get('selectedImage'),
         bodyparts: userBodyparts.get('bodyparts'),
         caption: selector(state, 'caption'),
-        basic: selector(state, 'basic'),
-        isolation: selector(state, 'isolation'),
-        posed: selector(state, 'posed'),
+        photoCategory: selector(state, 'category'),
+        sub_category: selector(state, 'sub_category'),
     }
 }
 
@@ -146,10 +150,3 @@ SelectProgressPhotoModal = connect(
 )(SelectProgressPhotoModal)
 
 export default SelectProgressPhotoModal;
-
-const submitSelectProgressPhotoData = (param1, param2, param3, param4) => {
-    console.log('param1 => ', param1);
-    console.log('param2 => ', param2);
-    console.log('param3 => ', param3);
-    console.log('param4 => ', param4);
-}

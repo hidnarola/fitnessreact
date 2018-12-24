@@ -14,6 +14,10 @@ export const SAVE_USER_BODY_FAT_REQUEST = 'SAVE_USER_BODY_FAT_REQUEST';
 export const SAVE_USER_BODY_FAT_SUCCESS = 'SAVE_USER_BODY_FAT_SUCCESS';
 export const SAVE_USER_BODY_FAT_ERROR = 'SAVE_USER_BODY_FAT_ERROR';
 
+export const GET_PROGRESS_PHOTOS_BY_DATE_REQUEST = 'GET_PROGRESS_PHOTOS_BY_DATE_REQUEST';
+export const GET_PROGRESS_PHOTOS_BY_DATE_SUCCESS = 'GET_PROGRESS_PHOTOS_BY_DATE_SUCCESS';
+export const GET_PROGRESS_PHOTOS_BY_DATE_ERROR = 'GET_PROGRESS_PHOTOS_BY_DATE_ERROR';
+
 export function getUserBodyMeasurementRequest(requestData) {
     return {
         type: GET_USER_BODY_MEASUREMENT_REQUEST,
@@ -94,6 +98,27 @@ export function saveUserBodyFatSuccess(data) {
 export function saveUserBodyFatError(error) {
     return {
         type: SAVE_USER_BODY_FAT_ERROR,
+        error,
+    }
+}
+
+export function getProgressPhotosByDateRequest(requestData) {
+    return {
+        type: GET_PROGRESS_PHOTOS_BY_DATE_REQUEST,
+        requestData,
+    }
+}
+
+export function getProgressPhotosByDateSuccess(data) {
+    return {
+        type: GET_PROGRESS_PHOTOS_BY_DATE_SUCCESS,
+        data,
+    }
+}
+
+export function getProgressPhotosByDateError(error) {
+    return {
+        type: GET_PROGRESS_PHOTOS_BY_DATE_ERROR,
         error,
     }
 }
