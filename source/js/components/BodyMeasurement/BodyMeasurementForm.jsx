@@ -324,6 +324,7 @@ class BodyMeasurementForm extends Component {
                                         userProgressPhotos.map((o) => {
                                             let photos = o.user_progress_photos ? o.user_progress_photos : [];
                                             return photos.map((co) => {
+                                                let caption = co.caption ? co.caption : "";
                                                 let category = co.category ? co.category : "";
                                                 let selectedCategory = _.find(PROGRESS_PHOTO_CATEGORIES, ["value", category]);
                                                 let selectedSubCategory = null;
@@ -357,8 +358,9 @@ class BodyMeasurementForm extends Component {
                                                                 }}
                                                             />
                                                             <ul className="uploade-data">
-                                                                <li>{selectedCategory ? selectedCategory.label : ""}</li>
-                                                                <li>{selectedSubCategory ? selectedSubCategory.label : ""}</li>
+                                                                {selectedCategory ? <li>{selectedCategory.label}</li> : ""}
+                                                                {selectedSubCategory ? <li>{selectedSubCategory.label}</li> : ""}
+                                                                {caption && <li>{caption}</li>}
                                                             </ul>
                                                         </a>
                                                     </div>

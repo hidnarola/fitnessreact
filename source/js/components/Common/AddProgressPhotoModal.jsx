@@ -52,6 +52,7 @@ class AddProgressPhotoModal extends Component {
                             <div className="progress-popup-body-l progress-l-wrap upload-display-img">
                                 {selectedPhotos && selectedPhotos.length > 0 &&
                                     selectedPhotos.map((o, i) => {
+                                        let caption = o.caption ? o.caption : "";
                                         let category = o.category ? o.category : "";
                                         let subCategory = o.subCategory ? o.subCategory : "";
                                         let selectedCategory = _.find(PROGRESS_PHOTO_CATEGORIES, ["value", category]);
@@ -80,8 +81,9 @@ class AddProgressPhotoModal extends Component {
                                                 <a href="javascript:void(0)">
                                                     <img src={o.image} />
                                                     <ul className="uploade-data">
-                                                        <li>{selectedCategory ? selectedCategory.label : ""}</li>
-                                                        <li>{selectedSubCategory ? selectedSubCategory.label : ""}</li>
+                                                        {selectedCategory ? <li>{selectedCategory.label}</li> : ""}
+                                                        {selectedSubCategory ? <li>{selectedSubCategory.label}</li> : ""}
+                                                        {caption && <li>{caption}</li>}
                                                     </ul>
                                                 </a>
                                                 <button type="button" className="delete-img" onClick={() => this.handleShowDeleteModal(i)}><i className="icon-close"></i></button>

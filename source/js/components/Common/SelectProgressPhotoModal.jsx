@@ -7,6 +7,10 @@ import { SelectField_ReactSelect, TextAreaField } from '../../helpers/FormContro
 import { PROGRESS_PHOTO_BASICS, PROGRESS_PHOTO_CATEGORIES, PROGRESS_PHOTO_POSED } from '../../constants/consts';
 import { addImageSelectedFromDetailsPage } from '../../actions/userProgressPhotos';
 import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
+import { maxLength, minLength } from '../../formValidation/validationRules';
+
+const maxLength100 = maxLength(100);
+const minLength2 = minLength(2);
 
 class SelectProgressPhotoModal extends Component {
     render() {
@@ -74,6 +78,8 @@ class SelectProgressPhotoModal extends Component {
                                     wrapperClass="form-group"
                                     placeholder="Caption"
                                     component={TextAreaField}
+                                    errorClass="help-block"
+                                    validate={[minLength2, maxLength100]}
                                 />
                                 <Field
                                     id="category"
