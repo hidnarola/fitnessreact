@@ -15,6 +15,7 @@ import CalculatorIcon from "svg/calculator.svg";
 import { Alert } from "react-bootstrap";
 import SlickSlider from '../Common/SlickSlider';
 import NoRecordFound from '../Common/NoRecordFound';
+import noImg from 'img/common/no-img.png';
 
 const min0 = min(0);
 const min20 = min(20);
@@ -348,7 +349,13 @@ class BodyMeasurementForm extends Component {
                                                 return (
                                                     <div className="fitly-slick-slider-item" key={co._id}>
                                                         <a href="javascript:void(0)">
-                                                            <img src={`${SERVER_BASE_URL}${co.image}`} alt="" height="200" />
+                                                            <img
+                                                                src={`${SERVER_BASE_URL}${co.image}`}
+                                                                alt="Progress Photo"
+                                                                onError={(e) => {
+                                                                    e.target.src = noImg
+                                                                }}
+                                                            />
                                                             <ul className="uploade-data">
                                                                 <li>{selectedCategory ? selectedCategory.label : ""}</li>
                                                                 <li>{selectedSubCategory ? selectedSubCategory.label : ""}</li>

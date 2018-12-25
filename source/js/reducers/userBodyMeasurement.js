@@ -38,7 +38,6 @@ const actionMap = {
             loadingProgressPhotos: true,
             measurement: null,
             bodyFat: null,
-            userProgressPhotos: [],
             error: [],
         }));
     },
@@ -167,7 +166,6 @@ const actionMap = {
     [GET_PROGRESS_PHOTOS_BY_DATE_REQUEST]: (state, action) => {
         return state.merge(Map({
             loadingProgressPhotos: true,
-            userProgressPhotos: [],
             error: [],
         }));
     },
