@@ -4,22 +4,24 @@ import { Modal, Alert } from "react-bootstrap";
 import { Field, reduxForm, reset } from "redux-form";
 import Dropzone from 'react-dropzone';
 import SelectProgressPhotoModal from "./SelectProgressPhotoModal";
-import { forwardImageToDetailsPage, cancelImageSelectedFromDetailsPage } from "../../actions/userProgressPhotos";
+import { forwardImageToDetailsPage, cancelImageSelectedFromDetailsPage, deleteImageSelectedFromDetailsPage } from "../../actions/userProgressPhotos";
 import ProgressPlaceholder from "img/common/body-progress-img-placeholder.jpg";
-import { PROGRESS_PHOTO_CATEGORIES, PROGRESS_PHOTO_BASICS, PROGRESS_PHOTO_POSED } from "../../constants/consts";
+import { PROGRESS_PHOTO_CATEGORIES, PROGRESS_PHOTO_BASICS, PROGRESS_PHOTO_POSED, MAX_IMAGE_FILE_SIZE_ALLOWED } from "../../constants/consts";
+import SweetAlert from "react-bootstrap-sweetalert";
 
 class AddProgressPhotoModal extends Component {
     constructor(props) {
         super(props);
         this.state = {
             invalidFile: false,
-            detailsModalShow: false
+            detailsModalShow: false,
+            imgToDel: null
         };
     }
 
     render() {
         const { show, handleSubmit, isLoading, selectedPhotos, bodyparts } = this.props;
-        const { invalidFile, detailsModalShow } = this.state;
+        const { invalidFile, detailsModalShow, imgToDel } = this.state;
         return (
             <div className="add-progress-photo-modal-wrapper">
                 <Modal show={show} bsSize="large" className="progress-popup">
@@ -33,7 +35,7 @@ class AddProgressPhotoModal extends Component {
 
                         {invalidFile &&
                             <Alert bsStyle="danger">
-                                Please select jpg, jpeg and gif files only.
+                                Please select max 2 MB jpg and png files only.
                             </Alert>
                         }
 
@@ -82,6 +84,7 @@ class AddProgressPhotoModal extends Component {
                                                         <li>{selectedSubCategory ? selectedSubCategory.label : ""}</li>
                                                     </ul>
                                                 </a>
+                                                <button type="button" className="delete-img" onClick={() => this.handleShowDeleteModal(i)}><i className="icon-close"></i></button>
                                             </div>
                                         );
                                     })
@@ -105,6 +108,19 @@ class AddProgressPhotoModal extends Component {
                     show={detailsModalShow}
                     handleClose={this.handleSelectProgressPhotoModalClose}
                 />
+                <SweetAlert
+                    show={(typeof imgToDel !== 'undefined' && imgToDel !== null && imgToDel >= 0)}
+                    danger
+                    showCancel
+                    confirmBtnText="Yes, delete it!"
+                    confirmBtnBsStyle="danger"
+                    cancelBtnBsStyle="default"
+                    title="Are you sure?"
+                    onConfirm={this.handleDeleteImg}
+                    onCancel={this.handleCloseDeleteModal}
+                >
+                    Image will not be able to recover!
+                </SweetAlert>
             </div>
         );
     }
@@ -130,6 +146,21 @@ class AddProgressPhotoModal extends Component {
         dispatch(cancelImageSelectedFromDetailsPage());
         this.setState({ detailsModalShow: false });
         handleOpen();
+    }
+
+    handleDeleteImg = () => {
+        const { dispatch } = this.props;
+        const { imgToDel } = this.state;
+        dispatch(deleteImageSelectedFromDetailsPage(imgToDel));
+        this.handleCloseDeleteModal();
+    }
+
+    handleShowDeleteModal = (i) => {
+        this.setState({ imgToDel: i });
+    }
+
+    handleCloseDeleteModal = () => {
+        this.setState({ imgToDel: null });
     }
 }
 
@@ -170,12 +201,12 @@ class SelectImageComponent extends Component {
                 accept={['image/jpeg', 'image/jpg', 'image/png']}
                 className="dropzone-div"
                 multiple={false}
+                maxSize={MAX_IMAGE_FILE_SIZE_ALLOWED}
                 onDrop={(accepted, rejected) => {
-                    this.isFileSelected = false;
+                    this.isFileSelected = true;
                     this.isValidFileSelected = false;
                     if (accepted && accepted.length > 0) {
                         this.isValidFileSelected = true;
-                        this.isFileSelected = true;
                         handleCloseModal(false);
                         openSelectProgressPhotoModal(true);
                         dispatch(forwardImageToDetailsPage(accepted));
@@ -184,6 +215,7 @@ class SelectImageComponent extends Component {
                 onFileDialogCancel={() => {
                     if (this.isFileSelected) {
                         setInvalidFile(!this.isValidFileSelected);
+                        this.isFileSelected = false;
                     }
                 }}
             >

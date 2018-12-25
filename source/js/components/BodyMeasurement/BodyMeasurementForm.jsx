@@ -369,7 +369,7 @@ class BodyMeasurementForm extends Component {
                                 </SlickSlider>
                             }
                             {!loadingProgressPhotos && userProgressPhotos && userProgressPhotos.length <= 0 &&
-                                <NoRecordFound title_class="fs-20" title="No progress photos for the day" />
+                                <NoRecordFound wrapper_class="mb-30" title_class="fs-20" title="No progress photos for the day" icon_class="fs-50 icon-error_outline" />
                             }
                             <div className="add-log d-flex"><button type="button" onClick={handleShowAddProgressPhotoModal} className="ml-auto">Add Photo</button></div>
                         </div>

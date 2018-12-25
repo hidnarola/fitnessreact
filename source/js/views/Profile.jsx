@@ -131,7 +131,7 @@ class Profile extends Component {
                                         to={`${routeCodes.PROFILE}/${username}`}
                                     >
                                         Fithub
-                                </NavLink>
+                                    </NavLink>
 
                                     <NavLink
                                         activeClassName='pink-btn'
@@ -140,7 +140,7 @@ class Profile extends Component {
                                         to={routeCodes.PROFILEPHOTOS.replace('{username}', username)}
                                     >
                                         Photos
-                                </NavLink>
+                                    </NavLink>
 
                                     <NavLink
                                         activeClassName='pink-btn'
@@ -149,7 +149,7 @@ class Profile extends Component {
                                         to={routeCodes.PROFILEFRIENDS.replace('{username}', username)}
                                     >
                                         Friends
-                                </NavLink>
+                                    </NavLink>
                                 </div>
                             </div>
                             {profile && profile.friendshipStatus && profile.friendshipStatus !== '' && profile.friendshipStatus !== FRIENDSHIP_STATUS_SELF &&

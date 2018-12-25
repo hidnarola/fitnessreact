@@ -949,6 +949,7 @@ display:-webkit-box; display:-webkit-flex; display:-ms-flex; display:flex; flex-
 .stepbox-b button i{vertical-align:top;}
 .width-100-per{width: 100% !important}
 .mb-20{margin-bottom: 20px !important;}
+.mb-30{margin-bottom: 30px !important;}
 .mt-10{margin-top: 10px !important;}
 .mt-15{margin-top: 15px !important;}
 .mt-20{margin-top: 20px !important;}
@@ -2122,7 +2123,10 @@ ul.program-pager-wrap.pager li a:hover {background: #ad60cf;color: #fff;}
 .rating-card-h-right { padding: 0 10px; display: inline-block; }
 .rating-card-body p { margin: 10px 0; }
 #menu-title-tooltip{ opacity: 1; background-color: #ff337e; color: #fff; font-weight: bold; box-shadow: 0 14px 26px -12px rgba(255, 51, 126, 0.6), 0 4px 23px 0 rgba(0,0,0,.12), 0 8px 10px -5px rgba(255, 51, 126, 0.2); }
-#menu-title-tooltip:after { border-right-color: #ff337e; }
+#menu-title-tooltip.__react_component_tooltip.type-light.place-top:after {border-top-color: #ff337e;}
+#menu-title-tooltip.__react_component_tooltip.type-light.place-right:after {border-right-color: #ff337e;}
+#menu-title-tooltip.__react_component_tooltip.type-light.place-bottom:after {border-bottom-color: #ff337e;}
+#menu-title-tooltip.__react_component_tooltip.type-light.place-left:after {border-left-color: #ff337e;}
 .custom_date_pdl {display: flex !important;}
 ul.custom-date-period { position: relative; left: 0; top: 0; list-style: none; text-align: left; background: #fff; max-width: 120px; vertical-align: top; margin: 0; min-height: 80px; border-right: 1px solid #f5f2f2;padding-right: 15px;}
 ul.custom-date-period li button {font-size: 13px;background: transparent;border: 0;padding: 4px 10px 4px 10px;margin-bottom: 5px;}
@@ -2169,6 +2173,8 @@ ul.uploade-data li{ line-height: normal; color: #fff; font-size: 14px; display: 
 .fitly-slick-slider-item a:hover:before{content:''; width:100%; height:100%; background:rgba(0,0,0,.8); position:absolute; top:50%; left:50%;transform:translate(-50%, -50%);}
 .fitly-slick-slider-item a:hover ul.uploade-data{ display:block;}
 .fitly-slick-slider-item a:hover img{webkit-filter: blur(4px); filter: blur(4px);opacity:.2;}
+.progress-l-wrap>div button.delete-img { position: absolute; top: -6px; right: -6px; border: 0; background: #ff3373; color: #fff; display: block; border-radius: 50%; width: 20px; height: 20px; }
+.progress-l-wrap>div button.delete-img i { font-size: 16px; line-height: 20px; }
 
 
 @media(min-width: 992px){

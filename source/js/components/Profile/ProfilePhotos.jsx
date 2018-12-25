@@ -22,6 +22,7 @@ import { routeCodes } from '../../constants/routes';
 import NoRecordFound from '../Common/NoRecordFound';
 import SweetAlert from "react-bootstrap-sweetalert";
 import moment from "moment";
+import { getUserBodypartsRequest } from '../../actions/userBodyparts';
 
 class ProfilePhotos extends Component {
     constructor(props) {
@@ -68,6 +69,7 @@ class ProfilePhotos extends Component {
                 doLoadGalleryPhotos: true,
             });
         }
+        dispatch(getUserBodypartsRequest());
     }
 
     render() {

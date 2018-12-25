@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from "react-redux";
 import { Field, reduxForm, formValueSelector } from "redux-form";
 import { Modal } from "react-bootstrap";
@@ -6,6 +6,7 @@ import Cropper from "react-cropper";
 import { SelectField_ReactSelect, TextAreaField } from '../../helpers/FormControlHelper';
 import { PROGRESS_PHOTO_BASICS, PROGRESS_PHOTO_CATEGORIES, PROGRESS_PHOTO_POSED } from '../../constants/consts';
 import { addImageSelectedFromDetailsPage } from '../../actions/userProgressPhotos';
+import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
 
 class SelectProgressPhotoModal extends Component {
     render() {
@@ -40,18 +41,21 @@ class SelectProgressPhotoModal extends Component {
                         <div className="progress-popup-body d-flex">
                             <div className="crop-l">
                                 {selectedImage && selectedImage.length > 0 &&
-                                    <Cropper
-                                        ref='cropper'
-                                        src={selectedImage[0].preview}
-                                        viewMode={0}
-                                        aspectRatio={1}
-                                        guides={false}
-                                        autoCropArea={0.8}
-                                        cropBoxResizable={true}
-                                        minCropBoxWidth={300}
-                                        minCropBoxHeight={300}
-                                        alt="Selected Progress Image"
-                                    />
+                                    <Fragment>
+                                        <label for="caption" class="control-label display_block">Selected Image </label>
+                                        <Cropper
+                                            ref='cropper'
+                                            src={selectedImage[0].preview}
+                                            viewMode={0}
+                                            aspectRatio={1}
+                                            guides={false}
+                                            autoCropArea={0.8}
+                                            cropBoxResizable={true}
+                                            minCropBoxWidth={300}
+                                            minCropBoxHeight={300}
+                                            alt="Selected Progress Image"
+                                        />
+                                    </Fragment>
                                 }
                                 <Field
                                     id="image_data"
@@ -116,15 +120,20 @@ class SelectProgressPhotoModal extends Component {
 
     selectProgressImage = () => {
         const { caption, photoCategory, sub_category, dispatch, handleClose } = this.props;
-        let image = this.refs.cropper.getCroppedCanvas().toDataURL();
-        let requrestData = {
-            image,
-            caption: caption ? caption : null,
-            category: photoCategory && photoCategory.value ? photoCategory.value : null,
-            subCategory: sub_category && sub_category.value ? sub_category.value : null
-        };
-        dispatch(addImageSelectedFromDetailsPage(requrestData));
-        handleClose();
+        let self = this;
+        dispatch(showPageLoader());
+        setTimeout(() => {
+            let image = self.refs.cropper.getCroppedCanvas().toDataURL();
+            let requrestData = {
+                image,
+                caption: caption ? caption : null,
+                category: photoCategory && photoCategory.value ? photoCategory.value : null,
+                subCategory: sub_category && sub_category.value ? sub_category.value : null
+            };
+            dispatch(addImageSelectedFromDetailsPage(requrestData));
+            dispatch(hidePageLoader());
+            handleClose();
+        }, 500);
     }
 }
 

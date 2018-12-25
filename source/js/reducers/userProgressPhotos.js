@@ -18,7 +18,8 @@ import {
     FORWARD_IMAGE_TO_DETAILS_PAGE,
     CANCEL_IMAGE_SELECTED_FROM_DETAILS_PAGE,
     ADD_IMAGE_SELECTED_FROM_DETAILS_PAGE,
-    REMOVE_SELECTED_PROGRESS_PHOTOS_TO_UPLOAD
+    REMOVE_SELECTED_PROGRESS_PHOTOS_TO_UPLOAD,
+    DELETE_IMAGE_SELECTED_FROM_DETAILS_PAGE
 } from "../actions/userProgressPhotos";
 import { VALIDATION_FAILURE_STATUS } from "../constants/consts";
 import { generateValidationErrorMsgArr } from "../helpers/funs";
@@ -246,6 +247,14 @@ const actionMap = {
         let imageData = action.imageData;
         let prevSelectedImages = state.get('selectedProgressPhotos');
         prevSelectedImages.push(imageData);
+        return state.merge(Map({
+            selectedProgressPhotos: prevSelectedImages
+        }));
+    },
+    [DELETE_IMAGE_SELECTED_FROM_DETAILS_PAGE]: (state, action) => {
+        let { index } = action;
+        let prevSelectedImages = state.get('selectedProgressPhotos');
+        prevSelectedImages.splice(index, 1);
         return state.merge(Map({
             selectedProgressPhotos: prevSelectedImages
         }));
