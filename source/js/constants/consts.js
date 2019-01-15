@@ -910,7 +910,7 @@ export const PROGRESS_PHOTO_POSED = [
 ];
 
 export const PROGRESS_PHOTO_CATEGORIES = [
-    { value: 'basic', label: 'Basic' },
+    { value: 'basic', label: 'Full body' },
     { value: 'isolation', label: 'Isolation' },
     { value: 'posed', label: 'Posed' }
 ];

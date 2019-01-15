@@ -5,12 +5,12 @@ const SlickSlider = (props) => {
     var settings = {
         dots: true,
         infinite: true,
-        slidesToShow: 1,
+        slidesToShow: 3,
         slidesToScroll: 1,
         initialSlide: 0,
         autoplaySpeed: 3000,
         cssEase: "linear",
-        autoplay: true,
+        autoplay: false,
         speed: 1000,
         pauseOnHover: true,
         responsive: [

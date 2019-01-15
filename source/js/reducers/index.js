@@ -33,6 +33,7 @@ import postComments from 'reducers/postComments';
 import profile from 'reducers/profile';
 import userChangePassword from 'reducers/changePassword';
 import friends from 'reducers/friends';
+import follows from 'reducers/follows';
 import login from 'reducers/login';
 import healthLabels from 'reducers/healthLabels';
 import dietLabels from 'reducers/dietLabels';
@@ -87,6 +88,7 @@ export default combineReducers({
     profile,
     userChangePassword,
     friends,
+    follows,
     login,
     healthLabels,
     dietLabels,

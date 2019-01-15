@@ -24,6 +24,9 @@ import { getUserChannelRequest } from '../actions/userMessages';
 import SweetAlert from "react-bootstrap-sweetalert";
 import { getPrivacyOfTimelineUserRequest } from '../actions/userTimeline';
 import { showPageLoader, hidePageLoader } from '../actions/pageLoader';
+import Follower from "svg/follower.svg";
+import Following from "svg/followers.svg";
+import { startFollowingRequest, stopFollowingRequest } from '../actions/follows';
 
 class Profile extends Component {
     constructor(props) {
@@ -52,6 +55,8 @@ class Profile extends Component {
             showChangeProfilePicModal: false,
             updateProfilePhotoActionInit: false,
             updateLocalStorageData: false,
+            showUnfollowModal: false,
+            selectedFollowId: null,
         }
         this.changeProfilePhotoRef = React.createRef();
     }
@@ -100,10 +105,12 @@ class Profile extends Component {
             showUpdateAboutMeModal,
             showChangeProfilePicModal,
             loadProfileActionInit,
+            showUnfollowModal
         } = this.state;
         const {
             requestChannelLoading,
             timelineUserPrivacy,
+            startFollowingLoading
         } = this.props;
         return (
             <div className='stat-page'>
@@ -217,6 +224,18 @@ class Profile extends Component {
                                         >
                                             {(!sendFriendRequestDisabled) ? 'Add Friend' : 'Please wait...'}
                                             <i className="icon-person_add"></i>
+                                        </button>
+                                    }
+                                    {!profile.followingStatus &&
+                                        <button className="white-btn gradient-color-2 color-white active" onClick={() => this.startFollowing(profile.authUserId)} disabled={startFollowingLoading}>
+                                            {(!startFollowingLoading) ? `Follow` : 'Please wait...'}
+                                            <Follower className="follower-icon" />
+                                        </button>
+                                    }
+                                    {profile.followingStatus &&
+                                        <button className="white-btn gradient-color-2 color-white active" onClick={() => this.showUnfollowAlert(profile.followingId)}>
+                                            Following
+                                            <Following className="following-icon" />
                                         </button>
                                     }
                                     {
@@ -376,6 +395,20 @@ class Profile extends Component {
                 >
                     You will not be able to recover it!
                 </SweetAlert>
+
+                <SweetAlert
+                    show={showUnfollowModal}
+                    danger
+                    showCancel
+                    confirmBtnText="Yes, Unfollow!"
+                    confirmBtnBsStyle="danger"
+                    cancelBtnBsStyle="default"
+                    title="Are you sure?"
+                    onConfirm={this.stopFollowing}
+                    onCancel={this.hideUnfollowAlert}
+                >
+                </SweetAlert>
+
                 <UpdateAboutMeModal
                     show={showUpdateAboutMeModal}
                     onSubmit={this.handleUpdateAboutMeSubmit}
@@ -391,7 +424,7 @@ class Profile extends Component {
         );
     }
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps, prevState) {
         const {
             profile,
             profileLoading,
@@ -404,7 +437,11 @@ class Profile extends Component {
             requestAcceptLoading,
             requestAcceptError,
             error,
-            settingsLoading
+            settingsLoading,
+            startFollowingLoading,
+            startFollowingError,
+            stopFollowingLoading,
+            stopFollowingError,
         } = this.props;
         const {
             loadProfileActionInit,
@@ -529,6 +566,21 @@ class Profile extends Component {
             dispatch(getProfileDetailsRequest(username));
             this.handleHideChangeProfilePhotoModal();
             this.setForceUpdateChildComponents(true);
+        }
+        if (!startFollowingLoading && prevProps.startFollowingLoading !== startFollowingLoading) {
+            this.setState({ loadProfileActionInit: true });
+            dispatch(getProfileDetailsRequest(username));
+            if (startFollowingError && startFollowingError.length > 0) {
+                te(startFollowingError[0]);
+            }
+        }
+        if (!stopFollowingLoading && prevProps.stopFollowingLoading !== stopFollowingLoading) {
+            this.setState({ loadProfileActionInit: true });
+            dispatch(getProfileDetailsRequest(username));
+            this.hideUnfollowAlert();
+            if (stopFollowingError && stopFollowingError.length > 0) {
+                te(stopFollowingError[0]);
+            }
         }
     }
 
@@ -725,12 +777,33 @@ class Profile extends Component {
         profile.weight = (weight && weight > 0) ? weight.toFixed(2) : '';
         return profile;
     }
+
+    startFollowing = (followingId) => {
+        const { dispatch } = this.props;
+        let requestData = { followingId };
+        dispatch(startFollowingRequest(requestData));
+    }
+
+    showUnfollowAlert = (_id) => {
+        this.setState({ selectedFollowId: _id, showUnfollowModal: true });
+    }
+
+    hideUnfollowAlert = () => {
+        this.setState({ selectedFollowId: null, showUnfollowModal: false });
+    }
+
+    stopFollowing = () => {
+        const { dispatch } = this.props;
+        const { selectedFollowId } = this.state;
+        let requestData = { _id: selectedFollowId };
+        dispatch(stopFollowingRequest(requestData));
+    }
     //#endregion
 
 }
 
 const mapStateToProps = (state) => {
-    const { profile, friends, user, userMessages, userTimeline } = state;
+    const { profile, friends, user, userMessages, userTimeline, follows } = state;
     return {
         profileLoading: profile.get('loading'),
         profile: profile.get('profile'),
@@ -748,6 +821,12 @@ const mapStateToProps = (state) => {
         socket: user.get('socket'),
         requestChannelLoading: userMessages.get('requestChannelLoading'),
         timelineUserPrivacy: userTimeline.get('privacy'),
+        startFollowingLoading: follows.get('startFollowingLoading'),
+        startFollowingStatus: follows.get('startFollowingStatus'),
+        startFollowingError: follows.get('startFollowingError'),
+        stopFollowingLoading: follows.get('stopFollowingLoading'),
+        stopFollowingStatus: follows.get('stopFollowingStatus'),
+        stopFollowingError: follows.get('stopFollowingError')
     }
 }
 

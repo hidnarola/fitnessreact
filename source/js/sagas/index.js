@@ -30,6 +30,7 @@ import postComments from 'sagas/postComments';
 import profile from 'sagas/profile';
 import userChangePasswordSagas from 'sagas/changePassword';
 import friends from 'sagas/friends';
+import follows from 'sagas/follows';
 import login from 'sagas/login';
 import healthLabels from 'sagas/healthLabels';
 import dietLabels from 'sagas/dietLabels';
@@ -81,6 +82,7 @@ export default function* rootSaga() {
     ...profile,
     ...userChangePasswordSagas,
     ...friends,
+    ...follows,
     ...login,
     ...healthLabels,
     ...dietLabels,

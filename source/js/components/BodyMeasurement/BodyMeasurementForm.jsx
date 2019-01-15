@@ -358,9 +358,9 @@ class BodyMeasurementForm extends Component {
                                                                 }}
                                                             />
                                                             <ul className="uploade-data">
-                                                                {selectedCategory ? <li>{selectedCategory.label}</li> : ""}
-                                                                {selectedSubCategory ? <li>{selectedSubCategory.label}</li> : ""}
-                                                                {caption && <li>{caption}</li>}
+                                                                {selectedCategory ? <li className="sm-img">{selectedCategory.label}</li> : ""}
+                                                                {selectedSubCategory ? <li className="sm-img">{selectedSubCategory.label}</li> : ""}
+                                                                {caption && <li className="sm-img">{caption}</li>}
                                                             </ul>
                                                         </a>
                                                     </div>
