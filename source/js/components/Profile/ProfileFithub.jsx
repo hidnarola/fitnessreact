@@ -285,7 +285,6 @@ class ProfileFithub extends Component {
                             >
                                 {
                                     posts.map((post, index) => {
-                                        console.log('post => ', post);
                                         var createdBy = (post.created_by && Object.keys(post.created_by).length > 0) ? post.created_by : null;
                                         if (!createdBy) {
                                             return null;
