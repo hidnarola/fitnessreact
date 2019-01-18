@@ -69,7 +69,10 @@ import {
     VIEW_USERS_PUBLIC_PROGRAM_WORKOUT_SCHEDULE_ERROR,
     GET_USER_PROGRAM_RATING_REQUEST,
     GET_USER_PROGRAM_RATING_SUCCESS,
-    GET_USER_PROGRAM_RATING_ERROR
+    GET_USER_PROGRAM_RATING_ERROR,
+    CREATE_USER_PROGRAM_FROM_CALENDAR_REQUEST,
+    CREATE_USER_PROGRAM_FROM_CALENDAR_SUCCESS,
+    CREATE_USER_PROGRAM_FROM_CALENDAR_ERROR
 } from "../actions/userPrograms";
 import {
     VALIDATION_FAILURE_STATUS,
@@ -113,6 +116,9 @@ const initialState = Map({
     loadingRatings: false,
     ratings: null,
     errorRatings: [],
+    createFromCalendarLoading: false,
+    createFromCalendarStatus: 0,
+    createFromCalendarError: [],
 });
 
 const actionMap = {
@@ -842,6 +848,37 @@ const actionMap = {
         return state.merge(Map({
             loadingRatings: false,
             errorRatings: error,
+        }));
+    },
+    [CREATE_USER_PROGRAM_FROM_CALENDAR_REQUEST]: (state, action) => {
+        return state.merge(Map({
+            createFromCalendarLoading: true,
+            createFromCalendarStatus: 0,
+            createFromCalendarError: [],
+        }));
+    },
+    [CREATE_USER_PROGRAM_FROM_CALENDAR_SUCCESS]: (state, action) => {
+        var newState = { createFromCalendarLoading: false };
+        if (action.data.status === 1) {
+            newState.createFromCalendarStatus = 1;
+        } else {
+            var msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
+            newState.createFromCalendarError = [msg];
+        }
+        return state.merge(Map(newState));
+    },
+    [CREATE_USER_PROGRAM_FROM_CALENDAR_ERROR]: (state, action) => {
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
+        }
+        return state.merge(Map({
+            createFromCalendarLoading: false,
+            createFromCalendarError: error,
         }));
     },
     [SET_USER_PROGRAM_STATE]: (state, action) => {

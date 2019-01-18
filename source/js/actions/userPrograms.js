@@ -93,6 +93,10 @@ export const GET_USER_PROGRAM_RATING_REQUEST = 'GET_USER_PROGRAM_RATING_REQUEST'
 export const GET_USER_PROGRAM_RATING_SUCCESS = 'GET_USER_PROGRAM_RATING_SUCCESS';
 export const GET_USER_PROGRAM_RATING_ERROR = 'GET_USER_PROGRAM_RATING_ERROR';
 
+export const CREATE_USER_PROGRAM_FROM_CALENDAR_REQUEST = 'CREATE_USER_PROGRAM_FROM_CALENDAR_REQUEST';
+export const CREATE_USER_PROGRAM_FROM_CALENDAR_SUCCESS = 'CREATE_USER_PROGRAM_FROM_CALENDAR_SUCCESS';
+export const CREATE_USER_PROGRAM_FROM_CALENDAR_ERROR = 'CREATE_USER_PROGRAM_FROM_CALENDAR_ERROR';
+
 export const SET_USER_PROGRAM_STATE = 'SET_USER_PROGRAM_STATE';
 
 export function getUserProgramsRequest(filterData) {
@@ -577,6 +581,27 @@ export function getUserProgramRatingSuccess(data) {
 export function getUserProgramRatingError(error) {
     return {
         type: GET_USER_PROGRAM_RATING_ERROR,
+        error
+    }
+}
+
+export function createUserProgramFromCalendarRequest(requestData) {
+    return {
+        type: CREATE_USER_PROGRAM_FROM_CALENDAR_REQUEST,
+        requestData,
+    }
+}
+
+export function createUserProgramFromCalendarSuccess(data) {
+    return {
+        type: CREATE_USER_PROGRAM_FROM_CALENDAR_SUCCESS,
+        data
+    }
+}
+
+export function createUserProgramFromCalendarError(error) {
+    return {
+        type: CREATE_USER_PROGRAM_FROM_CALENDAR_ERROR,
         error
     }
 }

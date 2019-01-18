@@ -139,6 +139,11 @@ function getUserProgramRating(_id) {
     return fetchResource(requestUrl + '/rating/' + _id, options);
 }
 
+function createUserProgramFromCalendar(requestData) {
+    let headers = extraUserHeaders();
+    return postFormData(requestUrl + '/create_program_from_calendar', requestData, headers);
+}
+
 export default {
     getUserPrograms,
     addUserProgramMaster,
@@ -160,5 +165,6 @@ export default {
     updateUsersProgramMaster,
     getWorkoutsListByProgramDay,
     reorderProgramWorkoutExercises,
-    getUserProgramRating
+    getUserProgramRating,
+    createUserProgramFromCalendar
 }

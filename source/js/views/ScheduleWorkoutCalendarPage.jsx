@@ -29,6 +29,8 @@ import AddWorkoutTitleForm from '../components/ScheduleWorkout/AddWorkoutTitleFo
 import ReactTooltip from "react-tooltip";
 import { showPageLoader, hidePageLoader } from '../actions/pageLoader';
 import SelectAssignProgramForm from '../components/ScheduleWorkout/SelectAssignProgramForm';
+import CreateProgramFromCalendarForm from '../components/ScheduleWorkout/CreateProgramFromCalendarForm';
+import { createUserProgramFromCalendarRequest } from '../actions/userPrograms';
 
 BigCalendar.momentLocalizer(moment);
 
@@ -56,6 +58,7 @@ class ScheduleWorkoutCalendarPage extends Component {
             addRestDayInit: false,
             calendarViewDate: null,
             selectAllChecked: false,
+            showCreateProgram: false
         }
     }
 
@@ -78,6 +81,7 @@ class ScheduleWorkoutCalendarPage extends Component {
             incompleteBulkActionAlert,
             showAddWorkoutTitleAlert,
             selectAllChecked,
+            showCreateProgram
         } = this.state;
         const {
             selectedSlot,
@@ -121,10 +125,12 @@ class ScheduleWorkoutCalendarPage extends Component {
                                                 <div className="count-leadeboard bg-pink">{selectedEvents.length}</div>
                                             </div>
                                             <div className="fixed-btm-bar-c">
+                                                <a href="javascript:void(0)" data-for="create-program-tooltip" data-tip="Create program" onClick={() => this.setState({ showCreateProgram: true })}><i className="icon-add_box"></i> </a>
                                                 <a href="javascript:void(0)" data-for="event-bulk-delete-tooltip" data-tip="Delete" onClick={() => this.setState({ deleteBulkActionAlert: true })}><i className="icon-delete_forever"></i> </a>
                                                 <a href="javascript:void(0)" data-for="event-bulk-complete-tooltip" data-tip="Mark as complete" onClick={() => this.setState({ completeBulkActionAlert: true })}><i className="icon-check_circle"></i></a>
                                                 <a href="javascript:void(0)" data-for="event-bulk-incomplete-tooltip" data-tip="Mark as incomplete" onClick={() => this.setState({ incompleteBulkActionAlert: true })}><i className="icon-cancel"></i></a>
                                             </div>
+                                            <ReactTooltip id='create-program-tooltip' place="top" type="info" effect="solid" />
                                             <ReactTooltip id='event-bulk-delete-tooltip' place="top" type="error" effect="solid" />
                                             <ReactTooltip id='event-bulk-complete-tooltip' place="top" type="success" effect="solid" />
                                             <ReactTooltip id='event-bulk-incomplete-tooltip' place="top" type="warning" effect="solid" />
@@ -258,6 +264,21 @@ class ScheduleWorkoutCalendarPage extends Component {
                         onSubmit={this.handleAddTitleSubmit}
                         onCancel={this.handleAddWorkoutTitleCancel}
                         errorArr={errorTitle}
+                    />
+                </SweetAlert>
+
+                <SweetAlert
+                    type="default"
+                    title="Create program"
+                    showConfirm={false}
+                    showCancel={false}
+                    onConfirm={() => { }}
+                    show={showCreateProgram}
+                    closeOnClickOutside={false}
+                >
+                    <CreateProgramFromCalendarForm
+                        onSubmit={this.createProgram}
+                        onCancel={() => this.setState({ showCreateProgram: false })}
                     />
                 </SweetAlert>
             </div>
@@ -677,10 +698,19 @@ class ScheduleWorkoutCalendarPage extends Component {
         dispatch(addUserWorkoutTitleRequest(requestData));
         dispatch(showPageLoader());
     }
+
+    createProgram = (data) => {
+        const { dispatch } = this.props;
+        const { workoutEvents } = this.state;
+        const selectedEvents = _.filter(workoutEvents, ['isSelectedForBulkAction', true]);
+        const selectedIds = _.map(selectedEvents, 'id');
+        const requestData = { selectedIds, ...data };
+        dispatch(createUserProgramFromCalendarRequest(requestData));
+    }
 }
 
 const mapStateToProps = (state) => {
-    const { userScheduleWorkouts } = state;
+    const { userScheduleWorkouts, userPrograms } = state;
     return {
         selectedSlot: userScheduleWorkouts.get('slotInfo'),
         workouts: userScheduleWorkouts.get('workouts'),
@@ -695,6 +725,9 @@ const mapStateToProps = (state) => {
         loadingTitle: userScheduleWorkouts.get('loadingTitle'),
         workoutTitle: userScheduleWorkouts.get('workoutTitle'),
         errorTitle: userScheduleWorkouts.get('errorTitle'),
+        createFromCalendarLoading: userPrograms.get('createFromCalendarLoading'),
+        createFromCalendarStatus: userPrograms.get('createFromCalendarStatus'),
+        createFromCalendarError: userPrograms.get('createFromCalendarError'),
     };
 }
 
