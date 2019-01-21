@@ -243,6 +243,7 @@ class App extends Component {
 
                             <ToastContainer
                                 position="top-right"
+                                className="fitassist-toast"
                                 transition={Flip}
                                 autoClose={3000}
                                 hideProgressBar
