@@ -67,6 +67,9 @@ import {
     createUserProgramFromCalendarSuccess,
     createUserProgramFromCalendarError,
     CREATE_USER_PROGRAM_FROM_CALENDAR_REQUEST,
+    appendUserProgramFromCalendarSuccess,
+    appendUserProgramFromCalendarError,
+    APPEND_USER_PROGRAM_FROM_CALENDAR_REQUEST,
 } from '../actions/userPrograms';
 
 function getUserProgramsData() {
@@ -335,6 +338,18 @@ function createUserProgramFromCalendarData() {
     }
 }
 
+function appendUserProgramFromCalendarData() {
+    return function* (action) {
+        try {
+            const requestData = action.requestData;
+            const data = yield call(() => api.appendUserProgramFromCalendar(requestData));
+            yield put(appendUserProgramFromCalendarSuccess(data))
+        } catch (error) {
+            yield put(appendUserProgramFromCalendarError(error))
+        }
+    }
+}
+
 export function* watchUserProgramsData() {
     yield takeLatest(GET_USER_PROGRAMS_REQUEST, getUserProgramsData());
     yield takeLatest(ADD_USER_PROGRAM_MASTER_REQUEST, addUserProgramMasterData());
@@ -358,6 +373,7 @@ export function* watchUserProgramsData() {
     yield takeLatest(REORDER_PROGRAM_WORKOUT_EXERCISES_REQUEST, reorderProgramWorkoutExercises());
     yield takeLatest(GET_USER_PROGRAM_RATING_REQUEST, getUserProgramRatingData());
     yield takeLatest(CREATE_USER_PROGRAM_FROM_CALENDAR_REQUEST, createUserProgramFromCalendarData());
+    yield takeLatest(APPEND_USER_PROGRAM_FROM_CALENDAR_REQUEST, appendUserProgramFromCalendarData());
 }
 
 export default [

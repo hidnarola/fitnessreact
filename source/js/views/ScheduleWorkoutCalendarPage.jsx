@@ -29,7 +29,8 @@ import ReactTooltip from "react-tooltip";
 import { showPageLoader, hidePageLoader } from '../actions/pageLoader';
 import SelectAssignProgramForm from '../components/ScheduleWorkout/SelectAssignProgramForm';
 import CreateProgramFromCalendarForm from '../components/ScheduleWorkout/CreateProgramFromCalendarForm';
-import { createUserProgramFromCalendarRequest } from '../actions/userPrograms';
+import { createUserProgramFromCalendarRequest, appendUserProgramFromCalendarRequest } from '../actions/userPrograms';
+import AppendProgramFromCalendarForm from '../components/ScheduleWorkout/AppendProgramFromCalendarForm';
 
 BigCalendar.momentLocalizer(moment);
 
@@ -57,7 +58,8 @@ class ScheduleWorkoutCalendarPage extends Component {
             addRestDayInit: false,
             calendarViewDate: null,
             selectAllChecked: false,
-            showCreateProgram: false
+            showCreateProgram: false,
+            showAppendProgram: false
         }
     }
 
@@ -80,7 +82,8 @@ class ScheduleWorkoutCalendarPage extends Component {
             incompleteBulkActionAlert,
             showAddWorkoutTitleAlert,
             selectAllChecked,
-            showCreateProgram
+            showCreateProgram,
+            showAppendProgram
         } = this.state;
         const {
             selectedSlot,
@@ -125,11 +128,13 @@ class ScheduleWorkoutCalendarPage extends Component {
                                             </div>
                                             <div className="fixed-btm-bar-c">
                                                 <a href="javascript:void(0)" data-for="create-program-tooltip" data-tip="Create program" onClick={() => this.setState({ showCreateProgram: true })}><i className="icon-add_box"></i> </a>
+                                                <a href="javascript:void(0)" data-for="append-program-tooltip" data-tip="Append program" onClick={() => this.setState({ showAppendProgram: true })}><i className="icon-playlist_add"></i> </a>
                                                 <a href="javascript:void(0)" data-for="event-bulk-delete-tooltip" data-tip="Delete" onClick={() => this.setState({ deleteBulkActionAlert: true })}><i className="icon-delete_forever"></i> </a>
                                                 <a href="javascript:void(0)" data-for="event-bulk-complete-tooltip" data-tip="Mark as complete" onClick={() => this.setState({ completeBulkActionAlert: true })}><i className="icon-check_circle"></i></a>
                                                 <a href="javascript:void(0)" data-for="event-bulk-incomplete-tooltip" data-tip="Mark as incomplete" onClick={() => this.setState({ incompleteBulkActionAlert: true })}><i className="icon-cancel"></i></a>
                                             </div>
                                             <ReactTooltip id='create-program-tooltip' place="top" type="info" effect="solid" />
+                                            <ReactTooltip id='append-program-tooltip' place="top" type="dark" effect="solid" />
                                             <ReactTooltip id='event-bulk-delete-tooltip' place="top" type="error" effect="solid" />
                                             <ReactTooltip id='event-bulk-complete-tooltip' place="top" type="success" effect="solid" />
                                             <ReactTooltip id='event-bulk-incomplete-tooltip' place="top" type="warning" effect="solid" />
@@ -280,6 +285,21 @@ class ScheduleWorkoutCalendarPage extends Component {
                         onCancel={() => this.setState({ showCreateProgram: false })}
                     />
                 </SweetAlert>
+
+                <SweetAlert
+                    type="default"
+                    title="Append to program"
+                    showConfirm={false}
+                    showCancel={false}
+                    onConfirm={() => { }}
+                    show={showAppendProgram}
+                    closeOnClickOutside={false}
+                >
+                    <AppendProgramFromCalendarForm
+                        onSubmit={this.appendProgram}
+                        onCancel={() => this.setState({ showAppendProgram: false })}
+                    />
+                </SweetAlert>
             </div>
         );
     }
@@ -297,7 +317,9 @@ class ScheduleWorkoutCalendarPage extends Component {
             history,
             dispatch,
             createFromCalendarLoading,
-            createFromCalendarStatus
+            createFromCalendarStatus,
+            appendFromCalendarLoading,
+            appendFromCalendarStatus
         } = this.props;
         const {
             workoutPasteAction,
@@ -427,6 +449,14 @@ class ScheduleWorkoutCalendarPage extends Component {
                 this.getWorkoutSchedulesByMonth();
                 this.setState({ showCreateProgram: false });
                 ts('Program created!');
+            }
+            dispatch(hidePageLoader());
+        }
+        if (!appendFromCalendarLoading && prevProps.appendFromCalendarLoading !== appendFromCalendarLoading) {
+            if (appendFromCalendarStatus && prevProps.appendFromCalendarStatus !== appendFromCalendarStatus) {
+                this.getWorkoutSchedulesByMonth();
+                this.setState({ showAppendProgram: false });
+                ts('Program appended!');
             }
             dispatch(hidePageLoader());
         }
@@ -718,6 +748,19 @@ class ScheduleWorkoutCalendarPage extends Component {
         dispatch(showPageLoader());
         dispatch(createUserProgramFromCalendarRequest(requestData));
     }
+
+    appendProgram = (data) => {
+        const { dispatch } = this.props;
+        const { workoutEvents } = this.state;
+        const selectedEvents = _.filter(workoutEvents, ['isSelectedForBulkAction', true]);
+        const selectedIds = _.map(selectedEvents, 'id');
+        const requestData = {
+            selectedIds,
+            programId: data.program_id && data.program_id.value ? data.program_id.value : ''
+        };
+        dispatch(showPageLoader());
+        dispatch(appendUserProgramFromCalendarRequest(requestData));
+    }
 }
 
 const mapStateToProps = (state) => {
@@ -738,6 +781,8 @@ const mapStateToProps = (state) => {
         errorTitle: userScheduleWorkouts.get('errorTitle'),
         createFromCalendarLoading: userPrograms.get('createFromCalendarLoading'),
         createFromCalendarStatus: userPrograms.get('createFromCalendarStatus'),
+        appendFromCalendarLoading: userPrograms.get('appendFromCalendarLoading'),
+        appendFromCalendarStatus: userPrograms.get('appendFromCalendarStatus'),
     };
 }
 

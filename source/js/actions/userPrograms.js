@@ -97,6 +97,10 @@ export const CREATE_USER_PROGRAM_FROM_CALENDAR_REQUEST = 'CREATE_USER_PROGRAM_FR
 export const CREATE_USER_PROGRAM_FROM_CALENDAR_SUCCESS = 'CREATE_USER_PROGRAM_FROM_CALENDAR_SUCCESS';
 export const CREATE_USER_PROGRAM_FROM_CALENDAR_ERROR = 'CREATE_USER_PROGRAM_FROM_CALENDAR_ERROR';
 
+export const APPEND_USER_PROGRAM_FROM_CALENDAR_REQUEST = 'APPEND_USER_PROGRAM_FROM_CALENDAR_REQUEST';
+export const APPEND_USER_PROGRAM_FROM_CALENDAR_SUCCESS = 'APPEND_USER_PROGRAM_FROM_CALENDAR_SUCCESS';
+export const APPEND_USER_PROGRAM_FROM_CALENDAR_ERROR = 'APPEND_USER_PROGRAM_FROM_CALENDAR_ERROR';
+
 export const SET_USER_PROGRAM_STATE = 'SET_USER_PROGRAM_STATE';
 
 export function getUserProgramsRequest(filterData) {
@@ -602,6 +606,27 @@ export function createUserProgramFromCalendarSuccess(data) {
 export function createUserProgramFromCalendarError(error) {
     return {
         type: CREATE_USER_PROGRAM_FROM_CALENDAR_ERROR,
+        error
+    }
+}
+
+export function appendUserProgramFromCalendarRequest(requestData) {
+    return {
+        type: APPEND_USER_PROGRAM_FROM_CALENDAR_REQUEST,
+        requestData,
+    }
+}
+
+export function appendUserProgramFromCalendarSuccess(data) {
+    return {
+        type: APPEND_USER_PROGRAM_FROM_CALENDAR_SUCCESS,
+        data
+    }
+}
+
+export function appendUserProgramFromCalendarError(error) {
+    return {
+        type: APPEND_USER_PROGRAM_FROM_CALENDAR_ERROR,
         error
     }
 }

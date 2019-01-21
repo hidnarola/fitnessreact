@@ -144,6 +144,11 @@ function createUserProgramFromCalendar(requestData) {
     return postFormData(requestUrl + '/create_program_from_calendar', requestData, headers);
 }
 
+function appendUserProgramFromCalendar(requestData) {
+    let headers = extraUserHeaders();
+    return postFormData(requestUrl + '/append_program_from_calendar', requestData, headers);
+}
+
 export default {
     getUserPrograms,
     addUserProgramMaster,
@@ -166,5 +171,6 @@ export default {
     getWorkoutsListByProgramDay,
     reorderProgramWorkoutExercises,
     getUserProgramRating,
-    createUserProgramFromCalendar
+    createUserProgramFromCalendar,
+    appendUserProgramFromCalendar
 }
