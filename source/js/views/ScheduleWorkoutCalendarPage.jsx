@@ -448,6 +448,7 @@ class ScheduleWorkoutCalendarPage extends Component {
             if (createFromCalendarStatus && prevProps.createFromCalendarStatus !== createFromCalendarStatus) {
                 this.getWorkoutSchedulesByMonth();
                 this.setState({ showCreateProgram: false });
+                dispatch(getProgramsNameRequest());
                 ts('Program created!');
             }
             dispatch(hidePageLoader());
