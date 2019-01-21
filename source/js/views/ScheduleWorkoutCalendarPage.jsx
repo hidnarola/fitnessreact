@@ -24,7 +24,6 @@ import { SCHEDULED_WORKOUT_TYPE_RESTDAY, SCHEDULED_WORKOUT_TYPE_EXERCISE } from 
 import { ts, te, prepareDropdownOptionsData, capitalizeFirstLetter } from '../helpers/funs';
 import { FaCopy, FaTrash, FaPencil, FaEye } from 'react-icons/lib/fa'
 import cns from "classnames";
-import Select from 'react-select';
 import AddWorkoutTitleForm from '../components/ScheduleWorkout/AddWorkoutTitleForm';
 import ReactTooltip from "react-tooltip";
 import { showPageLoader, hidePageLoader } from '../actions/pageLoader';
@@ -288,23 +287,21 @@ class ScheduleWorkoutCalendarPage extends Component {
     componentDidUpdate(prevProps, prevState) {
         const {
             workouts,
-            workout,
             loading,
-            selectedSlot,
             error,
             assignProgramLoading,
-            assignProgram,
             assignProgramError,
             loadingTitle,
             workoutTitle,
             errorTitle,
             history,
-            dispatch
+            dispatch,
+            createFromCalendarLoading,
+            createFromCalendarStatus
         } = this.props;
         const {
             workoutPasteAction,
             deleteWorkoutActionInit,
-            selectedWorkoutDate,
             selectedWorkoutId,
             deleteBulkActionInit,
             completeBulkActionInit,
@@ -312,7 +309,6 @@ class ScheduleWorkoutCalendarPage extends Component {
             completeWorkoutActionInit,
             addRestDayInit,
             addWorkoutTitleInit,
-            workoutEvents,
         } = this.state;
         if (!loading && prevProps.workouts !== workouts) {
             var newWorkouts = [];
@@ -425,6 +421,14 @@ class ScheduleWorkoutCalendarPage extends Component {
                 let url = routeCodes.SAVE_SCHEDULE_WORKOUT.replace(':id', _id);
                 history.push(url);
             }
+        }
+        if (!createFromCalendarLoading && prevProps.createFromCalendarLoading !== createFromCalendarLoading) {
+            if (createFromCalendarStatus && prevProps.createFromCalendarStatus !== createFromCalendarStatus) {
+                this.getWorkoutSchedulesByMonth();
+                this.setState({ showCreateProgram: false });
+                ts('Program created!');
+            }
+            dispatch(hidePageLoader());
         }
     }
 
@@ -704,7 +708,14 @@ class ScheduleWorkoutCalendarPage extends Component {
         const { workoutEvents } = this.state;
         const selectedEvents = _.filter(workoutEvents, ['isSelectedForBulkAction', true]);
         const selectedIds = _.map(selectedEvents, 'id');
-        const requestData = { selectedIds, ...data };
+        const requestData = {
+            selectedIds,
+            goal: data.goal && data.goal.value ? data.goal.value : '',
+            level: data.level && data.level.value ? data.level.value : '',
+            privacy: data.privacy && typeof data.privacy.value !== 'undefined' ? data.privacy.value : '',
+            title: data.title ? data.title : ''
+        };
+        dispatch(showPageLoader());
         dispatch(createUserProgramFromCalendarRequest(requestData));
     }
 }
@@ -727,7 +738,6 @@ const mapStateToProps = (state) => {
         errorTitle: userScheduleWorkouts.get('errorTitle'),
         createFromCalendarLoading: userPrograms.get('createFromCalendarLoading'),
         createFromCalendarStatus: userPrograms.get('createFromCalendarStatus'),
-        createFromCalendarError: userPrograms.get('createFromCalendarError'),
     };
 }
 

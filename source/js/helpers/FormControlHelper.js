@@ -16,7 +16,7 @@ export const InputField = (props) => {
                 `${wrapperClass} ${(meta.touched && meta.error) ? 'has-error' : ''}`
             }
         >
-            <label htmlFor={input.name} className={labelClass}>{label} {requiredAstrisk && <span style={{ color: "red" }}>*</span>}</label>
+            {label && <label htmlFor={input.name} className={labelClass}>{label} {requiredAstrisk && <span style={{ color: "red" }}>*</span>}</label>}
             <input
                 {...input}
                 type={type ? type : 'text'}
@@ -42,7 +42,6 @@ export const RadioFields = (props) => {
         className,
         labelClass,
         errorClass,
-        type,
         radioList,
         checked,
         handleChange,
@@ -50,7 +49,7 @@ export const RadioFields = (props) => {
     } = props;
     return (
         <div className={wrapperClass}>
-            <label htmlFor={input.name} className={labelClass}>{label} {requiredAstrisk && <span style={{ color: "red" }}>*</span>}</label>
+            {label && <label htmlFor={input.name} className={labelClass}>{label} {requiredAstrisk && <span style={{ color: "red" }}>*</span>}</label>}
             {
                 radioList.map((obj, index) => {
                     return (
@@ -82,7 +81,7 @@ export const TextAreaField = (props) => {
                 `${wrapperClass} ${(meta.touched && meta.error) ? 'has-error' : ''}`
             }
         >
-            <label htmlFor={input.name} className={labelClass}>{label} {requiredAstrisk && <span style={{ color: "red" }}>*</span>}</label>
+            {label && <label htmlFor={input.name} className={labelClass}>{label} {requiredAstrisk && <span style={{ color: "red" }}>*</span>}</label>}
             <textarea
                 {...input}
                 className={className}
@@ -107,7 +106,6 @@ export const CheckboxField = (props) => {
         errorClass,
         checked,
         handleClick,
-        fieldLabel,
         id,
         requiredAstrisk
     } = props;
@@ -122,7 +120,7 @@ export const CheckboxField = (props) => {
                 checked={checked}
                 onClick={(e) => handleClick(e.target.checked)}
             />
-            <label htmlFor={input.name} className={labelClass}>{label} {requiredAstrisk && <span style={{ color: "red" }}>*</span>}</label>
+            {label && <label htmlFor={input.name} className={labelClass}>{label} {requiredAstrisk && <span style={{ color: "red" }}>*</span>}</label>}
             {meta.touched &&
                 ((meta.error && <span className={errorClass}>{meta.error}</span>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))
             }
@@ -144,7 +142,7 @@ export const SelectField_ReactSelect = (props) => {
                 `${wrapperClass} ${(meta.touched && meta.error) ? 'has-error' : ''}`
             }
         >
-            <label htmlFor={input.name} className={labelClass}>{label} {requiredAstrisk && <span style={{ color: "red" }}>*</span>}</label>
+            {label && <label htmlFor={input.name} className={labelClass}>{label} {requiredAstrisk && <span style={{ color: "red" }}>*</span>}</label>}
             <Select
                 {...input}
                 value={val}
@@ -177,7 +175,7 @@ export const SelectField_ReactSelectMulti = (props) => {
                 `${wrapperClass} ${(meta.touched && meta.error) ? 'has-error' : ''}`
             }
         >
-            <label htmlFor={input.name} className={labelClass}>{label} {requiredAstrisk && <span style={{ color: "red" }}>*</span>}</label>
+            {label && <label htmlFor={input.name} className={labelClass}>{label} {requiredAstrisk && <span style={{ color: "red" }}>*</span>}</label>}
             <Select
                 {...input}
                 value={val}
@@ -249,7 +247,7 @@ export class FileField_Dropzone_Single extends Component {
                     `${mainWrapperClass} ${(meta.touched && meta.error) ? 'has-error' : ''} ${this.rejectedFiles ? 'has-error' : ''}`
                 }
             >
-                <label htmlFor={input.name} className={labelClass}>{label} {requiredAstrisk && <span style={{ color: "red" }}>*</span>}</label>
+                {label && <label htmlFor={input.name} className={labelClass}>{label} {requiredAstrisk && <span style={{ color: "red" }}>*</span>}</label>}
                 <div className="image-form-flex-wrapper">
                     {_existingImages}
                     <div
@@ -315,7 +313,7 @@ export const StarRating = (props) => {
                 `${wrapperClass} ${(meta.touched && meta.error) ? 'has-error' : ''}`
             }
         >
-            <label htmlFor={input.name} className={labelClass}>{label} {requiredAstrisk && <span style={{ color: "red" }}>*</span>}</label>
+            {label && <label htmlFor={input.name} className={labelClass}>{label} {requiredAstrisk && <span style={{ color: "red" }}>*</span>}</label>}
             <StarRatingComponent
                 {...input}
                 starRating={input.value}
@@ -351,7 +349,7 @@ export const DateField = (props) => {
     } = props;
     return (
         <div className={wrapperClass}>
-            <label htmlFor={input.name} className={labelClass}>{label} {requiredAstrisk && <span style={{ color: "red" }}>*</span>}</label>
+            {label && <label htmlFor={input.name} className={labelClass}>{label} {requiredAstrisk && <span style={{ color: "red" }}>*</span>}</label>}
             <DatePicker
                 {...props}
                 selected={selectedDate}
@@ -381,7 +379,6 @@ export const EditorField = (props) => {
         labelClass,
         placeholder,
         errorClass,
-        type,
         handleChange,
         requiredAstrisk
     } = props;
@@ -391,7 +388,7 @@ export const EditorField = (props) => {
                 `${wrapperClass} ${(meta.touched && meta.error) ? 'has-error' : ''}`
             }
         >
-            <label htmlFor={input.name} className={labelClass}>{label} {requiredAstrisk && <span style={{ color: "red" }}>*</span>}</label>
+            {label && <label htmlFor={input.name} className={labelClass}>{label} {requiredAstrisk && <span style={{ color: "red" }}>*</span>}</label>}
             <ReactQuill
                 {...input}
                 value={input.value ? input.value : ''}

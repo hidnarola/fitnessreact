@@ -2200,7 +2200,6 @@ ul.uploade-data li.sm-img {border-bottom: 1px dashed #fff;font-size:10px;}
 .profile-new-header .lavel-img>span .profile-overlay-wrap a.view-img{ left: 50px; top: 75px;}
 .profile-new-header .lavel-img>span .profile-overlay-wrap a.upload-img{ left: 110px; top: 25px;}
 
-
 .profile-new-header .lavel-img>span img {min-height: inherit;}
 .profile-new-header .profile-picture {padding-left: 80px;width: 20%;}
 .header .logo , .navigation{border-right: 2px solid #f4f7fc;}
@@ -2217,22 +2216,9 @@ ul.uploade-data li.sm-img {border-bottom: 1px dashed #fff;font-size:10px;}
 #profile-actions-tooltip.__react_component_tooltip.type-light.place-right:after {border-right-color: #ff337e;}
 #profile-actions-tooltip.__react_component_tooltip.type-light.place-bottom:after {border-bottom-color: #ff337e;}
 #profile-actions-tooltip.__react_component_tooltip.type-light.place-left:after {border-left-color: #ff337e;}
-
-.profile-new-header .body-head-r.add-friend{
-display: -webkit-box;
-display: -ms-flexbox;
-display: flex;
--webkit-box-orient: vertical;
--webkit-box-direction: normal;
--ms-flex-direction: column;
-flex-direction: column;
--webkit-box-pack: start;
--ms-flex-pack: start;
-justify-content: flex-start;
--ms-flex-wrap: wrap-reverse;
-flex-wrap: wrap-reverse;
-margin-top: 0;
-}
+.profile-new-header .body-head-r.add-friend{ display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-orient: vertical; -webkit-box-direction: normal; -ms-flex-direction: column; flex-direction: column; -webkit-box-pack: start; -ms-flex-pack: start; justify-content: flex-start; -ms-flex-wrap: wrap-reverse; flex-wrap: wrap-reverse; margin-top: 0; }
+.ta-left{text-align: left !important;}
+.fs-14{font-size: 14px !important;}
 
 
 

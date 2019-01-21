@@ -11,6 +11,8 @@ import {
     PROGRAM_PUBLIC,
     PROGRAM_PUBLIC_STR
 } from "../../constants/consts";
+import { Alert } from "react-bootstrap";
+import { setUserProgramState } from "../../actions/userPrograms";
 
 const minLength2 = minLength(2);
 const maxLength100 = maxLength(100);
@@ -22,9 +24,16 @@ const privacyOptions = [
 
 class CreateProgramFromCalendarForm extends Component {
     render() {
-        const { handleSubmit, onCancel, createFromCalendarLoading } = this.props;
+        const { handleSubmit, onCancel, createFromCalendarLoading, createFromCalendarError } = this.props;
         return (
             <div className="create-program-alert-form">
+                {createFromCalendarError && createFromCalendarError.length > 0 &&
+                    <Alert bsStyle="danger">
+                        {
+                            createFromCalendarError.map((o, i) => (<p key={i}>{o}</p>))
+                        }
+                    </Alert>
+                }
                 <form method="POST" onSubmit={handleSubmit}>
                     <Field
                         name="title"
@@ -39,6 +48,7 @@ class CreateProgramFromCalendarForm extends Component {
                         id="privacy"
                         name="privacy"
                         wrapperClass="form-group"
+                        className="ta-left fs-14"
                         placeholder="Privacy"
                         component={SelectField_ReactSelect}
                         options={privacyOptions}
@@ -49,6 +59,7 @@ class CreateProgramFromCalendarForm extends Component {
                         id="goal"
                         name="goal"
                         wrapperClass="form-group"
+                        className="ta-left fs-14"
                         placeholder="Goal"
                         component={SelectField_ReactSelect}
                         options={SECONDARY_GOALS}
@@ -59,6 +70,7 @@ class CreateProgramFromCalendarForm extends Component {
                         id="level"
                         name="level"
                         wrapperClass="form-group"
+                        className="ta-left fs-14"
                         placeholder="Level"
                         component={SelectField_ReactSelect}
                         options={PROGRAM_DIFFICULTY_LEVEL_OBJ}
@@ -70,6 +82,12 @@ class CreateProgramFromCalendarForm extends Component {
                 </form>
             </div>
         )
+    }
+
+    componentWillUnmount() {
+        const { dispatch } = this.props;
+        const newState = { createFromCalendarError: [] };
+        dispatch(setUserProgramState(newState));
     }
 }
 

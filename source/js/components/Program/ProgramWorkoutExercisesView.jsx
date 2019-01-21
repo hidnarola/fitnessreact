@@ -680,6 +680,7 @@ class WorkoutExerciseSupersetView extends Component {
             handleWholeExeDelete,
             exerciseObj,
             handleFillFormForEdit,
+            allowEdit
         } = this.props;
         return (
             <div className="workout-exercise-head-view-wrapper">
@@ -740,6 +741,7 @@ class WorkoutExerciseCircuitView extends Component {
             handleSingleExeDelete,
             exerciseObj,
             handleFillFormForEdit,
+            allowEdit
         } = this.props;
         return (
             <div className="workout-exercise-head-view-wrapper">
