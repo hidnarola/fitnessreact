@@ -48,26 +48,34 @@ class ProfileFriendBlock extends Component {
                     </div>
                     {friendshipStatus && friend.username !== loggedUserData.username &&
                         <div className="friend-box-status">
-                            <ButtonToolbar>
-                                <Dropdown id={`friend_options_${friend._id}`} pullRight>
-                                    <Dropdown.Toggle>
-                                        {(!friendsActionDisabled) &&
-                                            <h6 className="vertical-middle-c"><i className="icon-check_circle"></i> Friend</h6>
-                                        }
-                                        {friendsActionDisabled &&
-                                            <h6 className="vertical-middle-c"><i className="icon-check_circle"></i> Please wait...</h6>
-                                        }
-                                    </Dropdown.Toggle>
-                                    <Dropdown.Menu className="">
-                                        {friendshipStatus && friendshipStatus === FRIENDSHIP_STATUS_SELF &&
-                                            <MenuItem eventKey="1" href="javascript:void(0)" onClick={() => handleShowUnfriendRequest(friend.friendshipId)}>Unfriend</MenuItem>
-                                        }
-                                        {friend.userSettings && friend.userSettings.messageAccessibility && (friend.userSettings.messageAccessibility == ACCESS_LEVEL_PUBLIC || friend.userSettings.messageAccessibility == ACCESS_LEVEL_FRIENDS) &&
-                                            <MenuItem eventKey="2" href="javascript:void(0)" onClick={() => handleRequestMessageChannel(friend)}>Send message</MenuItem>
-                                        }
-                                    </Dropdown.Menu>
-                                </Dropdown>
-                            </ButtonToolbar>
+                            {
+                                ((friendshipStatus && friendshipStatus === FRIENDSHIP_STATUS_SELF) ||
+                                    (friend.userSettings && friend.userSettings.messageAccessibility && (friend.userSettings.messageAccessibility == ACCESS_LEVEL_PUBLIC || friend.userSettings.messageAccessibility == ACCESS_LEVEL_FRIENDS))) ?
+                                    <ButtonToolbar>
+                                        <Dropdown id={`friend_options_${friend._id}`} pullRight>
+                                            <Dropdown.Toggle>
+                                                {(!friendsActionDisabled) &&
+                                                    <h6 className="vertical-middle-c"><i className="icon-check_circle"></i> Friend</h6>
+                                                }
+                                                {friendsActionDisabled &&
+                                                    <h6 className="vertical-middle-c"><i className="icon-check_circle"></i> Please wait...</h6>
+                                                }
+                                            </Dropdown.Toggle>
+                                            <Dropdown.Menu className="">
+                                                {friendshipStatus && friendshipStatus === FRIENDSHIP_STATUS_SELF &&
+                                                    <MenuItem eventKey="1" href="javascript:void(0)" onClick={() => handleShowUnfriendRequest(friend.friendshipId)}>Unfriend</MenuItem>
+                                                }
+                                                {friend.userSettings && friend.userSettings.messageAccessibility && (friend.userSettings.messageAccessibility == ACCESS_LEVEL_PUBLIC || friend.userSettings.messageAccessibility == ACCESS_LEVEL_FRIENDS) &&
+                                                    <MenuItem eventKey="2" href="javascript:void(0)" onClick={() => handleRequestMessageChannel(friend)}>Send message</MenuItem>
+                                                }
+                                            </Dropdown.Menu>
+                                        </Dropdown>
+                                    </ButtonToolbar>
+                                    :
+                                    <div className="friend-box-status">
+                                        <h6 className="vertical-middle-c"><i className="icon-check_circle"></i> Friend</h6>
+                                    </div>
+                            }
                         </div>
                     }
                     {!(friendshipStatus && friend.username !== loggedUserData.username) &&
