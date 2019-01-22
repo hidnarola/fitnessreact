@@ -20,6 +20,7 @@ export const routeCodes = {
     PROFILE: `${publicPath}profile`,
     PROFILEPHOTOS: `${publicPath}profile/{username}/photos`,
     PROFILEFRIENDS: `${publicPath}profile/{username}/friends`,
+    PROFILECALENDAR: `${publicPath}profile/{username}/calendar`,
     UPDATE_PROFILE: `${publicPath}update_profile`,
     PROFILE_SETTINGS: `${publicPath}profile_settings`,
     CHANGE_PASSWORD: `${publicPath}change_password`,

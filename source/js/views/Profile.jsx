@@ -29,6 +29,7 @@ import ReactTooltip from "react-tooltip";
 import unitize from "unitize";
 import Lightbox from 'react-images';
 import UsersListModal from '../components/Common/UsersListModal';
+import ProfileCalendar from '../components/Profile/ProfileCalendar';
 
 class Profile extends Component {
     constructor(props) {
@@ -290,6 +291,7 @@ class Profile extends Component {
 
                         <div className="body-head-l-btm profile-new-menu">
                             <NavLink activeClassName='pink-btn-new' exact to={`${routeCodes.PROFILE}/${username}`}>Fithub</NavLink>
+                            <NavLink activeClassName='pink-btn-new' exact to={routeCodes.PROFILECALENDAR.replace('{username}', username)}>Calendar</NavLink>
                             <NavLink activeClassName='pink-btn-new' exact to={routeCodes.PROFILEPHOTOS.replace('{username}', username)}>Photos</NavLink>
                             <NavLink activeClassName='pink-btn-new' exact to={routeCodes.PROFILEFRIENDS.replace('{username}', username)}>Friends</NavLink>
                         </div>
@@ -324,6 +326,16 @@ class Profile extends Component {
                                             path={routeCodes.PROFILEPHOTOS.replace('{username}', username)}
                                             render={() => {
                                                 return <ProfilePhotos
+                                                    {...this.state}
+                                                    setForceUpdateChildComponents={this.setForceUpdateChildComponents}
+                                                />
+                                            }}
+                                        />
+                                        <Route
+                                            exact
+                                            path={routeCodes.PROFILECALENDAR.replace('{username}', username)}
+                                            render={() => {
+                                                return <ProfileCalendar
                                                     {...this.state}
                                                     setForceUpdateChildComponents={this.setForceUpdateChildComponents}
                                                 />
