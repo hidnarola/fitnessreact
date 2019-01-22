@@ -21,9 +21,13 @@ import {
     SAVE_LOGGED_USER_PROFILE_SETTINGS_REQUEST,
     SAVE_LOGGED_USER_PROFILE_SETTINGS_SUCCESS,
     SAVE_LOGGED_USER_PROFILE_SETTINGS_ERROR,
+    SHOW_FOLL_USER_LIST_REQUEST,
+    SHOW_FOLL_USER_LIST_SUCCESS,
+    SHOW_FOLL_USER_LIST_ERROR,
+    SET_USER_PROFILE_STATE,
 } from "../actions/profile";
 import { VALIDATION_FAILURE_STATUS } from "../constants/consts";
-import { generateValidationErrorMsgArr } from "../helpers/funs";
+import { generateValidationErrorMsgArr, capitalizeFirstLetter } from "../helpers/funs";
 
 const initialState = Map({
     loading: false,
@@ -32,6 +36,12 @@ const initialState = Map({
     settingsLoading: false,
     settings: null,
     settingsError: [],
+
+    showFollModal: false,
+    showFollModalFor: null,
+    showFollModalLoading: false,
+    showFollModalUsers: [],
+    showFollModalError: [],
 });
 
 const actionMap = {
@@ -261,6 +271,58 @@ const actionMap = {
             error: error,
         }));
     },
+    [SHOW_FOLL_USER_LIST_REQUEST]: (state, action) => {
+        return state.merge(Map({
+            showFollModalLoading: true,
+            showFollModal: true,
+            showFollModalFor: action._for ? capitalizeFirstLetter(action._for) : "Users",
+            showFollModalUsers: [],
+            showFollModalError: []
+        }));
+    },
+    [SHOW_FOLL_USER_LIST_SUCCESS]: (state, action) => {
+        var newState = {
+            showFollModalLoading: false,
+        };
+        if (action.data.status === 1) {
+            let users = [];
+            if (action.data.data && action.data.data.length > 0) {
+                action.data.data.map((o) => {
+                    users.push(o.user_details);
+                });
+            }
+            newState.showFollModalUsers = users;
+        } else {
+            if (action.data.message && action.data.message !== '') {
+                newState.showFollModalError = [action.data.message];
+            } else {
+                newState.showFollModalError = ['Something went wrong! please try again later.'];
+            }
+        }
+        return state.merge(Map(newState));
+    },
+    [SHOW_FOLL_USER_LIST_ERROR]: (state, action) => {
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
+        }
+        return state.merge(Map({
+            showFollModalLoading: false,
+            showFollModal: false,
+            showFollModalFor: null,
+            showFollModalError: error,
+        }));
+    },
+    [SET_USER_PROFILE_STATE]: (state, action) => {
+        return state.merge(Map({
+            ...state,
+            ...action.newState
+        }));
+    }
 };
 
 export default function reducer(state = initialState, action = {}) {

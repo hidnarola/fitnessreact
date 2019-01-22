@@ -21,6 +21,9 @@ import {
     saveLoggedUserProfileSettingsSuccess,
     saveLoggedUserProfileSettingsError,
     SAVE_LOGGED_USER_PROFILE_SETTINGS_REQUEST,
+    showFollUserListSuccess,
+    showFollUserListError,
+    SHOW_FOLL_USER_LIST_REQUEST,
 } from '../actions/profile';
 
 import api from 'api/profile';
@@ -107,6 +110,19 @@ function updateLoggedUserProfilePhotoData() {
     }
 }
 
+function showFollUserData() {
+    return function* (action) {
+        try {
+            var _for = action._for;
+            var username = action.username;
+            const data = yield call(() => api.showFollUserList(_for, username));
+            yield put(showFollUserListSuccess(data));
+        } catch (error) {
+            yield put(showFollUserListError(error));
+        }
+    }
+}
+
 export function* watchProfileDetailsData() {
     yield takeLatest(GET_LOGGED_USER_PROFILE_DETAILS_REQUEST, fetchLoggedUserProfileDetailsData());
     yield takeLatest(GET_PROFILE_DETAILS_REQUEST, fetchProfileDetailsData());
@@ -115,6 +131,7 @@ export function* watchProfileDetailsData() {
     yield takeLatest(SAVE_LOGGED_USER_PROFILE_SETTINGS_REQUEST, updateLoggedUserProfileSettingsData());
     yield takeLatest(SAVE_LOGGED_USER_PROFILE_PHOTO_REQUEST, updateLoggedUserProfilePhotoData());
     yield takeLatest(GET_LOGGED_USER_PROFILE_SETTINGS_REQUEST, fetchLoggedUserProfileSettingsData());
+    yield takeLatest(SHOW_FOLL_USER_LIST_REQUEST, showFollUserData());
 }
 
 export default [

@@ -26,6 +26,12 @@ export const SAVE_LOGGED_USER_PROFILE_PHOTO_REQUEST = 'SAVE_LOGGED_USER_PROFILE_
 export const SAVE_LOGGED_USER_PROFILE_PHOTO_SUCCESS = 'SAVE_LOGGED_USER_PROFILE_PHOTO_SUCCESS';
 export const SAVE_LOGGED_USER_PROFILE_PHOTO_ERROR = 'SAVE_LOGGED_USER_PROFILE_PHOTO_ERROR';
 
+export const SHOW_FOLL_USER_LIST_REQUEST = 'SHOW_FOLL_USER_LIST_REQUEST';
+export const SHOW_FOLL_USER_LIST_SUCCESS = 'SHOW_FOLL_USER_LIST_SUCCESS';
+export const SHOW_FOLL_USER_LIST_ERROR = 'SHOW_FOLL_USER_LIST_ERROR';
+
+export const SET_USER_PROFILE_STATE = 'SET_USER_PROFILE_STATE';
+
 export function getProfileDetailsRequest(username) {
     return {
         type: GET_PROFILE_DETAILS_REQUEST,
@@ -168,5 +174,34 @@ export function saveLoggedUserProfilePhotoError(error) {
     return {
         type: SAVE_LOGGED_USER_PROFILE_PHOTO_ERROR,
         error
+    }
+}
+
+export function showFollUserListRequest(_for, username) {
+    return {
+        type: SHOW_FOLL_USER_LIST_REQUEST,
+        _for,
+        username
+    }
+}
+
+export function showFollUserListSuccess(data) {
+    return {
+        type: SHOW_FOLL_USER_LIST_SUCCESS,
+        data
+    }
+}
+
+export function showFollUserListError(error) {
+    return {
+        type: SHOW_FOLL_USER_LIST_ERROR,
+        error
+    }
+}
+
+export function setUserProfileState(newState) {
+    return {
+        type: SET_USER_PROFILE_STATE,
+        newState
     }
 }

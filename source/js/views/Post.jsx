@@ -160,7 +160,7 @@ class Post extends Component {
                                             {ReactHtmlParser(description)}
                                         </div>
                                     }
-                                    <div className={cns("posttype-body-grey text-c", postImageDisplayClass)}>
+                                    <div className={cns("posttype-body-grey text-c single-post-view", postImageDisplayClass)}>
                                         {images && images.length > 0 &&
                                             images.map((imageD, imageI) => {
                                                 return (

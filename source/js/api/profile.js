@@ -13,7 +13,6 @@ function getLoggedUserProfileDetails() {
     return fetchResource(requestUrl, options);
 }
 
-
 function getLoggedUserProfileSettings() {
     let headers = extraUserHeaders();
     var options = {
@@ -54,6 +53,16 @@ function saveLoggedUserProfilePhoto(requestData) {
     return putFormData(requestUrl + '/photo', requestData, headers);
 }
 
+function showFollUserList(_for, username) {
+    let headers = extraUserHeaders();
+    var options = {
+        method: 'GET',
+        headers: headers,
+    }
+
+    return fetchResource(requestUrl + '/foll/' + username + '/' + _for, options);
+}
+
 export default {
     getLoggedUserProfileDetails,
     getLoggedUserProfileSettings,
@@ -62,4 +71,5 @@ export default {
     saveLoggedUserProfileDetails,
     saveLoggedUserProfileSettings,
     saveLoggedUserProfilePhoto,
+    showFollUserList
 }

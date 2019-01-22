@@ -8,7 +8,7 @@ import ProfilePhotos from 'components/Profile/ProfilePhotos';
 import FitnessHeader from 'components/global/FitnessHeader';
 import FitnessNav from 'components/global/FitnessNav';
 import { routeCodes } from 'constants/routes';
-import { getProfileDetailsRequest, saveLoggedUserProfilePhotoRequest, getLoggedUserProfileSettingsRequest } from '../actions/profile';
+import { getProfileDetailsRequest, saveLoggedUserProfilePhotoRequest, getLoggedUserProfileSettingsRequest, showFollUserListRequest, setUserProfileState } from '../actions/profile';
 import noProfileImg from 'img/common/no-profile-img.png'
 import { FRIENDSHIP_STATUS_SELF, FRIENDSHIP_STATUS_UNKNOWN, FRIENDSHIP_STATUS_FRIEND, FRIENDSHIP_STATUS_REQUEST_RECEIVED, FRIENDSHIP_STATUS_REQUEST_SENT, LOCALSTORAGE_USER_DETAILS_KEY, FITASSIST_USER_DETAILS_TOKEN_KEY, MEASUREMENT_UNIT_CENTIMETER, MEASUREMENT_UNIT_KILOGRAM, MEASUREMENT_UNIT_GRAM, ACCESS_LEVEL_PUBLIC, ACCESS_LEVEL_FRIENDS } from '../constants/consts';
 import { sendFriendRequestRequest, cancelFriendRequestRequest, acceptFriendRequestRequest } from '../actions/friends';
@@ -28,6 +28,7 @@ import { startFollowingRequest, stopFollowingRequest } from '../actions/follows'
 import ReactTooltip from "react-tooltip";
 import unitize from "unitize";
 import Lightbox from 'react-images';
+import UsersListModal from '../components/Common/UsersListModal';
 
 class Profile extends Component {
     constructor(props) {
@@ -110,7 +111,11 @@ class Profile extends Component {
         const {
             requestChannelLoading,
             timelineUserPrivacy,
-            startFollowingLoading
+            startFollowingLoading,
+            showFollModal,
+            showFollModalFor,
+            showFollModalUsers,
+            showFollModalLoading
         } = this.props;
         return (
             <div className='stat-page'>
@@ -166,10 +171,10 @@ class Profile extends Component {
                                         <span>{unitize(profile.totalWorkouts).toString()}</span> workouts
                                     </div>
                                     <div className="followers">
-                                        <span>{unitize(profile.totalFollowers).toString()}</span> followers
+                                        <a href="javascript:void(0)" onClick={() => this.showFollUserList("followers")} className="user-m-i-link"><span>{unitize(profile.totalFollowers).toString()}</span> followers</a>
                                     </div>
                                     <div className="following">
-                                        <span>{unitize(profile.totalFollowings).toString()}</span> following
+                                        <a href="javascript:void(0)" onClick={() => this.showFollUserList("followings")} className="user-m-i-link"><span>{unitize(profile.totalFollowings).toString()}</span> following</a>
                                     </div>
                                 </div>
                                 <div className="user-meta-text">
@@ -389,6 +394,13 @@ class Profile extends Component {
                     handleSubmit={this.saveProfilePhoto}
                     handleClose={this.handleHideChangeProfilePhotoModal}
                 />
+                <UsersListModal
+                    show={showFollModal}
+                    loading={showFollModalLoading}
+                    title={showFollModalFor}
+                    handleClose={this.hideFollUserList}
+                    data={showFollModalUsers ? showFollModalUsers : []}
+                />
             </div>
         );
     }
@@ -397,7 +409,6 @@ class Profile extends Component {
         const {
             profile,
             profileLoading,
-            match,
             requestSendLoading,
             requestSendError,
             dispatch,
@@ -720,6 +731,23 @@ class Profile extends Component {
         let requestData = { _id: selectedFollowId };
         dispatch(stopFollowingRequest(requestData));
     }
+
+    showFollUserList = (_for) => {
+        const { dispatch, match } = this.props;
+        dispatch(showFollUserListRequest(_for, match.params.username));
+    }
+
+    hideFollUserList = (_for) => {
+        const { dispatch } = this.props;
+        const newState = {
+            showFollModalLoading: false,
+            showFollModal: false,
+            showFollModalFor: null,
+            showFollModalUsers: [],
+            showFollModalError: [],
+        };
+        dispatch(setUserProfileState(newState));
+    }
     //#endregion
 
 }
@@ -748,7 +776,13 @@ const mapStateToProps = (state) => {
         startFollowingError: follows.get('startFollowingError'),
         stopFollowingLoading: follows.get('stopFollowingLoading'),
         stopFollowingStatus: follows.get('stopFollowingStatus'),
-        stopFollowingError: follows.get('stopFollowingError')
+        stopFollowingError: follows.get('stopFollowingError'),
+
+        showFollModalLoading: profile.get('showFollModalLoading'),
+        showFollModal: profile.get('showFollModal'),
+        showFollModalFor: profile.get('showFollModalFor'),
+        showFollModalUsers: profile.get('showFollModalUsers'),
+        showFollModalError: profile.get('showFollModalError')
     }
 }
 

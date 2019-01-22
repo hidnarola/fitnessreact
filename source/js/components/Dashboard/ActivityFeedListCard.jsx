@@ -141,7 +141,7 @@ class ActivityFeedListCard extends Component {
                             {ReactHtmlParser(description)}
                         </div>
                     }
-                    <div className={cns("posttype-body-grey ", postImageDisplayClass)}>
+                    <div className={cns("posttype-body-grey dashboard-feedact", postImageDisplayClass)}>
                         {images && images.length > 0 &&
                             images.map((imageD, imageI) => {
                                 if (imageI >= 5) {
