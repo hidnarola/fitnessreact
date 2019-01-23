@@ -102,10 +102,11 @@ export function setSelectedSlotFromCalendar(slotInfo = null) {
     }
 }
 
-export function getUsersWorkoutSchedulesRequest(requestData) {
+export function getUsersWorkoutSchedulesRequest(requestData, username = null) {
     return {
         type: GET_USERS_WORKOUT_SCHEDULES_REQUEST,
         requestData,
+        username
     }
 }
 

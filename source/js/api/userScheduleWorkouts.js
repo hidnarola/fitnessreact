@@ -3,9 +3,13 @@ import { extraUserHeaders } from '../helpers/funs';
 
 const requestUrl = 'user/user_workouts';
 
-function getUsersWorkoutSchedulesByMonths(requestData) {
+function getUsersWorkoutSchedulesByMonths(requestData, username) {
     let headers = extraUserHeaders();
-    return postFormData(requestUrl + '/get_by_month', requestData, headers);
+    if (username) {
+        return postFormData(requestUrl + '/get_by_month/' + username, requestData, headers);
+    } else {
+        return postFormData(requestUrl + '/get_by_month', requestData, headers);
+    }
 }
 
 function getExercisesName() {

@@ -64,7 +64,8 @@ function getUsersWorkoutSchedulesByMonthData() {
     return function* (action) {
         try {
             let requestData = action.requestData;
-            const data = yield call(() => api.getUsersWorkoutSchedulesByMonths(requestData));
+            const username = action.username;
+            const data = yield call(() => api.getUsersWorkoutSchedulesByMonths(requestData, username));
             yield put(getUsersWorkoutSchedulesSuccess(data));
         } catch (error) {
             yield put(getUsersWorkoutSchedulesError(error));

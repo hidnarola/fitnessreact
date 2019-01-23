@@ -32,25 +32,23 @@ class ProfileCalendar extends Component {
     render() {
         const { workoutEvents } = this.state;
         return (
-            <div className="col-md-12">
-                <div className="white-box space-btm-20">
-                    <div className="whitebox-body profile-body">
-                        <BigCalendar
-                            selectable={true}
-                            defaultView={BigCalendar.Views.MONTH}
-                            className="workout-calender"
-                            events={workoutEvents}
-                            onView={() => { }}
-                            views={[BigCalendar.Views.MONTH]}
-                            onNavigate={this.handleNavigation}
-                            onSelectEvent={(event) => { }}
-                            popup={true}
-                            popupOffset={50}
-                            components={{
-                                event: CustomEventCard,
-                            }}
-                        />
-                    </div>
+            <div className="white-box space-btm-20">
+                <div className="whitebox-body profile-body">
+                    <BigCalendar
+                        selectable={true}
+                        defaultView={BigCalendar.Views.MONTH}
+                        className="workout-calender"
+                        events={workoutEvents}
+                        onView={() => { }}
+                        views={[BigCalendar.Views.MONTH]}
+                        onNavigate={this.handleNavigation}
+                        onSelectEvent={(event) => { }}
+                        popup={true}
+                        popupOffset={50}
+                        components={{
+                            event: CustomEventCard,
+                        }}
+                    />
                 </div>
             </div>
         );
@@ -81,6 +79,7 @@ class ProfileCalendar extends Component {
 
     getWorkoutSchedulesByMonth = (date = null) => {
         const { calendarViewDate } = this.state;
+        const { dispatch, profile } = this.props;
         let _date = null;
         if (date) {
             _date = date;
@@ -91,11 +90,8 @@ class ProfileCalendar extends Component {
             _date = moment().startOf('day').utc();
             this.setState({ calendarViewDate: _date.local() });
         }
-        const {
-            dispatch
-        } = this.props;
         var requestObj = { date: _date }
-        dispatch(getUsersWorkoutSchedulesRequest(requestObj));
+        dispatch(getUsersWorkoutSchedulesRequest(requestObj, profile.username));
     }
 
     handleNavigation = (date) => {
