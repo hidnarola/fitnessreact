@@ -55,7 +55,7 @@ class ProfileCalendar extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        const { workouts, loading } = this.props;
+        const { workouts, loading, profile } = this.props;
         if (!loading && prevProps.workouts !== workouts) {
             var newWorkouts = [];
             _.forEach(workouts, (workout) => {
@@ -70,6 +70,7 @@ class ProfileCalendar extends Component {
                     totalExercises: (workout.totalExercises) ? workout.totalExercises : 0,
                     meta: workout,
                     description: (workout.description) ? workout.description : '',
+                    username: profile.username
                 }
                 newWorkouts.push(newWorkout);
             });
@@ -139,7 +140,7 @@ class CustomEventCard extends Component {
                             <div className={titleClassName}><p>{event.description}</p></div>
                         }
                         {(event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
-                            <NavLink to={routeCodes.SAVE_SCHEDULE_WORKOUT.replace(':id', event.id)} data-tip="Details" title=""><FaEye /></NavLink>
+                            <NavLink to={routeCodes.PROFILE_WORKOUT_DETAILS.replace(':username', event.username).replace(':id', event.id)} data-tip="Details" title=""><FaEye /></NavLink>
                         }
                     </div>
                 </div>

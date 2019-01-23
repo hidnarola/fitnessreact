@@ -104,6 +104,7 @@ import en from 'javascript-time-ago/locale/en'
 import SaveProgramMasterPage from '../components/Program/SaveProgramMasterPage';
 import ProgramView from '../components/Program/ProgramView';
 import RatingView from '../components/Program/RatingView';
+import ViewScheduleWorkout from '../components/Profile/ViewScheduleWorkout';
 JavascriptTimeAgo.locale(en);
 
 const auth = new Auth();
@@ -165,6 +166,7 @@ class App extends Component {
 
                                 <PrivateRoute path={`${routeCodes.STATSPAGE}`} component={StatsPage} />
 
+                                <PrivateRoute exact path={routeCodes.PROFILE_WORKOUT_DETAILS} component={ViewScheduleWorkout} />
                                 <PrivateRoute path={`${routeCodes.PROFILE}/:username`} component={ProfilePage} />
                                 <PrivateRoute path={routeCodes.UPDATE_PROFILE} component={UpdateProfile} />
                                 <PrivateRoute path={routeCodes.PROFILE_SETTINGS} component={ProfileSettings} />

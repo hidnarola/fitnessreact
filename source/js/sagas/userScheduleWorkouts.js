@@ -77,7 +77,8 @@ function getUsersWorkoutScheduleData() {
     return function* (action) {
         try {
             let _id = action._id;
-            const data = yield call(() => api.getUsersWorkoutSchedule(_id));
+            const username = action.username;
+            const data = yield call(() => api.getUsersWorkoutSchedule(_id, username));
             yield put(getUsersWorkoutScheduleSuccess(data));
         } catch (error) {
             yield put(getUsersWorkoutScheduleError(error));
@@ -243,7 +244,8 @@ function getUserFirstWorkoutByDateData() {
     return function* (action) {
         try {
             let requestData = action.requestData;
-            const data = yield call(() => api.getUserFirstWorkoutByDate(requestData));
+            const username = action.username;
+            const data = yield call(() => api.getUserFirstWorkoutByDate(requestData, username));
             yield put(getUserFirstWorkoutByDateSuccess(data));
         } catch (error) {
             yield put(getUserFirstWorkoutByDateError(error));
@@ -255,7 +257,8 @@ function getUserWorkoutCalendarListData() {
     return function* (action) {
         try {
             let requestData = action.requestData;
-            const data = yield call(() => api.getUserWorkoutCalendarList(requestData));
+            const username = action.username;
+            const data = yield call(() => api.getUserWorkoutCalendarList(requestData, username));
             yield put(getUserWorkoutCalendarListSuccess(data));
         } catch (error) {
             yield put(getUserWorkoutCalendarListError(error));

@@ -2234,6 +2234,7 @@ ul.uploade-data li.sm-img {border-bottom: 1px dashed #fff;font-size:10px;}
 .ta-left{text-align: left !important;}
 .fs-14{font-size: 14px !important;}
 .fitassist-toast .Toastify__toast { border-radius: 3px; box-shadow: 0 0px 10px 3px rgba(0, 0, 0, 0.4); min-height: 36px; padding-left: 15px; padding-right: 15px; font-family: "Roboto", "Helvetica", "Arial", sans-serif }
+.workout-exercises-view-wrapper.default-cursor ul li { cursor: default !important; }
 
 
 

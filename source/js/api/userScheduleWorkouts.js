@@ -32,14 +32,20 @@ function getExerciseMeasurement() {
     return fetchResource('user/exercise_measurements', options);
 }
 
-function getUsersWorkoutSchedule(_id) {
+function getUsersWorkoutSchedule(_id, username = null) {
     let headers = extraUserHeaders();
     var options = {
         method: 'GET',
         headers: headers,
     }
-
-    return fetchResource(requestUrl + '/' + _id, options);
+    let url = `${requestUrl}`;
+    if (username) {
+        url += `/${username}/${_id}`;
+        return fetchResource(url, options);
+    } else {
+        url += `/${_id}`;
+        return fetchResource(url, options);
+    }
 }
 
 function addUsersWorkoutSchedule(requestData) {
@@ -112,14 +118,22 @@ function getUserWorkoutByDate(requestData) {
     return postFormData(requestUrl + '/by_date', requestData, headers);
 }
 
-function getUserFirstWorkoutByDate(requestData) {
+function getUserFirstWorkoutByDate(requestData, username = null) {
     let headers = extraUserHeaders();
-    return postFormData(requestUrl + '/first_workout', requestData, headers);
+    if (username) {
+        return postFormData(requestUrl + '/first_workout/' + username, requestData, headers);
+    } else {
+        return postFormData(requestUrl + '/first_workout', requestData, headers);
+    }
 }
 
-function getUserWorkoutCalendarList(requestData) {
+function getUserWorkoutCalendarList(requestData, username = null) {
     let headers = extraUserHeaders();
-    return postFormData(requestUrl + '/calendar_list', requestData, headers);
+    if (username) {
+        return postFormData(requestUrl + '/calendar_list/' + username, requestData, headers);
+    } else {
+        return postFormData(requestUrl + '/calendar_list', requestData, headers);
+    }
 }
 
 function getWorkoutsListByDate(requestData) {

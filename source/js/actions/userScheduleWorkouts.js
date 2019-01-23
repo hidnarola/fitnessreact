@@ -124,10 +124,11 @@ export function getUsersWorkoutSchedulesError(error) {
     }
 }
 
-export function getUsersWorkoutScheduleRequest(_id) {
+export function getUsersWorkoutScheduleRequest(_id, username = null) {
     return {
         type: GET_USERS_WORKOUT_SCHEDULE_REQUEST,
         _id,
+        username
     }
 }
 
@@ -445,10 +446,11 @@ export function changeUsersWorkoutFormAction(action = 'add', data = null) {
     }
 }
 
-export function getUserFirstWorkoutByDateRequest(requestData) {
+export function getUserFirstWorkoutByDateRequest(requestData, username = null) {
     return {
         type: GET_USER_FIRST_WORKOUT_BY_DATE_REQUEST,
         requestData,
+        username
     }
 }
 
@@ -466,10 +468,11 @@ export function getUserFirstWorkoutByDateError(error) {
     }
 }
 
-export function getUserWorkoutCalendarListRequest(requestData) {
+export function getUserWorkoutCalendarListRequest(requestData, username = null) {
     return {
         type: GET_USER_WORKOUT_CALENDAR_LIST_REQUEST,
         requestData,
+        username
     }
 }
 
