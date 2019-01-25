@@ -11,8 +11,6 @@ import { FaEye } from 'react-icons/lib/fa'
 import cns from "classnames";
 import ReactTooltip from "react-tooltip";
 
-BigCalendar.momentLocalizer(moment);
-
 class ProfileCalendar extends Component {
     constructor(props) {
         super(props);
@@ -36,6 +34,7 @@ class ProfileCalendar extends Component {
                 <div className="whitebox-body profile-body">
                     <BigCalendar
                         selectable={true}
+                        localizer={BigCalendar.momentLocalizer(moment)}
                         defaultView={BigCalendar.Views.MONTH}
                         className="workout-calender"
                         events={workoutEvents}

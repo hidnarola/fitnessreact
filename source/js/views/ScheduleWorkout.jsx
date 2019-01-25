@@ -32,8 +32,6 @@ import CreateProgramFromCalendarForm from '../components/ScheduleWorkout/CreateP
 import { createUserProgramFromCalendarRequest, appendUserProgramFromCalendarRequest } from '../actions/userPrograms';
 import AppendProgramFromCalendarForm from '../components/ScheduleWorkout/AppendProgramFromCalendarForm';
 
-BigCalendar.momentLocalizer(moment);
-
 class ScheduleWorkout extends Component {
     constructor(props) {
         super(props);
@@ -151,6 +149,7 @@ class ScheduleWorkout extends Component {
                                     }
                                     <BigCalendar
                                         selectable={true}
+                                        localizer={BigCalendar.momentLocalizer(moment)}
                                         defaultView={BigCalendar.Views.MONTH}
                                         className="workout-calender"
                                         events={workoutEvents}
