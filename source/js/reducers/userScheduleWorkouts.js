@@ -63,6 +63,7 @@ import {
     REORDER_WORKOUT_EXERCISES_ERROR,
     REORDER_WORKOUT_EXERCISES,
     SET_SCHEDULE_WORKOUTS_STATE,
+    CUT_USER_WORKOUT_SCHEDULE,
 } from "../actions/userScheduleWorkouts";
 import { VALIDATION_FAILURE_STATUS, SCHEDULED_WORKOUT_TYPE_WARMUP, SCHEDULED_WORKOUT_TYPE_EXERCISE, SCHEDULED_WORKOUT_TYPE_COOLDOWN } from "../constants/consts";
 import { generateValidationErrorMsgArr, createNewStateForWorkout } from "../helpers/funs";
@@ -78,6 +79,7 @@ const initialState = Map({
     error: [],
     exercises: [],
     programs: [],
+    cutWorkout: null,
     copiedWorkout: null,
     assignProgramLoading: null,
     assignProgram: null,
@@ -323,6 +325,11 @@ const actionMap = {
         return state.merge(Map({
             loading: false,
             error: error,
+        }));
+    },
+    [CUT_USER_WORKOUT_SCHEDULE]: (state, action) => {
+        return state.merge(Map({
+            cutWorkout: action.selectedData,
         }));
     },
     [COPY_USER_WORKOUT_SCHEDULE]: (state, action) => {

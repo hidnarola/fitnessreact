@@ -22,6 +22,7 @@ export const UPDATE_USERS_WORKOUT_SCHEDULE_REQUEST = 'UPDATE_USERS_WORKOUT_SCHED
 export const UPDATE_USERS_WORKOUT_SCHEDULE_SUCCESS = 'UPDATE_USERS_WORKOUT_SCHEDULE_SUCCESS';
 export const UPDATE_USERS_WORKOUT_SCHEDULE_ERROR = 'UPDATE_USERS_WORKOUT_SCHEDULE_ERROR';
 
+export const CUT_USER_WORKOUT_SCHEDULE = 'CUT_USER_WORKOUT_SCHEDULE';
 export const COPY_USER_WORKOUT_SCHEDULE = 'COPY_USER_WORKOUT_SCHEDULE';
 
 export const DELETE_USERS_BULK_WORKOUT_SCHEDULE_REQUEST = 'DELETE_USERS_BULK_WORKOUT_SCHEDULE_REQUEST';
@@ -208,10 +209,11 @@ export function updateUsersWorkoutScheduleError(error) {
     }
 }
 
-export function pasteUsersWorkoutScheduleRequest(requestData) {
+export function pasteUsersWorkoutScheduleRequest(requestData, action = 'copy') {
     return {
         type: PASTE_USERS_WORKOUT_SCHEDULE_REQUEST,
         requestData,
+        action
     }
 }
 
@@ -226,6 +228,13 @@ export function pasteUsersWorkoutScheduleError(error) {
     return {
         type: PASTE_USERS_WORKOUT_SCHEDULE_ERROR,
         error,
+    }
+}
+
+export function cutUserWorkoutSchedule(selectedData) {
+    return {
+        type: CUT_USER_WORKOUT_SCHEDULE,
+        selectedData,
     }
 }
 

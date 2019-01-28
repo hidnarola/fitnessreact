@@ -16,6 +16,7 @@ import {
     pasteUsersWorkoutScheduleRequest,
     addUserWorkoutTitleRequest,
     setScheduleWorkoutsState,
+    cutUserWorkoutSchedule,
 } from '../actions/userScheduleWorkouts';
 import { NavLink } from "react-router-dom";
 import { routeCodes } from '../constants/routes';
@@ -318,7 +319,8 @@ class ScheduleWorkoutCalendarPage extends Component {
             createFromCalendarLoading,
             createFromCalendarStatus,
             appendFromCalendarLoading,
-            appendFromCalendarStatus
+            appendFromCalendarStatus,
+            cutWorkout
         } = this.props;
         const {
             workoutPasteAction,
@@ -347,6 +349,35 @@ class ScheduleWorkoutCalendarPage extends Component {
                     meta: workout,
                     description: (workout.description) ? workout.description : '',
                     isSelectedForBulkAction: false,
+                    isCut: (cutWorkout === workout._id),
+                    handleCut: () => this.handleCut(workout._id),
+                    handleCopy: () => this.handleCopy(workout._id),
+                    handleDelete: () => this.showDeleteConfirmation(workout._id, workout.date),
+                    handleCompleteWorkout: () => this.handleCompleteWorkout(workout._id),
+                    handleSelectForBulkAction: () => this.handleSelectForBulkAction(workout._id),
+                }
+                newWorkouts.push(newWorkout);
+            });
+            this.setState({ workoutEvents: newWorkouts });
+        }
+        if (cutWorkout && prevProps.cutWorkout !== cutWorkout) {
+            var newWorkouts = [];
+            _.forEach(workouts, (workout, index) => {
+                var newWorkout = {
+                    id: workout._id,
+                    title: (workout.title) ? workout.title : `Workout on ${(workout.date) ? moment(workout.date).format('DD/MM/YYYY') : ''}`,
+                    start: workout.date,
+                    end: workout.date,
+                    allDay: true,
+                    isCompleted: (workout.isCompleted) ? workout.isCompleted : 0,
+                    exercises: (workout.exercises && workout.exercises.length > 0) ? workout.exercises : [],
+                    exerciseType: (workout.type) ? workout.type : null,
+                    totalExercises: (workout.totalExercises) ? workout.totalExercises : 0,
+                    meta: workout,
+                    description: (workout.description) ? workout.description : '',
+                    isSelectedForBulkAction: false,
+                    isCut: (cutWorkout === workout._id),
+                    handleCut: () => this.handleCut(workout._id),
                     handleCopy: () => this.handleCopy(workout._id),
                     handleDelete: () => this.showDeleteConfirmation(workout._id, workout.date),
                     handleCompleteWorkout: () => this.handleCompleteWorkout(workout._id),
@@ -360,6 +391,8 @@ class ScheduleWorkoutCalendarPage extends Component {
             this.setState({ workoutPasteAction: false });
             this.getWorkoutSchedulesByMonth();
             this.cancelSelectedSlotAction();
+            const newWorkoutState = { cutWorkout: null };
+            dispatch(setScheduleWorkoutsState(newWorkoutState));
             dispatch(hidePageLoader());
             if (error && error.length > 0) {
                 te('Something went wrong! please try again later.');
@@ -519,6 +552,14 @@ class ScheduleWorkoutCalendarPage extends Component {
         dispatch(showPageLoader());
     }
 
+    handleCut = (_id) => {
+        const { dispatch } = this.props;
+        if (_id) {
+            dispatch(cutUserWorkoutSchedule(_id));
+            ts('Workout cut!');
+        }
+    }
+
     handleCopy = (_id) => {
         const { dispatch } = this.props;
         if (_id) {
@@ -528,8 +569,18 @@ class ScheduleWorkoutCalendarPage extends Component {
     }
 
     handlePaste = () => {
-        const { copiedWorkout, selectedSlot, dispatch } = this.props;
-        if (copiedWorkout) {
+        const { cutWorkout, copiedWorkout, selectedSlot, dispatch } = this.props;
+        if (cutWorkout) {
+            var startDay = moment(selectedSlot.start).startOf('day');
+            var date = moment.utc(startDay);
+            var requestData = {
+                exerciseId: cutWorkout,
+                date: date,
+            };
+            dispatch(pasteUsersWorkoutScheduleRequest(requestData, 'cut'));
+            this.setState({ workoutPasteAction: true });
+            dispatch(showPageLoader());
+        } else if (copiedWorkout) {
             var startDay = moment(selectedSlot.start).startOf('day');
             var date = moment.utc(startDay);
             var requestData = {
@@ -540,7 +591,7 @@ class ScheduleWorkoutCalendarPage extends Component {
             this.setState({ workoutPasteAction: true });
             dispatch(showPageLoader());
         } else {
-            te('There is no workout copied!');
+            te('There is no workout cut/copied!');
         }
     }
 
@@ -771,6 +822,7 @@ const mapStateToProps = (state) => {
         workout: userScheduleWorkouts.get('workout'),
         loading: userScheduleWorkouts.get('loading'),
         error: userScheduleWorkouts.get('error'),
+        cutWorkout: userScheduleWorkouts.get('cutWorkout'),
         copiedWorkout: userScheduleWorkouts.get('copiedWorkout'),
         programs: userScheduleWorkouts.get('programs'),
         assignProgramLoading: userScheduleWorkouts.get('assignProgramLoading'),
@@ -817,7 +869,6 @@ class SelectEventView extends Component {
 class CustomEventCard extends Component {
     render() {
         const { event } = this.props;
-        console.log('i am custom card => ', event);
         let today = moment().utc();
         let yesturday = moment().subtract('1', 'day');
         let eventDate = moment(event.start);
@@ -832,9 +883,14 @@ class CustomEventCard extends Component {
             showCompleteSwitch = true;
         }
         return (
-            <div className={cns('big-calendar-custom-month-event-view-card', { 'restday': (event.exerciseType === SCHEDULED_WORKOUT_TYPE_RESTDAY) })} title="">
+            <div
+                className={
+                    cns('big-calendar-custom-month-event-view-card', { 'restday': (event.exerciseType === SCHEDULED_WORKOUT_TYPE_RESTDAY), 'loss-opacity': event.isCut })
+                }
+                title=""
+            >
                 <div className="big-calendar-custom-month-event-view-card-header">
-                    <div className="pull-left custom_check" onClick={event.handleSelectForBulkAction}>
+                    <div className="pull-left custom_check p-relative" onClick={event.handleSelectForBulkAction}>
                         <input
                             type="checkbox"
                             id={`complete_workout_schedule_${event.id}`}
@@ -843,6 +899,7 @@ class CustomEventCard extends Component {
                             onChange={() => { }}
                         />
                         <label><h5 className={titleClassName}>{event.title}</h5></label>
+                        <a href="javascript:void(0)" data-tip="Cut" className="workout-cut-card-btn" onClick={(e) => { e.stopPropagation(); event.handleCut() }}><i className="icon-flip_to_front"></i></a>
                     </div>
                     <div className="big-calendar-custom-month-event-view-card-body">
                         {event.description &&

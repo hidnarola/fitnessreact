@@ -58,9 +58,13 @@ function updateUsersWorkoutSchedule(requestData) {
     return putFormData(requestUrl + '/workout', requestData, headers);
 }
 
-function pasteUsersWorkoutSchedule(requestData) {
+function pasteUsersWorkoutSchedule(requestData, action = 'copy') {
     let headers = extraUserHeaders();
-    return postFormData(requestUrl + '/copy', requestData, headers);
+    if (action === 'cut') {
+        return postFormData(requestUrl + '/cut', requestData, headers);
+    } else {
+        return postFormData(requestUrl + '/copy', requestData, headers);
+    }
 }
 
 function changeUsersWorkoutSchedule(_id, requestData) {
