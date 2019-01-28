@@ -1278,15 +1278,25 @@ ul.text-right.pager {text-align: right;}
 .workout-calender .rbc-row-segment {padding:5px;}
 .workout-calender .rbc-event {padding: 0;border-radius: 0;color: #000;cursor: pointer;    background: transparent;}
 .workout-calender .custom_check [type="checkbox"]:not(:checked) + label:before,
-.workout-calender .custom_check [type="checkbox"]:checked + label:before {width:16px; height:16px; border: 1px solid #ddd; background: #fff;}
+.workout-calender .custom_check [type="checkbox"]:checked + label:before,
+#custom-cut-workout-wrap .custom_check [type="checkbox"]:not(:checked) + label:before,
+#custom-cut-workout-wrap .custom_check [type="checkbox"]:checked + label:before {width:16px; height:16px; border: 1px solid #ddd; background: #fff;}
 .workout-calender .custom_check [type="checkbox"]:not(:checked) + label,
-.workout-calender .custom_check [type="checkbox"]:checked + label {padding-left: 22px; height: auto; margin: 0;}
-.workout-calender .pull-left.custom_check{ float:none !important; background: #693fbd; padding: 10px; height: 38px;}
-.workout-calender .big-calendar-custom-month-event-view-card h5 { font-size:16px; line-height:18px; display:block; text-overflow:ellipsis; height:18px; overflow:hidden; width:100%; color:#fff; margin:0;}
-.workout-calender .big-calendar-custom-month-event-view-card p {font-style: normal; white-space: normal; color: #333 !important; font-size: 14px; line-height: 20px; padding: 0; margin: 0px 0 10px 0; overflow: hidden; height: 42px; word-break: break-all;}
-.workout-calender .big-calendar-custom-month-event-view-card a {color:#716684; width: calc(25% - 4px); display: inline-block; line-height: 20px; padding: 2px 4px 6px; border: 0; background: #e2dbee; text-align: center; margin: 0 2px; vertical-align: top; }
+.workout-calender .custom_check [type="checkbox"]:checked + label,
+#custom-cut-workout-wrap .custom_check [type="checkbox"]:checked + label,
+#custom-cut-workout-wrap .custom_check [type="checkbox"]:not(:checked) + label, {padding-left: 22px; height: auto; margin: 0;}
+.workout-calender .pull-left.custom_check,
+#custom-cut-workout-wrap .pull-left.custom_check { float:none !important; background: #693fbd; padding: 10px; height: 38px;}
+.workout-calender .big-calendar-custom-month-event-view-card h5,
+#custom-cut-workout-wrap .big-calendar-custom-month-event-view-card h5 { font-size:16px; line-height:18px; display:block; text-overflow:ellipsis; height:18px; overflow:hidden; width:100%; color:#fff; margin:0;}
+.workout-calender .big-calendar-custom-month-event-view-card p,
+#custom-cut-workout-wrap .big-calendar-custom-month-event-view-card p{font-style: normal; white-space: normal; color: #333 !important; font-size: 14px; line-height: 20px; padding: 0; margin: 0px 0 10px 0; overflow: hidden; height: 42px; word-break: break-all;}
+.workout-calender .big-calendar-custom-month-event-view-card a,
+#custom-cut-workout-wrap .big-calendar-custom-month-event-view-card a  {color:#716684; width: calc(25% - 4px); display: inline-block; line-height: 20px; padding: 2px 4px 6px; border: 0; background: #e2dbee; text-align: center; margin: 0 2px; vertical-align: top; }
 .workout-calender .custom_check [type="checkbox"]:not(:checked) + label:after,
-.workout-calender .custom_check [type="checkbox"]:checked + label:after {width:10px; height: 10px; background: #6a3fbd; top: 3px; left: 3px;}
+.workout-calender .custom_check [type="checkbox"]:checked + label:after,
+#custom-cut-workout-wrap .custom_check [type="checkbox"]:not(:checked) + label:after,
+#custom-cut-workout-wrap .custom_check [type="checkbox"]:checked + label:after {width:10px; height: 10px; background: #6a3fbd; top: 3px; left: 3px;}
 .workout-calender .rbc-month-view>.rbc-month-row{display:flex; overflow:visible; height:auto; flex-wrap:wrap;flex: 1; min-height: 180px;}
 .workout-calender .big-calendar-custom-month-event-view-card.restday .pull-left.custom_check{ background:#46E9C5;}
 .workout-calender .big-calendar-custom-month-event-view-card.restday .big-calendar-custom-month-event-view-card-body {background-color: #e3fdf7;}
@@ -1302,7 +1312,9 @@ ul.text-right.pager {text-align: right;}
 .material-switch > label::before {border-radius:80px; height:10px; margin-top:-5px; width:30px;}
 .material-switch > label::after {border-radius:46px; height:16px; right:-4px; margin-top:-8px; width:16px;}
 .workout-calender .custom_check [type="checkbox"]:not(:checked) + label:before,
-.workout-calender .custom_check [type="checkbox"]:checked + label:before{ border:0;}
+.workout-calender .custom_check [type="checkbox"]:checked + label:before,
+#custom-cut-workout-wrap .custom_check [type="checkbox"]:not(:checked) + label:before,
+#custom-cut-workout-wrap .custom_check [type="checkbox"]:checked + label:before{ border:0;}
 .rbc-selected-cell{background:#fff; }
 .popup-link-wrap{margin: 0 20px; border: 0; display: flex; flex-wrap: wrap;}
 .popup-link a,
@@ -2235,11 +2247,16 @@ ul.uploade-data li.sm-img {border-bottom: 1px dashed #fff;font-size:10px;}
 .fs-14{font-size: 14px !important;}
 .fitassist-toast .Toastify__toast { border-radius: 3px; box-shadow: 0 0px 10px 3px rgba(0, 0, 0, 0.4); min-height: 36px; padding-left: 15px; padding-right: 15px; font-family: "Roboto", "Helvetica", "Arial", sans-serif }
 .workout-exercises-view-wrapper.default-cursor ul li { cursor: default !important; }
-.workout-calender .big-calendar-custom-month-event-view-card .workout-cut-card-btn { display: inline-block; position: absolute; top: 7px; right: 8px; width: 20px; height: 20px; background: transparent !important; border-radius: 50%; margin: 0; padding: 0; }
-.workout-calender .big-calendar-custom-month-event-view-card .workout-cut-card-btn i {font-size: 20px; color: #ffffff;}
+.workout-calender .big-calendar-custom-month-event-view-card .workout-cut-card-btn,
+#custom-cut-workout-wrap .big-calendar-custom-month-event-view-card .workout-cut-card-btn { display: inline-block; position: absolute; top: 7px; right: 8px; width: 20px; height: 20px; background: transparent !important; border-radius: 50%; margin: 0; padding: 0; }
+.workout-calender .big-calendar-custom-month-event-view-card .workout-cut-card-btn i,
+#custom-cut-workout-wrap .big-calendar-custom-month-event-view-card .workout-cut-card-btn i {font-size: 20px; color: #ffffff;}
 .p-relative{position: relative !important;}
 .loss-opacity { opacity: 0.45 !important; }
-
+div#custom-cut-workout-wrap { background: transparent!important; padding: 0;opacity: 1;min-width: 169px;}
+div#custom-cut-workout-wrap:after { border: 0 !important; }
+.disable-overlay{position: relative;}
+.disable-overlay:before{ content: ""; display: block; height: 100%; position: absolute; top: 0; left: 0; width: 100%; z-index: 1;}
 
 @media(min-width: 992px){
     body.with_login .app-wrapper-content{ width: 100%; }

@@ -80,6 +80,7 @@ const initialState = Map({
     exercises: [],
     programs: [],
     cutWorkout: null,
+    cutWorkoutData: null,
     copiedWorkout: null,
     assignProgramLoading: null,
     assignProgram: null,
@@ -330,6 +331,7 @@ const actionMap = {
     [CUT_USER_WORKOUT_SCHEDULE]: (state, action) => {
         return state.merge(Map({
             cutWorkout: action.selectedData,
+            cutWorkoutData: action.workout
         }));
     },
     [COPY_USER_WORKOUT_SCHEDULE]: (state, action) => {

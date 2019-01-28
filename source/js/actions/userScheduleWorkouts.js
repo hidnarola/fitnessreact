@@ -231,10 +231,11 @@ export function pasteUsersWorkoutScheduleError(error) {
     }
 }
 
-export function cutUserWorkoutSchedule(selectedData) {
+export function cutUserWorkoutSchedule(selectedData, workout) {
     return {
         type: CUT_USER_WORKOUT_SCHEDULE,
         selectedData,
+        workout
     }
 }
 
