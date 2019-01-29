@@ -80,7 +80,7 @@ class ProgramSave extends Component {
                     <div className="body-content d-flex row justify-content-start">
                         <div className="col-md-12">
                             <div className="white-box space-btm-20">
-                                <div className="whitebox-body profile-body programs-table-wrapper">
+                                <div className="whitebox-body profile-body programs-table-wrapper my-custom-calendar">
                                     {selectedEvents && selectedEvents.length > 0 &&
                                         <div className="fixed-btm-bar d-flex">
                                             <div className="fixed-btm-bar-l d-flex">
@@ -650,7 +650,7 @@ class CustomDaysCalendarBlock extends Component {
                                     return (
                                         <div className={cns('program-event-block-wrapper', { 'restday': (e.type === SCHEDULED_WORKOUT_TYPE_RESTDAY) })} key={i} onClick={(e) => e.stopPropagation()}>
                                             <div className="program-event-block-title">
-                                                <div className="pull-left custom_check" onClick={(event) => this.handleCheckChange(event, e._id)}>
+                                                <div className="pull-left custom_check p-relative" onClick={(event) => this.handleCheckChange(event, e._id)}>
                                                     <input
                                                         type="checkbox"
                                                         id={`complete_workout_schedule_${e._id}`}
@@ -659,6 +659,7 @@ class CustomDaysCalendarBlock extends Component {
                                                         onChange={() => { }}
                                                     />
                                                     <label><h5 className="">{(e.title) ? e.title : ''}</h5></label>
+                                                    <a href="javascript:void(0)" data-tip="Cut" className="workout-cut-card-btn" onClick={(evn) => { evn.stopPropagation(); e.handleCut(e) }}><i className="icon-flip_to_front"></i></a>
                                                 </div>
                                             </div>
                                             <div className="program-event-block-content">

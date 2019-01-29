@@ -2253,8 +2253,10 @@ ul.uploade-data li.sm-img {border-bottom: 1px dashed #fff;font-size:10px;}
 .fitassist-toast .Toastify__toast { border-radius: 3px; box-shadow: 0 0px 10px 3px rgba(0, 0, 0, 0.4); min-height: 36px; padding-left: 15px; padding-right: 15px; font-family: "Roboto", "Helvetica", "Arial", sans-serif }
 .workout-exercises-view-wrapper.default-cursor ul li { cursor: default !important; }
 .workout-calender .big-calendar-custom-month-event-view-card .workout-cut-card-btn,
+.my-custom-calendar .workout-cut-card-btn,
 #custom-cut-workout-wrap .big-calendar-custom-month-event-view-card .workout-cut-card-btn { display: inline-block; position: absolute; top: 7px; right: 8px; width: 20px; height: 20px; background: transparent !important; border-radius: 50%; margin: 0; padding: 0; }
 .workout-calender .big-calendar-custom-month-event-view-card .workout-cut-card-btn i,
+.my-custom-calendar .workout-cut-card-btn i,
 #custom-cut-workout-wrap .big-calendar-custom-month-event-view-card .workout-cut-card-btn i {font-size: 20px; color: #ffffff;}
 .p-relative{position: relative !important;}
 .loss-opacity { opacity: 0.45 !important; }
