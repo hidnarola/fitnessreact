@@ -69,6 +69,8 @@ export const DELETE_USER_PROGRAM_BULK_EXERCISE_REQUEST = 'DELETE_USER_PROGRAM_BU
 export const DELETE_USER_PROGRAM_BULK_EXERCISE_SUCCESS = 'DELETE_USER_PROGRAM_BULK_EXERCISE_SUCCESS';
 export const DELETE_USER_PROGRAM_BULK_EXERCISE_ERROR = 'DELETE_USER_PROGRAM_BULK_EXERCISE_ERROR';
 
+export const CUT_USER_PROGRAM_WORKOUT_SCHEDULE = 'CUT_USER_PROGRAM_WORKOUT_SCHEDULE';
+
 export const COPY_USER_PROGRAM_WORKOUT_SCHEDULE = 'COPY_USER_PROGRAM_WORKOUT_SCHEDULE';
 
 export const PASTE_USERS_PROGRAM_WORKOUT_SCHEDULE_REQUEST = 'PASTE_USERS_PROGRAM_WORKOUT_SCHEDULE_REQUEST';
@@ -448,6 +450,14 @@ export function deleteUserProgramWholeExerciseError(error) {
     }
 }
 
+export function cutUserProgramWorkoutSchedule(selectedData, workout) {
+    return {
+        type: CUT_USER_PROGRAM_WORKOUT_SCHEDULE,
+        selectedData,
+        workout
+    }
+}
+
 export function copyUserProgramWorkoutSchedule(selectedData) {
     return {
         type: COPY_USER_PROGRAM_WORKOUT_SCHEDULE,
@@ -455,10 +465,11 @@ export function copyUserProgramWorkoutSchedule(selectedData) {
     }
 }
 
-export function pasteUsersProgramWorkoutScheduleRequest(requestData) {
+export function pasteUsersProgramWorkoutScheduleRequest(requestData, action = 'copy') {
     return {
         type: PASTE_USERS_PROGRAM_WORKOUT_SCHEDULE_REQUEST,
         requestData,
+        action
     }
 }
 

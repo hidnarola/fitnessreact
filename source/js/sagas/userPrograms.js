@@ -269,7 +269,8 @@ function pasteUsersProgramWorkoutScheduleData() {
     return function* (action) {
         try {
             let requestData = action.requestData;
-            const data = yield call(() => api.pasteUsersProgramWorkoutSchedule(requestData));
+            let _action = action.action;
+            const data = yield call(() => api.pasteUsersProgramWorkoutSchedule(requestData, _action));
             yield put(pasteUsersProgramWorkoutScheduleSuccess(data));
         } catch (error) {
             yield put(pasteUsersProgramWorkoutScheduleError(error));

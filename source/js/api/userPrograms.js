@@ -110,9 +110,13 @@ function deleteUserProgramBulkExercise(requestData) {
     return postFormData(requestUrl + '/workout_delete', requestData, headers);
 }
 
-function pasteUsersProgramWorkoutSchedule(requestData) {
+function pasteUsersProgramWorkoutSchedule(requestData, action) {
     let headers = extraUserHeaders();
-    return postFormData(requestUrl + '/copy', requestData, headers);
+    if (action === 'cut') {
+        return postFormData(requestUrl + '/cut', requestData, headers);
+    } else {
+        return postFormData(requestUrl + '/copy', requestData, headers);
+    }
 }
 
 function updateUsersProgramMaster(_id, requestData) {

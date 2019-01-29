@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import FitnessHeader from '../global/FitnessHeader';
 import FitnessNav from '../global/FitnessNav';
-import { getUserProgramRequest, setSelectedDayForProgram, copyUserProgramWorkoutSchedule, deleteUsersProgramWorkoutScheduleRequest, selectUsersProgramWorkoutScheduleForEdit, addUserProgramWorkoutTitleRequest, pasteUsersProgramWorkoutScheduleRequest, setUserProgramState } from '../../actions/userPrograms';
+import { getUserProgramRequest, setSelectedDayForProgram, copyUserProgramWorkoutSchedule, deleteUsersProgramWorkoutScheduleRequest, selectUsersProgramWorkoutScheduleForEdit, addUserProgramWorkoutTitleRequest, pasteUsersProgramWorkoutScheduleRequest, setUserProgramState, cutUserProgramWorkoutSchedule } from '../../actions/userPrograms';
 import { routeCodes } from '../../constants/routes';
 import { te, ts, capitalizeFirstLetter } from '../../helpers/funs';
 import _ from "lodash";
@@ -49,7 +49,7 @@ class ProgramSave extends Component {
 
     render() {
         const { program, totalDays, workouts, showSelectEventAlert, deleteWorkoutAlert, deleteWeekAlert, deleteBulkActionAlert, showAddWorkoutTitleAlert, selectAllChecked } = this.state;
-        const { selectedDay, errorTitle } = this.props;
+        const { selectedDay, errorTitle, cutWorkout, cutWorkoutData } = this.props;
         var selectedEvents = _.filter(workouts, ['isSelectedForBulkAction', true]);
         return (
             <div className="fitness-body">
@@ -79,8 +79,8 @@ class ProgramSave extends Component {
                     </div>
                     <div className="body-content d-flex row justify-content-start">
                         <div className="col-md-12">
-                            <div className="white-box space-btm-20">
-                                <div className="whitebox-body profile-body programs-table-wrapper my-custom-calendar">
+                            <div className="white-box space-btm-20 my-custom-calendar">
+                                <div className="whitebox-body profile-body programs-table-wrapper" data-for="custom-cut-workout-wrap" data-tip>
                                     {selectedEvents && selectedEvents.length > 0 &&
                                         <div className="fixed-btm-bar d-flex">
                                             <div className="fixed-btm-bar-l d-flex">
@@ -107,6 +107,7 @@ class ProgramSave extends Component {
                                         totalDays={totalDays}
                                         workouts={workouts}
                                         handleSelectDayAction={this.handleSelectDayAction}
+                                        handleCut={this.handleCut}
                                         handleCopy={this.handleCopy}
                                         handleDelete={this.showDeleteConfirmation}
                                         handleSelectedForBulk={this.handleSelectedForBulk}
@@ -118,6 +119,11 @@ class ProgramSave extends Component {
                                         }
                                     </div>
                                 </div>
+                                {cutWorkout &&
+                                    <ReactTooltip id="custom-cut-workout-wrap" place="top" type="dark" effect="float">
+                                        <CustomEventCardView event={cutWorkoutData} />
+                                    </ReactTooltip>
+                                }
                             </div>
                         </div>
                     </div>
@@ -217,6 +223,7 @@ class ProgramSave extends Component {
             workoutTitle,
             errorTitle,
             dispatch,
+            cutWorkout
         } = this.props;
         const {
             workoutPasteAction,
@@ -239,7 +246,31 @@ class ProgramSave extends Component {
                 lastDay = (works[(works.length - 1)].day);
                 lastDay++;
                 works = _.map(works, (w) => {
-                    return _.assignIn({}, w, { isSelectedForBulkAction: false });
+                    return _.assignIn({}, w, { isSelectedForBulkAction: false, isCut: (cutWorkout === w._id), isCutEnable: (cutWorkout) ? true : false });
+                });
+            }
+            var getNumberOfWeek = Math.ceil(lastDay / 7);
+            var totalDaysToGenerate = (getNumberOfWeek * 7);
+            if (prog) {
+                this.setState({
+                    program: prog,
+                    workouts: works,
+                    totalDays: totalDaysToGenerate,
+                });
+            } else {
+                te('Something went wrong! please try again later.');
+                history.push(routeCodes.PROGRAMS);
+            }
+        }
+        if (cutWorkout && prevProps.cutWorkout !== cutWorkout) {
+            var prog = (program.programDetails) ? program.programDetails : null;
+            var works = (program.workouts) ? program.workouts : [];
+            var lastDay = 1;
+            if (works && works.length > 0) {
+                lastDay = (works[(works.length - 1)].day);
+                lastDay++;
+                works = _.map(works, (w) => {
+                    return _.assignIn({}, w, { isSelectedForBulkAction: false, isCut: (cutWorkout === w._id), isCutEnable: (cutWorkout) ? true : false });
                 });
             }
             var getNumberOfWeek = Math.ceil(lastDay / 7);
@@ -259,6 +290,8 @@ class ProgramSave extends Component {
             this.setState({ workoutPasteAction: false });
             this.getProgramWorkoutSchedules();
             this.cancelSelectDayAction();
+            const newWorkoutState = { cutWorkout: null, cutWorkoutData: null };
+            dispatch(setUserProgramState(newWorkoutState));
             dispatch(hidePageLoader());
             if (error && error.length > 0) {
                 te('Something went wrong! please try again later.');
@@ -315,6 +348,14 @@ class ProgramSave extends Component {
                 ts('Rest day added!');
             }
         }
+    }
+
+    componentDidMount() {
+        document.addEventListener("keyup", (event) => {
+            if (event && typeof event.keyCode !== 'undefined' && event.keyCode === 27) {
+                this.resetCutData();
+            }
+        });
     }
 
     componentWillUnmount() {
@@ -380,11 +421,19 @@ class ProgramSave extends Component {
     }
 
     handleSelectDayAction = (day) => {
-        const { dispatch } = this.props;
-        this.setState({
-            showSelectEventAlert: true,
-        });
-        dispatch(setSelectedDayForProgram(day));
+        const { dispatch, cutWorkout } = this.props;
+        if (cutWorkout) {
+            var requestData = {
+                exerciseId: cutWorkout,
+                day: (day - 1),
+            };
+            dispatch(pasteUsersProgramWorkoutScheduleRequest(requestData, 'cut'));
+            this.setState({ workoutPasteAction: true });
+            dispatch(showPageLoader());
+        } else {
+            this.setState({ showSelectEventAlert: true });
+            dispatch(setSelectedDayForProgram(day));
+        }
     }
 
     cancelSelectDayAction = () => {
@@ -410,6 +459,23 @@ class ProgramSave extends Component {
         dispatch(addUserProgramWorkoutTitleRequest(requestData));
         this.setState({ addRestDayInit: true });
         dispatch(showPageLoader());
+    }
+
+    resetCutData = () => {
+        const { dispatch, cutWorkout } = this.props;
+        if (cutWorkout) {
+            this.getProgramWorkoutSchedules();
+            const newWorkoutState = { cutWorkout: null, cutWorkoutData: null };
+            dispatch(setUserProgramState(newWorkoutState));
+        }
+    }
+
+    handleCut = (_id, workout) => {
+        const { dispatch } = this.props;
+        if (_id) {
+            dispatch(cutUserProgramWorkoutSchedule(_id, workout));
+            ts('Workout cut!');
+        }
     }
 
     handleCopy = (_id) => {
@@ -547,6 +613,8 @@ const mapStateToProps = (state) => {
         error: userPrograms.get('error'),
         selectedDay: userPrograms.get('selectedDay'),
         workout: userPrograms.get('workout'),
+        cutWorkout: userPrograms.get('cutWorkout'),
+        cutWorkoutData: userPrograms.get('cutWorkoutData'),
         copiedWorkout: userPrograms.get('copiedWorkout'),
         loadingTitle: userPrograms.get('loadingTitle'),
         workoutTitle: userPrograms.get('workoutTitle'),
@@ -567,6 +635,7 @@ class CustomDaysCalendarView extends Component {
             totalDays,
             workouts,
             handleSelectDayAction,
+            handleCut,
             handleCopy,
             handleDelete,
             handleSelectedForBulk,
@@ -580,6 +649,7 @@ class CustomDaysCalendarView extends Component {
                     key={index}
                     workouts={workouts}
                     handleSelectDayAction={handleSelectDayAction}
+                    handleCut={handleCut}
                     handleCopy={handleCopy}
                     handleDelete={handleDelete}
                     handleSelectedForBulk={handleSelectedForBulk}
@@ -600,6 +670,7 @@ class CustomDaysCalendarRow extends Component {
             rowNumber,
             workouts,
             handleSelectDayAction,
+            handleCut,
             handleCopy,
             handleDelete,
             handleSelectedForBulk,
@@ -614,6 +685,7 @@ class CustomDaysCalendarRow extends Component {
                     key={index}
                     workouts={workouts}
                     handleSelectDayAction={handleSelectDayAction}
+                    handleCut={handleCut}
                     handleCopy={handleCopy}
                     handleDelete={handleDelete}
                     handleSelectedForBulk={handleSelectedForBulk}
@@ -648,7 +720,7 @@ class CustomDaysCalendarBlock extends Component {
                             {
                                 events.map((e, i) => {
                                     return (
-                                        <div className={cns('program-event-block-wrapper', { 'restday': (e.type === SCHEDULED_WORKOUT_TYPE_RESTDAY) })} key={i} onClick={(e) => e.stopPropagation()}>
+                                        <div className={cns('program-event-block-wrapper', { 'restday': (e.type === SCHEDULED_WORKOUT_TYPE_RESTDAY), 'loss-opacity': e.isCut, 'disable-overlay': e.isCutEnable })} key={i} onClick={(e) => e.stopPropagation()}>
                                             <div className="program-event-block-title">
                                                 <div className="pull-left custom_check p-relative" onClick={(event) => this.handleCheckChange(event, e._id)}>
                                                     <input
@@ -659,7 +731,7 @@ class CustomDaysCalendarBlock extends Component {
                                                         onChange={() => { }}
                                                     />
                                                     <label><h5 className="">{(e.title) ? e.title : ''}</h5></label>
-                                                    <a href="javascript:void(0)" data-tip="Cut" className="workout-cut-card-btn" onClick={(evn) => { evn.stopPropagation(); e.handleCut(e) }}><i className="icon-flip_to_front"></i></a>
+                                                    <a href="javascript:void(0)" data-tip="Cut" className="workout-cut-card-btn" onClick={(event) => this.handleCutEvent(event, e._id, e)}><i className="icon-flip_to_front"></i></a>
                                                 </div>
                                             </div>
                                             <div className="program-event-block-content">
@@ -688,6 +760,12 @@ class CustomDaysCalendarBlock extends Component {
         );
     }
 
+    handleCutEvent = (e, _id, event) => {
+        const { handleCut } = this.props;
+        e.stopPropagation();
+        handleCut(_id, event);
+    }
+
     handleCopyEvent = (e, _id) => {
         const { handleCopy } = this.props;
         e.stopPropagation();
@@ -704,6 +782,41 @@ class CustomDaysCalendarBlock extends Component {
         const { handleSelectedForBulk } = this.props;
         e.stopPropagation();
         handleSelectedForBulk(_id);
+    }
+}
+
+class CustomEventCardView extends Component {
+    render() {
+        const e = this.props.event;
+        return (
+            <div className={cns('cut-workout-wrap program-event-block-wrapper', { 'restday': (e.type === SCHEDULED_WORKOUT_TYPE_RESTDAY) })}>
+                <div className="program-event-block-title">
+                    <div className="pull-left custom_check p-relative">
+                        <input
+                            type="checkbox"
+                            id={`cut-complete_workout_schedule_${e._id}`}
+                            name={`cut-complete_workout_schedule_${e._id}`}
+                            checked={e.isSelectedForBulkAction}
+                        />
+                        <label><h5 className="">{(e.title) ? e.title : ''}</h5></label>
+                        <a href="javascript:void(0)" className="workout-cut-card-btn"><i className="icon-flip_to_front"></i></a>
+                    </div>
+                </div>
+                <div className="program-event-block-content">
+                    <p>{(e.description) ? e.description : ''}</p>
+                    {(e.type === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
+                        <a href="javascript:void(0)"><FaCopy /></a>
+                    }
+                    {(e.type === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
+                        <a href="javascript:void(0)"><FaEye /></a>
+                    }
+                    {(e.type === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
+                        <a href="javascript:void(0)"><FaPencil /></a>
+                    }
+                    <a href="javascript:void(0)"><FaTrash /></a>
+                </div>
+            </div>
+        );
     }
 }
 

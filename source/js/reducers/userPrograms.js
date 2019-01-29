@@ -75,7 +75,8 @@ import {
     CREATE_USER_PROGRAM_FROM_CALENDAR_ERROR,
     APPEND_USER_PROGRAM_FROM_CALENDAR_REQUEST,
     APPEND_USER_PROGRAM_FROM_CALENDAR_SUCCESS,
-    APPEND_USER_PROGRAM_FROM_CALENDAR_ERROR
+    APPEND_USER_PROGRAM_FROM_CALENDAR_ERROR,
+    CUT_USER_PROGRAM_WORKOUT_SCHEDULE
 } from "../actions/userPrograms";
 import {
     VALIDATION_FAILURE_STATUS,
@@ -103,6 +104,8 @@ const initialState = Map({
     loadingTitle: false,
     workoutTitle: null,
     errorTitle: [],
+    cutWorkout: null,
+    cutWorkoutData: null,
     copiedWorkout: null,
     selectedWorkoutMainType: SCHEDULED_WORKOUT_TYPE_WARMUP,
     selectedWorkoutMainTypeDetails: SCHEDULED_WORKOUT_TYPE_WARMUP,
@@ -659,6 +662,12 @@ const actionMap = {
         return state.merge(Map({
             loading: false,
             error: error,
+        }));
+    },
+    [CUT_USER_PROGRAM_WORKOUT_SCHEDULE]: (state, action) => {
+        return state.merge(Map({
+            cutWorkout: action.selectedData,
+            cutWorkoutData: action.workout
         }));
     },
     [COPY_USER_PROGRAM_WORKOUT_SCHEDULE]: (state, action) => {
