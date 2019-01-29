@@ -16,6 +16,7 @@ import {
     pasteUsersWorkoutScheduleRequest,
     addUserWorkoutTitleRequest,
     setScheduleWorkoutsState,
+    cutUserWorkoutSchedule,
 } from '../actions/userScheduleWorkouts';
 import { NavLink } from "react-router-dom";
 import { routeCodes } from '../constants/routes';
@@ -86,7 +87,9 @@ class ScheduleWorkout extends Component {
         const {
             selectedSlot,
             programs,
-            errorTitle
+            errorTitle,
+            cutWorkout,
+            cutWorkoutData
         } = this.props;
         var selectedSlotStateDate = null;
         if (selectedSlot) {
@@ -114,7 +117,7 @@ class ScheduleWorkout extends Component {
                             </NavLink>
                         </div>
                     </div>
-                    <div className="body-content d-flex row justify-content-start profilephoto-content">
+                    <div className="body-content d-flex row justify-content-start profilephoto-content" data-for="custom-cut-workout-wrap" data-tip>
                         <div className="col-md-12">
                             <div className="white-box space-btm-20">
                                 <div className="whitebox-body profile-body">
@@ -168,6 +171,11 @@ class ScheduleWorkout extends Component {
                             </div>
                         </div>
                     </div>
+                    {cutWorkout &&
+                        <ReactTooltip id="custom-cut-workout-wrap" place="top" type="dark" effect="float">
+                            <CustomEventCardView event={cutWorkoutData} />
+                        </ReactTooltip>
+                    }
                 </section>
                 <SweetAlert
                     type="default"
@@ -279,7 +287,7 @@ class ScheduleWorkout extends Component {
                         errorArr={errorTitle}
                     />
                 </SweetAlert>
-                
+
                 <SweetAlert
                     type="default"
                     title="Create program"
@@ -316,12 +324,9 @@ class ScheduleWorkout extends Component {
     componentDidUpdate(prevProps, prevState) {
         const {
             workouts,
-            workout,
             loading,
-            selectedSlot,
             error,
             assignProgramLoading,
-            assignProgram,
             assignProgramError,
             loadingTitle,
             workoutTitle,
@@ -331,7 +336,8 @@ class ScheduleWorkout extends Component {
             createFromCalendarLoading,
             createFromCalendarStatus,
             appendFromCalendarLoading,
-            appendFromCalendarStatus
+            appendFromCalendarStatus,
+            cutWorkout
         } = this.props;
         const {
             workoutPasteAction,
@@ -360,6 +366,37 @@ class ScheduleWorkout extends Component {
                     meta: workout,
                     description: (workout.description) ? workout.description : '',
                     isSelectedForBulkAction: false,
+                    isCut: (cutWorkout === workout._id),
+                    isCutEnable: (cutWorkout) ? true : false,
+                    handleCut: (workoutEvent) => this.handleCut(workout._id, workoutEvent),
+                    handleCopy: () => this.handleCopy(workout._id),
+                    handleDelete: () => this.showDeleteConfirmation(workout._id, workout.date),
+                    handleCompleteWorkout: () => this.handleCompleteWorkout(workout._id),
+                    handleSelectForBulkAction: () => this.handleSelectForBulkAction(workout._id),
+                }
+                newWorkouts.push(newWorkout);
+            });
+            this.setState({ workoutEvents: newWorkouts });
+        }
+        if (cutWorkout && prevProps.cutWorkout !== cutWorkout) {
+            var newWorkouts = [];
+            _.forEach(workouts, (workout, index) => {
+                var newWorkout = {
+                    id: workout._id,
+                    title: (workout.title) ? workout.title : `Workout on ${(workout.date) ? moment(workout.date).format('DD/MM/YYYY') : ''}`,
+                    start: workout.date,
+                    end: workout.date,
+                    allDay: true,
+                    isCompleted: (workout.isCompleted) ? workout.isCompleted : 0,
+                    exercises: (workout.exercises && workout.exercises.length > 0) ? workout.exercises : [],
+                    exerciseType: (workout.type) ? workout.type : null,
+                    totalExercises: (workout.totalExercises) ? workout.totalExercises : 0,
+                    meta: workout,
+                    description: (workout.description) ? workout.description : '',
+                    isSelectedForBulkAction: false,
+                    isCut: (cutWorkout === workout._id),
+                    isCutEnable: (cutWorkout) ? true : false,
+                    handleCut: (workoutEvent) => this.handleCut(workout._id, workoutEvent),
                     handleCopy: () => this.handleCopy(workout._id),
                     handleDelete: () => this.showDeleteConfirmation(workout._id, workout.date),
                     handleCompleteWorkout: () => this.handleCompleteWorkout(workout._id),
@@ -373,6 +410,8 @@ class ScheduleWorkout extends Component {
             this.setState({ workoutPasteAction: false });
             this.getWorkoutSchedulesByMonth();
             this.cancelSelectedSlotAction();
+            const newWorkoutState = { cutWorkout: null, cutWorkoutData: null };
+            dispatch(setScheduleWorkoutsState(newWorkoutState));
             dispatch(hidePageLoader());
             if (error && error.length > 0) {
                 te('Something went wrong! please try again later.');
@@ -475,12 +514,39 @@ class ScheduleWorkout extends Component {
         }
     }
 
-    onSelectSlot = (slotInfo) => {
-        const { dispatch } = this.props;
-        this.setState({
-            showSelectEventAlert: true,
+    componentDidMount() {
+        document.addEventListener("keyup", (event) => {
+            if (event && typeof event.keyCode !== 'undefined' && event.keyCode === 27) {
+                this.resetCutData();
+            }
         });
-        dispatch(setSelectedSlotFromCalendar(slotInfo));
+    }
+
+    onSelectSlot = (slotInfo) => {
+        const { dispatch, cutWorkout } = this.props;
+        if (cutWorkout) {
+            var startDay = moment(slotInfo.start).startOf('day');
+            var date = moment.utc(startDay);
+            var requestData = {
+                exerciseId: cutWorkout,
+                date: date,
+            };
+            dispatch(pasteUsersWorkoutScheduleRequest(requestData, 'cut'));
+            this.setState({ workoutPasteAction: true });
+            dispatch(showPageLoader());
+        } else {
+            this.setState({ showSelectEventAlert: true });
+            dispatch(setSelectedSlotFromCalendar(slotInfo));
+        }
+    }
+
+    resetCutData = () => {
+        const { dispatch, cutWorkout } = this.props;
+        if (cutWorkout) {
+            this.getWorkoutSchedulesByMonth();
+            const newWorkoutState = { cutWorkout: null, cutWorkoutData: null };
+            dispatch(setScheduleWorkoutsState(newWorkoutState));
+        }
     }
 
     cancelSelectedSlotAction = () => {
@@ -530,6 +596,14 @@ class ScheduleWorkout extends Component {
         this.setState({ addRestDayInit: true });
         dispatch(addUserWorkoutTitleRequest(requestData));
         dispatch(showPageLoader());
+    }
+
+    handleCut = (_id, workout) => {
+        const { dispatch } = this.props;
+        if (_id) {
+            dispatch(cutUserWorkoutSchedule(_id, workout));
+            ts('Workout cut!');
+        }
     }
 
     handleCopy = (_id) => {
@@ -745,7 +819,7 @@ class ScheduleWorkout extends Component {
         dispatch(addUserWorkoutTitleRequest(requestData));
         dispatch(showPageLoader());
     }
-    
+
     createProgram = (data) => {
         const { dispatch } = this.props;
         const { workoutEvents } = this.state;
@@ -784,6 +858,8 @@ const mapStateToProps = (state) => {
         workout: userScheduleWorkouts.get('workout'),
         loading: userScheduleWorkouts.get('loading'),
         error: userScheduleWorkouts.get('error'),
+        cutWorkout: userScheduleWorkouts.get('cutWorkout'),
+        cutWorkoutData: userScheduleWorkouts.get('cutWorkoutData'),
         copiedWorkout: userScheduleWorkouts.get('copiedWorkout'),
         programs: userScheduleWorkouts.get('programs'),
         assignProgramLoading: userScheduleWorkouts.get('assignProgramLoading'),
@@ -844,9 +920,13 @@ class CustomEventCard extends Component {
             showCompleteSwitch = true;
         }
         return (
-            <div className={cns('big-calendar-custom-month-event-view-card', { 'restday': (event.exerciseType === SCHEDULED_WORKOUT_TYPE_RESTDAY) })} title="">
+            <div
+                className={
+                    cns('big-calendar-custom-month-event-view-card', { 'restday': (event.exerciseType === SCHEDULED_WORKOUT_TYPE_RESTDAY), 'loss-opacity': event.isCut, 'disable-overlay': event.isCutEnable })
+                }
+            >
                 <div className="big-calendar-custom-month-event-view-card-header">
-                    <div className="pull-left custom_check" onClick={event.handleSelectForBulkAction}>
+                    <div className="pull-left custom_check p-relative" onClick={event.handleSelectForBulkAction}>
                         <input
                             type="checkbox"
                             id={`complete_workout_schedule_${event.id}`}
@@ -855,6 +935,7 @@ class CustomEventCard extends Component {
                             onChange={() => { }}
                         />
                         <label><h5 className={titleClassName}>{event.title}</h5></label>
+                        <a href="javascript:void(0)" data-tip="Cut" className="workout-cut-card-btn" onClick={(e) => { e.stopPropagation(); event.handleCut(event) }}><i className="icon-flip_to_front"></i></a>
                     </div>
                     <div className="big-calendar-custom-month-event-view-card-body">
                         {event.description &&
@@ -892,6 +973,76 @@ class CustomEventCard extends Component {
 
                 <ReactTooltip place="top" type="dark" effect="solid" />
                 <ReactTooltip id='event-delete-tooltip' place="top" type="error" effect="solid" />
+            </div>
+        );
+    }
+}
+
+class CustomEventCardView extends Component {
+    render() {
+        const { event } = this.props;
+        let today = moment().utc();
+        let yesturday = moment().subtract('1', 'day');
+        let eventDate = moment(event.start);
+        let titleClassName = '';
+        let showCompleteSwitch = false;
+        if (today > eventDate) {
+            if (event.isCompleted === 1 && event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE) {
+                titleClassName = 'color-completed';
+            } else if (event.isCompleted === 0 && yesturday > eventDate && event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE) {
+                titleClassName = 'color-in-completed';
+            }
+            showCompleteSwitch = true;
+        }
+        return (
+            <div
+                className={
+                    cns('cut-workout-wrap big-calendar-custom-month-event-view-card', { 'restday': (event.exerciseType === SCHEDULED_WORKOUT_TYPE_RESTDAY) })
+                }
+            >
+                <div className="big-calendar-custom-month-event-view-card-header">
+                    <div className="pull-left custom_check p-relative">
+                        <input
+                            type="checkbox"
+                            id={`cut-complete_workout_schedule_${event.id}`}
+                            name={`cut-complete_workout_schedule_${event.id}`}
+                            checked={event.isSelectedForBulkAction}
+                        />
+                        <label><h5 className={titleClassName}>{event.title}</h5></label>
+                        <a href="javascript:void(0)" className="workout-cut-card-btn"><i className="icon-flip_to_front"></i></a>
+                    </div>
+                    <div className="big-calendar-custom-month-event-view-card-body">
+                        {event.description &&
+                            <div className={titleClassName}><p>{event.description}</p></div>
+                        }
+                        {(event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
+                            <a href="javascript:void(0)" title=""><FaCopy /></a>
+                        }
+                        {(event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
+                            <a href="javascript:void(0)" title=""><FaEye /></a>
+                        }
+                        {(event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
+                            <a href="javascript:void(0)" title=""><FaPencil /></a>
+                        }
+                        <a href="javascript:void(0)" title=""><FaTrash /></a>
+                    </div>
+                </div>
+                {event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE && showCompleteSwitch && typeof event.totalExercises !== 'undefined' && event.totalExercises > 0 &&
+                    <div className="big-calendar-custom-month-event-view-card-footer">
+                        <div className="switch-wrap">
+                            <small>Workout Completed</small>
+                            <div className="material-switch">
+                                <input
+                                    id={`cut-complete_switch_${event.id}`}
+                                    name={`cut-complete_switch_${event.id}`}
+                                    checked={event.isCompleted}
+                                    type="checkbox"
+                                />
+                                <label htmlFor={`cut-complete_switch_${event.id}`} className="label-default"></label>
+                            </div>
+                        </div>
+                    </div>
+                }
             </div>
         );
     }

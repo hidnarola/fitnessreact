@@ -32,7 +32,6 @@ import SelectAssignProgramForm from '../components/ScheduleWorkout/SelectAssignP
 import CreateProgramFromCalendarForm from '../components/ScheduleWorkout/CreateProgramFromCalendarForm';
 import { createUserProgramFromCalendarRequest, appendUserProgramFromCalendarRequest } from '../actions/userPrograms';
 import AppendProgramFromCalendarForm from '../components/ScheduleWorkout/AppendProgramFromCalendarForm';
-import { eventChannel } from '../../../node_modules/redux-saga';
 
 class ScheduleWorkoutCalendarPage extends Component {
     constructor(props) {
