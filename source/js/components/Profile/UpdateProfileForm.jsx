@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Field, reduxForm, initialize } from "redux-form";
+import { Field, reduxForm, initialize, formValueSelector } from "redux-form";
 import DatePicker from "react-datepicker";
 import {
     WORKOUT_LOCATION_HOME,
@@ -37,6 +37,8 @@ import gym from 'img/common/gym.png';
 import ReactTooltip from "react-tooltip";
 import jwt from "jwt-simple";
 import { setLoggedUserFromLocalStorage } from '../../actions/user';
+import { TextAreaField } from '../../helpers/FormControlHelper';
+import Emos from '../Common/Emos';
 
 const minLength2 = minLength(2);
 const maxLength15 = maxLength(15);
@@ -77,7 +79,7 @@ class UpdateProfileForm extends Component {
                 <form>
                     <div className="col-md-6 pull-left">
                         <div className="white-box">
-                            <div className="whitebox-head">
+                            <div className="mb-10">
                                 <h3 className="title-h3">Profile Settings</h3>
                             </div>
                             <div className="stepbox-m personal-dtl no-padding width-100-per">
@@ -227,7 +229,7 @@ class UpdateProfileForm extends Component {
                     </div>
                     <div className="col-md-6 pull-left">
                         <div className="white-box pb-0">
-                            <div className="whitebox-head">
+                            <div className="mb-10">
                                 <h3 className="title-h3">Workout Location</h3>
                             </div>
                             <div className="stepbox-m personal-dtl no-padding width-100-per">
@@ -264,8 +266,8 @@ class UpdateProfileForm extends Component {
                             </div>
                         </div>
 
-                        <div className="white-box pb-0">
-                            <div className="whitebox-head">
+                        <div className="white-box pb-0 pt-0">
+                            <div className="mb-10">
                                 <h3 className="title-h3">Goals</h3>
                             </div>
                             <div className="stepbox-m personal-dtl no-padding width-100-per">
@@ -339,24 +341,29 @@ class UpdateProfileForm extends Component {
                             </div>
                         </div>
 
-                        <div className="white-box pb-0">
-                            <div className="whitebox-head">
+                        <div className="white-box pb-0 pt-0">
+                            <div className="mb-10">
                                 <h3 className="title-h3">About Me</h3>
                             </div>
                             <div className="stepbox-m personal-dtl no-padding width-100-per">
                                 <ul className="">
                                     <li>
-                                        <div className="form-div label_float">
-                                            <Field
-                                                name="about_me"
-                                                value={this.state.aboutMe}
-                                                handleChange={this.handleChangeTextEditor}
-                                                className="editor-min-height-200"
-                                                placeholder="About Me"
-                                                wrapperClass="width-100-per"
-                                                component={EditorField}
-                                            />
-                                        </div>
+                                        <Field
+                                            name="about_me"
+                                            className="form-control resize-vertical min-height-179"
+                                            wrapperClass="form-group"
+                                            placeholder="Description"
+                                            component={TextAreaField}
+                                            errorClass="help-block"
+                                        />
+                                        <Emos
+                                            pickerProps={{
+                                                color: "#ff337f",
+                                                onClick: this.handleEmoClick,
+                                                onSelect: this.handleEmoSelect,
+                                            }}
+                                            positionClass="top-right"
+                                        />
                                     </li>
                                 </ul>
                             </div>
@@ -449,6 +456,24 @@ class UpdateProfileForm extends Component {
         var encryptedUserDetails = jwt.encode(userDetails, FITASSIST_USER_DETAILS_TOKEN_KEY);
         localStorage.setItem(LOCALSTORAGE_USER_DETAILS_KEY, encryptedUserDetails);
     }
+
+    handleEmoClick = (emoji, event) => {
+        const { native } = emoji;
+        this.appendDescription(native);
+    }
+
+    handleEmoSelect = (emoji) => {
+        const { native } = emoji;
+        this.appendDescription(native);
+    }
+
+    appendDescription = (str) => {
+        if (str) {
+            const { aboutMe, change } = this.props;
+            let newAboutMe = aboutMe + str;
+            change('about_me', newAboutMe);
+        }
+    }
 }
 
 const handleSubmit = (data, dispatch, props) => {
@@ -472,10 +497,12 @@ const handleSubmit = (data, dispatch, props) => {
     dispatch(saveLoggedUserProfileDetailsRequest(formData));
 }
 
+const selector = formValueSelector('update_profile_details_form');
+
 UpdateProfileForm = reduxForm({
     form: 'update_profile_details_form',
     onSubmit: (data, dispatch, props) => handleSubmit(data, dispatch, props)
-})(UpdateProfileForm)
+})(UpdateProfileForm);
 
 const mapStateToProps = (state) => {
     const { profile } = state;
@@ -485,6 +512,7 @@ const mapStateToProps = (state) => {
         profileError: profile.get('error'),
         profileSettings: profile.get('settings'),
         settingsLoading: profile.get('loading'),
+        aboutMe: selector(state, 'about_me')
     };
 }
 

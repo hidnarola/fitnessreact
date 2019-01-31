@@ -1,36 +1,53 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { NavLink, Link } from 'react-router-dom';
-import moment from 'moment';
-import { POST_TYPE_TIMELINE, POST_TYPE_GALLERY, POST_TYPE_PROGRESS_PHOTO, ACCESS_LEVEL_PUBLIC, ACCESS_LEVEL_FRIENDS, ACCESS_LEVEL_PRIVATE, SERVER_BASE_URL, FRIENDSHIP_STATUS_FRIEND, POST_TYPE_WORKOUT } from '../../constants/consts';
+import { NavLink, Link, withRouter } from "react-router-dom";
+import {
+    POST_TYPE_TIMELINE,
+    POST_TYPE_GALLERY,
+    POST_TYPE_PROGRESS_PHOTO,
+    POST_TYPE_WORKOUT,
+    ACCESS_LEVEL_PUBLIC,
+    ACCESS_LEVEL_FRIENDS,
+    ACCESS_LEVEL_PRIVATE,
+    FRIENDSHIP_STATUS_SELF,
+    ACCESS_LEVEL_PUBLIC_STR,
+    ACCESS_LEVEL_FRIENDS_STR,
+    ACCESS_LEVEL_PRIVATE_STR,
+    SERVER_BASE_URL
+} from '../../constants/consts';
+import moment from "moment";
 import _ from "lodash";
-import noProfileImg from 'img/common/no-profile-img.png';
-import noImg from 'img/common/no-img.png';
-import { routeCodes } from '../../constants/routes';
-import { FaGlobe, FaLock, FaGroup } from 'react-icons/lib/fa';
+import { MenuItem, Dropdown } from "react-bootstrap";
 import ReactHtmlParser from "react-html-parser";
-import cns from 'classnames';
-import Lightbox from 'react-images';
-import LikeButton from '../Profile/LikeButton';
-import CommentBoxForm from '../Profile/CommentBoxForm';
+import cns from "classnames";
+import noProfileImg from 'img/common/no-profile-img.png'
+import noImg from 'img/common/no-img.png'
+import LikeButton from './LikeButton';
+import CommentBoxForm from './CommentBoxForm';
 import LikesListModal from '../Common/LikesListModal';
+import { FaGlobe, FaLock, FaGroup } from 'react-icons/lib/fa';
+import { routeCodes } from '../../constants/routes';
 
-class ActivityFeedListCard extends Component {
+class PostCard extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            lightBoxOpen: false,
-            currentImage: 0,
-            lightBoxImages: [],
-
-            showLikes: false,
-        }
         this.commentBoxRef = React.createRef();
     }
 
     render() {
-        const { lightBoxOpen, currentImage, lightBoxImages, showLikes } = this.state;
-        const { post, loggedUserData, index } = this.props;
+        const {
+            post,
+            handleOpenChangeAccessPostModal,
+            handleOpenDeletePostModal,
+            handleOpenLightbox,
+            toggleShowLikesModal,
+            handleToggleLike,
+            handleComment,
+            match,
+            profile,
+            index,
+            loggedUserData,
+            showCommentBox
+        } = this.props;
         if (!post) {
             return null;
         }
@@ -110,7 +127,7 @@ class ActivityFeedListCard extends Component {
             }
         }
         return (
-            <div className="post-type timeline-infinite-scroll">
+            <div className="post-type" key={post._id}>
                 <div className="posttype-head d-flex justify-content-start">
                     <span>
                         <img
@@ -126,15 +143,40 @@ class ActivityFeedListCard extends Component {
                             <NavLink to={`${routeCodes.PROFILE}/${createdBy.username}`}>
                                 {`${createdBy.firstName} ${(createdBy.lastName) ? createdBy.lastName : ''}`}
                             </NavLink>
-                            <Link className="post_added" to={`${routeCodes.POST}/${createdBy.username}/${post._id}`}>{(post.tag_line) ? post.tag_line : ''}</Link>
+                            <Link to={`${routeCodes.POST}/${match.params.username}/${post._id}`} className="pull-right post_added">{(post.tag_line) ? post.tag_line : ''}</Link>
                         </big>
-                        <p className="">
-                            {postCreatedAt}
-                            {post.privacy == ACCESS_LEVEL_PUBLIC && <FaGlobe />}
-                            {post.privacy == ACCESS_LEVEL_FRIENDS && <FaGroup />}
-                            {post.privacy == ACCESS_LEVEL_PRIVATE && <FaLock />}
-                        </p>
+                        <div className="post-bottom-info">
+                            <p className="">
+                                {postCreatedAt}
+                            </p>
+                            {!(profile.friendshipStatus === FRIENDSHIP_STATUS_SELF) &&
+                                <p className="access-level-icons">
+                                    {post.privacy == ACCESS_LEVEL_PUBLIC && <FaGlobe />}
+                                    {post.privacy == ACCESS_LEVEL_FRIENDS && <FaGroup />}
+                                    {post.privacy == ACCESS_LEVEL_PRIVATE && <FaLock />}
+                                </p>
+                            }
+                            {profile.friendshipStatus === FRIENDSHIP_STATUS_SELF &&
+                                <Dropdown id="single_post_privacy" className="single_post_privacy">
+                                    <Dropdown.Toggle className="d-flex public-dropdown">
+                                        {post.privacy == ACCESS_LEVEL_PUBLIC && <FaGlobe />}
+                                        {post.privacy == ACCESS_LEVEL_FRIENDS && <FaGroup />}
+                                        {post.privacy == ACCESS_LEVEL_PRIVATE && <FaLock />}
+                                    </Dropdown.Toggle>
+                                    <Dropdown.Menu>
+                                        <MenuItem eventKey="3" onClick={() => handleOpenChangeAccessPostModal(ACCESS_LEVEL_PUBLIC, post._id)}><FaGlobe /> {ACCESS_LEVEL_PUBLIC_STR}</MenuItem>
+                                        <MenuItem eventKey="2" onClick={() => handleOpenChangeAccessPostModal(ACCESS_LEVEL_FRIENDS, post._id)}><FaGroup /> {ACCESS_LEVEL_FRIENDS_STR}</MenuItem>
+                                        <MenuItem eventKey="1" onClick={() => handleOpenChangeAccessPostModal(ACCESS_LEVEL_PRIVATE, post._id)}><FaLock /> {ACCESS_LEVEL_PRIVATE_STR}</MenuItem>
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                            }
+                        </div>
                     </h4>
+                    {profile.friendshipStatus === FRIENDSHIP_STATUS_SELF &&
+                        <button type="button" className="timline-post-del-btn" onClick={() => handleOpenDeletePostModal(post._id)}>
+                            <i className="icon-cancel"></i>
+                        </button>
+                    }
                 </div>
                 <div className="posttype-body">
                     {description &&
@@ -142,46 +184,49 @@ class ActivityFeedListCard extends Component {
                             {ReactHtmlParser(description)}
                         </div>
                     }
-                    <div className={cns("posttype-body-grey dashboard-feedact", postImageDisplayClass)}>
+                    <div className={cns("posttype-body-grey", postImageDisplayClass)}>
                         {images && images.length > 0 &&
                             images.map((imageD, imageI) => {
                                 if (imageI >= 5) {
                                     return null;
                                 }
                                 return (
-                                    <a href="javascript:void(0)" key={imageD._id} onClick={() => this.handleOpenLightbox(images, imageI)}>
-                                        <span>
-                                            <img
-                                                src={SERVER_BASE_URL + imageD.image}
-                                                onError={(e) => {
-                                                    e.target.src = noImg
-                                                }}
-                                            />
-                                        </span>
-                                    </a>
+                                    <div className="item" key={imageD._id}>
+                                        <a href="javascript:void(0)" onClick={() => handleOpenLightbox(images, imageI)}>
+                                            <span key={imageI}>
+                                                <img
+                                                    src={SERVER_BASE_URL + imageD.image}
+                                                    onError={(e) => {
+                                                        e.target.src = noImg
+                                                    }}
+                                                />
+                                            </span>
+                                        </a>
+                                    </div>
                                 )
                             })
                         }
                     </div>
-                    {(likesStr || totalComments > 0) &&
-                        <div className={cns("posttype-body-grey")}>
+                    <div className={cns("posttype-body-grey")}>
+                        {(likesStr || totalComments > 0) &&
                             <p>
                                 {likesStr &&
-                                    <a href="javascript:void(0)" onClick={this.handleOpenLikesModal}>{likesStr}</a>
+                                    <a href="javascript:void(0)" onClick={() => toggleShowLikesModal(post._id)}>{likesStr}</a>
                                 }
                                 {totalComments > 0 &&
-                                    <Link to={`${routeCodes.POST}/${createdBy.username}/${post._id}`} className="pull-right">Comments {totalComments}</Link>
+                                    <Link to={`${routeCodes.POST}/${match.params.username}/${post._id}`} className="pull-right">Comments {totalComments}</Link>
                                 }
                             </p>
-                        </div>
-                    }
+                        }
+
+                    </div>
                 </div>
                 <div className="posttype-btm d-flex">
                     <LikeButton
                         index={index}
                         postId={post._id}
                         isLikedByLoggedUser={isLikedByLoggedUser}
-                        handleToggleLike={this.handleToggleLike}
+                        handleToggleLike={handleToggleLike}
                     />
                     <a href="javascript:void(0)" className="icon-chat" onClick={() => this.commentBoxRef.current.focus()}></a>
                 </div>
@@ -200,119 +245,31 @@ class ActivityFeedListCard extends Component {
                             <h4>
                                 <NavLink to={`${routeCodes.PROFILE}/${lastComment.username}`}>
                                     {lastComment.firstName} {(lastComment.lastName) ? lastComment.lastName : ''}
-                                </NavLink> {(lastComment.comment)}
-                            </h4>
-                            <div className="post-comment-r-btm d-flex">
+                                </NavLink>
                                 <p>{lastCommentCreatedAt}</p>
+                            </h4>
+                            <div className="post-comment-r-btm">
+                                {ReactHtmlParser(lastComment.comment)}
                             </div>
                         </div>
                     </div>
                 }
-                {
-                    post && post.owner_by &&
-                    post.owner_by.userPreferences &&
-                    post.owner_by.userPreferences.commentAccessibility &&
-                    post.owner_by.userPreferences.commentAccessibility == ACCESS_LEVEL_PUBLIC &&
+                {showCommentBox &&
                     <CommentBoxForm
                         postId={post._id}
                         index={index}
-                        onSubmit={this.handleComment}
+                        onSubmit={handleComment}
                         commentBoxRef={this.commentBoxRef}
-                    />
-                }
-                {
-                    post && post.owner_by &&
-                    post.owner_by.userPreferences &&
-                    post.owner_by.userPreferences.commentAccessibility &&
-                    post.owner_by.userPreferences.commentAccessibility == ACCESS_LEVEL_FRIENDS &&
-                    post.friendshipStatus && post.friendshipStatus == FRIENDSHIP_STATUS_FRIEND &&
-                    <CommentBoxForm
-                        postId={post._id}
-                        index={index}
-                        onSubmit={this.handleComment}
-                        commentBoxRef={this.commentBoxRef}
-                    />
-                }
-                {lightBoxImages && lightBoxImages.length > 0 &&
-                    <Lightbox
-                        images={lightBoxImages}
-                        isOpen={lightBoxOpen}
-                        onClickPrev={() => this.handleNavigation('prev')}
-                        onClickNext={() => this.handleNavigation('next')}
-                        onClose={this.handleCloseLightbox}
-                        currentImage={currentImage}
                     />
                 }
                 <LikesListModal
-                    show={showLikes}
-                    handleClose={this.handleCloseLikesModal}
+                    show={post.showLikesModal ? post.showLikesModal : false}
+                    handleClose={() => toggleShowLikesModal(post._id)}
                     likes={likes}
                 />
             </div>
         );
     }
-
-    handleOpenLightbox = (images, startFrom = 0) => {
-        let lightBoxImages = [];
-        images.map((photo) => {
-            lightBoxImages.push({ src: SERVER_BASE_URL + photo.image });
-        });
-        this.setState({ currentImage: startFrom, lightBoxOpen: true, lightBoxImages });
-    }
-
-    handleCloseLightbox = () => {
-        this.setState({
-            currentImage: 0,
-            lightBoxOpen: false,
-            lightBoxImages: [],
-        });
-    }
-
-    handleNavigation = (direction = 'next') => {
-        const { currentImage, lightBoxImages } = this.state;
-        let newCurrentImage = currentImage;
-        if (direction === 'prev') {
-            if (currentImage <= 0) {
-                newCurrentImage = (lightBoxImages.length - 1);
-            } else {
-                newCurrentImage -= 1;
-            }
-        } else if (direction === 'next') {
-            if (currentImage >= (lightBoxImages.length - 1)) {
-                newCurrentImage = 0;
-            } else {
-                newCurrentImage += 1;
-            }
-        }
-        this.setState({ currentImage: newCurrentImage });
-    }
-
-    handleToggleLike = (index, postId) => {
-        const { handleToggleLike } = this.props;
-        handleToggleLike(index, postId);
-    }
-
-    handleComment = (data, actionGenerator, props) => {
-        const { handleComment } = this.props;
-        handleComment(data, actionGenerator, props);
-    }
-
-    handleOpenLikesModal = () => {
-        this.setState({ showLikes: true });
-    }
-
-    handleCloseLikesModal = () => {
-        this.setState({ showLikes: false });
-    }
 }
 
-const mapStateToProps = (state) => {
-    const { user } = state;
-    return {
-        loggedUserData: user.get('loggedUserData'),
-    };
-}
-
-export default connect(
-    mapStateToProps,
-)(ActivityFeedListCard);
+export default withRouter(PostCard);

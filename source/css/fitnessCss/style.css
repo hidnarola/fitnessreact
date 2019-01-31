@@ -997,6 +997,7 @@ display:-webkit-box; display:-webkit-flex; display:-ms-flex; display:flex; flex-
 {height: 100px !important;}
 .resize-vertical{resize: vertical;}
 .min-height-80{min-height: 80px;}
+.min-height-179{min-height: 179px;}
 .min-height-373{min-height: 373px; position: relative;}
 .min-height-339 { min-height: 339px; position: relative; }
 .has-error .Select-control{border-color: #a94442;-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);}
@@ -1130,6 +1131,7 @@ div#loader .loader-spinner, div.loaderloader .loader-spinner, div.no-content-loa
 .height-725{height: 725px;}
 .height-auto{height: auto !important;}
 .pb-0{padding-bottom: 0 !important;}
+.pt-0{padding-top: 0 !important;}
 .p-10{padding: 10px !important;}
 .liked-color{color: #4e32b6 !important;}
 .user-right-menu-css .chat-body ul li {color: #282828;font-size: 16px;font-weight: 400;line-height: normal;display: block;margin-bottom: 10px;padding-bottom: 10px;border-bottom: 1px solid #eee;}
@@ -1170,7 +1172,8 @@ div#loader .loader-spinner, div.loaderloader .loader-spinner, div.no-content-loa
 .timeline-infinite-scroll .posttype-head>h4 small a {color: #999;}
 .timeline-infinite-scroll .posttype-head>h4 p {font-size: 11px;color: #999;margin: 0;}
 .timeline-infinite-scroll .posttype-body-grey p a {color: #000;}
-.timeline-infinite-scroll .timline-post-del-btn { padding: 0; border-radius: 80%; border: 0; height: 20px; background: #fff; color: #ff3371; position: absolute; right: -9px; top: -10px; }
+.timeline-infinite-scroll .post-type:hover .timline-post-del-btn { display: block; }
+.timeline-infinite-scroll .timline-post-del-btn { padding: 0; border-radius: 80%; border: 0; height: 20px; background: #fff; color: #ff3371; position: absolute; right: -9px; top: -10px;display: none;}
 .timeline-infinite-scroll .timline-post-del-btn i { font-size: 20px; }
 .timeline-new-post-editor .post-photos-selected-view-wrapper {width: 100%;height: 100%;display: block;}
 .timeline-new-post-editor .post-photos-selected-view-wrapper ul {margin: auto;}

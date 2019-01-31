@@ -22,6 +22,7 @@ import { reset } from "redux-form";
 import Lightbox from 'react-images';
 import NoRecordFound from '../components/Common/NoRecordFound';
 import LikesListModal from '../components/Common/LikesListModal';
+import $ from "jquery";
 
 class Post extends Component {
     constructor(props) {
@@ -35,6 +36,7 @@ class Post extends Component {
 
             showLikes: false,
         }
+        this.commentBoxRef = React.createRef();
     }
 
     componentWillMount() {
@@ -189,7 +191,7 @@ class Post extends Component {
                                 </div>
                                 <div className="posttype-btm d-flex">
                                     <a href="javascript:void(0)" className={cns('icon-thumb_up', { 'liked-color': isLikedByLoggedUser })} onClick={this.handleLike}></a>
-                                    <Link to={`${routeCodes.POST}/${match.params.username}/${post._id}`} className="icon-chat"></Link>
+                                    <a href="javascript:void(0)" className="icon-chat" onClick={this.setfocusOnCommentBox}></a>
                                 </div>
                             </div>
                             <div className="single-post-right">
@@ -201,6 +203,7 @@ class Post extends Component {
                                     <CommentBoxForm
                                         postId={post._id}
                                         onSubmit={this.handleComment}
+                                        commentBoxRef={this.commentBoxRef}
                                     />
                                 }
                                 {
@@ -212,6 +215,7 @@ class Post extends Component {
                                     <CommentBoxForm
                                         postId={post._id}
                                         onSubmit={this.handleComment}
+                                        commentBoxRef={this.commentBoxRef}
                                     />
                                 }
                                 {
@@ -219,6 +223,7 @@ class Post extends Component {
                                     <CommentBoxForm
                                         postId={post._id}
                                         onSubmit={this.handleComment}
+                                        commentBoxRef={this.commentBoxRef}
                                     />
                                 }
                                 {post.comments && post.comments.length > 0 &&
@@ -385,6 +390,10 @@ class Post extends Component {
 
     handleCloseLikesModal = () => {
         this.setState({ showLikes: false });
+    }
+
+    setfocusOnCommentBox = () => {
+        this.commentBoxRef.current.focus();
     }
 }
 

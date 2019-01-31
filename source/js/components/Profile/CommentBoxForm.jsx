@@ -4,7 +4,7 @@ import { Field, reduxForm } from 'redux-form';
 
 class CommentBoxForm extends Component {
     render() {
-        const { handleSubmit, postId, commentLoading } = this.props;
+        const { handleSubmit, postId, commentLoading, commentBoxRef } = this.props;
         return (
             <div className="post-comment-box-form-wrapper">
                 <form onSubmit={handleSubmit}>
@@ -16,6 +16,7 @@ class CommentBoxForm extends Component {
                             placeholder="Comment"
                             component={CommentBoxField}
                             commentLoading={commentLoading}
+                            commentBoxRef={commentBoxRef}
                         />
                     </div>
                 </form>
@@ -40,7 +41,7 @@ export default connect(
 )(CommentBoxForm);
 
 const CommentBoxField = (props) => {
-    const { input, meta, wrapperClass, className, labelClass, placeholder, errorClass, commentLoading } = props;
+    const { input, meta, wrapperClass, className, placeholder, errorClass, commentLoading, commentBoxRef } = props;
     return (
         <div
             className={
@@ -51,6 +52,7 @@ const CommentBoxField = (props) => {
                 {...input}
                 className={className}
                 placeholder={placeholder}
+                ref={commentBoxRef}
             />
             <button type="submit" disabled={commentLoading}>
                 <i className="icon-send"></i>

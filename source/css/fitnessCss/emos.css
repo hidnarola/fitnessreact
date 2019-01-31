@@ -1,0 +1,34 @@
+.emos-launcher-wrap {
+    position: relative;
+    display: inline-block;
+}
+.emos-area-wrap {
+    position: absolute;
+}
+.emos-area-wrap.top-right {
+    bottom: 32px;
+    right: 0;
+}
+.emos-area-wrap.top-left {
+    bottom: 32px;
+    left: 0;
+}
+.emos-area-wrap.button-right {
+    top: 32px;
+    right: 0;
+}
+.emos-area-wrap.bottom-left {
+    top: 32px;
+    left: 0;
+}
+button.emos-launcher-btn {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+    border-radius: 50%;
+    background: transparent;
+}
+button.emos-launcher-btn span.emoji-mart-emoji {
+    vertical-align: middle;
+}
