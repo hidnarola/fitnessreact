@@ -2290,7 +2290,7 @@ div#custom-drag-workout-wrap:after { border: 0 !important; }
 .disable-overlay:before{ content: ""; display: block; height: 100%; position: absolute; top: 0; left: 0; width: 100%; z-index: 1;}
 .big-calendar-custom-month-event-view-card-header label{width:calc(100% - 16px) !important;}
 .workout-cut-card-btn{ right:33px !important;}
-body .big-calendar-custom-month-event-view-card-header a.calendar-custom-drag-handle{ width: 20px;background: transparent;color: #fff;margin:-3px 0 0;padding: 0;}
+body .big-calendar-custom-month-event-view-card-header a.calendar-custom-drag-handle{ width: 20px;background: transparent !important;color: #fff;margin:-3px 0 0;padding: 0;}
 body .big-calendar-custom-month-event-view-card-header a.calendar-custom-drag-handle i{ font-size:18px; line-height:20px;color: #fff; }
 #custom-drag-workout-wrap .calendar-custom-drag-handle{ background:transparent !important; margin:0 !important; width:20px !important;position: absolute;top: 5px;right: 10px;}
 #custom-cut-workout-wrap a.calendar-custom-drag-handle{position:absolute !important; background: transparent !important; width: 20px !important; top: 5px !important; right: 7px !important;}
