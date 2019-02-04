@@ -351,3 +351,10 @@ export function clearCookies() {
         document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
     }
 }
+
+export function getElementOffsetRelativeToBody(el) {
+    const rect = el.getBoundingClientRect();
+    const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    return { top: (rect.top + scrollTop), left: (rect.left + scrollLeft), width: el.offsetWidth, height: el.offsetHeight }
+}

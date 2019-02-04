@@ -22,7 +22,7 @@ import { NavLink } from "react-router-dom";
 import { routeCodes } from '../constants/routes';
 import _ from "lodash";
 import { SCHEDULED_WORKOUT_TYPE_RESTDAY, SCHEDULED_WORKOUT_TYPE_EXERCISE } from '../constants/consts';
-import { ts, te, prepareDropdownOptionsData, capitalizeFirstLetter } from '../helpers/funs';
+import { ts, te, prepareDropdownOptionsData, capitalizeFirstLetter, getElementOffsetRelativeToBody } from '../helpers/funs';
 import { FaCopy, FaTrash, FaPencil, FaEye } from 'react-icons/lib/fa'
 import cns from "classnames";
 import AddWorkoutTitleForm from '../components/ScheduleWorkout/AddWorkoutTitleForm';
@@ -32,6 +32,16 @@ import SelectAssignProgramForm from '../components/ScheduleWorkout/SelectAssignP
 import CreateProgramFromCalendarForm from '../components/ScheduleWorkout/CreateProgramFromCalendarForm';
 import { createUserProgramFromCalendarRequest, appendUserProgramFromCalendarRequest } from '../actions/userPrograms';
 import AppendProgramFromCalendarForm from '../components/ScheduleWorkout/AppendProgramFromCalendarForm';
+import $ from "jquery";
+
+let dragEventActive = false;
+let dragEventCardOutside = false;
+let dragEventId = null;
+let dragEventDate = null;
+let dragEventCardX = null;
+let dragEventCardY = null;
+
+let calendarArea = null;
 
 class ScheduleWorkout extends Component {
     constructor(props) {
@@ -119,7 +129,7 @@ class ScheduleWorkout extends Component {
                     </div>
                     <div className="body-content d-flex row justify-content-start profilephoto-content" data-for="custom-cut-workout-wrap" data-tip>
                         <div className="col-md-12">
-                            <div className="white-box space-btm-20">
+                            <div id="cal-panel-wrap" className="white-box space-btm-20">
                                 <div className="whitebox-body profile-body">
                                     {selectedEvents && selectedEvents.length > 0 &&
                                         <div className="fixed-btm-bar d-flex">
@@ -176,6 +186,7 @@ class ScheduleWorkout extends Component {
                             <CustomEventCardView event={cutWorkoutData} />
                         </ReactTooltip>
                     }
+                    <div id="custom-drag-workout-wrap" style={{ position: 'absolute' }}></div>
                 </section>
                 <SweetAlert
                     type="default"
@@ -412,6 +423,7 @@ class ScheduleWorkout extends Component {
             this.cancelSelectedSlotAction();
             const newWorkoutState = { cutWorkout: null, cutWorkoutData: null };
             dispatch(setScheduleWorkoutsState(newWorkoutState));
+            this.resetDragContainer();
             dispatch(hidePageLoader());
             if (error && error.length > 0) {
                 te('Something went wrong! please try again later.');
@@ -518,13 +530,85 @@ class ScheduleWorkout extends Component {
         document.addEventListener("keyup", (event) => {
             if (event && typeof event.keyCode !== 'undefined' && event.keyCode === 27) {
                 this.resetCutData();
+                this.resetDragContainer();
             }
         });
+
+        document.addEventListener("mousemove", this.handleMouseMove, true);
+
+        document.addEventListener("mouseup", this.handleMouseUp, true);
+    }
+
+    handleMouseMove = (e) => {
+        if (dragEventActive && dragEventId) {
+            const workoutCalendarWrapper = $(".workout-calender");
+            const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            if (workoutCalendarWrapper && workoutCalendarWrapper[0]) {
+                calendarArea = getElementOffsetRelativeToBody(workoutCalendarWrapper[0]);
+            }
+            if (calendarArea) {
+                if ((e.clientX + scrollLeft) <= calendarArea.left ||
+                    (e.clientX + scrollLeft) >= (calendarArea.left + calendarArea.width) ||
+                    (e.clientY + scrollTop) <= calendarArea.top ||
+                    (e.clientY + scrollTop) >= (calendarArea.top + calendarArea.height)
+                ) {
+                    dragEventCardOutside = true;
+                    $('#cal-panel-wrap').css({ boxShadow: "0 0 10px 1px #da6d6d" });
+                } else {
+                    $('#cal-panel-wrap').css({ boxShadow: "none" });
+                }
+            }
+            const customDragWrap = $('#custom-drag-workout-wrap');
+            customDragWrap.css({ top: (dragEventCardY + e.clientY), left: (dragEventCardX + e.clientX) });
+        }
+    }
+
+    handleMouseUp = (e) => {
+        if (dragEventActive && dragEventId) {
+            const workoutCalendarWrapper = $(".workout-calender");
+            if (workoutCalendarWrapper && workoutCalendarWrapper[0]) {
+                calendarArea = getElementOffsetRelativeToBody(workoutCalendarWrapper[0]);
+            }
+            if (calendarArea) {
+                const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                if ((e.clientX + scrollLeft) <= calendarArea.left ||
+                    (e.clientX + scrollLeft) >= (calendarArea.left + calendarArea.width) ||
+                    (e.clientY + scrollTop) <= calendarArea.top ||
+                    (e.clientY + scrollTop) >= (calendarArea.top + calendarArea.height)
+                ) {
+                    e.stopPropagation();
+                    this.resetDragContainer();
+                }
+            }
+        }
     }
 
     onSelectSlot = (slotInfo) => {
         const { dispatch, cutWorkout } = this.props;
-        if (cutWorkout) {
+        if (dragEventId) {
+            if (dragEventCardOutside) {
+                this.resetDragContainer();
+            } else {
+                dragEventActive = false;
+                const eventDate = moment(dragEventDate);
+                const startDay = moment(slotInfo.start).startOf('day');
+                const endDay = moment(slotInfo.end).startOf('day');
+                let considerDate = startDay;
+                if (eventDate.diff(endDay, 'days') < 0) {
+                    considerDate = endDay;
+                }
+                var date = moment.utc(considerDate);
+                var requestData = {
+                    exerciseId: dragEventId,
+                    date: date,
+                };
+                dispatch(pasteUsersWorkoutScheduleRequest(requestData, 'cut'));
+                this.setState({ workoutPasteAction: true });
+                dispatch(showPageLoader());
+            }
+        } else if (cutWorkout) {
             var startDay = moment(slotInfo.start).startOf('day');
             var date = moment.utc(startDay);
             var requestData = {
@@ -547,6 +631,18 @@ class ScheduleWorkout extends Component {
             const newWorkoutState = { cutWorkout: null, cutWorkoutData: null };
             dispatch(setScheduleWorkoutsState(newWorkoutState));
         }
+    }
+
+    resetDragContainer = () => {
+        const dragPlaceholder = $('#custom-drag-workout-wrap');
+        dragPlaceholder.html('');
+        dragEventActive = false;
+        dragEventCardOutside = false;
+        dragEventId = null;
+        dragEventDate = null;
+        dragEventCardX = null;
+        dragEventCardY = null;
+        $('#cal-panel-wrap').css({ boxShadow: "none" });
     }
 
     cancelSelectedSlotAction = () => {
@@ -921,6 +1017,7 @@ class CustomEventCard extends Component {
         }
         return (
             <div
+                id={`workout-card-${event.id}`}
                 className={
                     cns('big-calendar-custom-month-event-view-card', { 'restday': (event.exerciseType === SCHEDULED_WORKOUT_TYPE_RESTDAY), 'loss-opacity': event.isCut, 'disable-overlay': event.isCutEnable })
                 }
@@ -936,6 +1033,7 @@ class CustomEventCard extends Component {
                         />
                         <label><h5 className={titleClassName}>{event.title}</h5></label>
                         <a href="javascript:void(0)" data-tip="Cut" className="workout-cut-card-btn" onClick={(e) => { e.stopPropagation(); event.handleCut(event) }}><i className="icon-flip_to_front"></i></a>
+                        <a href="javascript:void(0)" className="calendar-custom-drag-handle" onMouseDown={(e) => this.handleMouseDown(e, event)} onMouseUp={this.handleMouseUp} onClick={(e) => e.stopPropagation()}><i className="icon-open_with"></i></a>
                     </div>
                     <div className="big-calendar-custom-month-event-view-card-body">
                         {event.description &&
@@ -976,6 +1074,37 @@ class CustomEventCard extends Component {
             </div>
         );
     }
+
+    handleMouseDown = (e, event) => {
+        const selectedCard = $(`#workout-card-${event.id}`);
+        const dragPlaceholder = $('#custom-drag-workout-wrap');
+        const offsets = selectedCard.offset();
+        const offsetLeft = offsets && offsets.left ? offsets.left : 0;
+        const offsetRight = offsets && offsets.top ? offsets.top : 0;
+        const eventCardX = (offsetLeft - e.clientX);
+        const eventCardY = (offsetRight - e.clientY);
+        dragPlaceholder.html(selectedCard.parent().html());
+        dragPlaceholder.css({ top: 0, left: 0 });
+        dragEventActive = true;
+        dragEventCardOutside = false;
+        dragEventId = event.id;
+        dragEventDate = event.start;
+        dragEventCardX = eventCardX;
+        dragEventCardY = eventCardY;
+        $('#cal-panel-wrap').css({ boxShadow: "none" });
+    }
+
+    handleMouseUp = (e) => {
+        const dragPlaceholder = $('#custom-drag-workout-wrap');
+        dragPlaceholder.html('');
+        dragEventActive = false;
+        dragEventCardOutside = false;
+        dragEventId = null;
+        dragEventDate = null;
+        dragEventCardX = null;
+        dragEventCardY = null;
+        $('#cal-panel-wrap').css({ boxShadow: "none" });
+    }
 }
 
 class CustomEventCardView extends Component {
@@ -1010,6 +1139,7 @@ class CustomEventCardView extends Component {
                         />
                         <label><h5 className={titleClassName}>{event.title}</h5></label>
                         <a href="javascript:void(0)" className="workout-cut-card-btn"><i className="icon-flip_to_front"></i></a>
+                        <a href="javascript:void(0)" className="calendar-custom-drag-handle"><i className="icon-open_with"></i></a>
                     </div>
                     <div className="big-calendar-custom-month-event-view-card-body">
                         {event.description &&
