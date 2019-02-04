@@ -2293,7 +2293,9 @@ div#custom-drag-workout-wrap:after { border: 0 !important; }
 body .big-calendar-custom-month-event-view-card-header a.calendar-custom-drag-handle{ width: 20px;background: transparent !important;color: #fff;margin:-3px 0 0;padding: 0;}
 body .big-calendar-custom-month-event-view-card-header a.calendar-custom-drag-handle i{ font-size:18px; line-height:20px;color: #fff; }
 #custom-drag-workout-wrap .calendar-custom-drag-handle{ background:transparent !important; margin:0 !important; width:20px !important;position: absolute;top: 5px;right: 10px;}
-#custom-cut-workout-wrap a.calendar-custom-drag-handle{position:absolute !important; background: transparent !important; width: 20px !important; top: 5px !important; right: 7px !important;}
+#custom-cut-workout-wrap .calendar-custom-drag-handle{position:absolute !important; background: transparent !important; width: 20px !important; top: 5px !important; right: 7px !important;}
+.big-calendar-custom-month-event-view-card .calendar-custom-drag-handle { display: inline-block; position: absolute; top: 7px; right: 8px; width: 20px; height: 20px; background: transparent !important; border-radius: 50%; margin: 0; padding: 0; }
+.big-calendar-custom-month-event-view-card .calendar-custom-drag-handle i { font-size: 20px; color: #ffffff; }
 
 @media(min-width: 992px){
     body.with_login .app-wrapper-content{ width: 100%; }

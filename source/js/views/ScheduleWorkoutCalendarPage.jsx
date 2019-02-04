@@ -1023,7 +1023,7 @@ class CustomEventCard extends Component {
                         />
                         <label><h5 className={titleClassName}>{event.title}</h5></label>
                         <a href="javascript:void(0)" data-tip="Cut" className="workout-cut-card-btn" onClick={(e) => { e.stopPropagation(); event.handleCut(event) }}><i className="icon-flip_to_front"></i></a>
-                        <a href="javascript:void(0)" className="calendar-custom-drag-handle" onMouseDown={(e) => this.handleMouseDown(e, event)} onMouseUp={this.handleMouseUp} onClick={(e) => e.stopPropagation()}><i className="icon-open_with"></i></a>
+                        <div className="calendar-custom-drag-handle" onMouseDown={(e) => this.handleMouseDown(e, event)} onMouseUp={this.handleMouseUp} onClick={(e) => e.stopPropagation()}><i className="icon-open_with"></i></div>
                     </div>
                     <div className="big-calendar-custom-month-event-view-card-body">
                         {event.description &&
@@ -1129,7 +1129,7 @@ class CustomEventCardView extends Component {
                         />
                         <label><h5 className={titleClassName}>{event.title}</h5></label>
                         <a href="javascript:void(0)" className="workout-cut-card-btn"><i className="icon-flip_to_front"></i></a>
-                        <a href="javascript:void(0)" className="calendar-custom-drag-handle"><i className="icon-open_with"></i></a>
+                        <div href="javascript:void(0)" className="calendar-custom-drag-handle"><i className="icon-open_with"></i></div>
                     </div>
                     <div className="big-calendar-custom-month-event-view-card-body">
                         {event.description &&
