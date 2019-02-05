@@ -527,16 +527,22 @@ class ScheduleWorkout extends Component {
     }
 
     componentDidMount() {
-        document.addEventListener("keyup", (event) => {
-            if (event && typeof event.keyCode !== 'undefined' && event.keyCode === 27) {
-                this.resetCutData();
-                this.resetDragContainer();
-            }
-        });
-
+        document.addEventListener("keyup", this.handleKeyUp, true);
         document.addEventListener("mousemove", this.handleMouseMove, true);
-
         document.addEventListener("mouseup", this.handleMouseUp, true);
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener('keyup', this.handleKeyUp, true);
+        document.removeEventListener('mousemove', this.handleMouseMove, true);
+        document.removeEventListener('mouseup', this.handleMouseUp, true);
+    }
+
+    handleKeyUp = (e) => {
+        if (e && typeof e.keyCode !== 'undefined' && e.keyCode === 27) {
+            this.resetCutData();
+            this.resetDragContainer();
+        }
     }
 
     handleMouseMove = (e) => {
@@ -886,19 +892,23 @@ class ScheduleWorkout extends Component {
     }
 
     handleSelectAll = (e) => {
-        const { workoutEvents, calendarViewDate } = this.state;
         let selectStatus = e.target.checked;
+        this.changeAllWorkoutCheckedStatus(selectStatus);
+    }
+
+    changeAllWorkoutCheckedStatus = (checked) => {
+        const { workoutEvents, calendarViewDate } = this.state;
         let calendarViewMonth = calendarViewDate.format("M");
         let newWorkouts = [];
         _.forEach(workoutEvents, (o, i) => {
             let eventMonth = moment(o.start).format('M');
             let newObj = Object.assign({}, o);
             if (calendarViewMonth === eventMonth) {
-                newObj.isSelectedForBulkAction = selectStatus;
+                newObj.isSelectedForBulkAction = checked;
             }
             newWorkouts.push(newObj);
         });
-        this.setState({ workoutEvents: newWorkouts, selectAllChecked: selectStatus });
+        this.setState({ workoutEvents: newWorkouts, selectAllChecked: checked });
     }
 
     handleAddTitleSubmit = (data) => {
@@ -1033,7 +1043,7 @@ class CustomEventCard extends Component {
                         />
                         <label><h5 className={titleClassName}>{event.title}</h5></label>
                         <a href="javascript:void(0)" data-tip="Cut" className="workout-cut-card-btn" onClick={(e) => { e.stopPropagation(); event.handleCut(event) }}><i className="icon-flip_to_front"></i></a>
-                        <a href="javascript:void(0)" className="calendar-custom-drag-handle" onMouseDown={(e) => this.handleMouseDown(e, event)} onMouseUp={this.handleMouseUp} onClick={(e) => e.stopPropagation()}><i className="icon-open_with"></i></a>
+                        <div className="calendar-custom-drag-handle" onMouseDown={(e) => this.handleMouseDown(e, event)} onMouseUp={this.handleMouseUp} onClick={(e) => e.stopPropagation()}><i className="icon-open_with"></i></div>
                     </div>
                     <div className="big-calendar-custom-month-event-view-card-body">
                         {event.description &&
@@ -1139,7 +1149,7 @@ class CustomEventCardView extends Component {
                         />
                         <label><h5 className={titleClassName}>{event.title}</h5></label>
                         <a href="javascript:void(0)" className="workout-cut-card-btn"><i className="icon-flip_to_front"></i></a>
-                        <a href="javascript:void(0)" className="calendar-custom-drag-handle"><i className="icon-open_with"></i></a>
+                        <div href="javascript:void(0)" className="calendar-custom-drag-handle"><i className="icon-open_with"></i></div>
                     </div>
                     <div className="big-calendar-custom-month-event-view-card-body">
                         {event.description &&

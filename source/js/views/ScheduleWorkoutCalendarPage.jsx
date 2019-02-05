@@ -517,16 +517,23 @@ class ScheduleWorkoutCalendarPage extends Component {
     }
 
     componentDidMount() {
-        document.addEventListener("keyup", (event) => {
-            if (event && typeof event.keyCode !== 'undefined' && event.keyCode === 27) {
-                this.resetCutData();
-                this.resetDragContainer();
-            }
-        });
-
+        document.addEventListener("keyup", this.handleKeyUp, true);
         document.addEventListener("mousemove", this.handleMouseMove, true);
-
         document.addEventListener("mouseup", this.handleMouseUp, true);
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener('keyup', this.handleKeyUp, true);
+        document.removeEventListener('mousemove', this.handleMouseMove, true);
+        document.removeEventListener('mouseup', this.handleMouseUp, true);
+    }
+
+    handleKeyUp = (e) => {
+        if (e && typeof e.keyCode !== 'undefined' && e.keyCode === 27) {
+            this.resetCutData();
+            this.resetDragContainer();
+            this.changeAllWorkoutCheckedStatus(false);
+        }
     }
 
     handleMouseMove = (e) => {
@@ -876,19 +883,23 @@ class ScheduleWorkoutCalendarPage extends Component {
     }
 
     handleSelectAll = (e) => {
-        const { workoutEvents, calendarViewDate } = this.state;
         let selectStatus = e.target.checked;
+        this.changeAllWorkoutCheckedStatus(selectStatus);
+    }
+
+    changeAllWorkoutCheckedStatus = (checked) => {
+        const { workoutEvents, calendarViewDate } = this.state;
         let calendarViewMonth = calendarViewDate.format("M");
         let newWorkouts = [];
         _.forEach(workoutEvents, (o, i) => {
             let eventMonth = moment(o.start).format('M');
             let newObj = Object.assign({}, o);
             if (calendarViewMonth === eventMonth) {
-                newObj.isSelectedForBulkAction = selectStatus;
+                newObj.isSelectedForBulkAction = checked;
             }
             newWorkouts.push(newObj);
         });
-        this.setState({ workoutEvents: newWorkouts, selectAllChecked: selectStatus });
+        this.setState({ workoutEvents: newWorkouts, selectAllChecked: checked });
     }
 
     handleAddTitleSubmit = (data) => {
