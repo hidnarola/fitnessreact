@@ -532,7 +532,6 @@ class ScheduleWorkoutCalendarPage extends Component {
         if (e && typeof e.keyCode !== 'undefined' && e.keyCode === 27) {
             this.resetCutData();
             this.resetDragContainer();
-            this.changeAllWorkoutCheckedStatus(false);
         }
     }
 

@@ -10,6 +10,7 @@ a:hover, a:focus{text-decoration:none;}
 .row {display:-webkit-box; display:-ms-flexbox; display:flex; -ms-flex-wrap:wrap; flex-wrap:wrap; margin-right:-15px; margin-left:-15px;}
 .d-flex { display: -webkit-box!important; display: -webkit-flex!important; display: -ms-flexbox!important; display: flex!important;}
 .p-relative { position: relative !important;}
+.p-unset { position: unset !important; }
 .vertical-middle-c{display:-webkit-box; display:-webkit-flex; display:-ms-flex; display:flex; justify-content: center; flex-direction: column;}
 .vertical-middle-r{display:-webkit-box; display:-webkit-flex; display:-ms-flex; display:flex; justify-content: center; flex-direction:row;}
 .ml-auto{margin-left:auto !important;}
@@ -1428,13 +1429,15 @@ ul.text-right.pager {text-align: right;}
 .program-save-custom-days-wrapper .program-save-custom-days-row .program-save-custom-days-block { width: 14.28%; border: 1px solid #eee; padding: 3px 10px; /*height: 100%; float: left;*/    display: -ms-flexbox; display: -webkit-box; display: flex; -ms-flex-direction: row; -webkit-box-orient: horizontal; -webkit-box-direction: normal; flex-direction: column;}
 .program-save-custom-days-wrapper .program-save-custom-days-row .program-save-custom-days-block .program-save-custom-days-block-title { text-align: right; }
 .program-save-custom-days-wrapper .program-save-custom-days-row .program-save-custom-days-block .program-save-custom-days-block-content { width: 100%; min-height: 150px; }
+.program-save-custom-days-block-content .program-event-block-main-wrapper { margin-bottom: 5px; }
 .program-event-block-wrapper{border-radius: 0;color:#000;cursor:pointer; margin:0;}
 .program-event-block-wrapper + .program-event-block-wrapper{margin-top:10px}
 .program-event-block-title{ display:block; }
 .program-event-block-title .pull-left.custom_check{  float: none !important; background: #693fbd; padding: 10px; height: 38px;}
-.restday .program-event-block-title .pull-left.custom_check{ background: #46E9C5;}
+.restday .program-event-block-title .pull-left.custom_check,
+#custom-drag-workout-wrap .restday .program-event-block-title .pull-left.custom_check{ background: #46E9C5;}
 .program-event-block-title .custom_check {font-size: 14px; line-height:16px; display: block; text-overflow: ellipsis; height:16px; overflow: hidden; width: 100%; color: #6a3fbd; margin:0;}
-.program-save-custom-days-wrapper .program-save-custom-days-row .program-save-custom-days-block{ padding:5px;}
+.program-save-custom-days-wrapper .program-save-custom-days-row .program-save-custom-days-block{ padding:5px; z-index: 4; user-select: none;}
 .program-event-block-content p{    font-style: normal; white-space: normal; color: #333 !important; font-size: 14px; line-height: 20px; padding: 0; margin: 0px 0 10px 0; overflow: hidden; height: 42px; word-break: break-all;}
 .program-event-block-content a{color: #716684; width: calc(25% - 4px); display: inline-block; line-height: 20px; padding: 2px 4px 6px; border: 0; background: #e2dbee; text-align: center; margin: 0 2px; vertical-align: top;}
 .program-save-custom-days-row { display: -ms-flexbox; display: -webkit-box; display: flex; -ms-flex-direction: row; -webkit-box-orient: horizontal; -webkit-box-direction: normal; flex-direction: row; }
@@ -2274,10 +2277,12 @@ ul.uploade-data li.sm-img {border-bottom: 1px dashed #fff;font-size:10px;}
 .workout-exercises-view-wrapper.default-cursor ul li { cursor: default !important; }
 .workout-calender .big-calendar-custom-month-event-view-card .workout-cut-card-btn,
 .my-custom-calendar .workout-cut-card-btn,
+.my-custom-calendar .calendar-custom-drag-handle,
 #custom-cut-workout-wrap .big-calendar-custom-month-event-view-card .workout-cut-card-btn,
 #custom-drag-workout-wrap .big-calendar-custom-month-event-view-card .workout-cut-card-btn { display: inline-block; position: absolute; top: 7px; right: 8px; width: 20px; height: 20px; background: transparent !important; border-radius: 50%; margin: 0; padding: 0; }
 .workout-calender .big-calendar-custom-month-event-view-card .workout-cut-card-btn i,
 .my-custom-calendar .workout-cut-card-btn i,
+.my-custom-calendar .calendar-custom-drag-handle i,
 #custom-cut-workout-wrap .big-calendar-custom-month-event-view-card .workout-cut-card-btn i,
 #custom-drag-workout-wrap .big-calendar-custom-month-event-view-card .workout-cut-card-btn i {font-size: 20px; color: #ffffff;}
 .p-relative{position: relative !important;}
