@@ -91,6 +91,12 @@ class ProgramSave extends Component {
                         <div className="col-md-12 p-unset">
                             <div id="cal-panel-wrap" className="white-box space-btm-20 my-custom-calendar">
                                 <div className="whitebox-body profile-body programs-table-wrapper" data-for="custom-cut-workout-wrap" data-tip>
+                                    <div className="block-border-div"></div>
+                                    <div className="block-border-div"></div>
+                                    <div className="block-border-div"></div>
+                                    <div className="block-border-div"></div>
+                                    <div className="block-border-div"></div>
+                                    <div className="block-border-div"></div>
                                     {selectedEvents && selectedEvents.length > 0 &&
                                         <div className="fixed-btm-bar d-flex">
                                             <div className="fixed-btm-bar-l d-flex">

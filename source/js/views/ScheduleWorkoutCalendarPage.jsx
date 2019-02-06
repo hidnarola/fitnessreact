@@ -43,6 +43,8 @@ let dragEventCardY = null;
 
 let calendarArea = null;
 
+let hardResetContainer = false;
+
 class ScheduleWorkoutCalendarPage extends Component {
     constructor(props) {
         super(props);
@@ -378,6 +380,7 @@ class ScheduleWorkoutCalendarPage extends Component {
                 newWorkouts.push(newWorkout);
             });
             this.setState({ workoutEvents: newWorkouts });
+            this.resetDragContainer();
         }
         if (cutWorkout && prevProps.cutWorkout !== cutWorkout) {
             var newWorkouts = [];
@@ -413,7 +416,6 @@ class ScheduleWorkoutCalendarPage extends Component {
             this.cancelSelectedSlotAction();
             const newWorkoutState = { cutWorkout: null, cutWorkoutData: null };
             dispatch(setScheduleWorkoutsState(newWorkoutState));
-            this.resetDragContainer();
             dispatch(hidePageLoader());
             if (error && error.length > 0) {
                 te('Something went wrong! please try again later.');
@@ -531,7 +533,12 @@ class ScheduleWorkoutCalendarPage extends Component {
     handleKeyUp = (e) => {
         if (e && typeof e.keyCode !== 'undefined' && e.keyCode === 27) {
             this.resetCutData();
-            this.resetDragContainer();
+            if (dragEventId) {
+                const selectedCard = $(`#workout-card-${dragEventId}`);
+                this.resetDragContainer();
+                selectedCard.removeClass("opacity-0");
+                selectedCard.css({ opacity: "1" });
+            }
         }
     }
 
@@ -552,6 +559,7 @@ class ScheduleWorkoutCalendarPage extends Component {
                     dragEventCardOutside = true;
                     $('#cal-panel-wrap').css({ boxShadow: "0 0 10px 1px #da6d6d" });
                 } else {
+                    dragEventCardOutside = false;
                     $('#cal-panel-wrap').css({ boxShadow: "none" });
                 }
             }
@@ -563,6 +571,17 @@ class ScheduleWorkoutCalendarPage extends Component {
     handleMouseUp = (e) => {
         if (dragEventActive && dragEventId) {
             const workoutCalendarWrapper = $(".workout-calender");
+            hardResetContainer = true;
+            setTimeout(() => {
+                if (hardResetContainer) {
+                    this.changeAllWorkoutCheckedStatus();
+                    hardResetContainer = false;
+                    const selectedCard = $(`#workout-card-${dragEventId}`);
+                    this.resetDragContainer();
+                    selectedCard.removeClass("opacity-0");
+                    selectedCard.css({ opacity: "1" });
+                }
+            }, 500);
             if (workoutCalendarWrapper && workoutCalendarWrapper[0]) {
                 calendarArea = getElementOffsetRelativeToBody(workoutCalendarWrapper[0]);
             }
@@ -575,7 +594,10 @@ class ScheduleWorkoutCalendarPage extends Component {
                     (e.clientY + scrollTop) >= (calendarArea.top + calendarArea.height)
                 ) {
                     e.stopPropagation();
+                    const selectedCard = $(`#workout-card-${dragEventId}`);
                     this.resetDragContainer();
+                    selectedCard.removeClass("opacity-0");
+                    selectedCard.css({ opacity: "1" });
                 }
             }
         }
@@ -584,6 +606,7 @@ class ScheduleWorkoutCalendarPage extends Component {
     onSelectSlot = (slotInfo) => {
         const { dispatch, cutWorkout } = this.props;
         if (dragEventId) {
+            hardResetContainer = false;
             if (dragEventCardOutside) {
                 this.resetDragContainer();
             } else {
@@ -1019,7 +1042,12 @@ class CustomEventCard extends Component {
             <div
                 id={`workout-card-${event.id}`}
                 className={
-                    cns('big-calendar-custom-month-event-view-card', { 'restday': (event.exerciseType === SCHEDULED_WORKOUT_TYPE_RESTDAY), 'loss-opacity': event.isCut, 'disable-overlay': event.isCutEnable })
+                    cns('big-calendar-custom-month-event-view-card', {
+                        'restday': (event.exerciseType === SCHEDULED_WORKOUT_TYPE_RESTDAY),
+                        'loss-opacity': event.isCut,
+                        'disable-overlay': event.isCutEnable,
+                        'opacity-0': dragEventId === event.id
+                    })
                 }
             >
                 <div className="big-calendar-custom-month-event-view-card-header">
@@ -1084,7 +1112,7 @@ class CustomEventCard extends Component {
         const eventCardX = (offsetLeft - e.clientX);
         const eventCardY = (offsetRight - e.clientY);
         dragPlaceholder.html(selectedCard.parent().html());
-        dragPlaceholder.css({ top: 0, left: 0 });
+        dragPlaceholder.css({ top: (eventCardY + e.clientY), left: (eventCardX + e.clientX) });
         dragEventActive = true;
         dragEventCardOutside = false;
         dragEventId = event.id;
@@ -1092,9 +1120,11 @@ class CustomEventCard extends Component {
         dragEventCardX = eventCardX;
         dragEventCardY = eventCardY;
         $('#cal-panel-wrap').css({ boxShadow: "none" });
+        selectedCard.css({ opacity: "0" });
     }
 
     handleMouseUp = (e) => {
+        const selectedCard = $(`#workout-card-${dragEventId}`);
         const dragPlaceholder = $('#custom-drag-workout-wrap');
         dragPlaceholder.html('');
         dragEventActive = false;
@@ -1104,6 +1134,8 @@ class CustomEventCard extends Component {
         dragEventCardX = null;
         dragEventCardY = null;
         $('#cal-panel-wrap').css({ boxShadow: "none" });
+        selectedCard.removeClass("opacity-0");
+        selectedCard.css({ opacity: "1" });
     }
 }
 

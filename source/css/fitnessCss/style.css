@@ -973,6 +973,7 @@ display:-webkit-box; display:-webkit-flex; display:-ms-flex; display:flex; flex-
 .image-preview-wrapper img{width: auto; max-height: 210px;border-radius: 5px;}
 .display_block {display: block;}
 .display_none {display: none !important;}
+.opacity-0 {opacity: 0 !important;}
 .display_inline_block {display: inline-block !important;}
 .fs-100{font-size: 100px !important;}
 .fs-25{font-size: 25px !important;}
@@ -1443,7 +1444,7 @@ ul.text-right.pager {text-align: right;}
 .program-save-custom-days-row { display: -ms-flexbox; display: -webkit-box; display: flex; -ms-flex-direction: row; -webkit-box-orient: horizontal; -webkit-box-direction: normal; flex-direction: row; }
 .program-save-custom-days-wrapper{ border:1px solid #ddd;}
 .program-save-custom-days-block{border:0 !important;}
-.program-save-custom-days-block + .program-save-custom-days-block{border-left: 1px solid #DDD !important;}
+/* .program-save-custom-days-block + .program-save-custom-days-block{border-left: 1px solid #DDD !important;} */
 .program-save-custom-days-row + .program-save-custom-days-row{ border-top:1px solid #ddd;}
 .program-event-block-content{background-color: #f6f1ff;padding: 10px;}
 .restday .program-event-block-content{    background-color: #e3fdf7;}
@@ -2301,6 +2302,14 @@ body .big-calendar-custom-month-event-view-card-header a.calendar-custom-drag-ha
 #custom-cut-workout-wrap .calendar-custom-drag-handle{position:absolute !important; background: transparent !important; width: 20px !important; top: 5px !important; right: 7px !important;}
 .big-calendar-custom-month-event-view-card .calendar-custom-drag-handle { display: inline-block; position: absolute; top: 7px; right: 8px; width: 20px; height: 20px; background: transparent !important; border-radius: 50%; margin: 0; padding: 0; }
 .big-calendar-custom-month-event-view-card .calendar-custom-drag-handle i { font-size: 20px; color: #ffffff; }
+.block-border-div {position: absolute; top: 0; left: 14.28%; width: 1px; height:calc(100% - 119px); }
+.block-border-div:before {content: ''; width: 1px; height: 100%; left: 0; top: 0; background: #ddd; position: absolute;}
+.block-border-div:nth-child(2){left:28.56%;} 
+.block-border-div:nth-child(3){left:42.84%;} 
+.block-border-div:nth-child(4){left:57.12%;} 
+.block-border-div:nth-child(5){left:71.4%;} 
+.block-border-div:nth-child(6){left:85.68%;} 
+
 
 @media(min-width: 992px){
     body.with_login .app-wrapper-content{ width: 100%; }
