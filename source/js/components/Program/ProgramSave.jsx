@@ -21,11 +21,12 @@ import $ from "jquery";
 let dragEventActive = false;
 let dragEventCardOutside = false;
 let dragEventId = null;
-let dragEventDate = null;
 let dragEventCardX = null;
 let dragEventCardY = null;
 
 let calendarArea = null;
+
+let hardResetContainer = false;
 
 class ProgramSave extends Component {
     constructor(props) {
@@ -91,12 +92,6 @@ class ProgramSave extends Component {
                         <div className="col-md-12 p-unset">
                             <div id="cal-panel-wrap" className="white-box space-btm-20 my-custom-calendar">
                                 <div className="whitebox-body profile-body programs-table-wrapper" data-for="custom-cut-workout-wrap" data-tip>
-                                    <div className="block-border-div"></div>
-                                    <div className="block-border-div"></div>
-                                    <div className="block-border-div"></div>
-                                    <div className="block-border-div"></div>
-                                    <div className="block-border-div"></div>
-                                    <div className="block-border-div"></div>
                                     {selectedEvents && selectedEvents.length > 0 &&
                                         <div className="fixed-btm-bar d-flex">
                                             <div className="fixed-btm-bar-l d-flex">
@@ -278,6 +273,7 @@ class ProgramSave extends Component {
                 te('Something went wrong! please try again later.');
                 history.push(routeCodes.PROGRAMS);
             }
+            this.resetDragContainer();
         }
         if (cutWorkout && prevProps.cutWorkout !== cutWorkout) {
             var prog = (program.programDetails) ? program.programDetails : null;
@@ -309,7 +305,6 @@ class ProgramSave extends Component {
             this.cancelSelectDayAction();
             const newWorkoutState = { cutWorkout: null, cutWorkoutData: null };
             dispatch(setUserProgramState(newWorkoutState));
-            this.resetDragContainer();
             dispatch(hidePageLoader());
             if (error && error.length > 0) {
                 te('Something went wrong! please try again later.');
@@ -386,7 +381,12 @@ class ProgramSave extends Component {
     handleKeyUp = (e) => {
         if (e && typeof e.keyCode !== 'undefined' && e.keyCode === 27) {
             this.resetCutData();
-            this.resetDragContainer();
+            if (dragEventId) {
+                const selectedCard = $(`#workout-card-${dragEventId}`);
+                this.resetDragContainer();
+                selectedCard.removeClass("opacity-0");
+                selectedCard.css({ opacity: "1" });
+            }
         }
     }
 
@@ -407,6 +407,7 @@ class ProgramSave extends Component {
                     dragEventCardOutside = true;
                     $('#cal-panel-wrap').css({ boxShadow: "0 0 10px 1px #da6d6d" });
                 } else {
+                    dragEventCardOutside = false;
                     $('#cal-panel-wrap').css({ boxShadow: "none" });
                 }
             }
@@ -418,6 +419,17 @@ class ProgramSave extends Component {
     handleMouseUp = (e) => {
         if (dragEventActive && dragEventId) {
             const workoutCalendarWrapper = $(".program-save-custom-days-wrapper");
+            hardResetContainer = true;
+            setTimeout(() => {
+                if (hardResetContainer) {
+                    this.changeAllWorkoutCheckedStatus();
+                    hardResetContainer = false;
+                    const selectedCard = $(`#workout-card-${dragEventId}`);
+                    this.resetDragContainer();
+                    selectedCard.removeClass("opacity-0");
+                    selectedCard.css({ opacity: "1" });
+                }
+            }, 500);
             if (workoutCalendarWrapper && workoutCalendarWrapper[0]) {
                 calendarArea = getElementOffsetRelativeToBody(workoutCalendarWrapper[0]);
             }
@@ -430,7 +442,10 @@ class ProgramSave extends Component {
                     (e.clientY + scrollTop) >= (calendarArea.top + calendarArea.height)
                 ) {
                     e.stopPropagation();
+                    const selectedCard = $(`#workout-card-${dragEventId}`);
                     this.resetDragContainer();
+                    selectedCard.removeClass("opacity-0");
+                    selectedCard.css({ opacity: "1" });
                 }
             }
         }
@@ -494,6 +509,7 @@ class ProgramSave extends Component {
     handleSelectDayAction = (day) => {
         const { dispatch, cutWorkout } = this.props;
         if (dragEventId) {
+            hardResetContainer = false;
             if (dragEventCardOutside) {
                 this.resetDragContainer();
             } else {
@@ -560,7 +576,6 @@ class ProgramSave extends Component {
         dragEventActive = false;
         dragEventCardOutside = false;
         dragEventId = null;
-        dragEventDate = null;
         dragEventCardX = null;
         dragEventCardY = null;
         $('#cal-panel-wrap').css({ boxShadow: "none" });
@@ -758,6 +773,12 @@ class CustomDaysCalendarView extends Component {
         }
         return (
             <div className="program-save-custom-days-wrapper">
+                <div className="block-border-div"></div>
+                <div className="block-border-div"></div>
+                <div className="block-border-div"></div>
+                <div className="block-border-div"></div>
+                <div className="block-border-div"></div>
+                <div className="block-border-div"></div>
                 {rowsObj}
             </div>
         );
@@ -806,6 +827,10 @@ class CustomDaysCalendarBlock extends Component {
             blockNumber,
             workouts,
             handleSelectDayAction,
+            handleSelectedForBulk,
+            handleCut,
+            handleCopy,
+            handleDelete
         } = this.props;
         var findDay = (blockNumber - 1);
         var events = _.filter(workouts, { 'day': findDay });
@@ -820,44 +845,85 @@ class CustomDaysCalendarBlock extends Component {
                             {
                                 events.map((e, i) => {
                                     return (
-                                        <div className="program-event-block-main-wrapper" key={i}>
-                                            <div id={`workout-card-${e._id}`} className={cns('program-event-block-wrapper', { 'restday': (e.type === SCHEDULED_WORKOUT_TYPE_RESTDAY), 'loss-opacity': e.isCut, 'disable-overlay': e.isCutEnable })} onClick={(e) => e.stopPropagation()}>
-                                                <div className="program-event-block-title">
-                                                    <div className="pull-left custom_check p-relative" onClick={(event) => this.handleCheckChange(event, e._id)}>
-                                                        <input
-                                                            type="checkbox"
-                                                            id={`complete_workout_schedule_${e._id}`}
-                                                            name={`complete_workout_schedule_${e._id}`}
-                                                            checked={e.isSelectedForBulkAction}
-                                                            onChange={() => { }}
-                                                        />
-                                                        <label><h5 className="">{(e.title) ? e.title : ''}</h5></label>
-                                                        <a href="javascript:void(0)" data-tip="Cut" className="workout-cut-card-btn" onClick={(event) => this.handleCutEvent(event, e._id, e)}><i className="icon-flip_to_front"></i></a>
-                                                        <div className="calendar-custom-drag-handle" onMouseDown={(event) => this.handleMouseDown(event, e)} onMouseUp={this.handleMouseUp} onClick={(event) => event.stopPropagation()}><i className="icon-open_with"></i></div>
-                                                    </div>
-                                                </div>
-                                                <div className="program-event-block-content">
-                                                    <p>{(e.description) ? e.description : ''}</p>
-                                                    {(e.type === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
-                                                        <a href="javascript:void(0)" data-tip="Copy" onClick={(event) => this.handleCopyEvent(event, e._id)}><FaCopy /></a>
-                                                    }
-                                                    {(e.type === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
-                                                        <NavLink to={routeCodes.SAVE_PROGRAM_SCHEDULE_WORKOUT.replace(':id', e.programId).replace(':workout_id', e._id)} data-tip="Details" title=""><FaEye /></NavLink>
-                                                    }
-                                                    {(e.type === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
-                                                        <NavLink to={routeCodes.SAVE_PROGRAM_SCHEDULE_WORKOUT.replace(':id', e.programId).replace(':workout_id', e._id)} data-tip="Change" title=""><FaPencil /></NavLink>
-                                                    }
-                                                    <a href="javascript:void(0)" data-tip="Delete" data-for="event-delete-tooltip" onClick={(event) => this.handleDeleteEvent(event, e._id)}><FaTrash /></a>
-                                                </div>
-                                                <ReactTooltip place="top" type="dark" effect="solid" />
-                                                <ReactTooltip id='event-delete-tooltip' place="top" type="error" effect="solid" />
-                                            </div>
-                                        </div>
+                                        <CustomDaysCalendarBlockCard
+                                            key={i}
+                                            e={e}
+                                            i={i}
+                                            handleSelectedForBulk={handleSelectedForBulk}
+                                            handleCut={handleCut}
+                                            handleCopy={handleCopy}
+                                            handleDelete={handleDelete}
+                                        />
                                     );
                                 })
                             }
                         </Fragment>
                     }
+                </div>
+            </div>
+        );
+    }
+
+    handleCardMouseUp = (e) => {
+        if (dragEventActive && dragEventId) {
+            const { blockNumber, handleSelectDayAction } = this.props;
+            handleSelectDayAction(blockNumber)
+        }
+    }
+}
+
+class CustomDaysCalendarBlockCard extends Component {
+    constructor(props) {
+        super(props);
+        this.checkbox = React.createRef();
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const { e } = this.props;
+        if (e.isSelectedForBulkAction !== nextProps.e.isSelectedForBulkAction) {
+            if (typeof nextProps.e.isSelectedForBulkAction !== 'undefined') {
+                this.checkbox.current.checked = nextProps.e.isSelectedForBulkAction
+            }
+        }
+    }
+
+    render() {
+        const { e } = this.props;
+        return (
+            <div className="program-event-block-main-wrapper">
+                <div id={`workout-card-${e._id}`} className={cns('program-event-block-wrapper', {
+                    'restday': (e.type === SCHEDULED_WORKOUT_TYPE_RESTDAY),
+                    'loss-opacity': e.isCut,
+                    'disable-overlay': e.isCutEnable,
+                    'opacity-0': dragEventId === e._id
+                })} onClick={(event) => { event.preventDefault(); event.stopPropagation(); }}>
+                    <div className="program-event-block-title">
+                        <div className="pull-left custom_check p-relative" onClick={(event) => this.handleCheckChange(event, e._id)}>
+                            <input
+                                type="checkbox"
+                                id={`complete_workout_schedule_${e._id}`}
+                                ref={this.checkbox}
+                            />
+                            <label><h5 className="">{(e.title) ? e.title : ''}</h5></label>
+                            <a href="javascript:void(0)" data-tip="Cut" className="workout-cut-card-btn" onClick={(event) => this.handleCutEvent(event, e._id, e)}><i className="icon-flip_to_front"></i></a>
+                            <div className="calendar-custom-drag-handle" onMouseDown={(event) => this.handleMouseDown(event, e)} onMouseUp={this.handleMouseUp} onClick={(event) => { event.stopPropagation(); }}><i className="icon-open_with"></i></div>
+                        </div>
+                    </div>
+                    <div className="program-event-block-content">
+                        <p>{(e.description) ? e.description : ''}</p>
+                        {(e.type === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
+                            <a href="javascript:void(0)" data-tip="Copy" onClick={(event) => this.handleCopyEvent(event, e._id)}><FaCopy /></a>
+                        }
+                        {(e.type === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
+                            <NavLink to={routeCodes.SAVE_PROGRAM_SCHEDULE_WORKOUT.replace(':id', e.programId).replace(':workout_id', e._id)} data-tip="Details" title=""><FaEye /></NavLink>
+                        }
+                        {(e.type === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
+                            <NavLink to={routeCodes.SAVE_PROGRAM_SCHEDULE_WORKOUT.replace(':id', e.programId).replace(':workout_id', e._id)} data-tip="Change" title=""><FaPencil /></NavLink>
+                        }
+                        <a href="javascript:void(0)" data-tip="Delete" data-for="event-delete-tooltip" onClick={(event) => this.handleDeleteEvent(event, e._id)}><FaTrash /></a>
+                    </div>
+                    <ReactTooltip place="top" type="dark" effect="solid" />
+                    <ReactTooltip id='event-delete-tooltip' place="top" type="error" effect="solid" />
                 </div>
             </div>
         );
@@ -887,13 +953,6 @@ class CustomDaysCalendarBlock extends Component {
         handleSelectedForBulk(_id);
     }
 
-    handleCardMouseUp = (e) => {
-        if (dragEventActive && dragEventId) {
-            const { blockNumber, handleSelectDayAction } = this.props;
-            handleSelectDayAction(blockNumber)
-        }
-    }
-
     handleMouseDown = (e, event) => {
         const selectedCard = $(`#workout-card-${event._id}`);
         const dragPlaceholder = $('#custom-drag-workout-wrap');
@@ -903,26 +962,28 @@ class CustomDaysCalendarBlock extends Component {
         const eventCardX = (offsetLeft - e.clientX);
         const eventCardY = (offsetRight - e.clientY);
         dragPlaceholder.html(selectedCard.parent().html());
-        dragPlaceholder.css({ top: 0, left: 0 });
+        dragPlaceholder.css({ top: (eventCardY + e.clientY), left: (eventCardX + e.clientX) });
         dragEventActive = true;
         dragEventCardOutside = false;
         dragEventId = event._id;
-        dragEventDate = event.start;
         dragEventCardX = eventCardX;
         dragEventCardY = eventCardY;
         $('#cal-panel-wrap').css({ boxShadow: "none" });
+        selectedCard.css({ opacity: "0" });
     }
 
     handleMouseUp = (e) => {
+        const selectedCard = $(`#workout-card-${dragEventId}`);
         const dragPlaceholder = $('#custom-drag-workout-wrap');
         dragPlaceholder.html('');
         dragEventActive = false;
         dragEventCardOutside = false;
         dragEventId = null;
-        dragEventDate = null;
         dragEventCardX = null;
         dragEventCardY = null;
         $('#cal-panel-wrap').css({ boxShadow: "none" });
+        selectedCard.removeClass("opacity-0");
+        selectedCard.css({ opacity: "1" });
     }
 }
 
@@ -941,6 +1002,7 @@ class CustomEventCardView extends Component {
                         />
                         <label><h5 className="">{(e.title) ? e.title : ''}</h5></label>
                         <a href="javascript:void(0)" className="workout-cut-card-btn"><i className="icon-flip_to_front"></i></a>
+                        <div href="javascript:void(0)" className="calendar-custom-drag-handle"><i className="icon-open_with"></i></div>
                     </div>
                 </div>
                 <div className="program-event-block-content">

@@ -1436,13 +1436,14 @@ ul.text-right.pager {text-align: right;}
 .program-event-block-title{ display:block; }
 .program-event-block-title .pull-left.custom_check{  float: none !important; background: #693fbd; padding: 10px; height: 38px;}
 .restday .program-event-block-title .pull-left.custom_check,
-#custom-drag-workout-wrap .restday .program-event-block-title .pull-left.custom_check{ background: #46E9C5;}
+#custom-cut-workout-wrap .restday .program-event-block-title .pull-left.custom_check
+#custom-drag-workout-wrap .restday .program-event-block-title .pull-left.custom_check{ background: #46E9C5 !important;}
 .program-event-block-title .custom_check {font-size: 14px; line-height:16px; display: block; text-overflow: ellipsis; height:16px; overflow: hidden; width: 100%; color: #6a3fbd; margin:0;}
 .program-save-custom-days-wrapper .program-save-custom-days-row .program-save-custom-days-block{ padding:5px; z-index: 4; user-select: none;}
 .program-event-block-content p{    font-style: normal; white-space: normal; color: #333 !important; font-size: 14px; line-height: 20px; padding: 0; margin: 0px 0 10px 0; overflow: hidden; height: 42px; word-break: break-all;}
 .program-event-block-content a{color: #716684; width: calc(25% - 4px); display: inline-block; line-height: 20px; padding: 2px 4px 6px; border: 0; background: #e2dbee; text-align: center; margin: 0 2px; vertical-align: top;}
 .program-save-custom-days-row { display: -ms-flexbox; display: -webkit-box; display: flex; -ms-flex-direction: row; -webkit-box-orient: horizontal; -webkit-box-direction: normal; flex-direction: row; }
-.program-save-custom-days-wrapper{ border:1px solid #ddd;}
+.program-save-custom-days-wrapper{ border:1px solid #ddd;position: relative;}
 .program-save-custom-days-block{border:0 !important;}
 /* .program-save-custom-days-block + .program-save-custom-days-block{border-left: 1px solid #DDD !important;} */
 .program-save-custom-days-row + .program-save-custom-days-row{ border-top:1px solid #ddd;}
@@ -2294,7 +2295,8 @@ div#custom-cut-workout-wrap:after,
 div#custom-drag-workout-wrap:after { border: 0 !important; }
 .disable-overlay{position: relative;}
 .disable-overlay:before{ content: ""; display: block; height: 100%; position: absolute; top: 0; left: 0; width: 100%; z-index: 1;}
-.big-calendar-custom-month-event-view-card-header label{width:calc(100% - 16px) !important;}
+.big-calendar-custom-month-event-view-card-header label,
+.program-event-block-main-wrapper label{width:calc(100% - 16px) !important;}
 .workout-cut-card-btn{ right:33px !important;}
 body .big-calendar-custom-month-event-view-card-header a.calendar-custom-drag-handle{ width: 20px;background: transparent !important;color: #fff;margin:-3px 0 0;padding: 0;}
 body .big-calendar-custom-month-event-view-card-header a.calendar-custom-drag-handle i{ font-size:18px; line-height:20px;color: #fff; }
@@ -2302,7 +2304,7 @@ body .big-calendar-custom-month-event-view-card-header a.calendar-custom-drag-ha
 #custom-cut-workout-wrap .calendar-custom-drag-handle{position:absolute !important; background: transparent !important; width: 20px !important; top: 5px !important; right: 7px !important;}
 .big-calendar-custom-month-event-view-card .calendar-custom-drag-handle { display: inline-block; position: absolute; top: 7px; right: 8px; width: 20px; height: 20px; background: transparent !important; border-radius: 50%; margin: 0; padding: 0; }
 .big-calendar-custom-month-event-view-card .calendar-custom-drag-handle i { font-size: 20px; color: #ffffff; }
-.block-border-div {position: absolute; top: 0; left: 14.28%; width: 1px; height:calc(100% - 119px); }
+.block-border-div {position: absolute; top: 0; left: 14.28%; width: 1px; height:100%; }
 .block-border-div:before {content: ''; width: 1px; height: 100%; left: 0; top: 0; background: #ddd; position: absolute;}
 .block-border-div:nth-child(2){left:28.56%;} 
 .block-border-div:nth-child(3){left:42.84%;} 
