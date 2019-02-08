@@ -1,9 +1,14 @@
+.emos-wrap {
+    display: inline-block;
+}
 .emos-launcher-wrap {
     position: relative;
     display: inline-block;
+    width: 100%;
 }
 .emos-area-wrap {
     position: absolute;
+    text-align: left;
 }
 .emos-area-wrap.top-right {
     bottom: 32px;
@@ -13,7 +18,7 @@
     bottom: 32px;
     left: 0;
 }
-.emos-area-wrap.button-right {
+.emos-area-wrap.bottom-right {
     top: 32px;
     right: 0;
 }

@@ -14,6 +14,7 @@ import Lightbox from 'react-images';
 import LikeButton from '../Profile/LikeButton';
 import CommentBoxForm from '../Profile/CommentBoxForm';
 import LikesListModal from '../Common/LikesListModal';
+import { replaceStringWithEmos } from '../../helpers/funs';
 
 class ActivityFeedListCard extends Component {
     constructor(props) {
@@ -55,6 +56,7 @@ class ActivityFeedListCard extends Component {
         } else {
             return null;
         }
+        description = replaceStringWithEmos(description);
         var imagesCount = images.length;
         var postImageDisplayClass = 'masonry';
         if (imagesCount === 1) {

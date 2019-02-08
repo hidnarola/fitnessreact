@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { toggleSideMenu, getToken } from '../../helpers/funs';
+import { toggleSideMenu, getToken, replaceStringWithEmos } from '../../helpers/funs';
 import noProfileImg from 'img/common/no-profile-img.png'
 import cns from "classnames";
 import { openUserChatWindowRequest, loadMoreUserMessageChannelRequest, getUserChannelRequest } from '../../actions/userMessages';
@@ -10,8 +10,8 @@ import { Scrollbars } from 'react-custom-scrollbars';
 import { loadMoreApprovedFriendsMessengerRequest } from '../../actions/friends';
 import NoRecordFound from '../Common/NoRecordFound';
 import { FRIENDSHIP_STATUS_UNKNOWN } from '../../constants/consts';
-import moment from "moment";
-import ReactTimeAgo from 'react-time-ago'
+import ReactTimeAgo from 'react-time-ago';
+import ReactHtmlParser from 'react-html-parser';
 
 class UserMessagePanel extends Component {
     render() {
@@ -240,7 +240,10 @@ export default connect(
 class ChannelMessageCard extends Component {
     render() {
         const { channel, loggedUserData, handleOpenChatWindow, handleMessageSeen } = this.props;
-        var message = channel.conversation.message;
+        var message = "";
+        if (channel && channel.conversation && channel.conversation.message && channel.conversation.message !== '') {
+            message = replaceStringWithEmos(channel.conversation.message);
+        }
         var channelFor = null;
         var channelForPreferences = null;
         var friendshipStatus = (channel.friendshipStatus) ? channel.friendshipStatus : FRIENDSHIP_STATUS_UNKNOWN;
@@ -251,7 +254,6 @@ class ChannelMessageCard extends Component {
             channelFor = channel.friendData;
             channelForPreferences = channel.friendPreferences;
         }
-        console.log('channel => ', channel);
         var isSeen = true;
         if (channel.conversation.userId !== loggedUserData.authId && channel.conversation.isSeen === 0) {
             isSeen = false;
@@ -276,12 +278,12 @@ class ChannelMessageCard extends Component {
                             <strong>
                                 {`${channelFor.firstName} ${(channelFor.lastName) ? channelFor.lastName : ''}`}
                                 {channel && channel.lastReplyAt &&
-                                    <span className="text-mute noti-time"> 
+                                    <span className="text-mute noti-time">
                                         <ReactTimeAgo>{new Date(channel.lastReplyAt)}</ReactTimeAgo>
                                     </span>
                                 }
                             </strong>
-                            <small>{message}</small>
+                            <small>{message !== '' && ReactHtmlParser(message)}</small>
                         </h4>
                     </div>
                 </a>

@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import { toggleSmallChatWindow, getToken, scrollBottom } from '../../helpers/funs';
+import { toggleSmallChatWindow, getToken, scrollBottom, replaceStringWithEmos } from '../../helpers/funs';
 import moment from "moment";
 import noProfileImg from 'img/common/no-profile-img.png';
 import _ from "lodash";
 import { ACCESS_LEVEL_NONE, ACCESS_LEVEL_PUBLIC, ACCESS_LEVEL_FRIENDS_OF_FRIENDS, ACCESS_LEVEL_PRIVATE, ACCESS_LEVEL_FRIENDS, FRIENDSHIP_STATUS_FRIEND } from '../../constants/consts';
+import Emos from '../Common/Emos';
+import ReactHtmlParser from 'react-html-parser';
 
 class UserChatWindow extends Component {
     constructor(props) {
@@ -32,7 +34,6 @@ class UserChatWindow extends Component {
         const {
             newMsg,
         } = this.state;
-        console.log('friendshipStatus => ', friendshipStatus);
         return (
             <div className="small-chat-window-wrapper" style={style}>
                 <header
@@ -55,6 +56,10 @@ class UserChatWindow extends Component {
                         {messages && Object.keys(messages).length > 0 && !loadingMessages &&
                             messages.map((msg, index) => {
                                 var dt = moment(msg.createdAt).format('Do MMM HH:mm');
+                                let message = '';
+                                if (msg.message && msg.message !== '') {
+                                    message = replaceStringWithEmos(msg.message);
+                                }
                                 return (
                                     <div key={index}>
                                         <div className="chat-message clearfix">
@@ -69,7 +74,7 @@ class UserChatWindow extends Component {
                                             <div className="chat-message-content clearfix">
                                                 <span className="chat-time">{dt}</span>
                                                 <h5>{`${msg.firstName} ${(msg.lastName) ? msg.lastName : ''}`}</h5>
-                                                <p>{(msg.message)}</p>
+                                                {message !== '' && ReactHtmlParser(message)}
                                             </div>
                                         </div>
                                         <hr />
@@ -96,6 +101,16 @@ class UserChatWindow extends Component {
                     }
                     {userPreferences && userPreferences.messageAccessibility == ACCESS_LEVEL_FRIENDS && friendshipStatus && friendshipStatus === FRIENDSHIP_STATUS_FRIEND &&
                         <div className="p-10">
+                            <Emos
+                                pickerProps={{
+                                    color: "#ff337f",
+                                    onClick: this.handleEmoClick,
+                                    onSelect: this.handleEmoSelect,
+                                }}
+                                positionClass="top-right"
+                                emosWrapClass="emotis-chat-window"
+                                emojiBtnSize={18}
+                            />
                             <form method="POST" onSubmit={this.handleSend}>
                                 <fieldset>
                                     <input type="text" name='newMsg' value={newMsg} onChange={this.handleChange} placeholder="Type your message…" autoFocus={true} autoComplete="off" />
@@ -108,6 +123,16 @@ class UserChatWindow extends Component {
                     }
                     {userPreferences && userPreferences.messageAccessibility == ACCESS_LEVEL_PUBLIC &&
                         <div className="p-10">
+                            <Emos
+                                pickerProps={{
+                                    color: "#ff337f",
+                                    onClick: this.handleEmoClick,
+                                    onSelect: this.handleEmoSelect,
+                                }}
+                                positionClass="top-right"
+                                emosWrapClass="emotis-chat-window"
+                                emojiBtnSize={18}
+                            />
                             <form method="POST" onSubmit={this.handleSend}>
                                 <fieldset>
                                     <input type="text" name='newMsg' value={newMsg} onChange={this.handleChange} placeholder="Type your message…" autoFocus={true} autoComplete="off" />
@@ -196,6 +221,24 @@ class UserChatWindow extends Component {
             handleSendButton(data);
             this.setState({ newMsg: '' });
             scrollBottom(`#chat-history_${channelId}`, 'slow');
+        }
+    }
+
+    handleEmoClick = (emoji, event) => {
+        const { colons } = emoji;
+        this.appendDescription(colons);
+    }
+
+    handleEmoSelect = (emoji) => {
+        const { colons } = emoji;
+        this.appendDescription(colons);
+    }
+
+    appendDescription = (str) => {
+        if (str) {
+            const { newMsg } = this.state;
+            let _newMsg = newMsg + str;
+            this.setState({ newMsg: _newMsg });
         }
     }
 }

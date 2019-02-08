@@ -12,7 +12,7 @@ import { getProfileDetailsRequest, saveLoggedUserProfilePhotoRequest, getLoggedU
 import noProfileImg from 'img/common/no-profile-img.png'
 import { FRIENDSHIP_STATUS_SELF, FRIENDSHIP_STATUS_UNKNOWN, FRIENDSHIP_STATUS_FRIEND, FRIENDSHIP_STATUS_REQUEST_RECEIVED, FRIENDSHIP_STATUS_REQUEST_SENT, LOCALSTORAGE_USER_DETAILS_KEY, FITASSIST_USER_DETAILS_TOKEN_KEY, MEASUREMENT_UNIT_CENTIMETER, MEASUREMENT_UNIT_KILOGRAM, MEASUREMENT_UNIT_GRAM, ACCESS_LEVEL_PUBLIC, ACCESS_LEVEL_FRIENDS } from '../constants/consts';
 import { sendFriendRequestRequest, cancelFriendRequestRequest, acceptFriendRequestRequest } from '../actions/friends';
-import { ts, te, convertUnits } from '../helpers/funs';
+import { ts, te, convertUnits, replaceStringWithEmos } from '../helpers/funs';
 import ReactHtmlParser from 'react-html-parser';
 import ChangeProfilePhotoModal from '../components/Profile/ChangeProfilePhotoModal';
 import jwt from "jwt-simple";
@@ -118,6 +118,10 @@ class Profile extends Component {
             showFollModalUsers,
             showFollModalLoading
         } = this.props;
+        let profileAboutMe = '';
+        if (profile && profile.aboutMe && profile.aboutMe !== '') {
+            profileAboutMe = replaceStringWithEmos(profile.aboutMe);
+        }
         return (
             <div className='stat-page'>
                 <FitnessHeader />
@@ -179,9 +183,7 @@ class Profile extends Component {
                                     </div>
                                 </div>
                                 <div className="user-meta-text">
-                                    {profile && profile.aboutMe !== '' &&
-                                        ReactHtmlParser(profile.aboutMe)
-                                    }
+                                    {profileAboutMe !== '' && ReactHtmlParser(profileAboutMe)}
                                 </div>
 
                             </div>

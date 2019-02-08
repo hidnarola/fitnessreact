@@ -12,6 +12,8 @@ export const AUTH0_ACCESS_DENIED_ERR_STR = 'error=access_denied';
 export const AUTH0_UNVERIFIED_ERR_STR = 'error=unauthorized';
 export const AUTH0_SERVER_ERR_STR = 'error=server_error';
 
+export const REGEX_FOR_EMOJI_COLONS = /(:[a-zA-Z0-9\_\-\+]{1,}:)/g;
+
 export const AUTH_STATE_ACTION_LOGIN = 'login';
 export const AUTH_STATE_ACTION_SIGNUP = 'signup';
 

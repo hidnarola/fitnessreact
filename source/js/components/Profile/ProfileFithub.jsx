@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import { getUserTimelineRequest, addPostOnUserTimelineRequest, setTimelineState, deletePostOfTimelineRequest, changeAccessLevelPostOfTimelineRequest } from '../../actions/userTimeline';
+import {
+    getUserTimelineRequest,
+    addPostOnUserTimelineRequest,
+    deletePostOfTimelineRequest,
+    changeAccessLevelPostOfTimelineRequest
+} from '../../actions/userTimeline';
 import _ from "lodash";
-import noProfileImg from 'img/common/no-profile-img.png'
-import noImg from 'img/common/no-img.png'
 import moment from "moment";
 import {
-    POST_TYPE_TIMELINE,
-    POST_TYPE_GALLERY,
-    POST_TYPE_PROGRESS_PHOTO,
     SERVER_BASE_URL,
     ACCESS_LEVEL_PUBLIC,
     ACCESS_LEVEL_FRIENDS,
@@ -35,25 +35,23 @@ import {
     MUSCLE_WIDGET_WEIGHT,
     MUSCLE_WIDGET_HEIGHT,
     WIDGETS_TYPE_TIMELINE,
-    FRIENDSHIP_STATUS_FRIEND,
-    POST_TYPE_WORKOUT
+    FRIENDSHIP_STATUS_FRIEND
 } from '../../constants/consts';
-import cns from "classnames";
-import { routeCodes } from '../../constants/routes';
-import { NavLink, Link } from "react-router-dom";
 import { toggleLikeOnPostRequest } from '../../actions/postLikes';
-import CommentBoxForm from './CommentBoxForm';
 import { commentOnPostRequest } from '../../actions/postComments';
 import { initialize, reset } from "redux-form";
-import ReactHtmlParser from "react-html-parser";
 import ReactQuill from 'react-quill';
 import { te, ts } from '../../helpers/funs';
 import InfiniteScroll from 'react-infinite-scroller';
 import { MenuItem, Dropdown } from "react-bootstrap";
 import { FaGlobe, FaLock, FaGroup, FaSpinner, FaCircleONotch } from 'react-icons/lib/fa';
 import AddPostPhotoModal from './AddPostPhotoModal';
-import LikeButton from "./LikeButton";
-import { getTimelineWidgetsAndWidgetsDataRequest, saveTimelineWidgetsRequest, changeTimelineMuscleInnerDataRequest, changeTimelineBodyFatWidgetRequest } from '../../actions/timelineWidgets';
+import {
+    getTimelineWidgetsAndWidgetsDataRequest,
+    saveTimelineWidgetsRequest,
+    changeTimelineMuscleInnerDataRequest,
+    changeTimelineBodyFatWidgetRequest
+} from '../../actions/timelineWidgets';
 import WidgetsListModal from '../Common/WidgetsListModal';
 import WidgetProgressPhotoCard from '../Common/WidgetProgressPhotoCard';
 import WidgetMuscleCard from '../Common/WidgetMuscleCard';
@@ -61,8 +59,8 @@ import WidgetBodyFatCard from '../Common/WidgetBodyFatCard';
 import WidgetBadgesCard from '../Common/WidgetBadgesCard';
 import SweetAlert from "react-bootstrap-sweetalert";
 import Lightbox from 'react-images';
-import LikesListModal from '../Common/LikesListModal';
 import PostCard from './PostCard';
+import Emos from '../Common/Emos';
 
 class ProfileFithub extends Component {
     constructor(props) {
@@ -249,6 +247,16 @@ class ProfileFithub extends Component {
                                         </div>
                                     }
                                     <div className="how-training-btm d-flex justify-content-end">
+                                        <Emos
+                                            pickerProps={{
+                                                color: "#ff337f",
+                                                onClick: this.handleEmoClick,
+                                                onSelect: this.handleEmoSelect,
+                                            }}
+                                            positionClass="bottom-right"
+                                            emosWrapClass="emos-timeline"
+                                            emojiBtnSize={24}
+                                        />
                                         <a href="javascript:void(0)" onClick={this.handleShowPostPhotosModal}>
                                             <i className="icon-photo_size_select_actual vertical-middle-c"></i>
                                         </a>
@@ -1028,6 +1036,24 @@ class ProfileFithub extends Component {
             newPosts.push(o);
         });
         this.setState({ posts: newPosts });
+    }
+
+    handleEmoClick = (emoji, event) => {
+        const { colons } = emoji;
+        this.appendDescription(colons);
+    }
+
+    handleEmoSelect = (emoji) => {
+        const { colons } = emoji;
+        this.appendDescription(colons);
+    }
+
+    appendDescription = (str) => {
+        if (str) {
+            const { postContent } = this.state;
+            let _postContent = postContent + str;
+            this.setState({ postContent: _postContent });
+        }
     }
 }
 

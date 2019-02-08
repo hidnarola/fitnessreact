@@ -26,6 +26,7 @@ import CommentBoxForm from './CommentBoxForm';
 import LikesListModal from '../Common/LikesListModal';
 import { FaGlobe, FaLock, FaGroup } from 'react-icons/lib/fa';
 import { routeCodes } from '../../constants/routes';
+import { replaceStringWithEmos } from '../../helpers/funs';
 
 class PostCard extends Component {
     constructor(props) {
@@ -72,6 +73,7 @@ class PostCard extends Component {
         } else {
             return null;
         }
+        description = replaceStringWithEmos(description);
         var imagesCount = images.length;
         var postImageDisplayClass = 'masonry';
         if (imagesCount === 1) {

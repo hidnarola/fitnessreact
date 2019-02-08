@@ -21,7 +21,6 @@ import {
     MEASUREMENT_UNIT_INCH,
 } from '../../constants/consts';
 import { capitalizeFirstLetter, ts, convertUnits, focusToControl } from '../../helpers/funs';
-import ReactQuill from 'react-quill';
 import {
     getLoggedUserProfileDetailsRequest,
     saveLoggedUserProfileDetailsRequest,
@@ -347,7 +346,7 @@ class UpdateProfileForm extends Component {
                             </div>
                             <div className="stepbox-m personal-dtl no-padding width-100-per">
                                 <ul className="">
-                                    <li>
+                                    <li className="p-relative">
                                         <Field
                                             name="about_me"
                                             className="form-control resize-vertical min-height-179"
@@ -357,12 +356,14 @@ class UpdateProfileForm extends Component {
                                             errorClass="help-block"
                                         />
                                         <Emos
+                                            id="emos"
                                             pickerProps={{
                                                 color: "#ff337f",
                                                 onClick: this.handleEmoClick,
                                                 onSelect: this.handleEmoSelect,
                                             }}
                                             positionClass="top-right"
+                                            emosWrapClass="emotis-text-area"
                                         />
                                     </li>
                                 </ul>
@@ -458,13 +459,13 @@ class UpdateProfileForm extends Component {
     }
 
     handleEmoClick = (emoji, event) => {
-        const { native } = emoji;
-        this.appendDescription(native);
+        const { colons } = emoji;
+        this.appendDescription(colons);
     }
 
     handleEmoSelect = (emoji) => {
-        const { native } = emoji;
-        this.appendDescription(native);
+        const { colons } = emoji;
+        this.appendDescription(colons);
     }
 
     appendDescription = (str) => {
@@ -590,30 +591,6 @@ class DateField extends Component {
                 {meta.touched &&
                     ((meta.error && <span className={errorClass}>{meta.error}</span>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))
                 }
-            </div>
-        );
-    }
-}
-
-class EditorField extends Component {
-    render() {
-        const {
-            input,
-            wrapperClass,
-            placeholder,
-            handleChange,
-            className,
-        } = this.props;
-        return (
-            <div className={wrapperClass}>
-                <ReactQuill
-                    {...input}
-                    value={input.value ? input.value : ''}
-                    onChange={(content, delta, source, editor) => handleChange(content)}
-                    onBlur={(content) => { return content }}
-                    placeholder={placeholder}
-                    className={className}
-                />
             </div>
         );
     }

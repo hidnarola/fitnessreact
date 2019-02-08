@@ -13,14 +13,21 @@ class Emos extends Component {
     render() {
         const { openEmosArea } = this.state;
         const {
+            id,
+            emosWrapClass,
             positionClass,
-            pickerProps
+            pickerProps,
+            emojiBtnSize
         } = this.props;
+        let emojiBtnIcon = <Emoji emoji='blush' set='emojione' size={emojiBtnSize ? emojiBtnSize : 24} />;
+        if (openEmosArea) {
+            emojiBtnIcon = <Emoji emoji='smiley' set='emojione' size={emojiBtnSize ? emojiBtnSize : 24} />;
+        }
         return (
-            <div className="emos-wrap">
+            <div id={id} className={cns("emos-wrap", (emosWrapClass ? emosWrapClass : ""))}>
                 <div className="emos-launcher-wrap">
                     <button type="button" className="emos-launcher-btn" onClick={this.toggleEmosArea}>
-                        <Emoji emoji='blush' set='emojione' size={24} />
+                        {emojiBtnIcon}
                     </button>
                     {openEmosArea &&
                         <div className={cns("emos-area-wrap", (positionClass ? positionClass : "top-right"))}>
@@ -39,6 +46,23 @@ class Emos extends Component {
                 </div>
             </div>
         );
+    }
+
+    componentDidMount() {
+        document.addEventListener('keyup', this.handleKeyUp, true);
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener('keyup', this.handleKeyUp, true);
+    }
+
+    handleKeyUp = (e) => {
+        if (e && typeof e.keyCode !== 'undefined' && e.keyCode === 27) {
+            const { openEmosArea } = this.state;
+            if (openEmosArea) {
+                this.toggleEmosArea();
+            }
+        }
     }
 
     toggleEmosArea = () => {

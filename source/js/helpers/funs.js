@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import ReactDOMServer from "react-dom/server";
 import {
     LOCALSTORAGE_ACCESS_TOKEN_KEY,
     MEASUREMENT_UNIT_INCH,
@@ -13,6 +14,7 @@ import {
     FITASSIST_USER_DETAILS_TOKEN_KEY,
     EXE_MEASUREMENT_UNITS,
     GENDER_FEMALE,
+    REGEX_FOR_EMOJI_COLONS,
 } from "../constants/consts";
 import _ from 'lodash';
 import moment from "moment";
@@ -21,6 +23,7 @@ import { toast } from "react-toastify";
 import { FaCheck, FaFrownO } from 'react-icons/lib/fa';
 import $ from 'jquery';
 import jwt from "jwt-simple";
+import { Emoji } from "emoji-mart";
 
 export function extraHeaders() {
     const token = localStorage.getItem(LOCALSTORAGE_ACCESS_TOKEN_KEY);
@@ -357,4 +360,13 @@ export function getElementOffsetRelativeToBody(el) {
     const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
     return { top: (rect.top + scrollTop), left: (rect.left + scrollLeft), width: el.offsetWidth, height: el.offsetHeight }
+}
+
+export function replaceStringWithEmos(str, size = 16) {
+    if (str) {
+        return str.replace(REGEX_FOR_EMOJI_COLONS, (match) => {
+            return ReactDOMServer.renderToString(<Emoji emoji={match} size={size} />);
+        });
+    }
+    return str;
 }
