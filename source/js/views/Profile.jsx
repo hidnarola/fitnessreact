@@ -133,7 +133,7 @@ class Profile extends Component {
                 }
                 {!loadProfileActionInit && profile && Object.keys(profile).length > 0 &&
                     <section className="body-wrap">
-                        <div className="body-head profile-new-header d-flex">
+                        <div className="body-head profile-new-header d-flex front-white-header profile_one">
 
                             <div className="profile-picture">
                                 <div className="lavel-img">

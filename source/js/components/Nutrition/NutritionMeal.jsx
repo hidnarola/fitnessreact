@@ -73,9 +73,9 @@ class NutritionMeal extends Component {
                 <FitnessHeader />
                 <FitnessNav />
                 <section className="body-wrap nutrition-todays-meal-section">
-                    <div className="body-head d-flex justify-content-start">
+                    <div className="body-head d-flex justify-content-start front-white-header">
                         <div className="body-head-l">
-                            <h2>nutrition</h2>
+                            <h2>Nutrition</h2>
                             <p>Your meal plan is balanced and tailored to provide the right mix for your goal. For your fitness assistant
                                 to provide the best meal plans make sure you rate recipes you like. You can further fine tune the meals
                                 selected for you by changing your nutrition settings. </p>

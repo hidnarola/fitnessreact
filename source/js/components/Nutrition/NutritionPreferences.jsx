@@ -87,7 +87,7 @@ class NutritionPreferences extends Component {
                 <FitnessHeader />
                 <FitnessNav />
                 <section className="body-wrap">
-                    <div className="body-head d-flex justify-content-start">
+                    <div className="body-head d-flex justify-content-start front-white-header">
                         <div className="body-head-l">
                             <h2>Nutrition Preferences</h2>
                             <p>Each fitness test feeds directly into our algorithm - every test is used to identify the most efficient and effective

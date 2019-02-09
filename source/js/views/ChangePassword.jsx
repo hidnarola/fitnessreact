@@ -14,7 +14,7 @@ class ChangePassword extends Component {
                 <FitnessHeader />
                 <FitnessNav />
                 <section className="body-wrap">
-                    <div className="body-head space-btm-45 d-flex justify-content-start">
+                    <div className="body-head space-btm-45 d-flex justify-content-start front-white-header">
                         <div className="body-head-l">
                             <h2>Change Password</h2>
                             <p>Your goal choice shapes how your fitness assistant will ceate your meal and exercise plans, it’s important that

@@ -35,7 +35,7 @@ class BodyMeasurement extends Component {
         const { showAddProgressPhotoModal, showBodyFatModal, saveProgressPhotoActionInit, refreshBodyMeasurementForm } = this.state;
         return (
             <div className="body-measurement-list-section-wrapper">
-                <div className="body-head d-flex justify-content-start">
+                <div className="body-head d-flex justify-content-start front-white-header">
                     <div className="body-head-l">
                         <h2>Your Body</h2>
                         <p>Your goal choice shapes how your fitness assistant will ceate your meal and exercise plans, it’s important that

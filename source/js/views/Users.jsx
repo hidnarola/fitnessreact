@@ -54,7 +54,7 @@ class Users extends Component {
                 <FitnessHeader />
                 <FitnessNav />
                 <section className="body-wrap">
-                    <div className="body-head d-flex justify-content-start">
+                    <div className="body-head d-flex justify-content-start front-white-header">
                         <div className="body-head-l">
                             <h2>Users</h2>
                             <p>Each fitness test feeds directly into our algorithm - every test is used to identify the most efficient and effective structure of your training plan. Each test is designed to identify imbalances and weaknesses that may lead to increased risk of injury or decreased performance - now and in the future. This may also allow us to identify opportunities for rapid improvement.</p>

@@ -37,7 +37,7 @@ class SaveProgramMasterPage extends Component {
                 <FitnessHeader />
                 <FitnessNav />
                 <section className="body-wrap">
-                    <div className="body-head d-flex justify-content-start">
+                    <div className="body-head d-flex justify-content-start front-white-header">
                         <div className="body-head-l">
                             <h2>Save Program</h2>
                         </div>

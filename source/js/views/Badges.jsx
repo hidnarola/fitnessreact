@@ -22,40 +22,16 @@ export default class Badges extends Component {
                 <FitnessHeader />
                 <FitnessNav />
                 <section className="body-wrap">
-                    <div className="body-head space-btm-45 d-flex justify-content-start">
+                    <div className="body-head space-btm-45 d-flex justify-content-start front-white-header with-tabs">
                         <div className="body-head-l ">
                             <h2>Badges</h2>
-                            <div className="body-head-l-btm">
-
-                                <NavLink
-                                    activeClassName='pink-btn'
-                                    className='white-btn'
-                                    exact
-                                    to={routeCodes.BADGESTRACKING}
-                                >
-                                    Tracking
-                                </NavLink>
-
-                                <NavLink
-                                    activeClassName='pink-btn'
-                                    className='white-btn'
-                                    exact
-                                    to={routeCodes.BADGESINCOMPLETE}
-                                >
-                                    Incomplete
-                                </NavLink>
-
-                                <NavLink
-                                    activeClassName='pink-btn'
-                                    className='white-btn'
-                                    exact
-                                    to={routeCodes.BADGESCOMPLETE}
-                                >
-                                    Complete
-                                </NavLink>
-
-                            </div>
                         </div>
+                    </div>
+
+                    <div className="body-head-l-btm profile-new-menu">
+                        <NavLink activeClassName='pink-btn-new' className='white-btn' exact to={routeCodes.BADGESTRACKING}>Tracking</NavLink>
+                        <NavLink activeClassName='pink-btn-new' className='white-btn' exact to={routeCodes.BADGESINCOMPLETE}>Incomplete</NavLink>
+                        <NavLink activeClassName='pink-btn-new' className='white-btn' exact to={routeCodes.BADGESCOMPLETE}>Complete</NavLink>
                     </div>
 
                     <Switch>

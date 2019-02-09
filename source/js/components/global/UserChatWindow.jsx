@@ -46,7 +46,7 @@ class UserChatWindow extends Component {
                 >
                     <a href="javascript:void(0)" onClick={() => closeWindow(channelId)} className="chat-close">x</a>
                     <h4>{`${userDetails.firstName} ${(userDetails.lastName) ? userDetails.lastName : ''}`}</h4>
-                    <span className="chat-message-counter">3</span>
+                    {/* <span className="chat-message-counter">3</span> */}
                 </header>
                 <div id={`live-chat-chat_${channelId}`} className="chat">
                     <div id={`chat-history_${channelId}`} className="chat-history">
@@ -100,7 +100,7 @@ class UserChatWindow extends Component {
                         </div>
                     }
                     {userPreferences && userPreferences.messageAccessibility == ACCESS_LEVEL_FRIENDS && friendshipStatus && friendshipStatus === FRIENDSHIP_STATUS_FRIEND &&
-                        <div className="p-10">
+                        <div className="p-10 p-relative">
                             <Emos
                                 pickerProps={{
                                     color: "#ff337f",
@@ -122,7 +122,7 @@ class UserChatWindow extends Component {
                         </div>
                     }
                     {userPreferences && userPreferences.messageAccessibility == ACCESS_LEVEL_PUBLIC &&
-                        <div className="p-10">
+                        <div className="p-10 p-relative">
                             <Emos
                                 pickerProps={{
                                     color: "#ff337f",

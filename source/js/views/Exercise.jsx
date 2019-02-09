@@ -57,7 +57,7 @@ class Exercise extends Component {
                 <FitnessNav />
                 {!loadWorkoutsInit && !firstWorkoutLoading &&
                     <section className="body-wrap starts-body">
-                        <div className="body-head d-flex justify-content-start">
+                        <div className="body-head d-flex justify-content-start front-white-header">
                             <div className="body-head-l">
                                 <h2>Workout - {(date) ? moment(date).local().format('DD/MM/YYYY') : ''}</h2>
                                 <p>You have no workout scheduled for the day.</p>

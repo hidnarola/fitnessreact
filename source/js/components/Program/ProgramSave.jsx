@@ -67,7 +67,7 @@ class ProgramSave extends Component {
                 <FitnessHeader />
                 <FitnessNav />
                 <section className="body-wrap">
-                    <div className="body-head d-flex justify-content-start">
+                    <div className="body-head d-flex justify-content-start front-white-header">
                         {program && program.name &&
                             <div className="body-head-l title_edit_pop">
                                 <h2>{program.name}</h2>
@@ -88,8 +88,8 @@ class ProgramSave extends Component {
                             </NavLink>
                         </div>
                     </div>
-                    <div className="body-content d-flex row justify-content-start">
-                        <div className="col-md-12 p-unset">
+                    <div className="body-content">
+                        <div className="p-unset">
                             <div id="cal-panel-wrap" className="white-box space-btm-20 my-custom-calendar">
                                 <div className="whitebox-body profile-body programs-table-wrapper" data-for="custom-cut-workout-wrap" data-tip>
                                     {selectedEvents && selectedEvents.length > 0 &&

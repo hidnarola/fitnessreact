@@ -43,61 +43,22 @@ class Progress extends Component {
                 <FitnessHeader />
                 <FitnessNav />
                 <section className="body-wrap starts-body">
-                    <div className="body-head d-flex justify-content-start">
+                    <div className="body-head d-flex justify-content-start front-white-header with-tabs">
                         <div className="body-head-l">
                             <h2>Your Progress</h2>
-                            <div className="body-head-l-btm">
-                                <NavLink
-                                    activeClassName='pink-btn'
-                                    className='white-btn'
-                                    exact
-                                    to={routeCodes.PROGRESS_BODY_FAT}
-                                >
-                                    Body Fat
-                                </NavLink>
-
-                                <NavLink
-                                    activeClassName='pink-btn'
-                                    className='white-btn'
-                                    exact
-                                    to={routeCodes.PROGRESS_MOBILITY}
-                                >
-                                    Mobility
-                                </NavLink>
-
-                                <NavLink
-                                    activeClassName='pink-btn'
-                                    className='white-btn'
-                                    exact
-                                    to={routeCodes.PROGRESS_MUSCLE}
-                                >
-                                    Muscle
-                                </NavLink>
-
-                                <NavLink
-                                    activeClassName='pink-btn'
-                                    className='white-btn'
-                                    exact
-                                    to={routeCodes.PROGRESS_STRENGTH}
-                                >
-                                    Strength
-                                </NavLink>
-
-                                <NavLink
-                                    activeClassName='pink-btn'
-                                    className='white-btn'
-                                    exact
-                                    to={routeCodes.PROGRESS_ENDURANCE}
-                                >
-                                    Endurance
-                                </NavLink>
-                            </div>
                         </div>
                         {dateRange &&
                             <div className="body-head-r">
                                 <a href="javascript:void(0)" onClick={() => this.setState({ showSearch: !showSearch })} className="pink-btn">{`${dateRange.start.local().format('DD/MM/YYYY')} - ${dateRange.end.local().format('DD/MM/YYYY')}`}<i className="icon-date_range"></i></a>
                             </div>
                         }
+                    </div>
+                    <div className="body-head-l-btm profile-new-menu">
+                        <NavLink activeClassName='pink-btn-new' className='white-btn' exact to={routeCodes.PROGRESS_BODY_FAT}>Body Fat</NavLink>
+                        <NavLink activeClassName='pink-btn-new' className='white-btn' exact to={routeCodes.PROGRESS_MOBILITY}>Mobility</NavLink>
+                        <NavLink activeClassName='pink-btn-new' className='white-btn' exact to={routeCodes.PROGRESS_MUSCLE}>Muscle</NavLink>
+                        <NavLink activeClassName='pink-btn-new' className='white-btn' exact to={routeCodes.PROGRESS_STRENGTH}>Strength</NavLink>
+                        <NavLink activeClassName='pink-btn-new' className='white-btn' exact to={routeCodes.PROGRESS_ENDURANCE}>Endurance</NavLink>
                     </div>
 
                     {showSearch &&

@@ -14,28 +14,9 @@ class Programs extends Component {
                 <FitnessHeader />
                 <FitnessNav />
                 <section className="body-wrap">
-                    <div className="body-head d-flex justify-content-start">
+                    <div className="body-head d-flex justify-content-start front-white-header with-tabs">
                         <div className="body-head-l">
                             <h2>Programs</h2>
-                            <div className="body-head-l-btm">
-                                <NavLink
-                                    activeClassName='pink-btn'
-                                    className='white-btn'
-                                    exact
-                                    to={routeCodes.PROGRAMS}
-                                >
-                                    My Programs
-                                </NavLink>
-
-                                <NavLink
-                                    activeClassName='pink-btn'
-                                    className='white-btn'
-                                    exact
-                                    to={routeCodes.PROGRAMS_PUBLIC}
-                                >
-                                    Public
-                                </NavLink>
-                            </div>
                         </div>
                         <div className="body-head-r">
                             <Link className="pink-btn" to={routeCodes.PROGRAM_MASTER_SAVE}>
@@ -47,6 +28,10 @@ class Programs extends Component {
                                 <i className="icon-arrow_back"></i>
                             </Link>
                         </div>
+                    </div>
+                    <div className="body-head-l-btm profile-new-menu">
+                        <NavLink activeClassName='pink-btn-new' className='white-btn' exact to={routeCodes.PROGRAMS}>My Programs</NavLink>
+                        <NavLink activeClassName='pink-btn-new' className='white-btn' exact to={routeCodes.PROGRAMS_PUBLIC}>Public</NavLink>
                     </div>
 
                     <Switch>

@@ -150,6 +150,7 @@ class App extends Component {
         } = this.props;
         var chatWindowKeys = Object.keys(chatWindows);
         let onGroundChatWindowsCounterFlag = 0;
+        let chatWindowZIndex = 10;
         return (
             <div className="appWrapper">
                 <div className="app-wrapper-content">
@@ -272,8 +273,9 @@ class App extends Component {
                                             var chatWindow = chatWindows[key];
                                             if (chatWindow && chatWindow.isOnGround) {
                                                 var chatWindowWidth = $('.small-chat-window-wrapper').width();
+                                                chatWindowZIndex -= index;
                                                 var right = (chatWindowWidth) ? ((chatWindowWidth + 10) * onGroundChatWindowsCounterFlag) : 0;
-                                                var style = { right };
+                                                var style = { right, zIndex: chatWindowZIndex };
                                                 var userDetails = chatWindow.userDetails;
                                                 var userPreferences = chatWindow.userPreferences;
                                                 var friendshipStatus = chatWindow.friendshipStatus;

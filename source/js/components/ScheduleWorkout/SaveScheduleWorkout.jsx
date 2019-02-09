@@ -105,7 +105,7 @@ class SaveScheduleWorkout extends Component {
                 <FitnessHeader />
                 <FitnessNav />
                 <section className="body-wrap workout-schedule-save">
-                    <div className="body-head d-flex justify-content-start">
+                    <div className="body-head d-flex justify-content-start front-white-header">
                         <div className="body-head-l">
                             {(workout && workout.date && workout.type && workout.type === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
                                 <h2>{`Workout - ${(workout && workout.date) ? moment(workout.date).format('DD/MM/YYYY') : 'DD/MM/YYYY'}`}</h2>

@@ -42,6 +42,7 @@ import WidgetProgressPhotoCard from '../components/Common/WidgetProgressPhotoCar
 import WidgetMuscleCard from '../components/Common/WidgetMuscleCard';
 import WidgetBodyFatCard from '../components/Common/WidgetBodyFatCard';
 import WidgetBadgesCard from '../components/Common/WidgetBadgesCard';
+import ReactTooltip from "react-tooltip";
 
 class Dashboard extends Component {
     constructor(props) {
@@ -81,23 +82,25 @@ class Dashboard extends Component {
                 <FitnessHeader />
                 <FitnessNav />
                 <section className="body-wrap">
-                    <div className="body-head space-btm-45 d-flex justify-content-start">
+                    <div className="body-head space-btm-45 d-flex justify-content-start front-white-header">
                         <div className="body-head-l">
                             <h2>Dashboard</h2>
                             <p>Your goal choice shapes how your fitness assistant will ceate your meal and exercise plans, it’s important that
                                 you set goals which are achieveable. Keep updating your profile and your fitness assistant will keep you
                                 on track and meeting the goals you’ve set out for yourself.</p>
                         </div>
-                        <div className="body-head-r space-btm-20">
-                            <button type="button" onClick={this.handleShowWidgetsModal} className="white-btn" disabled={loading}>
+                        <div className="body-head-r add-friend">
+                            <button
+                                type="button"
+                                onClick={this.handleShowWidgetsModal}
+                                className="bordered-circle default-bordered-circle"
+                                data-tip="Widgets"
+                                data-for="profile-actions-tooltip"
+                            >
                                 {loading && <FaSpinner className="loader-spinner" />}
                                 {!loading && <i className="icon-widgets"></i>}
-                                <span>Widget</span>
                             </button>
-                            {/* <button type="button" disabled={true} className="pink-btn cursor-default">
-                                <span>Profile Completion</span>
-                                <span className="pull-right">{(profileComplete) ? `${profileComplete}%` : ''}</span>
-                            </button> */}
+                            <ReactTooltip id="profile-actions-tooltip" place="left" type="light" effect="solid" />
                         </div>
                     </div>
 
