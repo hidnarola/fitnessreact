@@ -95,6 +95,7 @@
     "react-bootstrap-sweetalert": "^4.4.1",
     "react-calendar": "^2.13.2",
     "react-circular-progressbar": "^0.8.0",
+    "react-contenteditable": "^3.2.6",
     "react-cropper": "^1.0.1",
     "react-custom-scrollbars": "^4.2.1",
     "react-date-range": "^1.0.0-alpha4",

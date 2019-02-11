@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOMServer from "react-dom/server";
 import { connect } from 'react-redux';
 import { Field, reduxForm, initialize, formValueSelector } from "redux-form";
 import DatePicker from "react-datepicker";
@@ -36,8 +37,9 @@ import gym from 'img/common/gym.png';
 import ReactTooltip from "react-tooltip";
 import jwt from "jwt-simple";
 import { setLoggedUserFromLocalStorage } from '../../actions/user';
-import { TextAreaField } from '../../helpers/FormControlHelper';
 import Emos from '../Common/Emos';
+import ContentEditable from 'react-contenteditable';
+import { Emoji } from "emoji-mart";
 
 const minLength2 = minLength(2);
 const maxLength15 = maxLength(15);
@@ -55,7 +57,6 @@ class UpdateProfileForm extends Component {
         this.state = {
             selectActionInit: false,
             dob: null,
-            aboutMe: '',
             weightUnit: MEASUREMENT_UNIT_GRAM,
             heightUnit: MEASUREMENT_UNIT_CENTIMETER,
         }
@@ -347,13 +348,23 @@ class UpdateProfileForm extends Component {
                             <div className="stepbox-m personal-dtl no-padding width-100-per">
                                 <ul className="">
                                     <li className="p-relative">
+                                        {/* <div className="form-group">
+                                            <ContentEditable
+                                                innerRef={this.contentEditable}
+                                                html={aboutMe}
+                                                disabled={false}
+                                                onChange={this.handleAboutMe}
+                                                tagName='div'
+                                                className="my-custom-textarea resize-vertical min-height-179"
+                                            />
+                                        </div> */}
                                         <Field
                                             name="about_me"
-                                            className="form-control resize-vertical min-height-179"
+                                            className="my-custom-textarea resize-vertical min-height-179"
                                             wrapperClass="form-group"
-                                            placeholder="Description"
-                                            component={TextAreaField}
-                                            errorClass="help-block"
+                                            // placeholder="Description"
+                                            component={MyCustomTextarea}
+                                        // errorClass="help-block"
                                         />
                                         <Emos
                                             id="emos"
@@ -448,31 +459,30 @@ class UpdateProfileForm extends Component {
         this.setState({ dob: date });
     }
 
-    handleChangeTextEditor = (editorText) => {
-        this.props.change('about_me', editorText);
-        this.setState({ aboutMe: editorText });
-    }
-
     updateLocalStorageUserDetails = (userDetails) => {
         var encryptedUserDetails = jwt.encode(userDetails, FITASSIST_USER_DETAILS_TOKEN_KEY);
         localStorage.setItem(LOCALSTORAGE_USER_DETAILS_KEY, encryptedUserDetails);
     }
 
     handleEmoClick = (emoji, event) => {
-        const { colons } = emoji;
-        this.appendDescription(colons);
+        const { id } = emoji;
+        this.appendDescription(id);
     }
 
     handleEmoSelect = (emoji) => {
-        const { colons } = emoji;
-        this.appendDescription(colons);
+        const { id } = emoji;
+        this.appendDescription(id);
     }
 
-    appendDescription = (str) => {
-        if (str) {
+    appendDescription = (id) => {
+        if (id) {
             const { aboutMe, change } = this.props;
-            let newAboutMe = aboutMe + str;
-            change('about_me', newAboutMe);
+            const _aboutMe = aboutMe +
+                ReactDOMServer.renderToString(<span contentEditable={false} dangerouslySetInnerHTML={{
+                    __html: Emoji({ html: true, set: 'emojione', emoji: id, size: 16 })
+                }}></span>) +
+                ReactDOMServer.renderToString(<span>&nbsp;</span>);
+            change('about_me', _aboutMe);
         }
     }
 }
@@ -591,6 +601,33 @@ class DateField extends Component {
                 {meta.touched &&
                     ((meta.error && <span className={errorClass}>{meta.error}</span>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))
                 }
+            </div>
+        );
+    }
+}
+
+class MyCustomTextarea extends Component {
+    constructor(props) {
+        super(props);
+        this.contentEditable = React.createRef();
+    }
+
+    render() {
+        const {
+            wrapperClass,
+            className,
+            input
+        } = this.props;
+        return (
+            <div className={wrapperClass}>
+                <ContentEditable
+                    innerRef={this.contentEditable}
+                    html={input.value}
+                    disabled={false}
+                    onChange={(e) => input.onChange(e.target.value)}
+                    tagName='div'
+                    className={className}
+                />
             </div>
         );
     }
