@@ -364,6 +364,7 @@ export function getElementOffsetRelativeToBody(el) {
 
 export function replaceStringWithEmos(str, size = 16) {
     if (str) {
+        str = str.replace(/contenteditable="false"/g, '')
         return str.replace(REGEX_FOR_EMOJI_COLONS, (match) => {
             return ReactDOMServer.renderToString(<Emoji emoji={match} size={size} />);
         });

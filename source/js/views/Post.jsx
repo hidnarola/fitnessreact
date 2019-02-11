@@ -129,7 +129,7 @@ class Post extends Component {
                     }
 
                     {!loading && post && doRenderPost &&
-                        <div className="post-type timeline-infinite-scroll single-post-wrapper d-flex">
+                        <div className="body-content post-type timeline-infinite-scroll single-post-wrapper d-flex">
                             <div className="single-post-left">
                                 <div className="posttype-head d-flex justify-content-start">
                                     <span>

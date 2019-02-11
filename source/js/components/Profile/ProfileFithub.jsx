@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOMServer from "react-dom/server";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import {
@@ -40,7 +41,6 @@ import {
 import { toggleLikeOnPostRequest } from '../../actions/postLikes';
 import { commentOnPostRequest } from '../../actions/postComments';
 import { initialize, reset } from "redux-form";
-import ReactQuill from 'react-quill';
 import { te, ts } from '../../helpers/funs';
 import InfiniteScroll from 'react-infinite-scroller';
 import { MenuItem, Dropdown } from "react-bootstrap";
@@ -61,6 +61,8 @@ import SweetAlert from "react-bootstrap-sweetalert";
 import Lightbox from 'react-images';
 import PostCard from './PostCard';
 import Emos from '../Common/Emos';
+import ContentEditableTextarea from '../Common/ContentEditableTextarea';
+import { Emoji } from "emoji-mart";
 
 class ProfileFithub extends Component {
     constructor(props) {
@@ -222,14 +224,13 @@ class ProfileFithub extends Component {
                         </div>
                         <div className="whitebox-body">
                             {showPostBox &&
-                                <div className="how-training timeline-new-post-editor">
-                                    <ReactQuill
-                                        value={postContent}
-                                        onChange={this.handlePostContentChange}
-                                        placeholder="What's in your mind"
-                                        modules={{
-                                            toolbar: ['bold', 'italic', 'underline', 'strike']
+                                <div className="how-training timeline-new-post-editor form-group">
+                                    <ContentEditableTextarea
+                                        fieldProps={{
+                                            className: "my-custom-textarea resize-vertical min-height-179"
                                         }}
+                                        html={postContent}
+                                        onChange={this.handlePostContentChange}
                                     />
                                     {postImages && postImages.length > 0 &&
                                         <div className="post-photos-selected-view-wrapper">
@@ -558,13 +559,9 @@ class ProfileFithub extends Component {
         this.setState({ postPrivacy: access });
     }
 
-    handlePostContentChange = (content, delta, source, editor) => {
-        var editorText = editor.getText().trim();
-        if (editorText !== '' && editorText !== '\n') {
-            this.setState({ postContent: content });
-        } else {
-            this.setState({ postContent: '' });
-        }
+    handlePostContentChange = (value) => {
+        const editorText = value.trim();
+        this.setState({ postContent: editorText });
     }
 
     handleMakePost = () => {
@@ -1039,19 +1036,23 @@ class ProfileFithub extends Component {
     }
 
     handleEmoClick = (emoji, event) => {
-        const { colons } = emoji;
-        this.appendDescription(colons);
+        const { id } = emoji;
+        this.appendDescription(id);
     }
 
     handleEmoSelect = (emoji) => {
-        const { colons } = emoji;
-        this.appendDescription(colons);
+        const { id } = emoji;
+        this.appendDescription(id);
     }
 
-    appendDescription = (str) => {
-        if (str) {
+    appendDescription = (id) => {
+        if (id) {
             const { postContent } = this.state;
-            let _postContent = postContent + str;
+            const _postContent = postContent +
+                ReactDOMServer.renderToString(<span contentEditable={false} dangerouslySetInnerHTML={{
+                    __html: Emoji({ html: true, set: 'emojione', emoji: id, size: 16 })
+                }}></span>) +
+                ReactDOMServer.renderToString(<span>&nbsp;</span>);
             this.setState({ postContent: _postContent });
         }
     }
