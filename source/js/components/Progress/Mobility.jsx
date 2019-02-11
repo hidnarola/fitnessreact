@@ -40,7 +40,7 @@ class Mobility extends Component {
             );
         }
         return (
-            <div className="progress-wrapper progress-mobility">
+            <div className="body-content progress-wrapper progress-mobility">
                 {!loading && progress && typeof progress.data !== 'undefined' && progress.data && selectedType === PROGRESS_MOBILITY &&
                     <div className="tab-wrap">
                         <div className="tab-div"></div>

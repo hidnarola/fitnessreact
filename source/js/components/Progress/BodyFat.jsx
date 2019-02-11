@@ -38,7 +38,7 @@ class BodyFat extends Component {
             );
         }
         return (
-            <div className="progress-wrapper progress-body-fat">
+            <div className="body-content progress-wrapper progress-body-fat">
                 {!loading && typeof progress !== 'undefined' && progress && typeof progress.data !== 'undefined' && progress.data && selectedType === PROGRESS_BODY_FAT && progress.data.body_fat && Object.keys(progress.data.body_fat).length > 0 &&
                     <div className="tab-wrap">
                         <div className="tab-div"></div>

@@ -89,7 +89,7 @@ class NutritionMealAdd extends Component {
                 <FitnessHeader />
                 <FitnessNav />
                 <section className="body-wrap">
-                    <div className="body-head d-flex justify-content-start">
+                    <div className="body-head d-flex justify-content-start front-white-header">
                         <div className="body-head-l">
                             <h2>Search Recipe</h2>
                             <p>Your meal plan is balanced and tailored to provide the right mix for your goal. For your fitness assistant
@@ -105,7 +105,7 @@ class NutritionMealAdd extends Component {
                             </NavLink>
                         </div>
                     </div>
-                    <div className="body-content d-flex row justify-content-start nutrition-meal-add-wrapper">
+                    <div className="body-content d-flex row justify-content-start nutrition-meal-add-wrapper ">
                         <div className="col-md-12">
                             <div className="white-box">
                                 <div className="whitebox-head d-flex profile-head">

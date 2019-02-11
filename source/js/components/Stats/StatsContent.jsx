@@ -32,7 +32,7 @@ class StatsContent extends Component {
             );
         }
         return (
-            <div className="stats-wrapper strength-wrapper">
+            <div className="body-content stats-wrapper strength-wrapper">
                 {!loading && stats && stats.data && stats.data.length > 0 && (selectedType === STATS_STRENGTH || selectedType === STATS_CARDIO) &&
                     stats.data.map((o, i) => {
                         return (

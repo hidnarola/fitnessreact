@@ -36,7 +36,7 @@ class Strength extends Component {
             );
         }
         return (
-            <div className="progress-wrapper progress-strength">
+            <div className="body-content progress-wrapper progress-strength">
                 {!loading && typeof progress !== 'undefined' && progress && typeof progress.data !== 'undefined' && progress.data && progress.data.length > 0 && selectedType === PROGRESS_STRENGTH &&
                     <div className="tab-wrap">
                         <div className="tab-div"></div>

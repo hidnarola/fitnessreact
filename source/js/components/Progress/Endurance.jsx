@@ -37,7 +37,7 @@ class Endurance extends Component {
             );
         }
         return (
-            <div className="progress-wrapper progress-endurance">
+            <div className="body-content progress-wrapper progress-endurance">
                 {!loading && typeof progress !== 'undefined' && progress && typeof progress.data !== 'undefined' && progress.data && selectedType === PROGRESS_ENDURANCE &&
                     <div className="tab-wrap">
                         <div className="tab-div"></div>

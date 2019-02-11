@@ -42,7 +42,7 @@ const SlickSlider = (props) => {
     };
     return (
         <div className="react-slick-container">
-            <Slider {...settings}>
+            <Slider {...settings} {...props.settings}>
                 {props.children}
             </Slider>
         </div>

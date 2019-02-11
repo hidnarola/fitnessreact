@@ -39,7 +39,7 @@ class Muscle extends Component {
             );
         }
         return (
-            <div className="progress-wrapper progress-muscle">
+            <div className="body-content progress-wrapper progress-muscle">
                 {!loading && typeof progress !== 'undefined' && progress && typeof progress.data !== 'undefined' && progress.data && selectedType === PROGRESS_MUSCLE &&
                     <div className="tab-wrap">
                         <div className="tab-div"></div>

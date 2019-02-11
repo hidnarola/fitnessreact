@@ -348,23 +348,11 @@ class UpdateProfileForm extends Component {
                             <div className="stepbox-m personal-dtl no-padding width-100-per">
                                 <ul className="">
                                     <li className="p-relative">
-                                        {/* <div className="form-group">
-                                            <ContentEditable
-                                                innerRef={this.contentEditable}
-                                                html={aboutMe}
-                                                disabled={false}
-                                                onChange={this.handleAboutMe}
-                                                tagName='div'
-                                                className="my-custom-textarea resize-vertical min-height-179"
-                                            />
-                                        </div> */}
                                         <Field
                                             name="about_me"
                                             className="my-custom-textarea resize-vertical min-height-179"
                                             wrapperClass="form-group"
-                                            // placeholder="Description"
                                             component={MyCustomTextarea}
-                                        // errorClass="help-block"
                                         />
                                         <Emos
                                             id="emos"

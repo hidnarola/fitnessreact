@@ -97,6 +97,12 @@ class BodyMeasurementForm extends Component {
             bodyMeasurement = profileSettings.bodyMeasurement;
             weighUnit = profileSettings.weight;
         }
+        let totalProgressPhotos = 0;
+        if (userProgressPhotos) {
+            userProgressPhotos.map((o) => {
+                totalProgressPhotos += o.user_progress_photos ? o.user_progress_photos.length : 0;
+            });
+        }
         return (
             <form onSubmit={handleSubmit}>
                 {error && error.length > 0 &&
@@ -318,8 +324,9 @@ class BodyMeasurementForm extends Component {
                     <div className="col-md-4">
                         <div className="daily_img_wrapper">
                             <div className="whitebox-head"><h3 className="title-h3">Progress Photos</h3></div>
+                            {console.log('userProgressPhotos.length => ', userProgressPhotos.length)}
                             {!loadingProgressPhotos && userProgressPhotos && userProgressPhotos.length > 0 &&
-                                <SlickSlider>
+                                <SlickSlider settings={{ slidesToShow: (totalProgressPhotos > 3) ? 3 : 1 }}>
                                     {
                                         userProgressPhotos.map((o) => {
                                             let photos = o.user_progress_photos ? o.user_progress_photos : [];
