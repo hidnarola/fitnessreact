@@ -16,7 +16,7 @@ import cns from "classnames";
 import { NavLink, Link } from "react-router-dom";
 import CommentBoxForm from '../components/Profile/CommentBoxForm';
 import { toggleLikeOnPostRequest } from '../actions/postLikes';
-import { te } from '../helpers/funs';
+import { te, replaceStringWithEmos } from '../helpers/funs';
 import { commentOnPostRequest } from '../actions/postComments';
 import { reset } from "redux-form";
 import Lightbox from 'react-images';
@@ -71,6 +71,7 @@ class Post extends Component {
             } else {
                 doRenderPost = false;
             }
+            description = replaceStringWithEmos(description);
             var imagesCount = images.length;
             var postImageDisplayClass = 'masonry';
             if (imagesCount === 1) {

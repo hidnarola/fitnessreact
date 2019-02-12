@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOMServer from "react-dom/server";
 import { toggleSmallChatWindow, getToken, scrollBottom, replaceStringWithEmos } from '../../helpers/funs';
 import moment from "moment";
 import noProfileImg from 'img/common/no-profile-img.png';
@@ -6,6 +7,9 @@ import _ from "lodash";
 import { ACCESS_LEVEL_NONE, ACCESS_LEVEL_PUBLIC, ACCESS_LEVEL_FRIENDS_OF_FRIENDS, ACCESS_LEVEL_PRIVATE, ACCESS_LEVEL_FRIENDS, FRIENDSHIP_STATUS_FRIEND } from '../../constants/consts';
 import Emos from '../Common/Emos';
 import ReactHtmlParser from 'react-html-parser';
+import ContentEditableTextbox from '../Common/ContentEditableTextbox';
+import { Emoji } from "emoji-mart";
+import $ from "jquery";
 
 class UserChatWindow extends Component {
     constructor(props) {
@@ -16,6 +20,8 @@ class UserChatWindow extends Component {
         this.messageTypingStopDebounce = _.debounce(this.handleTypeingStop, 1000);
         this.messageTypingStart = false;
         this.isMinimized = false;
+        this.chatTextbox = React.createRef();
+        this.emos = React.createRef();
     }
 
     render() {
@@ -102,6 +108,7 @@ class UserChatWindow extends Component {
                     {userPreferences && userPreferences.messageAccessibility == ACCESS_LEVEL_FRIENDS && friendshipStatus && friendshipStatus === FRIENDSHIP_STATUS_FRIEND &&
                         <div className="p-10 p-relative">
                             <Emos
+                                ref={this.emos}
                                 pickerProps={{
                                     color: "#ff337f",
                                     onClick: this.handleEmoClick,
@@ -111,9 +118,16 @@ class UserChatWindow extends Component {
                                 emosWrapClass="emotis-chat-window"
                                 emojiBtnSize={18}
                             />
-                            <form method="POST" onSubmit={this.handleSend}>
+                            <form id={`chat-window-form_${channelId}`} method="POST" onSubmit={this.handleSend}>
                                 <fieldset>
-                                    <input type="text" name='newMsg' value={newMsg} onChange={this.handleChange} placeholder="Type your message…" autoFocus={true} autoComplete="off" />
+                                    <ContentEditableTextbox
+                                        ref={this.chatTextbox}
+                                        fieldProps={{
+                                            className: ""
+                                        }}
+                                        html={newMsg}
+                                        onChange={this.handleChange}
+                                    />
                                     <button type="submit">
                                         <i className="icon-send"></i>
                                     </button>
@@ -124,6 +138,7 @@ class UserChatWindow extends Component {
                     {userPreferences && userPreferences.messageAccessibility == ACCESS_LEVEL_PUBLIC &&
                         <div className="p-10 p-relative">
                             <Emos
+                                ref={this.emos}
                                 pickerProps={{
                                     color: "#ff337f",
                                     onClick: this.handleEmoClick,
@@ -135,8 +150,16 @@ class UserChatWindow extends Component {
                             />
                             <form method="POST" onSubmit={this.handleSend}>
                                 <fieldset>
-                                    <input type="text" name='newMsg' value={newMsg} onChange={this.handleChange} placeholder="Type your message…" autoFocus={true} autoComplete="off" />
-                                    <button type="submit">
+                                    <ContentEditableTextbox
+                                        ref={this.chatTextbox}
+                                        fieldProps={{
+                                            className: "my-custom-textbox",
+                                            placeholder: "Your message."
+                                        }}
+                                        html={newMsg}
+                                        onChange={this.handleChange}
+                                    />
+                                    <button id={`chat-window-send-btn-${channelId}`} type="submit">
                                         <i className="icon-send"></i>
                                     </button>
                                 </fieldset>
@@ -149,7 +172,32 @@ class UserChatWindow extends Component {
     }
 
     componentDidMount() {
+        const { channelId } = this.props;
+        document.getElementById(`live-chat-chat_${channelId}`).addEventListener('keyup', this.handleKeyUpOnChatWindow, true);
+        document.getElementById(`live-chat-chat_${channelId}`).addEventListener('keydown', this.handleKeyDownOnChatWindow, true);
+    }
 
+    componentWillUnmount() {
+        const { channelId } = this.props;
+        document.getElementById(`live-chat-chat_${channelId}`).removeEventListener('keyup', this.handleKeyUpOnChatWindow, true);
+        document.getElementById(`live-chat-chat_${channelId}`).removeEventListener('keydown', this.handleKeyDownOnChatWindow, true);
+    }
+
+
+    handleKeyUpOnChatWindow = (e) => {
+        const { keyCode, shiftKey } = e;
+        const { channelId } = this.props;
+        if (!shiftKey && keyCode === 13) {
+            const chatForm = $(`#chat-window-send-btn-${channelId}`);
+            chatForm.trigger('click');
+        }
+    }
+
+    handleKeyDownOnChatWindow = (e) => {
+        const { keyCode, shiftKey } = e;
+        if (!shiftKey && keyCode === 13) {
+            e.preventDefault();
+        }
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -162,12 +210,8 @@ class UserChatWindow extends Component {
         }
     }
 
-    handleChange = (e) => {
-        var name = e.target.name;
-        var value = e.target.value;
-        this.setState({
-            [name]: value,
-        });
+    handleChange = (value, e) => {
+        this.setState({ newMsg: value });
         if (!this.messageTypingStart) {
             this.messageTypingStart = true;
             this.handleTypeingStart();
@@ -221,23 +265,30 @@ class UserChatWindow extends Component {
             handleSendButton(data);
             this.setState({ newMsg: '' });
             scrollBottom(`#chat-history_${channelId}`, 'slow');
+            this.emos.current.toggleEmosArea();
         }
     }
 
     handleEmoClick = (emoji, event) => {
-        const { colons } = emoji;
-        this.appendDescription(colons);
+        const { id } = emoji;
+        this.appendDescription(id);
+        this.chatTextbox.current.focus();
     }
 
     handleEmoSelect = (emoji) => {
-        const { colons } = emoji;
-        this.appendDescription(colons);
+        const { id } = emoji;
+        this.appendDescription(id);
+        this.chatTextbox.current.focus();
     }
 
-    appendDescription = (str) => {
-        if (str) {
+    appendDescription = (id) => {
+        if (id) {
             const { newMsg } = this.state;
-            let _newMsg = newMsg + str;
+            const _newMsg = newMsg +
+                ReactDOMServer.renderToString(<span contentEditable={false} dangerouslySetInnerHTML={{
+                    __html: Emoji({ html: true, set: 'emojione', emoji: id, size: 16 })
+                }}></span>) +
+                ReactDOMServer.renderToString(<span>&nbsp;</span>);
             this.setState({ newMsg: _newMsg });
         }
     }

@@ -94,6 +94,9 @@ class ProfileFithub extends Component {
             currentImage: 0,
             lightBoxImages: [],
         }
+
+        this.postTextarea = React.createRef();
+        this.emos = React.createRef();
     }
 
     componentWillMount() {
@@ -226,8 +229,10 @@ class ProfileFithub extends Component {
                             {showPostBox &&
                                 <div className="how-training timeline-new-post-editor form-group">
                                     <ContentEditableTextarea
+                                        ref={this.postTextarea}
                                         fieldProps={{
-                                            className: "my-custom-textarea resize-vertical min-height-179"
+                                            className: "my-custom-textarea resize-vertical min-height-100",
+                                            placeholder: "What's in your mind..."
                                         }}
                                         html={postContent}
                                         onChange={this.handlePostContentChange}
@@ -249,6 +254,7 @@ class ProfileFithub extends Component {
                                     }
                                     <div className="how-training-btm d-flex justify-content-end">
                                         <Emos
+                                            ref={this.emos}
                                             pickerProps={{
                                                 color: "#ff337f",
                                                 onClick: this.handleEmoClick,
@@ -586,6 +592,7 @@ class ProfileFithub extends Component {
             }
             this.setState({ newPostActionInit: true });
             dispatch(addPostOnUserTimelineRequest(formData));
+            this.emos.current.toggleEmosArea();
         }
     }
 
@@ -1038,11 +1045,13 @@ class ProfileFithub extends Component {
     handleEmoClick = (emoji, event) => {
         const { id } = emoji;
         this.appendDescription(id);
+        this.postTextarea.current.focus();
     }
 
     handleEmoSelect = (emoji) => {
         const { id } = emoji;
         this.appendDescription(id);
+        this.postTextarea.current.focus();
     }
 
     appendDescription = (id) => {

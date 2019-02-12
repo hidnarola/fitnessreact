@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import ContentEditable from 'react-contenteditable';
 
-class ContentEditableTextarea extends Component {
+class ContentEditableTextbox extends Component {
     constructor(props) {
         super(props);
         this.contentEditable = React.createRef();
@@ -22,10 +22,10 @@ class ContentEditableTextarea extends Component {
             </Fragment>
         );
     }
-    
+
     focus = () => {
         this.contentEditable.current.focus();
     }
 }
 
-export default ContentEditableTextarea;
+export default ContentEditableTextbox;

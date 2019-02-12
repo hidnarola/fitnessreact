@@ -615,8 +615,13 @@ class MyCustomTextarea extends Component {
                     onChange={(e) => input.onChange(e.target.value)}
                     tagName='div'
                     className={className}
+                    placeholder="About me"
                 />
             </div>
         );
+    }
+
+    focus = () => {
+        this.contentEditable.current.focus();
     }
 }
