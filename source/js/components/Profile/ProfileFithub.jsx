@@ -592,7 +592,7 @@ class ProfileFithub extends Component {
             }
             this.setState({ newPostActionInit: true });
             dispatch(addPostOnUserTimelineRequest(formData));
-            this.emos.current.toggleEmosArea();
+            this.emos.current.forceOpenClose(false);
         }
     }
 

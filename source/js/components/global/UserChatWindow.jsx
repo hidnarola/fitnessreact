@@ -265,7 +265,7 @@ class UserChatWindow extends Component {
             handleSendButton(data);
             this.setState({ newMsg: '' });
             scrollBottom(`#chat-history_${channelId}`, 'slow');
-            this.emos.current.toggleEmosArea();
+            this.emos.current.forceOpenClose(false);
         }
     }
 

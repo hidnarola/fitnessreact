@@ -1,4 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
+import ReactDOMServer from "react-dom/server";
+import { connect } from "react-redux";
+import { change } from "redux-form";
 import { NavLink, Link, withRouter } from "react-router-dom";
 import {
     POST_TYPE_TIMELINE,
@@ -27,6 +30,8 @@ import LikesListModal from '../Common/LikesListModal';
 import { FaGlobe, FaLock, FaGroup } from 'react-icons/lib/fa';
 import { routeCodes } from '../../constants/routes';
 import { replaceStringWithEmos } from '../../helpers/funs';
+import Emos from '../Common/Emos';
+import { Emoji } from "emoji-mart";
 
 class PostCard extends Component {
     constructor(props) {
@@ -257,12 +262,24 @@ class PostCard extends Component {
                     </div>
                 }
                 {showCommentBox &&
-                    <CommentBoxForm
-                        postId={post._id}
-                        index={index}
-                        onSubmit={handleComment}
-                        commentBoxRef={this.commentBoxRef}
-                    />
+                    <Fragment>
+                        <Emos
+                            pickerProps={{
+                                color: "#ff337f",
+                                onClick: this.handleEmoClick,
+                                onSelect: this.handleEmoSelect,
+                            }}
+                            positionClass="top-right"
+                            emosWrapClass="emotis-comment-window"
+                            emojiBtnSize={18}
+                        />
+                        <CommentBoxForm
+                            postId={post._id}
+                            index={index}
+                            onSubmit={handleComment}
+                            commentBoxRef={this.commentBoxRef}
+                        />
+                    </Fragment>
                 }
                 <LikesListModal
                     show={post.showLikesModal ? post.showLikesModal : false}
@@ -272,6 +289,31 @@ class PostCard extends Component {
             </div>
         );
     }
+
+    handleEmoClick = (emoji, event) => {
+        const { id } = emoji;
+        this.appendDescription(id);
+    }
+
+    handleEmoSelect = (emoji) => {
+        const { id } = emoji;
+        this.appendDescription(id);
+    }
+
+    appendDescription = (id) => {
+        const { dispatch, post } = this.props;
+        if (id && post) {
+            const { current: { value } } = this.commentBoxRef;
+            const _value = value +
+                ReactDOMServer.renderToString(<span contentEditable={false} dangerouslySetInnerHTML={{
+                    __html: Emoji({ html: true, set: 'emojione', emoji: id, size: 16 })
+                }}></span>) +
+                ReactDOMServer.renderToString(<span>&nbsp;</span>);
+            dispatch(change('commentBoxForm', `comment_${post._id}`, _value));
+        }
+    }
 }
+
+PostCard = connect()(PostCard);
 
 export default withRouter(PostCard);

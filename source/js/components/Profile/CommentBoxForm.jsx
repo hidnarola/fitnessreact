@@ -40,26 +40,28 @@ export default connect(
     mapStateToProps,
 )(CommentBoxForm);
 
-const CommentBoxField = (props) => {
-    const { input, meta, wrapperClass, className, placeholder, errorClass, commentLoading, commentBoxRef } = props;
-    return (
-        <div
-            className={
-                `${wrapperClass} ${(meta.submitFailed && meta.error) ? 'has-error' : ''}`
-            }
-        >
-            <textarea
-                {...input}
-                className={className}
-                placeholder={placeholder}
-                ref={commentBoxRef}
-            />
-            <button type="submit" disabled={commentLoading}>
-                <i className="icon-send"></i>
-            </button>
-            {meta.submitFailed &&
-                ((meta.error && <div className={errorClass}>{meta.error}</div>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))
-            }
-        </div>
-    );
+class CommentBoxField extends Component {
+    render() {
+        const { input, meta, wrapperClass, className, placeholder, errorClass, commentLoading, commentBoxRef } = this.props;
+        return (
+            <div
+                className={
+                    `${wrapperClass} ${(meta.submitFailed && meta.error) ? 'has-error' : ''}`
+                }
+            >
+                <textarea
+                    {...input}
+                    className={className}
+                    placeholder={placeholder}
+                    ref={commentBoxRef}
+                />
+                <button type="submit" disabled={commentLoading}>
+                    <i className="icon-send"></i>
+                </button>
+                {meta.submitFailed &&
+                    ((meta.error && <div className={errorClass}>{meta.error}</div>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))
+                }
+            </div>
+        );
+    }
 }

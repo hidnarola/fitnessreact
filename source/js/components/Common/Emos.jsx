@@ -72,6 +72,10 @@ class Emos extends Component {
             }
         });
     }
+
+    forceOpenClose = (flag = false) => {
+        this.setState({ openEmosArea: flag });
+    }
 }
 
 export default Emos;
