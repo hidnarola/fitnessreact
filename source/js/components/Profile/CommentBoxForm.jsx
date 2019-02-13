@@ -1,67 +1,136 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { Field, reduxForm } from 'redux-form';
+import ReactDOMServer from "react-dom/server";
+import Emos from '../Common/Emos';
+import ContentEditableTextarea from '../Common/ContentEditableTextarea';
+import { Emoji } from "emoji-mart";
+import { FaSpinner } from 'react-icons/lib/fa';
+import { sanitizeEditableContentValue } from '../../helpers/funs';
 
 class CommentBoxForm extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            comment: "",
+            buttonLoader: false
+        }
+        this.commentBoxRef = React.createRef();
+        this.emojis = React.createRef();
+    }
+
     render() {
-        const { handleSubmit, postId, commentLoading, commentBoxRef } = this.props;
+        const { postId, isLoading } = this.props;
+        const { comment, buttonLoader } = this.state;
         return (
             <div className="post-comment-box-form-wrapper">
-                <form onSubmit={handleSubmit}>
-                    <div className="row no-margin">
-                        <Field
-                            name={`comment_${postId}`}
-                            wrapperClass="comment-form-box"
-                            className="form-control"
-                            placeholder="Comment"
-                            component={CommentBoxField}
-                            commentLoading={commentLoading}
-                            commentBoxRef={commentBoxRef}
-                        />
-                    </div>
+                <form id={`comment-box-form-${postId}`} method="POST" onSubmit={this.handleComment}>
+                    <Emos
+                        ref={this.emojis}
+                        pickerProps={{
+                            color: "#ff337f",
+                            onClick: this.handleEmoClick,
+                            onSelect: this.handleEmoSelect,
+                        }}
+                        positionClass="top-right"
+                        emosWrapClass="emotis-comment-block"
+                        emojiBtnSize={16}
+                    />
+
+                    <ContentEditableTextarea
+                        ref={this.commentBoxRef}
+                        fieldProps={{
+                            className: "my-comment-textarea",
+                            placeholder: "Comment"
+                        }}
+                        html={comment}
+                        onChange={this.handleChange}
+                    />
+                    {buttonLoader ?
+                        <button type="submit" disabled={isLoading}>
+                            <FaSpinner className="loader-spinner" />
+                        </button>
+                        :
+                        <button type="submit" disabled={isLoading}>
+                            <i className="icon-send"></i>
+                        </button>
+                    }
                 </form>
             </div>
         );
     }
-}
 
-CommentBoxForm = reduxForm({
-    form: 'commentBoxForm'
-})(CommentBoxForm);
+    componentDidUpdate(prevProps, prevState) {
+        const { isLoading } = this.props;
+        const { buttonLoader } = this.state;
+        if (!isLoading && prevProps.isLoading !== isLoading && buttonLoader) {
+            this.setState({ buttonLoader: false });
+            this.resetComponent();
+        }
+    }
 
-const mapStateToProps = (state) => {
-    const { postComments } = state;
-    return {
-        commentLoading: postComments.get('loading'),
-    };
-}
 
-export default connect(
-    mapStateToProps,
-)(CommentBoxForm);
+    handleComment = (e) => {
+        e.preventDefault();
+        const { comment } = this.state;
+        const sanitizedComment = sanitizeEditableContentValue(comment);
+        if (comment && sanitizedComment && comment.trim() && sanitizedComment.trim()) {
+            this.setState({ buttonLoader: true });
+            const { handleComment, postId, index } = this.props;
+            const data = { comment, postId, index };
+            handleComment(data);
+        }
+    }
 
-class CommentBoxField extends Component {
-    render() {
-        const { input, meta, wrapperClass, className, placeholder, errorClass, commentLoading, commentBoxRef } = this.props;
-        return (
-            <div
-                className={
-                    `${wrapperClass} ${(meta.submitFailed && meta.error) ? 'has-error' : ''}`
+    handleChange = (value) => {
+        const { buttonLoader } = this.state;
+        if (!buttonLoader) {
+            this.setState({ comment: value });
+        } else {
+            this.setState((state) => {
+                return {
+                    comment: state.comment
                 }
-            >
-                <textarea
-                    {...input}
-                    className={className}
-                    placeholder={placeholder}
-                    ref={commentBoxRef}
-                />
-                <button type="submit" disabled={commentLoading}>
-                    <i className="icon-send"></i>
-                </button>
-                {meta.submitFailed &&
-                    ((meta.error && <div className={errorClass}>{meta.error}</div>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))
-                }
-            </div>
-        );
+            });
+        }
+    }
+
+    handleEmoClick = (emoji, event) => {
+        const { buttonLoader } = this.state;
+        if (!buttonLoader) {
+            const { id } = emoji;
+            this.appendDescription(id);
+            this.commentBoxRef.current.focus();
+        }
+    }
+
+    handleEmoSelect = (emoji) => {
+        const { buttonLoader } = this.state;
+        if (!buttonLoader) {
+            const { id } = emoji;
+            this.appendDescription(id);
+            this.commentBoxRef.current.focus();
+        }
+    }
+
+    appendDescription = (id) => {
+        if (id) {
+            const { comment } = this.state;
+            const _comment = comment +
+                ReactDOMServer.renderToString(<span contentEditable={false} dangerouslySetInnerHTML={{
+                    __html: Emoji({ html: true, set: 'emojione', emoji: id, size: 16 })
+                }}></span>) +
+                ReactDOMServer.renderToString(<span>&nbsp;</span>);
+            this.setState({ comment: _comment });
+        }
+    }
+
+    resetComponent = () => {
+        this.setState({ comment: "" });
+        this.emojis.current.forceOpenClose(false);
+    }
+
+    focus = () => {
+        this.commentBoxRef.current.focus();
     }
 }
+
+export default CommentBoxForm;

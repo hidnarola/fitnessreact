@@ -42,7 +42,7 @@ class GalleryPhotos extends Component {
                 <FitnessHeader />
                 <FitnessNav />
                 <section className="body-wrap">
-                    <div className="body-head space-btm-45 d-flex justify-content-start">
+                    <div className="body-head space-btm-45 d-flex justify-content-start front-white-header">
                         <div className="body-head-l">
                             <h2>Gallery Photos</h2>
                             <p>Your goal choice shapes how your fitness assistant will ceate your meal and exercise plans, it’s important that
@@ -57,58 +57,60 @@ class GalleryPhotos extends Component {
                         </div>
                     </div>
 
-                    {loading &&
-                        <div className="no-content-loader">
-                            <FaCircleONotch className="loader-spinner fs-100" />
-                        </div>
-                    }
+                    <div className="body-content">
+                        {loading &&
+                            <div className="no-content-loader">
+                                <FaCircleONotch className="loader-spinner fs-100" />
+                            </div>
+                        }
 
-                    {!loading && galleryPhotos && galleryPhotos.length > 0 &&
-                        <div className="white-box">
-                            <ul className="d-flex profile-list-ul">
-                                {galleryPhotos.map((o, index) => {
-                                    let photo = o.images ? o.images : null;
-                                    if (!photo) return;
-                                    return (
-                                        <li key={index}>
-                                            <ProfilePhotoBlock
-                                                imageData={photo}
-                                                image={photo.image}
-                                                caption={photo.date}
-                                                handleOpenLightbox={this.handleOpenLightbox}
-                                                index={index}
-                                                blockFor="gallery_photos"
-                                                handleShowDeleteImageAlert={this.handleShowDeleteImageAlert}
-                                                allowDelete={(loggedUserData && match.params && loggedUserData.username && match.params.username && loggedUserData.username === match.params.username)}
-                                            />
-                                        </li>
-                                    )
-                                })}
-                            </ul>
-                            {!photoLoadMoreLoading && !photoDataOver &&
-                                <button type="button" className="photo-load-more-btn gallery-photos" onClick={this.handleLoadMore}>
-                                    <span>Load More</span>
-                                </button>
-                            }
-                            {photoLoadMoreLoading &&
-                                <button type="button" className="photo-load-more-btn gallery-photos" disabled={true}>
-                                    <FaCircleONotch className="loader-spinner loader-spinner-icon" />
-                                    <span>Loading...</span>
-                                </button>
-                            }
-                        </div>
-                    }
+                        {!loading && galleryPhotos && galleryPhotos.length > 0 &&
+                            <div className="white-box">
+                                <ul className="d-flex profile-list-ul">
+                                    {galleryPhotos.map((o, index) => {
+                                        let photo = o.images ? o.images : null;
+                                        if (!photo) return;
+                                        return (
+                                            <li key={index}>
+                                                <ProfilePhotoBlock
+                                                    imageData={photo}
+                                                    image={photo.image}
+                                                    caption={photo.date}
+                                                    handleOpenLightbox={this.handleOpenLightbox}
+                                                    index={index}
+                                                    blockFor="gallery_photos"
+                                                    handleShowDeleteImageAlert={this.handleShowDeleteImageAlert}
+                                                    allowDelete={(loggedUserData && match.params && loggedUserData.username && match.params.username && loggedUserData.username === match.params.username)}
+                                                />
+                                            </li>
+                                        )
+                                    })}
+                                </ul>
+                                {!photoLoadMoreLoading && !photoDataOver &&
+                                    <button type="button" className="photo-load-more-btn gallery-photos" onClick={this.handleLoadMore}>
+                                        <span>Load More</span>
+                                    </button>
+                                }
+                                {photoLoadMoreLoading &&
+                                    <button type="button" className="photo-load-more-btn gallery-photos" disabled={true}>
+                                        <FaCircleONotch className="loader-spinner loader-spinner-icon" />
+                                        <span>Loading...</span>
+                                    </button>
+                                }
+                            </div>
+                        }
 
-                    {!loading && (!galleryPhotos || galleryPhotos.length <= 0) && error && error.length <= 0 &&
-                        <NoRecordFound />
-                    }
+                        {!loading && (!galleryPhotos || galleryPhotos.length <= 0) && error && error.length <= 0 &&
+                            <NoRecordFound />
+                        }
 
-                    {!loading && (!galleryPhotos || galleryPhotos.length <= 0) && error && error.length > 0 &&
-                        <div className="server-error-wrapper">
-                            <ErrorCloud />
-                            <h4>Something went wrong! please try again.</h4>
-                        </div>
-                    }
+                        {!loading && (!galleryPhotos || galleryPhotos.length <= 0) && error && error.length > 0 &&
+                            <div className="server-error-wrapper">
+                                <ErrorCloud />
+                                <h4>Something went wrong! please try again.</h4>
+                            </div>
+                        }
+                    </div>
                 </section>
                 <SweetAlert
                     show={showImageDeleteAlert}

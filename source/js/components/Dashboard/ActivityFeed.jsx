@@ -75,16 +75,11 @@ class ActivityFeed extends Component {
         dispatch(toggleLikeOnPostRequest(requestData));
     }
 
-    handleComment = (data, actionGenerator, props) => {
+    handleComment = (data) => {
         const { dispatch, activityFeed } = this.props;
-        var index = props.index;
-        var postId = props.postId;
-        var comment = (data[`comment_${postId}`]) ? data[`comment_${postId}`].trim() : '';
+        const { comment, postId, index } = data;
         if (comment) {
-            var requestData = {
-                comment: comment.replace(/\n/gi, '<br/>'),
-                postId: postId,
-            };
+            var requestData = { comment, postId, index };
             let selectedPostForComment = (activityFeed[index]) ? activityFeed[index] : null;
             this.setState({ selectedPostForComment });
             dispatch(commentOnPostRequest(requestData));

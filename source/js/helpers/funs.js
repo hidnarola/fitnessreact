@@ -366,8 +366,34 @@ export function replaceStringWithEmos(str, size = 16) {
     if (str) {
         str = str.replace(/contenteditable="false"/g, '')
         return str.replace(REGEX_FOR_EMOJI_COLONS, (match) => {
-            return ReactDOMServer.renderToString(<Emoji emoji={match} size={size} />);
+            return ReactDOMServer.renderToString(<Emoji emoji={match} set="emojione" size={size} />);
         });
     }
     return str;
+}
+
+export function sanitizeEditableContentValue(str = "") {
+    let _str = str;
+    if (str) {
+        _str = removeNBSP(_str);
+        _str = removeDivWithJustBr(_str);
+    }
+    return _str;
+}
+
+export function removeNBSP(str = "") {
+    let _str = str;
+    if (str) {
+        _str = _str.replace(/&nbsp;/g, '');
+    }
+    return _str;
+}
+
+export function removeDivWithJustBr(str = "") {
+    let _str = str;
+    if (str) {
+        _str = _str.replace(/<div><br><\/div>/g, '');
+        _str = _str.replace(/<div><br\/><\/div>/g, '');
+    }
+    return _str;
 }

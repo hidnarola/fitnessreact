@@ -31,7 +31,7 @@ class ActivityFeedListCard extends Component {
 
     render() {
         const { lightBoxOpen, currentImage, lightBoxImages, showLikes } = this.state;
-        const { post, loggedUserData, index } = this.props;
+        const { post, loggedUserData, index, postCommentLoading } = this.props;
         if (!post) {
             return null;
         }
@@ -202,11 +202,12 @@ class ActivityFeedListCard extends Component {
                             <h4>
                                 <NavLink to={`${routeCodes.PROFILE}/${lastComment.username}`}>
                                     {lastComment.firstName} {(lastComment.lastName) ? lastComment.lastName : ''}
-                                </NavLink> {(lastComment.comment)}
+                                </NavLink>
                             </h4>
                             <div className="post-comment-r-btm d-flex">
                                 <p>{lastCommentCreatedAt}</p>
                             </div>
+                            {ReactHtmlParser(replaceStringWithEmos(lastComment.comment))}
                         </div>
                     </div>
                 }
@@ -216,10 +217,11 @@ class ActivityFeedListCard extends Component {
                     post.owner_by.userPreferences.commentAccessibility &&
                     post.owner_by.userPreferences.commentAccessibility == ACCESS_LEVEL_PUBLIC &&
                     <CommentBoxForm
+                        ref={this.commentBoxRef}
                         postId={post._id}
                         index={index}
-                        onSubmit={this.handleComment}
-                        commentBoxRef={this.commentBoxRef}
+                        handleComment={this.handleComment}
+                        isLoading={postCommentLoading}
                     />
                 }
                 {
@@ -229,10 +231,11 @@ class ActivityFeedListCard extends Component {
                     post.owner_by.userPreferences.commentAccessibility == ACCESS_LEVEL_FRIENDS &&
                     post.friendshipStatus && post.friendshipStatus == FRIENDSHIP_STATUS_FRIEND &&
                     <CommentBoxForm
+                        ref={this.commentBoxRef}
                         postId={post._id}
                         index={index}
-                        onSubmit={this.handleComment}
-                        commentBoxRef={this.commentBoxRef}
+                        handleComment={this.handleComment}
+                        isLoading={postCommentLoading}
                     />
                 }
                 {lightBoxImages && lightBoxImages.length > 0 &&
@@ -294,9 +297,9 @@ class ActivityFeedListCard extends Component {
         handleToggleLike(index, postId);
     }
 
-    handleComment = (data, actionGenerator, props) => {
+    handleComment = (data) => {
         const { handleComment } = this.props;
-        handleComment(data, actionGenerator, props);
+        handleComment(data);
     }
 
     handleOpenLikesModal = () => {
@@ -309,9 +312,10 @@ class ActivityFeedListCard extends Component {
 }
 
 const mapStateToProps = (state) => {
-    const { user } = state;
+    const { user, postComments } = state;
     return {
         loggedUserData: user.get('loggedUserData'),
+        postCommentLoading: postComments.get('loading'),
     };
 }
 

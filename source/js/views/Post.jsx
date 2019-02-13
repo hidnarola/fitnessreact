@@ -46,7 +46,7 @@ class Post extends Component {
     }
 
     render() {
-        const { loading, postError, post, match } = this.props;
+        const { loading, postError, post, match, postCommentLoading } = this.props;
         const { isLikedByLoggedUser, lightBoxOpen, currentImage, lightBoxImages, showLikes } = this.state;
         let doRenderPost = true;
         if (!loading && post) {
@@ -202,9 +202,10 @@ class Post extends Component {
                                     post.owner_by.userPreferences.commentAccessibility &&
                                     post.owner_by.userPreferences.commentAccessibility == ACCESS_LEVEL_PUBLIC &&
                                     <CommentBoxForm
+                                        ref={this.commentBoxRef}
                                         postId={post._id}
-                                        onSubmit={this.handleComment}
-                                        commentBoxRef={this.commentBoxRef}
+                                        handleComment={this.handleComment}
+                                        isLoading={postCommentLoading}
                                     />
                                 }
                                 {
@@ -214,17 +215,19 @@ class Post extends Component {
                                     post.owner_by.userPreferences.commentAccessibility == ACCESS_LEVEL_FRIENDS &&
                                     post.friendshipStatus && post.friendshipStatus == FRIENDSHIP_STATUS_FRIEND &&
                                     <CommentBoxForm
+                                        ref={this.commentBoxRef}
                                         postId={post._id}
-                                        onSubmit={this.handleComment}
-                                        commentBoxRef={this.commentBoxRef}
+                                        handleComment={this.handleComment}
+                                        isLoading={postCommentLoading}
                                     />
                                 }
                                 {
                                     post && post.friendshipStatus && post.friendshipStatus == FRIENDSHIP_STATUS_SELF &&
                                     <CommentBoxForm
+                                        ref={this.commentBoxRef}
                                         postId={post._id}
-                                        onSubmit={this.handleComment}
-                                        commentBoxRef={this.commentBoxRef}
+                                        handleComment={this.handleComment}
+                                        isLoading={postCommentLoading}
                                     />
                                 }
                                 {post.comments && post.comments.length > 0 &&
@@ -248,7 +251,7 @@ class Post extends Component {
                                                         <p>{moment(moment.utc(o.create_date).toDate()).local().format('Do MMM [at] hh:mm')}</p>
                                                     </h4>
                                                     <div className="post-comment-r-btm">
-                                                        {ReactHtmlParser(o.comment)}
+                                                        {ReactHtmlParser(replaceStringWithEmos(o.comment))}
                                                     </div>
                                                 </div>
                                             </div>
@@ -338,14 +341,10 @@ class Post extends Component {
     }
 
     handleComment = (data) => {
-        const { dispatch, post } = this.props;
-        var postId = post._id;
-        var comment = (data[`comment_${postId}`]) ? data[`comment_${postId}`].trim() : '';
+        const { dispatch } = this.props;
+        const { comment, postId } = data;
         if (comment) {
-            var requestData = {
-                comment: comment.replace(/\n/gi, '<br/>'),
-                postId: postId,
-            };
+            var requestData = { comment, postId };
             dispatch(commentOnPostRequest(requestData));
         }
     }
