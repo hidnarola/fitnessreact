@@ -41,7 +41,7 @@ import {
 import { toggleLikeOnPostRequest } from '../../actions/postLikes';
 import { commentOnPostRequest } from '../../actions/postComments';
 import { initialize, reset } from "redux-form";
-import { te, ts } from '../../helpers/funs';
+import { te, ts, sanitizeEditableContentValue, sanitizeAndRemoveSpaceAndEnterOnEditableContent } from '../../helpers/funs';
 import InfiniteScroll from 'react-infinite-scroller';
 import { MenuItem, Dropdown } from "react-bootstrap";
 import { FaGlobe, FaLock, FaGroup, FaSpinner, FaCircleONotch } from 'react-icons/lib/fa';
@@ -561,8 +561,7 @@ class ProfileFithub extends Component {
     }
 
     handlePostContentChange = (value) => {
-        const editorText = value.trim();
-        this.setState({ postContent: editorText });
+        this.setState({ postContent: value });
     }
 
     handleMakePost = () => {
@@ -575,9 +574,11 @@ class ProfileFithub extends Component {
             activeProfile,
             dispatch,
         } = this.props;
-        if ((postContent) || (postImages && postImages.length > 0)) {
+        const sanitizeContent = sanitizeEditableContentValue(postContent);
+        if ((postContent && postContent.trim() && sanitizeContent && sanitizeContent.trim()) || (postImages && postImages.length > 0)) {
             var formData = new FormData();
-            formData.append('description', postContent);
+            const _postContent = sanitizeAndRemoveSpaceAndEnterOnEditableContent(postContent);
+            formData.append('description', _postContent);
             formData.append('privacy', postPrivacy);
             formData.append('onWall', activeProfile.authUserId);
             if (postImages.length > 0) {

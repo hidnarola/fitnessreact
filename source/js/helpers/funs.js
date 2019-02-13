@@ -375,8 +375,7 @@ export function replaceStringWithEmos(str, size = 16) {
 export function sanitizeEditableContentValue(str = "") {
     let _str = str;
     if (str) {
-        _str = removeNBSP(_str);
-        _str = removeDivWithJustBr(_str);
+        _str = sanitizeAndRemoveSpaceAndEnterOnEditableContent(_str);
     }
     return _str;
 }
@@ -393,7 +392,16 @@ export function removeDivWithJustBr(str = "") {
     let _str = str;
     if (str) {
         _str = _str.replace(/<div><br><\/div>/g, '');
-        _str = _str.replace(/<div><br\/><\/div>/g, '');
+        _str = _str.replace(/<div><\/br><\/div>/g, '');
+    }
+    return _str;
+}
+
+export function sanitizeAndRemoveSpaceAndEnterOnEditableContent(str = "") {
+    let _str = str;
+    if (str) {
+        _str = _str.replace(/^(\&nbsp;|\ |<div><br><\/div>|<div>(&nbsp;|\ )*<\/div>)*/g, '');
+        _str = _str.replace(/(\&nbsp;|\ |<div><br><\/div>|<div>(&nbsp;|\ )*<\/div>)*$/g, '');
     }
     return _str;
 }
