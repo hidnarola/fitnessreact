@@ -16,7 +16,7 @@ import cns from "classnames";
 import { NavLink, Link } from "react-router-dom";
 import CommentBoxForm from '../components/Profile/CommentBoxForm';
 import { toggleLikeOnPostRequest } from '../actions/postLikes';
-import { te, replaceStringWithEmos } from '../helpers/funs';
+import { te, replaceStringWithEmos, sanitizeEditableContentValue } from '../helpers/funs';
 import { commentOnPostRequest } from '../actions/postComments';
 import { reset } from "redux-form";
 import Lightbox from 'react-images';
@@ -343,8 +343,9 @@ class Post extends Component {
     handleComment = (data) => {
         const { dispatch } = this.props;
         const { comment, postId } = data;
-        if (comment) {
-            var requestData = { comment, postId };
+        const sanitizeComment = sanitizeEditableContentValue(comment);
+        if (sanitizeComment && sanitizeComment.trim()) {
+            var requestData = { comment: sanitizeComment, postId };
             dispatch(commentOnPostRequest(requestData));
         }
     }

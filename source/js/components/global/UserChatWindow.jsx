@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOMServer from "react-dom/server";
-import { toggleSmallChatWindow, getToken, scrollBottom, replaceStringWithEmos } from '../../helpers/funs';
+import { toggleSmallChatWindow, getToken, scrollBottom, replaceStringWithEmos, sanitizeEditableContentValue } from '../../helpers/funs';
 import moment from "moment";
 import noProfileImg from 'img/common/no-profile-img.png';
 import _ from "lodash";
@@ -245,19 +245,16 @@ class UserChatWindow extends Component {
 
     handleSend = (e) => {
         e.preventDefault();
-        const {
-            handleSendButton,
-            userDetails,
-            channelId,
-        } = this.props;
-        const {
-            newMsg,
-        } = this.state;
-        if (newMsg && newMsg.trim()) {
+        const { handleSendButton, userDetails, channelId } = this.props;
+        const { newMsg } = this.state;
+        console.log('newMsg => ', newMsg);
+        const sanitizeNewMsg = sanitizeEditableContentValue(newMsg);
+        console.log('sanitizeNewMsg => ', sanitizeNewMsg);
+        if (sanitizeNewMsg && sanitizeNewMsg.trim()) {
             var data = {
                 channelId: channelId,
                 friendId: userDetails.authUserId,
-                message: newMsg,
+                message: sanitizeNewMsg,
                 token: getToken(),
                 createdAt: moment(),
                 timestamp: moment().valueOf(),

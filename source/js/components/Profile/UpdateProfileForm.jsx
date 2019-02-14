@@ -21,7 +21,7 @@ import {
     MEASUREMENT_UNIT_POUND,
     MEASUREMENT_UNIT_INCH,
 } from '../../constants/consts';
-import { capitalizeFirstLetter, ts, convertUnits, focusToControl } from '../../helpers/funs';
+import { capitalizeFirstLetter, ts, convertUnits, focusToControl, sanitizeEditableContentValue } from '../../helpers/funs';
 import {
     getLoggedUserProfileDetailsRequest,
     saveLoggedUserProfileDetailsRequest,
@@ -477,6 +477,9 @@ class UpdateProfileForm extends Component {
 
 const handleSubmit = (data, dispatch, props) => {
     const { handleSaveActionFlag } = props;
+    console.log('brofre data.about_me => ', data.about_me);
+    const sanitizeAboutMe = sanitizeEditableContentValue(data.about_me);
+    console.log('after sanitizeAboutMe => ', sanitizeAboutMe);
     var formData = {
         firstName: (data.first_name && data.first_name.trim()) ? capitalizeFirstLetter(data.first_name.trim()) : '',
         lastName: (data.last_name && data.last_name.trim()) ? capitalizeFirstLetter(data.last_name.trim()) : '',
@@ -484,7 +487,7 @@ const handleSubmit = (data, dispatch, props) => {
         gender: (data.gender) ? data.gender : GENDER_MALE,
         dateOfBirth: (data.dob) ? data.dob : '',
         goal: (data.primary_goal) ? data.primary_goal : null,
-        aboutMe: (data.about_me) ? data.about_me : '',
+        aboutMe: (sanitizeAboutMe && sanitizeAboutMe.trim()) ? sanitizeAboutMe : '',
         height: (data.height) ? data.height : 0,
         weight: (data.weight) ? data.weight : 0,
         heightUnit: (data.heightUnit) ? data.heightUnit : '',

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import ActivityFeedListCard from './ActivityFeedListCard';
 import NoRecordFound from '../Common/NoRecordFound';
 import { toggleLikeOnPostRequest } from '../../actions/postLikes';
-import { te } from '../../helpers/funs';
+import { te, sanitizeEditableContentValue } from '../../helpers/funs';
 import { setNewStateOfSinglePost } from '../../actions/dashboard';
 import { commentOnPostRequest } from '../../actions/postComments';
 import { reset } from "redux-form";
@@ -78,8 +78,9 @@ class ActivityFeed extends Component {
     handleComment = (data) => {
         const { dispatch, activityFeed } = this.props;
         const { comment, postId, index } = data;
-        if (comment) {
-            var requestData = { comment, postId, index };
+        const sanitizedComment = sanitizeEditableContentValue(comment);
+        if (sanitizedComment && sanitizedComment.trim()) {
+            var requestData = { comment: sanitizedComment, postId, index };
             let selectedPostForComment = (activityFeed[index]) ? activityFeed[index] : null;
             this.setState({ selectedPostForComment });
             dispatch(commentOnPostRequest(requestData));

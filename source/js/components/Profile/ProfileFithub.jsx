@@ -41,7 +41,7 @@ import {
 import { toggleLikeOnPostRequest } from '../../actions/postLikes';
 import { commentOnPostRequest } from '../../actions/postComments';
 import { initialize, reset } from "redux-form";
-import { te, ts, sanitizeEditableContentValue, sanitizeAndRemoveSpaceAndEnterOnEditableContent } from '../../helpers/funs';
+import { te, ts, sanitizeEditableContentValue } from '../../helpers/funs';
 import InfiniteScroll from 'react-infinite-scroller';
 import { MenuItem, Dropdown } from "react-bootstrap";
 import { FaGlobe, FaLock, FaGroup, FaSpinner, FaCircleONotch } from 'react-icons/lib/fa';
@@ -545,13 +545,10 @@ class ProfileFithub extends Component {
     handleComment = (data) => {
         const { dispatch } = this.props;
         const { comment, postId, index } = data;
-        if (comment) {
-            var requestData = { comment, postId };
-            this.setState({
-                selectedTimelineIndex: index,
-                selectedTimelineId: postId,
-                commentActionInit: true,
-            });
+        const sanitizedComment = sanitizeEditableContentValue(comment);
+        if (sanitizedComment && sanitizedComment.trim()) {
+            var requestData = { comment: sanitizedComment, postId };
+            this.setState({ selectedTimelineIndex: index, selectedTimelineId: postId, commentActionInit: true });
             dispatch(commentOnPostRequest(requestData));
         }
     }
@@ -575,10 +572,9 @@ class ProfileFithub extends Component {
             dispatch,
         } = this.props;
         const sanitizeContent = sanitizeEditableContentValue(postContent);
-        if ((postContent && postContent.trim() && sanitizeContent && sanitizeContent.trim()) || (postImages && postImages.length > 0)) {
+        if ((sanitizeContent && sanitizeContent.trim()) || (postImages && postImages.length > 0)) {
             var formData = new FormData();
-            const _postContent = sanitizeAndRemoveSpaceAndEnterOnEditableContent(postContent);
-            formData.append('description', _postContent);
+            formData.append('description', sanitizeContent);
             formData.append('privacy', postPrivacy);
             formData.append('onWall', activeProfile.authUserId);
             if (postImages.length > 0) {
