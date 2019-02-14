@@ -343,7 +343,6 @@ class App extends Component {
         }
     }
 
-
     handleLogout = () => {
         const { socket } = this.props;
         socket.emit('request_make_user_offline');
@@ -396,7 +395,11 @@ class App extends Component {
 
     handleUsersConversationByChannel = (data) => {
         const { dispatch } = this.props;
-        dispatch(openUserChatWindowSuccess(data));
+        const channelId = data && data.channel && data.channel._id ? data.channel._id : null;
+        if (channelId) {
+            dispatch(openUserChatWindowSuccess(data));
+            scrollBottom(`#chat-history_${channelId}`, 'slow');
+        }
     }
 
     handleCloseUserChatWindow = (channelId) => {

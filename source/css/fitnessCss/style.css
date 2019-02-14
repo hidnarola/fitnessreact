@@ -1179,7 +1179,7 @@ div#loader .loader-spinner, div.loaderloader .loader-spinner, div.no-content-loa
 .timeline-new-post-editor .post-photos-selected-view-wrapper ul {margin: auto;}
 .timeline-new-post-editor .post-photos-selected-view-wrapper ul li {display: inline-block;list-style: none;width: 70px;height: 70px;margin: 2px;border-radius: 3px;}
 .timeline-new-post-editor .post-photos-selected-view-wrapper ul li img {width: 100%;height: 100%;}
-.timeline-infinite-scroll .posttype-head>h4 p svg {margin-left: 5px;position: absolute;}
+.timeline-infinite-scroll .posttype-head>h4 p svg {margin-left: 5px;position: absolute;font-size: 12px;}
 .gallery-popup.profile-photo-update-modal .modal-dialog {max-width: 600px;}
 .gallery-popup.profile-photo-update-modal .modal-dialog .modal-content {padding: 42px 30px 38px 40px;}
 .gallery-popup.profile-photo-update-modal .modal-dialog .gallery-popup-body-r .upload-gallery {margin: 15px 0; width:100%;}
@@ -1889,7 +1889,7 @@ ul.common-ul>li.body-fat-field-li{ width:50%; margin-left:auto;width: 55%;}
 .single-post-right .post-comment-box-form-wrapper {background: #fff;margin-left: 30px;padding: 20px 20px 20px 20px;}
 .single-post-right .post-comment-box-form-wrapper textarea.form-control {min-height: 100px;}
 .single-post-right .post-comment {background: #fff;margin-left: 30px;}
-.single-post-wrapper {background: transparent;margin: 0;box-sizing: border-box;}
+.single-post-wrapper {background: transparent;margin: 0;box-sizing: border-box;border: 0;}
 .single-post-left .posttype-body {padding: 15px;     background: #fff;}
 .auth0-lock-error-msg { width: -moz-max-content;}
 #user-message-panel button.btn-messages-loadmore {border: 1px solid #ddd;background: #fff;color: #000;padding: 10px 20px;width: 100%;border-radius: 5px;margin-bottom: 2px;}
@@ -2107,7 +2107,7 @@ span.text-mute.noti-time { display: block; height: auto; width: auto; text-align
 .item {background: #f9fafa;padding: 0;margin: 0;border: 0px solid #f9fafa;}
 .posttype-body-grey.single-post-view .item {border: 5px solid #fff;}
 .masonry.single { column-count: 1; }
-.single-post-cntline{max-width: 768px; margin: 0 auto;}
+.single-post-cntline{max-width: 768px; margin: 0 auto;border: 5px solid #fff;}
 .program-search {text-align: right;margin-bottom: 20px;}
 .program-search input {color: #000;border: 0;background: #f9fafa;padding: 10px 10px;max-width: 400px;width: 100%;border-radius: 4px;line-height: normal;}
 .programs-table-wrapper table.table thead tr {border-bottom: 5px solid #fff;}
