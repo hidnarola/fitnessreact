@@ -517,10 +517,11 @@ class ProfileFithub extends Component {
                 let newPostsState = [];
                 if (this.state.posts && this.state.posts.length > 0) {
                     this.state.posts.map((o) => {
-                        if (o._id === selectedPostId) {
-                            o.privacy = selectedPostAccessLevel;
+                        const _o = Object.assign({}, o);
+                        if (_o._id === selectedPostId) {
+                            _o.privacy = selectedPostAccessLevel;
                         }
-                        newPostsState.push(o);
+                        newPostsState.push(_o);
                     });
                 }
                 this.setState({ posts: newPostsState, selectedPostId: null, selectedPostAccessLevel: null });
