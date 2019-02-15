@@ -50,13 +50,13 @@ class SelectProgressPhotoModal extends Component {
                                         <Cropper
                                             ref='cropper'
                                             src={selectedImage[0].preview}
-                                            viewMode={0}
+                                            viewMode={1}
                                             aspectRatio={1}
-                                            guides={false}
+                                            guides={true}
                                             autoCropArea={0.8}
                                             cropBoxResizable={true}
-                                            minCropBoxWidth={300}
-                                            minCropBoxHeight={300}
+                                            minCropBoxWidth={500}
+                                            minCropBoxHeight={500}
                                             alt="Selected Progress Image"
                                         />
                                     </Fragment>

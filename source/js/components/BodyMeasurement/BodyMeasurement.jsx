@@ -147,14 +147,16 @@ class BodyMeasurement extends Component {
 
     handleProgressPhotoSubmit = (data) => {
         const { dispatch, body_fat_log_date, selectedPhotos } = this.props;
-        let requestData = {
-            description: data.description ? data.description : '',
-            date: body_fat_log_date,
-            progressPhotosData: selectedPhotos
-        };
-        this.setState({ saveProgressPhotoActionInit: true });
-        dispatch(showPageLoader());
-        dispatch(addUserProgressPhotoRequest(requestData));
+        if (selectedPhotos && selectedPhotos.length > 0) {
+            let requestData = {
+                description: data.description ? data.description : '',
+                date: body_fat_log_date,
+                progressPhotosData: selectedPhotos
+            };
+            this.setState({ saveProgressPhotoActionInit: true });
+            dispatch(showPageLoader());
+            dispatch(addUserProgressPhotoRequest(requestData));
+        }
     }
 
     handleShowBodyFatModal = () => {

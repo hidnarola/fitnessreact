@@ -190,6 +190,7 @@ class ProfilePhotos extends Component {
                                                 blockFor="gallery_photos"
                                                 handleShowDeleteImageAlert={this.handleShowDeleteImageAlert}
                                                 allowDelete={(profile && profile.friendshipStatus && profile.friendshipStatus === FRIENDSHIP_STATUS_SELF)}
+                                                containerClass="profile_one"
                                             />
                                         </li>
                                     )
@@ -391,15 +392,17 @@ class ProfilePhotos extends Component {
 
     handleProgressPhotoSubmit = (data) => {
         const { dispatch, selectedPhotos } = this.props;
-        let logDate = moment();
-        let requestData = {
-            description: data.description ? data.description : '',
-            date: logDate,
-            progressPhotosData: selectedPhotos
-        };
-        this.setState({ saveProgressPhotoActionInit: true });
-        dispatch(showPageLoader());
-        dispatch(addUserProgressPhotoRequest(requestData));
+        if (selectedPhotos && selectedPhotos.length > 0) {
+            let logDate = moment();
+            let requestData = {
+                description: data.description ? data.description : '',
+                date: logDate,
+                progressPhotosData: selectedPhotos
+            };
+            this.setState({ saveProgressPhotoActionInit: true });
+            dispatch(showPageLoader());
+            dispatch(addUserProgressPhotoRequest(requestData));
+        }
     }
 
     handleGalleryPhotoSubmit = (data) => {

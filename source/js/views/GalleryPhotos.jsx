@@ -81,6 +81,7 @@ class GalleryPhotos extends Component {
                                                     blockFor="gallery_photos"
                                                     handleShowDeleteImageAlert={this.handleShowDeleteImageAlert}
                                                     allowDelete={(loggedUserData && match.params && loggedUserData.username && match.params.username && loggedUserData.username === match.params.username)}
+                                                    containerClass="profile_one"
                                                 />
                                             </li>
                                         )

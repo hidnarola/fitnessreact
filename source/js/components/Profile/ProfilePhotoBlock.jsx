@@ -2,11 +2,12 @@ import React from 'react';
 import { SERVER_BASE_URL } from '../../constants/consts';
 import noProfileImg from 'img/common/no-profile-img.png'
 import moment from "moment";
+import cns from "classnames";
 
 const ProfilePhotoBlock = (props) => {
-    const { image, caption, handleOpenLightbox, index, blockFor, handleShowDeleteImageAlert, imageData, allowDelete } = props;
+    const { image, caption, handleOpenLightbox, index, blockFor, handleShowDeleteImageAlert, imageData, allowDelete, containerClass } = props;
     return (
-        <div className="profile-list">
+        <div className={cns("profile-list", containerClass)}>
             <span>
                 {allowDelete && <button type="button" className="close_btn" onClick={() => handleShowDeleteImageAlert(blockFor, imageData)}><i className="icon-cancel"></i></button>}
                 <a href="javascript:void(0)" onClick={() => handleOpenLightbox(blockFor, index)}>

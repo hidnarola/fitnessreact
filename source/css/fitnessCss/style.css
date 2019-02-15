@@ -389,9 +389,9 @@ display: flex; justify-content: center; flex-direction: column; text-align: cent
 .profile-list-ul{list-style:none;margin:0 -5px;flex-wrap: wrap; width:100%;}
 .profile-list-ul li{width:20%;padding:5px;}
 .profile-list{display:block;background:#f8f9f9;border-radius:5px;overflow:visible;}
-.profile-list span{display:block;height:185px;overflow:hidden;}
-.profile-list span a{text-decoration:none;background:#f8f9f9;text-align:center; display: flex; margin: 0 auto; height: 185px; width: auto; justify-content: center; align-items: center;}
-.profile-list span a img{max-height: 185px;}
+.profile-list span{display:block;/*height:185px*/;overflow:hidden;}
+.profile-list span a{text-decoration:none;background:#f8f9f9;text-align:center; display: flex; margin: 0 auto; /*height: 185px;*/ width: auto; justify-content: center; align-items: center;}
+/* .profile-list span a img{max-height: 185px;} */
 .profile-list h4{margin:0;padding:15px; line-height:100%; font-size:100%; text-align:center;}
 .profile-list h4 a{line-height:30px;text-align:center; color:#1A2032; font-size:14px; font-weight:700;}
 .lavel-img{display:block;margin:0 0 20px;}
@@ -2301,6 +2301,11 @@ div[contenteditable="true"]:empty:focus:before { content: ""; }
 .post-comment-box-form-wrapper form .emos-wrap {position: absolute;left: 0;top: 0;padding: 0 10px;border-right: 2px solid #f9fafa;height: 100%;display: flex;justify-content: center;align-items: center;}
 .post-comment-box-form-wrapper form .my-comment-textarea {max-height: 50px;font-size: 13px;overflow-y: auto;overflow-x: hidden;width: 100%;word-break: break-all;line-height: 13px;}
 .single-post-right .post-comment-box-form-wrapper form {border-bottom: 2px solid #f9fafa;border-left: 2px solid #f9fafa;border-right: 2px solid #f9fafa;}
+
+.profile-list.profile_one span a img {max-height: 185px;}
+.profile-list.profile_one span a {height: 185px;}
+.profile-list.profile_one span {height: 185px;}
+
 
 @media(min-width: 992px){
     body.with_login .app-wrapper-content{ width: 100%; }
