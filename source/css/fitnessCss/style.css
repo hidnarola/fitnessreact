@@ -1,4 +1,97 @@
 *{margin:0;padding:0;}
+@font-face {
+    font-family:'gt_walsheim_proregular';
+    src: url('../assets/fonts/gt-walsheim-pro-thin-webfont.woff2') format('woff2'),
+            url('../assets/fonts/gt-walsheim-pro-thin-webfont.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family:'gt_walsheim_proregular';
+    src: url('../assets/fonts/gt-walsheim-pro-ultra-light-webfont.woff2') format('woff2'),
+         url('../assets/fonts/gt-walsheim-pro-ultra-light-webfont.woff') format('woff');
+    font-weight: 200;
+    font-style: normal;
+}
+@font-face {
+    font-family:'gt_walsheim_proregular';
+    src: url('../assets/fonts/gt-walsheim-pro-light-webfont.woff2') format('woff2'),
+         url('../assets/fonts/gt-walsheim-pro-light-webfont.woff') format('woff');
+    font-weight:300;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'gt_walsheim_proregular';
+    src: url('../assets/fonts/gt-walsheim-pro-regular-webfont.woff2') format('woff2'),
+         url('../assets/fonts/gt-walsheim-pro-regular-webfont.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'gt_walsheim_proregular';
+    src: url('../assets/fonts/gt-walsheim-pro-medium-webfont.woff2') format('woff2'),
+         url('../assets/fonts/gt-walsheim-pro-medium-webfont.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'gt_walsheim_proregular';
+    src: url('../assets/fonts/gt-walsheim-pro-bold-webfont.woff2') format('woff2'),
+         url('../assets/fonts/gt-walsheim-pro-bold-webfont.woff') format('woff');
+    font-weight:700;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'gt_walsheim_proregular';
+    src: url('../assets/fonts/gt-walsheim-pro-ultra-bold-webfont.woff2') format('woff2'),
+         url('../assets/fonts/gt-walsheim-pro-ultra-bold-webfont.woff') format('woff');
+    font-weight:800;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'gt_walsheim_proregular';
+    src: url('../assets/fonts/gt-walsheim-pro-black-webfont.woff2') format('woff2'),
+         url('../assets/fonts/gt-walsheim-pro-black-webfont.woff') format('woff');
+    font-weight:900;
+    font-style: normal;
+}
+@font-face {
+    font-family:'Neuzeit';
+    src: url('../assets/fonts/NeuzeitGro-Reg.eot');
+  src: url('../assets/fonts/NeuzeitGro-Reg.eot?#iefix') format('embedded-opentype'),
+    url('../assets/fonts/NeuzeitGro-Reg.woff2') format('woff2'),
+    url('../assets/fonts/NeuzeitGro-Reg.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+    font-stretch: normal;
+    unicode-range: U+0020-00FE;
+}
+
+@font-face {
+    font-family:'Neuzeit';
+    src: url('../assets/fonts/NeuzeitGro-Bol.eot');
+  src: url('../assets/fonts/NeuzeitGro-Bol.eot?#iefix') format('embedded-opentype'),
+    url('../assets/fonts/NeuzeitGro-Bol.woff2') format('woff2'),
+    url('../assets/fonts/NeuzeitGro-Bol.woff') format('woff');
+    font-weight: 700;
+    font-style: normal;
+    font-stretch: normal;
+    unicode-range: U+0020-00FE;
+}
+
+@font-face {
+    font-family:'Neuzeit';
+    src: url('../assets/fonts/NeuzeitGro-Bla.eot');
+  src: url('../assets/fonts/NeuzeitGro-Bla.eot?#iefix') format('embedded-opentype'),
+    url('../assets/fonts/NeuzeitGro-Bla.woff2') format('woff2'),
+    url('../assets/fonts/NeuzeitGro-Bla.woff') format('woff');
+
+    font-weight: 900;
+    font-style: normal;
+    font-stretch: normal;
+    unicode-range: U+0020-00FE;
+}
 img{max-width:100%;}
 .react-datepicker__current-month, .react-datepicker-time__header {font-size: 1.5rem;}
 .react-datepicker__day-name, .react-datepicker__day, .react-datepicker__time-name {font-size: 1.5rem;}
@@ -2321,98 +2414,4 @@ div[contenteditable="true"]:empty:focus:before { content: ""; }
 
 @media only screen and (max-width: 767px) and (min-width: 540px) {
     .masonry { column-count: 1; }
-}
-
-@font-face {
-    font-family:'gt_walsheim_proregular';
-    src: url('../assets/fonts/gt-walsheim-pro-thin-webfont.woff2') format('woff2'),
-            url('../assets/fonts/gt-walsheim-pro-thin-webfont.woff') format('woff');
-    font-weight: 300;
-    font-style: normal;
-}
-
-@font-face {
-    font-family:'gt_walsheim_proregular';
-    src: url('../assets/fonts/gt-walsheim-pro-ultra-light-webfont.woff2') format('woff2'),
-         url('../assets/fonts/gt-walsheim-pro-ultra-light-webfont.woff') format('woff');
-    font-weight: 200;
-    font-style: normal;
-}
-@font-face {
-    font-family:'gt_walsheim_proregular';
-    src: url('../assets/fonts/gt-walsheim-pro-light-webfont.woff2') format('woff2'),
-         url('../assets/fonts/gt-walsheim-pro-light-webfont.woff') format('woff');
-    font-weight:300;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'gt_walsheim_proregular';
-    src: url('../assets/fonts/gt-walsheim-pro-regular-webfont.woff2') format('woff2'),
-         url('../assets/fonts/gt-walsheim-pro-regular-webfont.woff') format('woff');
-    font-weight: 400;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'gt_walsheim_proregular';
-    src: url('../assets/fonts/gt-walsheim-pro-medium-webfont.woff2') format('woff2'),
-         url('../assets/fonts/gt-walsheim-pro-medium-webfont.woff') format('woff');
-    font-weight: 500;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'gt_walsheim_proregular';
-    src: url('../assets/fonts/gt-walsheim-pro-bold-webfont.woff2') format('woff2'),
-         url('../assets/fonts/gt-walsheim-pro-bold-webfont.woff') format('woff');
-    font-weight:700;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'gt_walsheim_proregular';
-    src: url('../assets/fonts/gt-walsheim-pro-ultra-bold-webfont.woff2') format('woff2'),
-         url('../assets/fonts/gt-walsheim-pro-ultra-bold-webfont.woff') format('woff');
-    font-weight:800;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'gt_walsheim_proregular';
-    src: url('../assets/fonts/gt-walsheim-pro-black-webfont.woff2') format('woff2'),
-         url('../assets/fonts/gt-walsheim-pro-black-webfont.woff') format('woff');
-    font-weight:900;
-    font-style: normal;
-}
-@font-face {
-    font-family:'Neuzeit';
-    src: url('../assets/fonts/NeuzeitGro-Reg.eot');
-  src: url('../assets/fonts/NeuzeitGro-Reg.eot?#iefix') format('embedded-opentype'),
-    url('../assets/fonts/NeuzeitGro-Reg.woff2') format('woff2'),
-    url('../assets/fonts/NeuzeitGro-Reg.woff') format('woff');
-    font-weight: 400;
-    font-style: normal;
-    font-stretch: normal;
-    unicode-range: U+0020-00FE;
-}
-
-@font-face {
-    font-family:'Neuzeit';
-    src: url('../assets/fonts/NeuzeitGro-Bol.eot');
-  src: url('../assets/fonts/NeuzeitGro-Bol.eot?#iefix') format('embedded-opentype'),
-    url('../assets/fonts/NeuzeitGro-Bol.woff2') format('woff2'),
-    url('../assets/fonts/NeuzeitGro-Bol.woff') format('woff');
-    font-weight: 700;
-    font-style: normal;
-    font-stretch: normal;
-    unicode-range: U+0020-00FE;
-}
-
-@font-face {
-    font-family:'Neuzeit';
-    src: url('../assets/fonts/NeuzeitGro-Bla.eot');
-  src: url('../assets/fonts/NeuzeitGro-Bla.eot?#iefix') format('embedded-opentype'),
-    url('../assets/fonts/NeuzeitGro-Bla.woff2') format('woff2'),
-    url('../assets/fonts/NeuzeitGro-Bla.woff') format('woff');
-
-    font-weight: 900;
-    font-style: normal;
-    font-stretch: normal;
-    unicode-range: U+0020-00FE;
 }

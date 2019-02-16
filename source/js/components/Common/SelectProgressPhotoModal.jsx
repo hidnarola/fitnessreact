@@ -55,8 +55,8 @@ class SelectProgressPhotoModal extends Component {
                                             guides={true}
                                             autoCropArea={0.8}
                                             cropBoxResizable={true}
-                                            minCropBoxWidth={500}
-                                            minCropBoxHeight={500}
+                                            minCropBoxWidth={300}
+                                            minCropBoxHeight={300}
                                             alt="Selected Progress Image"
                                         />
                                     </Fragment>
