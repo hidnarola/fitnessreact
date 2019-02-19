@@ -20,7 +20,7 @@ class ActivityFeed extends Component {
     render() {
         const { activityFeed } = this.props;
         return (
-            <div className="white-box space-btm-30 min-height-373">
+            <div className="white-box space-btm-30">
                 <div className="whitebox-head d-flex">
                     <h3 className="title-h3">Activity Feed</h3>
                 </div>

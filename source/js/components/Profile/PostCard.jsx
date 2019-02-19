@@ -212,27 +212,24 @@ class PostCard extends Component {
                         }
                     </div>
                     <div className={cns("posttype-body-grey")}>
-                        {(likesStr || totalComments > 0) &&
-                            <p>
-                                {likesStr &&
-                                    <a href="javascript:void(0)" onClick={() => toggleShowLikesModal(post._id)}>{likesStr}</a>
-                                }
-                                {totalComments > 0 &&
-                                    <Link to={`${routeCodes.POST}/${match.params.username}/${post._id}`} className="pull-right">Comments {totalComments}</Link>
-                                }
-                            </p>
-                        }
-
+                        <p>
+                            {likesStr &&
+                                <a href="javascript:void(0)" onClick={() => toggleShowLikesModal(post._id)}>{likesStr}</a>
+                            }
+                            {totalComments > 0 &&
+                                <Link to={`${routeCodes.POST}/${match.params.username}/${post._id}`} className="pull-right">Comments {totalComments}</Link>
+                            }
+                        </p>
+                        <div className="posttype-btm d-flex">
+                            <LikeButton
+                                index={index}
+                                postId={post._id}
+                                isLikedByLoggedUser={isLikedByLoggedUser}
+                                handleToggleLike={handleToggleLike}
+                            />
+                            <a href="javascript:void(0)" className="icon-chat" onClick={() => this.commentBoxRef.current.focus()}></a>
+                        </div>
                     </div>
-                </div>
-                <div className="posttype-btm d-flex">
-                    <LikeButton
-                        index={index}
-                        postId={post._id}
-                        isLikedByLoggedUser={isLikedByLoggedUser}
-                        handleToggleLike={handleToggleLike}
-                    />
-                    <a href="javascript:void(0)" className="icon-chat" onClick={() => this.commentBoxRef.current.focus()}></a>
                 </div>
                 {totalComments > 0 &&
                     <div className="post-comment d-flex">

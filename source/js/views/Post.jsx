@@ -9,7 +9,18 @@ import noProfileImg from 'img/common/no-profile-img.png'
 import noImg from 'img/common/no-img.png'
 import moment from "moment";
 import { routeCodes } from '../constants/routes';
-import { ACCESS_LEVEL_PUBLIC, ACCESS_LEVEL_FRIENDS, ACCESS_LEVEL_PRIVATE, SERVER_BASE_URL, POST_TYPE_TIMELINE, POST_TYPE_GALLERY, POST_TYPE_PROGRESS_PHOTO, FRIENDSHIP_STATUS_FRIEND, FRIENDSHIP_STATUS_SELF, POST_TYPE_WORKOUT } from '../constants/consts';
+import {
+    ACCESS_LEVEL_PUBLIC,
+    ACCESS_LEVEL_FRIENDS,
+    ACCESS_LEVEL_PRIVATE,
+    SERVER_BASE_URL,
+    POST_TYPE_TIMELINE,
+    POST_TYPE_GALLERY,
+    POST_TYPE_PROGRESS_PHOTO,
+    FRIENDSHIP_STATUS_FRIEND,
+    FRIENDSHIP_STATUS_SELF,
+    POST_TYPE_WORKOUT
+} from '../constants/consts';
 import { FaGlobe, FaLock, FaGroup } from 'react-icons/lib/fa';
 import ReactHtmlParser from "react-html-parser";
 import cns from "classnames";
@@ -22,7 +33,7 @@ import { reset } from "redux-form";
 import Lightbox from 'react-images';
 import NoRecordFound from '../components/Common/NoRecordFound';
 import LikesListModal from '../components/Common/LikesListModal';
-import $ from "jquery";
+import { getProfileDetailsRequest } from '../actions/profile';
 
 class Post extends Component {
     constructor(props) {
@@ -42,13 +53,16 @@ class Post extends Component {
     componentWillMount() {
         const { dispatch, match } = this.props;
         let id = match.params.id;
+        const username = match.params.username;
         dispatch(getUserSingleTimelineRequest(id));
+        dispatch(getProfileDetailsRequest(username));
     }
 
     render() {
-        const { loading, postError, post, match, postCommentLoading } = this.props;
+        const { loading, postError, post, match, postCommentLoading, profile, timelineUserPrivacy } = this.props;
         const { isLikedByLoggedUser, lightBoxOpen, currentImage, lightBoxImages, showLikes } = this.state;
         let doRenderPost = true;
+        let showCommentBox = false;
         if (!loading && post) {
             var createdBy = (post.created_by && Object.keys(post.created_by).length > 0) ? post.created_by : null;
             if (!createdBy) {
@@ -111,6 +125,15 @@ class Post extends Component {
                     likesStr += ' liked this';
                 }
             }
+            if (profile && profile.friendshipStatus === FRIENDSHIP_STATUS_SELF) {
+                showCommentBox = true;
+            } else {
+                if (timelineUserPrivacy && typeof timelineUserPrivacy.commentAccessibility !== 'undefined') {
+                    if (timelineUserPrivacy.commentAccessibility === parseInt(ACCESS_LEVEL_PUBLIC) || profile.friendshipStatus === FRIENDSHIP_STATUS_FRIEND && timelineUserPrivacy.commentAccessibility === parseInt(ACCESS_LEVEL_FRIENDS)) {
+                        showCommentBox = true;
+                    }
+                }
+            }
         }
         return (
             <div className="post-details-wrapper">
@@ -132,137 +155,147 @@ class Post extends Component {
                     {!loading && post && doRenderPost &&
                         <div className="body-content post-type timeline-infinite-scroll single-post-wrapper d-flex">
                             <div className="single-post-left">
-                                <div className="posttype-head d-flex justify-content-start">
-                                    <span>
-                                        <img
-                                            src={createdBy.avatar}
-                                            alt={createdBy.firstName}
-                                            onError={(e) => {
-                                                e.target.src = noProfileImg
-                                            }}
-                                        />
-                                    </span>
-                                    <h4 className="head_post_f">
-                                        <big>
-                                            <NavLink to={`${routeCodes.PROFILE}/${createdBy.username}`}>
-                                                {`${createdBy.firstName} ${(createdBy.lastName) ? createdBy.lastName : ''}`}
-                                            </NavLink>
-                                            <Link to={`${routeCodes.POST}/${match.params.username}/${post._id}`} className="pull-right post_added">{(post.tag_line) ? post.tag_line : ''}</Link>
-                                        </big>
-                                        <p className="">
-                                            {postCreatedAt}
-                                            {post.privacy == ACCESS_LEVEL_PUBLIC && <FaGlobe />}
-                                            {post.privacy == ACCESS_LEVEL_FRIENDS && <FaGroup />}
-                                            {post.privacy == ACCESS_LEVEL_PRIVATE && <FaLock />}
-                                        </p>
-                                    </h4>
-                                </div>
-                                <div className="posttype-body">
-                                    {description &&
-                                        <div className="posttype-body-white">
-                                            {ReactHtmlParser(description)}
-                                        </div>
-                                    }
-                                    <div className={cns("posttype-body-grey text-c single-post-view", postImageDisplayClass)}>
-                                        {images && images.length > 0 &&
-                                            images.map((imageD, imageI) => {
-                                                return (
-                                                    <div className="item" key={imageD._id}>
-                                                        <a href="javascript:void(0)" key={imageI} onClick={() => this.handleOpenLightbox(images, imageI)}>
-                                                            <img
-                                                                src={SERVER_BASE_URL + imageD.image}
-                                                                onError={(e) => {
-                                                                    e.target.src = noImg
-                                                                }}
-                                                            />
-                                                        </a>
-                                                    </div>
-                                                )
-                                            })
-                                        }
+                                <div className="single-post-left-wrap">
+                                    <div className="posttype-head d-flex justify-content-start">
+                                        <span>
+                                            <img
+                                                src={createdBy.avatar}
+                                                alt={createdBy.firstName}
+                                                onError={(e) => {
+                                                    e.target.src = noProfileImg
+                                                }}
+                                            />
+                                        </span>
+                                        <h4 className="head_post_f">
+                                            <big>
+                                                <NavLink to={`${routeCodes.PROFILE}/${createdBy.username}`}>
+                                                    {`${createdBy.firstName} ${(createdBy.lastName) ? createdBy.lastName : ''}`}
+                                                </NavLink>
+                                                <Link to={`${routeCodes.POST}/${match.params.username}/${post._id}`} className="pull-right post_added">{(post.tag_line) ? post.tag_line : ''}</Link>
+                                            </big>
+                                            <p className="">
+                                                {postCreatedAt}
+                                                {post.privacy == ACCESS_LEVEL_PUBLIC && <FaGlobe />}
+                                                {post.privacy == ACCESS_LEVEL_FRIENDS && <FaGroup />}
+                                                {post.privacy == ACCESS_LEVEL_PRIVATE && <FaLock />}
+                                            </p>
+                                        </h4>
                                     </div>
-                                    {(likesStr || (post.comments && post.comments.length > 0)) &&
+                                    <div className="posttype-body">
+                                        {description &&
+                                            <div className="posttype-body-white">
+                                                {ReactHtmlParser(description)}
+                                            </div>
+                                        }
+                                        <div className={cns("posttype-body-grey text-c single-post-view", postImageDisplayClass)}>
+                                            {images && images.length > 0 &&
+                                                images.map((imageD, imageI) => {
+                                                    return (
+                                                        <div className="item" key={imageD._id}>
+                                                            <a href="javascript:void(0)" key={imageI} onClick={() => this.handleOpenLightbox(images, imageI)}>
+                                                                <img
+                                                                    src={SERVER_BASE_URL + imageD.image}
+                                                                    onError={(e) => {
+                                                                        e.target.src = noImg
+                                                                    }}
+                                                                />
+                                                            </a>
+                                                        </div>
+                                                    )
+                                                })
+                                            }
+                                        </div>
                                         <div className={cns("posttype-body-grey text-c single-post-cntline")}>
                                             <p>
-                                                <span onClick={this.handleOpenLikesModal} className="cursor-pointer">{likesStr}</span>
-                                                <span>{post.comments.length > 0 && 'Comments ' + post.comments.length}</span>
+                                                {likesStr && <span onClick={this.handleOpenLikesModal} className="cursor-pointer">{likesStr}</span>}
+                                                {post.comments && post.comments.length > 0 && <span>{post.comments.length > 0 && 'Comments ' + post.comments.length}</span>}
                                             </p>
+                                            <div className="posttype-btm d-flex">
+                                                <a href="javascript:void(0)" className={cns('icon-thumb_up', { 'liked-color': isLikedByLoggedUser })} onClick={this.handleLike}></a>
+                                                <a href="javascript:void(0)" className="icon-chat" onClick={this.setfocusOnCommentBox}></a>
+                                            </div>
                                         </div>
-                                    }
-                                </div>
-                                <div className="posttype-btm d-flex">
-                                    <a href="javascript:void(0)" className={cns('icon-thumb_up', { 'liked-color': isLikedByLoggedUser })} onClick={this.handleLike}></a>
-                                    <a href="javascript:void(0)" className="icon-chat" onClick={this.setfocusOnCommentBox}></a>
+                                    </div>
                                 </div>
                             </div>
                             <div className="single-post-right">
-                                {
-                                    post && post.owner_by &&
-                                    post.owner_by.userPreferences &&
-                                    post.owner_by.userPreferences.commentAccessibility &&
-                                    post.owner_by.userPreferences.commentAccessibility == ACCESS_LEVEL_PUBLIC &&
-                                    <CommentBoxForm
-                                        ref={this.commentBoxRef}
-                                        postId={post._id}
-                                        handleComment={this.handleComment}
-                                        isLoading={postCommentLoading}
-                                    />
-                                }
-                                {
-                                    post && post.owner_by &&
-                                    post.owner_by.userPreferences &&
-                                    post.owner_by.userPreferences.commentAccessibility &&
-                                    post.owner_by.userPreferences.commentAccessibility == ACCESS_LEVEL_FRIENDS &&
-                                    post.friendshipStatus && post.friendshipStatus == FRIENDSHIP_STATUS_FRIEND &&
-                                    <CommentBoxForm
-                                        ref={this.commentBoxRef}
-                                        postId={post._id}
-                                        handleComment={this.handleComment}
-                                        isLoading={postCommentLoading}
-                                    />
-                                }
-                                {
-                                    post && post.friendshipStatus && post.friendshipStatus == FRIENDSHIP_STATUS_SELF &&
-                                    <CommentBoxForm
-                                        ref={this.commentBoxRef}
-                                        postId={post._id}
-                                        handleComment={this.handleComment}
-                                        isLoading={postCommentLoading}
-                                    />
-                                }
-                                {post.comments && post.comments.length > 0 &&
-                                    post.comments.map((o, i) => {
-                                        return (
-                                            <div className="post-comment d-flex" key={i}>
-                                                <span>
-                                                    <img
-                                                        src={o.avatar}
-                                                        alt={o.firstName}
-                                                        onError={(e) => {
-                                                            e.target.src = noProfileImg
-                                                        }}
-                                                    />
-                                                </span>
-                                                <div className="post-comment-r">
-                                                    <h4>
-                                                        <NavLink to={`${routeCodes.PROFILE}/${o.username}`}>
-                                                            {o.firstName} {(o.lastName) ? o.lastName : ''}
-                                                        </NavLink>
-                                                        <p>{moment(moment.utc(o.create_date).toDate()).local().format('Do MMM [at] hh:mm')}</p>
-                                                    </h4>
-                                                    <div className="post-comment-r-btm">
-                                                        {ReactHtmlParser(replaceStringWithEmos(o.comment))}
+                                <div className="single-post-right-wrap">
+                                    {showCommentBox &&
+                                        <CommentBoxForm
+                                            ref={this.commentBoxRef}
+                                            postId={post._id}
+                                            handleComment={this.handleComment}
+                                            isLoading={postCommentLoading}
+                                        />
+                                    }
+                                    {/* {
+                                        post && post.owner_by &&
+                                        post.owner_by.userPreferences &&
+                                        post.owner_by.userPreferences.commentAccessibility &&
+                                        post.owner_by.userPreferences.commentAccessibility == ACCESS_LEVEL_PUBLIC &&
+                                        <CommentBoxForm
+                                            ref={this.commentBoxRef}
+                                            postId={post._id}
+                                            handleComment={this.handleComment}
+                                            isLoading={postCommentLoading}
+                                        />
+                                    } */}
+                                    {/* {
+                                        post && post.owner_by &&
+                                        post.owner_by.userPreferences &&
+                                        post.owner_by.userPreferences.commentAccessibility &&
+                                        post.owner_by.userPreferences.commentAccessibility == ACCESS_LEVEL_FRIENDS &&
+                                        post.friendshipStatus && post.friendshipStatus == FRIENDSHIP_STATUS_FRIEND &&
+                                        <CommentBoxForm
+                                            ref={this.commentBoxRef}
+                                            postId={post._id}
+                                            handleComment={this.handleComment}
+                                            isLoading={postCommentLoading}
+                                        />
+                                    } */}
+                                    {/* {
+                                        post && post.friendshipStatus && post.friendshipStatus == FRIENDSHIP_STATUS_SELF &&
+                                        <CommentBoxForm
+                                            ref={this.commentBoxRef}
+                                            postId={post._id}
+                                            handleComment={this.handleComment}
+                                            isLoading={postCommentLoading}
+                                        />
+                                    } */}
+                                    {post.comments && post.comments.length > 0 &&
+                                        post.comments.map((o, i) => {
+                                            return (
+                                                <div className="post-comment d-flex" key={i}>
+                                                    <span>
+                                                        <img
+                                                            src={o.avatar}
+                                                            alt={o.firstName}
+                                                            onError={(e) => {
+                                                                e.target.src = noProfileImg
+                                                            }}
+                                                        />
+                                                    </span>
+                                                    <div className="post-comment-r">
+                                                        <h4>
+                                                            <NavLink to={`${routeCodes.PROFILE}/${o.username}`}>
+                                                                {o.firstName} {(o.lastName) ? o.lastName : ''}
+                                                            </NavLink>
+                                                            <p>{moment(moment.utc(o.create_date).toDate()).local().format('Do MMM [at] hh:mm')}</p>
+                                                        </h4>
+                                                        <div className="post-comment-r-btm">
+                                                            {ReactHtmlParser(replaceStringWithEmos(o.comment))}
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        );
-                                    })
-                                }
-                                <LikesListModal
-                                    show={showLikes}
-                                    handleClose={this.handleCloseLikesModal}
-                                    likes={likes}
-                                />
+                                            );
+                                        })
+                                    }
+                                    <LikesListModal
+                                        show={showLikes}
+                                        handleClose={this.handleCloseLikesModal}
+                                        likes={likes}
+                                    />
+                                </div>
                             </div>
                         </div>
                     }
@@ -399,11 +432,12 @@ class Post extends Component {
 }
 
 const mapStateToProps = (state) => {
-    const { userTimeline, user, postLikes, postComments } = state;
+    const { userTimeline, user, postLikes, postComments, profile } = state;
     return {
         loading: userTimeline.get('postLoading'),
         post: userTimeline.get('post'),
         postError: userTimeline.get('postError'),
+        timelineUserPrivacy: userTimeline.get('privacy'),
         loggedUserData: user.get('loggedUserData'),
         postLikeLoading: postLikes.get('loading'),
         postLikePost: postLikes.get('post'),
@@ -411,6 +445,7 @@ const mapStateToProps = (state) => {
         postCommentLoading: postComments.get('loading'),
         postCommentPost: postComments.get('post'),
         postCommentError: postComments.get('error'),
+        profile: profile.get('profile'),
     };
 }
 

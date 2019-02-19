@@ -113,23 +113,17 @@ class Dashboard extends Component {
                     {!loading &&
                         <div className="body-content row d-flex col-md-12">
                             <div className={cns(
-                                { 'col-md-8': (userWidgets && typeof userWidgets[WIDGET_ACTIVITY_FEED] !== 'undefined' && userWidgets[WIDGET_ACTIVITY_FEED] === 1) },
+                                { 'col-md-6': (userWidgets && typeof userWidgets[WIDGET_ACTIVITY_FEED] !== 'undefined' && userWidgets[WIDGET_ACTIVITY_FEED] === 1) },
                                 { 'col-md-12': (!userWidgets || typeof userWidgets[WIDGET_ACTIVITY_FEED] === 'undefined' || userWidgets[WIDGET_ACTIVITY_FEED] === 0) },
                             )}>
                                 <div className="row">
                                     {userWidgets && typeof userWidgets[WIDGET_TODAYS_WORKOUT] !== 'undefined' && userWidgets[WIDGET_TODAYS_WORKOUT] === 1 &&
-                                        <div className={cns(
-                                            { 'col-md-12': (userWidgets && typeof userWidgets[WIDGET_PROGRESS_PHOTO] === 'undefined') || !userWidgets[WIDGET_PROGRESS_PHOTO] },
-                                            { 'col-md-6': (!userWidgets || typeof userWidgets[WIDGET_PROGRESS_PHOTO] !== 'undefined') && userWidgets[WIDGET_PROGRESS_PHOTO] }
-                                        )}>
+                                        <div className="col-md-12">
                                             <Workouts />
                                         </div>
                                     }
                                     {userWidgets && typeof userWidgets[WIDGET_PROGRESS_PHOTO] !== 'undefined' && userWidgets[WIDGET_PROGRESS_PHOTO] === 1 &&
-                                        <div className={cns(
-                                            { 'col-md-6': (userWidgets && typeof userWidgets[WIDGET_TODAYS_WORKOUT] === 'undefined') || userWidgets[WIDGET_TODAYS_WORKOUT] === 0 },
-                                            { 'col-md-6': (!userWidgets || typeof userWidgets[WIDGET_TODAYS_WORKOUT] !== 'undefined') && userWidgets[WIDGET_TODAYS_WORKOUT] === 1 }
-                                        )}>
+                                        <div className="col-md-12">
                                             <WidgetProgressPhotoCard progressPhoto={widgetProgressPhotos} username={loggedUserData && loggedUserData.username ? loggedUserData.username : ''} />
                                         </div>
                                     }
@@ -152,7 +146,7 @@ class Dashboard extends Component {
                                                 userWidgets={userWidgets}
                                                 muscle={widgetMuscle}
                                                 requestGraphData={this.requestGraphData}
-                                                bodyWrapperClass="col-md-6"
+                                                bodyWrapperClass="col-md-12"
                                             />
                                         </div>
                                     }
@@ -160,7 +154,6 @@ class Dashboard extends Component {
                                         <div className="col-md-12">
                                             <WidgetBadgesCard
                                                 badges={widgetBadges}
-                                                bodyWrapperClass="d-flex flex-wrap badges-wrap badges-wrap-box2"
                                             />
                                         </div>
                                     }
@@ -168,7 +161,7 @@ class Dashboard extends Component {
                             </div>
 
                             {userWidgets && typeof userWidgets[WIDGET_ACTIVITY_FEED] !== 'undefined' && userWidgets[WIDGET_ACTIVITY_FEED] === 1 &&
-                                <div className="col-md-4">
+                                <div className="col-md-6">
                                     <ActivityFeed />
                                 </div>
                             }
