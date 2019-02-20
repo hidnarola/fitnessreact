@@ -141,7 +141,7 @@ a:hover, a:focus{text-decoration:none;}
 .whitebox-head-r{ width:auto; line-height:28px; margin-left:auto;}
 .whitebox-head-r a {color: #232B41; font-size: 20px; line-height: 28px; margin: 0 0 0 10px;}
 body .no-flex{display:block !important;}
-h3.title-h3{padding:0;margin:0;display:block; color:#232B41; font-size:25px; font-weight:900; line-height:28px;}
+h3.title-h3{padding:0;margin:0;display:block; color:#232B41; font-size:35px; font-weight:900; line-height:35px;text-transform: lowercase;}
 .size-14{font-size:14px !important;}
 .header{height:100px;width:100%;display:flex; position:fixed;top:0;left:0;z-index:99;background:#fff; display:-webkit-box; display:-webkit-flex; display:-ms-flexbox; display:flex;  -webkit-box-pack:start; -webkit-jutify-content:fles-start; -ms-jutify-content:fles-start; jutify-content:fles-start;}
 .logo{padding: 15px 15px; width: 110px;}
@@ -2400,7 +2400,7 @@ div[contenteditable="true"]:empty:focus:before { content: ""; }
 .post-comment-box-form-wrapper form {position: relative;border-top: 0px solid #f9fafa;padding: 0;background: #fff;margin-top: 10px;border-radius: 10px;}
 .post-comment-box-form-wrapper form {padding: 15px 47px 15px 45px;}
 .post-comment-box-form-wrapper form .emos-wrap {position: absolute;left: 0;top: 0;padding: 0 10px;border-right: 2px solid #f9fafa;height: 100%;display: flex;justify-content: center;align-items: center;}
-.post-comment-box-form-wrapper form .my-comment-textarea {max-height: 50px;font-size: 13px;overflow-y: auto;overflow-x: hidden;width: 100%;word-break: break-all;line-height: 13px;}
+.post-comment-box-form-wrapper form .my-comment-textarea {max-height: 50px;font-size: 13px;overflow-y: auto;overflow-x: hidden;width: 100%;word-break: break-all;line-height: 13px;min-height: 15px;}
 .single-post-right .post-comment-box-form-wrapper form {border-bottom: 2px solid #f9fafa;border-left: 2px solid #f9fafa;border-right: 2px solid #f9fafa;}
 .profile-list.profile_one span a img {max-height: 185px;border-radius: 0%;}
 .profile-list.profile_one span a {height: 185px;background: #f9f9f9;border-radius: 5px;}
