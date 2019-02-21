@@ -1163,6 +1163,7 @@ div#loader .loader-spinner, div.loaderloader .loader-spinner, div.no-content-loa
 .ui-widget-header{background: linear-gradient(134.72deg, #3023AE 0%, #C86DD7 100%);}
 .ReactTable .rt-th, .ReactTable .rt-td{overflow: initial;}
 .v-align-sub{vertical-align: sub !important;}
+.v-align-mid{vertical-align: middle !important;}
 .fs-28{font-size: 28px !important;}
 .nutrition-todays-meal-section .dropdown .btn-default,
 .nutrition-todays-meal-section .dropdown .btn-default:hover,
@@ -2405,7 +2406,8 @@ div[contenteditable="true"]:empty:focus:before { content: ""; }
 .profile-list.profile_one span a img {max-height: 185px;border-radius: 0%;}
 .profile-list.profile_one span a {height: 185px;background: #f9f9f9;border-radius: 5px;}
 .profile-list.profile_one span {height: 185px;}
-
+.muscle-graph-dd.dropdown { margin: 0; }
+.muscle-graph-dd.dropdown button#muscle-graph-dd { margin: 0; border: 0; display: inline-block; color: #232B41; font-size: 35px; font-weight: 900; line-height: 35px; text-transform: lowercase; padding: 0;background: transparent !important; }
 
 @media(min-width: 992px){
     body.with_login .app-wrapper-content{ width: 100%; }
