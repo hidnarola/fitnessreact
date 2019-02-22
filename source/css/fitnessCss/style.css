@@ -485,7 +485,7 @@ display: flex; justify-content: center; flex-direction: column; text-align: cent
 .profile-list span{display:block;/*height:185px*/;overflow:hidden;}
 .profile-list span a{text-decoration:none;background:#fff;text-align:center; display: flex; margin: 0 auto; /*height: 185px;*/ width: auto; justify-content: center; align-items: center;}
 /* .profile-list span a img{max-height: 185px;} */
-.profile-list span a img {border-radius: 50%;}
+.profile-list span a img {border-radius: 50%;height: 250px;}
 .profile-list h4{margin:0;padding:15px; line-height:100%; font-size:100%; text-align:center;}
 .profile-list h4 a{line-height:30px;text-align:center; color:#1A2032; font-size:14px; font-weight:700;}
 .lavel-img{display:block;margin:0 0 20px;}
@@ -1114,6 +1114,12 @@ display:-webkit-box; display:-webkit-flex; display:-ms-flex; display:flex; flex-
 .react-calendar__navigation button.react-calendar__navigation__arrow,
 .react-calendar__navigation button.react-calendar__navigation__label {font-size: 16px !important;font-weight: 700 !important;}
 .react-calendar__tile--highlight {display: block;width: 8px;height: 8px;border-radius: 50%;background-color: #45edd1;position: relative;left: 40%;}
+.react-datepicker__year-dropdown-container--select,
+.react-datepicker__month-dropdown-container--select,
+.react-datepicker__month-year-dropdown-container--select,
+.react-datepicker__year-dropdown-container--scroll,
+.react-datepicker__month-dropdown-container--scroll,
+.react-datepicker__month-year-dropdown-container--scroll {font-size: 1.5rem;}
 .badges-timed-date-range-wrapper{padding: 10px 15px; border: 1px solid #ccc; border-radius: 5px;}
 .cm-kg{line-height: 44px; font-size: 12px; padding: 0 10px; color: #999;width: 70px; text-align: center;}
 .body-measurement-list-section-wrapper .help-block,
@@ -2408,6 +2414,7 @@ div[contenteditable="true"]:empty:focus:before { content: ""; }
 .profile-list.profile_one span {height: 185px;}
 .muscle-graph-dd.dropdown { margin: 0; }
 .muscle-graph-dd.dropdown button#muscle-graph-dd { margin: 0; border: 0; display: inline-block; color: #232B41; font-size: 35px; font-weight: 900; line-height: 35px; text-transform: lowercase; padding: 0;background: transparent !important; }
+div[contenteditable="true"] {min-height: 15px;}
 
 @media(min-width: 992px){
     body.with_login .app-wrapper-content{ width: 100%; }

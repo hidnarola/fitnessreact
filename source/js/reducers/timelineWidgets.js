@@ -114,10 +114,8 @@ const actionMap = {
         let nextMuscleState = {};
         Object.keys(prevMuscleState).map((k, i) => {
             let _o = Object.assign({}, prevMuscleState[k]);
-            if (k === action.requestData.bodypart) {
-                _o.loading = true;
-                _o.error = [];
-            }
+            _o.loading = true;
+            _o.error = [];
             nextMuscleState[k] = _o;
         });
         return state.merge(Map({
@@ -125,29 +123,7 @@ const actionMap = {
         }));
     },
     [CHANGE_TIMELINE_MUSCLE_INNER_DATA_SUCCESS]: (state, action) => {
-        let prevMuscleState = state.get('muscle');
-        let nextMuscleState = {};
-        Object.keys(prevMuscleState).map((k, i) => {
-            let _o = Object.assign({}, prevMuscleState[k]);
-            if (k === action.data.data.bodypart) {
-                if (action.data.data.muscle) {
-                    _o = action.data.data.muscle;
-                    if (_o.graphData) {
-                        _o.graphData.map((o) => {
-                            o.date = moment(o.date).local().format('DD/MM/YYYY');
-                        });
-                    }
-                    _o.loading = false;
-                    _o.error = [];
-                } else {
-                    _o = {
-                        loading: false,
-                        error: [],
-                    }
-                }
-            }
-            nextMuscleState[k] = _o;
-        });
+        let nextMuscleState = prepareMuscleData(action.data.data.muscle);
         return state.merge(Map({
             muscle: nextMuscleState,
             userWidgets: action.data.data.widgets,
@@ -158,10 +134,8 @@ const actionMap = {
         let nextMuscleState = {};
         Object.keys(prevMuscleState).map((k, i) => {
             let _o = Object.assign({}, prevMuscleState[k]);
-            if (k === action.data.data.bodypart) {
-                _o.loading = false;
-                _o.error = prepareResponseError(action);
-            }
+            _o.loading = false;
+            _o.error = prepareResponseError(action);
             nextMuscleState[k] = _o;
         })
         return state.merge(Map({

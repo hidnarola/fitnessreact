@@ -477,9 +477,7 @@ class UpdateProfileForm extends Component {
 
 const handleSubmit = (data, dispatch, props) => {
     const { handleSaveActionFlag } = props;
-    console.log('brofre data.about_me => ', data.about_me);
     const sanitizeAboutMe = sanitizeEditableContentValue(data.about_me);
-    console.log('after sanitizeAboutMe => ', sanitizeAboutMe);
     var formData = {
         firstName: (data.first_name && data.first_name.trim()) ? capitalizeFirstLetter(data.first_name.trim()) : '',
         lastName: (data.last_name && data.last_name.trim()) ? capitalizeFirstLetter(data.last_name.trim()) : '',

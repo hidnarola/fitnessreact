@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import { connect } from 'react-redux';
 import DateRangePicker from 'react-daterange-picker';
 import DateRangePickerCustomPeriod from './DateRangePickerCustomPeriod';
 import { WIDGETS_TYPE_TIMELINE, FRIENDSHIP_STATUS_SELF, WIDGETS_TYPE_DASHBOARD, WIDGET_MUSCLE } from '../../constants/consts';
@@ -30,7 +31,7 @@ class WidgetMuscleCard extends Component {
         const { showDatePicker, selectedMuscle } = this.state;
         let data = null;
         let dateRange = null;
-        if (selectedMuscle) {
+        if (muscle && Object.keys(muscle).length > 0 && selectedMuscle) {
             data = muscle[selectedMuscle];
             let muscleWidget = userWidgets[WIDGET_MUSCLE];
             let selectedWidget = _.find(muscleWidget, ['name', selectedMuscle]);
@@ -147,4 +148,13 @@ class WidgetMuscleCard extends Component {
     }
 }
 
-export default WidgetMuscleCard;
+const mapStateToProps = (state) => {
+    const { profile } = state;
+    return {
+        profile: profile.get('profile'),
+    };
+}
+
+export default connect(
+    mapStateToProps,
+)(WidgetMuscleCard);
