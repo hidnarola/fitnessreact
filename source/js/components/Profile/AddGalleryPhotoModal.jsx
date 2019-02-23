@@ -9,10 +9,10 @@ import {
     ACCESS_LEVEL_PRIVATE,
     ACCESS_LEVEL_PRIVATE_STR
 } from '../../constants/consts';
-import _ from "lodash";
 import { Alert } from "react-bootstrap";
 import Weightlifting from "svg/weightlifting.svg";
 import cns from "classnames";
+import { te, checkImageMagicCode } from '../../helpers/funs';
 
 const accessLevelOptions = [
     { value: ACCESS_LEVEL_PUBLIC, label: ACCESS_LEVEL_PUBLIC_STR },
@@ -132,8 +132,7 @@ class AddGalleryPhotoModal extends Component {
                                             let invalidImage = [];
                                             this.setState({ invalidImage, noImageError });
                                         }
-                                        var allImages = _.concat(images, filesToUpload);
-                                        this.handleImagesSelection(allImages);
+                                        this.handleImagesSelection(filesToUpload);
                                     }}
                                     multiple={true}
                                     ref={(node) => { dropzoneRef = node; }}
@@ -172,7 +171,17 @@ class AddGalleryPhotoModal extends Component {
     }
 
     handleImagesSelection = (fileList) => {
-        this.setState({ images: fileList });
+        for (const file of fileList) {
+            checkImageMagicCode(file).then((image) => {
+                this.setState((prevState) => {
+                    return {
+                        images: [...prevState.images, image]
+                    }
+                });
+            }).catch((error) => {
+                te(error.message);
+            });
+        }
     }
 
     handleImageDelete = (index) => {

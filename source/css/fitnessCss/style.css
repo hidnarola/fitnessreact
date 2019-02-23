@@ -2295,7 +2295,7 @@ ul.uploade-data li:last-child { border-bottom: 0; }
 ul.uploade-data li.sm-img {border-bottom: 1px dashed #fff;font-size:10px;}
 .progress-l-wrap>div a:hover ul.uploade-data{ display:block;}
 .progress-l-wrap>div a:hover img{webkit-filter: blur(4px); filter: blur(4px);opacity:.2;}
-.slick-next:before, .slick-prev:before {color: #000;}
+.slick-next:before, .slick-prev:before {color: #000 !important;}
 .react-slick-container .slick-slide img{margin: auto;}
 .fitly-slick-slider-item{position: relative;padding: 0 5px;}
 .fitly-slick-slider-item a:hover:before{content:''; width:100%; height:100%; background:rgba(0,0,0,.8); position:absolute; top:50%; left:50%;transform:translate(-50%, -50%);}
@@ -2409,9 +2409,9 @@ div[contenteditable="true"]:empty:focus:before { content: ""; }
 .post-comment-box-form-wrapper form .emos-wrap {position: absolute;left: 0;top: 0;padding: 0 10px;border-right: 2px solid #f9fafa;height: 100%;display: flex;justify-content: center;align-items: center;}
 .post-comment-box-form-wrapper form .my-comment-textarea {max-height: 50px;font-size: 13px;overflow-y: auto;overflow-x: hidden;width: 100%;word-break: break-all;line-height: 13px;min-height: 15px;}
 .single-post-right .post-comment-box-form-wrapper form {border-bottom: 2px solid #f9fafa;border-left: 2px solid #f9fafa;border-right: 2px solid #f9fafa;}
-.profile-list.profile_one span a img {max-height: 185px;border-radius: 0%;}
-.profile-list.profile_one span a {height: 185px;background: #f9f9f9;border-radius: 5px;}
-.profile-list.profile_one span {height: 185px;}
+.profile-list.profile_one span a img { min-height: 250px; border-radius: 0%; }
+.profile-list.profile_one span a { min-height: 250px; background: #f9f9f9; border-radius: 5px; }
+.profile-list.profile_one span { min-height: 250px; }
 .muscle-graph-dd.dropdown { margin: 0; }
 .muscle-graph-dd.dropdown button#muscle-graph-dd { margin: 0; border: 0; display: inline-block; color: #232B41; font-size: 35px; font-weight: 900; line-height: 35px; text-transform: lowercase; padding: 0;background: transparent !important; }
 div[contenteditable="true"] {min-height: 15px;}

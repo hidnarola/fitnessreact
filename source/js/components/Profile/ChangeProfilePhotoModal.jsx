@@ -5,6 +5,7 @@ import Dropzone from "react-dropzone";
 import Cropper from "react-cropper";
 import { MAX_IMAGE_FILE_SIZE_ALLOWED } from '../../constants/consts';
 import { hidePageLoader, showPageLoader } from '../../actions/pageLoader';
+import { checkImageMagicCode, te } from '../../helpers/funs';
 
 class ChangeProfilePhotoModal extends Component {
     constructor(props) {
@@ -46,7 +47,7 @@ class ChangeProfilePhotoModal extends Component {
                             <Cropper
                                 ref='cropper'
                                 src={selectedImage.preview}
-                                viewMode={3}
+                                viewMode={2}
                                 aspectRatio={1}
                                 guides={false}
                                 autoCropArea={0.8}
@@ -105,10 +106,14 @@ class ChangeProfilePhotoModal extends Component {
         this.setState({ showRejectedError: (rejectedFiles && rejectedFiles.length > 0) });
         if (filesToUpload && filesToUpload.length > 0) {
             if (filesToUpload[0].size > 0 && filesToUpload[0].size <= MAX_IMAGE_FILE_SIZE_ALLOWED) {
-                this.setState({
-                    selectedImage: filesToUpload[0],
-                    croppedImg: null,
-                    imageSizeError: false
+                checkImageMagicCode(filesToUpload[0]).then((image) => {
+                    this.setState({
+                        selectedImage: image,
+                        croppedImg: null,
+                        imageSizeError: false
+                    });
+                }).catch((error) => {
+                    te(error.message);
                 });
             } else {
                 this.setState({ imageSizeError: true });

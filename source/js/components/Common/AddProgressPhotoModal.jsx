@@ -8,6 +8,7 @@ import { forwardImageToDetailsPage, cancelImageSelectedFromDetailsPage, deleteIm
 import ProgressPlaceholder from "img/common/body-progress-img-placeholder.jpg";
 import { PROGRESS_PHOTO_CATEGORIES, PROGRESS_PHOTO_BASICS, PROGRESS_PHOTO_POSED, MAX_IMAGE_FILE_SIZE_ALLOWED } from "../../constants/consts";
 import SweetAlert from "react-bootstrap-sweetalert";
+import { checkImageMagicCode, te } from "../../helpers/funs";
 
 class AddProgressPhotoModal extends Component {
     constructor(props) {
@@ -209,9 +210,13 @@ class SelectImageComponent extends Component {
                     this.isValidFileSelected = false;
                     if (accepted && accepted.length > 0) {
                         this.isValidFileSelected = true;
-                        handleCloseModal(false);
-                        openSelectProgressPhotoModal(true);
-                        dispatch(forwardImageToDetailsPage(accepted));
+                        checkImageMagicCode(accepted[0]).then((image) => {
+                            handleCloseModal(false);
+                            openSelectProgressPhotoModal(true);
+                            dispatch(forwardImageToDetailsPage([image]));
+                        }).catch((error) => {
+                            te(error.message);
+                        });
                     }
                 }}
                 onFileDialogCancel={() => {

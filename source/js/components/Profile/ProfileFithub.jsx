@@ -41,7 +41,7 @@ import {
 import { toggleLikeOnPostRequest } from '../../actions/postLikes';
 import { commentOnPostRequest } from '../../actions/postComments';
 import { initialize, reset } from "redux-form";
-import { te, ts, sanitizeEditableContentValue } from '../../helpers/funs';
+import { te, ts, sanitizeEditableContentValue, checkImageMagicCode } from '../../helpers/funs';
 import InfiniteScroll from 'react-infinite-scroller';
 import { MenuItem, Dropdown } from "react-bootstrap";
 import { FaGlobe, FaLock, FaGroup, FaSpinner, FaCircleONotch } from 'react-icons/lib/fa';
@@ -620,8 +620,19 @@ class ProfileFithub extends Component {
         if (rejectedFiles && rejectedFiles.length > 0) {
             postImagesError = ['Invalid file(s). Please select jpg and png only'];
         }
-        var allImages = _.concat(postImages, filesToUpload);
-        this.setState({ postImages: allImages, postImagesError });
+        for (const file of filesToUpload) {
+            checkImageMagicCode(file).then((image) => {
+                this.setState((prevState) => {
+                    return {
+                        postImages: [...prevState.postImages, image]
+                    }
+                });
+            }).catch((error) => {
+                te(error.message);
+            });
+        }
+        // var allImages = _.concat(postImages, filesToUpload);
+        this.setState({ postImagesError });
     }
 
     handleRemovePostImage = (index) => {

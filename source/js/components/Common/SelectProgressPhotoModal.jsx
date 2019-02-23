@@ -8,6 +8,7 @@ import { PROGRESS_PHOTO_BASICS, PROGRESS_PHOTO_CATEGORIES, PROGRESS_PHOTO_POSED 
 import { addImageSelectedFromDetailsPage } from '../../actions/userProgressPhotos';
 import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
 import { maxLength, minLength } from '../../formValidation/validationRules';
+import { te } from '../../helpers/funs';
 
 const maxLength100 = maxLength(100);
 const minLength2 = minLength(2);
@@ -46,7 +47,7 @@ class SelectProgressPhotoModal extends Component {
                             <div className="crop-l">
                                 {selectedImage && selectedImage.length > 0 &&
                                     <Fragment>
-                                        <label for="caption" class="control-label display_block">Selected Image </label>
+                                        <label htmlFor="caption" className="control-label display_block">Selected Image </label>
                                         <Cropper
                                             ref='cropper'
                                             src={selectedImage[0].preview}
@@ -129,16 +130,21 @@ class SelectProgressPhotoModal extends Component {
         let self = this;
         dispatch(showPageLoader());
         setTimeout(() => {
-            let image = self.refs.cropper.getCroppedCanvas().toDataURL();
-            let requrestData = {
-                image,
-                caption: caption ? caption : null,
-                category: photoCategory && photoCategory.value ? photoCategory.value : null,
-                subCategory: sub_category && sub_category.value ? sub_category.value : null
-            };
-            dispatch(addImageSelectedFromDetailsPage(requrestData));
-            dispatch(hidePageLoader());
-            handleClose();
+            try {
+                let image = self.refs.cropper.getCroppedCanvas().toDataURL();
+                let requrestData = {
+                    image,
+                    caption: caption ? caption : null,
+                    category: photoCategory && photoCategory.value ? photoCategory.value : null,
+                    subCategory: sub_category && sub_category.value ? sub_category.value : null
+                };
+                dispatch(addImageSelectedFromDetailsPage(requrestData));
+            } catch (error) {
+                te('Invalid file selection for cropping. Please select jpg or png files.');
+            } finally {
+                dispatch(hidePageLoader());
+                handleClose();
+            }
         }, 500);
     }
 }
