@@ -209,13 +209,13 @@ class CustomTooltip extends Component {
                 <div className="custom-graph-tooltip-wrapper">
                     <ul>
                         <li><strong>Date : </strong> <span>{label}</span></li>
-                        {payload[0].payload && payload[0].payload.metaData && payload[0].payload.metaData.name &&
+                        {payload && payload[0] && payload[0].payload && payload[0].payload.metaData && payload[0].payload.metaData.name &&
                             <li><strong>{`Self ${capitalizeFirstLetter(payload[0].payload.metaData.name.replace(/([a-z])([A-Z])/g, '$1 $2'))}`} : </strong> <span>{`${payload[0].value} ${payload[0].payload.metaData.unit}`}</span></li>
                         }
-                        {payload[1].payload && payload[1].payload.metaData && payload[1].payload.metaData.name &&
+                        {payload && payload[1] && payload[1].payload && payload[1].payload.metaData && payload[1].payload.metaData.name &&
                             <li><strong>{`Friends Avg. ${capitalizeFirstLetter(payload[1].payload.metaData.name.replace(/([a-z])([A-Z])/g, '$1 $2'))}`} : </strong> <span>{`${payload[1].value} ${payload[1].payload.metaData.unit}`}</span></li>
                         }
-                        {payload[2].payload && payload[2].payload.metaData && payload[2].payload.metaData.name &&
+                        {payload && payload[2] && payload[2].payload && payload[2].payload.metaData && payload[2].payload.metaData.name &&
                             <li><strong>{`Global Avg. ${capitalizeFirstLetter(payload[2].payload.metaData.name.replace(/([a-z])([A-Z])/g, '$1 $2'))}`} : </strong> <span>{`${payload[2].value} ${payload[2].payload.metaData.unit}`}</span></li>
                         }
                     </ul>
