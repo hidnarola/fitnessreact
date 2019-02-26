@@ -1,97 +1,4 @@
 *{margin:0;padding:0;}
-@font-face {
-    font-family:'gt_walsheim_proregular';
-    src: url('../assets/fonts/gt-walsheim-pro-thin-webfont.woff2') format('woff2'),
-            url('../assets/fonts/gt-walsheim-pro-thin-webfont.woff') format('woff');
-    font-weight: 300;
-    font-style: normal;
-}
-
-@font-face {
-    font-family:'gt_walsheim_proregular';
-    src: url('../assets/fonts/gt-walsheim-pro-ultra-light-webfont.woff2') format('woff2'),
-         url('../assets/fonts/gt-walsheim-pro-ultra-light-webfont.woff') format('woff');
-    font-weight: 200;
-    font-style: normal;
-}
-@font-face {
-    font-family:'gt_walsheim_proregular';
-    src: url('../assets/fonts/gt-walsheim-pro-light-webfont.woff2') format('woff2'),
-         url('../assets/fonts/gt-walsheim-pro-light-webfont.woff') format('woff');
-    font-weight:300;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'gt_walsheim_proregular';
-    src: url('../assets/fonts/gt-walsheim-pro-regular-webfont.woff2') format('woff2'),
-         url('../assets/fonts/gt-walsheim-pro-regular-webfont.woff') format('woff');
-    font-weight: 400;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'gt_walsheim_proregular';
-    src: url('../assets/fonts/gt-walsheim-pro-medium-webfont.woff2') format('woff2'),
-         url('../assets/fonts/gt-walsheim-pro-medium-webfont.woff') format('woff');
-    font-weight: 500;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'gt_walsheim_proregular';
-    src: url('../assets/fonts/gt-walsheim-pro-bold-webfont.woff2') format('woff2'),
-         url('../assets/fonts/gt-walsheim-pro-bold-webfont.woff') format('woff');
-    font-weight:700;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'gt_walsheim_proregular';
-    src: url('../assets/fonts/gt-walsheim-pro-ultra-bold-webfont.woff2') format('woff2'),
-         url('../assets/fonts/gt-walsheim-pro-ultra-bold-webfont.woff') format('woff');
-    font-weight:800;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'gt_walsheim_proregular';
-    src: url('../assets/fonts/gt-walsheim-pro-black-webfont.woff2') format('woff2'),
-         url('../assets/fonts/gt-walsheim-pro-black-webfont.woff') format('woff');
-    font-weight:900;
-    font-style: normal;
-}
-@font-face {
-    font-family:'Neuzeit';
-    src: url('../assets/fonts/NeuzeitGro-Reg.eot');
-  src: url('../assets/fonts/NeuzeitGro-Reg.eot?#iefix') format('embedded-opentype'),
-    url('../assets/fonts/NeuzeitGro-Reg.woff2') format('woff2'),
-    url('../assets/fonts/NeuzeitGro-Reg.woff') format('woff');
-    font-weight: 400;
-    font-style: normal;
-    font-stretch: normal;
-    unicode-range: U+0020-00FE;
-}
-
-@font-face {
-    font-family:'Neuzeit';
-    src: url('../assets/fonts/NeuzeitGro-Bol.eot');
-  src: url('../assets/fonts/NeuzeitGro-Bol.eot?#iefix') format('embedded-opentype'),
-    url('../assets/fonts/NeuzeitGro-Bol.woff2') format('woff2'),
-    url('../assets/fonts/NeuzeitGro-Bol.woff') format('woff');
-    font-weight: 700;
-    font-style: normal;
-    font-stretch: normal;
-    unicode-range: U+0020-00FE;
-}
-
-@font-face {
-    font-family:'Neuzeit';
-    src: url('../assets/fonts/NeuzeitGro-Bla.eot');
-  src: url('../assets/fonts/NeuzeitGro-Bla.eot?#iefix') format('embedded-opentype'),
-    url('../assets/fonts/NeuzeitGro-Bla.woff2') format('woff2'),
-    url('../assets/fonts/NeuzeitGro-Bla.woff') format('woff');
-
-    font-weight: 900;
-    font-style: normal;
-    font-stretch: normal;
-    unicode-range: U+0020-00FE;
-}
 img{max-width:100%;}
 .react-datepicker__current-month, .react-datepicker-time__header {font-size: 1.5rem;}
 .react-datepicker__day-name, .react-datepicker__day, .react-datepicker__time-name {font-size: 1.5rem;}
@@ -196,7 +103,6 @@ h3.title-h3{padding:0;margin:0;display:block; color:#232B41; font-size:35px; fon
 .body-wrap:after,
 .body-head:after,
 .body-content:after{content:'';clear:both;display:block;}
-/*.body-wrap{padding:3vh 5vw;}*/
 .body-head {margin-bottom:30px;}
 .body-head-l{width:70%;}
 .body-head-l h2{margin:0;padding:0; color:#2F3684; font-size:60px; font-weight: 900;	line-height: 95px;	text-align: left;font-family: 'gt_walsheim_proregular' !important;}
@@ -482,9 +388,8 @@ display: flex; justify-content: center; flex-direction: column; text-align: cent
 .profile-list-ul{list-style:none;margin:0 -5px;flex-wrap: wrap; width:100%;}
 .profile-list-ul li{width:20%;padding:5px;}
 .profile-list{display:block;background:#fff;border-radius:5px;overflow:visible;}
-.profile-list span{display:block;/*height:185px*/;overflow:hidden;}
-.profile-list span a{text-decoration:none;background:#fff;text-align:center; display: flex; margin: 0 auto; /*height: 185px;*/ width: auto; justify-content: center; align-items: center;}
-/* .profile-list span a img{max-height: 185px;} */
+.profile-list span{display:block;overflow:hidden;}
+.profile-list span a{text-decoration:none;background:#fff;text-align:center; display: flex; margin: 0 auto; width: auto; justify-content: center; align-items: center;}
 .profile-list span a img {border-radius: 50%;height: 250px;}
 .profile-list h4{margin:0;padding:15px; line-height:100%; font-size:100%; text-align:center;}
 .profile-list h4 a{line-height:30px;text-align:center; color:#1A2032; font-size:14px; font-weight:700;}
@@ -1130,10 +1035,10 @@ display:-webkit-box; display:-webkit-flex; display:-ms-flex; display:flex; flex-
 .rc-time-picker-panel-narrow {max-width: 153px !important;width: 153 !important;min-width: 153 !important;}
 .rc-time-picker-panel-select {width: 50% !important;}
 .rc-time-picker-panel-inner {width: 100% !important;}
-/* Remove Spinner from number input For Firefox */
+
 .remove-spinner input[type='number'],
 .body-measurement-list-section-wrapper input[type='number'] {-moz-appearance:textfield;}
-/* Remove Spinner from number input Webkit browsers like Safari and Chrome */
+
 .remove-spinner input[type=number]::-webkit-inner-spin-button,
 .remove-spinner input[type=number]::-webkit-outer-spin-button,
 .body-measurement-list-section-wrapper input[type=number]::-webkit-inner-spin-button,
@@ -1344,11 +1249,11 @@ ul.text-right.pager {text-align: right;}
 .small-chat-window-wrapper img { border: 0; display: block; height: auto; max-width: 100%; }
 .small-chat-window-wrapper input { border: 0; color: inherit; font-family: inherit; font-size: 100%; line-height: normal; margin: 0; }
 .small-chat-window-wrapper p { margin: 0;color: #9a9a9a;word-wrap: break-word; }
-/* For IE 6/7 */
+
 .small-chat-window-wrapper .clearfix { *zoom: 1; }
 .small-chat-window-wrapper .clearfix:before, .clearfix:after { content: ""; display: table; }
 .small-chat-window-wrapper .clearfix:after { clear: both; }
-/* ---------- LIVE-CHAT ---------- */
+
 .small-chat-window-wrapper { bottom: 0; font-size: 12px; right: 24px; position: fixed; width: 300px; }
 .small-chat-window-wrapper header { background: linear-gradient(134.72deg, #3023AE 0%, #C86DD7 100%); border-radius: 5px 5px 0 0; color: #fff; cursor: pointer; padding: 10px 24px; }
 .small-chat-window-wrapper h4 { font-size: 12px; }
@@ -1501,7 +1406,7 @@ ul.text-right.pager {text-align: right;}
 .programs-table-wrapper .table>tbody>tr:nth-child(2n+2)> td{background: #f9fafa;}
 .programs-table-wrapper .table>tbody>tr>td:first-child {padding-left: 8px;}
 .programs-table-wrapper .table>tbody>tr>td:last-child .btn-toolbar .dropdown{margin-top: 10px;}
-.program-save-custom-days-wrapper .program-save-custom-days-row .program-save-custom-days-block { width: 14.28%; border: 1px solid #eee; padding: 3px 10px; /*height: 100%; float: left;*/    display: -ms-flexbox; display: -webkit-box; display: flex; -ms-flex-direction: row; -webkit-box-orient: horizontal; -webkit-box-direction: normal; flex-direction: column;}
+.program-save-custom-days-wrapper .program-save-custom-days-row .program-save-custom-days-block { width: 14.28%; border: 1px solid #eee; padding: 3px 10px; display: -ms-flexbox; display: -webkit-box; display: flex; -ms-flex-direction: row; -webkit-box-orient: horizontal; -webkit-box-direction: normal; flex-direction: column;}
 .program-save-custom-days-wrapper .program-save-custom-days-row .program-save-custom-days-block .program-save-custom-days-block-title { text-align: right; }
 .program-save-custom-days-wrapper .program-save-custom-days-row .program-save-custom-days-block .program-save-custom-days-block-content { width: 100%; min-height: 150px; }
 .program-save-custom-days-block-content .program-event-block-main-wrapper { margin-bottom: 5px; }
@@ -1529,7 +1434,7 @@ ul.text-right.pager {text-align: right;}
 .program-event-block-wrapper .custom_check [type="checkbox"]:checked + label:after {width: 10px; height: 10px; background: #6a3fbd; top: 3px; left: 3px;}
 .program-event-block-wrapper .custom_check [type="checkbox"]:not(:checked) + label,
 .program-event-block-wrapper .custom_check [type="checkbox"]:checked + label {padding-left: 24px;}
-.program-event-block-title h5{ font-size: 16px; line-height: 18px; display: block; text-overflow: ellipsis; height: 18px; overflow: hidden;width: 100%; color: #fff !important; margin: 0;}
+.program-event-block-title h5{ font-size: 16px; line-height: 18px; display: block; text-overflow: ellipsis; height: 18px; overflow: hidden;width: 70%; color: #fff !important; margin: 0;}
 .program-event-block-wrapper.restday .custom_check [type="checkbox"]:not(:checked) + label:after,
 .program-event-block-wrapper.restday .custom_check [type="checkbox"]:checked + label:after {background: #46E9C5;}
 .week-btn-btm{ margin:25px 0 0;}
@@ -1641,9 +1546,9 @@ td.close-td a i{ font-size:20px;}
 .workout-main-types-wrapper ul li a{color:#1A2032; font-family: gt_walsheim_proregular; font-size:15px; font-weight:700; line-height:50px; background:#fff; border:0; min-width:150px; margin:0 auto; box-shadow:0 1px 4px 0 rgba(0, 0, 0, .1); display:block; border-radius:80px; }
 .workout-main-types-wrapper ul li.active a,
 .workout-main-types-wrapper ul li:hover a{ background:linear-gradient(148.66deg, #FF3366 0%, #FF339A 100%); color:#fff; }
-.select-workout-type-wrapper {background: #fff;padding: 15px;text-align: center;}
-.select-workout-type-wrapper strong{ display:block; vertical-align:top; line-height:40px; margin-right:15px;  }
-.select-workout-type-wrapper .workout-type-radios{ display:inline-block; vertical-align:top; }
+.select-workout-type-wrapper {background: #fff;padding: 15px;}
+.select-workout-type-wrapper strong{ display:block; vertical-align:top; line-height:40px; margin-right:15px;text-align:center;}
+.select-workout-type-wrapper .workout-type-radios{ display:inline-block; vertical-align:top;width:100%;text-align:center;}
 .select-workout-type-wrapper .workout-type-radios ul{ list-style:none; margin:0; padding:0;}
 .select-workout-type-wrapper .workout-type-radios ul li{ position:relative; display:inline-block; vertical-align:top; margin:0 15px 0 0;}
 .workout-type-radios .radiobox input[type=radio]{display: none;}
@@ -1680,7 +1585,7 @@ td.close-td a i{ font-size:20px;}
 .multiple-sets-header>div{ display:inline-block; vertical-align:top; line-height: 29px;}
 .multiple-sets-header>div input[max="12"]{width:100px; max-width:100px; margin:0 20px 0 0;}
 .multiple-sets-header>div input{padding:5px 10px 4px 10px; line-height:29px; height:29px; border:1px solid #eee;}
-.multiple-sets-header>div select{background:#eee; border:0; padding: 6px 5px 5px 5px; font-size: 12px; line-height: 20px; height: 29px }
+.multiple-sets-header>div select{background:#eee; border:0; padding: 6px 5px 5px 5px; font-size: 12px; line-height: 20px; height: 28px }
 .workout-circuit-add-exercise-btn{background: #fff; padding: 20px;}
 .workout-circuit-add-exercise-btn button{ background:#eee; border: 0; padding:7px 20px 6px 40px; line-height: 18px; font-size: 13px; vertical-align: middle; position: relative;}
 .workout-circuit-add-exercise-btn button i{font-size:16px; line-height:17px; position:absolute; top:50%; transform:translateY(-50%);  left:17px; height: 17px; vertical-align: middle; margin-top: -1px;}
@@ -2307,7 +2212,7 @@ ul.uploade-data li.sm-img {border-bottom: 1px dashed #fff;font-size:10px;}
 .profile-new-menu a{box-shadow: none;border-radius: 0;margin-right: 0;margin-right: 0; font-size: 14px;font-weight: 700;line-height: 50px;color: #1a2032;border-bottom: 3px solid transparent;}
 .profile-new-menu a {font-size: 17px;font-weight: 900;}
 .profile-new-menu a.pink-btn-new{border-bottom: 3px solid #FF3366;color: #FF3366;}
-.profile-new-menu a:hover{background: transparent ;border-bottom: 3px solid #FF3366;color: #FF3366;}
+.profile-new-menu a:hover{background: transparent ;border-bottom: 3px solid #FF3366;color: #FF3366;opacity: 1;}
 .profile-new-header .lavel-img>span a{top: 15px;right: 35px;}
 .profile-new-header .body-head-l h2 {font-size: 50px;}
 .profile-new-header .user-meta-info > div > span {font-size: 18px;font-weight: 700;color: #2f3684;}
@@ -2439,4 +2344,94 @@ div[contenteditable="true"] {min-height: 15px;}
 
 @media only screen and (max-width: 767px) and (min-width: 540px) {
     .masonry { column-count: 1; }
+}
+@font-face {
+    font-family:'gt_walsheim_proregular';
+    src: url('../assets/fonts/gt-walsheim-pro-thin-webfont.woff2') format('woff2'),
+            url('../assets/fonts/gt-walsheim-pro-thin-webfont.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+}
+@font-face {
+    font-family:'gt_walsheim_proregular';
+    src: url('../assets/fonts/gt-walsheim-pro-ultra-light-webfont.woff2') format('woff2'),
+         url('../assets/fonts/gt-walsheim-pro-ultra-light-webfont.woff') format('woff');
+    font-weight: 200;
+    font-style: normal;
+}
+@font-face {
+    font-family:'gt_walsheim_proregular';
+    src: url('../assets/fonts/gt-walsheim-pro-light-webfont.woff2') format('woff2'),
+         url('../assets/fonts/gt-walsheim-pro-light-webfont.woff') format('woff');
+    font-weight:300;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'gt_walsheim_proregular';
+    src: url('../assets/fonts/gt-walsheim-pro-regular-webfont.woff2') format('woff2'),
+         url('../assets/fonts/gt-walsheim-pro-regular-webfont.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'gt_walsheim_proregular';
+    src: url('../assets/fonts/gt-walsheim-pro-medium-webfont.woff2') format('woff2'),
+         url('../assets/fonts/gt-walsheim-pro-medium-webfont.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'gt_walsheim_proregular';
+    src: url('../assets/fonts/gt-walsheim-pro-bold-webfont.woff2') format('woff2'),
+         url('../assets/fonts/gt-walsheim-pro-bold-webfont.woff') format('woff');
+    font-weight:700;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'gt_walsheim_proregular';
+    src: url('../assets/fonts/gt-walsheim-pro-ultra-bold-webfont.woff2') format('woff2'),
+         url('../assets/fonts/gt-walsheim-pro-ultra-bold-webfont.woff') format('woff');
+    font-weight:800;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'gt_walsheim_proregular';
+    src: url('../assets/fonts/gt-walsheim-pro-black-webfont.woff2') format('woff2'),
+         url('../assets/fonts/gt-walsheim-pro-black-webfont.woff') format('woff');
+    font-weight:900;
+    font-style: normal;
+}
+@font-face {
+    font-family:'Neuzeit';
+    src: url('../assets/fonts/NeuzeitGro-Reg.eot');
+  src: url('../assets/fonts/NeuzeitGro-Reg.eot?#iefix') format('embedded-opentype'),
+    url('../assets/fonts/NeuzeitGro-Reg.woff2') format('woff2'),
+    url('../assets/fonts/NeuzeitGro-Reg.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+    font-stretch: normal;
+    unicode-range: U+0020-00FE;
+}
+@font-face {
+    font-family:'Neuzeit';
+    src: url('../assets/fonts/NeuzeitGro-Bol.eot');
+  src: url('../assets/fonts/NeuzeitGro-Bol.eot?#iefix') format('embedded-opentype'),
+    url('../assets/fonts/NeuzeitGro-Bol.woff2') format('woff2'),
+    url('../assets/fonts/NeuzeitGro-Bol.woff') format('woff');
+    font-weight: 700;
+    font-style: normal;
+    font-stretch: normal;
+    unicode-range: U+0020-00FE;
+}
+@font-face {
+    font-family:'Neuzeit';
+    src: url('../assets/fonts/NeuzeitGro-Bla.eot');
+  src: url('../assets/fonts/NeuzeitGro-Bla.eot?#iefix') format('embedded-opentype'),
+    url('../assets/fonts/NeuzeitGro-Bla.woff2') format('woff2'),
+    url('../assets/fonts/NeuzeitGro-Bla.woff') format('woff');
+
+    font-weight: 900;
+    font-style: normal;
+    font-stretch: normal;
+    unicode-range: U+0020-00FE;
 }

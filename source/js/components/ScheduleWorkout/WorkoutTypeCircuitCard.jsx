@@ -13,6 +13,7 @@ import { required, requiredReactSelect, min, max, validNumber } from '../../form
 
 const min0 = min(0);
 const min1 = min(1);
+const max10000 = max(10000);
 const max12 = max(12);
 
 class WorkoutTypeCircuitCard extends Component {
@@ -63,7 +64,7 @@ class WorkoutTypeCircuitCard extends Component {
                                 type="text"
                                 errorClass="erro_msg_single"
                                 fieldWrapperErrorClass="erro_msg_super_wrapper"
-                                validate={[required, validNumber, min0]}
+                                validate={[required, validNumber, min0, max10000]}
                             />
                         }
                         {typeof circuitSets !== 'undefined' && circuitSets > 1 &&
@@ -106,13 +107,13 @@ class WorkoutTypeCircuitCard extends Component {
                             }
                         }
                     }
-                    let _field1Validation = [required, validNumber, min1];
-                    let _field2Validation = [required, validNumber, min1];
-                    let _field3Validation = [required, validNumber, min1];
+                    let _field1Validation = [required, validNumber, min1, max10000];
+                    let _field2Validation = [required, validNumber, min1, max10000];
+                    let _field3Validation = [required, validNumber, min1, max10000];
                     if (fieldData) {
-                        _field1Validation = (validations && validations[index] && validations[index].field1Validation) ? validations[index].field1Validation : [required, validNumber, min1];
-                        _field2Validation = (validations && validations[index] && validations[index].field2Validation) ? validations[index].field2Validation : [required, validNumber, min1];
-                        _field3Validation = (validations && validations[index] && validations[index].field3Validation) ? validations[index].field3Validation : [required, validNumber, min1];
+                        _field1Validation = (validations && validations[index] && validations[index].field1Validation) ? validations[index].field1Validation : [required, validNumber, min1, max10000];
+                        _field2Validation = (validations && validations[index] && validations[index].field2Validation) ? validations[index].field2Validation : [required, validNumber, min1, max10000];
+                        _field3Validation = (validations && validations[index] && validations[index].field3Validation) ? validations[index].field3Validation : [required, validNumber, min1, max10000];
                     }
                     return (
                         <div key={index} className="workout-type-card-block  pos-relative">
@@ -270,17 +271,17 @@ class WorkoutTypeCircuitCard extends Component {
                     if (selectedExerciseMeasurementObj && selectedExerciseMeasurementObj.field1 && selectedExerciseMeasurementObj.field1.length > 0) {
                         let selectedOption = (fieldData && fieldData.field1_unit) ? fieldData.field1_unit : selectedExerciseMeasurementObj.field1[0];
                         let selectedFieldUnit = getExeMeasurementValidationRules(selectedOption);
-                        _field1Validation = (selectedFieldUnit && selectedFieldUnit.validation) ? selectedFieldUnit.validation : [required, validNumber, min1];
+                        _field1Validation = (selectedFieldUnit && selectedFieldUnit.validation) ? selectedFieldUnit.validation : [required, validNumber, min1, max10000];
                     }
                     if (selectedExerciseMeasurementObj && selectedExerciseMeasurementObj.field2 && selectedExerciseMeasurementObj.field2.length > 0) {
                         let selectedOption = (fieldData && fieldData.field2_unit) ? fieldData.field2_unit : selectedExerciseMeasurementObj.field2[0];
                         let selectedFieldUnit = getExeMeasurementValidationRules(selectedOption);
-                        _field2Validation = (selectedFieldUnit && selectedFieldUnit.validation) ? selectedFieldUnit.validation : [required, validNumber, min1];
+                        _field2Validation = (selectedFieldUnit && selectedFieldUnit.validation) ? selectedFieldUnit.validation : [required, validNumber, min1, max10000];
                     }
                     if (selectedExerciseMeasurementObj && selectedExerciseMeasurementObj.field3 && selectedExerciseMeasurementObj.field3.length > 0) {
                         let selectedOption = (fieldData && fieldData.field3_unit) ? fieldData.field3_unit : selectedExerciseMeasurementObj.field3[0];
                         let selectedFieldUnit = getExeMeasurementValidationRules(selectedOption);
-                        _field3Validation = (selectedFieldUnit && selectedFieldUnit.validation) ? selectedFieldUnit.validation : [required, validNumber, min1];
+                        _field3Validation = (selectedFieldUnit && selectedFieldUnit.validation) ? selectedFieldUnit.validation : [required, validNumber, min1, max10000];
                     }
                 }
             }

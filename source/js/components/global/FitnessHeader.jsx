@@ -265,11 +265,17 @@ class FitnessHeader extends Component {
     }
 
     renderSearchSuggestion = (suggestion, { query }) => {
-        if (suggestion._id === 'view_all' || suggestion._id === 'no_result') {
+        if (suggestion._id === 'view_all') {
             return (
                 <NavLink to={`${routeCodes.USERS}`}>
                     <span>{suggestion.text}</span>
                 </NavLink>
+            );
+        } else if (suggestion._id === 'no_result') {
+            return (
+                <a href="javascript:void(0)">
+                    <span>{suggestion.text}</span>
+                </a>
             );
         } else {
             var fullName = suggestion.firstName;

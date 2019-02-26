@@ -733,47 +733,48 @@ export const EXE_CAT_SCAT = [
 
 const min1 = min(1);
 const max100 = max(100);
+const max10000 = max(10000);
 
 export const EXE_MEASUREMENT_UNITS = [
     {
         value: MEASUREMENT_UNIT_SECONDS,
         label: 'Seconds',
-        validation: [required, validNumber, min1],
+        validation: [required, validNumber, min1, max10000],
     },
     {
         value: MEASUREMENT_UNIT_MINUTES,
         label: 'Minutes',
-        validation: [required, validNumber, min1],
+        validation: [required, validNumber, min1, max10000],
     },
     {
         value: MEASUREMENT_UNIT_HOURS,
         label: 'Hours',
-        validation: [required, validNumber, min1],
+        validation: [required, validNumber, min1, max10000],
     },
     {
         value: MEASUREMENT_UNIT_METER,
         label: 'Meter',
-        validation: [required, validNumber, min1],
+        validation: [required, validNumber, min1, max10000],
     },
     {
         value: MEASUREMENT_UNIT_FEET,
         label: 'Foot',
-        validation: [required, validNumber, min1],
+        validation: [required, validNumber, min1, max10000],
     },
     {
         value: MEASUREMENT_UNIT_KILOMETER,
         label: 'KM',
-        validation: [required, validNumber, min1],
+        validation: [required, validNumber, min1, max10000],
     },
     {
         value: MEASUREMENT_UNIT_MILE,
         label: 'Mile',
-        validation: [required, validNumber, min1],
+        validation: [required, validNumber, min1, max10000],
     },
     {
         value: MEASUREMENT_UNIT_REPS,
         label: 'Reps',
-        validation: [required, validNumber, min1],
+        validation: [required, validNumber, min1, max10000],
     },
     {
         value: MEASUREMENT_UNIT_EFFORT,
@@ -783,22 +784,22 @@ export const EXE_MEASUREMENT_UNITS = [
     {
         value: MEASUREMENT_UNIT_KMPH,
         label: 'KMPH',
-        validation: [required, validNumber, min1],
+        validation: [required, validNumber, min1, max10000],
     },
     {
         value: MEASUREMENT_UNIT_MPH,
         label: 'MPH',
-        validation: [required, validNumber, min1],
+        validation: [required, validNumber, min1, max10000],
     },
     {
         value: MEASUREMENT_UNIT_POUND,
         label: 'LB',
-        validation: [required, validNumber, min1],
+        validation: [required, validNumber, min1, max10000],
     },
     {
         value: MEASUREMENT_UNIT_KILOGRAM,
         label: 'KG',
-        validation: [required, validNumber, min1],
+        validation: [required, validNumber, min1, max10000],
     },
     {
         value: MEASUREMENT_UNIT_ONE_RM,
@@ -808,12 +809,12 @@ export const EXE_MEASUREMENT_UNITS = [
     {
         value: MEASUREMENT_UNIT_REP_TIME,
         label: 'Rep Time',
-        validation: [required, validNumber, min1],
+        validation: [required, validNumber, min1, max10000],
     },
     {
         value: MEASUREMENT_UNIT_SET_TIME,
         label: 'Set Time',
-        validation: [required, validNumber, min1],
+        validation: [required, validNumber, min1, max10000],
     },
 ];
 
