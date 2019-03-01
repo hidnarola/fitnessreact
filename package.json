@@ -7,7 +7,7 @@
   "scripts": {
     "start": "webpack-dev-server",
     "client:dev": "webpack-dev-server",
-    "client:watch": "cross-env HYDRATE=\"true\" webpack",
+    "client:watch": "cross-env HYDRATE=\"true\" webpack --display-entrypoints",
     "client:build": "npm run clean && cross-env NODE_ENV=\"production\" webpack",
     "client:build-hydrate": "npm run clean && cross-env HYDRATE=\"true\" cross-env NODE_ENV=\"production\" webpack",
     "client:preview": "npm run clean && cross-env NODE_ENV=\"production\" webpack-dev-server",
