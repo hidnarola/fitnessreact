@@ -24,7 +24,7 @@ class BodyFatModal extends Component {
                                 <span aria-hidden="true">&times;</span>
                             </button>
                             <h3 className="title-h3">Enter Body Fat</h3>
-                            <p>We use We use We use We use We use We use We use We use We use We use We use We use We use We use We use We use We use We use We use We use We use We use We use We use We use We use We use</p>
+                            <p>To perform each measurement: Using the tips of your thumb and forefinger pinch the skin in the area to be measured. Pull the skin away from the muscle, being sure to 'get' all the subcutaneous fat underneath the skin but don't include the underlying muscle. Measure the thickness of this fold of fat and skin, in millimeters, with either a ruler (metric) or skin fold calipers. If you do have calipers, the jaws should be placed close to where the fingertips have the skin pinched so an accurate reading can be obtained (about 1 cm (1/4 in) away from the fingers). Release the caliper's handles and wait 2 seconds before taking the reading. Take a reading of that same site a few more times (release the fold and get a new 'pinch' for each measurement) and take the average - each reading should be within 1 or 2 mm of each other. If you don't have calipers you'll have to make do with a ruler.</p>
                         </div>
 
                         <div className="progress-popup-body">

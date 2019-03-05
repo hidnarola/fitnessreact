@@ -353,6 +353,12 @@ class BodyMeasurementForm extends Component {
                                                             break;
                                                     }
                                                 }
+                                                let imgStyle = {};
+                                                let liStyle = {};
+                                                if (totalProgressPhotos <= 3) {
+                                                    imgStyle['minWidth'] = 320;
+                                                    liStyle['fontSize'] = 12;
+                                                }
                                                 return (
                                                     <div className="fitly-slick-slider-item" key={co._id}>
                                                         <a href="javascript:void(0)">
@@ -362,11 +368,12 @@ class BodyMeasurementForm extends Component {
                                                                 onError={(e) => {
                                                                     e.target.src = noImg
                                                                 }}
+                                                                style={imgStyle}
                                                             />
                                                             <ul className="uploade-data">
-                                                                {selectedCategory ? <li className="sm-img">{selectedCategory.label}</li> : ""}
-                                                                {selectedSubCategory ? <li className="sm-img">{selectedSubCategory.label}</li> : ""}
-                                                                {caption && <li className="sm-img">{caption}</li>}
+                                                                {selectedCategory ? <li className="sm-img" style={liStyle}>{selectedCategory.label}</li> : ""}
+                                                                {selectedSubCategory ? <li className="sm-img" style={liStyle}>{selectedSubCategory.label}</li> : ""}
+                                                                {caption && <li className="sm-img" style={liStyle}>{caption}</li>}
                                                             </ul>
                                                         </a>
                                                     </div>
@@ -418,6 +425,19 @@ class BodyMeasurementForm extends Component {
         );
     }
 
+    componentDidMount() {
+        // const self = this;
+        // let indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+        // let IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
+        // let IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
+
+        // let request = indexedDB.open("fitly", 1);
+        // request.onsuccess = function (event) {
+        //     self.db = request.result;
+        //     console.log("success: " + self.db);
+        // };
+    }
+
     componentDidUpdate(prevProps, prevState) {
         const { selectActionInit, logDate } = this.state;
         const { loading, measurement, initialize, change, refreshBodyMeasurementForm, resetRefreshBodyMeasurementForm, dispatch, profileSettings, bodyFat } = this.props;
@@ -443,18 +463,40 @@ class BodyMeasurementForm extends Component {
                     heartRate: (measurement.heartRate) ? measurement.heartRate : 0,
                     weight: convertUnits(MEASUREMENT_UNIT_GRAM, weightUnit, measurement.weight).toFixed(2),
                     height: convertUnits(MEASUREMENT_UNIT_CENTIMETER, bodyUnit, measurement.height).toFixed(2),
-                    log_date: new Date(measurement.logDate),
-                    bodyfat: (bodyFat && bodyFat.bodyFatPer) ? bodyFat.bodyFatPer : '',
-                    age: (bodyFat && bodyFat.age) ? bodyFat.age : '',
-                    site1: (bodyFat && bodyFat.site1) ? bodyFat.site1 : '',
-                    site2: (bodyFat && bodyFat.site2) ? bodyFat.site2 : '',
-                    site3: (bodyFat && bodyFat.site3) ? bodyFat.site3 : '',
+                    log_date: new Date(measurement.logDate)
                 }
                 initialize(measurementData);
             } else {
-                initialize({});
-                change('log_date', logDate);
+                let measurementData = {
+                    neck: '',
+                    shoulders: '',
+                    chest: '',
+                    upper_arm: '',
+                    waist: '',
+                    forearm: '',
+                    hips: '',
+                    thigh: '',
+                    calf: '',
+                    heartRate: '',
+                    weight: '',
+                    height: '',
+                    log_date: logDate
+                }
+                initialize(measurementData);
                 this.setState({ logDate: logDate });
+            }
+            if (bodyFat && Object.keys(bodyFat).length > 0) {
+                change('bodyfat', (bodyFat && bodyFat.bodyFatPer) ? bodyFat.bodyFatPer : '');
+                change('age', (bodyFat && bodyFat.age) ? bodyFat.age : '');
+                change('site1', (bodyFat && bodyFat.site1) ? bodyFat.site1 : '');
+                change('site2', (bodyFat && bodyFat.site2) ? bodyFat.site2 : '');
+                change('site3', (bodyFat && bodyFat.site3) ? bodyFat.site3 : '');
+            } else {
+                change('bodyfat', '');
+                change('age', '');
+                change('site1', '');
+                change('site2', '');
+                change('site3', '');
             }
             this.setValidationRules();
             dispatch(hidePageLoader());

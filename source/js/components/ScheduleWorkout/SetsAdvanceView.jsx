@@ -83,15 +83,15 @@ class SetsAdvanceView extends Component {
                 var o = workout_circuit[index];
                 for (let i = 0; i < circuit_sets; i++) {
                     var obj = {};
-                    if (o.field1_value) {
+                    if (o && o.field1_value) {
                         obj.field1_value = o.field1_value;
                         obj.field1_unit = o.field1_unit;
                     }
-                    if (o.field2_value) {
+                    if (o && o.field2_value) {
                         obj.field2_value = o.field2_value;
                         obj.field2_unit = o.field2_unit;
                     }
-                    if (o.field3_value) {
+                    if (o && o.field3_value) {
                         obj.field3_value = o.field3_value;
                         obj.field3_unit = o.field3_unit;
                     }

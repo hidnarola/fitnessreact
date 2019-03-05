@@ -187,6 +187,7 @@ class WorkoutTypeSingleCardUpdate extends Component {
                                                                 component={WorkoutInputField}
                                                                 placeholder="Rest Time"
                                                                 type="text"
+                                                                errorClass="erro_msg_single"
                                                                 validate={[required, validNumber, min0, max10000]}
                                                             />
                                                             <Field

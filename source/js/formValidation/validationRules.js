@@ -8,7 +8,7 @@ export const required = (value) => {
 
 export const validNumber = (value) => {
     if (value && !/^\d+(?:\.\d{1,})?$/i.test(value)) {
-        return "Field should contain only numeric values.";
+        return "Invalid numeric value.";
     }
     return undefined;
 }
