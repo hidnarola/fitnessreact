@@ -30,6 +30,10 @@ export const SHOW_FOLL_USER_LIST_REQUEST = 'SHOW_FOLL_USER_LIST_REQUEST';
 export const SHOW_FOLL_USER_LIST_SUCCESS = 'SHOW_FOLL_USER_LIST_SUCCESS';
 export const SHOW_FOLL_USER_LIST_ERROR = 'SHOW_FOLL_USER_LIST_ERROR';
 
+export const DELETE_USER_PROFILE_IMG_REQUEST = 'DELETE_USER_PROFILE_IMG_REQUEST';
+export const DELETE_USER_PROFILE_IMG_SUCCESS = 'DELETE_USER_PROFILE_IMG_SUCCESS';
+export const DELETE_USER_PROFILE_IMG_ERROR = 'DELETE_USER_PROFILE_IMG_ERROR';
+
 export const SET_USER_PROFILE_STATE = 'SET_USER_PROFILE_STATE';
 
 export function getProfileDetailsRequest(username) {
@@ -195,6 +199,26 @@ export function showFollUserListSuccess(data) {
 export function showFollUserListError(error) {
     return {
         type: SHOW_FOLL_USER_LIST_ERROR,
+        error
+    }
+}
+
+export function deleteUserProfileImageRequest() {
+    return {
+        type: DELETE_USER_PROFILE_IMG_REQUEST,
+    }
+}
+
+export function deleteUserProfileImageSuccess(data) {
+    return {
+        type: DELETE_USER_PROFILE_IMG_SUCCESS,
+        data
+    }
+}
+
+export function deleteUserProfileImageError(error) {
+    return {
+        type: DELETE_USER_PROFILE_IMG_ERROR,
         error
     }
 }

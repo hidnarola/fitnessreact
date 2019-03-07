@@ -31,4 +31,4 @@ renderMethod(
     document.getElementById('root')
 );
 
-// registerServiceWorker();
+registerServiceWorker();

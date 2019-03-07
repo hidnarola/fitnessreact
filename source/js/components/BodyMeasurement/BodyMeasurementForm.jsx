@@ -9,8 +9,8 @@ import { required, min, max, validNumber } from '../../formValidation/validation
 import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
 import { getUserBodyMeasurementRequest, getUserBodyMeasurementLogDatesRequest } from '../../actions/userBodyMeasurement';
 import { getLoggedUserProfileSettingsRequest } from '../../actions/profile';
-import { MEASUREMENT_UNIT_CENTIMETER, MEASUREMENT_UNIT_KILOGRAM, MEASUREMENT_UNIT_GRAM, MEASUREMENT_UNIT_BPM, SERVER_BASE_URL, PROGRESS_PHOTO_CATEGORIES, PROGRESS_PHOTO_BASICS, PROGRESS_PHOTO_POSED } from '../../constants/consts';
-import { convertUnits } from '../../helpers/funs';
+import { MEASUREMENT_UNIT_CENTIMETER, MEASUREMENT_UNIT_KILOGRAM, MEASUREMENT_UNIT_GRAM, MEASUREMENT_UNIT_BPM, SERVER_BASE_URL, PROGRESS_PHOTO_CATEGORIES, PROGRESS_PHOTO_BASICS, PROGRESS_PHOTO_POSED, IDB_NAME, IDB_VERSION } from '../../constants/consts';
+import { convertUnits, te, ts } from '../../helpers/funs';
 import CalculatorIcon from "svg/calculator.svg";
 import { Alert } from "react-bootstrap";
 import SlickSlider from '../Common/SlickSlider';
@@ -66,6 +66,8 @@ class BodyMeasurementForm extends Component {
                 body_fat: [validNumber, min0, max100],
             }
         }
+        this.iDB;
+        this.iDBOpenReq;
     }
 
     componentWillMount() {
@@ -73,8 +75,10 @@ class BodyMeasurementForm extends Component {
         const { change, dispatch } = this.props;
         change('log_date', logDate);
         let requestData = { logDate }
-        this.getBodyMeasurementLogData(requestData);
-        dispatch(getLoggedUserProfileSettingsRequest());
+        if (window.navigator && window.navigator.onLine) {
+            this.getBodyMeasurementLogData(requestData);
+            dispatch(getLoggedUserProfileSettingsRequest());
+        }
     }
 
     render() {
@@ -426,63 +430,24 @@ class BodyMeasurementForm extends Component {
     }
 
     componentDidMount() {
-        // const self = this;
-        // let indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
-        // let IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
-        // let IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
-
-        // let request = indexedDB.open("fitly", 1);
-        // request.onsuccess = function (event) {
-        //     self.db = request.result;
-        //     console.log("success: " + self.db);
-        // };
+        if (window.indexedDB) {
+            this.iDBOpenReq = window.indexedDB.open(IDB_NAME, IDB_VERSION);
+            this.iDBOpenReq.onsuccess = this.handleIDBOpenSuccess;
+            this.iDBOpenReq.onerror = this.handleIDBOpenError;
+            this.iDBOpenReq.onupgradeneeded = this.handleIDBOpenUpgrade;
+        }
     }
 
     componentDidUpdate(prevProps, prevState) {
         const { selectActionInit, logDate } = this.state;
-        const { loading, measurement, initialize, change, refreshBodyMeasurementForm, resetRefreshBodyMeasurementForm, dispatch, profileSettings, bodyFat } = this.props;
-        var bodyUnit = MEASUREMENT_UNIT_CENTIMETER;
-        var weightUnit = MEASUREMENT_UNIT_KILOGRAM;
-        if (profileSettings) {
-            bodyUnit = profileSettings.bodyMeasurement;
-            weightUnit = profileSettings.weight;
-        }
+        const { loading, measurement, change, refreshBodyMeasurementForm, resetRefreshBodyMeasurementForm, dispatch, bodyFat } = this.props;
         if (selectActionInit && !loading) {
             this.setState({ selectActionInit: false });
             if (measurement && Object.keys(measurement).length > 0) {
-                let measurementData = {
-                    neck: convertUnits(MEASUREMENT_UNIT_CENTIMETER, bodyUnit, measurement.neck).toFixed(2),
-                    shoulders: convertUnits(MEASUREMENT_UNIT_CENTIMETER, bodyUnit, measurement.shoulders).toFixed(2),
-                    chest: convertUnits(MEASUREMENT_UNIT_CENTIMETER, bodyUnit, measurement.chest).toFixed(2),
-                    upper_arm: convertUnits(MEASUREMENT_UNIT_CENTIMETER, bodyUnit, measurement.upperArm).toFixed(2),
-                    waist: convertUnits(MEASUREMENT_UNIT_CENTIMETER, bodyUnit, measurement.waist).toFixed(2),
-                    forearm: convertUnits(MEASUREMENT_UNIT_CENTIMETER, bodyUnit, measurement.forearm).toFixed(2),
-                    hips: convertUnits(MEASUREMENT_UNIT_CENTIMETER, bodyUnit, measurement.hips).toFixed(2),
-                    thigh: convertUnits(MEASUREMENT_UNIT_CENTIMETER, bodyUnit, measurement.thigh).toFixed(2),
-                    calf: convertUnits(MEASUREMENT_UNIT_CENTIMETER, bodyUnit, measurement.calf).toFixed(2),
-                    heartRate: (measurement.heartRate) ? measurement.heartRate : 0,
-                    weight: convertUnits(MEASUREMENT_UNIT_GRAM, weightUnit, measurement.weight).toFixed(2),
-                    height: convertUnits(MEASUREMENT_UNIT_CENTIMETER, bodyUnit, measurement.height).toFixed(2),
-                    log_date: new Date(measurement.logDate)
-                }
-                initialize(measurementData);
+                this.initializeFormData(measurement);
+                this.storeInIDB(measurement);
             } else {
-                let measurementData = {
-                    neck: '',
-                    shoulders: '',
-                    chest: '',
-                    upper_arm: '',
-                    waist: '',
-                    forearm: '',
-                    hips: '',
-                    thigh: '',
-                    calf: '',
-                    heartRate: '',
-                    weight: '',
-                    height: '',
-                    log_date: logDate
-                }
-                initialize(measurementData);
+                this.initializeFormData();
                 this.setState({ logDate: logDate });
             }
             if (bodyFat && Object.keys(bodyFat).length > 0) {
@@ -524,13 +489,18 @@ class BodyMeasurementForm extends Component {
             this.setState({ logDate: date });
             this.props.change('log_date', date);
             let requestData = { logDate: date }
-            this.getBodyMeasurementLogData(requestData);
+            if (window.navigator.onLine) {
+                this.getBodyMeasurementLogData(requestData);
+            } else {
+                this.getDataFromIDB(requestData);
+            }
         }
     }
 
     onMonthClick = (date) => {
         const { change } = this.props;
         let now = new Date();
+        now.setHours(0, 0, 0, 0);
         let requestData = {};
         if (now.getMonth() === date.getMonth() && now.getFullYear() === date.getFullYear()) {
             this.setState({ logDate: now });
@@ -549,6 +519,7 @@ class BodyMeasurementForm extends Component {
         if (obj.view === "month") {
             let date = obj.activeStartDate;
             let now = new Date();
+            now.setHours(0, 0, 0, 0);
             let requestData = {};
             if (now.getMonth() === date.getMonth() && now.getFullYear() === date.getFullYear()) {
                 this.setState({ logDate: now });
@@ -598,6 +569,104 @@ class BodyMeasurementForm extends Component {
             }
         }
         this.setState({ validationRules });
+    }
+
+    handleIDBOpenSuccess = (event) => {
+        console.log("IDB connection success: ", event);
+        this.iDB = this.iDBOpenReq.result;
+        if (window.navigator && !window.navigator.onLine) {
+            const { logDate } = this.state;
+            let requestData = { logDate }
+            this.getDataFromIDB(requestData);
+        }
+    }
+
+    handleIDBOpenError = (event) => {
+        console.log("IDB connection error: ", event);
+    }
+
+    handleIDBOpenUpgrade = (event) => {
+        const db = event.target.result;
+        const objectStore = db.createObjectStore("body_measurement", { keyPath: "_id" });
+        objectStore.createIndex("logDate", "logDate", { unique: false });
+    }
+
+    storeInIDB = (data) => {
+        const transaction = this.iDB.transaction(["body_measurement"], 'readwrite');
+        const objectStore = transaction.objectStore("body_measurement");
+        const measurementId = data._id;
+        const iDBGetReq = objectStore.get(measurementId);
+        iDBGetReq.onsuccess = (event) => {
+            const { target: { result } } = event;
+            if (result) {
+                objectStore.put(data);
+            } else {
+                objectStore.add(data);
+            }
+        }
+        iDBGetReq.onerror = (event) => {
+            te("Application is offline, please check your internet connection");
+        };
+    }
+
+    getDataFromIDB = (requestData) => {
+        const { logDate } = requestData;
+        const transaction = this.iDB.transaction(["body_measurement"], 'readonly');
+        const objectStore = transaction.objectStore("body_measurement");
+        const logDateIndex = objectStore.index('logDate');
+        const isoDate = logDate.toISOString();
+        const iDBGetReq = logDateIndex.get(isoDate);
+        iDBGetReq.onsuccess = (event) => {
+            const { target: { result } } = event;
+            this.initializeFormData(result);
+        }
+        iDBGetReq.onerror = (event) => {
+            te("Application is offline, please check your internet connection");
+        };
+    }
+
+    initializeFormData = (measurement = {}) => {
+        const { logDate } = this.state;
+        const { initialize, profileSettings } = this.props;
+        let bodyUnit = MEASUREMENT_UNIT_CENTIMETER;
+        let weightUnit = MEASUREMENT_UNIT_KILOGRAM;
+        if (profileSettings) {
+            bodyUnit = profileSettings.bodyMeasurement;
+            weightUnit = profileSettings.weight;
+        }
+        let measurementData = {
+            neck: '',
+            shoulders: '',
+            chest: '',
+            upper_arm: '',
+            waist: '',
+            forearm: '',
+            hips: '',
+            thigh: '',
+            calf: '',
+            heartRate: '',
+            weight: '',
+            height: '',
+            log_date: logDate
+        };
+        if (measurement && Object.keys(measurement).length > 0) {
+            measurementData = {
+                neck: convertUnits(MEASUREMENT_UNIT_CENTIMETER, bodyUnit, measurement.neck).toFixed(2),
+                shoulders: convertUnits(MEASUREMENT_UNIT_CENTIMETER, bodyUnit, measurement.shoulders).toFixed(2),
+                chest: convertUnits(MEASUREMENT_UNIT_CENTIMETER, bodyUnit, measurement.chest).toFixed(2),
+                upper_arm: convertUnits(MEASUREMENT_UNIT_CENTIMETER, bodyUnit, measurement.upperArm).toFixed(2),
+                waist: convertUnits(MEASUREMENT_UNIT_CENTIMETER, bodyUnit, measurement.waist).toFixed(2),
+                forearm: convertUnits(MEASUREMENT_UNIT_CENTIMETER, bodyUnit, measurement.forearm).toFixed(2),
+                hips: convertUnits(MEASUREMENT_UNIT_CENTIMETER, bodyUnit, measurement.hips).toFixed(2),
+                thigh: convertUnits(MEASUREMENT_UNIT_CENTIMETER, bodyUnit, measurement.thigh).toFixed(2),
+                calf: convertUnits(MEASUREMENT_UNIT_CENTIMETER, bodyUnit, measurement.calf).toFixed(2),
+                heartRate: (measurement.heartRate) ? measurement.heartRate : 0,
+                weight: convertUnits(MEASUREMENT_UNIT_GRAM, weightUnit, measurement.weight).toFixed(2),
+                height: convertUnits(MEASUREMENT_UNIT_CENTIMETER, bodyUnit, measurement.height).toFixed(2),
+                log_date: new Date(measurement.logDate)
+            }
+        }
+        initialize(measurementData);
     }
 }
 

@@ -24,6 +24,9 @@ import {
     showFollUserListSuccess,
     showFollUserListError,
     SHOW_FOLL_USER_LIST_REQUEST,
+    deleteUserProfileImageSuccess,
+    deleteUserProfileImageError,
+    DELETE_USER_PROFILE_IMG_REQUEST,
 } from '../actions/profile';
 
 import api from 'api/profile';
@@ -123,6 +126,18 @@ function showFollUserData() {
     }
 }
 
+function deleteProfileImage() {
+    return function* (action) {
+        try {
+            const data = yield call(() => api.deleteProfileImage());
+            yield put(deleteUserProfileImageSuccess(data));
+        } catch (error) {
+            yield put(deleteUserProfileImageError(error));
+        }
+    }
+}
+
+
 export function* watchProfileDetailsData() {
     yield takeLatest(GET_LOGGED_USER_PROFILE_DETAILS_REQUEST, fetchLoggedUserProfileDetailsData());
     yield takeLatest(GET_PROFILE_DETAILS_REQUEST, fetchProfileDetailsData());
@@ -132,6 +147,7 @@ export function* watchProfileDetailsData() {
     yield takeLatest(SAVE_LOGGED_USER_PROFILE_PHOTO_REQUEST, updateLoggedUserProfilePhotoData());
     yield takeLatest(GET_LOGGED_USER_PROFILE_SETTINGS_REQUEST, fetchLoggedUserProfileSettingsData());
     yield takeLatest(SHOW_FOLL_USER_LIST_REQUEST, showFollUserData());
+    yield takeLatest(DELETE_USER_PROFILE_IMG_REQUEST,deleteProfileImage());
 }
 
 export default [

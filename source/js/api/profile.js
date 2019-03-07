@@ -63,6 +63,16 @@ function showFollUserList(_for, username) {
     return fetchResource(requestUrl + '/foll/' + username + '/' + _for, options);
 }
 
+function deleteProfileImage() {
+    let headers = extraUserHeaders();
+    var options = {
+        method: 'DELETE',
+        headers: headers,
+    }
+
+    return fetchResource(requestUrl + '/photo', options);
+}
+
 export default {
     getLoggedUserProfileDetails,
     getLoggedUserProfileSettings,
@@ -71,5 +81,6 @@ export default {
     saveLoggedUserProfileDetails,
     saveLoggedUserProfileSettings,
     saveLoggedUserProfilePhoto,
-    showFollUserList
+    showFollUserList,
+    deleteProfileImage
 }

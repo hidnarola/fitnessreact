@@ -8,7 +8,7 @@ import ProfilePhotos from 'components/Profile/ProfilePhotos';
 import FitnessHeader from 'components/global/FitnessHeader';
 import FitnessNav from 'components/global/FitnessNav';
 import { routeCodes } from 'constants/routes';
-import { getProfileDetailsRequest, saveLoggedUserProfilePhotoRequest, getLoggedUserProfileSettingsRequest, showFollUserListRequest, setUserProfileState } from '../actions/profile';
+import { getProfileDetailsRequest, saveLoggedUserProfilePhotoRequest, getLoggedUserProfileSettingsRequest, showFollUserListRequest, setUserProfileState, deleteUserProfileImageRequest } from '../actions/profile';
 import noProfileImg from 'img/common/no-profile-img.png'
 import { FRIENDSHIP_STATUS_SELF, FRIENDSHIP_STATUS_UNKNOWN, FRIENDSHIP_STATUS_FRIEND, FRIENDSHIP_STATUS_REQUEST_RECEIVED, FRIENDSHIP_STATUS_REQUEST_SENT, LOCALSTORAGE_USER_DETAILS_KEY, FITASSIST_USER_DETAILS_TOKEN_KEY, MEASUREMENT_UNIT_CENTIMETER, MEASUREMENT_UNIT_KILOGRAM, MEASUREMENT_UNIT_GRAM, ACCESS_LEVEL_PUBLIC, ACCESS_LEVEL_FRIENDS } from '../constants/consts';
 import { sendFriendRequestRequest, cancelFriendRequestRequest, acceptFriendRequestRequest } from '../actions/friends';
@@ -58,7 +58,8 @@ class Profile extends Component {
             updateLocalStorageData: false,
             showUnfollowModal: false,
             selectedFollowId: null,
-            showProfilePicLightbox: false
+            showProfilePicLightbox: false,
+            showProfilePictureModal:false
         }
         this.changeProfilePhotoRef = React.createRef();
     }
@@ -107,7 +108,8 @@ class Profile extends Component {
             showChangeProfilePicModal,
             loadProfileActionInit,
             showUnfollowModal,
-            showProfilePicLightbox
+            showProfilePicLightbox,
+            showProfilePictureModal
         } = this.state;
         const {
             requestChannelLoading,
@@ -154,10 +156,16 @@ class Profile extends Component {
                                                         <i className="icon-view_array"></i>
                                                     </a>
                                                     {profile && profile.friendshipStatus && profile.friendshipStatus === FRIENDSHIP_STATUS_SELF &&
-                                                        <a href="javascript:void(0)" className="upload-img" onClick={this.handleShowChangeProfilePhotoModal}>
-                                                            <i className="icon-add_a_photo"></i>
-                                                        </a>
+                                                        <Fragment>
+                                                            <a href="javascript:void(0)" className="upload-img" onClick={this.handleShowChangeProfilePhotoModal}>
+                                                                <i className="icon-add_a_photo"></i>
+                                                            </a>
+                                                            <a href="javascript:void(0)" className="view-img">
+                                                                <i className="icon-cancel" onClick={this.handleShowProfilePictureModal}></i>
+                                                            </a>
+                                                        </Fragment>
                                                     }
+
                                                 </Fragment>
                                             </div>
                                         </span>
@@ -402,6 +410,19 @@ class Profile extends Component {
                     onCancel={this.hideUnfollowAlert}
                 >
                 </SweetAlert>
+                <SweetAlert
+                    show={showProfilePictureModal}
+                    danger
+                    showCancel
+                    confirmBtnText="Yes, Delete it!"
+                    confirmBtnBsStyle="danger"
+                    cancelBtnBsStyle="default"
+                    title="Are you sure?"
+                    onConfirm={this.handleDeleteProfilePicture}
+                    onCancel={this.handleHideProfilePictureModal}
+                >
+                    You will not be able to recover it!
+                </SweetAlert>
                 <ChangeProfilePhotoModal
                     ref={this.changeProfilePhotoRef}
                     show={showChangeProfilePicModal}
@@ -436,6 +457,9 @@ class Profile extends Component {
             startFollowingError,
             stopFollowingLoading,
             stopFollowingError,
+            deleteProfileImgLoding,
+            deleteProfileImgStatus,
+            deleteProfileImgError
         } = this.props;
         const {
             loadProfileActionInit,
@@ -562,6 +586,18 @@ class Profile extends Component {
                 te(stopFollowingError[0]);
             }
         }
+        if (!deleteProfileImgLoding && prevProps.deleteProfileImgLoding !== deleteProfileImgLoding) {
+            this.setState({ loadProfileActionInit: true, updateLocalStorageData: true, showProfilePictureModal: false });
+            dispatch(hidePageLoader());
+            dispatch(getProfileDetailsRequest(username));
+            this.setForceUpdateChildComponents(true);
+            if (deleteProfileImgStatus) {
+                ts("Profile image removed");
+            } else {
+                const msg = deleteProfileImgError && deleteProfileImgError.length > 0 ? deleteProfileImgError[0] : "Something went wrong, Please try again later.";
+                te(msg);
+            }
+        }
     }
 
     //#region funs
@@ -682,6 +718,24 @@ class Profile extends Component {
         this.setState({ updateProfilePhotoActionInit: true });
     }
 
+    handleDeleteProfilePicture = () => {
+        const { dispatch } = this.props;
+        dispatch(deleteUserProfileImageRequest());
+        dispatch(showPageLoader());
+    }
+
+    handleHideProfilePictureModal = () => {
+        this.setState({
+            showProfilePictureModal: false
+        });
+    }
+
+    handleShowProfilePictureModal = () => {
+        this.setState({
+            showProfilePictureModal: true
+        });
+    }
+
     handleRequestMessageChannel = () => {
         const { profile, loggedUserData, dispatch, socket } = this.props;
         var profileId = '';
@@ -796,7 +850,11 @@ const mapStateToProps = (state) => {
         showFollModal: profile.get('showFollModal'),
         showFollModalFor: profile.get('showFollModalFor'),
         showFollModalUsers: profile.get('showFollModalUsers'),
-        showFollModalError: profile.get('showFollModalError')
+        showFollModalError: profile.get('showFollModalError'),
+
+        deleteProfileImgLoding: profile.get('deleteImageLodaing'),
+        deleteProfileImgStatus: profile.get('deleteImageStatus'),
+        deleteProfileImgError: profile.get('deleteImageError'),
     }
 }
 

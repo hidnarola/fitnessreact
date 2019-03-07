@@ -48,6 +48,7 @@ class ProfileCalendar extends Component {
                             event: CustomEventCard,
                         }}
                     />
+                    
                 </div>
             </div>
         );

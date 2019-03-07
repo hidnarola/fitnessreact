@@ -25,6 +25,9 @@ import {
     SHOW_FOLL_USER_LIST_SUCCESS,
     SHOW_FOLL_USER_LIST_ERROR,
     SET_USER_PROFILE_STATE,
+    DELETE_USER_PROFILE_IMG_REQUEST,
+    DELETE_USER_PROFILE_IMG_SUCCESS,
+    DELETE_USER_PROFILE_IMG_ERROR,
 } from "../actions/profile";
 import { VALIDATION_FAILURE_STATUS } from "../constants/consts";
 import { generateValidationErrorMsgArr, capitalizeFirstLetter } from "../helpers/funs";
@@ -42,6 +45,10 @@ const initialState = Map({
     showFollModalLoading: false,
     showFollModalUsers: [],
     showFollModalError: [],
+
+    deleteImageLodaing: false,
+    deleteImageStatus: false,
+    deleteImageError:[]
 });
 
 const actionMap = {
@@ -315,6 +322,43 @@ const actionMap = {
             showFollModal: false,
             showFollModalFor: null,
             showFollModalError: error,
+        }));
+    },
+    [DELETE_USER_PROFILE_IMG_REQUEST]: (state, action) => {
+        return state.merge(Map({
+            deleteImageLodaing: true,
+            deleteImageStatus: false,
+            deleteImageError: []
+        }));
+    },
+    [DELETE_USER_PROFILE_IMG_SUCCESS]: (state, action) => {
+        var newState = {
+            deleteImageLodaing: false,
+        };
+        if (action.data.status === 1) {
+            newState.deleteImageStatus = true;
+        } else {
+            if (action.data.message && action.data.message !== '') {
+                newState.deleteImageError = [action.data.message];
+            } else {
+                newState.deleteImageError = ['Something went wrong! please try again later.'];
+            }
+        }
+        return state.merge(Map(newState));
+    },
+    [DELETE_USER_PROFILE_IMG_ERROR]: (state, action) => {
+        let error = [];
+        if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+            error = generateValidationErrorMsgArr(action.error.response.message);
+        } else if (action.error && action.error.message) {
+            error = [action.error.message];
+        } else {
+            error = ['Something went wrong! please try again later'];
+        }
+        return state.merge(Map({
+            deleteImageLodaing: false,
+            deleteImageStatus: false,
+            deleteImageError: error
         }));
     },
     [SET_USER_PROFILE_STATE]: (state, action) => {

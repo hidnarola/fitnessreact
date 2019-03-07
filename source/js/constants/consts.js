@@ -917,3 +917,6 @@ export const PROGRESS_PHOTO_CATEGORIES = [
     { value: 'isolation', label: 'Isolation' },
     { value: 'posed', label: 'Posed' }
 ];
+
+export const IDB_NAME = "fitly";
+export const IDB_VERSION = 1;

@@ -167,8 +167,9 @@ class Users extends Component {
         const { allUsersSearchValue, dispatch } = this.props;
         const { offset } = this.state;
         this.setState({ start: 0, selectActionInit: true, allUsers: [], isFirstReq: true });
+        let searchTerm = allUsersSearchValue ? allUsersSearchValue.trim() : '';
         var requestData = {
-            name: allUsersSearchValue,
+            name: searchTerm,
             start: 0,
             offset: offset,
         };
