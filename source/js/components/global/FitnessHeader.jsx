@@ -64,7 +64,7 @@ class FitnessHeader extends Component {
         } = this.state;
         var loggedUserImage = '';
         if (loggedUserData && loggedUserData.avatar) {
-            loggedUserImage = loggedUserData.avatar;
+            // loggedUserImage = loggedUserData.avatar;
             if (loggedUserData.userDetails && loggedUserData.userDetails.avatar) {
                 loggedUserImage = loggedUserData.userDetails.avatar;
             }

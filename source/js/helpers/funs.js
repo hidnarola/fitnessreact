@@ -24,6 +24,7 @@ import { FaCheck, FaFrownO } from 'react-icons/lib/fa';
 import $ from 'jquery';
 import jwt from "jwt-simple";
 import { Emoji } from "emoji-mart";
+import { IDB_NAME, IDB_VERSION } from "../constants/idb";
 
 export function extraHeaders() {
     const token = localStorage.getItem(LOCALSTORAGE_ACCESS_TOKEN_KEY);
@@ -433,4 +434,36 @@ export function checkImageMagicCode(image) {
         fileReader.readAsArrayBuffer(image);
     });
     return promise;
+}
+
+export function connectIDB(idbName = IDB_NAME, idbVersion = IDB_VERSION) {
+    return function (upgradeCallback = () => { }, blockCallback = () => { }) {
+        const promise = new Promise((resolve, reject) => {
+            if (window.indexedDB) {
+                const idbOpenReq = window.indexedDB.open(idbName, idbVersion);
+                idbOpenReq.onsuccess = (event) => {
+                    resolve(idbOpenReq);
+                }
+                idbOpenReq.onupgradeneeded = (event) => {
+                    const fn = upgradeCallback;
+                    fn ? fn(event, idbOpenReq) : () => { console.log("Upgrade") };
+                }
+                idbOpenReq.onerror = (event) => {
+                    reject(event);
+                }
+                idbOpenReq.onblocked = (event) => {
+                    const fn = blockCallback;
+                    fn ? fn(event, idbOpenReq) : () => { console.log("Blocked") };
+                }
+            }
+        });
+        return promise;
+    }
+}
+
+export function isOnline() {
+    if (window && window.navigator) {
+        return window.navigator.onLine;
+    }
+    return true;
 }

@@ -50,10 +50,12 @@ class Emos extends Component {
 
     componentDidMount() {
         document.addEventListener('keyup', this.handleKeyUp, true);
+        document.addEventListener('click', this.handleClick, true);
     }
 
     componentWillUnmount() {
         document.removeEventListener('keyup', this.handleKeyUp, true);
+        document.removeEventListener('click', this.handleClick, true);
     }
 
     handleKeyUp = (e) => {
@@ -63,6 +65,10 @@ class Emos extends Component {
                 this.toggleEmosArea();
             }
         }
+    }
+
+    handleClick = (e) => {
+        // console.log('handle click =>', e);
     }
 
     toggleEmosArea = () => {

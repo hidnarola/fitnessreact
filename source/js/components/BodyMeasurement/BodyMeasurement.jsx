@@ -5,7 +5,7 @@ import BodyMeasurementForm from './BodyMeasurementForm';
 import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
 import { saveUserBodyMeasurementRequest, saveUserBodyFatRequest, getProgressPhotosByDateRequest } from '../../actions/userBodyMeasurement';
 import moment from 'moment';
-import { ts, te } from '../../helpers/funs';
+import { ts, te, isOnline } from '../../helpers/funs';
 import { addUserProgressPhotoRequest, removeSelectedProgressPhotosToUpload } from '../../actions/userProgressPhotos';
 import AddProgressPhotoModal from '../Common/AddProgressPhotoModal';
 import BodyFatModal from './BodyFatModal';
@@ -160,26 +160,25 @@ class BodyMeasurement extends Component {
     }
 
     handleShowBodyFatModal = () => {
-        const { dispatch, bodyFat } = this.props;
+        const { dispatch, site1, site2, site3, bodyfat, age } = this.props;
         this.setState({ showBodyFatModal: true });
         let encUserDetails = localStorage.getItem(LOCALSTORAGE_USER_DETAILS_KEY);
         let userDetails = jwt.decode(encUserDetails, FITASSIST_USER_DETAILS_TOKEN_KEY);
         let dob = (userDetails.dateOfBirth) ? userDetails.dateOfBirth : null;
         let gender = (userDetails.gender) ? userDetails.gender : GENDER_MALE;
         let diff = moment().diff(dob, 'years');
-        let formData = {};
-        if (bodyFat) {
-            formData.site1 = (bodyFat.site1) ? bodyFat.site1 : '';
-            formData.site2 = (bodyFat.site2) ? bodyFat.site2 : '';
-            formData.site3 = (bodyFat.site3) ? bodyFat.site3 : '';
-            formData.bodyFat = (bodyFat.bodyFatPer) ? bodyFat.bodyFatPer : '';
-        }
+        let formData = {
+            "site1": site1 ? site1 : '',
+            "site2": site2 ? site2 : '',
+            "site3": site3 ? site3 : '',
+            "bodyFat": bodyfat ? bodyfat : '',
+        };
         if (diff) {
             formData.age = diff;
             formData.hidden_age = diff;
             formData.gender = gender;
         } else {
-            formData.age = (bodyFat.age) ? bodyFat.age : '';;
+            formData.age = age;
             formData.gender = gender;
         }
         dispatch(initialize('saveBodyFatForm', formData));
@@ -211,7 +210,6 @@ class BodyMeasurement extends Component {
         let requestData = { logDate: body_fat_log_date };
         dispatch(getProgressPhotosByDateRequest(requestData));
     }
-
 }
 
 const selector1 = formValueSelector('userBodyMeasurement')
@@ -225,6 +223,11 @@ const mapStateToProps = (state) => {
         progressPhotoloading: userProgressPhotos.get('loading'),
         progressPhotoError: userProgressPhotos.get('error'),
         body_fat_log_date: selector1(state, 'log_date'),
+        site1: selector1(state, 'site1'),
+        site2: selector1(state, 'site2'),
+        site3: selector1(state, 'site3'),
+        bodyfat: selector1(state, 'bodyfat'),
+        age: selector1(state, 'age'),
         selectedPhotos: userProgressPhotos.get('selectedProgressPhotos'),
     }
 }

@@ -9,13 +9,14 @@ import { required, min, max, validNumber } from '../../formValidation/validation
 import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
 import { getUserBodyMeasurementRequest, getUserBodyMeasurementLogDatesRequest } from '../../actions/userBodyMeasurement';
 import { getLoggedUserProfileSettingsRequest } from '../../actions/profile';
-import { MEASUREMENT_UNIT_CENTIMETER, MEASUREMENT_UNIT_KILOGRAM, MEASUREMENT_UNIT_GRAM, MEASUREMENT_UNIT_BPM, SERVER_BASE_URL, PROGRESS_PHOTO_CATEGORIES, PROGRESS_PHOTO_BASICS, PROGRESS_PHOTO_POSED, IDB_NAME, IDB_VERSION } from '../../constants/consts';
-import { convertUnits, te, ts } from '../../helpers/funs';
+import { MEASUREMENT_UNIT_CENTIMETER, MEASUREMENT_UNIT_KILOGRAM, MEASUREMENT_UNIT_GRAM, MEASUREMENT_UNIT_BPM, SERVER_BASE_URL, PROGRESS_PHOTO_CATEGORIES, PROGRESS_PHOTO_BASICS, PROGRESS_PHOTO_POSED } from '../../constants/consts';
+import { convertUnits, te, ts, connectIDB, isOnline } from '../../helpers/funs';
 import CalculatorIcon from "svg/calculator.svg";
 import { Alert } from "react-bootstrap";
 import SlickSlider from '../Common/SlickSlider';
 import NoRecordFound from '../Common/NoRecordFound';
 import noImg from 'img/common/no-img.png';
+import { IDB_TBL_BODY_MEASUREMENT, IDB_READ_WRITE, IDB_READ, IDB_TBL_BODY_FAT } from '../../constants/idb';
 
 const min0 = min(0);
 const min20 = min(20);
@@ -75,7 +76,7 @@ class BodyMeasurementForm extends Component {
         const { change, dispatch } = this.props;
         change('log_date', logDate);
         let requestData = { logDate }
-        if (window.navigator && window.navigator.onLine) {
+        if (isOnline()) {
             this.getBodyMeasurementLogData(requestData);
             dispatch(getLoggedUserProfileSettingsRequest());
         }
@@ -431,37 +432,30 @@ class BodyMeasurementForm extends Component {
 
     componentDidMount() {
         if (window.indexedDB) {
-            this.iDBOpenReq = window.indexedDB.open(IDB_NAME, IDB_VERSION);
-            this.iDBOpenReq.onsuccess = this.handleIDBOpenSuccess;
-            this.iDBOpenReq.onerror = this.handleIDBOpenError;
-            this.iDBOpenReq.onupgradeneeded = this.handleIDBOpenUpgrade;
+            connectIDB()(this.handleIDBOpenUpgrade).then((connection) => {
+                this.iDBOpenReq = connection;
+                this.handleIDBOpenSuccess(connection);
+            });
         }
     }
 
     componentDidUpdate(prevProps, prevState) {
         const { selectActionInit, logDate } = this.state;
-        const { loading, measurement, change, refreshBodyMeasurementForm, resetRefreshBodyMeasurementForm, dispatch, bodyFat } = this.props;
+        const { loading, measurement, userProgressPhotos, refreshBodyMeasurementForm, resetRefreshBodyMeasurementForm, dispatch, bodyFat } = this.props;
         if (selectActionInit && !loading) {
             this.setState({ selectActionInit: false });
             if (measurement && Object.keys(measurement).length > 0) {
-                this.initializeFormData(measurement);
-                this.storeInIDB(measurement);
+                this.initializeBodyMeasurementFormData(measurement);
+                this.storeBodyMeasurementInIDB(measurement);
             } else {
-                this.initializeFormData();
+                this.initializeBodyMeasurementFormData();
                 this.setState({ logDate: logDate });
             }
             if (bodyFat && Object.keys(bodyFat).length > 0) {
-                change('bodyfat', (bodyFat && bodyFat.bodyFatPer) ? bodyFat.bodyFatPer : '');
-                change('age', (bodyFat && bodyFat.age) ? bodyFat.age : '');
-                change('site1', (bodyFat && bodyFat.site1) ? bodyFat.site1 : '');
-                change('site2', (bodyFat && bodyFat.site2) ? bodyFat.site2 : '');
-                change('site3', (bodyFat && bodyFat.site3) ? bodyFat.site3 : '');
+                this.initializeBodyFatFormData(bodyFat);
+                this.storeBodyFatInIDB(bodyFat);
             } else {
-                change('bodyfat', '');
-                change('age', '');
-                change('site1', '');
-                change('site2', '');
-                change('site3', '');
+                this.initializeBodyFatFormData(bodyFat);
             }
             this.setValidationRules();
             dispatch(hidePageLoader());
@@ -489,7 +483,7 @@ class BodyMeasurementForm extends Component {
             this.setState({ logDate: date });
             this.props.change('log_date', date);
             let requestData = { logDate: date }
-            if (window.navigator.onLine) {
+            if (isOnline()) {
                 this.getBodyMeasurementLogData(requestData);
             } else {
                 this.getDataFromIDB(requestData);
@@ -511,7 +505,11 @@ class BodyMeasurementForm extends Component {
             change('log_date', date);
             requestData = { logDate: date }
         }
-        this.getBodyMeasurementLogData(requestData);
+        if (isOnline()) {
+            this.getBodyMeasurementLogData(requestData);
+        } else {
+            this.getDataFromIDB(requestData);
+        }
     }
 
     onActiveDateChange = (obj) => {
@@ -530,7 +528,11 @@ class BodyMeasurementForm extends Component {
                 change('log_date', date);
                 requestData = { logDate: date }
             }
-            this.getBodyMeasurementLogData(requestData);
+            if (isOnline()) {
+                this.getBodyMeasurementLogData(requestData);
+            } else {
+                this.getDataFromIDB(requestData);
+            }
         }
     }
 
@@ -571,61 +573,92 @@ class BodyMeasurementForm extends Component {
         this.setState({ validationRules });
     }
 
-    handleIDBOpenSuccess = (event) => {
-        console.log("IDB connection success: ", event);
-        this.iDB = this.iDBOpenReq.result;
-        if (window.navigator && !window.navigator.onLine) {
+    handleIDBOpenSuccess = (connection) => {
+        this.iDB = connection.result;
+        if (!isOnline()) {
             const { logDate } = this.state;
             let requestData = { logDate }
             this.getDataFromIDB(requestData);
         }
     }
 
-    handleIDBOpenError = (event) => {
-        console.log("IDB connection error: ", event);
-    }
-
     handleIDBOpenUpgrade = (event) => {
         const db = event.target.result;
-        const objectStore = db.createObjectStore("body_measurement", { keyPath: "_id" });
+        let objectStore = db.createObjectStore(IDB_TBL_BODY_MEASUREMENT, { keyPath: "_id" });
+        objectStore.createIndex("logDate", "logDate", { unique: false });
+        objectStore = db.createObjectStore(IDB_TBL_BODY_FAT, { keyPath: "_id" });
         objectStore.createIndex("logDate", "logDate", { unique: false });
     }
 
-    storeInIDB = (data) => {
-        const transaction = this.iDB.transaction(["body_measurement"], 'readwrite');
-        const objectStore = transaction.objectStore("body_measurement");
-        const measurementId = data._id;
-        const iDBGetReq = objectStore.get(measurementId);
-        iDBGetReq.onsuccess = (event) => {
-            const { target: { result } } = event;
-            if (result) {
-                objectStore.put(data);
-            } else {
-                objectStore.add(data);
+    storeBodyMeasurementInIDB = (data) => {
+        const transaction = this.iDB.transaction([IDB_TBL_BODY_MEASUREMENT], IDB_READ_WRITE);
+        if (transaction) {
+            const objectStore = transaction.objectStore(IDB_TBL_BODY_MEASUREMENT);
+            if (objectStore) {
+                const measurementId = data._id;
+                const iDBGetReq = objectStore.get(measurementId);
+                iDBGetReq.onsuccess = (event) => {
+                    const { target: { result } } = event;
+                    if (result) {
+                        objectStore.put(data);
+                    } else {
+                        objectStore.add(data);
+                    }
+                }
             }
         }
-        iDBGetReq.onerror = (event) => {
-            te("Application is offline, please check your internet connection");
-        };
+    }
+
+    storeBodyFatInIDB = (data) => {
+        const transaction = this.iDB.transaction([IDB_TBL_BODY_FAT], IDB_READ_WRITE);
+        if (transaction) {
+            const objectStore = transaction.objectStore(IDB_TBL_BODY_FAT);
+            if (objectStore) {
+                const _id = data._id;
+                const iDBGetReq = objectStore.get(_id);
+                iDBGetReq.onsuccess = (event) => {
+                    const { target: { result } } = event;
+                    if (result) {
+                        objectStore.put(data);
+                    } else {
+                        objectStore.add(data);
+                    }
+                }
+            }
+        }
     }
 
     getDataFromIDB = (requestData) => {
         const { logDate } = requestData;
-        const transaction = this.iDB.transaction(["body_measurement"], 'readonly');
-        const objectStore = transaction.objectStore("body_measurement");
-        const logDateIndex = objectStore.index('logDate');
-        const isoDate = logDate.toISOString();
-        const iDBGetReq = logDateIndex.get(isoDate);
-        iDBGetReq.onsuccess = (event) => {
-            const { target: { result } } = event;
-            this.initializeFormData(result);
+        const transaction = this.iDB.transaction([IDB_TBL_BODY_MEASUREMENT, IDB_TBL_BODY_FAT], IDB_READ);
+        if (transaction) {
+            const osBodyMeas = transaction.objectStore(IDB_TBL_BODY_MEASUREMENT);
+            const isoDate = logDate.toISOString();
+            if (osBodyMeas) {
+                const logDateIndex = osBodyMeas.index('logDate');
+                const iDBGetReq = logDateIndex.get(isoDate);
+                if (logDateIndex) {
+                    iDBGetReq.onsuccess = (event) => {
+                        const { target: { result } } = event;
+                        this.initializeBodyMeasurementFormData(result);
+                    }
+                }
+            }
+            const osBodyFat = transaction.objectStore(IDB_TBL_BODY_FAT);
+            if (osBodyFat) {
+                const logDateIndex = osBodyFat.index('logDate');
+                const iDBGetReq = logDateIndex.get(isoDate);
+                if (logDateIndex) {
+                    iDBGetReq.onsuccess = (event) => {
+                        const { target: { result } } = event;
+                        this.initializeBodyFatFormData(result);
+                    }
+                }
+            }
         }
-        iDBGetReq.onerror = (event) => {
-            te("Application is offline, please check your internet connection");
-        };
     }
 
-    initializeFormData = (measurement = {}) => {
+    initializeBodyMeasurementFormData = (measurement = {}) => {
         const { logDate } = this.state;
         const { initialize, profileSettings } = this.props;
         let bodyUnit = MEASUREMENT_UNIT_CENTIMETER;
@@ -667,6 +700,38 @@ class BodyMeasurementForm extends Component {
             }
         }
         initialize(measurementData);
+    }
+
+    initializeBodyFatFormData = (bodyFat = {}) => {
+        const { change } = this.props;
+        if (bodyFat && Object.keys(bodyFat).length > 0) {
+            change('bodyfat', (bodyFat && bodyFat.bodyFatPer) ? bodyFat.bodyFatPer : '');
+            change('age', (bodyFat && bodyFat.age) ? bodyFat.age : '');
+            change('site1', (bodyFat && bodyFat.site1) ? bodyFat.site1 : '');
+            change('site2', (bodyFat && bodyFat.site2) ? bodyFat.site2 : '');
+            change('site3', (bodyFat && bodyFat.site3) ? bodyFat.site3 : '');
+        } else {
+            change('bodyfat', '');
+            change('age', '');
+            change('site1', '');
+            change('site2', '');
+            change('site3', '');
+        }
+    }
+
+    componentWillUnmount() {
+        if (isOnline()) {
+            const transaction = this.iDB.transaction([IDB_TBL_BODY_MEASUREMENT, IDB_TBL_BODY_FAT], IDB_READ_WRITE);
+            if (transaction) {
+                const osBodyMeas = transaction.objectStore(IDB_TBL_BODY_MEASUREMENT);
+                osBodyMeas.clear();
+                const osBodyFat = transaction.objectStore(IDB_TBL_BODY_FAT);
+                osBodyFat.clear();
+            }
+        }
+        this.iDB.close();
+        this.iDB = null;
+        this.iDBOpenReq = null;
     }
 }
 
