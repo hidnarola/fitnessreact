@@ -18,6 +18,8 @@ export const GET_PROGRESS_PHOTOS_BY_DATE_REQUEST = 'GET_PROGRESS_PHOTOS_BY_DATE_
 export const GET_PROGRESS_PHOTOS_BY_DATE_SUCCESS = 'GET_PROGRESS_PHOTOS_BY_DATE_SUCCESS';
 export const GET_PROGRESS_PHOTOS_BY_DATE_ERROR = 'GET_PROGRESS_PHOTOS_BY_DATE_ERROR';
 
+export const SET_USER_BODY_MEASUREMENT_STATE = 'SET_USER_BODY_MEASUREMENT_STATE';
+
 export function getUserBodyMeasurementRequest(requestData) {
     return {
         type: GET_USER_BODY_MEASUREMENT_REQUEST,
@@ -120,5 +122,12 @@ export function getProgressPhotosByDateError(error) {
     return {
         type: GET_PROGRESS_PHOTOS_BY_DATE_ERROR,
         error,
+    }
+}
+
+export function setUserBodyMeasurementState(newState) {
+    return {
+        type: SET_USER_BODY_MEASUREMENT_STATE,
+        newState
     }
 }

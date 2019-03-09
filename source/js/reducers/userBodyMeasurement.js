@@ -14,7 +14,8 @@ import {
     SAVE_USER_BODY_FAT_ERROR,
     GET_PROGRESS_PHOTOS_BY_DATE_REQUEST,
     GET_PROGRESS_PHOTOS_BY_DATE_SUCCESS,
-    GET_PROGRESS_PHOTOS_BY_DATE_ERROR
+    GET_PROGRESS_PHOTOS_BY_DATE_ERROR,
+    SET_USER_BODY_MEASUREMENT_STATE
 } from "../actions/userBodyMeasurement";
 import { VALIDATION_FAILURE_STATUS } from "../constants/consts";
 import { generateValidationErrorMsgArr } from "../helpers/funs";
@@ -193,6 +194,12 @@ const actionMap = {
             error: error,
         }));
     },
+    [SET_USER_BODY_MEASUREMENT_STATE]: (state, action) => {
+        return state.merge(Map({
+            ...state,
+            ...action.newState
+        }));
+    }
 };
 
 export default function reducer(state = initialState, action = {}) {

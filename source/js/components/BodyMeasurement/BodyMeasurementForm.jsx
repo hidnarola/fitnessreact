@@ -7,7 +7,7 @@ import ReactCalender from 'react-calendar/dist/entry.nostyle';
 import bodyGraph from 'img/site/body-graph.png';
 import { required, min, max, validNumber } from '../../formValidation/validationRules';
 import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
-import { getUserBodyMeasurementRequest, getUserBodyMeasurementLogDatesRequest } from '../../actions/userBodyMeasurement';
+import { getUserBodyMeasurementRequest, getUserBodyMeasurementLogDatesRequest, setUserBodyMeasurementState } from '../../actions/userBodyMeasurement';
 import { getLoggedUserProfileSettingsRequest } from '../../actions/profile';
 import { MEASUREMENT_UNIT_CENTIMETER, MEASUREMENT_UNIT_KILOGRAM, MEASUREMENT_UNIT_GRAM, MEASUREMENT_UNIT_BPM, SERVER_BASE_URL, PROGRESS_PHOTO_CATEGORIES, PROGRESS_PHOTO_BASICS, PROGRESS_PHOTO_POSED } from '../../constants/consts';
 import { convertUnits, te, ts, connectIDB, isOnline } from '../../helpers/funs';
@@ -16,7 +16,7 @@ import { Alert } from "react-bootstrap";
 import SlickSlider from '../Common/SlickSlider';
 import NoRecordFound from '../Common/NoRecordFound';
 import noImg from 'img/common/no-img.png';
-import { IDB_TBL_BODY_MEASUREMENT, IDB_READ_WRITE, IDB_READ, IDB_TBL_BODY_FAT } from '../../constants/idb';
+import { IDB_TBL_BODY_MEASUREMENT, IDB_READ_WRITE, IDB_READ, IDB_TBL_BODY_FAT, IDB_TBL_BODY_PP } from '../../constants/idb';
 
 const min0 = min(0);
 const min20 = min(20);
@@ -457,6 +457,11 @@ class BodyMeasurementForm extends Component {
             } else {
                 this.initializeBodyFatFormData(bodyFat);
             }
+            if (userProgressPhotos && userProgressPhotos.length > 0) {
+                for (const photo of userProgressPhotos) {
+                    this.storeBodyProgressPhotosInIDB(photo);
+                }
+            }
             this.setValidationRules();
             dispatch(hidePageLoader());
         }
@@ -588,6 +593,8 @@ class BodyMeasurementForm extends Component {
         objectStore.createIndex("logDate", "logDate", { unique: false });
         objectStore = db.createObjectStore(IDB_TBL_BODY_FAT, { keyPath: "_id" });
         objectStore.createIndex("logDate", "logDate", { unique: false });
+        objectStore = db.createObjectStore(IDB_TBL_BODY_PP, { keyPath: "_id" });
+        objectStore.createIndex("logDate", "logDate", { unique: false });
     }
 
     storeBodyMeasurementInIDB = (data) => {
@@ -628,9 +635,33 @@ class BodyMeasurementForm extends Component {
         }
     }
 
+    storeBodyProgressPhotosInIDB = (data) => {
+        const transaction = this.iDB.transaction([IDB_TBL_BODY_PP], IDB_READ_WRITE);
+        if (transaction) {
+            const objectStore = transaction.objectStore(IDB_TBL_BODY_PP);
+            if (objectStore) {
+                const _id = data._id;
+                const iDBGetReq = objectStore.get(_id);
+                iDBGetReq.onsuccess = (event) => {
+                    const { target: { result } } = event;
+                    if (result) {
+                        objectStore.put(data);
+                    } else {
+                        objectStore.add(data);
+                    }
+                }
+            }
+        }
+    }
+
     getDataFromIDB = (requestData) => {
         const { logDate } = requestData;
-        const transaction = this.iDB.transaction([IDB_TBL_BODY_MEASUREMENT, IDB_TBL_BODY_FAT], IDB_READ);
+        const idbTbls = [
+            IDB_TBL_BODY_MEASUREMENT,
+            IDB_TBL_BODY_FAT,
+            IDB_TBL_BODY_PP
+        ];
+        const transaction = this.iDB.transaction(idbTbls, IDB_READ);
         if (transaction) {
             const osBodyMeas = transaction.objectStore(IDB_TBL_BODY_MEASUREMENT);
             const isoDate = logDate.toISOString();
@@ -652,6 +683,18 @@ class BodyMeasurementForm extends Component {
                     iDBGetReq.onsuccess = (event) => {
                         const { target: { result } } = event;
                         this.initializeBodyFatFormData(result);
+                    }
+                }
+            }
+            const osPP = transaction.objectStore(IDB_TBL_BODY_PP);
+            if (osPP) {
+                const logDateIndex = osPP.index('logDate');
+                const iDBGetReq = logDateIndex.get(isoDate);
+                if (logDateIndex) {
+                    iDBGetReq.onsuccess = (event) => {
+                        const { target: { result } } = event;
+                        const newState = { userProgressPhotos: result };
+                        this.props.dispatch(setUserBodyMeasurementState(newState));
                     }
                 }
             }

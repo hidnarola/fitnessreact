@@ -23,14 +23,19 @@ export const AUTH_STATE_ACTION_SIGNUP_KEY = 'com.auth0.auth.{"action":"signup"}'
 export const USER_ROLE = 'fitassist-user';
 export const ADMIN_ROLE = 'fitassist-admin'
 
-var baseUrl = 'http://' + window.location.hostname;
+let http = 'http://';
+if (process.env.NODE_ENV) {
+    http = 'https://';
+}
+
+var baseUrl = http + window.location.hostname;
 if (window.location.port) {
     baseUrl += ':' + window.location.port;
 }
 baseUrl += '/';
 
 export const BASE_URL = baseUrl;
-export const SERVER_BASE_URL = 'http://' + window.location.hostname + ':3300/';
+export const SERVER_BASE_URL = http + window.location.hostname + ':3300/';
 
 // amit's system url of api
 // export const SERVER_BASE_URL = 'http://192.168.100.19:3300/';
