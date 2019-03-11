@@ -20,7 +20,7 @@ import _ from 'lodash';
 import moment from "moment";
 import { AUTH_CONFIG } from "../auth/auth0-variables";
 import { toast } from "react-toastify";
-import { FaCheck, FaFrownO } from 'react-icons/lib/fa';
+import { FaCheck, FaFrownO, FaExclamationTriangle } from 'react-icons/lib/fa';
 import $ from 'jquery';
 import jwt from "jwt-simple";
 import { Emoji } from "emoji-mart";
@@ -115,6 +115,14 @@ export function te(msg = 'Something went wrong!') {
     toast.error(
         <span>
             <FaFrownO /> {msg}
+        </span>
+    );
+}
+
+export function tw(msg = 'Something went wrong!') {
+    toast.warn(
+        <span>
+            <FaExclamationTriangle /> {msg}
         </span>
     );
 }

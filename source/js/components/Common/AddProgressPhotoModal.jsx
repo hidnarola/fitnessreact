@@ -8,7 +8,7 @@ import { forwardImageToDetailsPage, cancelImageSelectedFromDetailsPage, deleteIm
 import ProgressPlaceholder from "img/common/body-progress-img-placeholder.jpg";
 import { PROGRESS_PHOTO_CATEGORIES, PROGRESS_PHOTO_BASICS, PROGRESS_PHOTO_POSED, MAX_IMAGE_FILE_SIZE_ALLOWED } from "../../constants/consts";
 import SweetAlert from "react-bootstrap-sweetalert";
-import { checkImageMagicCode, te } from "../../helpers/funs";
+import { checkImageMagicCode, te, isOnline, tw } from "../../helpers/funs";
 
 class AddProgressPhotoModal extends Component {
     constructor(props) {

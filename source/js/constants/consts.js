@@ -23,9 +23,9 @@ export const AUTH_STATE_ACTION_SIGNUP_KEY = 'com.auth0.auth.{"action":"signup"}'
 export const USER_ROLE = 'fitassist-user';
 export const ADMIN_ROLE = 'fitassist-admin'
 
-let http = 'http://';
-if (process.env.NODE_ENV) {
-    http = 'https://';
+let http = 'https://';
+if (process.env.NODE_ENV === 'development') {
+    http = 'http://';
 }
 
 var baseUrl = http + window.location.hostname;

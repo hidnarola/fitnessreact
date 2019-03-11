@@ -30,7 +30,7 @@ class Emos extends Component {
                         {emojiBtnIcon}
                     </button>
                     {openEmosArea &&
-                        <div className={cns("emos-area-wrap", (positionClass ? positionClass : "top-right"))}>
+                        <div id={id + "emojicustom"} className={cns("emos-area-wrap", (positionClass ? positionClass : "top-right"))}>
                             <Picker
                                 color="#f00"
                                 emoji=""
@@ -68,7 +68,13 @@ class Emos extends Component {
     }
 
     handleClick = (e) => {
-        // console.log('handle click =>', e);
+        const { id } = this.props;
+        const { openEmosArea } = this.state;
+        if (openEmosArea) {
+            if (!document.getElementById(id + "emojicustom").contains(e.target)) {
+                this.toggleEmosArea();
+            }
+        }
     }
 
     toggleEmosArea = () => {

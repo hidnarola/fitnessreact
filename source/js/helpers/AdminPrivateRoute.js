@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import { LOCALSTORAGE_ROLE_KEY, ADMIN_ROLE, LOCALSTORAGE_ACCESS_TOKEN_KEY, USER_ROLE } from '../constants/consts';
-import { adminRootRoute } from '../constants/adminRoutes';
+import { LOCALSTORAGE_ROLE_KEY, ADMIN_ROLE, LOCALSTORAGE_ACCESS_TOKEN_KEY } from '../constants/consts';
 import { publicPath } from '../constants/routes';
 
 export default class AdminPrivateRoute extends Component {
@@ -12,18 +11,16 @@ export default class AdminPrivateRoute extends Component {
                 (props) => {
                     let token = localStorage.getItem(LOCALSTORAGE_ACCESS_TOKEN_KEY);
                     let role = localStorage.getItem(LOCALSTORAGE_ROLE_KEY);
-                    let decodedRole = window.atob(role)
-                    if (decodedRole === ADMIN_ROLE) {
-                        return (
-                            (token && role) ? <Component {...props} /> : <Redirect to={{ pathname: adminRootRoute, state: { from: props.location } }} />
-                        )
-                    } else if (decodedRole === USER_ROLE) {
-                        return (
-                            (token && role) ? <Component {...props} /> : <Redirect to={{ pathname: publicPath, state: { from: props.location } }} />
-                        )
+                    if (token && role) {
+                        let decodedRole = window.atob(role);
+                        if (decodedRole === ADMIN_ROLE) {
+                            return (
+                                <Component {...props} />
+                            )
+                        }
                     }
                     return (
-                        <Redirect to={{ pathname: adminRootRoute, state: { from: props.location } }} />
+                        <Redirect to={{ pathname: publicPath, state: { from: props.location } }} />
                     )
                 }
             } />

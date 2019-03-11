@@ -22,7 +22,7 @@ const actionMap = {
         if (action.data && action.data.status && action.data.status === 1) {
             newState.data = action.data.data;
         } else {
-            let msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
+            let msg = (action.data) ? (action.data.message) ? action.data.message : 'Something went wrong! please try again later.' : 'Something went wrong! please try again later.';
             newState.error = [msg];
         }
         return state.merge(Map(newState));

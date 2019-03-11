@@ -594,7 +594,7 @@ class BodyMeasurementForm extends Component {
         objectStore = db.createObjectStore(IDB_TBL_BODY_FAT, { keyPath: "_id" });
         objectStore.createIndex("logDate", "logDate", { unique: false });
         objectStore = db.createObjectStore(IDB_TBL_BODY_PP, { keyPath: "_id" });
-        objectStore.createIndex("logDate", "logDate", { unique: false });
+        objectStore.createIndex("date", "date", { unique: false });
     }
 
     storeBodyMeasurementInIDB = (data) => {
@@ -688,8 +688,8 @@ class BodyMeasurementForm extends Component {
             }
             const osPP = transaction.objectStore(IDB_TBL_BODY_PP);
             if (osPP) {
-                const logDateIndex = osPP.index('logDate');
-                const iDBGetReq = logDateIndex.get(isoDate);
+                const logDateIndex = osPP.index('date');
+                const iDBGetReq = logDateIndex.getAll(isoDate);
                 if (logDateIndex) {
                     iDBGetReq.onsuccess = (event) => {
                         const { target: { result } } = event;

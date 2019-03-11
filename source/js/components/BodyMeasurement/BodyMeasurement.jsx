@@ -3,9 +3,9 @@ import { connect } from "react-redux";
 import { reset, initialize, formValueSelector } from "redux-form";
 import BodyMeasurementForm from './BodyMeasurementForm';
 import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
-import { saveUserBodyMeasurementRequest, saveUserBodyFatRequest, getProgressPhotosByDateRequest } from '../../actions/userBodyMeasurement';
+import { saveUserBodyMeasurementRequest, saveUserBodyFatRequest } from '../../actions/userBodyMeasurement';
 import moment from 'moment';
-import { ts, te, isOnline } from '../../helpers/funs';
+import { ts, te, isOnline, tw } from '../../helpers/funs';
 import { addUserProgressPhotoRequest, removeSelectedProgressPhotosToUpload } from '../../actions/userProgressPhotos';
 import AddProgressPhotoModal from '../Common/AddProgressPhotoModal';
 import BodyFatModal from './BodyFatModal';
@@ -93,39 +93,44 @@ class BodyMeasurement extends Component {
             dispatch(hidePageLoader());
         }
         if (saveProgressPhotoActionInit && !progressPhotoloading) {
-            this.setState({ saveProgressPhotoActionInit: false });
+            let newState = { saveProgressPhotoActionInit: false };
             if (progressPhotoError && progressPhotoError.length <= 0) {
+                newState.refreshBodyMeasurementForm = true;
                 ts('Progress photo saved successfully!');
             } else {
                 te('Something went wrong while adding progress photo! Please try again.');
             }
             this.handleCloseAddProgressPhotoModal();
             dispatch(hidePageLoader());
-            this.getProgressPhotosByDate();
+            this.setState(newState);
         }
     }
 
     handleSubmit = (data) => {
-        const { dispatch } = this.props;
-        this.setState({ saveActionInit: true });
-        let measurementData = {
-            logDate: moment(data.log_date).startOf().utc(),
-            neck: data.neck,
-            shoulders: data.shoulders,
-            chest: data.chest,
-            upperArm: data.upper_arm,
-            waist: data.waist,
-            forearm: data.forearm,
-            hips: data.hips,
-            thigh: data.thigh,
-            calf: data.calf,
-            heartRate: data.heartRate,
-            weight: data.weight,
-            height: data.height,
-            bodyFatPer: data.bodyfat,
+        if (isOnline()) {
+            const { dispatch } = this.props;
+            this.setState({ saveActionInit: true });
+            let measurementData = {
+                logDate: moment(data.log_date).startOf().utc(),
+                neck: data.neck,
+                shoulders: data.shoulders,
+                chest: data.chest,
+                upperArm: data.upper_arm,
+                waist: data.waist,
+                forearm: data.forearm,
+                hips: data.hips,
+                thigh: data.thigh,
+                calf: data.calf,
+                heartRate: data.heartRate,
+                weight: data.weight,
+                height: data.height,
+                bodyFatPer: data.bodyfat,
+            }
+            dispatch(showPageLoader());
+            dispatch(saveUserBodyMeasurementRequest(measurementData));
+        } else {
+            tw("You are offline, please check your internet connection");
         }
-        dispatch(showPageLoader());
-        dispatch(saveUserBodyMeasurementRequest(measurementData));
     }
 
     resetRefreshBodyMeasurementForm = () => {
@@ -133,7 +138,11 @@ class BodyMeasurement extends Component {
     }
 
     handleShowAddProgressPhotoModal = () => {
-        this.setState({ showAddProgressPhotoModal: true });
+        if (isOnline()) {
+            this.setState({ showAddProgressPhotoModal: true });
+        } else {
+            tw("You are offline, please check your internet connection");
+        }
     }
 
     handleCloseAddProgressPhotoModal = (resetFormData = true) => {
@@ -146,16 +155,20 @@ class BodyMeasurement extends Component {
     }
 
     handleProgressPhotoSubmit = (data) => {
-        const { dispatch, body_fat_log_date, selectedPhotos } = this.props;
-        if (selectedPhotos && selectedPhotos.length > 0) {
-            let requestData = {
-                description: data.description ? data.description : '',
-                date: body_fat_log_date,
-                progressPhotosData: selectedPhotos
-            };
-            this.setState({ saveProgressPhotoActionInit: true });
-            dispatch(showPageLoader());
-            dispatch(addUserProgressPhotoRequest(requestData));
+        if (isOnline()) {
+            const { dispatch, body_fat_log_date, selectedPhotos } = this.props;
+            if (selectedPhotos && selectedPhotos.length > 0) {
+                let requestData = {
+                    description: data.description ? data.description : '',
+                    date: body_fat_log_date,
+                    progressPhotosData: selectedPhotos
+                };
+                this.setState({ saveProgressPhotoActionInit: true });
+                dispatch(showPageLoader());
+                dispatch(addUserProgressPhotoRequest(requestData));
+            }
+        } else {
+            tw("You are offline, please check your internet connection");
         }
     }
 
@@ -191,24 +204,22 @@ class BodyMeasurement extends Component {
     }
 
     handleBodyFatSubmit = (data) => {
-        const { dispatch } = this.props;
-        this.setState({ saveBodyFatInit: true });
-        let requestData = {
-            logDate: moment(data.log_date).startOf('day').utc(),
-            site1: data.site1,
-            site2: data.site2,
-            site3: data.site3,
-            bodyFatPer: data.bodyFat,
-            age: data.age,
+        if (isOnline()) {
+            const { dispatch } = this.props;
+            this.setState({ saveBodyFatInit: true });
+            let requestData = {
+                logDate: moment(data.log_date).startOf('day').utc(),
+                site1: data.site1,
+                site2: data.site2,
+                site3: data.site3,
+                bodyFatPer: data.bodyFat,
+                age: data.age,
+            }
+            dispatch(showPageLoader());
+            dispatch(saveUserBodyFatRequest(requestData));
+        } else {
+            tw("You are offline, please check your internet connection");
         }
-        dispatch(showPageLoader());
-        dispatch(saveUserBodyFatRequest(requestData));
-    }
-
-    getProgressPhotosByDate = () => {
-        const { body_fat_log_date, dispatch } = this.props;
-        let requestData = { logDate: body_fat_log_date };
-        dispatch(getProgressPhotosByDateRequest(requestData));
     }
 }
 

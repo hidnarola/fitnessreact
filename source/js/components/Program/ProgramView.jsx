@@ -31,13 +31,13 @@ class ProgramView extends Component {
     }
 
     render() {
-        const { program, totalDays, workouts} = this.state;
+        const { program, totalDays, workouts } = this.state;
         return (
             <div className="fitness-body">
                 <FitnessHeader />
                 <FitnessNav />
                 <section className="body-wrap">
-                    <div className="body-head d-flex justify-content-start">
+                    <div className="body-head d-flex justify-content-start front-white-header">
                         {program && program.name &&
                             <div className="body-head-l title_edit_pop">
                                 <h2>{program.name}</h2>
@@ -144,6 +144,12 @@ class CustomDaysCalendarView extends Component {
         }
         return (
             <div className="program-save-custom-days-wrapper">
+                <div className="block-border-div"></div>
+                <div className="block-border-div"></div>
+                <div className="block-border-div"></div>
+                <div className="block-border-div"></div>
+                <div className="block-border-div"></div>
+                <div className="block-border-div"></div>
                 {rowsObj}
             </div>
         );
