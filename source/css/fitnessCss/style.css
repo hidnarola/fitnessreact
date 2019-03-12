@@ -975,6 +975,7 @@ display:-webkit-box; display:-webkit-flex; display:-ms-flex; display:flex; flex-
 .display_block {display: block;}
 .display_none {display: none !important;}
 .opacity-0 {opacity: 0 !important;}
+.w-c-brb{border-radius: 0 0 10px 10px !important;}
 .display_inline_block {display: inline-block !important;}
 .fs-100{font-size: 100px !important;}
 .fs-25{font-size: 25px !important;}
@@ -1283,7 +1284,7 @@ ul.text-right.pager {text-align: right;}
 .workout-exercise-card-wrapper.workout-exercise-card-for-exercise-wrapper h4 { float: left; margin: 0; padding: 0; position: relative; top: -30px; left: 0; background: #fff; min-width: 7%; text-align: center; }
 .workout-exercise-card-wrapper.workout-exercise-card-for-warmup-wrapper h4 { float: left; margin: 0; padding: 0; position: relative; top: -30px; left: 0; background: #fff; min-width: 8%; text-align: center; }
 .workout-exercise-card-wrapper.workout-exercise-card-for-cooldown-wrapper h4 { float: left; margin: 0; padding: 0; position: relative; top: -30px; left: 0; background: #fff; min-width: 9%; text-align: center; }
-.big-calendar-custom-month-event-view-card { padding:0; margin: 0; }
+.big-calendar-custom-month-event-view-card {padding: 0;margin: 0;box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.15);border-radius: 10px;}
 .big-calendar-custom-month-event-view-card h5 { font-size: 16px; }
 .big-calendar-custom-month-event-view-card p { font-size: 12px; font-style: italic; }
 .big-calendar-custom-month-event-view-card a{color: #44edd1;}
@@ -1294,7 +1295,7 @@ ul.text-right.pager {text-align: right;}
 #custom-cut-workout-wrap .custom_check [type="checkbox"]:not(:checked) + label:before,
 #custom-cut-workout-wrap .custom_check [type="checkbox"]:checked + label:before,
 #custom-drag-workout-wrap .custom_check [type="checkbox"]:not(:checked) + label:before,
-#custom-drag-workout-wrap .custom_check [type="checkbox"]:checked + label:before {width:16px; height:16px; border: 1px solid #ddd; background: #fff;}
+#custom-drag-workout-wrap .custom_check [type="checkbox"]:checked + label:before {width: 15px; height: 15px; border: 1px solid #ddd; background: #fff; border-radius: 50%; top: 1px;}
 .workout-calender .custom_check [type="checkbox"]:not(:checked) + label,
 .workout-calender .custom_check [type="checkbox"]:checked + label,
 #custom-cut-workout-wrap .custom_check [type="checkbox"]:checked + label,
@@ -1303,7 +1304,7 @@ ul.text-right.pager {text-align: right;}
 #custom-drag-workout-wrap .custom_check [type="checkbox"]:not(:checked) + label {padding-left: 22px; height: auto; margin: 0;}
 .workout-calender .pull-left.custom_check,
 #custom-cut-workout-wrap .pull-left.custom_check,
-#custom-drag-workout-wrap .pull-left.custom_check { float:none !important; background: #693fbd; padding: 10px; height: 38px;}
+#custom-drag-workout-wrap .pull-left.custom_check {float: none !important;background: #693fbd;padding: 10px;height: 40px;border-radius: 10px 10px 0 0;}
 .workout-calender .big-calendar-custom-month-event-view-card h5,
 #custom-cut-workout-wrap .big-calendar-custom-month-event-view-card h5,
 #custom-drag-workout-wrap .big-calendar-custom-month-event-view-card h5 { font-size:16px; line-height:18px; display:block; text-overflow:ellipsis; height:18px; overflow:hidden; width:70%; color:#fff; margin:0;}
@@ -1312,33 +1313,33 @@ ul.text-right.pager {text-align: right;}
 #custom-drag-workout-wrap .big-calendar-custom-month-event-view-card p{font-style: normal; white-space: normal; color: #333 !important; font-size: 14px; line-height: 20px; padding: 0; margin: 0px 0 10px 0; overflow: hidden; height: 42px; word-break: break-all;}
 .workout-calender .big-calendar-custom-month-event-view-card a,
 #custom-cut-workout-wrap .big-calendar-custom-month-event-view-card a,
-#custom-drag-workout-wrap .big-calendar-custom-month-event-view-card a  {color:#716684; width: calc(25% - 4px); display: inline-block; line-height: 20px; padding: 2px 4px 6px; border: 0; background: #e2dbee; text-align: center; margin: 0 2px; vertical-align: top; }
+#custom-drag-workout-wrap .big-calendar-custom-month-event-view-card a  {color:#716684; width: calc(25% - 4px); display: inline-block; line-height: 20px; padding: 2px 4px 6px; border: 0; background: #f4f7fc; text-align: center; margin: 0 2px; vertical-align: top;     border-radius: 6px;}
 .workout-calender .custom_check [type="checkbox"]:not(:checked) + label:after,
 .workout-calender .custom_check [type="checkbox"]:checked + label:after,
 #custom-cut-workout-wrap .custom_check [type="checkbox"]:not(:checked) + label:after,
 #custom-cut-workout-wrap .custom_check [type="checkbox"]:checked + label:after,
 #custom-drag-workout-wrap .custom_check [type="checkbox"]:not(:checked) + label:after,
-#custom-drag-workout-wrap .custom_check [type="checkbox"]:checked + label:after {width:10px; height: 10px; background: #6a3fbd; top: 3px; left: 3px;}
+#custom-drag-workout-wrap .custom_check [type="checkbox"]:checked + label:after {width: 9px; height: 9px; background: #6a3fbd; top: 4px; left: 3px; border-radius: 50%;}
 .workout-calender .rbc-month-view>.rbc-month-row{display:flex; overflow:visible; height:auto; flex-wrap:wrap;flex: 1; min-height: 180px;}
 .workout-calender .big-calendar-custom-month-event-view-card.restday .pull-left.custom_check,
 #custom-cut-workout-wrap .big-calendar-custom-month-event-view-card.restday .pull-left.custom_check,
 #custom-drag-workout-wrap .big-calendar-custom-month-event-view-card.restday .pull-left.custom_check{ background:#46E9C5;}
 .workout-calender .big-calendar-custom-month-event-view-card.restday .big-calendar-custom-month-event-view-card-body,
 #custom-cut-workout-wrap .big-calendar-custom-month-event-view-card.restday .big-calendar-custom-month-event-view-card-body,
-#custom-drag-workout-wrap .big-calendar-custom-month-event-view-card.restday .big-calendar-custom-month-event-view-card-body {background-color: #e3fdf7;}
+#custom-drag-workout-wrap .big-calendar-custom-month-event-view-card.restday .big-calendar-custom-month-event-view-card-body {background-color: rgba(210, 111, 58, 0.05);}
 .workout-calender .big-calendar-custom-month-event-view-card.restday .custom_check [type="checkbox"]:not(:checked) + label:after,
 .workout-calender .big-calendar-custom-month-event-view-card.restday .custom_check [type="checkbox"]:checked + label:after,
 #custom-cut-workout-wrap .big-calendar-custom-month-event-view-card.restday .custom_check [type="checkbox"]:not(:checked) + label:after,
 #custom-cut-workout-wrap .big-calendar-custom-month-event-view-card.restday .custom_check [type="checkbox"]:checked + label:after,
 #custom-drag-workout-wrap .big-calendar-custom-month-event-view-card.restday .custom_check [type="checkbox"]:not(:checked) + label:after,
-#custom-drag-workout-wrap .big-calendar-custom-month-event-view-card.restday .custom_check [type="checkbox"]:checked + label:after{background:#46E9C5;}
+#custom-drag-workout-wrap .big-calendar-custom-month-event-view-card.restday .custom_check [type="checkbox"]:checked + label:after{background:#d26f3a;}
 .workout-calender .big-calendar-custom-month-event-view-card.restday a,
 #custom-cut-workout-wrap .big-calendar-custom-month-event-view-card.restday a,
-#custom-drag-workout-wrap .big-calendar-custom-month-event-view-card.restday a {background:#d6e6e3;}
+#custom-drag-workout-wrap .big-calendar-custom-month-event-view-card.restday a {background:#f5e4d9;}
 .workout-calender .rbc-header {padding: 10px 3px; background: #f4f0fc;}
 .workout-calender .rbc-month-view{flex:1}
-.big-calendar-custom-month-event-view-card-body{background-color:#f6f1ff; padding:10px;}
-.big-calendar-custom-month-event-view-card-footer .switch-wrap{ box-shadow:none; font-family:'Neuzeit'; background:#fafafa; border-radius:0; padding:0 10px; line-height:36px;}
+.big-calendar-custom-month-event-view-card-body {background-color: #fff;padding: 15px 8px;}
+.big-calendar-custom-month-event-view-card-footer .switch-wrap{ box-shadow:none; font-family:'Neuzeit'; background:#f8f8f8; border-radius:0 0 10px 10px; padding:0 10px; line-height:36px;}
 .big-calendar-custom-month-event-view-card-footer .switch-wrap small {font-weight: 500;margin: 0;width: 75%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;}
 .material-switch > label {width: 30px;}
 .material-switch > label::before {border-radius:80px; height:10px; margin-top:-5px; width:30px;}
@@ -1410,33 +1411,33 @@ ul.text-right.pager {text-align: right;}
 .program-save-custom-days-wrapper .program-save-custom-days-row .program-save-custom-days-block .program-save-custom-days-block-title { text-align: right; }
 .program-save-custom-days-wrapper .program-save-custom-days-row .program-save-custom-days-block .program-save-custom-days-block-content { width: 100%; min-height: 150px; }
 .program-save-custom-days-block-content .program-event-block-main-wrapper { margin-bottom: 5px; }
-.program-event-block-wrapper{border-radius: 0;color:#000;cursor:pointer; margin:0;}
+.program-event-block-wrapper{color: #000; cursor: pointer; -webkit-box-shadow: 0 0 10px 0 rgba(0, 0, 0, .15); box-shadow: 0 0 10px 0 rgba(0, 0, 0, .15); border-radius: 10px; margin: 0;}
 .program-event-block-wrapper + .program-event-block-wrapper{margin-top:10px}
 .program-event-block-title{ display:block; }
-.program-event-block-title .pull-left.custom_check{  float: none !important; background: #693fbd; padding: 10px; height: 38px;}
+.program-event-block-title .pull-left.custom_check{  float: none !important; background: #693fbd; padding: 10px; height: 38px;border-radius: 10px 10px 0 0;}
 .restday .program-event-block-title .pull-left.custom_check,
 #custom-cut-workout-wrap .restday .program-event-block-title .pull-left.custom_check
-#custom-drag-workout-wrap .restday .program-event-block-title .pull-left.custom_check{ background: #46E9C5 !important;}
+#custom-drag-workout-wrap .restday .program-event-block-title .pull-left.custom_check{ background: #d26f3a !important;}
 .program-event-block-title .custom_check {font-size: 14px; line-height:16px; display: block; text-overflow: ellipsis; height:16px; overflow: hidden; width: 100%; color: #6a3fbd; margin:0;}
 .program-save-custom-days-wrapper .program-save-custom-days-row .program-save-custom-days-block{ padding:5px; z-index: 4; user-select: none;}
 .program-event-block-content p{    font-style: normal; white-space: normal; color: #333 !important; font-size: 14px; line-height: 20px; padding: 0; margin: 0px 0 10px 0; overflow: hidden; height: 42px; word-break: break-all;}
-.program-event-block-content a{color: #716684; width: calc(25% - 4px); display: inline-block; line-height: 20px; padding: 2px 4px 6px; border: 0; background: #e2dbee; text-align: center; margin: 0 2px; vertical-align: top;}
+.program-event-block-content a{color: #716684; width: calc(25% - 4px); display: inline-block; line-height: 20px; padding: 2px 4px 6px; border: 0; background: #f4f7fc; text-align: center; margin: 0 2px; vertical-align: top; border-radius: 6px;}
 .program-save-custom-days-row { display: -ms-flexbox; display: -webkit-box; display: flex; -ms-flex-direction: row; -webkit-box-orient: horizontal; -webkit-box-direction: normal; flex-direction: row; }
 .program-save-custom-days-wrapper{ border:1px solid #ddd;position: relative;}
 .program-save-custom-days-block{border:0 !important;}
 .program-save-custom-days-row + .program-save-custom-days-row{ border-top:1px solid #ddd;}
-.program-event-block-content{background-color: #f6f1ff;padding: 10px;}
-.restday .program-event-block-content{    background-color: #e3fdf7;}
-.program-event-block-wrapper.restday .program-event-block-content a{background: #d6e6e3;}
+.program-event-block-content{background-color: #fff;padding: 10px;border-radius: 0 0 10px 10px;}
+.restday .program-event-block-content{background-color: rgba(210, 111, 58, .05);}
+.program-event-block-wrapper.restday .program-event-block-content a{background: #f5e4d9;}
 .program-event-block-wrapper .custom_check [type="checkbox"]:not(:checked) + label:before,
-.program-event-block-wrapper .custom_check [type="checkbox"]:checked + label:before {width: 16px; height: 16px; border:0; background: #fff;}
+.program-event-block-wrapper .custom_check [type="checkbox"]:checked + label:before {width: 15px; height: 15px; border: 1px solid #ddd; background: #fff; border-radius: 50%; top: 1px;}
 .program-event-block-wrapper .custom_check [type="checkbox"]:not(:checked) + label:after,
-.program-event-block-wrapper .custom_check [type="checkbox"]:checked + label:after {width: 10px; height: 10px; background: #6a3fbd; top: 3px; left: 3px;}
+.program-event-block-wrapper .custom_check [type="checkbox"]:checked + label:after {width: 9px; height: 9px; background: #6a3fbd; top: 4px; left: 3px; border-radius: 50%;}
 .program-event-block-wrapper .custom_check [type="checkbox"]:not(:checked) + label,
 .program-event-block-wrapper .custom_check [type="checkbox"]:checked + label {padding-left: 24px;}
-.program-event-block-title h5{ font-size: 16px; line-height: 18px; display: block; text-overflow: ellipsis; height: 18px; overflow: hidden;width: 70%; color: #fff !important; margin: 0;}
+.program-event-block-title h5{ font-size: 16px; line-height: 18px; display: block; text-overflow: ellipsis; height: 18px; overflow: hidden;width: 70%; color: #fff !important; margin: 0;font-weight: 600;}
 .program-event-block-wrapper.restday .custom_check [type="checkbox"]:not(:checked) + label:after,
-.program-event-block-wrapper.restday .custom_check [type="checkbox"]:checked + label:after {background: #46E9C5;}
+.program-event-block-wrapper.restday .custom_check [type="checkbox"]:checked + label:after {background: #d26f3a;}
 .week-btn-btm{ margin:25px 0 0;}
 .week-btn-btm a{ color: #fff; display: inline-block; margin: 0; text-align: center; vertical-align: middle; padding:7px 10px 5px; border-radius:4px; line-height: 20px; white-space: nowrap;font-family: 'Neuzeit'; font-weight:400; }
 a.program-save-add-week-btn{background:#ba66c8;}
@@ -2257,7 +2258,7 @@ ul.uploade-data li.sm-img:last-child {border-bottom: 0;}
 .my-custom-calendar .workout-cut-card-btn,
 .my-custom-calendar .calendar-custom-drag-handle,
 #custom-cut-workout-wrap .big-calendar-custom-month-event-view-card .workout-cut-card-btn,
-#custom-drag-workout-wrap .big-calendar-custom-month-event-view-card .workout-cut-card-btn { display: inline-block; position: absolute; top: 7px; right: 8px; width: 20px; height: 20px; background: transparent !important; border-radius: 50%; margin: 0; padding: 0; }
+#custom-drag-workout-wrap .big-calendar-custom-month-event-view-card .workout-cut-card-btn { display: inline-block; position: absolute; top: 9px; right: 8px; width: 20px; height: 20px; background: transparent !important; border-radius: 50%; margin: 0; padding: 0; }
 .workout-calender .big-calendar-custom-month-event-view-card .workout-cut-card-btn i,
 .my-custom-calendar .workout-cut-card-btn i,
 .my-custom-calendar .calendar-custom-drag-handle i,
@@ -2276,9 +2277,9 @@ div#custom-drag-workout-wrap:after { border: 0 !important; }
 .workout-cut-card-btn{ right:33px !important;}
 body .big-calendar-custom-month-event-view-card-header a.calendar-custom-drag-handle{ width: 20px;background: transparent !important;color: #fff;margin:-3px 0 0;padding: 0;}
 body .big-calendar-custom-month-event-view-card-header a.calendar-custom-drag-handle i{ font-size:18px; line-height:20px;color: #fff; }
-#custom-drag-workout-wrap .calendar-custom-drag-handle{ background:transparent !important; margin:0 !important; width:20px !important;position: absolute;top: 5px;right: 10px;}
-#custom-cut-workout-wrap .calendar-custom-drag-handle{position:absolute !important; background: transparent !important; width: 20px !important; top: 5px !important; right: 7px !important;}
-.big-calendar-custom-month-event-view-card .calendar-custom-drag-handle { display: inline-block; position: absolute; top: 7px; right: 8px; width: 20px; height: 20px; background: transparent !important; border-radius: 50%; margin: 0; padding: 0; }
+#custom-drag-workout-wrap .calendar-custom-drag-handle{ background:transparent !important; margin:0 !important; width:20px !important;position: absolute;top: 8px;right: 10px;}
+#custom-cut-workout-wrap .calendar-custom-drag-handle{position:absolute !important; background: transparent !important; width: 20px !important; top: 8px !important; right: 8px !important;}
+.big-calendar-custom-month-event-view-card .calendar-custom-drag-handle { display: inline-block; position: absolute; top: 9px; right: 8px; width: 20px; height: 20px; background: transparent !important; border-radius: 50%; margin: 0; padding: 0; }
 .big-calendar-custom-month-event-view-card .calendar-custom-drag-handle i { font-size: 20px; color: #ffffff; }
 .block-border-div {position: absolute; top: 0; left: 14.28%; width: 1px; height:100%; }
 .block-border-div:before {content: ''; width: 1px; height: 100%; left: 0; top: 0; background: #ddd; position: absolute;}
@@ -2330,6 +2331,33 @@ div[contenteditable="true"] {min-height: 15px;}
 .workout-exercises-view-wrapper .workout-exercise-head-view-data-row-ul ul li{ padding:10px;}
 .workout-exercise-head-view-data-row-ul .workout-exercise-advance-set-view-wrapper {background: #f2f2f2; padding: 0; justify-content: space-between;}
 .react-calendar .react-calendar__month-view__days button { max-width: 14.2857%; }
+.workout-calender .w-c-green .pull-left.custom_check,
+#custom-cut-workout-wrap .w-c-green .pull-left.custom_check,
+#custom-drag-workout-wrap .w-c-green .pull-left.custom_check {background: #3cffc1;}
+.workout-calender .w-c-green .pull-left.custom_check h5,
+#custom-cut-workout-wrap .w-c-green h5,
+#custom-drag-workout-wrap .w-c-green h5 {color: #447e6b;font-weight: 600;}
+.workout-calender .w-c-green .pull-left.custom_check {background: #3cffc1;}
+.w-c-green .material-switch > input[type="checkbox"]:checked + label::after {background: #3cffc1;}
+.w-c-green .material-switch > input[type="checkbox"]:checked + label::before {background: #cbece1;}
+.workout-calender .w-c-pink .pull-left.custom_check,
+#custom-cut-workout-wrap .w-c-pink .pull-left.custom_check,
+#custom-drag-workout-wrap .w-c-pink .pull-left.custom_check {background: #ff337e;}
+.workout-calender .w-c-pink .pull-left.custom_check h5,
+#custom-cut-workout-wrap .w-c-pink h5,
+#custom-drag-workout-wrap .w-c-pink h5 {font-weight: 600;color: #fff;}
+.workout-calender .big-calendar-custom-month-event-view-card.restday.w-c-orange .pull-left.custom_check,
+#custom-cut-workout-wrap .big-calendar-custom-month-event-view-card.restday.w-c-orange .pull-left.custom_check,
+#custom-drag-workout-wrap .big-calendar-custom-month-event-view-card.restday.w-c-orange .pull-left.custom_check {background: #d26f3a;}
+.workout-calender .big-calendar-custom-month-event-view-card.w-c-orange h5,
+#custom-cut-workout-wrap .big-calendar-custom-month-event-view-card.w-c-orange h5,
+#custom-drag-workout-wrap .big-calendar-custom-month-event-view-card.w-c-orange h5 {font-weight: bold;}
+.w-c-pink .material-switch > label::after {background: #ff337e;}
+.w-c-pink .material-switch > label::before {background: #560e28;}
+.rbc-event-content {border-radius: 10px;-webkit-box-shadow: none;box-shadow: none;overflow: visible !important;}
+.workout-calender .w-c-green .custom_check [type="checkbox"]:checked + label:after { background: #3cffc1; }
+.workout-calender .w-c-pink .custom_check [type="checkbox"]:checked + label:after { background: #ff337e; }
+#custom-cut-workout-wrap, #custom-drag-workout-wrap{border-radius: 10px;-webkit-box-shadow: 0 0 10px 0 rgba(0, 0, 0, .15);box-shadow: 0 0 10px 0 rgba(0, 0, 0, .15);}
 
 @media(min-width: 992px){
     body.with_login .app-wrapper-content{ width: 100%; }

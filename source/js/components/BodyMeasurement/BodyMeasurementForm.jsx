@@ -661,36 +661,32 @@ class BodyMeasurementForm extends Component {
             IDB_TBL_BODY_FAT,
             IDB_TBL_BODY_PP
         ];
-        const transaction = this.iDB.transaction(idbTbls, IDB_READ);
-        if (transaction) {
-            const osBodyMeas = transaction.objectStore(IDB_TBL_BODY_MEASUREMENT);
-            const isoDate = logDate.toISOString();
-            if (osBodyMeas) {
-                const logDateIndex = osBodyMeas.index('logDate');
-                const iDBGetReq = logDateIndex.get(isoDate);
-                if (logDateIndex) {
+        try {
+            const transaction = this.iDB.transaction(idbTbls, IDB_READ);
+            if (transaction) {
+                const osBodyMeas = transaction.objectStore(IDB_TBL_BODY_MEASUREMENT);
+                const isoDate = logDate.toISOString();
+                if (osBodyMeas) {
+                    const logDateIndex = osBodyMeas.index('logDate');
+                    const iDBGetReq = logDateIndex.get(isoDate);
                     iDBGetReq.onsuccess = (event) => {
                         const { target: { result } } = event;
                         this.initializeBodyMeasurementFormData(result);
                     }
                 }
-            }
-            const osBodyFat = transaction.objectStore(IDB_TBL_BODY_FAT);
-            if (osBodyFat) {
-                const logDateIndex = osBodyFat.index('logDate');
-                const iDBGetReq = logDateIndex.get(isoDate);
-                if (logDateIndex) {
+                const osBodyFat = transaction.objectStore(IDB_TBL_BODY_FAT);
+                if (osBodyFat) {
+                    const logDateIndex = osBodyFat.index('logDate');
+                    const iDBGetReq = logDateIndex.get(isoDate);
                     iDBGetReq.onsuccess = (event) => {
                         const { target: { result } } = event;
                         this.initializeBodyFatFormData(result);
                     }
                 }
-            }
-            const osPP = transaction.objectStore(IDB_TBL_BODY_PP);
-            if (osPP) {
-                const logDateIndex = osPP.index('date');
-                const iDBGetReq = logDateIndex.getAll(isoDate);
-                if (logDateIndex) {
+                const osPP = transaction.objectStore(IDB_TBL_BODY_PP);
+                if (osPP) {
+                    const logDateIndex = osPP.index('date');
+                    const iDBGetReq = logDateIndex.getAll(isoDate);
                     iDBGetReq.onsuccess = (event) => {
                         const { target: { result } } = event;
                         const newState = { userProgressPhotos: result };
@@ -698,7 +694,7 @@ class BodyMeasurementForm extends Component {
                     }
                 }
             }
-        }
+        } catch (e) { }
     }
 
     initializeBodyMeasurementFormData = (measurement = {}) => {
@@ -763,18 +759,23 @@ class BodyMeasurementForm extends Component {
     }
 
     componentWillUnmount() {
-        if (isOnline()) {
-            const transaction = this.iDB.transaction([IDB_TBL_BODY_MEASUREMENT, IDB_TBL_BODY_FAT], IDB_READ_WRITE);
-            if (transaction) {
-                const osBodyMeas = transaction.objectStore(IDB_TBL_BODY_MEASUREMENT);
-                osBodyMeas.clear();
-                const osBodyFat = transaction.objectStore(IDB_TBL_BODY_FAT);
-                osBodyFat.clear();
+        try {
+            const idbs = [IDB_TBL_BODY_MEASUREMENT, IDB_TBL_BODY_FAT, IDB_TBL_BODY_PP];
+            if (isOnline()) {
+                const transaction = this.iDB.transaction(idbs, IDB_READ_WRITE);
+                if (transaction) {
+                    const osBodyMeas = transaction.objectStore(IDB_TBL_BODY_MEASUREMENT);
+                    osBodyMeas.clear();
+                    const osBodyFat = transaction.objectStore(IDB_TBL_BODY_FAT);
+                    osBodyFat.clear();
+                    const osPP = transaction.objectStore(IDB_TBL_BODY_PP);
+                    osPP.clear();
+                }
             }
-        }
-        this.iDB.close();
-        this.iDB = null;
-        this.iDBOpenReq = null;
+            this.iDB.close();
+            this.iDB = null;
+            this.iDBOpenReq = null;
+        } catch (error) { }
     }
 }
 

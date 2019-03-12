@@ -135,7 +135,7 @@ class ProgramSave extends Component {
                                         <CustomEventCardView event={cutWorkoutData} />
                                     </ReactTooltip>
                                 }
-                                <div id="custom-drag-workout-wrap" style={{ position: 'absolute' }}></div>
+                                <div id="custom-drag-workout-wrap" style={{ position: 'absolute', minWidth: 178 }}></div>
                             </div>
                         </div>
                     </div>

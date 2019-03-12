@@ -48,7 +48,7 @@ class ProfileCalendar extends Component {
                             event: CustomEventCard,
                         }}
                     />
-                    
+
                 </div>
             </div>
         );
@@ -121,23 +121,25 @@ class CustomEventCard extends Component {
         let today = moment().utc();
         let yesturday = moment().subtract('1', 'day');
         let eventDate = moment(event.start);
-        let titleClassName = '';
+        let cardClassName = '';
         if (today > eventDate) {
             if (event.isCompleted === 1 && event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE) {
-                titleClassName = 'color-completed';
+                cardClassName = 'w-c-green';
             } else if (event.isCompleted === 0 && yesturday > eventDate && event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE) {
-                titleClassName = 'color-in-completed';
+                cardClassName = 'w-c-pink';
             }
         }
         return (
-            <div className={cns('big-calendar-custom-month-event-view-card', { 'restday': (event.exerciseType === SCHEDULED_WORKOUT_TYPE_RESTDAY) })} title="">
+            <div className={cns(`big-calendar-custom-month-event-view-card ${cardClassName}`, {
+                'restday w-c-orange': (event.exerciseType === SCHEDULED_WORKOUT_TYPE_RESTDAY)
+            })}>
                 <div className="big-calendar-custom-month-event-view-card-header">
                     <div className="pull-left custom_check">
-                        <label><h5 className={titleClassName}>{event.title}</h5></label>
+                        <label><h5>{event.title}</h5></label>
                     </div>
-                    <div className="big-calendar-custom-month-event-view-card-body">
+                    <div className="big-calendar-custom-month-event-view-card-body w-c-brb">
                         {event.description &&
-                            <div className={titleClassName}><p>{event.description}</p></div>
+                            <div><p>{event.description}</p></div>
                         }
                         {(event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
                             <NavLink to={routeCodes.PROFILE_WORKOUT_DETAILS.replace(':username', event.username).replace(':id', event.id)} data-tip="Details" title=""><FaEye /></NavLink>

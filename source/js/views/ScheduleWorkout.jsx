@@ -188,7 +188,7 @@ class ScheduleWorkout extends Component {
                             <CustomEventCardView event={cutWorkoutData} />
                         </ReactTooltip>
                     }
-                    <div id="custom-drag-workout-wrap" style={{ position: 'absolute' }}></div>
+                    <div id="custom-drag-workout-wrap" style={{ position: 'absolute', minWidth: 178 }}></div>
                 </section>
                 <SweetAlert
                     type="default"
@@ -1038,13 +1038,13 @@ class CustomEventCard extends Component {
         let today = moment().utc();
         let yesturday = moment().subtract('1', 'day');
         let eventDate = moment(event.start);
-        let titleClassName = '';
+        let cardClassName = '';
         let showCompleteSwitch = false;
         if (today > eventDate) {
             if (event.isCompleted === 1 && event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE) {
-                titleClassName = 'color-completed';
+                cardClassName = 'w-c-green';
             } else if (event.isCompleted === 0 && yesturday > eventDate && event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE) {
-                titleClassName = 'color-in-completed';
+                cardClassName = 'w-c-pink';
             }
             showCompleteSwitch = true;
         }
@@ -1052,8 +1052,8 @@ class CustomEventCard extends Component {
             <div
                 id={`workout-card-${event.id}`}
                 className={
-                    cns('big-calendar-custom-month-event-view-card', {
-                        'restday': (event.exerciseType === SCHEDULED_WORKOUT_TYPE_RESTDAY),
+                    cns(`big-calendar-custom-month-event-view-card ${cardClassName}`, {
+                        'restday w-c-orange': (event.exerciseType === SCHEDULED_WORKOUT_TYPE_RESTDAY),
                         'loss-opacity': event.isCut,
                         'disable-overlay': event.isCutEnable,
                         'opacity-0': dragEventId === event.id
@@ -1069,13 +1069,13 @@ class CustomEventCard extends Component {
                             checked={event.isSelectedForBulkAction}
                             onChange={() => { }}
                         />
-                        <label><h5 className={titleClassName}>{event.title}</h5></label>
+                        <label><h5>{event.title}</h5></label>
                         <a href="javascript:void(0)" data-tip="Cut" className="workout-cut-card-btn" onClick={(e) => { e.stopPropagation(); event.handleCut(event) }}><i className="icon-flip_to_front"></i></a>
                         <div className="calendar-custom-drag-handle" onMouseDown={(e) => this.handleMouseDown(e, event)} onMouseUp={this.handleMouseUp} onClick={(e) => e.stopPropagation()}><i className="icon-open_with"></i></div>
                     </div>
-                    <div className="big-calendar-custom-month-event-view-card-body">
+                    <div className={cns("big-calendar-custom-month-event-view-card-body", { "w-c-brb": !showCompleteSwitch })}>
                         {event.description &&
-                            <div className={titleClassName}><p>{event.description}</p></div>
+                            <div><p>{event.description}</p></div>
                         }
                         {(event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
                             <a href="javascript:void(0)" data-tip="Copy" onClick={event.handleCopy} title=""><FaCopy /></a>
@@ -1155,20 +1155,22 @@ class CustomEventCardView extends Component {
         let today = moment().utc();
         let yesturday = moment().subtract('1', 'day');
         let eventDate = moment(event.start);
-        let titleClassName = '';
+        let cardClassName = '';
         let showCompleteSwitch = false;
         if (today > eventDate) {
             if (event.isCompleted === 1 && event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE) {
-                titleClassName = 'color-completed';
+                cardClassName = 'w-c-green';
             } else if (event.isCompleted === 0 && yesturday > eventDate && event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE) {
-                titleClassName = 'color-in-completed';
+                cardClassName = 'w-c-pink';
             }
             showCompleteSwitch = true;
         }
         return (
             <div
                 className={
-                    cns('cut-workout-wrap big-calendar-custom-month-event-view-card', { 'restday': (event.exerciseType === SCHEDULED_WORKOUT_TYPE_RESTDAY) })
+                    cns(`cut-workout-wrap big-calendar-custom-month-event-view-card ${cardClassName}`, {
+                        'restday w-c-orange': (event.exerciseType === SCHEDULED_WORKOUT_TYPE_RESTDAY)
+                    })
                 }
             >
                 <div className="big-calendar-custom-month-event-view-card-header">
@@ -1179,13 +1181,13 @@ class CustomEventCardView extends Component {
                             name={`cut-complete_workout_schedule_${event.id}`}
                             checked={event.isSelectedForBulkAction}
                         />
-                        <label><h5 className={titleClassName}>{event.title}</h5></label>
+                        <label><h5>{event.title}</h5></label>
                         <a href="javascript:void(0)" className="workout-cut-card-btn"><i className="icon-flip_to_front"></i></a>
                         <div href="javascript:void(0)" className="calendar-custom-drag-handle"><i className="icon-open_with"></i></div>
                     </div>
-                    <div className="big-calendar-custom-month-event-view-card-body">
+                    <div className={cns("big-calendar-custom-month-event-view-card-body", { "w-c-brb": !showCompleteSwitch })}>
                         {event.description &&
-                            <div className={titleClassName}><p>{event.description}</p></div>
+                            <div><p>{event.description}</p></div>
                         }
                         {(event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
                             <a href="javascript:void(0)" title=""><FaCopy /></a>
