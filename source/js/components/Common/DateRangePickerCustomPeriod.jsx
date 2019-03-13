@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import moment from "moment";
 import cns from "classnames";
+import { tw, isOnline } from '../../helpers/funs';
 
 class DateRangePickerCustomPeriod extends Component {
     render() {
@@ -21,26 +22,30 @@ class DateRangePickerCustomPeriod extends Component {
     }
 
     handleCustomDateRange = (frequency, duration = 'months', rangeFlag = 1) => {
-        const { changeCallback } = this.props;
-        let today = moment().startOf('day').utc();
-        let start = today;
-        let end = today;
-        if (rangeFlag === 1) {
-            start = moment().startOf('month').startOf('day').utc();
-            if (frequency > 0) {
-                end = moment().add((frequency - 1), duration).endOf('month').endOf('day').utc();
-            } else {
-                end = moment().endOf('month').endOf('day').utc();
+        if (isOnline()) {
+            const { changeCallback } = this.props;
+            let today = moment().startOf('day').utc();
+            let start = today;
+            let end = today;
+            if (rangeFlag === 1) {
+                start = moment().startOf('month').startOf('day').utc();
+                if (frequency > 0) {
+                    end = moment().add((frequency - 1), duration).endOf('month').endOf('day').utc();
+                } else {
+                    end = moment().endOf('month').endOf('day').utc();
+                }
+            } else if (rangeFlag === -1) {
+                end = moment().subtract(1, 'months').endOf('month').endOf('day').utc();
+                if (frequency > 0) {
+                    start = moment().startOf('month').startOf('day').subtract(frequency, duration).utc();
+                } else {
+                    start = moment().startOf('month').startOf('day').subtract(1, 'months').utc();
+                }
             }
-        } else if (rangeFlag === -1) {
-            end = moment().subtract(1, 'months').endOf('month').endOf('day').utc();
-            if (frequency > 0) {
-                start = moment().startOf('month').startOf('day').subtract(frequency, duration).utc();
-            } else {
-                start = moment().startOf('month').startOf('day').subtract(1, 'months').utc();
-            }
+            changeCallback(start, end);
+        } else {            
+            tw("You are offline, please check your internet connection");
         }
-        changeCallback(start, end);
     }
 
     getRangeLiesIn = (dateRange) => {

@@ -23,6 +23,9 @@ const initialState = Map({
     error: [],
     dateRange: null,
     regetStats: false,  // used as flag to hard reget stats data
+
+    // stats for indexed DB Management
+    graphRawDataLoading: false
 });
 
 const actionMap = {
@@ -62,17 +65,17 @@ const actionMap = {
         }));
     },
     [GET_USER_GRAPH_DATA_REQUEST]: (state, action) => {
-        var newState = {};
+        var newState = { graphRawDataLoading: true };
         newState.stats = prepareStatsDataForGraphRequest(state.get('stats'), action.requestData);
         return state.merge(Map(newState));
     },
     [GET_USER_GRAPH_DATA_SUCCESS]: (state, action) => {
-        var newState = {};
+        var newState = { graphRawDataLoading: false };
         newState.stats = prepareStateDataForGraphResponse(state.get('stats'), action.data);
         return state.merge(Map(newState));
     },
     [GET_USER_GRAPH_DATA_ERROR]: (state, action) => {
-        var newState = {};
+        var newState = { graphRawDataLoading: false };
         newState.stats = prepareStateDataForGraphResponse(state.get('stats'), action.data);
         return state.merge(Map(newState));
     },

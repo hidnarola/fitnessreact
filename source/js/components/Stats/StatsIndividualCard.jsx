@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import _ from "lodash";
-import { capitalizeFirstLetter } from '../../helpers/funs';
+import { capitalizeFirstLetter, isOnline, tw } from '../../helpers/funs';
 import cns from "classnames";
 import { ResponsiveContainer, AreaChart, XAxis, YAxis, Area, Tooltip } from "recharts";
 import { FaCircleONotch } from "react-icons/lib/fa";
@@ -21,7 +21,7 @@ class StatsIndividualCard extends Component {
     }
 
     render() {
-        const { o, handleExerciseChange, handleChangeFieldGraph } = this.props;
+        const { o } = this.props;
         const { openCalendar } = this.state;
         let subCategory = _.find(EXE_SCATS, ['value', o.subCategory]);
         let subCategoryTitle = 'Overview';
@@ -34,7 +34,7 @@ class StatsIndividualCard extends Component {
                     <div className="stats-content-head-l d-flex">
                         <h4>{subCategoryTitle}</h4>
                         {o.exercises && o.exercises.length > 0 &&
-                            <select name={`exe_${o.subCategory}`} onChange={(e) => handleExerciseChange(e, o)} value={(o.exerciseId) ? o.exerciseId : 'all'}>
+                            <select name={`exe_${o.subCategory}`} onChange={(e) => this.handleDropdownChange(e)} value={(o.exerciseId) ? o.exerciseId : 'all'}>
                                 <option value="all">All Varient</option>
                                 {
                                     o.exercises.map((e, ei) => {
@@ -92,7 +92,7 @@ class StatsIndividualCard extends Component {
                                             key={j}
                                             type="button"
                                             className={cns({ 'active': o.activeField === key })}
-                                            onClick={() => handleChangeFieldGraph(o, key)}
+                                            onClick={() => { this.handleButtonClick(o, key) }}
                                         >
                                             <div className="stats-btn-head">{`Total ${capitalizeFirstLetter(key.replace(/([a-z])([A-Z])/g, '$1 $2'))}`}</div>
                                             <div className="stats-btn-body"><h3>{`${field.total} ${field.unit}`}</h3></div>
@@ -166,15 +166,41 @@ class StatsIndividualCard extends Component {
         );
     }
 
+    handleDropdownChange = (e) => {
+        const { o, handleExerciseChange } = this.props;
+        if (isOnline()) {
+            handleExerciseChange(e, o)
+        } else {
+            tw("You are offline, please check your internet connection");
+        }
+    }
+
+    handleButtonClick = (o, key) => {
+        const { handleChangeFieldGraph } = this.props;
+        if (isOnline()) {
+            handleChangeFieldGraph(o, key);
+        } else {
+            tw("You are offline, please check your internet connection");
+        }
+    }
+
     handleCalendarShortCutBtn = (type) => {
-        const { o, handleShortCutCalendarBtn } = this.props;
-        this.setState({ openCalendar: false });
-        handleShortCutCalendarBtn(o, type);
+        if (isOnline()) {
+            const { o, handleShortCutCalendarBtn } = this.props;
+            this.setState({ openCalendar: false });
+            handleShortCutCalendarBtn(o, type);
+        } else {
+            tw("You are offline, please check your internet connection");
+        }
     }
 
     handleOpenCalendar = () => {
-        const { openCalendar } = this.state;
-        this.setState({ openCalendar: !openCalendar });
+        if (isOnline()) {
+            const { openCalendar } = this.state;
+            this.setState({ openCalendar: !openCalendar });
+        } else {
+            tw("You are offline, please check your internet connection");
+        }
     }
 
     handleDateRange = (range, state) => {

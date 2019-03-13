@@ -11,13 +11,12 @@ import DateRangePicker from 'react-daterange-picker';
 import { setUserStatsState } from '../actions/userStats';
 import DateRangePickerCustomPeriod from '../components/Common/DateRangePickerCustomPeriod';
 import moment from "moment";
+import { tw, isOnline } from '../helpers/funs';
 
 class StatsPage extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            showSearch: false,
-        }
+        this.state = { showSearch: false }
     }
 
     componentWillMount() {
@@ -85,13 +84,17 @@ class StatsPage extends Component {
     }
 
     handleTimeDateRange = (range, state) => {
-        const { dispatch } = this.props;
-        let stateData = {
-            dateRange: range,
-            regetStats: true
-        };
-        dispatch(setUserStatsState(stateData));
-        this.setState({ showSearch: false });
+        if(isOnline()){
+            const { dispatch } = this.props;
+            let stateData = {
+                dateRange: range,
+                regetStats: true
+            };
+            dispatch(setUserStatsState(stateData));
+            this.setState({ showSearch: false });
+        } else {
+            tw("You are offline, please check your internet connection");
+        }
     }
 
     handleCustomDateRange = (start, end) => {

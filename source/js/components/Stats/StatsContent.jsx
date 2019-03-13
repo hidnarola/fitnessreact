@@ -7,6 +7,8 @@ import { FaCircleONotch } from "react-icons/lib/fa";
 import ErrorCloud from "svg/error-cloud.svg";
 import StatsIndividualCard from './StatsIndividualCard';
 import NoRecordFound from '../Common/NoRecordFound';
+import { isOnline, connectIDB } from '../../helpers/funs';
+import { IDB_TBL_STATS, IDB_READ_WRITE, IDB_READ } from '../../constants/idb';
 
 class StatsContent extends Component {
     constructor(props) {
@@ -16,10 +18,14 @@ class StatsContent extends Component {
             fieldsLoaded: false,
             singleGraphDataRequest: null,
         }
+        this.iDB;
+        this.iDBOpenReq;
     }
 
     componentWillMount() {
-        this.getInitialStatsData();
+        if (isOnline()) {
+            this.getInitialStatsData();
+        }
     }
 
     render() {
@@ -62,11 +68,22 @@ class StatsContent extends Component {
         );
     }
 
+    componentDidMount() {
+        connectIDB()(this.handleIDBOpenUpgrade).then((connection) => {
+            this.iDBOpenReq = connection;
+            this.handleIDBOpenSuccess(connection);
+        });
+    }
+
     componentDidUpdate(prevProps, prevState) {
         const { initialDataLoaded, fieldsLoaded, singleGraphDataRequest } = this.state;
-        const { loading, stats, selectedType, dispatch, loadingFields, match, regetStats } = this.props;
+        const { loading, stats, selectedType, dispatch, loadingFields, match, regetStats, graphRawDataLoading } = this.props;
         if (match && match.params && match.params.type && prevProps.match && prevProps.match.params && prevProps.match.params.type && prevProps.match.params.type !== match.params.type) {
-            this.getInitialStatsData();
+            if (isOnline()) {
+                this.getInitialStatsData();
+            } else {
+                this.getDataFromIDB();
+            }
         }
         if (!loading && initialDataLoaded) {
             let data = (stats && stats.data) ? stats.data : [];
@@ -84,6 +101,7 @@ class StatsContent extends Component {
             });
             dispatch(getUserGraphDataRequest(requestData));
             this.setState({ initialDataLoaded: false });
+            this.storeStatsInIDB(match.params.type, JSON.stringify(stats));
         }
         if (!loadingFields && fieldsLoaded && singleGraphDataRequest) {
             let requestData = [singleGraphDataRequest];
@@ -94,6 +112,9 @@ class StatsContent extends Component {
             let stateData = { regetStats: false };
             dispatch(setUserStatsState(stateData));
             this.getInitialStatsData();
+        }
+        if (!graphRawDataLoading && prevProps.graphRawDataLoading !== graphRawDataLoading) {
+            this.storeStatsInIDB(match.params.type, JSON.stringify(stats));
         }
     }
 
@@ -179,6 +200,76 @@ class StatsContent extends Component {
         dispatch(getUserSingleStatsRequest(requestData));
         this.setState({ fieldsLoaded: true, singleGraphDataRequest: requestData });
     }
+
+    handleIDBOpenSuccess = (connection) => {
+        this.iDB = connection.result;
+        if (!isOnline()) {
+            this.getDataFromIDB();
+        }
+    }
+
+    handleIDBOpenUpgrade = (event) => {
+        const db = event.target.result;
+        db.createObjectStore(IDB_TBL_STATS, { keyPath: "type" });
+    }
+
+    getDataFromIDB = () => {
+        const { match: { params: { type } }, dispatch } = this.props;
+        if (type) {
+            const idbTbls = [IDB_TBL_STATS];
+            try {
+                const transaction = this.iDB.transaction(idbTbls, IDB_READ);
+                if (transaction) {
+                    const osStats = transaction.objectStore(IDB_TBL_STATS);
+                    const iDBGetReq = osStats.get(type);
+                    iDBGetReq.onsuccess = (event) => {
+                        const { target: { result } } = event;
+                        if (result) {
+                            const resultObj = JSON.parse(result.meta);
+                            const newState = { stats: resultObj };
+                            dispatch(setUserStatsState(newState));
+                        } else {
+                            const newState = { stats: null };
+                            dispatch(setUserStatsState(newState));
+                        }
+                    }
+                }
+            } catch (error) { }
+        }
+    }
+
+    storeStatsInIDB = (type, data) => {
+        try {
+            const idbData = { type, meta: data };
+            const transaction = this.iDB.transaction([IDB_TBL_STATS], IDB_READ_WRITE);
+            const objectStore = transaction.objectStore(IDB_TBL_STATS);
+            const iDBGetReq = objectStore.get(type);
+            iDBGetReq.onsuccess = (event) => {
+                const { target: { result } } = event;
+                if (result) {
+                    objectStore.put(idbData);
+                } else {
+                    objectStore.add(idbData);
+                }
+            }
+        } catch (error) { }
+    }
+
+    componentWillUnmount() {
+        try {
+            const idbs = [IDB_TBL_STATS];
+            if (isOnline()) {
+                const transaction = this.iDB.transaction(idbs, IDB_READ_WRITE);
+                if (transaction) {
+                    const osStats = transaction.objectStore(IDB_TBL_STATS);
+                    osStats.clear();
+                }
+            }
+            this.iDB.close();
+            this.iDB = null;
+            this.iDBOpenReq = null;
+        } catch (error) { }
+    }
 }
 
 const mapStateToProps = (state) => {
@@ -191,6 +282,7 @@ const mapStateToProps = (state) => {
         error: userStats.get('error'),
         dateRange: userStats.get('dateRange'),
         regetStats: userStats.get('regetStats'),
+        graphRawDataLoading: userStats.get('graphRawDataLoading'),
     };
 }
 
