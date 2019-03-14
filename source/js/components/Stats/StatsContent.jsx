@@ -22,12 +22,6 @@ class StatsContent extends Component {
         this.iDBOpenReq;
     }
 
-    componentWillMount() {
-        if (isOnline()) {
-            this.getInitialStatsData();
-        }
-    }
-
     render() {
         const { loading, stats, error, selectedType } = this.props;
         if (loading) {
@@ -73,6 +67,9 @@ class StatsContent extends Component {
             this.iDBOpenReq = connection;
             this.handleIDBOpenSuccess(connection);
         });
+        if (isOnline()) {
+            this.getInitialStatsData();
+        }
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -111,7 +108,9 @@ class StatsContent extends Component {
         if (regetStats && prevProps.regetStats !== regetStats) {
             let stateData = { regetStats: false };
             dispatch(setUserStatsState(stateData));
-            this.getInitialStatsData();
+            if (isOnline()) {
+                this.getInitialStatsData();
+            }
         }
         if (!graphRawDataLoading && prevProps.graphRawDataLoading !== graphRawDataLoading) {
             this.storeStatsInIDB(match.params.type, JSON.stringify(stats));

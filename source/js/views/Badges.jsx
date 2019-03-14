@@ -1,14 +1,19 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 import { routeCodes } from 'constants/routes';
+import { setUserBadgesByType } from '../actions/userBadges';
 import FitnessHeader from 'components/global/FitnessHeader';
 import FitnessNav from 'components/global/FitnessNav';
 import Complete from 'components/Badges/Complete';
 import InComplete from 'components/Badges/InComplete';
 import Tracking from 'components/Badges/Tracking';
+import { IDB_TBL_BADGES, IDB_READ_WRITE } from '../constants/idb';
+import { connectIDB, isOnline } from '../helpers/funs';
 
-export default class Badges extends Component {
+class Badges extends Component {
+
     componentWillMount() {
         const { match, history } = this.props;
         if (match.isExact) {
@@ -44,6 +49,14 @@ export default class Badges extends Component {
         );
     }
 
+    componentDidMount() {
+        connectIDB()().then((connection) => {
+            const { dispatch } = this.props;
+            const iDB = connection.result;
+            dispatch(setUserBadgesByType({ iDB }))
+        });
+    }
+
     componentDidUpdate(prevProps, prevState) {
         const { match, history } = this.props;
         if (match.isExact) {
@@ -51,4 +64,33 @@ export default class Badges extends Component {
         }
     }
 
+    componentWillUnmount() {
+        try {
+            console.log("unmount")
+            const idbs = [IDB_TBL_BADGES];
+            const { iDB } = this.props;
+            if (isOnline()) {
+                const transaction = iDB.transaction(idbs, IDB_READ_WRITE);
+                if (transaction) {
+                    const osBadge = transaction.objectStore(IDB_TBL_BADGES);
+                    osBadge.clear();
+                }
+            }
+            iDB.close();
+            dispatch(setUserBadgesByType({ iDB: null }))
+        } catch (error) {
+        }
+    }
+
 }
+
+const mapStateToProps = (state) => {
+    const { userBadges } = state;
+    return {
+        iDB: userBadges.get('iDB')
+    };
+}
+
+export default connect(
+    mapStateToProps,
+)(Badges);

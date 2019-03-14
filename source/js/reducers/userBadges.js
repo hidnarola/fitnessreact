@@ -5,6 +5,7 @@ import {
     GET_USER_BADGES_BY_TYPE_REQUEST,
     GET_USER_BADGES_BY_TYPE_SUCCESS,
     GET_USER_BADGES_BY_TYPE_ERROR,
+    SET_USER_BADGES_BY_TYPE
 } from "../actions/userBadges";
 
 const initialState = Map({
@@ -12,6 +13,7 @@ const initialState = Map({
     selectedBadgeType: BADGE_TYPE_TRACKING,
     badges: [],
     error: [],
+    iDB:null
 });
 
 const actionMap = {
@@ -49,6 +51,9 @@ const actionMap = {
             error: error,
         }));
     },
+    [SET_USER_BADGES_BY_TYPE]: (state, action) => {
+        return state.merge(Map(action.data));
+    }
 }
 
 export default function reducer(state = initialState, action = {}) {
