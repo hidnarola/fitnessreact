@@ -432,7 +432,7 @@ class BodyMeasurementForm extends Component {
 
     componentDidMount() {
         if (window.indexedDB) {
-            connectIDB()(this.handleIDBOpenUpgrade).then((connection) => {
+            connectIDB()().then((connection) => {
                 this.iDBOpenReq = connection;
                 this.handleIDBOpenSuccess(connection);
             });
@@ -585,16 +585,6 @@ class BodyMeasurementForm extends Component {
             let requestData = { logDate }
             this.getDataFromIDB(requestData);
         }
-    }
-
-    handleIDBOpenUpgrade = (event) => {
-        const db = event.target.result;
-        let objectStore = db.createObjectStore(IDB_TBL_BODY_MEASUREMENT, { keyPath: "_id" });
-        objectStore.createIndex("logDate", "logDate", { unique: false });
-        objectStore = db.createObjectStore(IDB_TBL_BODY_FAT, { keyPath: "_id" });
-        objectStore.createIndex("logDate", "logDate", { unique: false });
-        objectStore = db.createObjectStore(IDB_TBL_BODY_PP, { keyPath: "_id" });
-        objectStore.createIndex("date", "date", { unique: false });
     }
 
     storeBodyMeasurementInIDB = (data) => {

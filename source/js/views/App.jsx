@@ -38,7 +38,7 @@ import NutritionRecipeDetails from '../components/Nutrition/NutritionRecipeDetai
 import cns from "classnames";
 import NutritionMealAdd from '../components/Nutrition/NutritionMealAdd';
 import UpdateProfile from './UpdateProfile';
-import { toggleSideMenu, getToken, scrollBottom, slideToBottomOfChatWindow, ts } from '../helpers/funs';
+import { toggleSideMenu, getToken, scrollBottom, slideToBottomOfChatWindow, ts, connectIDB } from '../helpers/funs';
 import Auth from '../auth/Auth';
 import socketClient from "socket.io-client";
 import { openSocket } from '../actions/user';
@@ -105,6 +105,7 @@ import SaveProgramMasterPage from '../components/Program/SaveProgramMasterPage';
 import ProgramView from '../components/Program/ProgramView';
 import RatingView from '../components/Program/RatingView';
 import ViewScheduleWorkout from '../components/Profile/ViewScheduleWorkout';
+import initIDBSchema from '../helpers/idbInitialiser';
 JavascriptTimeAgo.locale(en);
 
 const auth = new Auth();
@@ -331,6 +332,20 @@ class App extends Component {
                 </div>
             </div>
         );
+    }
+
+    componentDidMount() {
+        try {
+            if (window.indexedDB) {
+                connectIDB()(this.handleIDBUpgrade).then((connection) => {
+                    connection.result.close();
+                });
+            }
+        } catch (error) { console.log('Connection error of IDB : ', error); }
+    }
+
+    handleIDBUpgrade = (event) => {
+        initIDBSchema(event);
     }
 
     componentDidUpdate(prevProps, prevState) {

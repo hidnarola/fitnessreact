@@ -69,7 +69,7 @@ class StatsContent extends Component {
     }
 
     componentDidMount() {
-        connectIDB()(this.handleIDBOpenUpgrade).then((connection) => {
+        connectIDB()().then((connection) => {
             this.iDBOpenReq = connection;
             this.handleIDBOpenSuccess(connection);
         });
@@ -206,11 +206,6 @@ class StatsContent extends Component {
         if (!isOnline()) {
             this.getDataFromIDB();
         }
-    }
-
-    handleIDBOpenUpgrade = (event) => {
-        const db = event.target.result;
-        db.createObjectStore(IDB_TBL_STATS, { keyPath: "type" });
     }
 
     getDataFromIDB = () => {
