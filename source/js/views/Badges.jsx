@@ -13,7 +13,6 @@ import { IDB_TBL_BADGES, IDB_READ_WRITE } from '../constants/idb';
 import { connectIDB, isOnline } from '../helpers/funs';
 
 class Badges extends Component {
-
     componentWillMount() {
         const { match, history } = this.props;
         if (match.isExact) {
@@ -66,7 +65,6 @@ class Badges extends Component {
 
     componentWillUnmount() {
         try {
-            console.log("unmount")
             const idbs = [IDB_TBL_BADGES];
             const { iDB } = this.props;
             if (isOnline()) {
@@ -78,8 +76,7 @@ class Badges extends Component {
             }
             iDB.close();
             dispatch(setUserBadgesByType({ iDB: null }))
-        } catch (error) {
-        }
+        } catch (error) { }
     }
 
 }

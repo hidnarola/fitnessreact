@@ -68,7 +68,6 @@ class BodyMeasurementForm extends Component {
             }
         }
         this.iDB;
-        this.iDBOpenReq;
     }
 
     componentWillMount() {
@@ -433,7 +432,6 @@ class BodyMeasurementForm extends Component {
     componentDidMount() {
         if (window.indexedDB) {
             connectIDB()().then((connection) => {
-                this.iDBOpenReq = connection;
                 this.handleIDBOpenSuccess(connection);
             });
         }
@@ -764,7 +762,6 @@ class BodyMeasurementForm extends Component {
             }
             this.iDB.close();
             this.iDB = null;
-            this.iDBOpenReq = null;
         } catch (error) { }
     }
 }

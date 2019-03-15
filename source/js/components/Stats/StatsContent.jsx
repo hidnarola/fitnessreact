@@ -19,7 +19,6 @@ class StatsContent extends Component {
             singleGraphDataRequest: null,
         }
         this.iDB;
-        this.iDBOpenReq;
     }
 
     render() {
@@ -64,7 +63,6 @@ class StatsContent extends Component {
 
     componentDidMount() {
         connectIDB()().then((connection) => {
-            this.iDBOpenReq = connection;
             this.handleIDBOpenSuccess(connection);
         });
         if (isOnline()) {
@@ -261,7 +259,6 @@ class StatsContent extends Component {
             }
             this.iDB.close();
             this.iDB = null;
-            this.iDBOpenReq = null;
         } catch (error) { }
     }
 }
