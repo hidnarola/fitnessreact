@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
-import { InputField, EditorField, SelectField_ReactSelect, FileField_Dropzone_Single } from '../../../helpers/FormControlHelper';
+import { InputField, SelectField_ReactSelect, FileField_Dropzone_Single, TextAreaField } from '../../../helpers/FormControlHelper';
 import { required, requiredReactSelect, requiredReactSelectStatus, minLength, maxLength } from '../../../formValidation/validationRules';
 import { adminRouteCodes } from '../../../constants/adminRoutes';
 import { showPageLoader, hidePageLoader } from '../../../actions/pageLoader';
@@ -23,7 +23,6 @@ class EquipmentForm extends Component {
         super(props);
         this.state = {
             initPageDataLoad: false,
-            description: '',
             exerciseImages: [],
             categoryOptions: [],
         }
@@ -43,7 +42,7 @@ class EquipmentForm extends Component {
 
     render() {
         const { handleSubmit } = this.props;
-        const { exerciseImages, description, categoryOptions } = this.state;
+        const { exerciseImages, categoryOptions } = this.state;
         return (
             <form method="POST" onSubmit={handleSubmit}>
                 <div className="d-flex">
@@ -94,15 +93,13 @@ class EquipmentForm extends Component {
                 <div className="d-flex">
                     <div className="col-md-6">
                         <Field
+                            id="description"
                             name="description"
-                            value={description}
-                            handleChange={this.handleChangeTextEditor}
-                            className="editor-min-height-200"
+                            component={TextAreaField}
                             label="Description"
-                            labelClass="control-label display_block"
+                            labelClass="display_block"
                             wrapperClass="form-group"
-                            placeholder="Description"
-                            component={EditorField}
+                            className="form-control min-height-242 resize-vertical"
                         />
                     </div>
                     <div className="col-md-6">
@@ -156,7 +153,6 @@ class EquipmentForm extends Component {
                 };
                 this.setState({
                     initPageDataLoad: false,
-                    description: equipment.description,
                     exerciseImages: [equipment.image],
                     categoryOptions: _categoryOptions,
                 });
@@ -174,13 +170,6 @@ class EquipmentForm extends Component {
             }
         }
     }
-
-    // Start funs
-    handleChangeTextEditor = (editorText) => {
-        this.props.change('description', editorText);
-        this.setState({ description: editorText });
-    }
-    // End funs
 }
 
 EquipmentForm = reduxForm({

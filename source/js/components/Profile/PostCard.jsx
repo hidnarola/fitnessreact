@@ -18,7 +18,6 @@ import {
 import moment from "moment";
 import _ from "lodash";
 import { MenuItem, Dropdown } from "react-bootstrap";
-import ReactHtmlParser from "react-html-parser";
 import cns from "classnames";
 import noProfileImg from 'img/common/no-profile-img.png'
 import noImg from 'img/common/no-img.png'
@@ -185,7 +184,7 @@ class PostCard extends Component {
                 <div className="posttype-body">
                     {description &&
                         <div className="posttype-body-white">
-                            {ReactHtmlParser(description)}
+                            <small dangerouslySetInnerHTML={{ __html: description }}></small>
                         </div>
                     }
                     <div className={cns("posttype-body-grey", postImageDisplayClass)}>
@@ -250,7 +249,7 @@ class PostCard extends Component {
                                 <p>{lastCommentCreatedAt}</p>
                             </h4>
                             <div className="post-comment-r-btm">
-                                {ReactHtmlParser(replaceStringWithEmos(lastComment.comment))}
+                                <small dangerouslySetInnerHTML={{ __html: replaceStringWithEmos(lastComment.comment) }}></small>
                             </div>
                         </div>
                     </div>

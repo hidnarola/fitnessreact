@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
-import { NavLink } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import Setting from 'components/Exercise/Setting';
 import Equipment from 'components/Exercise/Equipment';
 import Fitness from 'components/Exercise/Fitness';

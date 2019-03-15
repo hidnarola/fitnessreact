@@ -8,7 +8,6 @@ import noProfileImg from 'img/common/no-profile-img.png';
 import noImg from 'img/common/no-img.png';
 import { routeCodes } from '../../constants/routes';
 import { FaGlobe, FaLock, FaGroup } from 'react-icons/lib/fa';
-import ReactHtmlParser from "react-html-parser";
 import cns from 'classnames';
 import Lightbox from 'react-images';
 import LikeButton from '../Profile/LikeButton';
@@ -141,7 +140,7 @@ class ActivityFeedListCard extends Component {
                 <div className="posttype-body">
                     {description &&
                         <div className="posttype-body-white">
-                            {ReactHtmlParser(description)}
+                            <span dangerouslySetInnerHTML={{ __html: description }}></span>
                         </div>
                     }
                     <div className={cns("posttype-body-grey dashboard-feedact", postImageDisplayClass)}>
@@ -205,7 +204,7 @@ class ActivityFeedListCard extends Component {
                             <div className="post-comment-r-btm d-flex">
                                 <p>{lastCommentCreatedAt}</p>
                             </div>
-                            {ReactHtmlParser(replaceStringWithEmos(lastComment.comment))}
+                            <span dangerouslySetInnerHTML={{ __html: replaceStringWithEmos(lastComment.comment) }}></span>
                         </div>
                     </div>
                 }

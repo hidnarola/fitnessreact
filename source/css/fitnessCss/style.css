@@ -1002,6 +1002,7 @@ display:-webkit-box; display:-webkit-flex; display:-ms-flex; display:flex; flex-
 .min-height-179{min-height: 179px !important;}
 .min-height-373{min-height: 373px; position: relative;}
 .min-height-339 { min-height: 339px; position: relative; }
+.min-height-242 {min-height: 242px !important;}
 .has-error .Select-control{border-color: #a94442;-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);}
 .has-error .Select-control span.Select-arrow {border-color: #a94442 transparent transparent;}
 .no-padding{padding: 0 !important;}

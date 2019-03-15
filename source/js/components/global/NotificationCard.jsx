@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { toggleSideMenu } from '../../helpers/funs';
-import ReactHtmlParser from "react-html-parser";
 import noProfileImg from 'img/common/no-profile-img.png'
 import { routeCodes } from '../../constants/routes';
 import { Link } from 'react-router-dom';
@@ -38,7 +37,7 @@ class NotificationCard extends Component {
                                 />
                             </span>
                             <h4 className="time_under">
-                                {ReactHtmlParser(msg)}
+                                <small dangerouslySetInnerHTML={{ __html: msg }}></small>
                                 {notification && notification.createdAt &&
                                     <span className="text-mute noti-time">{moment(notification.createdAt).local().format('Do MMM YYYY, HH:mm')}</span>
                                 }
@@ -58,7 +57,7 @@ class NotificationCard extends Component {
                                 <BadgeIcon />
                             </span>
                             <h4 className="time_under">
-                                {ReactHtmlParser(msg)}
+                                <small dangerouslySetInnerHTML={{ __html: msg }}></small>
                                 {notification && notification.createdAt &&
                                     <span className="text-mute noti-time">{moment(notification.createdAt).local().format('Do MMM YYYY, HH:mm')}</span>
                                 }
@@ -86,7 +85,7 @@ class NotificationCard extends Component {
                                 />
                             </span>
                             <h4 className="time_under">
-                                {ReactHtmlParser(msg)}
+                                <small dangerouslySetInnerHTML={{ __html: msg }}></small>
                                 {notification && notification.createdAt &&
                                     <span className="text-mute noti-time">{moment(notification.createdAt).local().format('Do MMM YYYY, HH:mm')}</span>
                                 }

@@ -9,7 +9,6 @@ import {
 } from '../../constants/consts';
 import noImg from 'img/common/no-img.png'
 import _ from "lodash";
-import ReactHtmlParser from "react-html-parser";
 
 class WorkoutExercisesViewReadonly extends Component {
     render() {
@@ -74,7 +73,7 @@ class WorkoutExerciseSingleView extends Component {
                     </div>
                     <div className="workout-exercise-body-view-r">
                         <div className="workout-exercise-body-view-desc">
-                            {ReactHtmlParser(exercise.exercises.description)}
+                            <small dangerouslySetInnerHTML={{ __html: exercise.exercises.description }}></small>
                         </div>
                         <div className="d-flex">
                             {exercise.differentSets === 0 &&
@@ -236,7 +235,7 @@ class WorkoutExerciseSupersetNormalView extends Component {
                     </div>
                     <div className="workout-exercise-body-content-view-r">
                         <div className="workout-exercise-body-view-desc">
-                            {ReactHtmlParser(exercise.exercises.description)}
+                            <small dangerouslySetInnerHTML={{ __html: exercise.exercises.description }}></small>
                         </div>
                         <div className="d-flex">
                             {exercise.differentSets === 0 &&
@@ -304,7 +303,7 @@ class WorkoutExerciseCircuitNormalView extends Component {
                     </div>
                     <div className="workout-exercise-body-content-view-r">
                         <div className="workout-exercise-body-view-desc">
-                            {ReactHtmlParser(exercise.exercises.description)}
+                            <small dangerouslySetInnerHTML={{ __html: exercise.exercises.description }}></small>
                         </div>
                         <div className="d-flex">
                             {exercise.differentSets === 0 &&

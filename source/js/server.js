@@ -14,8 +14,6 @@ import configureStore from 'config/store';
 import getServerHtml from 'components/server/ServerHTML';
 import App from 'views/App';
 
-import { getPeopleServer } from 'sagas/people';
-
 // Load SCSS
 import 'index.css';
 
@@ -91,9 +89,6 @@ function handleRequest(req, res, sagas = null, sagaArgs = {}) {
 // pass two additional params to "handleRequest"
 // array of sagas which should be completed
 // and object containing saga's options (usually req.params)
-app.get('/people', (req, res) => {
-    handleRequest(req, res, [getPeopleServer]);
-});
 
 // All other routes
 app.use((req, res) => {

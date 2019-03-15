@@ -11,7 +11,6 @@ import { loadMoreApprovedFriendsMessengerRequest } from '../../actions/friends';
 import NoRecordFound from '../Common/NoRecordFound';
 import { FRIENDSHIP_STATUS_UNKNOWN } from '../../constants/consts';
 import ReactTimeAgo from 'react-time-ago';
-import ReactHtmlParser from 'react-html-parser';
 
 class UserMessagePanel extends Component {
     render() {
@@ -283,7 +282,7 @@ class ChannelMessageCard extends Component {
                                     </span>
                                 }
                             </strong>
-                            <small>{message !== '' && ReactHtmlParser(message)}</small>
+                            <small>{message !== '' && <small dangerouslySetInnerHTML={{ __html: message }}></small>}</small>
                         </h4>
                     </div>
                 </a>

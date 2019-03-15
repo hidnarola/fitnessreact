@@ -8,7 +8,6 @@ import {
 } from '../../constants/consts';
 import noImg from 'img/common/no-img.png'
 import cns from "classnames";
-import ReactHtmlParser from "react-html-parser";
 
 class FitnessItem extends Component {
     constructor(props) {
@@ -48,7 +47,7 @@ class FitnessItem extends Component {
 
                 {item && item.format && item.format === FITNESS_TEST_FORMAT_MAX_REP &&
                     <div className="dropdown-menu" aria-labelledby="test-01">
-                        {ReactHtmlParser(item.description)}
+                        <span dangerouslySetInnerHTML={{ __html: item.description }}></span>
                         {item.max_rep && item.max_rep.length > 0 &&
                             item.max_rep.map((val, i) => {
                                 var userVal = '';
@@ -106,7 +105,7 @@ class FitnessItem extends Component {
                                     )
                                 })
                             }
-                            {ReactHtmlParser(item.description)}
+                            <span dangerouslySetInnerHTML={{ __html: item.description }}></span>
                         </div>
                     </div>
                 }
@@ -150,14 +149,14 @@ class FitnessItem extends Component {
                                     })
                                 }
                             </ul>
-                            {ReactHtmlParser(item.description)}
+                            <span dangerouslySetInnerHTML={{ __html: item.description }}></span>
                         </div>
                     </div>
                 }
 
                 {item && item.format && item.format === FITNESS_TEST_FORMAT_TEXT_FIELD &&
                     <div className="dropdown-menu" aria-labelledby="test-03">
-                        {ReactHtmlParser(item.description)}
+                    <span dangerouslySetInnerHTML={{ __html: item.description }}></span>
                         <div className={cns('grey-white remove-spinner', { 'has-error': (userValue && userValue.error) })}>
                             <label>Value</label>
                             <input

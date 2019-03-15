@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
-import PropTypes from 'prop-types';
 import { outputFiles } from '../../../../webpack/output-files';
 
 const ServerHTML = ({ appHtml, dehydratedState }) => (
@@ -26,11 +25,6 @@ const ServerHTML = ({ appHtml, dehydratedState }) => (
         </body>
     </html>
 );
-
-ServerHTML.propTypes = {
-    appHtml: PropTypes.string,
-    dehydratedState: PropTypes.string,
-};
 
 const getServerHTML = (appHtml, dehydratedState = null) => {
     return `<!doctype html>${ ReactDOMServer.renderToString(

@@ -15,7 +15,6 @@ import { deleteUserWholeExerciseRequest, deleteUserSingleExerciseRequest, change
 import { te, ts, prepareExerciseOptions, focusToControl } from '../../helpers/funs';
 import { FaPencil, FaTrash } from "react-icons/lib/fa";
 import { ButtonToolbar, Dropdown, MenuItem } from "react-bootstrap";
-import ReactHtmlParser from "react-html-parser";
 import SweetAlert from "react-bootstrap-sweetalert";
 import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
@@ -626,7 +625,7 @@ class WorkoutExerciseSingleView extends Component {
                     </div>
                     <div className="workout-exercise-body-view-r">
                         <div className="workout-exercise-body-view-desc">
-                            {ReactHtmlParser(exercise.exercises.description)}
+                            <small dangerouslySetInnerHTML={{ __html: exercise.exercises.description }}></small>
                         </div>
                         <div className="d-flex">
                             {exercise.differentSets === 0 &&
@@ -817,7 +816,7 @@ class WorkoutExerciseSupersetNormalView extends Component {
                     </div>
                     <div className="workout-exercise-body-content-view-r">
                         <div className="workout-exercise-body-view-desc">
-                            {ReactHtmlParser(exercise.exercises.description)}
+                            <small dangerouslySetInnerHTML={{ __html: exercise.exercises.description }}></small>
                         </div>
                         <div className="d-flex">
                             {exercise.differentSets === 0 &&
@@ -890,7 +889,7 @@ class WorkoutExerciseCircuitNormalView extends Component {
                     </div>
                     <div className="workout-exercise-body-content-view-r">
                         <div className="workout-exercise-body-view-desc">
-                            {ReactHtmlParser(exercise.exercises.description)}
+                            <small dangerouslySetInnerHTML={{ __html: exercise.exercises.description }}></small>
                         </div>
                         <div className="d-flex">
                             {exercise.differentSets === 0 &&

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from "react-router-dom";
 import { Field, reduxForm } from "redux-form";
-import { SelectField_ReactSelect, InputField, EditorField } from '../../helpers/FormControlHelper';
+import { SelectField_ReactSelect, InputField, TextAreaField } from '../../helpers/FormControlHelper';
 import { required, requiredReactSelect, minLength, maxLength, requiredReactSelectNumberOptions } from '../../formValidation/validationRules';
 
 const minLength2 = minLength(2);
@@ -10,16 +10,8 @@ const maxLength100 = maxLength(100);
 const maxLength5000 = maxLength(5000);
 
 class SaveProgramMasterPageForm extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            description: ''
-        }
-    }
-
     render() {
         const { handleSubmit, privacyOptions, goalOptions, levelOptions, backUrl } = this.props;
-        const { description } = this.state;
         return (
             <form method="POST" onSubmit={handleSubmit}>
                 <div className="d-flex">
@@ -89,14 +81,11 @@ class SaveProgramMasterPageForm extends Component {
                         <Field
                             id="description"
                             name="description"
-                            value={description}
-                            handleChange={this.handleChangeTextEditor}
-                            className="editor-min-height-200"
+                            component={TextAreaField}
                             label="Description"
-                            labelClass="control-label display_block"
+                            labelClass="display_block"
                             wrapperClass="form-group"
-                            placeholder="Description"
-                            component={EditorField}
+                            className="form-control min-height-242 resize-vertical"
                             errorClass="help-block"
                             validate={[maxLength5000]}
                         />
@@ -116,11 +105,6 @@ class SaveProgramMasterPageForm extends Component {
                 </div>
             </form>
         );
-    }
-
-    handleChangeTextEditor = (editorText) => {
-        this.props.change('description', editorText);
-        this.setState({ description: editorText });
     }
 }
 

@@ -22,7 +22,6 @@ import {
     POST_TYPE_WORKOUT
 } from '../constants/consts';
 import { FaGlobe, FaLock, FaGroup } from 'react-icons/lib/fa';
-import ReactHtmlParser from "react-html-parser";
 import cns from "classnames";
 import { NavLink, Link } from "react-router-dom";
 import CommentBoxForm from '../components/Profile/CommentBoxForm';
@@ -184,7 +183,7 @@ class Post extends Component {
                                     <div className="posttype-body">
                                         {description &&
                                             <div className="posttype-body-white">
-                                                {ReactHtmlParser(description)}
+                                                <small dangerouslySetInnerHTML={{ __html: description }}></small>
                                             </div>
                                         }
                                         <div className={cns("posttype-body-grey text-c single-post-view", postImageDisplayClass)}>
@@ -283,7 +282,7 @@ class Post extends Component {
                                                             <p>{moment(moment.utc(o.create_date).toDate()).local().format('Do MMM [at] hh:mm')}</p>
                                                         </h4>
                                                         <div className="post-comment-r-btm">
-                                                            {ReactHtmlParser(replaceStringWithEmos(o.comment))}
+                                                            <small dangerouslySetInnerHTML={{ __html: replaceStringWithEmos(o.comment) }}></small>
                                                         </div>
                                                     </div>
                                                 </div>

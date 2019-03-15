@@ -27,7 +27,7 @@ import Autosuggest from "react-autosuggest";
 import _ from "lodash";
 import TimePicker from 'rc-time-picker';
 import moment from "moment";
-import { capitalizeFirstLetter, convertMinsToTime, convertTimeToMins, ts } from '../../helpers/funs';
+import { convertMinsToTime, convertTimeToMins, ts } from '../../helpers/funs';
 import { showPageLoader, hidePageLoader } from '../../actions/pageLoader.js';
 
 const defaultTimeSchedule = {

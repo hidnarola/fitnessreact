@@ -5,7 +5,6 @@ import FitnessHeader from '../global/FitnessHeader';
 import FitnessNav from '../global/FitnessNav';
 import { routeCodes } from '../../constants/routes';
 import { getUserProgramRatingRequest } from '../../actions/userPrograms';
-import ReactHtmlParser from "react-html-parser";
 import { FaCircleONotch } from "react-icons/lib/fa";
 import ErrorCloud from "svg/error-cloud.svg";
 import RatingViewCard from './RatingViewCard';
@@ -40,7 +39,7 @@ class RatingView extends Component {
                         <div className="body-head-l">
                             <h2>{ratings && ratings.name ? ratings.name : ""}</h2>
                             {ratings && ratings.description &&
-                                ReactHtmlParser(ratings.description)
+                                <small dangerouslySetInnerHTML={{ __html: ratings.description }}></small>
                             }
                         </div>
                         <div className="body-head-r">

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
 import { Field, reduxForm, FieldArray, formValueSelector } from 'redux-form';
-import { InputField, EditorField, SelectField_ReactSelect, FileField_Dropzone_Single } from '../../../helpers/FormControlHelper';
+import { InputField, SelectField_ReactSelect, FileField_Dropzone_Single, TextAreaField } from '../../../helpers/FormControlHelper';
 import { required, requiredReactSelect, requiredImage, requiredReactSelectStatus } from '../../../formValidation/validationRules';
 import { FaTrash } from 'react-icons/lib/fa'
 import { adminRouteCodes } from '../../../constants/adminRoutes';
@@ -59,8 +59,6 @@ class FitnessTestForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            description: '',
-            instructions: '',
             selectActionInit: false,
             existingFeatureImages: [],
             existingImageA: [],
@@ -100,13 +98,10 @@ class FitnessTestForm extends Component {
 
     render() {
         const {
-            description,
-            instructions,
             existingFeatureImages,
             existingImageA,
             existingImageB,
             existingMultiselectData,
-            deletedMultiselectIds,
             formatOptions,
         } = this.state;
         const {
@@ -220,28 +215,24 @@ class FitnessTestForm extends Component {
                     <div className="row">
                         <div className="col-md-6">
                             <Field
+                                id="description"
                                 name="description"
-                                value={description}
-                                handleChange={(value) => this.handleChangeTextEditor('description', value)}
-                                className="editor-min-height-200"
+                                component={TextAreaField}
                                 label="Description"
-                                labelClass="control-label display_block"
+                                labelClass="display_block"
                                 wrapperClass="form-group"
-                                placeholder="Description"
-                                component={EditorField}
+                                className="form-control min-height-242 resize-vertical"
                             />
                         </div>
                         <div className="col-md-6">
                             <Field
+                                id="instructions"
                                 name="instructions"
-                                value={instructions}
-                                handleChange={(value) => this.handleChangeTextEditor('instructions', value)}
-                                className="editor-min-height-200"
+                                component={TextAreaField}
                                 label="Instructions"
-                                labelClass="control-label display_block"
+                                labelClass="display_block"
                                 wrapperClass="form-group"
-                                placeholder="Instructions"
-                                component={EditorField}
+                                className="form-control min-height-242 resize-vertical"
                             />
                         </div>
                     </div>
@@ -429,8 +420,6 @@ class FitnessTestForm extends Component {
                     instructions: fitnessTest.instructions,
                 }
                 this.setState({
-                    description: fitnessTest.description,
-                    instructions: fitnessTest.instructions,
                     existingFeatureImages: (fitnessTest.featureImage) ? [fitnessTest.featureImage] : [],
                 });
                 if (fitnessTest.format === FITNESS_TEST_FORMAT_MAX_REP) {
@@ -483,11 +472,6 @@ class FitnessTestForm extends Component {
             deletedMultiselectIds: deletedIds,
         });
         this.props.change('deletedMultiselectIds', JSON.stringify(deletedIds));
-    }
-
-    handleChangeTextEditor = (name, value) => {
-        this.props.change(name, value);
-        this.setState({ [name]: value });
     }
 
     validateMaxRepsRequired = (value, allValues, props) => {

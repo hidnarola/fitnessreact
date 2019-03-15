@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import FitnessHeader from '../global/FitnessHeader';
 import FitnessNav from '../global/FitnessNav';
-import { getUserProgramRequest, viewUserPublicProgramRequest } from '../../actions/userPrograms';
+import { viewUserPublicProgramRequest } from '../../actions/userPrograms';
 import { routeCodes } from '../../constants/routes';
 import { te } from '../../helpers/funs';
 import _ from "lodash";
@@ -12,7 +12,6 @@ import { SCHEDULED_WORKOUT_TYPE_RESTDAY, SCHEDULED_WORKOUT_TYPE_EXERCISE } from 
 import cns from "classnames";
 import { NavLink } from "react-router-dom";
 import ReactTooltip from "react-tooltip";
-import ReactHtmlParser from "react-html-parser";
 
 class ProgramView extends Component {
     constructor(props) {
@@ -42,7 +41,7 @@ class ProgramView extends Component {
                             <div className="body-head-l title_edit_pop">
                                 <h2>{program.name}</h2>
                                 {program && program.description &&
-                                    ReactHtmlParser(program.description)
+                                    <small dangerouslySetInnerHTML={{ __html: program.description }}></small>
                                 }
                             </div>
                         }

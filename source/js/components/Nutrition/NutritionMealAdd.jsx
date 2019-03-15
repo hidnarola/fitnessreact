@@ -30,8 +30,6 @@ import moment from "moment";
 import { ts, te } from '../../helpers/funs';
 import { NavLink } from "react-router-dom";
 import { routeCodes } from '../../constants/routes';
-import Dotdotdot from "react-dotdotdot";
-import ReactHtmlParser from "react-html-parser";
 import { FaCircleONotch } from "react-icons/lib/fa";
 
 const dayDriveOptions = [
@@ -164,10 +162,7 @@ class NutritionMealAdd extends Component {
                                                                         {recipe.label}
                                                                     </a>
                                                                 </h5>
-
-                                                                <Dotdotdot clamp={3}>
-                                                                    <small>{ReactHtmlParser(recipeIngreLines)}</small>
-                                                                </Dotdotdot>
+                                                                <small><small dangerouslySetInnerHTML={{ __html: recipeIngreLines }}></small></small>
                                                             </div>
                                                             <div className="meal-info">
                                                                 <small>Cals</small>

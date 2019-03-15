@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { Route } from 'react-router-dom';
 import $ from "jquery";
 import { Link } from "react-router-dom";
@@ -20,11 +19,6 @@ const RouteStatus = ({ code, children }) => (
         }
     />
 );
-
-RouteStatus.propTypes = {
-    code: PropTypes.number.isRequired,
-    children: PropTypes.object,
-};
 
 export default class NotFound extends Component {
     render() {

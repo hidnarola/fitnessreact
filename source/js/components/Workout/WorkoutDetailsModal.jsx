@@ -11,7 +11,6 @@ import {
     EXERCISE_DIFFICULTY_INTERMEDIATE,
     EXERCISE_DIFFICULTY_EXPERT
 } from '../../constants/consts';
-import ReactHtmlParser from "react-html-parser";
 import _ from "lodash";
 import { getUserBodypartsRequest } from '../../actions/userBodyparts';
 import { getUserEquipmentsRequest } from '../../actions/userEquipments';
@@ -199,7 +198,7 @@ class WorkoutDetailsModal extends Component {
                                                 <a href="javascript:void(0)"><i className="icon-arrow_drop_down"></i></a>
                                             </div>
                                             <div className="general-format">
-                                                {(workout.exerciseId.description) ? ReactHtmlParser(workout.exerciseId.description) : ''}
+                                                {(workout.exerciseId.description) ? <small dangerouslySetInnerHTML={{ __html: workout.exerciseId.description }}></small> : ''}
                                                 {workout.exerciseId.steps && workout.exerciseId.steps.length > 0 &&
                                                     <div>
                                                         <p>Steps :</p>

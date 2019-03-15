@@ -18,8 +18,8 @@ import {
     InputField,
     SelectField_ReactSelect,
     SelectField_ReactSelectMulti,
-    EditorField,
-    FileField_Dropzone_Single
+    FileField_Dropzone_Single,
+    TextAreaField
 } from '../../../helpers/FormControlHelper';
 import {
     EXERCISE_MECHANICS_ISOLATION,
@@ -29,7 +29,6 @@ import {
     EXERCISE_DIFFICULTY_EXPERT,
     EXE_CATS,
     EXE_CAT_SCAT,
-    EXE_SCATS,
 } from '../../../constants/consts';
 import ExerciseSteps from './ExerciseSteps';
 import { adminRouteCodes } from '../../../constants/adminRoutes';
@@ -64,7 +63,6 @@ class ExerciseForm extends Component {
             selectedImageToDelete: null,
             deletedImages: [],
             exerciseImages: [],
-            description: '',
             subCategories: [],
             subCategoriesValidation: [],
         };
@@ -89,7 +87,7 @@ class ExerciseForm extends Component {
 
     render() {
         const { bodyParts, equipments, handleSubmit } = this.props;
-        const { exerciseImages, showDeleteImageModel, description, subCategories, subCategoriesValidation } = this.state;
+        const { exerciseImages, showDeleteImageModel, subCategories, subCategoriesValidation } = this.state;
         const bodyPartsOptions = prepareDropdownOptionsData(bodyParts, '_id', 'bodypart');
         const equipmentsOptions = prepareDropdownOptionsData(equipments, '_id', 'name');
         return (
@@ -234,15 +232,13 @@ class ExerciseForm extends Component {
                         </div>
                         <div className="col-md-6">
                             <Field
+                                id="description"
                                 name="description"
-                                value={description}
-                                handleChange={this.handleChangeTextEditor}
-                                className="editor-min-height-200"
+                                component={TextAreaField}
                                 label="Description"
-                                labelClass="control-label display_block"
+                                labelClass="display_block"
                                 wrapperClass="form-group"
-                                placeholder="Description"
-                                component={EditorField}
+                                className="form-control min-height-242 resize-vertical"
                             />
                         </div>
                         <div className="col-md-6">
@@ -377,7 +373,6 @@ class ExerciseForm extends Component {
                 let exerciseImages = exercise.images;
                 this.setState({
                     exerciseImages: exerciseImages,
-                    description: exercise.description,
                 });
             }
         } else {
@@ -437,11 +432,6 @@ class ExerciseForm extends Component {
         });
         change('deleted_images', JSON.stringify(deletedImages));
         this.handleDeleteImageModel(false);
-    }
-
-    handleChangeTextEditor = (editorText) => {
-        this.props.change('description', editorText);
-        this.setState({ description: editorText });
     }
     // ----End Methods----
 }

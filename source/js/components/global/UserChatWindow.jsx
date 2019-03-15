@@ -6,7 +6,6 @@ import noProfileImg from 'img/common/no-profile-img.png';
 import _ from "lodash";
 import { ACCESS_LEVEL_NONE, ACCESS_LEVEL_PUBLIC, ACCESS_LEVEL_FRIENDS_OF_FRIENDS, ACCESS_LEVEL_PRIVATE, ACCESS_LEVEL_FRIENDS, FRIENDSHIP_STATUS_FRIEND } from '../../constants/consts';
 import Emos from '../Common/Emos';
-import ReactHtmlParser from 'react-html-parser';
 import ContentEditableTextbox from '../Common/ContentEditableTextbox';
 import { Emoji } from "emoji-mart";
 import $ from "jquery";
@@ -80,7 +79,7 @@ class UserChatWindow extends Component {
                                             <div className="chat-message-content clearfix">
                                                 <span className="chat-time">{dt}</span>
                                                 <h5>{`${msg.firstName} ${(msg.lastName) ? msg.lastName : ''}`}</h5>
-                                                {message !== '' && ReactHtmlParser(message)}
+                                                {message !== '' && <small dangerouslySetInnerHTML={{ __html: message }}></small>}
                                             </div>
                                         </div>
                                         <hr />

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
 import noImg from 'img/common/no-img.png'
 import moment from 'moment';
-import { InputField, SelectField_ReactSelect, DateField, EditorField } from '../../../helpers/FormControlHelper';
+import { InputField, SelectField_ReactSelect, DateField, TextAreaField } from '../../../helpers/FormControlHelper';
 import { required, requiredReactSelectStatus, minLength, maxLength, mobile, min, max, validNumber } from '../../../formValidation/validationRules';
 import { adminRouteCodes } from '../../../constants/adminRoutes';
 import { capitalizeFirstLetter, convertUnits, te } from '../../../helpers/funs';
@@ -60,7 +60,6 @@ class UserForm extends Component {
         this.state = {
             dob: null,
             gender: GENDER_MALE,
-            aboutMe: '',
             heightUnit: MEASUREMENT_UNIT_CENTIMETER,
             weightUnit: MEASUREMENT_UNIT_KILOGRAM
         }
@@ -76,7 +75,7 @@ class UserForm extends Component {
 
     render() {
         const { handleSubmit, selectUser } = this.props;
-        const { aboutMe, heightUnit, weightUnit } = this.state;
+        const { heightUnit, weightUnit } = this.state;
         let validateWeight = (weightUnit !== MEASUREMENT_UNIT_POUND) ? [validNumber, min20, max1000] : [validNumber, min44, max2200];
         let validateHeight = (heightUnit !== MEASUREMENT_UNIT_INCH) ? [validNumber, min50, max600] : [validNumber, min20, max240];
         return (
@@ -254,15 +253,13 @@ class UserForm extends Component {
                     <div className="row">
                         <div className="col-md-8">
                             <Field
+                                id="about_me"
                                 name="about_me"
-                                value={aboutMe}
-                                handleChange={this.handleChangeTextEditor}
-                                className="editor-min-height-200"
+                                component={TextAreaField}
                                 label="About Me"
-                                labelClass="control-label"
+                                labelClass="display_block"
                                 wrapperClass="form-group"
-                                placeholder="About Me"
-                                component={EditorField}
+                                className="form-control min-height-242 resize-vertical"
                             />
                         </div>
                         <div className="col-md-4">
@@ -324,7 +321,6 @@ class UserForm extends Component {
             this.setState({
                 dob: dob,
                 gender: selectUser.gender,
-                aboutMe: selectUser.aboutMe,
                 heightUnit,
                 weightUnit
             });
@@ -345,11 +341,6 @@ class UserForm extends Component {
     genderChange = (gender) => {
         this.props.change('gender', gender);
         this.setState({ gender: gender });
-    }
-
-    handleChangeTextEditor = (editorText) => {
-        this.props.change('about_me', editorText);
-        this.setState({ aboutMe: editorText });
     }
 }
 

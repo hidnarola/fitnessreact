@@ -15,7 +15,6 @@ import AddProgramWorkoutTitleForm from './AddProgramWorkoutTitleForm';
 import { NavLink, Link } from "react-router-dom";
 import ReactTooltip from "react-tooltip";
 import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
-import ReactHtmlParser from "react-html-parser";
 import $ from "jquery";
 
 let dragEventActive = false;
@@ -74,7 +73,7 @@ class ProgramSave extends Component {
                                 <Link to={`${routeCodes.PROGRAM_MASTER_SAVE}/${program._id}`} data-for="edit-program-tooltip" data-tip="Edit"><FaPencil /></Link>
                                 <ReactTooltip id='edit-program-tooltip' place="top" effect="solid" />
                                 {program && program.description &&
-                                    ReactHtmlParser(program.description)
+                                    <small dangerouslySetInnerHTML={{ __html: program.description }}></small>
                                 }
                             </div>
                         }

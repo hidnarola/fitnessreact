@@ -5,14 +5,11 @@
 @import "fitnessCss/bootstrap-select.min";
 @import "fitnessCss/bootstrap.min";
 @import "fitnessCss/icomoon-style";
-@import "fitnessCss/progressbar.css";
 @import "fitnessCss/Calendar.css";
 @import "react-table/react-table.css";
 @import "react-select/dist/react-select.css";
 @import "react-datepicker/dist/react-datepicker.css";
-@import "react-quill/dist/quill.snow.css";
 @import 'react-toastify/dist/ReactToastify.css';
-@import 'react-tagsinput/react-tagsinput.css';
 @import 'react-daterange-picker/dist/css/react-calendar.css';
 @import 'round-slider/dist/roundslider.min.css';
 @import 'rc-time-picker/assets/index.css';

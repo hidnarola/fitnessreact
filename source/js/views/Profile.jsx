@@ -13,7 +13,6 @@ import noProfileImg from 'img/common/no-profile-img.png'
 import { FRIENDSHIP_STATUS_SELF, FRIENDSHIP_STATUS_UNKNOWN, FRIENDSHIP_STATUS_FRIEND, FRIENDSHIP_STATUS_REQUEST_RECEIVED, FRIENDSHIP_STATUS_REQUEST_SENT, LOCALSTORAGE_USER_DETAILS_KEY, FITASSIST_USER_DETAILS_TOKEN_KEY, MEASUREMENT_UNIT_CENTIMETER, MEASUREMENT_UNIT_KILOGRAM, MEASUREMENT_UNIT_GRAM, ACCESS_LEVEL_PUBLIC, ACCESS_LEVEL_FRIENDS } from '../constants/consts';
 import { sendFriendRequestRequest, cancelFriendRequestRequest, acceptFriendRequestRequest } from '../actions/friends';
 import { ts, te, convertUnits, replaceStringWithEmos } from '../helpers/funs';
-import ReactHtmlParser from 'react-html-parser';
 import ChangeProfilePhotoModal from '../components/Profile/ChangeProfilePhotoModal';
 import jwt from "jwt-simple";
 import { setLoggedUserFromLocalStorage } from '../actions/user';
@@ -59,7 +58,7 @@ class Profile extends Component {
             showUnfollowModal: false,
             selectedFollowId: null,
             showProfilePicLightbox: false,
-            showProfilePictureModal:false
+            showProfilePictureModal: false
         }
         this.changeProfilePhotoRef = React.createRef();
     }
@@ -191,7 +190,7 @@ class Profile extends Component {
                                     </div>
                                 </div>
                                 <div className="user-meta-text">
-                                    {profileAboutMe !== '' && ReactHtmlParser(profileAboutMe)}
+                                    {profileAboutMe !== '' && <small dangerouslySetInnerHTML={{ __html: profileAboutMe }}></small>}
                                 </div>
 
                             </div>

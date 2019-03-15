@@ -4,7 +4,6 @@ import Dropzone from 'react-dropzone';
 import _ from 'lodash';
 import StarRatingComponent from 'react-star-rating-component';
 import DatePicker from 'react-datepicker';
-import ReactQuill from 'react-quill';
 import { SERVER_BASE_URL } from '../constants/consts';
 import noImg from 'img/common/no-img.png'
 
@@ -361,41 +360,6 @@ export const DateField = (props) => {
                 showMonthDropdown={(showMonthDropdown) ? showMonthDropdown : true}
                 scrollableYearDropdown={(scrollableYearDropdown) ? scrollableYearDropdown : true}
                 dropdownMode={(dropdownMode) ? dropdownMode : 'select'}
-            />
-            {meta.touched &&
-                ((meta.error && <span className={errorClass}>{meta.error}</span>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))
-            }
-        </div>
-    );
-}
-
-export const EditorField = (props) => {
-    const {
-        label,
-        input,
-        meta,
-        wrapperClass,
-        className,
-        labelClass,
-        placeholder,
-        errorClass,
-        handleChange,
-        requiredAstrisk
-    } = props;
-    return (
-        <div
-            className={
-                `${wrapperClass} ${(meta.touched && meta.error) ? 'has-error' : ''}`
-            }
-        >
-            {label && <label htmlFor={input.name} className={labelClass}>{label} {requiredAstrisk && <span style={{ color: "red" }}>*</span>}</label>}
-            <ReactQuill
-                {...input}
-                value={input.value ? input.value : ''}
-                onChange={(content, delta, source, editor) => handleChange(content)}
-                onBlur={(content) => { return content }}
-                className={className}
-                placeholder={placeholder}
             />
             {meta.touched &&
                 ((meta.error && <span className={errorClass}>{meta.error}</span>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))
