@@ -6,3 +6,4 @@ build
 *.log*
 _nogit
 todo.md
+command.sh
