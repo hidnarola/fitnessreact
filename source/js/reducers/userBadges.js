@@ -12,8 +12,7 @@ const initialState = Map({
     loading: false,
     selectedBadgeType: BADGE_TYPE_TRACKING,
     badges: [],
-    error: [],
-    iDB:null
+    error: []
 });
 
 const actionMap = {

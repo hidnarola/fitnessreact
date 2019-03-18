@@ -13,6 +13,8 @@ import DateRangePicker from 'react-daterange-picker';
 import moment from "moment";
 import { setUserProgresDateRange } from '../actions/userProgress';
 import DateRangePickerCustomPeriod from '../components/Common/DateRangePickerCustomPeriod';
+import { IDB_TBL_PROGRESS, IDB_READ_WRITE } from '../constants/idb';
+import { connectIDB, isOnline, tw } from '../helpers/funs';
 
 class Progress extends Component {
     constructor(props) {
@@ -20,6 +22,7 @@ class Progress extends Component {
         this.state = {
             showSearch: false,
         }
+        this.iDB;
     }
 
     componentWillMount() {
@@ -49,7 +52,7 @@ class Progress extends Component {
                         </div>
                         {dateRange &&
                             <div className="body-head-r">
-                                <a href="javascript:void(0)" onClick={() => this.setState({ showSearch: !showSearch })} className="pink-btn">{`${dateRange.start.local().format('DD/MM/YYYY')} - ${dateRange.end.local().format('DD/MM/YYYY')}`}<i className="icon-date_range"></i></a>
+                                <a href="javascript:void(0)" onClick={this.handleOpenCalendar} className="pink-btn">{`${dateRange.start.local().format('DD/MM/YYYY')} - ${dateRange.end.local().format('DD/MM/YYYY')}`}<i className="icon-date_range"></i></a>
                             </div>
                         }
                     </div>
@@ -90,12 +93,32 @@ class Progress extends Component {
         );
     }
 
+    componentDidMount() {
+        connectIDB()().then((connection) => {
+            this.handleIDBOpenSuccess(connection);
+        });
+    }
+
+    handleIDBOpenSuccess = (connection) => {
+        this.iDB = connection.result;
+    }
+
     componentDidUpdate(prevProps, prevState) {
         const { match, history } = this.props;
         if (match.isExact) {
             history.push(routeCodes.PROGRESS_BODY_FAT);
         }
     }
+
+    handleOpenCalendar = () => {
+        const { showSearch } = this.state;
+        if (isOnline()) {
+            this.setState({ showSearch: !showSearch })
+        } else {
+            tw("You are offline, please check your internet connection");
+        }
+    }
+
 
     handleTimeDateRange = (range, state) => {
         const { dispatch } = this.props;
@@ -108,6 +131,20 @@ class Progress extends Component {
         let range = moment.range(start, end);
         dispatch(setUserProgresDateRange(range));
         this.setState({ showSearch: false });
+    }
+
+    componentWillUnmount() {
+        try {
+            const idbs = [IDB_TBL_PROGRESS];
+            if (isOnline()) {
+                const transaction = this.iDB.transaction(idbs, IDB_READ_WRITE);
+                if (transaction) {
+                    const osProgress = transaction.objectStore(IDB_TBL_PROGRESS);
+                    osProgress.clear();
+                }
+            }
+            this.iDB.close();
+        } catch (error) { }
     }
 }
 

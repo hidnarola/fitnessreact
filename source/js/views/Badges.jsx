@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 import { routeCodes } from 'constants/routes';
-import { setUserBadgesByType } from '../actions/userBadges';
 import FitnessHeader from 'components/global/FitnessHeader';
 import FitnessNav from 'components/global/FitnessNav';
 import Complete from 'components/Badges/Complete';
@@ -13,6 +12,12 @@ import { IDB_TBL_BADGES, IDB_READ_WRITE } from '../constants/idb';
 import { connectIDB, isOnline } from '../helpers/funs';
 
 class Badges extends Component {
+
+    constructor(props) {
+        super(props);
+        this.iDB;
+    }
+
     componentWillMount() {
         const { match, history } = this.props;
         if (match.isExact) {
@@ -50,10 +55,12 @@ class Badges extends Component {
 
     componentDidMount() {
         connectIDB()().then((connection) => {
-            const { dispatch } = this.props;
-            const iDB = connection.result;
-            dispatch(setUserBadgesByType({ iDB }))
+            this.handleIDBOpenSuccess(connection);
         });
+    }
+
+    handleIDBOpenSuccess = (connection) => {
+        this.iDB = connection.result;
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -66,16 +73,14 @@ class Badges extends Component {
     componentWillUnmount() {
         try {
             const idbs = [IDB_TBL_BADGES];
-            const { iDB } = this.props;
             if (isOnline()) {
-                const transaction = iDB.transaction(idbs, IDB_READ_WRITE);
+                const transaction = this.iDB.transaction(idbs, IDB_READ_WRITE);
                 if (transaction) {
                     const osBadge = transaction.objectStore(IDB_TBL_BADGES);
                     osBadge.clear();
                 }
             }
-            iDB.close();
-            dispatch(setUserBadgesByType({ iDB: null }))
+            this.iDB.close();
         } catch (error) { }
     }
 
@@ -84,7 +89,6 @@ class Badges extends Component {
 const mapStateToProps = (state) => {
     const { userBadges } = state;
     return {
-        iDB: userBadges.get('iDB')
     };
 }
 

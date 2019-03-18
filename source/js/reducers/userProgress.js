@@ -5,6 +5,7 @@ import {
     GET_USER_PROGRESS_BY_CATEGORY_AND_DATE_SUCCESS,
     GET_USER_PROGRESS_BY_CATEGORY_AND_DATE_ERROR,
     SET_USER_PROGRESS_DATE_RANGE,
+    SET_USER_PROGRESS_BY_CATEGORY_AND_DATE
 } from "../actions/userProgress";
 import { generateValidationErrorMsgArr } from "../helpers/funs";
 import moment from "moment";
@@ -14,7 +15,7 @@ const initialState = Map({
     selectedType: PROGRESS_BODY_FAT,
     dateRange: null,
     progress: null,
-    error: [],
+    error: []
 });
 
 const actionMap = {
@@ -58,6 +59,9 @@ const actionMap = {
             error: error,
         }));
     },
+    [SET_USER_PROGRESS_BY_CATEGORY_AND_DATE]: (state, action) => {
+        return state.merge(Map(action.data));
+    }
 };
 
 function transformBodyfatData(data) {

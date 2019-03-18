@@ -7,12 +7,13 @@ import ErrorCloud from "svg/error-cloud.svg";
 import { FaCircleONotch } from "react-icons/lib/fa";
 import NoRecordFound from '../Common/NoRecordFound';
 import { IDB_TBL_BADGES, IDB_READ_WRITE, IDB_READ } from '../../constants/idb';
-import { isOnline } from '../../helpers/funs';
+import { connectIDB, isOnline } from '../../helpers/funs';
 
 class InComplete extends Component {
 
     constructor(props) {
         super(props);
+        this.iDB;
     }
 
     render() {
@@ -57,10 +58,18 @@ class InComplete extends Component {
     }
 
     componentDidMount() {
+        connectIDB()().then((connection) => {
+            this.handleIDBOpenSuccess(connection);
+        });
         if (isOnline()) {
             const { dispatch } = this.props;
             dispatch(getUserBadgesByTypeRequest(BADGE_TYPE_IN_COMPLETE));
-        } else {
+        }
+    }
+
+    handleIDBOpenSuccess = (connection) => {
+        this.iDB = connection.result;
+        if (!isOnline()) {
             this.getDataFromIDB();
         }
     }
@@ -73,11 +82,11 @@ class InComplete extends Component {
     }
 
     getDataFromIDB = () => {
-        const { selectedBadgeType, dispatch, iDB } = this.props;
+        const { selectedBadgeType, dispatch } = this.props;
         if (selectedBadgeType) {
             const idbTbls = [IDB_TBL_BADGES];
             try {
-                const transaction = iDB.transaction(idbTbls, IDB_READ);
+                const transaction = this.iDB.transaction(idbTbls, IDB_READ);
                 if (transaction) {
                     const osBadge = transaction.objectStore(IDB_TBL_BADGES);
                     const iDBGetReq = osBadge.get(BADGE_TYPE_IN_COMPLETE);
@@ -94,15 +103,16 @@ class InComplete extends Component {
                     }
                 }
             } catch (error) {
+                const data = { badges: [], error: [] }
+                dispatch(setUserBadgesByType(data));
             }
         }
     }
 
     storeBadgeInIDB = (type, data) => {
         try {
-            const { iDB } = this.props;
             const idbData = { type, data };
-            const transaction = iDB.transaction([IDB_TBL_BADGES], IDB_READ_WRITE);
+            const transaction = this.iDB.transaction([IDB_TBL_BADGES], IDB_READ_WRITE);
             const objectStore = transaction.objectStore(IDB_TBL_BADGES);
             const iDBGetReq = objectStore.get(type);
             iDBGetReq.onsuccess = (event) => {
@@ -116,6 +126,12 @@ class InComplete extends Component {
         } catch (error) { }
     }
 
+    componentWillUnmount() {
+        try {
+            this.iDB.close();
+        } catch (error) { }
+    }
+
 }
 
 const mapStateToProps = (state) => {
@@ -124,8 +140,7 @@ const mapStateToProps = (state) => {
         loading: userBadges.get('loading'),
         selectedBadgeType: userBadges.get('selectedBadgeType'),
         badges: userBadges.get('badges'),
-        error: userBadges.get('error'),
-        iDB: userBadges.get('iDB')
+        error: userBadges.get('error')
     };
 }
 

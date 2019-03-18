@@ -2,29 +2,19 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import moment from "moment";
 import { PROGRESS_ENDURANCE } from '../../constants/consts';
-import { getUserProgressByCategoryAndDateRequest } from '../../actions/userProgress';
+import { getUserProgressByCategoryAndDateRequest, setUerProgressByCategoryAndDate } from '../../actions/userProgress';
 import { FaCircleONotch } from "react-icons/lib/fa";
 import ErrorCloud from "svg/error-cloud.svg";
 import { capitalizeFirstLetter } from '../../helpers/funs';
 import NoRecordFound from '../Common/NoRecordFound';
+import { IDB_TBL_PROGRESS, IDB_READ_WRITE, IDB_READ } from '../../constants/idb';
+import { connectIDB, isOnline } from '../../helpers/funs';
 
 class Endurance extends Component {
-    componentWillMount() {
-        const { dispatch, dateRange } = this.props;
-        var requestDate = dateRange;
-        if (!requestDate) {
-            requestDate = moment.range(
-                moment().subtract(1, 'month').startOf('day').utc(),
-                moment().startOf('day').utc()
-            )
-        }
-        var requestData = {
-            dateRange: requestDate,
-            start: requestDate.start,
-            end: requestDate.end,
-            category: PROGRESS_ENDURANCE,
-        }
-        dispatch(getUserProgressByCategoryAndDateRequest(requestData));
+
+    constructor(props) {
+        super(props);
+        this.iDB;
     }
 
     render() {
@@ -61,7 +51,7 @@ class Endurance extends Component {
                     </div>
                 }
 
-                {!loading && (typeof progress === 'undefined' || !progress) && typeof error !== 'undefined' && error && error.length <= 0 &&
+                {!loading && (typeof progress === 'undefined' || (progress && progress.length <= 0)) && typeof error !== 'undefined' && error && error.length <= 0 &&
                     <NoRecordFound title="Endurance (Cardio) data are not available for these days" />
                 }
 
@@ -75,8 +65,41 @@ class Endurance extends Component {
         );
     }
 
+    componentDidMount() {
+
+        connectIDB()().then((connection) => {
+            this.handleIDBOpenSuccess(connection);
+        });
+
+        if (isOnline()) {
+            const { dispatch, dateRange } = this.props;
+            var requestDate = dateRange;
+            if (!requestDate) {
+                requestDate = moment.range(
+                    moment().subtract(1, 'month').startOf('day').utc(),
+                    moment().startOf('day').utc()
+                )
+            }
+            var requestData = {
+                dateRange: requestDate,
+                start: requestDate.start,
+                end: requestDate.end,
+                category: PROGRESS_ENDURANCE,
+            }
+            dispatch(getUserProgressByCategoryAndDateRequest(requestData));
+        }
+    }
+
+    handleIDBOpenSuccess = (connection) => {
+        this.iDB = connection.result;
+        if (!isOnline()) {
+            this.getDataFromIDB();
+        }
+    }
+
+
     componentDidUpdate(prevProps, prevState) {
-        const { dateRange, dispatch } = this.props;
+        const { dateRange, dispatch, loading, progress, selectedType } = this.props;
         if (dateRange && prevProps.dateRange !== dateRange) {
             var requestData = {
                 dateRange: dateRange,
@@ -86,6 +109,60 @@ class Endurance extends Component {
             }
             dispatch(getUserProgressByCategoryAndDateRequest(requestData));
         }
+        if (!loading && prevProps.loading !== loading) {
+            this.storeProgressInIDB(selectedType, JSON.stringify(progress));
+        }
+    }
+
+    storeProgressInIDB = (type, data) => {
+        try {
+            const idbData = { type, data };
+            const transaction = this.iDB.transaction([IDB_TBL_PROGRESS], IDB_READ_WRITE);
+            const objectStore = transaction.objectStore(IDB_TBL_PROGRESS);
+            const iDBGetReq = objectStore.get(type);
+            iDBGetReq.onsuccess = (event) => {
+                const { target: { result } } = event;
+                if (result) {
+                    objectStore.put(idbData);
+                } else {
+                    objectStore.add(idbData);
+                }
+            }
+        } catch (error) { }
+    }
+
+    getDataFromIDB = () => {
+        const { selectedType, dispatch } = this.props;
+        if (selectedType) {
+            const idbTbls = [IDB_TBL_PROGRESS];
+            try {
+                const transaction = this.iDB.transaction(idbTbls, IDB_READ);
+                if (transaction) {
+                    const osBadge = transaction.objectStore(IDB_TBL_PROGRESS);
+                    const iDBGetReq = osBadge.get(PROGRESS_ENDURANCE);
+                    iDBGetReq.onsuccess = (event) => {
+                        const { target: { result } } = event;
+                        if (result) {
+                            const resultObj = JSON.parse(result.data);
+                            const data = { progress: resultObj, error: [], selectedType: PROGRESS_ENDURANCE }
+                            dispatch(setUerProgressByCategoryAndDate(data));
+                        } else {
+                            const data = { progress: [], error: [], selectedType: PROGRESS_ENDURANCE }
+                            dispatch(setUerProgressByCategoryAndDate(data));
+                        }
+                    }
+                }
+            } catch (error) {
+                const data = { progress: [], error: [], selectedType: PROGRESS_ENDURANCE }
+                dispatch(setUerProgressByCategoryAndDate(data));
+            }
+        }
+    }
+
+    componentWillUnmount() {
+        try {
+            this.iDB.close();
+        } catch (error) { }
     }
 }
 
@@ -96,7 +173,7 @@ const mapStateToProps = (state) => {
         selectedType: userProgress.get('selectedType'),
         progress: userProgress.get('progress'),
         dateRange: userProgress.get('dateRange'),
-        error: userProgress.get('error'),
+        error: userProgress.get('error')
     };
 }
 
