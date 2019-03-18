@@ -49,7 +49,6 @@
     "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^1.1.6",
     "html-webpack-plugin": "^2.30.1",
-    "lodash-webpack-plugin": "^0.11.5",
     "nodemon": "^1.14.7",
     "postcss": "^6.0.15",
     "postcss-cssnext": "^3.0.2",

@@ -16,7 +16,6 @@ const devServer = require('./webpack/dev-server').devServer;
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 
 // Default client app entry file
 const entry = [
@@ -81,7 +80,6 @@ plugins.push(
                 "react-images",
                 "react-infinite-scroller",
                 "react-paginate",
-                "react-quill",
                 "react-redux",
                 "react-router",
                 "react-router-dom",
@@ -136,8 +134,7 @@ if (IS_DEVELOPMENT) {
     entry.unshift('babel-polyfill');
 } else {
     plugins.push(
-        new BundleAnalyzerPlugin(),
-        new LodashModuleReplacementPlugin(),
+        new BundleAnalyzerPlugin()
     );
 }
 
