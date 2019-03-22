@@ -15,7 +15,8 @@ import {
     CHANGE_DASHBOARD_MUSCLE_INNER_DATA_REQUEST,
     CHANGE_DASHBOARD_MUSCLE_INNER_DATA_SUCCESS,
     CHANGE_DASHBOARD_MUSCLE_INNER_DATA_ERROR,
-    SET_NEW_STATE_OF_SINGLE_POST
+    SET_NEW_STATE_OF_SINGLE_POST,
+    SET_DASHBOARD_PAGE
 } from "../actions/dashboard";
 import { VALIDATION_FAILURE_STATUS } from "../constants/consts";
 import { generateValidationErrorMsgArr } from "../helpers/funs";
@@ -41,6 +42,9 @@ const initialState = Map({
 });
 
 const actionMap = {
+    [SET_DASHBOARD_PAGE]: (state, action) => {
+        return state.merge(Map(action.data));
+    },
     [GET_DASHBOARD_PAGE_REQUEST]: (state, action) => {
         return state.merge(Map({
             loading: true,

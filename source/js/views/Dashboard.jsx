@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import FitnessHeader from 'components/global/FitnessHeader';
 import FitnessNav from 'components/global/FitnessNav';
 import { connect } from 'react-redux';
-import { getToken, te } from '../helpers/funs';
+import { getToken, te, isOnline, connectIDB, tw } from '../helpers/funs';
 import {
     getDashboardPageRequest,
     saveDashboardWidgetsDataRequest,
     changeDashboardMuscleInnerDataRequest,
-    changeDashboardBodyFatWidgetRequest
+    changeDashboardBodyFatWidgetRequest,
+    setDashboardPage
 } from '../actions/dashboard';
 import {
     WIDGET_TODAYS_WORKOUT,
@@ -29,6 +30,7 @@ import {
     MUSCLE_WIDGET_HEART_RATE,
     MUSCLE_WIDGET_WEIGHT,
     MUSCLE_WIDGET_HEIGHT,
+    WIDGET_USER_WIDGET,
 } from '../constants/consts';
 import moment from "moment";
 import { initialize, reset } from "redux-form";
@@ -43,13 +45,14 @@ import WidgetMuscleCard from '../components/Common/WidgetMuscleCard';
 import WidgetBodyFatCard from '../components/Common/WidgetBodyFatCard';
 import WidgetBadgesCard from '../components/Common/WidgetBadgesCard';
 import ReactTooltip from "react-tooltip";
-
+import { IDB_TBL_DASHBOARD, IDB_READ_WRITE, IDB_READ } from '../constants/idb';
 class Dashboard extends Component {
     constructor(props) {
         super(props);
         this.state = {
             showWidgetsModal: false,
         }
+        this.iDB;
     }
 
     componentWillMount() {
@@ -58,7 +61,6 @@ class Dashboard extends Component {
         if (socket && token) {
             socket.emit('join', token);
         }
-        this.requestDashboardData();
     }
 
     render() {
@@ -200,19 +202,263 @@ class Dashboard extends Component {
         );
     }
 
+    componentDidMount() {
+        connectIDB()().then((connection) => {
+            this.handleIDBOpenSuccess(connection);
+        });
+        if (isOnline()) {
+            this.requestDashboardData();
+        }
+    }
+
+    handleIDBOpenSuccess = (connection) => {
+        this.iDB = connection.result;
+        if (!isOnline()) {
+            this.getDataFromIDB();
+        }
+    }
+
+
     componentDidUpdate(prevProps, prevState) {
         const {
             dispatch,
             saveWidgetsLoading,
             saveWidgetsError,
+            loading,
+            likeLoading,
+            commentLoading
         } = this.props;
         if (!saveWidgetsLoading && prevProps.saveWidgetsLoading !== saveWidgetsLoading) {
             if (saveWidgetsError && saveWidgetsError.length > 0) {
                 te('Something went wrong! please try again later.');
             }
             this.handleCloseWidgetsModal();
-            this.requestDashboardData();
+            if(isOnline()){
+                this.requestDashboardData();
+            }
+            this.storeUserWidgetDashboardInIDB();
         }
+        if ((!loading && !likeLoading && !commentLoading )) {
+            this.storeDashboardInIDB();
+        }
+    }
+
+    getDataFromIDB = () => {
+        const { dispatch } = this.props;
+        if (WIDGET_BADGES && WIDGET_BODY_FAT && WIDGET_MUSCLE && WIDGET_PROGRESS_PHOTO && WIDGET_USER_WIDGET && WIDGET_ACTIVITY_FEED) {
+            const idbTbls = [IDB_TBL_DASHBOARD];
+            try {
+                const transaction = this.iDB.transaction(idbTbls, IDB_READ);
+                if (transaction) {
+                    const osDashboard = transaction.objectStore(IDB_TBL_DASHBOARD);
+
+                    const iDBGetReqBadges = osDashboard.get(WIDGET_BADGES);
+                    iDBGetReqBadges.onsuccess = (event) => {
+                        const { target: { result } } = event;
+                        if (result) {
+                            const resultObj = JSON.parse(result.data);
+                            const data = { badges: resultObj, loading: false }
+                            dispatch(setDashboardPage(data));
+                        } else {
+                            const data = { badges: [], loading: false }
+                            dispatch(setDashboardPage(data));
+                        }
+                    }
+
+                    const iDBGetReqBodyfat = osDashboard.get(WIDGET_BODY_FAT);
+                    iDBGetReqBodyfat.onsuccess = (event) => {
+                        const { target: { result } } = event;
+                        if (result) {
+                            const resultObj = JSON.parse(result.data);
+                            const data = { bodyFat: resultObj, loading: false }
+                            dispatch(setDashboardPage(data));
+                        } else {
+                            const data = { bodyFat: [], loading: false }
+                            dispatch(setDashboardPage(data));
+                        }
+                    }
+
+                    const iDBGetReqMuscle = osDashboard.get(WIDGET_MUSCLE);
+                    iDBGetReqMuscle.onsuccess = (event) => {
+                        const { target: { result } } = event;
+                        if (result) {
+                            const resultObj = JSON.parse(result.data);
+                            const data = { muscle: resultObj, loading: false }
+                            dispatch(setDashboardPage(data));
+                        } else {
+                            const data = { muscle: {}, loading: false }
+                            dispatch(setDashboardPage(data));
+                        }
+                    }
+
+                    const iDBGetReqProgressPhoto = osDashboard.get(WIDGET_PROGRESS_PHOTO);
+                    iDBGetReqProgressPhoto.onsuccess = (event) => {
+                        const { target: { result } } = event;
+                        if (result) {
+                            const resultObj = JSON.parse(result.data);
+                            const data = { progressPhoto: resultObj, loading: false }
+                            dispatch(setDashboardPage(data));
+                        } else {
+                            const data = { progressPhoto: {}, loading: false }
+                            dispatch(setDashboardPage(data));
+                        }
+                    }
+
+                    const iDBGetRequserWidget = osDashboard.get(WIDGET_USER_WIDGET);
+                    iDBGetRequserWidget.onsuccess = (event) => {
+                        const { target: { result } } = event;
+                        if (result) {
+                            const resultObj = JSON.parse(result.data);
+                            const data = { userWidgets: resultObj, workouts: [], loading: false }
+                            dispatch(setDashboardPage(data));
+                        } else {
+                            const data = { userWidgets: {}, workouts: [], loading: false }
+                            dispatch(setDashboardPage(data));
+                        }
+                    }
+
+                    const iDBGetReqworkout = osDashboard.get(WIDGET_TODAYS_WORKOUT);
+                    iDBGetReqworkout.onsuccess = (event) => {
+                        const { target: { result } } = event;
+                        if (result) {
+                            const resultObj = JSON.parse(result.data);
+                            const data = { workouts: resultObj, loading: false }
+                            dispatch(setDashboardPage(data));
+                        } else {
+                            const data = { workouts: [], loading: false }
+                            dispatch(setDashboardPage(data));
+                        }
+                    }
+
+                    const iDBGetReqactivityFeed = osDashboard.get(WIDGET_ACTIVITY_FEED);
+                    iDBGetReqactivityFeed.onsuccess = (event) => {
+                        const { target: { result } } = event;
+                        if (result) {
+                            const resultObj = JSON.parse(result.data);
+                            const data = { activityFeed: resultObj, loading: false }
+                            dispatch(setDashboardPage(data));
+                        } else {
+                            const data = { activityFeed: [], loading: false }
+                            dispatch(setDashboardPage(data));
+                        }
+                    }   
+
+
+                }
+            } catch (error) {
+                const data = { badges: [], error: [], muscle: {}, progressPhoto: {}, bodyFat: [], userWidgets: {}, workouts: [], activityFeed: [], loading: false }
+                dispatch(setDashboardPage(data));
+            }
+        }
+    }
+
+    storeDashboardInIDB = () => {
+        const {
+            dispatch,
+            loading,
+            widgetProgressPhotos,
+            widgetMuscle,
+            widgetBodyFat,
+            widgetBadges,
+            userWidgets,
+            workouts,
+            activityFeed
+        } = this.props;
+        try {
+            const idbDataBedges = { type: WIDGET_BADGES, data: JSON.stringify(widgetBadges) };
+            const idbDataBodyFat = { type: WIDGET_BODY_FAT, data: JSON.stringify(widgetBodyFat) };
+            const idbDataMuscle = { type: WIDGET_MUSCLE, data: JSON.stringify(widgetMuscle) };
+            const idbDataProgressPhotos = { type: WIDGET_PROGRESS_PHOTO, data: JSON.stringify(widgetProgressPhotos) };
+            const idbDatauserWidget = { type: WIDGET_USER_WIDGET, data: JSON.stringify(userWidgets) };
+            const idbDatatodayWorkout = { type: WIDGET_TODAYS_WORKOUT, data: JSON.stringify(workouts) };
+            const idbDatatodayactivityFeed = { type: WIDGET_ACTIVITY_FEED, data: JSON.stringify(activityFeed) };
+
+
+            const transaction = this.iDB.transaction([IDB_TBL_DASHBOARD], IDB_READ_WRITE);
+            const objectStore = transaction.objectStore(IDB_TBL_DASHBOARD);
+
+
+            const iDBGetReqBedges = objectStore.get(WIDGET_BADGES);
+            iDBGetReqBedges.onsuccess = (event) => {
+                const { target: { result } } = event;
+                if (result) {
+                    objectStore.put(idbDataBedges);
+                } else {
+                    objectStore.add(idbDataBedges);
+                }
+            }
+
+
+            const iDBGetReqBodyFat = objectStore.get(WIDGET_BODY_FAT);
+            iDBGetReqBodyFat.onsuccess = (event) => {
+                const { target: { result } } = event;
+                if (result) {
+                    objectStore.put(idbDataBodyFat);
+                } else {
+                    objectStore.add(idbDataBodyFat);
+                }
+            }
+
+
+            const iDBGetReqMuscle = objectStore.get(WIDGET_MUSCLE);
+            iDBGetReqMuscle.onsuccess = (event) => {
+                const { target: { result } } = event;
+                if (result) {
+                    objectStore.put(idbDataMuscle);
+                } else {
+                    objectStore.add(idbDataMuscle);
+                }
+            }
+
+
+            const iDBGetReqProgressPhotos = objectStore.get(WIDGET_PROGRESS_PHOTO);
+            iDBGetReqProgressPhotos.onsuccess = (event) => {
+                const { target: { result } } = event;
+                if (result) {
+                    objectStore.put(idbDataProgressPhotos);
+                } else {
+                    objectStore.add(idbDataProgressPhotos);
+                }
+            }
+
+            const iDBGetRequserWidget = objectStore.get(WIDGET_USER_WIDGET);
+            iDBGetRequserWidget.onsuccess = (event) => {
+                const { target: { result } } = event;
+                if (result) {
+                    objectStore.put(idbDatauserWidget);
+                } else {
+                    objectStore.add(idbDatauserWidget);
+                }
+            }
+
+            const iDBGetReqtodayWorkout = objectStore.get(WIDGET_TODAYS_WORKOUT);
+            iDBGetReqtodayWorkout.onsuccess = (event) => {
+                const { target: { result } } = event;
+                if (result) {
+                    objectStore.put(idbDatatodayWorkout);
+                } else {
+                    objectStore.add(idbDatatodayWorkout);
+                }
+            }
+
+            const iDBGetReqtodayactivityFeed = objectStore.get(WIDGET_ACTIVITY_FEED);
+            iDBGetReqtodayactivityFeed.onsuccess = (event) => {
+                const { target: { result } } = event;
+                if (result) {
+                    objectStore.put(idbDatatodayactivityFeed);
+                } else {
+                    objectStore.add(idbDatatodayactivityFeed);
+                }
+            }
+
+        } catch (error) {
+        }
+    }
+
+    storeUserWidgetDashboardInIDB = () => {
+        const { saveWidgetsLoading,
+            saveWidgetsError,
+            userWidgets } = this.props;
     }
 
     handleShowWidgetsModal = () => {
@@ -381,13 +627,28 @@ class Dashboard extends Component {
         };
         dispatch(getDashboardPageRequest(requestData));
     }
+
+    componentWillUnmount() {
+        try {
+            const idbs = [IDB_TBL_DASHBOARD];
+            if (isOnline()) {
+                const transaction = this.iDB.transaction(idbs, IDB_READ_WRITE);
+                if (transaction) {
+                    const osDashboard = transaction.objectStore(IDB_TBL_DASHBOARD);
+                    osDashboard.clear();
+                }
+            }
+            this.iDB.close();
+        } catch (error) { }
+    }
 }
 
 const mapStateToProps = (state) => {
-    const { dashboard, user } = state;
+    const { dashboard, user, postLikes, postComments } = state;
     return {
         socket: user.get('socket'),
         loggedUserData: user.get('loggedUserData'),
+        activityFeed: dashboard.get('activityFeed'),
         loading: dashboard.get('loading'),
         error: dashboard.get('error'),
         profileComplete: dashboard.get('profileComplete'),
@@ -400,6 +661,9 @@ const mapStateToProps = (state) => {
         changeBodyFatLoading: dashboard.get('changeBodyFatLoading'),
         changeBodyFatError: dashboard.get('changeBodyFatError'),
         widgetBadges: dashboard.get('badges'),
+        workouts: dashboard.get('workouts'),
+        likeLoading: postLikes.get('loading'),
+        commentLoading: postComments.get('loading'),
     };
 };
 

@@ -873,6 +873,7 @@ export const WIDGET_BADGES = 'badges';
 export const WIDGET_BODY_FAT = 'bodyFat';
 export const WIDGET_MUSCLE = 'muscle';
 export const WIDGET_PROGRESS_PHOTO = 'progressPhoto';
+export const WIDGET_USER_WIDGET = 'userWidgets';
 
 export const MUSCLE_WIDGET_NECK = 'neck';
 export const MUSCLE_WIDGET_SHOULDER = 'shoulders';

@@ -12,6 +12,8 @@ export default function initIDBSchema(event) {
         objectStore = db.createObjectStore(idbConst.IDB_TBL_BODY_PP, { keyPath: "_id" });
         objectStore.createIndex("date", "date", { unique: false });
 
+        objectStore = db.createObjectStore(idbConst.IDB_TBL_DASHBOARD, { keyPath: "type" });
+
         objectStore = db.createObjectStore(idbConst.IDB_TBL_STATS, { keyPath: "type" });
 
         objectStore = db.createObjectStore(idbConst.IDB_TBL_BADGES, { keyPath: "type" });

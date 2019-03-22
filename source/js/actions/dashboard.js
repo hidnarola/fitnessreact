@@ -20,6 +20,8 @@ export const CHANGE_DASHBOARD_MUSCLE_INNER_DATA_ERROR = 'CHANGE_DASHBOARD_MUSCLE
 
 export const SET_NEW_STATE_OF_SINGLE_POST = 'SET_NEW_STATE_OF_SINGLE_POST';
 
+export const SET_DASHBOARD_PAGE = 'SET_DASHBOARD_PAGE';
+
 export function getDashboardPageRequest(requestData) {
     return {
         type: GET_DASHBOARD_PAGE_REQUEST,
@@ -38,6 +40,13 @@ export function getDashboardPageError(error) {
     return {
         type: GET_DASHBOARD_PAGE_ERROR,
         error
+    }
+}
+
+export function setDashboardPage(data) {
+    return {
+        type: SET_DASHBOARD_PAGE,
+        data
     }
 }
 
