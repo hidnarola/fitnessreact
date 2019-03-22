@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import cns from "classnames";
+import { isOnline, tw } from '../../helpers/funs';
 
 export default class LikeButton extends Component {
     constructor(props) {
@@ -43,7 +44,12 @@ export default class LikeButton extends Component {
             postId,
             handleToggleLike,
         } = this.props;
-        this.setState({ isLikedByLoggedUser: !this.state.isLikedByLoggedUser });
-        handleToggleLike(index, postId);
+        if (isOnline()) {
+            this.setState({ isLikedByLoggedUser: !this.state.isLikedByLoggedUser });
+            handleToggleLike(index, postId);
+        } else {
+            tw("You are offline, please check your internet connection");
+        }
+
     }
 }

@@ -4,6 +4,7 @@ import { routeCodes } from '../../constants/routes';
 import { NavLink } from "react-router-dom";
 import moment from "moment";
 import { SCHEDULED_WORKOUT_TYPE_EXERCISE } from '../../constants/consts';
+import { isOnline, tw } from '../../helpers/funs';
 
 class WorkoutsListCard extends Component {
     constructor(props) {
@@ -27,8 +28,18 @@ class WorkoutsListCard extends Component {
         }
     }
 
+    handleWorkout = () => {
+        const { handleCompleteWorkout } = this.props;
+        if (isOnline()) {
+            this.setState({ isCompleted: !isCompleted });
+            handleCompleteWorkout(workout._id, !isCompleted);
+        } else {
+            tw("You are offline, please check your internet connection");
+        }
+    }
+
     render() {
-        const { workout, handleCompleteWorkout } = this.props;
+        const { workout } = this.props;
         const { isCompleted } = this.state;
         var today = moment().utc();
         var workoutDay = moment(workout.date);
@@ -44,8 +55,7 @@ class WorkoutsListCard extends Component {
                                 type="checkbox"
                                 checked={isCompleted}
                                 onChange={() => {
-                                    this.setState({ isCompleted: !isCompleted });
-                                    handleCompleteWorkout(workout._id, !isCompleted);
+                                    this.handleWorkout();
                                 }}
                                 disabled={false}
                             />

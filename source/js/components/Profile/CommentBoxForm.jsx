@@ -4,7 +4,7 @@ import Emos from '../Common/Emos';
 import ContentEditableTextarea from '../Common/ContentEditableTextarea';
 import { Emoji } from "emoji-mart";
 import { FaSpinner } from 'react-icons/lib/fa';
-import { sanitizeEditableContentValue } from '../../helpers/funs';
+import { sanitizeEditableContentValue, isOnline, tw } from '../../helpers/funs';
 
 class CommentBoxForm extends Component {
     constructor(props) {
@@ -70,13 +70,17 @@ class CommentBoxForm extends Component {
 
     handleComment = (e) => {
         e.preventDefault();
-        const { comment } = this.state;
-        const sanitizedComment = sanitizeEditableContentValue(comment);
-        if (comment && sanitizedComment && comment.trim() && sanitizedComment.trim()) {
-            this.setState({ buttonLoader: true });
-            const { handleComment, postId, index } = this.props;
-            const data = { comment, postId, index };
-            handleComment(data);
+        if (isOnline()) {
+            const { comment } = this.state;
+            const sanitizedComment = sanitizeEditableContentValue(comment);
+            if (comment && sanitizedComment && comment.trim() && sanitizedComment.trim()) {
+                this.setState({ buttonLoader: true });
+                const { handleComment, postId, index } = this.props;
+                const data = { comment, postId, index };
+                handleComment(data);
+            }
+        } else {
+            tw("You are offline, please check your internet connection");
         }
     }
 

@@ -12,6 +12,7 @@ import CustomTooltip from '../Progress/CustomTooltip';
 import _ from "lodash";
 import moment from "moment";
 import { ButtonToolbar, Dropdown, MenuItem } from "react-bootstrap";
+import { isOnline, tw } from '../../helpers/funs';
 
 class WidgetMuscleCard extends Component {
     constructor(props) {
@@ -124,7 +125,11 @@ class WidgetMuscleCard extends Component {
     }
 
     toggleCalendar = () => {
-        this.setState((prevState) => { return { showDatePicker: !prevState.showDatePicker } });
+        if(isOnline()) {
+            this.setState((prevState) => { return { showDatePicker: !prevState.showDatePicker } });
+        } else {
+            tw("You are offline, please check your internet connection");
+        }
     }
 
     handleMuscleChange = (value) => {

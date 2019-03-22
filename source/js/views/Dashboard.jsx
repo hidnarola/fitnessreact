@@ -601,7 +601,11 @@ class Dashboard extends Component {
             ];
             requestData[WIDGET_MUSCLE] = _data;
         }
-        dispatch(saveDashboardWidgetsDataRequest(requestData));
+        if(isOnline()) {
+            dispatch(saveDashboardWidgetsDataRequest(requestData));
+        } else {
+            tw("You are offline, please check your internet connection");
+        }
     }
 
     requestGraphData = (requestData) => {

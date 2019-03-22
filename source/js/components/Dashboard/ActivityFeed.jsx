@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import ActivityFeedListCard from './ActivityFeedListCard';
 import NoRecordFound from '../Common/NoRecordFound';
 import { toggleLikeOnPostRequest } from '../../actions/postLikes';
-import { te, sanitizeEditableContentValue } from '../../helpers/funs';
+import { te, sanitizeEditableContentValue, isOnline, tw } from '../../helpers/funs';
 import { setNewStateOfSinglePost } from '../../actions/dashboard';
 import { commentOnPostRequest } from '../../actions/postComments';
 import { reset } from "redux-form";
@@ -70,9 +70,13 @@ class ActivityFeed extends Component {
     handleToggleLike = (index, postId) => {
         const { dispatch, activityFeed } = this.props;
         var requestData = { postId: postId };
-        let selectedPostForLike = (activityFeed[index]) ? activityFeed[index] : null;
-        this.setState({ selectedPostForLike });
-        dispatch(toggleLikeOnPostRequest(requestData));
+        if (isOnline()) {
+            let selectedPostForLike = (activityFeed[index]) ? activityFeed[index] : null;
+            this.setState({ selectedPostForLike });
+            dispatch(toggleLikeOnPostRequest(requestData));
+        } else {
+            tw("You are offline, please check your internet connection");
+        }
     }
 
     handleComment = (data) => {

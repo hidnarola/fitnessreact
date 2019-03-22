@@ -8,6 +8,7 @@ import { FaCircleONotch } from "react-icons/lib/fa";
 import ErrorCloud from "svg/error-cloud.svg";
 import NoRecordFound from './NoRecordFound';
 import DateRangePickerCustomPeriod from './DateRangePickerCustomPeriod';
+import { isOnline, tw } from '../../helpers/funs';
 
 class WidgetBodyFatCard extends Component {
     constructor(props) {
@@ -95,7 +96,11 @@ class WidgetBodyFatCard extends Component {
 
     toggleCalendar = () => {
         const { showCalendar } = this.state;
-        this.setState({ showCalendar: !showCalendar });
+        if(isOnline()) {
+            this.setState({ showCalendar: !showCalendar });
+        } else {
+            tw("You are offline, please check your internet connection");
+        }
     }
 
     handleTimeDateRange = (range, state) => {
