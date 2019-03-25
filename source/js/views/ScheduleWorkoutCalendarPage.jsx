@@ -17,12 +17,13 @@ import {
     addUserWorkoutTitleRequest,
     setScheduleWorkoutsState,
     cutUserWorkoutSchedule,
+    setDatainIdb
 } from '../actions/userScheduleWorkouts';
 import { NavLink } from "react-router-dom";
 import { routeCodes } from '../constants/routes';
 import _ from "lodash";
-import { SCHEDULED_WORKOUT_TYPE_RESTDAY, SCHEDULED_WORKOUT_TYPE_EXERCISE } from '../constants/consts';
-import { ts, te, prepareDropdownOptionsData, capitalizeFirstLetter, getElementOffsetRelativeToBody } from '../helpers/funs';
+import { SCHEDULED_WORKOUT_TYPE_RESTDAY, SCHEDULED_WORKOUT_TYPE_EXERCISE, CALENDER_PROGRAMS, CALENDER_WORKOUTS } from '../constants/consts';
+import { ts, te, prepareDropdownOptionsData, capitalizeFirstLetter, getElementOffsetRelativeToBody, isOnline, tw, connectIDB } from '../helpers/funs';
 import { FaCopy, FaTrash, FaPencil, FaEye } from 'react-icons/lib/fa'
 import cns from "classnames";
 import AddWorkoutTitleForm from '../components/ScheduleWorkout/AddWorkoutTitleForm';
@@ -30,9 +31,10 @@ import ReactTooltip from "react-tooltip";
 import { showPageLoader, hidePageLoader } from '../actions/pageLoader';
 import SelectAssignProgramForm from '../components/ScheduleWorkout/SelectAssignProgramForm';
 import CreateProgramFromCalendarForm from '../components/ScheduleWorkout/CreateProgramFromCalendarForm';
-import { createUserProgramFromCalendarRequest, appendUserProgramFromCalendarRequest } from '../actions/userPrograms';
+import { createUserProgrramFromCalendarRequest, appendUserProgramFromCalendarRequest } from '../actions/userPrograms';
 import AppendProgramFromCalendarForm from '../components/ScheduleWorkout/AppendProgramFromCalendarForm';
 import $ from "jquery";
+import { IDB_TBL_CALENDER, IDB_READ_WRITE, IDB_READ } from '../constants/idb';
 
 let dragEventActive = false;
 let dragEventCardOutside = false;
@@ -72,14 +74,7 @@ class ScheduleWorkoutCalendarPage extends Component {
             showCreateProgram: false,
             showAppendProgram: false
         }
-    }
-
-    componentWillMount() {
-        const { dispatch } = this.props;
-        var today = moment().startOf('day').utc();
-        this.setState({ calendarViewDate: today.local() });
-        this.getWorkoutSchedulesByMonth(today);
-        dispatch(getProgramsNameRequest());
+        this.iDB;
     }
 
     render() {
@@ -119,6 +114,7 @@ class ScheduleWorkoutCalendarPage extends Component {
                             <h2>Calendar</h2>
                             <p>Your goal choice shapes how your fitness assistant will ceate your meal and exercise plans, it’s important that you set goals which are achieveable. Keep updating your profile and your fitness assistant will keep you on track and meeting the goals you’ve set out for yourself.</p>
                         </div>
+
                     </div>
                     <div className="body-content d-flex row justify-content-start profilephoto-content" data-for="custom-cut-workout-wrap" data-tip>
                         <div className="col-md-12">
@@ -324,6 +320,34 @@ class ScheduleWorkoutCalendarPage extends Component {
         );
     }
 
+    componentDidMount() {
+        connectIDB()().then((connection) => {
+            this.handleIDBOpenSuccess(connection);
+        });
+        document.addEventListener("keyup", this.handleKeyUp, true);
+        document.addEventListener("mousemove", this.handleMouseMove, true);
+        document.addEventListener("mouseup", this.handleMouseUp, true);
+        if (isOnline()) {
+            const { dispatch } = this.props;
+            var today = moment().startOf('day').utc();
+            this.setState({ calendarViewDate: today.local() });
+            if (isOnline()) {
+                this.getWorkoutSchedulesByMonth(today);
+                dispatch(getProgramsNameRequest());
+            }
+        }
+    }
+
+    handleIDBOpenSuccess = (connection) => {
+        this.iDB = connection.result;
+        if (!isOnline()) {
+            // get data from iDB
+            this.getWorkoutsDataFromIDB()
+            this.getProgramsDataFromIDB()
+        }
+    }
+
+
     componentDidUpdate(prevProps, prevState) {
         const {
             workouts,
@@ -340,7 +364,8 @@ class ScheduleWorkoutCalendarPage extends Component {
             createFromCalendarStatus,
             appendFromCalendarLoading,
             appendFromCalendarStatus,
-            cutWorkout
+            cutWorkout,
+            loadingPrograms
         } = this.props;
         const {
             workoutPasteAction,
@@ -353,6 +378,10 @@ class ScheduleWorkoutCalendarPage extends Component {
             addRestDayInit,
             addWorkoutTitleInit,
         } = this.state;
+        if (!loadingPrograms && prevProps.loadingPrograms !== loadingPrograms) {
+            // store programs in iDB names
+            this.storeProgramDataInIDB()
+        }
         if (!loading && prevProps.workouts !== workouts) {
             var newWorkouts = [];
             _.forEach(workouts, (workout, index) => {
@@ -381,6 +410,11 @@ class ScheduleWorkoutCalendarPage extends Component {
             });
             this.setState({ workoutEvents: newWorkouts });
             this.resetDragContainer();
+            // store workouts in iDB
+            if (isOnline()) {
+                this.storeWorkoutDataInIDB()
+            }
+
         }
         if (cutWorkout && prevProps.cutWorkout !== cutWorkout) {
             var newWorkouts = [];
@@ -501,10 +535,15 @@ class ScheduleWorkoutCalendarPage extends Component {
         }
         if (!createFromCalendarLoading && prevProps.createFromCalendarLoading !== createFromCalendarLoading) {
             if (createFromCalendarStatus && prevProps.createFromCalendarStatus !== createFromCalendarStatus) {
-                this.getWorkoutSchedulesByMonth();
-                this.setState({ showCreateProgram: false });
-                dispatch(getProgramsNameRequest());
-                ts('Program created!');
+                if (isOnline()) {
+                    this.getWorkoutSchedulesByMonth();
+                    this.setState({ showCreateProgram: false });
+                    dispatch(getProgramsNameRequest());
+                    ts('Program created!');
+                } else {
+                    // get data from iDB
+                    this.getProgramsDataFromIDB()
+                }
             }
             dispatch(hidePageLoader());
         }
@@ -518,16 +557,115 @@ class ScheduleWorkoutCalendarPage extends Component {
         }
     }
 
-    componentDidMount() {
-        document.addEventListener("keyup", this.handleKeyUp, true);
-        document.addEventListener("mousemove", this.handleMouseMove, true);
-        document.addEventListener("mouseup", this.handleMouseUp, true);
-    }
-
     componentWillUnmount() {
         document.removeEventListener('keyup', this.handleKeyUp, true);
         document.removeEventListener('mousemove', this.handleMouseMove, true);
         document.removeEventListener('mouseup', this.handleMouseUp, true);
+
+        try {
+            const idbs = [IDB_TBL_CALENDER];
+            if (isOnline()) {
+                const transaction = this.iDB.transaction(idbs, IDB_READ_WRITE);
+                if (transaction) {
+                    const osCalender = transaction.objectStore(IDB_TBL_CALENDER);
+                    osCalender.clear();
+                }
+            }
+            this.iDB.close();
+        } catch (error) { }
+
+    }
+
+    getWorkoutsDataFromIDB = () => {
+        const { dispatch } = this.props;
+        const idbTbls = [IDB_TBL_CALENDER];
+        try {
+            const transaction = this.iDB.transaction(idbTbls, IDB_READ);
+            if (transaction) {
+                const osCalender = transaction.objectStore(IDB_TBL_CALENDER);
+                const iDBGetReq = osCalender.get(CALENDER_WORKOUTS);
+                iDBGetReq.onsuccess = (event) => {
+                    const { target: { result } } = event;
+                    if (result) {
+                        const resultObj = JSON.parse(result.data);
+                        const data = { workouts: resultObj, error: [] }
+                        dispatch(setDatainIdb(data));
+                    } else {
+                        const data = { workouts: [], error: [] }
+                        dispatch(setDatainIdb(data));
+                    }
+                }
+            }
+        } catch (error) {
+            const data = { workouts: [], error: [] }
+            dispatch(setDatainIdb(data));
+        }
+    }
+
+    getProgramsDataFromIDB = () => {
+        const { dispatch } = this.props;
+        const idbTbls = [IDB_TBL_CALENDER];
+        try {
+            const transaction = this.iDB.transaction(idbTbls, IDB_READ);
+            if (transaction) {
+                const osCalender = transaction.objectStore(IDB_TBL_CALENDER);
+                const iDBGetReq = osCalender.get(CALENDER_PROGRAMS);
+                iDBGetReq.onsuccess = (event) => {
+                    const { target: { result } } = event;
+                    if (result) {
+                        const resultObj = JSON.parse(result.data);
+                        const data = { programs: resultObj, error: [] }
+                        dispatch(setDatainIdb(data));
+                    } else {
+                        const data = { programs: [], error: [] }
+                        dispatch(setDatainIdb(data));
+                    }
+                }
+            }
+        } catch (error) {
+            const data = { programs: [], error: [] }
+            dispatch(setDatainIdb(data));
+        }
+    }
+
+    storeProgramDataInIDB = () => {
+        const { programs } = this.props
+        try {
+            const idbData = { type: CALENDER_PROGRAMS, data: JSON.stringify(programs) };
+            const transaction = this.iDB.transaction([IDB_TBL_CALENDER], IDB_READ_WRITE);
+            const objectStore = transaction.objectStore(IDB_TBL_CALENDER);
+            const iDBGetReq = objectStore.get(CALENDER_PROGRAMS);
+            iDBGetReq.onsuccess = (event) => {
+                const { target: { result } } = event;
+                if (result) {
+                    objectStore.put(idbData);
+                } else {
+                    objectStore.add(idbData);
+                }
+            }
+        } catch (error) {
+        }
+
+    }
+
+    storeWorkoutDataInIDB = () => {
+        const { workouts } = this.props
+        try {
+            const idbData = { type: CALENDER_WORKOUTS, data: JSON.stringify(workouts) };
+            const transaction = this.iDB.transaction([IDB_TBL_CALENDER], IDB_READ_WRITE);
+            const objectStore = transaction.objectStore(IDB_TBL_CALENDER);
+            const iDBGetReq = objectStore.get(CALENDER_WORKOUTS);
+            iDBGetReq.onsuccess = (event) => {
+                const { target: { result } } = event;
+                if (result) {
+                    objectStore.put(idbData);
+                } else {
+                    objectStore.add(idbData);
+                }
+            }
+        } catch (error) {
+        }
+
     }
 
     handleKeyUp = (e) => {
@@ -688,7 +826,12 @@ class ScheduleWorkoutCalendarPage extends Component {
             dispatch
         } = this.props;
         var requestObj = { date: _date };
-        dispatch(getUsersWorkoutSchedulesRequest(requestObj));
+        if (isOnline()) {
+            dispatch(getUsersWorkoutSchedulesRequest(requestObj));
+        } else {
+            // get data from iDB
+            this.getWorkoutsDataFromIDB()
+        }
     }
 
     handleNavigation = (date) => {
@@ -696,6 +839,7 @@ class ScheduleWorkoutCalendarPage extends Component {
         var day = moment.utc(momentDate);
         this.setState({ calendarViewDate: day.local() });
         this.getWorkoutSchedulesByMonth(day);
+
     }
 
     handleNewRestDay = () => {
@@ -981,6 +1125,7 @@ const mapStateToProps = (state) => {
         cutWorkoutData: userScheduleWorkouts.get('cutWorkoutData'),
         copiedWorkout: userScheduleWorkouts.get('copiedWorkout'),
         programs: userScheduleWorkouts.get('programs'),
+        loadingPrograms: userScheduleWorkouts.get('loadingPrograms'),
         assignProgramLoading: userScheduleWorkouts.get('assignProgramLoading'),
         assignProgram: userScheduleWorkouts.get('assignProgram'),
         assignProgramError: userScheduleWorkouts.get('assignProgramError'),

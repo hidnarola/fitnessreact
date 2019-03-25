@@ -19,6 +19,8 @@ export default function initIDBSchema(event) {
         objectStore = db.createObjectStore(idbConst.IDB_TBL_BADGES, { keyPath: "type" });
 
         objectStore = db.createObjectStore(idbConst.IDB_TBL_PROGRESS, { keyPath: "type" });
+        
+        objectStore = db.createObjectStore(idbConst.IDB_TBL_CALENDER, { keyPath: "type" });
 
     } catch (error) { console.log("IDB init Error : ", error); }
 }

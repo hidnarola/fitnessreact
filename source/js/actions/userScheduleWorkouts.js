@@ -95,6 +95,7 @@ export const REORDER_WORKOUT_EXERCISES_SUCCESS = 'REORDER_WORKOUT_EXERCISES_SUCC
 export const REORDER_WORKOUT_EXERCISES_ERROR = 'REORDER_WORKOUT_EXERCISES_ERROR';
 
 export const SET_SCHEDULE_WORKOUTS_STATE = 'SET_SCHEDULE_WORKOUTS_STATE';
+export const SET_DATA_IN_IDB  = 'SET_DATA_IN_IDB';
 
 export function setSelectedSlotFromCalendar(slotInfo = null) {
     return {
@@ -560,5 +561,12 @@ export function setScheduleWorkoutsState(stateData) {
     return {
         type: SET_SCHEDULE_WORKOUTS_STATE,
         stateData,
+    }
+}
+
+export function setDatainIdb(data) {
+    return {
+        type: SET_DATA_IN_IDB,
+        data,
     }
 }

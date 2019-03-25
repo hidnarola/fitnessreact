@@ -64,6 +64,7 @@ import {
     REORDER_WORKOUT_EXERCISES,
     SET_SCHEDULE_WORKOUTS_STATE,
     CUT_USER_WORKOUT_SCHEDULE,
+    SET_DATA_IN_IDB
 } from "../actions/userScheduleWorkouts";
 import { VALIDATION_FAILURE_STATUS, SCHEDULED_WORKOUT_TYPE_WARMUP, SCHEDULED_WORKOUT_TYPE_EXERCISE, SCHEDULED_WORKOUT_TYPE_COOLDOWN } from "../constants/consts";
 import { generateValidationErrorMsgArr, createNewStateForWorkout } from "../helpers/funs";
@@ -79,6 +80,7 @@ const initialState = Map({
     error: [],
     exercises: [],
     programs: [],
+    loadingPrograms: false,
     cutWorkout: null,
     cutWorkoutData: null,
     copiedWorkout: null,
@@ -206,10 +208,11 @@ const actionMap = {
     [GET_PROGRAMS_NAME_REQUEST]: (state, action) => {
         return state.merge(Map({
             programs: [],
+            loadingPrograms: true
         }));
     },
     [GET_PROGRAMS_NAME_SUCCESS]: (state, action) => {
-        var newState = {};
+        var newState = {loadingPrograms: false};
         if (action.data.status === 1) {
             newState.programs = action.data.programs;
         }
@@ -218,6 +221,7 @@ const actionMap = {
     [GET_PROGRAMS_NAME_ERROR]: (state, action) => {
         return state.merge(Map({
             programs: [],
+            loadingPrograms: false
         }));
     },
     [ADD_USERS_WORKOUT_SCHEDULE_REQUEST]: (state, action) => {
@@ -721,6 +725,9 @@ const actionMap = {
     [SET_SCHEDULE_WORKOUTS_STATE]: (state, action) => {
         return state.merge(Map(action.stateData));
     },
+    [SET_DATA_IN_IDB]: (state, action) => {
+        return state.merge(Map(action.data));
+    }
 }
 
 function reorderExercises(workout, newOrder) {

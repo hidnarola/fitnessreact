@@ -210,6 +210,9 @@ export const POST_TYPE_WORKOUT = 'workout';
 export const WORKOUT_LOCATION_HOME = 'home';
 export const WORKOUT_LOCATION_GYM = 'gym';
 
+export const CALENDER_PROGRAMS = 'programs';
+export const CALENDER_WORKOUTS = 'workouts';
+
 export const MEASUREMENT_UNIT_KEY_PERCENTAGE = 'percentage';
 export const MEASUREMENT_UNIT_KEY_KCAL = 'kcal';
 export const MEASUREMENT_UNIT_KEY_COUNT = 'count';

@@ -10,3 +10,4 @@ export const IDB_TBL_DASHBOARD = "dashboard";
 export const IDB_TBL_BODY_MEASUREMENT = "body_measurement";
 export const IDB_TBL_BODY_FAT = "body_fat";
 export const IDB_TBL_BODY_PP = "body_progress_photos";
+export const IDB_TBL_CALENDER = "calender";
