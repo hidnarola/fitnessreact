@@ -6,12 +6,13 @@ import { routeCodes } from '../constants/routes';
 import { NavLink } from "react-router-dom";
 import moment from "moment";
 import { showPageLoader, hidePageLoader } from '../actions/pageLoader';
-import { getUserFirstWorkoutByDateRequest, addUserWorkoutTitleRequest, setTodaysWorkoutDate, getUserWorkoutCalendarListRequest, setScheduleWorkoutsState } from '../actions/userScheduleWorkouts';
-import { te, capitalizeFirstLetter } from '../helpers/funs';
+import { getUserFirstWorkoutByDateRequest, addUserWorkoutTitleRequest, setTodaysWorkoutDate, getUserWorkoutCalendarListRequest, setScheduleWorkoutsState, setDatainIdb } from '../actions/userScheduleWorkouts';
+import { te, capitalizeFirstLetter, connectIDB, isOnline, tw } from '../helpers/funs';
 import SweetAlert from "react-bootstrap-sweetalert";
 import AddWorkoutTitleForm from '../components/ScheduleWorkout/AddWorkoutTitleForm';
-import { SCHEDULED_WORKOUT_TYPE_EXERCISE, SCHEDULED_WORKOUT_TYPE_RESTDAY } from '../constants/consts';
+import { SCHEDULED_WORKOUT_TYPE_EXERCISE, SCHEDULED_WORKOUT_TYPE_RESTDAY, EXERCISE_MESUREMENT, EXERCISE_CALENDER } from '../constants/consts';
 import ReactCalender from 'react-calendar/dist/entry.nostyle';
+import { IDB_TBL_EXERCISE, IDB_TBL_EXERCISE_DATA, IDB_READ_WRITE, IDB_READ } from '../constants/idb';
 
 class Exercise extends Component {
     constructor(props) {
@@ -25,37 +26,21 @@ class Exercise extends Component {
             addRestDayInit: false,
             logDate: logDate,
             firstWorkoutIdInit: false,
+            nodataInDb: false
         }
-    }
-
-    componentWillMount() {
-        const { dispatch, todaysWorkoutDate } = this.props;
-        var date = todaysWorkoutDate;
-        if (!date) {
-            date = moment().startOf('day').utc();
-            dispatch(setTodaysWorkoutDate(date));
-        }
-        var logDate = new Date(date);
-        logDate.setHours(0, 0, 0, 0);
-        this.setState({ logDate: logDate });
-        var requestData = {
-            date: date,
-        };
-        this.setState({ loadWorkoutsInit: true });
-        dispatch(showPageLoader());
-        dispatch(getUserFirstWorkoutByDateRequest(requestData));
-        dispatch(getUserWorkoutCalendarListRequest(requestData));
+        this.iDB;
     }
 
     render() {
-        const { showAddWorkoutTitleAlert, loadWorkoutsInit, logDate } = this.state;
+        const { showAddWorkoutTitleAlert, loadWorkoutsInit, logDate, nodataInDb } = this.state;
         const { todaysWorkoutDate, firstWorkoutLoading, firstWorkoutError, firstWorkoutId, calendarList, errorTitle } = this.props;
         var date = todaysWorkoutDate;
         return (
             <div className='stat-page'>
                 <FitnessHeader />
                 <FitnessNav />
-                {!loadWorkoutsInit && !firstWorkoutLoading &&
+                {console.log(!loadWorkoutsInit, !firstWorkoutLoading)}
+                {((!loadWorkoutsInit && !firstWorkoutLoading) || nodataInDb) &&
                     <section className="body-wrap starts-body">
                         <div className="body-head d-flex justify-content-start front-white-header">
                             <div className="body-head-l">
@@ -65,12 +50,14 @@ class Exercise extends Component {
                             <div className="body-head-r">
                                 <NavLink
                                     className='pink-btn'
+                                    onClick={(e) => { !isOnline() && this.userOfflineMessage(e) }}
                                     to={routeCodes.EXERCISEFITNESS}
                                 >
                                     <span>Fitness Tests</span>
                                 </NavLink>
                                 <NavLink
                                     className="white-btn"
+                                    onClick={(e) => { !isOnline() && this.userOfflineMessage(e) }}
                                     to={routeCodes.PROGRAMS}
                                 >
                                     <span>Manage Programs</span>
@@ -89,6 +76,7 @@ class Exercise extends Component {
                                     }
                                     {(typeof firstWorkoutId === 'undefined' || !firstWorkoutId) &&
                                         <NavLink
+                                            onClick={(e) => { !isOnline() && this.userOfflineMessage(e) }}
                                             to={routeCodes.SCHEDULE_WORKOUT}
                                         >
                                             <span>View Calendar</span>
@@ -124,7 +112,7 @@ class Exercise extends Component {
                                             }
                                         }}
                                     />
-                                    <NavLink to={routeCodes.SCHEDULE_WORKOUT} className="new-log-date-wrap-view">View Calendar</NavLink>
+                                    <NavLink to={routeCodes.SCHEDULE_WORKOUT} onClick={(e) => { !isOnline() && this.userOfflineMessage(e) }} className="new-log-date-wrap-view">View Calendar</NavLink>
                                 </div>
                             </div>
                         </div>
@@ -155,7 +143,86 @@ class Exercise extends Component {
         );
     }
 
+    componentDidMount() {
+
+        connectIDB()().then((connection) => {
+            this.handleIDBOpenSuccess(connection);
+        });
+
+        if (isOnline()) {
+            // call online dispatchs 
+            const { dispatch, todaysWorkoutDate } = this.props;
+            var date = todaysWorkoutDate;
+            if (!date) {
+                date = moment().startOf('day').utc();
+                dispatch(setTodaysWorkoutDate(date));
+            }
+            var logDate = new Date(date);
+            logDate.setHours(0, 0, 0, 0);
+            this.setState({ logDate: logDate });
+            var requestData = {
+                date: date,
+            };
+            this.setState({ loadWorkoutsInit: true });
+            dispatch(showPageLoader());
+            dispatch(getUserWorkoutCalendarListRequest(requestData));
+            dispatch(getUserFirstWorkoutByDateRequest(requestData));
+        }
+    }
+
+    userOfflineMessage = (e) => {
+        e.preventDefault();
+        tw("You are offline, please check your internet connection");
+    }
+
+    handleIDBOpenSuccess = (connection) => {
+        this.iDB = connection.result;
+        if (!isOnline()) {
+            console.log("handleIDBOpenSuccess offline");
+            const { dispatch, todaysWorkoutDate } = this.props;
+            var date = todaysWorkoutDate;
+            if (!date) {
+                date = moment().startOf('day').utc();
+                dispatch(setTodaysWorkoutDate(date));
+            }
+            var logDate = new Date(date);
+            logDate.setHours(0, 0, 0, 0);
+            this.setState({ logDate: logDate });
+            var requestData = {
+                date: date,
+            };
+            // get data from db function
+            // find firstWorkoutId from iDB
+            try {
+                const transaction = this.iDB.transaction(IDB_TBL_EXERCISE, IDB_READ);
+                if (transaction) {
+                    const osExerciseData = transaction.objectStore(IDB_TBL_EXERCISE);
+                    console.log('osExerciseData => ', osExerciseData);
+                    const isoDate = logDate.toString();
+                    console.log('isoDate => ', isoDate);
+                    if (osExerciseData) {
+                        console.log('osExerciseData => ', osExerciseData);
+                        const iDBGetReq = osExerciseData.get(isoDate);
+                        iDBGetReq.onsuccess = (event) => {
+                            const { target: { result } } = event;
+                            console.log('result => ', result);
+                            if (result) {
+                                dispatch(setDatainIdb({ firstWorkoutId: result.firstWorkoutId }))
+                                this.setState({ loadWorkoutsInit: true, nodataInDb: false });
+                            } else {
+                                this.setState({ loadWorkoutsInit: false, nodataInDb: true });
+                            }
+                        }
+                    }
+                }
+            } catch (e) {
+                console.log("ERROR => ", e);
+            }
+        }
+    }
+
     componentDidUpdate(prevProps, prevState) {
+        console.log('componentDidUpdate => ');
         const { loadWorkoutsInit, addWorkoutTitleInit, addRestDayInit, firstWorkoutIdInit } = this.state;
         const {
             firstWorkoutLoading,
@@ -166,12 +233,17 @@ class Exercise extends Component {
             loadingTitle,
             workoutTitle,
             errorTitle,
+            loadingCalender
         } = this.props;
+        console.log('loadWorkoutsInit => ', loadWorkoutsInit);
+        console.log('!firstWorkoutLoading => ', !firstWorkoutLoading);
+        console.log('firstWorkoutId => ', firstWorkoutId);
         if (loadWorkoutsInit && !firstWorkoutLoading) {
             this.setState({ loadWorkoutsInit: false });
             if (firstWorkoutError && firstWorkoutError.length > 0) {
                 te(firstWorkoutError[0]);
             } else if (firstWorkoutId) {
+                console.log('here => ');
                 history.push(routeCodes.SAVE_SCHEDULE_WORKOUT.replace(':id', firstWorkoutId));
             }
             dispatch(hidePageLoader());
@@ -204,6 +276,58 @@ class Exercise extends Component {
             }
             dispatch(hidePageLoader());
         }
+        if (!loadingCalender && prevProps.loadingCalender !== loadingCalender) {
+            // set calender data in db
+            this.setCalenderDataInDb()
+        }
+        if (!firstWorkoutLoading && prevProps.firstWorkoutLoading !== firstWorkoutLoading) {
+            // set firstworkout data in exercise table (IDB_TBL_EXERCISE)
+            this.setfirstWorkoutDataInDb(firstWorkoutId)
+        }
+    }
+
+    setCalenderDataInDb = () => {
+        const { calendarList } = this.props;
+        try {
+            const idbData = { type: EXERCISE_CALENDER, data: calendarList };
+            const transaction = this.iDB.transaction([IDB_TBL_EXERCISE_DATA], IDB_READ_WRITE);
+            const objectStore = transaction.objectStore(IDB_TBL_EXERCISE_DATA);
+            const iDBGetReq = objectStore.get(EXERCISE_CALENDER);
+            iDBGetReq.onsuccess = (event) => {
+                const { target: { result } } = event;
+                if (result) {
+                    objectStore.put(idbData);
+                } else {
+                    objectStore.add(idbData);
+                }
+            }
+        } catch (error) {
+        }
+    }
+
+    setfirstWorkoutDataInDb = (firstWorkoutId) => {
+        const { logDate } = this.state;
+        const transaction = this.iDB.transaction([IDB_TBL_EXERCISE], IDB_READ_WRITE);
+        if (transaction) {
+            const objectStore = transaction.objectStore(IDB_TBL_EXERCISE);
+            if (objectStore) {
+                const iDBGetReq = objectStore.get(logDate.toString());
+                iDBGetReq.onsuccess = (event) => {
+                    const { target: { result } } = event;
+                    if (firstWorkoutId !== null) {
+                        if (result) {
+                            console.log("store null in DB1");
+                            console.log("1 ======>", logDate.toString(), firstWorkoutId);
+                            objectStore.put({ firstWorkoutId: firstWorkoutId, logDate: logDate.toString() });
+                        } else {
+                            console.log("store null in DB2");
+                            console.log("2 ======>", logDate.toString(), firstWorkoutId);
+                            objectStore.add({ firstWorkoutId: firstWorkoutId, logDate: logDate.toString() });
+                        }
+                    }
+                }
+            }
+        }
     }
 
     refresh = () => {
@@ -221,7 +345,11 @@ class Exercise extends Component {
     }
 
     handleAddWorkout = () => {
-        this.setState({ showAddWorkoutTitleAlert: true });
+        if (isOnline()) {
+            this.setState({ showAddWorkoutTitleAlert: true });
+        } else {
+            tw("You are offline, please check your internet connection");
+        }
     }
 
     handleAddWorkoutTitleCancel = () => {
@@ -249,23 +377,62 @@ class Exercise extends Component {
     }
 
     handleNewRestDay = () => {
-        const { dispatch, todaysWorkoutDate } = this.props;
-        var date = todaysWorkoutDate;
-        if (!date) {
-            date = moment().startOf('day').utc();
+        if (isOnline()) {
+            const { dispatch, todaysWorkoutDate } = this.props;
+            var date = todaysWorkoutDate;
+            if (!date) {
+                date = moment().startOf('day').utc();
+            }
+            var requestData = {
+                title: 'Rest Day',
+                description: 'Hey its rest day! Take total rest.',
+                type: SCHEDULED_WORKOUT_TYPE_RESTDAY,
+                date: date,
+            };
+            this.setState({ addRestDayInit: true });
+            dispatch(addUserWorkoutTitleRequest(requestData));
+            dispatch(showPageLoader());
+        } else {
+            tw("You are offline, please check your internet connection");
         }
-        var requestData = {
-            title: 'Rest Day',
-            description: 'Hey its rest day! Take total rest.',
-            type: SCHEDULED_WORKOUT_TYPE_RESTDAY,
-            date: date,
-        };
-        this.setState({ addRestDayInit: true });
-        dispatch(addUserWorkoutTitleRequest(requestData));
-        dispatch(showPageLoader());
+    }
+
+    getFirstWorkoutId = (logDate) => {
+        const { dispatch, history } = this.props;
+        try {
+            const transaction = this.iDB.transaction(IDB_TBL_EXERCISE, IDB_READ);
+            if (transaction) {
+                const osExerciseData = transaction.objectStore(IDB_TBL_EXERCISE);
+                console.log('osExerciseData => ', osExerciseData);
+                const isoDate = logDate.toString();
+                console.log('isoDate => ', isoDate);
+                if (osExerciseData) {
+                    console.log('osExerciseData [e]=> ', osExerciseData);
+                    const iDBGetReq = osExerciseData.get(isoDate);
+                    iDBGetReq.onsuccess = (event) => {
+                        const { target: { result } } = event;
+                        console.log('result [e]=> ', result);
+                        if (result) {
+                            this.setState({ logDate });
+                            history.push(routeCodes.SAVE_SCHEDULE_WORKOUT.replace(':id', result.firstWorkoutId));
+                            // dispatch(setDatainIdb({ firstWorkoutId: result.firstWorkoutId }))
+
+                            // this.setState({ loadWorkoutsInit: true });
+                        } else {
+                            tw("You are offline, please check your internet connection");
+                            // this.setState({nodataInDb: true})
+                            // history.push(routeCodes.SCHEDULE_WORKOUT);
+                        }
+                    }
+                }
+            }
+        } catch (e) {
+            console.log("ERROR getFirstWorkoutId => ", e);
+        }
     }
 
     handleGoToToday = () => {
+        console.log("on Exercise.jsx handleGoToToday")
         const { logDate } = this.state;
         const { dispatch } = this.props;
         var date = new Date();
@@ -275,15 +442,21 @@ class Exercise extends Component {
             var requestData = {
                 date: _date,
             };
-            this.setState({ logDate: date, firstWorkoutIdInit: true });
-            dispatch(showPageLoader());
-            dispatch(setTodaysWorkoutDate(requestData.date));
-            dispatch(getUserFirstWorkoutByDateRequest(requestData));
-            dispatch(getUserWorkoutCalendarListRequest(requestData));
+            if (isOnline()) {
+                this.setState({ logDate: date, firstWorkoutIdInit: true });
+                dispatch(showPageLoader());
+                dispatch(setTodaysWorkoutDate(requestData.date));
+                dispatch(getUserFirstWorkoutByDateRequest(requestData));
+                dispatch(getUserWorkoutCalendarListRequest(requestData));
+            } else {
+
+                this.getFirstWorkoutId(date)
+            }
         }
     }
 
     onChangeLogDate = (date) => {
+        console.log("on Exercise.jsx onChnageLogDate")
         const { logDate } = this.state;
         const { dispatch } = this.props;
         if (moment(logDate).format('YYYY-MM-DD') !== moment(date).format('YYYY-MM-DD')) {
@@ -291,14 +464,19 @@ class Exercise extends Component {
             var requestData = {
                 date: _date,
             };
-            this.setState({ logDate: date, firstWorkoutIdInit: true });
-            dispatch(showPageLoader());
-            dispatch(setTodaysWorkoutDate(requestData.date));
-            dispatch(getUserFirstWorkoutByDateRequest(requestData));
+            if (isOnline()) {
+                this.setState({ logDate: date, firstWorkoutIdInit: true });
+                dispatch(showPageLoader());
+                dispatch(setTodaysWorkoutDate(requestData.date));
+                dispatch(getUserFirstWorkoutByDateRequest(requestData));
+            } else {
+                this.getFirstWorkoutId(date)
+            }
         }
     }
 
     onActiveDateChange = (obj) => {
+        console.log("exercise.jsx onActivedatechange")
         const { dispatch } = this.props;
         if (obj.view === "month") {
             let date = obj.activeStartDate;
@@ -315,11 +493,16 @@ class Exercise extends Component {
                     date: moment(date).startOf('day').utc(),
                 }
             }
-            dispatch(getUserWorkoutCalendarListRequest(requestData));
+            if (isOnline()) {
+                dispatch(getUserWorkoutCalendarListRequest(requestData));
+            } else {
+                tw("You are offline, please check your internet connection");
+            }
         }
     }
 
     onMonthClick = (date) => {
+        console.log("on Exercise.jsx onMonthClick")
         const { dispatch } = this.props;
         let now = new Date();
         let requestData = {};
@@ -334,7 +517,18 @@ class Exercise extends Component {
                 date: date,
             }
         }
-        dispatch(getUserWorkoutCalendarListRequest(requestData));
+        if (isOnline()) {
+            dispatch(getUserWorkoutCalendarListRequest(requestData));
+        } else {
+            tw("You are offline, please check your internet connection");
+        }
+    }
+
+
+    componentWillUnmount() {
+        try {
+            this.iDB.close();
+        } catch (error) { }
     }
 
 }
@@ -350,6 +544,7 @@ const mapStateToProps = (state) => {
         errorTitle: userScheduleWorkouts.get('errorTitle'),
         todaysWorkoutDate: userScheduleWorkouts.get('todaysWorkoutDate'),
         calendarList: userScheduleWorkouts.get('calendarList'),
+        loadingCalender: userScheduleWorkouts.get('loadingCalender'),
     };
 }
 

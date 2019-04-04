@@ -552,6 +552,10 @@ export const SCHEDULED_WORKOUT_TYPE_WARMUP = 'warmup';
 export const SCHEDULED_WORKOUT_TYPE_COOLDOWN = 'cooldown';
 export const SCHEDULED_WORKOUT_TYPE_RESTDAY = 'restday';
 
+export const EXERCISE_MESUREMENT = 'exercise_mesurement';
+export const EXERCISE_NAMES = 'exercise_names';
+export const EXERCISE_CALENDER = 'exercise_calender';
+
 export const EXE_CAT_CARDIO = 'cardio';
 export const EXE_CAT_STRENGTH = 'strength';
 export const EXE_CAT_FLEXIBILITY = 'flexibility';

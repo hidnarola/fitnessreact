@@ -53,7 +53,9 @@ import {
     GET_USER_FIRST_WORKOUT_BY_DATE_REQUEST,
     GET_USER_FIRST_WORKOUT_BY_DATE_SUCCESS,
     GET_USER_FIRST_WORKOUT_BY_DATE_ERROR,
+    GET_USER_WORKOUT_CALENDAR_LIST_REQUEST,
     GET_USER_WORKOUT_CALENDAR_LIST_SUCCESS,
+    GET_USER_WORKOUT_CALENDAR_LIST_ERROR,
     SET_TODAYS_WORKOUT_DATE,
     GET_WORKOUTS_LIST_BY_DATE_REQUEST,
     GET_WORKOUTS_LIST_BY_DATE_SUCCESS,
@@ -106,6 +108,9 @@ const initialState = Map({
     workoutsListError: [],
     reorderExercisesLoading: false,
     reorderExercisesError: [],
+    loadingCalender: false,
+    exercisesLoading : false,
+    exerciseMesurementLoading: false
 });
 
 const actionMap = {
@@ -153,11 +158,13 @@ const actionMap = {
         return state.merge(Map({
             loading: true,
             error: [],
+            loadingCalender: true
         }));
     },
     [GET_USERS_WORKOUT_SCHEDULE_SUCCESS]: (state, action) => {
         var newState = {
             loading: false,
+            loadingCalender: false
         };
         if (action.data.status === 1) {
             var newSt = createNewStateForWorkout(action.data.workouts);
@@ -186,23 +193,27 @@ const actionMap = {
         return state.merge(Map({
             loading: false,
             error: error,
+            loadingCalender: false
         }));
     },
     [GET_EXERCISES_NAME_REQUEST]: (state, action) => {
         return state.merge(Map({
             exercises: [],
+            exercisesLoading: true
         }));
     },
     [GET_EXERCISES_NAME_SUCCESS]: (state, action) => {
         var newState = {};
         if (action.data.status === 1) {
             newState.exercises = action.data.exercises;
+            newState.exercisesLoading = false
         }
         return state.merge(Map(newState));
     },
     [GET_EXERCISES_NAME_ERROR]: (state, action) => {
         return state.merge(Map({
             exercises: [],
+            exercisesLoading: false
         }));
     },
     [GET_PROGRAMS_NAME_REQUEST]: (state, action) => {
@@ -212,7 +223,7 @@ const actionMap = {
         }));
     },
     [GET_PROGRAMS_NAME_SUCCESS]: (state, action) => {
-        var newState = {loadingPrograms: false};
+        var newState = { loadingPrograms: false };
         if (action.data.status === 1) {
             newState.programs = action.data.programs;
         }
@@ -228,11 +239,13 @@ const actionMap = {
         return state.merge(Map({
             loading: true,
             error: [],
+            loadingCalender: true
         }));
     },
     [ADD_USERS_WORKOUT_SCHEDULE_SUCCESS]: (state, action) => {
         var newState = {
             loading: false,
+            loadingCalender: false
         };
         if (action.data.status === 1) {
             var newSt = createNewStateForWorkout(action.data.workouts);
@@ -261,17 +274,20 @@ const actionMap = {
         return state.merge(Map({
             loading: false,
             error: error,
+            loadingCalender: false
         }));
     },
     [UPDATE_USERS_WORKOUT_SCHEDULE_REQUEST]: (state, action) => {
         return state.merge(Map({
             loading: true,
             error: [],
+            loadingCalender: true
         }));
     },
     [UPDATE_USERS_WORKOUT_SCHEDULE_SUCCESS]: (state, action) => {
         var newState = {
             loading: false,
+            loadingCalender: false
         };
         if (action.data.status === 1) {
             var newSt = createNewStateForWorkout(action.data.workouts);
@@ -300,6 +316,7 @@ const actionMap = {
         return state.merge(Map({
             loading: false,
             error: error,
+            loadingCalender: false
         }));
     },
     [PASTE_USERS_WORKOUT_SCHEDULE_REQUEST]: (state, action) => {
@@ -510,29 +527,34 @@ const actionMap = {
     [GET_EXERCISE_MEASUREMENT_REQUEST]: (state, action) => {
         return state.merge(Map({
             exerciseMeasurements: [],
+            exerciseMesurementLoading: true
         }));
     },
     [GET_EXERCISE_MEASUREMENT_SUCCESS]: (state, action) => {
         var newState = {};
         if (action.data.status === 1) {
             newState.exerciseMeasurements = action.data.measurements;
+            newState.exerciseMesurementLoading = false
         }
         return state.merge(Map(newState));
     },
     [GET_EXERCISE_MEASUREMENT_ERROR]: (state, action) => {
         return state.merge(Map({
             exerciseMeasurements: [],
+            exerciseMesurementLoading: false
         }));
     },
     [DELETE_USER_WHOLE_EXERCISE_REQUEST]: (state, action) => {
         return state.merge(Map({
             loading: true,
             error: [],
+            loadingCalender: true
         }));
     },
     [DELETE_USER_WHOLE_EXERCISE_SUCCESS]: (state, action) => {
         var newState = {
             loading: false,
+            loadingCalender: false
         };
         if (action.data.status === 1) {
             var newSt = createNewStateForWorkout(action.data.workouts);
@@ -561,17 +583,20 @@ const actionMap = {
         return state.merge(Map({
             loading: false,
             error: error,
+            loadingCalender: false
         }));
     },
     [DELETE_USER_SINGLE_EXERCISE_REQUEST]: (state, action) => {
         return state.merge(Map({
             loading: true,
             error: [],
+            loadingCalender: true
         }));
     },
     [DELETE_USER_SINGLE_EXERCISE_SUCCESS]: (state, action) => {
         var newState = {
             loading: false,
+            loadingCalender: false
         };
         if (action.data.status === 1) {
             var newSt = createNewStateForWorkout(action.data.workouts);
@@ -600,6 +625,7 @@ const actionMap = {
         return state.merge(Map({
             loading: false,
             error: error,
+            loadingCalender: false
         }));
     },
     [CHANGE_USERS_WORKOUT_FORM_ACTION]: (state, action) => {
@@ -643,11 +669,19 @@ const actionMap = {
             firstWorkoutError: error,
         }));
     },
+    [GET_USER_WORKOUT_CALENDAR_LIST_REQUEST]: (state, action) => {
+        return state.merge(Map({loadingCalender: true }));
+    },
     [GET_USER_WORKOUT_CALENDAR_LIST_SUCCESS]: (state, action) => {
         var newState = {}
         if (action.data.status === 1) {
             newState.calendarList = action.data.calendar_list;
         }
+        newState.loadingCalender = false;
+        return state.merge(Map(newState));
+    },
+    [GET_USER_WORKOUT_CALENDAR_LIST_ERROR]: (action,data) => {
+        var newState = { loadingCalender: false };
         return state.merge(Map(newState));
     },
     [GET_WORKOUTS_LIST_BY_DATE_REQUEST]: (state, action) => {
@@ -726,6 +760,7 @@ const actionMap = {
         return state.merge(Map(action.stateData));
     },
     [SET_DATA_IN_IDB]: (state, action) => {
+        console.log('action.data => ',action.data);
         return state.merge(Map(action.data));
     }
 }

@@ -18,10 +18,11 @@ import {
     deleteUsersBulkWorkoutScheduleRequest,
     getWorkoutsListByDateRequest,
     addUserWorkoutTitleRequest,
-    setScheduleWorkoutsState
+    setScheduleWorkoutsState,
+    setDatainIdb
 } from '../../actions/userScheduleWorkouts';
 import { routeCodes } from '../../constants/routes';
-import { te, prepareFieldsOptions, ts, convertUnits, capitalizeFirstLetter } from '../../helpers/funs';
+import { te, prepareFieldsOptions, ts, convertUnits, capitalizeFirstLetter, connectIDB, isOnline, tw } from '../../helpers/funs';
 import FitnessHeader from '../global/FitnessHeader';
 import FitnessNav from '../global/FitnessNav';
 import moment from "moment";
@@ -34,7 +35,10 @@ import {
     MEASUREMENT_UNIT_SECONDS,
     SCHEDULED_WORKOUT_TYPE_RESTDAY,
     MEASUREMENT_UNIT_GRAM,
-    MEASUREMENT_UNIT_KILOGRAM
+    MEASUREMENT_UNIT_KILOGRAM,
+    EXERCISE_NAMES,
+    EXERCISE_CALENDER,
+    EXERCISE_MESUREMENT
 } from '../../constants/consts';
 import SaveScheduleWorkoutForm from './SaveScheduleWorkoutForm';
 import cns from "classnames";
@@ -45,6 +49,7 @@ import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
 import SweetAlert from "react-bootstrap-sweetalert";
 import UpdateWorkoutTitleForm from './UpdateWorkoutTitleForm';
 import AddWorkoutTitleForm from './AddWorkoutTitleForm';
+import { IDB_TBL_EXERCISE, IDB_TBL_EXERCISE_DATA, IDB_TBL_WORKOUT_DATA, IDB_READ_WRITE, IDB_READ } from '../../constants/idb';
 
 class SaveScheduleWorkout extends Component {
     constructor(props) {
@@ -67,18 +72,7 @@ class SaveScheduleWorkout extends Component {
             addWorkoutTitleInit: false,
             forceGetUsersWorkoutScheduleRequest: false,
         }
-    }
-
-    componentWillMount() {
-        const { match, dispatch } = this.props;
-        if (match && match.params && match.params.id) {
-            let _id = match.params.id;
-            dispatch(showPageLoader());
-            dispatch(getUsersWorkoutScheduleRequest(_id));
-            dispatch(getExercisesNameRequest());
-            dispatch(getExerciseMeasurementRequest());
-            this.setState({ loadWorkoutInit: true });
-        }
+        this.iDB;
     }
 
     render() {
@@ -130,12 +124,14 @@ class SaveScheduleWorkout extends Component {
                         <div className="body-head-r">
                             <NavLink
                                 className='pink-btn'
+                                onClick={(e) => { !isOnline() && this.userOfflineMessage(e) }}
                                 to={routeCodes.EXERCISEFITNESS}
                             >
                                 <span>Fitness Tests</span>
                             </NavLink>
                             <NavLink
                                 className="white-btn"
+                                onClick={(e) => { !isOnline() && this.userOfflineMessage(e) }}
                                 to={routeCodes.PROGRAMS}
                             >
                                 <span>Manage Programs</span>
@@ -244,7 +240,7 @@ class SaveScheduleWorkout extends Component {
                                         }
                                     }}
                                 />
-                                <NavLink to={routeCodes.SCHEDULE_WORKOUT} className="new-log-date-wrap-view">View Calendar</NavLink>
+                                <NavLink to={routeCodes.SCHEDULE_WORKOUT} onClick={(e) => { !isOnline() && this.userOfflineMessage(e) }} className="new-log-date-wrap-view">View Calendar</NavLink>
                             </div>
 
                             {workout && Object.keys(workout).length > 0 && workout.type && workout.type === SCHEDULED_WORKOUT_TYPE_EXERCISE && workoutStat &&
@@ -403,6 +399,84 @@ class SaveScheduleWorkout extends Component {
         );
     }
 
+
+    componentDidMount() {
+        connectIDB()().then((connection) => {
+            this.handleIDBOpenSuccess(connection);
+        })
+            .catch((error) => {
+                console.log("error", error)
+            })
+    }
+
+    userOfflineMessage = (e) => {
+        e.preventDefault();
+        tw("You are offline, please check your internet connection");
+    }
+
+    onlineFunctions = () => {
+        console.log("ONLINE FUNCTIONS")
+        const { match, dispatch } = this.props;
+        if (match && match.params && match.params.id) {
+            let _id = match.params.id;
+            // this.setfirstWorkoutDataInDb(_id)
+            dispatch(showPageLoader());
+            dispatch(getExerciseMeasurementRequest());
+            dispatch(getUsersWorkoutScheduleRequest(_id));
+            dispatch(getExercisesNameRequest());
+            this.setState({ loadWorkoutInit: true });
+        }
+    }
+
+    handleIDBOpenSuccess = (connection) => {
+        this.iDB = connection.result;
+        const { match } = this.props;
+        if (!isOnline()) {
+            console.log("OFLINEEEEEEE ")
+            if (match && match.params && match.params.id) {
+                let _id = match.params.id;
+                this.getDataFromIDB(_id);
+            }
+        }
+        if (isOnline()) {
+            console.log("OFLINEEEEEEE else part ")
+            this.onlineFunctions()
+        }
+    }
+
+    getDataFromIDB = (firstWorkoutId) => {
+        const { dispatch } = this.props;
+        try {
+            const transaction = this.iDB.transaction(IDB_TBL_WORKOUT_DATA, IDB_READ);
+            if (transaction) {
+                const osWorkoutData = transaction.objectStore(IDB_TBL_WORKOUT_DATA);
+                if (osWorkoutData) {
+                    console.log('osWorkoutData => ', osWorkoutData);
+                    const iDBGetReq = osWorkoutData.get(firstWorkoutId);
+                    iDBGetReq.onsuccess = (event) => {
+                        const { target: { result } } = event;
+                        console.log('result => ', result);
+                        if (result) {
+                            console.log('result => ', result);
+                            dispatch(setDatainIdb({
+                                firstWorkoutId: result.firstWorkoutId,
+                                workout: result.workout,
+                                workoutsList: result.workoutsList,
+                                calendarList: result.calendarList,
+                                workoutStat: result.workoutStat,
+                                workoutWarmupSequence: result.workoutWarmupSequence,
+                                workoutSequence: result.workoutSequence,
+                                workoutCooldownSequence: result.workoutCooldownSequence
+                            }))
+                        }
+                    }
+                }
+            }
+        } catch (e) {
+            console.log("ERROR => ", e);
+        }
+    }
+
     componentDidUpdate(prevProps, prevState) {
         const {
             workout,
@@ -417,6 +491,15 @@ class SaveScheduleWorkout extends Component {
             firstWorkoutError,
             firstWorkoutId,
             workoutTitle,
+            exercisesLoading,
+            loadingCalender,
+            exerciseMesurementLoading,
+            workoutsList,
+            calendarList,
+            workoutStat,
+            workoutWarmupSequence,
+            workoutSequence,
+            workoutCooldownSequence
         } = this.props;
         const {
             loadWorkoutInit,
@@ -433,11 +516,15 @@ class SaveScheduleWorkout extends Component {
             dispatch(hidePageLoader());
         }
         if ((match && match.params && match.params.id && prevProps.match.params.id !== match.params.id) || forceGetUsersWorkoutScheduleRequest) {
+            console.log("here")
             this.setState({ forceGetUsersWorkoutScheduleRequest: false });
             let _id = match.params.id;
-            dispatch(showPageLoader());
-            dispatch(getUsersWorkoutScheduleRequest(_id));
-            this.setState({ loadWorkoutInit: true });
+            this.getDataFromIDB(_id);
+            if (isOnline()) {
+                dispatch(showPageLoader());
+                dispatch(getUsersWorkoutScheduleRequest(_id));
+                this.setState({ loadWorkoutInit: true });
+            }
         }
         if (loadWorkoutInit && !loading && workout && Object.keys(workout).length <= 0) {
             this.setState({ loadWorkoutInit: false });
@@ -534,35 +621,165 @@ class SaveScheduleWorkout extends Component {
                 history.push(routeCodes.SAVE_SCHEDULE_WORKOUT.replace(':id', workoutTitleId));
             }
         }
+        if (!firstWorkoutLoading && prevProps.firstWorkoutLoading !== firstWorkoutLoading) {
+            // set firstworkout data in exercise table (IDB_TBL_EXERCISE)
+            this.setfirstWorkoutDataInDb(firstWorkoutId);
+        }
+        if (!exercisesLoading && prevProps.exercisesLoading !== exercisesLoading) {
+            this.setExerciseNameInIdb();
+        }
+        if (!loadingCalender && prevProps.loadingCalender !== loadingCalender) {
+            // set calender data in db
+            this.setCalenderDataInDb();
+        }
+        if (exerciseMesurementLoading && prevProps.exerciseMesurementLoading !== exerciseMesurementLoading) {
+            // set exercise_mesurement details in iDB
+            this.setMesurementDataInDb();
+        }
+        if (!loading && loading !== prevProps.loading) {
+            // set workoutdata in DB workout_data IDB_TBL_WORKOUT_DATA
+            this.setWorkoutDataInDb();
+        }
+    }
+
+    setWorkoutDataInDb = () => {
+        const { firstWorkoutId, workout, workoutsList, calendarList, workoutStat, workoutWarmupSequence, workoutSequence, workoutCooldownSequence } = this.props;
+        try {
+            const transaction = this.iDB.transaction([IDB_TBL_WORKOUT_DATA], IDB_READ_WRITE);
+            if (transaction) {
+                const objectStore = transaction.objectStore(IDB_TBL_WORKOUT_DATA);
+                if (objectStore) {
+                    const iDBGetReq = objectStore.get(firstWorkoutId);
+                    iDBGetReq.onsuccess = (event) => {
+                        const { target: { result } } = event;
+                        if (result) {
+                            objectStore.put({ firstWorkoutId, workout, workoutsList, calendarList, workoutStat, workoutWarmupSequence, workoutSequence, workoutCooldownSequence });
+                        } else {
+                            objectStore.add({ firstWorkoutId, workout, workoutsList, calendarList, workoutStat, workoutWarmupSequence, workoutSequence, workoutCooldownSequence });
+                        }
+                    }
+                }
+            }
+        } catch (error) {
+            console.log("ERROR =>", error);
+        }
+    }
+
+    setMesurementDataInDb = () => {
+        const { exerciseMeasurements } = this.props;
+        try {
+            const idbData = { type: EXERCISE_MESUREMENT, data: exerciseMeasurements };
+            const transaction = this.iDB.transaction([IDB_TBL_EXERCISE_DATA], IDB_READ_WRITE);
+            const objectStore = transaction.objectStore(IDB_TBL_EXERCISE_DATA);
+            const iDBGetReq = objectStore.get(EXERCISE_MESUREMENT);
+            iDBGetReq.onsuccess = (event) => {
+                const { target: { result } } = event;
+                if (result) {
+                    objectStore.put(idbData);
+                } else {
+                    objectStore.add(idbData);
+                }
+            }
+        } catch (error) {
+        }
+    }
+
+    setCalenderDataInDb = () => {
+        const { calendarList } = this.props;
+        try {
+            const idbData = { type: EXERCISE_CALENDER, data: calendarList };
+            const transaction = this.iDB.transaction([IDB_TBL_EXERCISE_DATA], IDB_READ_WRITE);
+            const objectStore = transaction.objectStore(IDB_TBL_EXERCISE_DATA);
+            const iDBGetReq = objectStore.get(EXERCISE_CALENDER);
+            iDBGetReq.onsuccess = (event) => {
+                const { target: { result } } = event;
+                if (result) {
+                    objectStore.put(idbData);
+                } else {
+                    objectStore.add(idbData);
+                }
+            }
+        } catch (error) {
+        }
+    }
+
+    setExerciseNameInIdb = () => {
+        const { exercises } = this.props;
+        try {
+            const idbData = { type: EXERCISE_NAMES, data: exercises };
+            const transaction = this.iDB.transaction([IDB_TBL_EXERCISE_DATA], IDB_READ_WRITE);
+            const objectStore = transaction.objectStore(IDB_TBL_EXERCISE_DATA);
+            const iDBGetReq = objectStore.get(EXERCISE_NAMES);
+            iDBGetReq.onsuccess = (event) => {
+                const { target: { result } } = event;
+                if (result) {
+                    objectStore.put(idbData);
+                } else {
+                    objectStore.add(idbData);
+                }
+            }
+        } catch (error) {
+        }
+    }
+
+    setfirstWorkoutDataInDb = (firstWorkoutId) => {
+        const { logDate } = this.state;
+        const transaction = this.iDB.transaction([IDB_TBL_EXERCISE], IDB_READ_WRITE);
+
+        try {
+            if (transaction) {
+                const objectStore = transaction.objectStore(IDB_TBL_EXERCISE);
+                if (objectStore) {
+                    const iDBGetReq = objectStore.get(logDate.toString());
+                    iDBGetReq.onsuccess = (event) => {
+                        const { target: { result } } = event;
+                        if (firstWorkoutId !== null) {
+                            if (result) {
+                                console.log("add({ firstWorkoutId:1", firstWorkoutId, logDate)
+                                objectStore.put({ firstWorkoutId: firstWorkoutId, logDate: logDate.toString() });
+                            } else {
+                                console.log("add({ firstWorkoutId:2", firstWorkoutId, logDate)
+                                objectStore.add({ firstWorkoutId: firstWorkoutId, logDate: logDate.toString() });
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (e) {
+        }
     }
 
     handleSubmit = (data) => {
-        const {
-            dispatch,
-            selectedWorkoutMainType,
-            workoutWarmupSequence,
-            workoutSequence,
-            workoutCooldownSequence,
-        } = this.props;
-        var workoutType = (data.workout_type) ? data.workout_type : null;
-        let requestData = null;
-        if (workoutType && workoutType === SCHEDULED_WORKOUT_TYPE_EXERCISE) {
-            requestData = this.prepareRequestDataForSingleWorkout(data);
-        } else if (workoutType && workoutType === SCHEDULED_WORKOUT_TYPE_SUPERSET) {
-            requestData = this.prepareRequestDataForSupersetWorkout(data);
-        } else if (workoutType && workoutType === SCHEDULED_WORKOUT_TYPE_CIRCUIT) {
-            requestData = this.prepareRequestDataForCircuitWorkout(data);
+        if (isOnline()) {
+            const {
+                dispatch,
+                selectedWorkoutMainType,
+                workoutWarmupSequence,
+                workoutSequence,
+                workoutCooldownSequence,
+            } = this.props;
+            var workoutType = (data.workout_type) ? data.workout_type : null;
+            let requestData = null;
+            if (workoutType && workoutType === SCHEDULED_WORKOUT_TYPE_EXERCISE) {
+                requestData = this.prepareRequestDataForSingleWorkout(data);
+            } else if (workoutType && workoutType === SCHEDULED_WORKOUT_TYPE_SUPERSET) {
+                requestData = this.prepareRequestDataForSupersetWorkout(data);
+            } else if (workoutType && workoutType === SCHEDULED_WORKOUT_TYPE_CIRCUIT) {
+                requestData = this.prepareRequestDataForCircuitWorkout(data);
+            }
+            if (selectedWorkoutMainType === SCHEDULED_WORKOUT_TYPE_WARMUP) {
+                requestData.sequence = (workoutWarmupSequence + 1);
+            } else if (selectedWorkoutMainType === SCHEDULED_WORKOUT_TYPE_EXERCISE) {
+                requestData.sequence = (workoutSequence + 1);
+            } else if (selectedWorkoutMainType === SCHEDULED_WORKOUT_TYPE_COOLDOWN) {
+                requestData.sequence = (workoutCooldownSequence + 1);
+            }
+            dispatch(showPageLoader());
+            dispatch(addUsersWorkoutScheduleRequest(requestData));
+            this.setState({ saveWorkoutActionInit: true });
+        } else {
+            tw("You are offline, please check your internet connection");
         }
-        if (selectedWorkoutMainType === SCHEDULED_WORKOUT_TYPE_WARMUP) {
-            requestData.sequence = (workoutWarmupSequence + 1);
-        } else if (selectedWorkoutMainType === SCHEDULED_WORKOUT_TYPE_EXERCISE) {
-            requestData.sequence = (workoutSequence + 1);
-        } else if (selectedWorkoutMainType === SCHEDULED_WORKOUT_TYPE_COOLDOWN) {
-            requestData.sequence = (workoutCooldownSequence + 1);
-        }
-        dispatch(showPageLoader());
-        dispatch(addUsersWorkoutScheduleRequest(requestData));
-        this.setState({ saveWorkoutActionInit: true });
     }
 
     handleUpdateSubmit = (data) => {
@@ -991,15 +1208,50 @@ class SaveScheduleWorkout extends Component {
     }
 
     handleCompleteWorkout = (workout) => {
-        const { dispatch, loading } = this.props;
-        if (workout && workout._id && !loading) {
-            var isCompleted = (typeof workout.isCompleted !== 'undefined') ? (workout.isCompleted === 0) ? 1 : 0 : 1;
-            var requestData = {
-                exerciseIds: [workout._id],
-                isCompleted: isCompleted,
-            };
-            this.setState({ completeWorkoutActionInit: true });
-            dispatch(completeUsersBulkWorkoutScheduleRequest(requestData));
+        if (isOnline()) {
+            const { dispatch, loading } = this.props;
+            if (workout && workout._id && !loading) {
+                var isCompleted = (typeof workout.isCompleted !== 'undefined') ? (workout.isCompleted === 0) ? 1 : 0 : 1;
+                var requestData = {
+                    exerciseIds: [workout._id],
+                    isCompleted: isCompleted,
+                };
+                this.setState({ completeWorkoutActionInit: true });
+                dispatch(completeUsersBulkWorkoutScheduleRequest(requestData));
+            }
+        } else {
+            tw("You are offline, please check your internet connection");
+        }
+    }
+
+
+    getFirstWorkoutId = (logDate) => {
+        const { dispatch, history } = this.props;
+        try {
+            const transaction = this.iDB.transaction(IDB_TBL_EXERCISE, IDB_READ);
+            if (transaction) {
+                const osExerciseData = transaction.objectStore(IDB_TBL_EXERCISE);
+                console.log('osExerciseData => ', osExerciseData);
+                const isoDate = logDate.toString();
+                console.log('isoDate => ', isoDate);
+                if (osExerciseData) {
+                    console.log('osExerciseData => ', osExerciseData);
+                    const iDBGetReq = osExerciseData.get(isoDate);
+                    iDBGetReq.onsuccess = (event) => {
+                        const { target: { result } } = event;
+                        console.log('result => ', result);
+                        if (result) {
+                            history.push(routeCodes.SAVE_SCHEDULE_WORKOUT.replace(':id', result.firstWorkoutId));
+                            this.setState({ logDate })
+                        } else {
+                            tw("You are offline, No data available");
+                            this.setState({ loadWorkoutsInit: false, forceGetUsersWorkoutScheduleRequest: false });
+                        }
+                    }
+                }
+            }
+        } catch (e) {
+            console.log("ERROR getFirstWorkoutId => ", e);
         }
     }
 
@@ -1013,10 +1265,15 @@ class SaveScheduleWorkout extends Component {
             var requestData = {
                 date: _date,
             };
-            this.setState({ logDate: date, firstWorkoutIdInit: true, forceGetUsersWorkoutScheduleRequest: true });
-            dispatch(showPageLoader());
-            dispatch(setTodaysWorkoutDate(requestData.date));
-            dispatch(getUserFirstWorkoutByDateRequest(requestData));
+            if (isOnline()) {
+                this.setState({ logDate: date, firstWorkoutIdInit: true, forceGetUsersWorkoutScheduleRequest: true });
+                dispatch(showPageLoader());
+                dispatch(setTodaysWorkoutDate(requestData.date));
+                dispatch(getUserFirstWorkoutByDateRequest(requestData));
+            } else {
+                this.setState({ forceGetUsersWorkoutScheduleRequest: false });
+                this.getFirstWorkoutId(date)
+            }
         }
     }
 
@@ -1028,14 +1285,21 @@ class SaveScheduleWorkout extends Component {
             var requestData = {
                 date: _date,
             };
-            this.setState({ logDate: date, firstWorkoutIdInit: true, forceGetUsersWorkoutScheduleRequest: true });
-            dispatch(showPageLoader());
-            dispatch(setTodaysWorkoutDate(requestData.date));
-            dispatch(getUserFirstWorkoutByDateRequest(requestData));
+            if (isOnline()) {
+                console.log("online onCHangeLogdate")
+                this.setState({ logDate: date, firstWorkoutIdInit: true, forceGetUsersWorkoutScheduleRequest: true });
+                dispatch(showPageLoader());
+                dispatch(setTodaysWorkoutDate(requestData.date));
+                dispatch(getUserFirstWorkoutByDateRequest(requestData));
+            } else {
+                this.setState({ forceGetUsersWorkoutScheduleRequest: false });
+                this.getFirstWorkoutId(date)
+            }
         }
     }
 
     onActiveDateChange = (obj) => {
+        console.log('onActiveDateChange => ');
         const { dispatch } = this.props;
         if (obj.view === "month") {
             let date = obj.activeStartDate;
@@ -1052,11 +1316,16 @@ class SaveScheduleWorkout extends Component {
                     date: moment(date).startOf('day').utc(),
                 }
             }
-            dispatch(getUserWorkoutCalendarListRequest(requestData));
+            if (isOnline()) {
+                dispatch(getUserWorkoutCalendarListRequest(requestData));
+            } else {
+                tw("You are offline, please check your internet connection");
+            }
         }
     }
 
     onMonthClick = (date) => {
+        console.log('onMonthClick => ');
         const { dispatch } = this.props;
         let now = new Date();
         let requestData = {};
@@ -1071,11 +1340,19 @@ class SaveScheduleWorkout extends Component {
                 date: date,
             }
         }
-        dispatch(getUserWorkoutCalendarListRequest(requestData));
+        if (isOnline()) {
+            dispatch(getUserWorkoutCalendarListRequest(requestData));
+        } else {
+            tw("You are offline, please check your internet connection");
+        }
     }
 
     handleShowWholeWorkoutDeleteAlert = (_id) => {
-        this.setState({ selectedWorkoutIdForDelete: _id, showWholeWorkoutDeleteAlert: true });
+        if (isOnline()) {
+            this.setState({ selectedWorkoutIdForDelete: _id, showWholeWorkoutDeleteAlert: true });
+        } else {
+            tw("You are offline, please check your internet connection");
+        }
     }
 
     handleCancelWholeWorkoutDeleteAlert = (_id) => {
@@ -1097,14 +1374,18 @@ class SaveScheduleWorkout extends Component {
     }
 
     handleOpenEditExerciseTitleModal = (workout) => {
-        const { dispatch } = this.props;
-        let formData = {
-            id: workout._id,
-            title: workout.title,
-            description: workout.description,
-        };
-        dispatch(initialize('update_workout_title_form', formData));
-        this.setState({ showUpdateTitleModal: true });
+        if (isOnline()) {
+            const { dispatch } = this.props;
+            let formData = {
+                id: workout._id,
+                title: workout.title,
+                description: workout.description,
+            };
+            dispatch(initialize('update_workout_title_form', formData));
+            this.setState({ showUpdateTitleModal: true });
+        } else {
+            tw("You are offline, please check your internet connection");
+        }
     }
 
     handleCloseEditExerciseTitleModal = () => {
@@ -1127,7 +1408,12 @@ class SaveScheduleWorkout extends Component {
     }
 
     handleAddWorkout = () => {
-        this.setState({ showAddWorkoutTitleAlert: true });
+        if (isOnline()) {
+            this.setState({ showAddWorkoutTitleAlert: true });
+        }
+        else {
+            tw("You are offline, please check your internet connection");
+        }
     }
 
     handleAddWorkoutTitleCancel = () => {
@@ -1153,6 +1439,13 @@ class SaveScheduleWorkout extends Component {
         dispatch(addUserWorkoutTitleRequest(requestData));
         dispatch(showPageLoader());
     }
+
+    componentWillUnmount() {
+        try {
+            this.iDB.close();
+        } catch (error) { }
+    }
+    
 }
 
 const mapStateToProps = (state) => {
@@ -1177,6 +1470,10 @@ const mapStateToProps = (state) => {
         firstWorkoutLoading: userScheduleWorkouts.get('firstWorkoutLoading'),
         firstWorkoutId: userScheduleWorkouts.get('firstWorkoutId'),
         firstWorkoutError: userScheduleWorkouts.get('firstWorkoutError'),
+        exercisesLoading: userScheduleWorkouts.get('exercisesLoading'),
+        exercises: userScheduleWorkouts.get('exercises'),
+        loadingCalender: userScheduleWorkouts.get('loadingCalender'),
+        exerciseMesurementLoading: userScheduleWorkouts.get('exerciseMesurementLoading'),
     };
 }
 

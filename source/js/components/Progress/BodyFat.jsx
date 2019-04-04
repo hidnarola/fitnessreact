@@ -10,6 +10,7 @@ import CustomTooltip1 from './CustomTooltip1';
 import NoRecordFound from '../Common/NoRecordFound';
 import { IDB_TBL_PROGRESS, IDB_READ_WRITE, IDB_READ } from '../../constants/idb';
 import { connectIDB, isOnline } from '../../helpers/funs';
+import Custom from './Custom';
 
 class BodyFat extends Component {
 
@@ -54,7 +55,7 @@ class BodyFat extends Component {
                                         </div>
                                     </div>
                                     <div className="progress-body-fat-larget-box">
-                                        <ResponsiveContainer>
+                                    <ResponsiveContainer>
                                             <AreaChart data={progress.data.body_fat.graph_data}>
                                                 <defs>
                                                     <linearGradient id="bodyFatArea" x1="0" y1="0" x2="0" y2="1">
@@ -68,6 +69,21 @@ class BodyFat extends Component {
                                                 <Area type='monotone' dataKey='count' activeDot={{ stroke: '#46E9C5', strokeWidth: 2, fill: "#fff" }} stroke="none" fill="url(#bodyFatArea)" />
                                             </AreaChart>
                                         </ResponsiveContainer>
+                                        
+                                        {/* Cutomised Graph */}                           
+                                        {false && <ResponsiveContainer>
+                                            <AreaChart data={progress.data.body_fat.graph_data}>
+                                                <defs>
+                                                    <linearGradient id="bodyFatArea" x1="0" y1="0" x2="0" y2="1">
+                                                        <stop offset="8%" stopColor="#9625a9" stopOpacity={1} />
+                                                        <stop offset="92%" stopColor="#1808b3" stopOpacity={1} />
+                                                    </linearGradient>
+                                                </defs>
+                                                <Area type='monotone' dataKey='count' activeDot={{ stroke: '#46E9C5', strokeWidth: 2, fill: "#fff" }} stroke="none" fill="url(#bodyFatArea)" />
+                                                <XAxis className="abcd" dataKey='date' axisLine={false} tickLine={false} mirror={false} tickMargin={-30} interval="preserveStartEnd" padding={{left : 10}} viewBox={{x:15}} tick={<Custom />} />
+                                                <Tooltip content={<CustomTooltip1 valueLabel="Body Fat" valueUnit="%" />} />
+                                            </AreaChart>
+                                        </ResponsiveContainer>}
                                     </div>
                                 </div>
                             </div>

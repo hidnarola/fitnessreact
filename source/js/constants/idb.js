@@ -11,3 +11,7 @@ export const IDB_TBL_BODY_MEASUREMENT = "body_measurement";
 export const IDB_TBL_BODY_FAT = "body_fat";
 export const IDB_TBL_BODY_PP = "body_progress_photos";
 export const IDB_TBL_CALENDER = "calender";
+export const IDB_TBL_EXERCISE = "exercise";
+export const IDB_TBL_EXERCISE_DATA = "exercise_data";
+export const IDB_TBL_WORKOUT_DATA = "workout_data";
+
