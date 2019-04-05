@@ -739,6 +739,7 @@ class SaveScheduleWorkout extends Component {
                                 objectStore.put({ firstWorkoutId: firstWorkoutId, logDate: logDate.toString() });
                             } else {
                                 console.log("add({ firstWorkoutId:2", firstWorkoutId, logDate)
+                                // alert(firstWorkoutId + logDate)  
                                 objectStore.add({ firstWorkoutId: firstWorkoutId, logDate: logDate.toString() });
                             }
                         }
