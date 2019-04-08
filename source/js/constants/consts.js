@@ -147,6 +147,8 @@ export const EXPERIENCE_LEVEL_3_LABEL = 'Competent Learner';
 export const EXPERIENCE_LEVEL_4_LABEL = 'Skilled Learner';
 export const EXPERIENCE_LEVEL_5_LABEL = 'Expert';
 
+
+export const FITNESS_TEST = 'fitness_test';
 export const FITNESS_TEST_CAT_STRENGTH = 'strength';
 export const FITNESS_TEST_CAT_FLEXIBILITY = 'flexibility';
 export const FITNESS_TEST_CAT_POSTURE = 'posture';
@@ -166,6 +168,8 @@ export const FITNESS_TEST_FORMAT_MAX_REP_STR = 'Max Reps';
 export const FITNESS_TEST_FORMAT_MULTISELECT_STR = 'Multiselect';
 export const FITNESS_TEST_FORMAT_TEXT_FIELD_STR = 'Text Field';
 export const FITNESS_TEST_FORMAT_A_OR_B_STR = 'A or B';
+
+export const MY_PROGRAMS = 'my_programs'
 
 export const FITNESS_FORMAT_OPTIONS = {
     [FITNESS_TEST_CAT_STRENGTH]: [

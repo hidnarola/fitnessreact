@@ -14,4 +14,6 @@ export const IDB_TBL_CALENDER = "calender";
 export const IDB_TBL_EXERCISE = "exercise";
 export const IDB_TBL_EXERCISE_DATA = "exercise_data";
 export const IDB_TBL_WORKOUT_DATA = "workout_data";
+export const IDB_TBL_USER_PROGRAM = "user_program";
+export const IDB_TBL_FITNESS = "fitness";
 

@@ -4,15 +4,16 @@ import { connect } from 'react-redux';
 import { routeCodes } from "../../constants/routes";
 import { DropdownButton, ButtonToolbar, MenuItem } from "react-bootstrap";
 import { FaPencil, FaTrash, FaSearch, FaCircleONotch, FaEye } from 'react-icons/lib/fa';
-import { getUserProgramsRequest, deleteUserProgramRequest } from "../../actions/userPrograms";
-import { SECONDARY_GOALS, PROGRAM_DIFFICULTY_LEVEL_OBJ } from "../../constants/consts";
+import { getUserProgramsRequest, deleteUserProgramRequest, setUserProgramState } from "../../actions/userPrograms";
+import { SECONDARY_GOALS, PROGRAM_DIFFICULTY_LEVEL_OBJ, MY_PROGRAMS } from "../../constants/consts";
 import { Pager } from "react-bootstrap";
 import SweetAlert from "react-bootstrap-sweetalert";
-import { ts, te } from "../../helpers/funs";
+import { ts, te, tw, isOnline, connectIDB } from "../../helpers/funs";
 import { hidePageLoader, showPageLoader } from "../../actions/pageLoader";
 import RatingStarsDisplay from '../Common/RatingStarsDisplay';
 import _ from "lodash";
 import unitize from "unitize";
+import { IDB_TBL_USER_PROGRAM, IDB_READ_WRITE, IDB_READ } from '../../constants/idb';
 
 class ProgramListing extends Component {
     constructor(props) {
@@ -32,10 +33,7 @@ class ProgramListing extends Component {
                 condition: props.condition
             }
         };
-    }
-
-    componentWillMount() {
-        this.getFilterPrograms();
+        this.iDB;
     }
 
     render() {
@@ -227,6 +225,18 @@ class ProgramListing extends Component {
         )
     }
 
+    componentDidMount() {
+        connectIDB()().then((connection) => {
+            this.handleIDBOpenSuccess(connection);
+        });
+    }
+
+    handleIDBOpenSuccess = (connection) => {
+        this.iDB = connection.result;
+        console.log('this.iDB in codm => ', this.iDB);
+        this.getFilterPrograms();
+    }
+
     componentDidUpdate(prevProps, prevState) {
         const { loading, error, dispatch } = this.props;
         const { deleteActionInit } = this.state;
@@ -242,15 +252,42 @@ class ProgramListing extends Component {
             }
             dispatch(hidePageLoader());
         }
+        if (!loading && prevProps.loading !== loading) {
+            // alert("new data here set in db")
+            this.storeProgramInIDB()
+        }
+    }
+
+    storeProgramInIDB = () => {
+        const { programs, totalRecords } = this.props;
+        try {
+            const idbData = { type: MY_PROGRAMS, data: { programs: programs, totalRecords: totalRecords } };
+            const transaction = this.iDB.transaction([IDB_TBL_USER_PROGRAM], IDB_READ_WRITE);
+            const objectStore = transaction.objectStore(IDB_TBL_USER_PROGRAM);
+            const iDBGetReq = objectStore.get(MY_PROGRAMS);
+            iDBGetReq.onsuccess = (event) => {
+                const { target: { result } } = event;
+                if (result) {
+                    objectStore.put(idbData);
+                } else {
+                    objectStore.add(idbData);
+                }
+            }
+        } catch (error) { }
     }
 
     handleSearch = (e) => {
-        const { value } = e.target;
-        const { filterData } = this.state;
-        let _filterData = Object.assign({}, filterData);
-        _filterData.search = value;
-        this.setState({ filterData: _filterData });
-        this.getFilterPrograms(_filterData);
+        e.preventDefault();
+        if (isOnline()) {
+            const { value } = e.target;
+            const { filterData } = this.state;
+            let _filterData = Object.assign({}, filterData);
+            _filterData.search = value;
+            this.setState({ filterData: _filterData });
+            this.getFilterPrograms(_filterData);
+        } else {
+            tw("You are offline, please check your internet connection");
+        }
     }
 
     handleSort = (column) => {
@@ -273,11 +310,19 @@ class ProgramListing extends Component {
     }
 
     handleTurnNextPage = () => {
-        this.changePage('next');
+        if (isOnline()) {
+            this.changePage('next');
+        } else {
+            tw("You are offline, please check your internet connection");
+        }
     }
 
     handleTurnPrevPage = () => {
-        this.changePage('prev');
+        if (isOnline()) {
+            this.changePage('prev');
+        } else {
+            tw("You are offline, please check your internet connection");
+        }
     }
 
     changePage = (direction) => {
@@ -298,17 +343,62 @@ class ProgramListing extends Component {
         if (_filterData) {
             filterData = _filterData;
         }
-        dispatch(getUserProgramsRequest(filterData));
+        if (isOnline()) {
+            dispatch(getUserProgramsRequest(filterData));
+        } else {
+            // set props data from iDB
+            console.log("get data from Idb");
+            this.getDataFromIDB()
+        }
+    }
+
+    getDataFromIDB = () => {
+        const { dispatch } = this.props;
+        const idbTbls = [IDB_TBL_USER_PROGRAM];
+        console.log('this.iDB => ', this.iDB);
+        try {
+            const transaction = this.iDB.transaction(idbTbls, IDB_READ);
+            console.log('transaction => ', transaction);
+            if (transaction) {
+                const osProgram = transaction.objectStore(IDB_TBL_USER_PROGRAM);
+                const iDBGetReq = osProgram.get(MY_PROGRAMS);
+                iDBGetReq.onsuccess = (event) => {
+                    const { target: { result } } = event;
+                    if (result) {
+                        const resultObj = result.data;
+                        const data = { programs: resultObj.programs, totalRecords: resultObj.totalRecords }
+                        dispatch(setUserProgramState(data));
+                    } else {
+                        const data = { programs: [], totalRecords: 0 }
+                        dispatch(setUserProgramState(data));
+                    }
+                }
+            }
+        } catch (error) {
+            console.log("error =>", error);
+            const data = { programs: [], totalRecords: 0 }
+            dispatch(setUserProgramState(data));
+        }
     }
 
     handleNavigation = (e, href) => {
-        const { history } = this.props;
+        console.log("in handleNavigation")
         e.preventDefault();
-        history.push(href);
+        if (isOnline()) {
+            console.log("here")
+            const { history } = this.props;
+            history.push(href);
+        } else {
+            tw("You are offline, please check your internet connection");
+        }
     }
 
     handleShowDeleteAlert = (_id) => {
-        this.setState({ showDeleteProgramAlert: true, selectedProgramId: _id, });
+        if (isOnline()) {
+            this.setState({ showDeleteProgramAlert: true, selectedProgramId: _id, });
+        } else {
+            tw("You are offline, please check your internet connection");
+        }
     }
 
     handleCancelDelete = () => {
@@ -322,6 +412,13 @@ class ProgramListing extends Component {
         dispatch(deleteUserProgramRequest(selectedProgramId));
         this.setState({ deleteActionInit: true });
     }
+
+    componentWillUnmount() {
+        try {
+            this.iDB.close();
+        } catch (error) { }
+    }
+
 }
 
 const mapStateToProps = (state) => {

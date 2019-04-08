@@ -149,7 +149,7 @@ class FitnessItem extends Component {
                                     })
                                 }
                             </ul>
-                            <span dangerouslySetInnerHTML={{ __html: item.description }}></span>
+                            <p dangerouslySetInnerHTML={{ __html: item.description }}></p>
                         </div>
                     </div>
                 }

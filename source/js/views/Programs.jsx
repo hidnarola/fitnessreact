@@ -6,8 +6,30 @@ import FitnessNav from '../components/global/FitnessNav';
 import { routeCodes } from '../constants/routes';
 import PrivatePrograms from '../components/Program/PrivatePrograms';
 import PublicPrograms from '../components/Program/PublicPrograms';
+import { IDB_TBL_USER_PROGRAM, IDB_READ_WRITE } from '../constants/idb';
+import { isOnline, connectIDB, tw } from "../helpers/funs";
 
 class Programs extends Component {
+    constructor(props) {
+        super(props);
+        this.iDB;
+    }
+
+    componentDidMount() {
+        connectIDB()().then((connection) => {
+            this.handleIDBOpenSuccess(connection);
+        });
+    }
+
+    handleIDBOpenSuccess = (connection) => {
+        this.iDB = connection.result;
+    }
+
+    userOfflineMessage = (e) => {
+        e.preventDefault();
+        tw("You are offline, please check your internet connection");
+    }
+
     render() {
         return (
             <div className="fitness-body">
@@ -30,8 +52,8 @@ class Programs extends Component {
                         </div>
                     </div>
                     <div className="body-head-l-btm profile-new-menu">
-                        <NavLink activeClassName='pink-btn-new' className='white-btn' exact to={routeCodes.PROGRAMS}>My Programs</NavLink>
-                        <NavLink activeClassName='pink-btn-new' className='white-btn' exact to={routeCodes.PROGRAMS_PUBLIC}>Public</NavLink>
+                        <NavLink activeClassName='pink-btn-new' className='white-btn' onClick={(e) => { !isOnline() && this.userOfflineMessage(e) }} exact to={routeCodes.PROGRAMS}>My Programs</NavLink>
+                        <NavLink activeClassName='pink-btn-new' className='white-btn' onClick={(e) => { !isOnline() && this.userOfflineMessage(e) }} exact to={routeCodes.PROGRAMS_PUBLIC}>Public</NavLink>
                     </div>
 
                     <Switch>
@@ -42,6 +64,20 @@ class Programs extends Component {
             </div>
         );
     }
+    componentWillUnmount() {
+        try {
+            const idbs = [IDB_TBL_USER_PROGRAM];
+            if (isOnline()) {
+                const transaction = this.iDB.transaction(idbs, IDB_READ_WRITE);
+                if (transaction) {
+                    const osProgram = transaction.objectStore(IDB_TBL_USER_PROGRAM);
+                    osProgram.clear();
+                }
+            }
+            this.iDB.close();
+        } catch (error) { }
+    }
+
 }
 
 
