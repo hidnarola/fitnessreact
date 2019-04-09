@@ -115,7 +115,7 @@ export function userFitnessTestsAOrB(_id, value) {
 
 export function setFitnessTestData(data) {
     return {
-        type: USER_FITNESS_TESTS_A_OR_B_FIELD,
+        type: SET_USER_FITNESS_TESTS_DATA,
         data,
     }
 }

@@ -172,14 +172,15 @@ class Fitness extends Component {
                         const data = { fitnessTests: resultObj.fitnessTests, userFitnessTests: resultObj.userFitnessTests, syncedUserFitnessTests: resultObj.syncedUserFitnessTests }
                         dispatch(setFitnessTestData(data));
                     } else {
-                        const data = { fitnessTests: {}, userFitnessTests: {}, syncedUserFitnessTests: {} }
+                        const data = { fitnessTests: {}, userFitnessTests: [], syncedUserFitnessTests: [] }
                         dispatch(setFitnessTestData(data));
                     }
                 }
             }
         } catch (error) {
-            const data = { fitnessTests: {}, userFitnessTests: {}, syncedUserFitnessTests: {}} }
+            const data = { fitnessTests: {}, userFitnessTests: [], syncedUserFitnessTests: []} 
             dispatch(setFitnessTestData(data));
+        }
         }
 
     setDataInIDB = () => {
