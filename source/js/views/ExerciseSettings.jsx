@@ -13,6 +13,7 @@ import { resetUserExercisePreferencesRequest } from '../actions/userExercisePref
 import { routeCodes } from '../constants/routes';
 import { resetUserFitnessTestsRequest } from '../actions/userFitnessTests';
 import { showPageLoader } from '../actions/pageLoader';
+import { tw, isOnline } from '../helpers/funs';
 
 class ExerciseSettings extends Component {
     constructor(props) {
@@ -130,30 +131,38 @@ class ExerciseSettings extends Component {
     }
 
     handleExerciseSettings = () => {
-        const { dispatch, match } = this.props;
-        if (match.path === routeCodes.EXERCISEEQP) {
-            dispatch(submit('userEquipmentsForm'));
-        } else if (match.path === routeCodes.EXERCISEPREFERENCE) {
-            dispatch(submit('userExercisePreferencesForm'));
-        } else if (match.path === routeCodes.EXERCISEFITNESS) {
-            this.fitnessChildRef.getWrappedInstance().handleSave();
+        if(isOnline()) {
+            const { dispatch, match } = this.props;
+            if (match.path === routeCodes.EXERCISEEQP) {
+                dispatch(submit('userEquipmentsForm'));
+            } else if (match.path === routeCodes.EXERCISEPREFERENCE) {
+                dispatch(submit('userExercisePreferencesForm'));
+            } else if (match.path === routeCodes.EXERCISEFITNESS) {
+                this.fitnessChildRef.getWrappedInstance().handleSave();
+            }
+            dispatch(showPageLoader());
+        } else {
+            tw("You are offline, please check your internet connection");
         }
-        dispatch(showPageLoader());
     }
 
     handleShowResetModal = () => {
-        const { match } = this.props;
-        let newModalState = {
-            showResetModal: true,
+        if(isOnline()) {
+            const { match } = this.props;
+            let newModalState = {
+                showResetModal: true,
+            }
+            if (match.path === routeCodes.EXERCISEEQP) {
+                newModalState.resetActionFor = 'userEquipmentsForm';
+            } else if (match.path === routeCodes.EXERCISEPREFERENCE) {
+                newModalState.resetActionFor = 'userExercisePreferencesForm';
+            } else if (match.path === routeCodes.EXERCISEFITNESS) {
+                newModalState.resetActionFor = 'userFitnessTests';
+            }
+            this.setState(newModalState);
+        } else {
+            tw("You are offline, please check your internet connection");
         }
-        if (match.path === routeCodes.EXERCISEEQP) {
-            newModalState.resetActionFor = 'userEquipmentsForm';
-        } else if (match.path === routeCodes.EXERCISEPREFERENCE) {
-            newModalState.resetActionFor = 'userExercisePreferencesForm';
-        } else if (match.path === routeCodes.EXERCISEFITNESS) {
-            newModalState.resetActionFor = 'userFitnessTests';
-        }
-        this.setState(newModalState);
     }
 
     closeResetModal = () => {

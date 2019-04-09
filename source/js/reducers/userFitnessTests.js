@@ -12,7 +12,8 @@ import {
     SAVE_USER_FITNESS_TESTS_ERROR,
     RESET_USER_FITNESS_TESTS_REQUEST,
     RESET_USER_FITNESS_TESTS_SUCCESS,
-    RESET_USER_FITNESS_TESTS_ERROR
+    RESET_USER_FITNESS_TESTS_ERROR,
+    SET_USER_FITNESS_TESTS_DATA
 } from "../actions/userFitnessTests";
 import { VALIDATION_FAILURE_STATUS, MAX_REPS_CONST_1, MAX_REPS_CONST_2, FITNESS_TEST_FORMAT_MAX_REP, FITNESS_TEST_FORMAT_MULTISELECT } from "../constants/consts";
 import { generateValidationErrorMsgArr } from "../helpers/funs";
@@ -143,6 +144,11 @@ const actionMap = {
             syncedUserFitnessTests: newSyncedUserFitnessTests,
         }));
     },
+    [SET_USER_FITNESS_TESTS_DATA]: (state, action) => {
+        return state.merge(Map(
+            action.data
+        ));
+    }
 }
 
 export default function reducer(state = initialState, action = {}) {

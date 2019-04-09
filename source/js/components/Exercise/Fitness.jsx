@@ -6,13 +6,16 @@ import {
     userFitnessTestsMaxRep,
     userFitnessTestsMultiselect,
     userFitnessTestsAOrB,
-    saveUserFitnessTestsRequest
+    saveUserFitnessTestsRequest,
+    setFitnessTestData,
 } from '../../actions/userFitnessTests';
-import { capitalizeFirstLetter, ts } from '../../helpers/funs';
+import { capitalizeFirstLetter, ts, tw, isOnline, connectIDB } from '../../helpers/funs';
 import FitnessItem from './FitnessItem';
 import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
 import moment from "moment";
 import Scrollbars from "react-custom-scrollbars";
+import { FITNESS_TEST } from '../../constants/consts';
+import { IDB_TBL_FITNESS, IDB_READ_WRITE, IDB_READ } from '../../constants/idb';
 
 class Fitness extends Component {
     constructor(props) {
@@ -22,14 +25,6 @@ class Fitness extends Component {
             syncedUserFitnessTests: {},
             selectActionInit: false,
         }
-    }
-
-    componentWillMount() {
-        const { dispatch } = this.props;
-        this.setState({ selectActionInit: true });
-        var today = moment().startOf('day').utc();
-        dispatch(showPageLoader());
-        dispatch(getUserFitnessTestsRequest(today));
     }
 
     render() {
@@ -98,6 +93,26 @@ class Fitness extends Component {
         );
     }
 
+    componentDidMount() {
+        connectIDB()().then((connection) => {
+            this.handleIDBOpenSuccess(connection);
+        });
+        if (isOnline()) {
+            const { dispatch } = this.props;
+            this.setState({ selectActionInit: true });
+            var today = moment().startOf('day').utc();
+            dispatch(showPageLoader());
+            dispatch(getUserFitnessTestsRequest(today));
+        } else {
+            // get data from db
+            this.getDataFromIDB()
+        }
+    }
+
+    handleIDBOpenSuccess = (connection) => {
+        this.iDB = connection.result;
+    }
+
     componentDidUpdate() {
         const {
             selectActionInit,
@@ -120,6 +135,7 @@ class Fitness extends Component {
                 syncedUserFitnessTests,
             });
             dispatch(hidePageLoader());
+            this.setDataInIDB();
         } else if (saveActionInit && !loading) {
             var _date = date;
             if (!_date) {
@@ -138,6 +154,50 @@ class Fitness extends Component {
             ts('Fitness test reset successfully!');
             this.setState({ selectActionInit: true });
             setResetAction(false);
+        }
+    }
+
+    getDataFromIDB = () => {
+        const { dispatch } = this.props;
+        const idbTbls = [IDB_TBL_FITNESS];
+        try {
+            const transaction = this.iDB.transaction(idbTbls, IDB_READ);
+            if (transaction) {
+                const osProgram = transaction.objectStore(IDB_TBL_FITNESS);
+                const iDBGetReq = osProgram.get(FITNESS_TEST);
+                iDBGetReq.onsuccess = (event) => {
+                    const { target: { result } } = event;
+                    if (result) {
+                        const resultObj = result.data;
+                        const data = { fitnessTests: resultObj.fitnessTests, userFitnessTests: resultObj.userFitnessTests, syncedUserFitnessTests: resultObj.syncedUserFitnessTests }
+                        dispatch(setFitnessTestData(data));
+                    } else {
+                        const data = { fitnessTests: {}, userFitnessTests: {}, syncedUserFitnessTests: {} }
+                        dispatch(setFitnessTestData(data));
+                    }
+                }
+            }
+        } catch (error) {
+            const data = { fitnessTests: {}, userFitnessTests: {}, syncedUserFitnessTests: {}} }
+            dispatch(setFitnessTestData(data));
+        }
+
+    setDataInIDB = () => {
+        const { fitnessTests, userFitnessTests, syncedUserFitnessTests } = this.props;
+        try {
+            const idbData = { type: FITNESS_TEST, data: { fitnessTests: fitnessTests, userFitnessTests: userFitnessTests, syncedUserFitnessTests: syncedUserFitnessTests } };
+            const transaction = this.iDB.transaction([IDB_TBL_FITNESS], IDB_READ_WRITE);
+            const objectStore = transaction.objectStore(IDB_TBL_FITNESS);
+            const iDBGetReq = objectStore.get(FITNESS_TEST);
+            iDBGetReq.onsuccess = (event) => {
+                const { target: { result } } = event;
+                if (result) {
+                    objectStore.put(idbData);
+                } else {
+                    objectStore.add(idbData);
+                }
+            }
+        } catch (error) {
         }
     }
 

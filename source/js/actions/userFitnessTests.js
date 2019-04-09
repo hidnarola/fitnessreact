@@ -15,6 +15,8 @@ export const USER_FITNESS_TESTS_MAX_REP_FIELD = 'USER_FITNESS_TESTS_MAX_REP_FIEL
 export const USER_FITNESS_TESTS_MULTISELECT_FIELD = 'USER_FITNESS_TESTS_MULTISELECT_FIELD';
 export const USER_FITNESS_TESTS_A_OR_B_FIELD = 'USER_FITNESS_TESTS_A_OR_B_FIELD';
 
+export const SET_USER_FITNESS_TESTS_DATA = 'SET_USER_FITNESS_TESTS_DATA';
+
 export function getUserFitnessTestsRequest(today) {
     return {
         type: GET_USER_FITNESS_TESTS_REQUEST,
@@ -108,5 +110,12 @@ export function userFitnessTestsAOrB(_id, value) {
         type: USER_FITNESS_TESTS_A_OR_B_FIELD,
         _id,
         value,
+    }
+}
+
+export function setFitnessTestData(data) {
+    return {
+        type: USER_FITNESS_TESTS_A_OR_B_FIELD,
+        data,
     }
 }
