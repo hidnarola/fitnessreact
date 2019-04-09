@@ -24,6 +24,8 @@ export default function initIDBSchema(event) {
 
         objectStore = db.createObjectStore(idbConst.IDB_TBL_PROGRESS, { keyPath: "type" });
 
+        objectStore = db.createObjectStore(idbConst.IDB_TBL_CALENDER, { keyPath: "type" });
+
         objectStore = db.createObjectStore(idbConst.IDB_TBL_EXERCISE_DATA, { keyPath: "type" });    
 
         objectStore = db.createObjectStore(idbConst.IDB_TBL_USER_PROGRAM, { keyPath: "type" });    
