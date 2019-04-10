@@ -8,6 +8,7 @@ export const IDB_TBL_BADGES = "badges";
 export const IDB_TBL_PROGRESS = "progress";
 export const IDB_TBL_DASHBOARD = "dashboard";
 export const IDB_TBL_BODY_MEASUREMENT = "body_measurement";
+export const IDB_TBL_BODY_LOGDATES = "body_logDates";
 export const IDB_TBL_BODY_FAT = "body_fat";
 export const IDB_TBL_BODY_PP = "body_progress_photos";
 export const IDB_TBL_CALENDER = "calender";

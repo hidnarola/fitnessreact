@@ -17,6 +17,8 @@ export default function initIDBSchema(event) {
         objectStore = db.createObjectStore(idbConst.IDB_TBL_WORKOUT_DATA, { keyPath: "firstWorkoutId" });
 
         objectStore = db.createObjectStore(idbConst.IDB_TBL_DASHBOARD, { keyPath: "type" });
+        
+        objectStore = db.createObjectStore(idbConst.IDB_TBL_BODY_LOGDATES, { keyPath: "type" });
 
         objectStore = db.createObjectStore(idbConst.IDB_TBL_STATS, { keyPath: "type" });
 

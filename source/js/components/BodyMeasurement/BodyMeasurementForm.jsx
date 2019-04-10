@@ -16,7 +16,7 @@ import { Alert } from "react-bootstrap";
 import SlickSlider from '../Common/SlickSlider';
 import NoRecordFound from '../Common/NoRecordFound';
 import noImg from 'img/common/no-img.png';
-import { IDB_TBL_BODY_MEASUREMENT, IDB_READ_WRITE, IDB_READ, IDB_TBL_BODY_FAT, IDB_TBL_BODY_PP } from '../../constants/idb';
+import { IDB_TBL_BODY_MEASUREMENT, IDB_TBL_BODY_LOGDATES, IDB_READ_WRITE, IDB_READ, IDB_TBL_BODY_FAT, IDB_TBL_BODY_PP } from '../../constants/idb';
 
 const min0 = min(0);
 const min20 = min(20);
@@ -438,7 +438,7 @@ class BodyMeasurementForm extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        const { selectActionInit, logDate } = this.state;
+        const { selectActionInit, logDate, loadingLogDates } = this.state;
         const { loading, measurement, userProgressPhotos, refreshBodyMeasurementForm, resetRefreshBodyMeasurementForm, dispatch, bodyFat } = this.props;
         if (selectActionInit && !loading) {
             this.setState({ selectActionInit: false });
@@ -459,6 +459,9 @@ class BodyMeasurementForm extends Component {
                 for (const photo of userProgressPhotos) {
                     this.storeBodyProgressPhotosInIDB(photo);
                 }
+            }
+            if (!loadingLogDates && prevProps.loadingLogDates !== loadingLogDates) {
+                this.storeLogDates()
             }
             this.setValidationRules();
             dispatch(hidePageLoader());
@@ -585,6 +588,31 @@ class BodyMeasurementForm extends Component {
         }
     }
 
+    storeLogDates = () => {
+        try {
+            const { logDates } = this.props;
+            const { logDate } = this.state;
+            const transaction = this.iDB.transaction([IDB_TBL_BODY_LOGDATES], IDB_READ_WRITE);
+            if (transaction) {
+                const objectStore = transaction.objectStore(IDB_TBL_BODY_LOGDATES);
+                if (objectStore) {
+                    const iDBGetReq = objectStore.get(IDB_TBL_BODY_LOGDATES);
+                    iDBGetReq.onsuccess = (event) => {
+                        const { target: { result } } = event;
+                        if (result) {
+                            objectStore.put({ type: IDB_TBL_BODY_LOGDATES, logDates: logDates });
+                        } else {
+                            // console.log("data to add => ",{ logDate: logDate.toISOString(), logDates: logDates } )
+                            objectStore.add({ type: IDB_TBL_BODY_LOGDATES, logDates: logDates });
+                        }
+                    }
+                }
+            }
+        } catch (e) {
+            console.log('e => ', e);
+        }
+    }
+
     storeBodyMeasurementInIDB = (data) => {
         const transaction = this.iDB.transaction([IDB_TBL_BODY_MEASUREMENT], IDB_READ_WRITE);
         if (transaction) {
@@ -647,7 +675,8 @@ class BodyMeasurementForm extends Component {
         const idbTbls = [
             IDB_TBL_BODY_MEASUREMENT,
             IDB_TBL_BODY_FAT,
-            IDB_TBL_BODY_PP
+            IDB_TBL_BODY_PP,
+            IDB_TBL_BODY_LOGDATES
         ];
         try {
             const transaction = this.iDB.transaction(idbTbls, IDB_READ);
@@ -678,6 +707,17 @@ class BodyMeasurementForm extends Component {
                     iDBGetReq.onsuccess = (event) => {
                         const { target: { result } } = event;
                         const newState = { userProgressPhotos: result };
+                        this.props.dispatch(setUserBodyMeasurementState(newState));
+                    }
+                }
+                const oslogdates = transaction.objectStore(IDB_TBL_BODY_LOGDATES);
+                if (oslogdates) {
+                    // const logDatesdata = oslogdates.get(logDate.toISOString())
+                    const logDatesdata = oslogdates.get(IDB_TBL_BODY_LOGDATES)
+                    console.log("logDatesdata ===>", logDatesdata)
+                    logDatesdata.onsuccess = (event) => {
+                        const { target: { result } } = event;
+                        const newState = { logDates: result.logDates };
                         this.props.dispatch(setUserBodyMeasurementState(newState));
                     }
                 }
@@ -748,7 +788,7 @@ class BodyMeasurementForm extends Component {
 
     componentWillUnmount() {
         try {
-            const idbs = [IDB_TBL_BODY_MEASUREMENT, IDB_TBL_BODY_FAT, IDB_TBL_BODY_PP];
+            const idbs = [IDB_TBL_BODY_MEASUREMENT, IDB_TBL_BODY_FAT, IDB_TBL_BODY_PP, IDB_TBL_BODY_LOGDATES];
             if (isOnline()) {
                 const transaction = this.iDB.transaction(idbs, IDB_READ_WRITE);
                 if (transaction) {
@@ -758,6 +798,8 @@ class BodyMeasurementForm extends Component {
                     osBodyFat.clear();
                     const osPP = transaction.objectStore(IDB_TBL_BODY_PP);
                     osPP.clear();
+                    const osLogdates = transaction.objectStore(IDB_TBL_BODY_LOGDATES);
+                    osLogdates.clear();
                 }
             }
             this.iDB.close();
