@@ -4,7 +4,7 @@ import { routeCodes } from '../../constants/routes';
 import noProfileImg from 'img/common/no-profile-img.png'
 import { ButtonToolbar, Dropdown, MenuItem } from "react-bootstrap";
 import { FRIENDSHIP_STATUS_SELF, ACCESS_LEVEL_PUBLIC, ACCESS_LEVEL_FRIENDS } from '../../constants/consts';
-import { capitalizeFirstLetter } from '../../helpers/funs';
+import { capitalizeFirstLetter, isOnline, tw } from '../../helpers/funs';
 
 class ProfileFriendBlock extends Component {
     render() {
@@ -20,7 +20,7 @@ class ProfileFriendBlock extends Component {
             return (
                 <div className="friend-box vertical-middle-r frd_fithub">
                     <div className="friend-box-img">
-                        <NavLink to={`${routeCodes.PROFILE}/${friend.username}`}>
+                        <NavLink onClick={(e) => this.userOfflineMessage(e) } to={`${routeCodes.PROFILE}/${friend.username}`}>
                             <img
                                 src={friend.avatar}
                                 alt={friend.username}
@@ -31,7 +31,7 @@ class ProfileFriendBlock extends Component {
                         </NavLink>
                     </div>
                     <div className="friend-box-info">
-                        <NavLink to={`${routeCodes.PROFILE}/${friend.username}`}>
+                        <NavLink onClick={(e) => { this.userOfflineMessage(e) }} to={`${routeCodes.PROFILE}/${friend.username}`}>
                             <h5 className="vertical-middle-c">
                                 {(typeof friend.firstName !== 'undefined' && friend.firstName) ? capitalizeFirstLetter(friend.firstName) : ''}
                                 {(typeof friend.lastName !== 'undefined' && friend.lastName) ? ' ' + capitalizeFirstLetter(friend.lastName) : ''}
@@ -87,6 +87,13 @@ class ProfileFriendBlock extends Component {
             );
         }
         return null;
+    }
+
+    userOfflineMessage = (e) => {
+        if(!isOnline()) {
+            tw("You are offline, please check your internet connection");
+            e.preventDefault();
+        }
     }
 }
 

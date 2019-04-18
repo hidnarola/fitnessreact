@@ -47,11 +47,13 @@ const actionMap = {
             posts: [],
             post: null,
             error: [],
+            postLoading: true
         }));
     },
     [GET_USER_TIMELINE_SUCCESS]: (state, action) => {
         var newState = {
             loading: false,
+            postLoading: false
         };
         if (action.data.status === 1) {
             newState.posts = action.data.timeline;
@@ -72,19 +74,18 @@ const actionMap = {
         }
         return state.merge(Map({
             loading: false,
+            postLoading: false,
             error: error,
         }));
     },
     [GET_USER_SINGLE_TIMELINE_REQUEST]: (state, action) => {
         return state.merge(Map({
-            postLoading: true,
             post: null,
             postError: [],
         }));
     },
     [GET_USER_SINGLE_TIMELINE_SUCCESS]: (state, action) => {
         var newState = {
-            postLoading: false,
         };
         if (action.data && action.data.status === 1) {
             newState.post = action.data.timeline;
@@ -104,7 +105,6 @@ const actionMap = {
             error = ['Something went wrong! please try again later'];
         }
         return state.merge(Map({
-            postLoading: false,
             postError: error,
         }));
     },

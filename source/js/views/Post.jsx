@@ -26,13 +26,15 @@ import cns from "classnames";
 import { NavLink, Link } from "react-router-dom";
 import CommentBoxForm from '../components/Profile/CommentBoxForm';
 import { toggleLikeOnPostRequest } from '../actions/postLikes';
-import { te, replaceStringWithEmos, sanitizeEditableContentValue } from '../helpers/funs';
+import { te, replaceStringWithEmos, sanitizeEditableContentValue, isOnline, connectIDB } from '../helpers/funs';
 import { commentOnPostRequest } from '../actions/postComments';
 import { reset } from "redux-form";
 import Lightbox from 'react-images';
 import NoRecordFound from '../components/Common/NoRecordFound';
 import LikesListModal from '../components/Common/LikesListModal';
 import { getProfileDetailsRequest } from '../actions/profile';
+import { IDB_TBL_PROFILE, IDB_READ_WRITE, IDB_READ } from '../constants/idb';
+
 
 class Post extends Component {
     constructor(props) {
@@ -47,14 +49,35 @@ class Post extends Component {
             showLikes: false,
         }
         this.commentBoxRef = React.createRef();
+        this.iDB;
     }
 
-    componentWillMount() {
-        const { dispatch, match } = this.props;
-        let id = match.params.id;
-        const username = match.params.username;
-        dispatch(getUserSingleTimelineRequest(id));
-        dispatch(getProfileDetailsRequest(username));
+    getDataFromIDB = () => {
+        console.log("get data")
+        const { dispatch } = this.props;
+        const idbTbls = [IDB_TBL_PROFILE];
+        try {
+            const transaction = this.iDB.transaction(idbTbls, IDB_READ);
+            if (transaction) {
+                const osPrivacy = transaction.objectStore(IDB_TBL_PROFILE);
+                const iDBGetReq = osPrivacy.get('post');
+                iDBGetReq.onsuccess = (event) => {
+                    const { target: { result } } = event;
+                    if (result) {
+                        const resultObj = JSON.parse(result.data);
+                        console.log('resultObj privacy => ',resultObj);
+                        const data = { post: resultObj }
+                        dispatch(setTimelineState(data));
+                    } else {
+                        const data = { post: null }
+                        dispatch(setTimelineState(data));
+                    }
+                }
+            }
+        }
+        catch (e) {
+            console.log("error post file => ", e);
+        }
     }
 
     render() {
@@ -326,6 +349,30 @@ class Post extends Component {
                 }
             </div>
         );
+    }
+
+    componentDidMount() {
+
+        connectIDB()().then((connection) => {
+            this.handleIDBOpenSuccess(connection);
+        });
+
+        const { dispatch, match } = this.props;
+        let id = match.params.id;
+        const username = match.params.username;
+        if(isOnline()) {
+            dispatch(getUserSingleTimelineRequest(id));
+            dispatch(getProfileDetailsRequest(username));
+        } 
+    }
+
+    handleIDBOpenSuccess = (connection) => {
+        this.iDB = connection.result;
+        if (!isOnline()) {
+            // get data from idb
+            console.log("Get Data From IDB");
+            this.getDataFromIDB()
+        }
     }
 
     componentDidUpdate(prevProps, prevState) {

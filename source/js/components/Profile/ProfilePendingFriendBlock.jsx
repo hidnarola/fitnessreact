@@ -4,7 +4,7 @@ import { routeCodes } from '../../constants/routes';
 import noProfileImg from 'img/common/no-profile-img.png'
 import { ButtonToolbar, Dropdown, MenuItem } from "react-bootstrap";
 import { ACCESS_LEVEL_PUBLIC } from '../../constants/consts';
-import { capitalizeFirstLetter } from '../../helpers/funs';
+import { capitalizeFirstLetter, isOnline, tw } from '../../helpers/funs';
 
 class ProfilePendingFriendBlock extends Component {
     render() {
@@ -19,7 +19,7 @@ class ProfilePendingFriendBlock extends Component {
             return (
                 <div className="friend-box vertical-middle-r">
                     <div className="friend-box-img">
-                        <NavLink to={`${routeCodes.PROFILE}/${friend.username}`}>
+                        <NavLink onClick={(e) => this.userOfflineMessage(e) }  to={`${routeCodes.PROFILE}/${friend.username}`}>
                             <img
                                 src={friend.avatar}
                                 alt={friend.username}
@@ -30,7 +30,7 @@ class ProfilePendingFriendBlock extends Component {
                         </NavLink>
                     </div>
                     <div className="friend-box-info">
-                        <NavLink to={`${routeCodes.PROFILE}/${friend.username}`}>
+                        <NavLink onClick={(e) => this.userOfflineMessage(e) }  to={`${routeCodes.PROFILE}/${friend.username}`}>
                             <h5 className="vertical-middle-c">
                                 {(typeof friend.firstName !== 'undefined' && friend.firstName) ? capitalizeFirstLetter(friend.firstName) : ''}
                                 {(typeof friend.lastName !== 'undefined' && friend.lastName) ? ' ' + capitalizeFirstLetter(friend.lastName) : ''}
@@ -71,6 +71,14 @@ class ProfilePendingFriendBlock extends Component {
         }
         return null;
     }
+
+    userOfflineMessage = (e) => {
+        if(!isOnline()) {
+            tw("You are offline, please check your internet connection");
+            e.preventDefault();
+        }
+    }
+
 }
 
 export default ProfilePendingFriendBlock;

@@ -6,7 +6,8 @@ import {
     getUserTimelineRequest,
     addPostOnUserTimelineRequest,
     deletePostOfTimelineRequest,
-    changeAccessLevelPostOfTimelineRequest
+    changeAccessLevelPostOfTimelineRequest,
+    setTimelineState
 } from '../../actions/userTimeline';
 import _ from "lodash";
 import moment from "moment";
@@ -41,7 +42,7 @@ import {
 import { toggleLikeOnPostRequest } from '../../actions/postLikes';
 import { commentOnPostRequest } from '../../actions/postComments';
 import { initialize, reset } from "redux-form";
-import { te, ts, sanitizeEditableContentValue, checkImageMagicCode } from '../../helpers/funs';
+import { te, ts, sanitizeEditableContentValue, checkImageMagicCode, tw, connectIDB, isOnline } from '../../helpers/funs';
 import InfiniteScroll from 'react-infinite-scroller';
 import { MenuItem, Dropdown } from "react-bootstrap";
 import { FaGlobe, FaLock, FaGroup, FaSpinner, FaCircleONotch } from 'react-icons/lib/fa';
@@ -50,7 +51,8 @@ import {
     getTimelineWidgetsAndWidgetsDataRequest,
     saveTimelineWidgetsRequest,
     changeTimelineMuscleInnerDataRequest,
-    changeTimelineBodyFatWidgetRequest
+    changeTimelineBodyFatWidgetRequest,
+    setTimeLineWidgetData
 } from '../../actions/timelineWidgets';
 import WidgetsListModal from '../Common/WidgetsListModal';
 import WidgetProgressPhotoCard from '../Common/WidgetProgressPhotoCard';
@@ -63,6 +65,8 @@ import PostCard from './PostCard';
 import Emos from '../Common/Emos';
 import ContentEditableTextarea from '../Common/ContentEditableTextarea';
 import { Emoji } from "emoji-mart";
+import { IDB_TBL_PROFILE, IDB_READ_WRITE, IDB_READ } from '../../constants/idb';
+import timelineWidgets from '../../api/timelineWidgets';
 
 class ProfileFithub extends Component {
     constructor(props) {
@@ -97,13 +101,7 @@ class ProfileFithub extends Component {
 
         this.postTextarea = React.createRef();
         this.emos = React.createRef();
-    }
-
-    componentWillMount() {
-        const { dispatch, match } = this.props;
-        if (match.params.username) {
-            dispatch(getTimelineWidgetsAndWidgetsDataRequest(match.params.username));
-        }
+        this.iDB;
     }
 
     componentWillReceiveProps(nextProps) {
@@ -378,6 +376,74 @@ class ProfileFithub extends Component {
         );
     }
 
+    componentDidMount() {
+        connectIDB()().then((connection) => {
+            this.handleIDBOpenSuccess(connection);
+        });
+        if (isOnline()) {
+            const { dispatch, match } = this.props;
+            if (match.params.username) {
+                dispatch(getTimelineWidgetsAndWidgetsDataRequest(match.params.username));
+            }
+        }
+    }
+
+    handleIDBOpenSuccess = (connection) => {
+        this.iDB = connection.result;
+        if (!isOnline()) {
+            // get data from idb
+            this.getDataFromIDB()
+
+        }
+    }
+
+    getDataFromIDB = () => {
+        const { dispatch } = this.props;
+        const idbTbls = [IDB_TBL_PROFILE];
+        try {
+            const transaction = this.iDB.transaction(idbTbls, IDB_READ);
+            if (transaction) {
+                const osPost = transaction.objectStore(IDB_TBL_PROFILE);
+                const iDBGetReq = osPost.get('posts');
+                iDBGetReq.onsuccess = (event) => {
+                    const { target: { result } } = event;
+                    if (result) {
+                        const resultObj = JSON.parse(result.data);
+                        this.setState({ posts: resultObj, hasMorePosts: false });
+                        const data = { posts: [] }
+                        dispatch(setTimelineState(data));
+                    } else {
+                        const data = { posts: [] }
+                        dispatch(setTimelineState(data));
+                    }
+                }
+            }
+
+            if (transaction) {
+                const osWidget = transaction.objectStore(IDB_TBL_PROFILE);
+                const iDBGetReqWidget = osWidget.get('userWidgets');
+                iDBGetReqWidget.onsuccess = (event) => {
+                    const { target: { result } } = event;
+                    if (result) {
+                        const resultObjWidget = JSON.parse(result.data);
+                        const dataPost = { userWidgets: resultObjWidget.userWidgets, bodyFat: resultObjWidget.bodyFat, badges: resultObjWidget.badges, muscle: resultObjWidget.muscle, progressPhoto: resultObjWidget.progressPhoto }
+                        dispatch(setTimeLineWidgetData(dataPost));
+                    } else {
+                        const dataPost = { userWidgets: {}, bodyFat: [], badges: [], muscle: {}, progressPhoto: {} }
+                        dispatch(setTimeLineWidgetData(dataPost));
+                    }
+                }
+            }
+            // 
+
+        } catch (error) {
+            const data = { posts: [] }
+            dispatch(setTimelineState(data));
+            const dataPost = { userWidgets: {}, bodyFat: [], badges: [], muscle: {}, progressPhoto: {} }
+            dispatch(setTimeLineWidgetData(dataPost));
+        }
+    }
+
     componentDidUpdate(prevProps, nextProps) {
         const {
             selectActionInit,
@@ -412,11 +478,16 @@ class ProfileFithub extends Component {
             postDeleteError,
             postAccessChangeLoading,
             postAccessChangeError,
+            tilelineWidgetsLoading,
+            userTimeline
         } = this.props;
         if (selectActionInit && !postLoading) {
             var hasMorePosts = (posts && posts.length > 0) ? true : false;
             var newPosts = this.state.posts;
-            if (posts && posts.length > 0) {
+            // if(!isOnline()){
+            //     dispatch(setTimelineState(data));
+            // }
+            if (posts && posts.length > 0 && isOnline()) {
                 newPosts = _.concat(this.state.posts, posts);
             }
             this.setState({
@@ -528,6 +599,57 @@ class ProfileFithub extends Component {
                 ts('Accessibility changed');
             }
         }
+        if (!tilelineWidgetsLoading && prevProps.tilelineWidgetsLoading !== tilelineWidgetsLoading) {
+            if (isOnline()) {
+                this.setDataInIdb()
+            }
+        }
+        if (!postLoading && posts !== [] && isOnline()) {
+            if (isOnline()) {
+                this.setpostdataInDb()
+            }
+        }
+    }
+
+    setpostdataInDb = () => {
+        const { posts } = this.props;
+        try {
+            const idbData = { type: 'posts', data: JSON.stringify(this.state.posts) };
+            const transaction = this.iDB.transaction([IDB_TBL_PROFILE], IDB_READ_WRITE);
+            if (transaction) {
+                const objectStore = transaction.objectStore(IDB_TBL_PROFILE);
+                const iDBGetReq = objectStore.get('posts');
+                iDBGetReq.onsuccess = (event) => {
+                    const { target: { result } } = event;
+                    if (result) {
+                        objectStore.put(idbData);
+                    } else {
+                        objectStore.add(idbData);
+                    }
+                }
+            }
+        } catch (error) {
+        }
+    }
+
+    setDataInIdb = () => {
+        const { userWidgets, widgetBodyFat, widgetBadges, widgetMuscle, posts } = this.props;
+        try {
+            const idbData = { type: 'userWidgets', data: JSON.stringify({ userWidgets: userWidgets, widgetBodyFat: widgetBodyFat, widgetBadges: widgetBadges, widgetMuscle: widgetMuscle }) };
+            const transaction = this.iDB.transaction([IDB_TBL_PROFILE], IDB_READ_WRITE);
+            const objectStore = transaction.objectStore(IDB_TBL_PROFILE);
+            const iDBGetReq = objectStore.get('userWidgets');
+            iDBGetReq.onsuccess = (event) => {
+                const { target: { result } } = event;
+                if (result) {
+                    objectStore.put(idbData);
+                } else {
+                    objectStore.add(idbData);
+                }
+            }
+
+        } catch (error) {
+        }
     }
 
     handleToggleLike = (index, postId) => {
@@ -563,46 +685,57 @@ class ProfileFithub extends Component {
     }
 
     handleMakePost = () => {
-        const {
-            postContent,
-            postPrivacy,
-            postImages,
-        } = this.state;
-        const {
-            activeProfile,
-            dispatch,
-        } = this.props;
-        const sanitizeContent = sanitizeEditableContentValue(postContent);
-        if ((sanitizeContent && sanitizeContent.trim()) || (postImages && postImages.length > 0)) {
-            var formData = new FormData();
-            formData.append('description', sanitizeContent);
-            formData.append('privacy', postPrivacy);
-            formData.append('onWall', activeProfile.authUserId);
-            if (postImages.length > 0) {
-                postImages.map((img, index) => {
-                    formData.append('images', img);
-                })
+        if(isOnline()) {
+            const {
+                postContent,
+                postPrivacy,
+                postImages,
+            } = this.state;
+            const {
+                activeProfile,
+                dispatch,
+            } = this.props;
+            const sanitizeContent = sanitizeEditableContentValue(postContent);
+            if ((sanitizeContent && sanitizeContent.trim()) || (postImages && postImages.length > 0)) {
+                var formData = new FormData();
+                formData.append('description', sanitizeContent);
+                formData.append('privacy', postPrivacy);
+                formData.append('onWall', activeProfile.authUserId);
+                if (postImages.length > 0) {
+                    postImages.map((img, index) => {
+                        formData.append('images', img);
+                    })
+                }
+                this.setState({ newPostActionInit: true });
+                dispatch(addPostOnUserTimelineRequest(formData));
+                this.emos.current.forceOpenClose(false);
             }
-            this.setState({ newPostActionInit: true });
-            dispatch(addPostOnUserTimelineRequest(formData));
-            this.emos.current.forceOpenClose(false);
+        } else {
+            tw("You are offline, please check your internet connection");
         }
     }
 
     loadPostsData = () => {
-        const {
-            start,
-            offset,
-            selectActionInit,
-        } = this.state;
-        const {
-            match,
-            dispatch,
-        } = this.props;
-        if (!selectActionInit && match.params && match.params.username) {
-            var username = match.params.username;
-            dispatch(getUserTimelineRequest(username, start, offset));
-            this.setState({ selectActionInit: true });
+        if (!isOnline()) {
+            this.setState({ hasMorePosts: false })
+        }
+        if (isOnline()) {
+            const {
+                start,
+                offset,
+                selectActionInit,
+            } = this.state;
+            const {
+                match,
+                dispatch,
+            } = this.props;
+            if (!selectActionInit && match.params && match.params.username) {
+                var username = match.params.username;
+                if (isOnline()) {
+                    dispatch(getUserTimelineRequest(username, start, offset));
+                }
+                this.setState({ selectActionInit: true });
+            }
         }
     }
 
@@ -768,7 +901,11 @@ class ProfileFithub extends Component {
             ];
             requestData[WIDGET_MUSCLE] = _data;
         }
-        dispatch(saveTimelineWidgetsRequest(requestData));
+        if (isOnline()) {
+            dispatch(saveTimelineWidgetsRequest(requestData));
+        } else {
+            tw("You are offline, please check your internet connection");
+        }
     }
 
     requestGraphData = (requestData) => {

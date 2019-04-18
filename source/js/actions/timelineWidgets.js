@@ -14,6 +14,8 @@ export const CHANGE_TIMELINE_MUSCLE_INNER_DATA_REQUEST = 'CHANGE_TIMELINE_MUSCLE
 export const CHANGE_TIMELINE_MUSCLE_INNER_DATA_SUCCESS = 'CHANGE_TIMELINE_MUSCLE_INNER_DATA_SUCCESS';
 export const CHANGE_TIMELINE_MUSCLE_INNER_DATA_ERROR = 'CHANGE_TIMELINE_MUSCLE_INNER_DATA_ERROR';
 
+export const SET_TIMELINE_WIDGET_DATA = 'SET_TIMELINE_WIDGET_DATA';
+
 export function getTimelineWidgetsAndWidgetsDataRequest(username) {
     return {
         type: GET_TIMELINE_WIDGETS_AND_WIDGETS_DATA_REQUEST,
@@ -95,5 +97,12 @@ export function changeTimelineMuscleInnerDataError(error) {
     return {
         type: CHANGE_TIMELINE_MUSCLE_INNER_DATA_ERROR,
         error
+    }
+}
+
+export function setTimeLineWidgetData(data) {
+    return {
+        type: SET_TIMELINE_WIDGET_DATA,
+        data
     }
 }

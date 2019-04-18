@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import BigCalendar from 'react-big-calendar';
 import moment from "moment";
-import { getUsersWorkoutSchedulesRequest } from '../../actions/userScheduleWorkouts';
+import { getUsersWorkoutSchedulesRequest, setDatainIdb } from '../../actions/userScheduleWorkouts';
 import { NavLink } from "react-router-dom";
 import { routeCodes } from '../../constants/routes';
 import _ from "lodash";
@@ -10,6 +10,8 @@ import { SCHEDULED_WORKOUT_TYPE_RESTDAY, SCHEDULED_WORKOUT_TYPE_EXERCISE } from 
 import { FaEye } from 'react-icons/lib/fa'
 import cns from "classnames";
 import ReactTooltip from "react-tooltip";
+import { IDB_TBL_PROFILE, IDB_READ_WRITE, IDB_READ } from '../../constants/idb';
+import { connectIDB, isOnline } from '../../helpers/funs';
 
 class ProfileCalendar extends Component {
     constructor(props) {
@@ -19,12 +21,7 @@ class ProfileCalendar extends Component {
             workoutEvents: [],
             calendarViewDate: null
         }
-    }
-
-    componentWillMount() {
-        var today = moment().startOf('day').utc();
-        this.setState({ calendarViewDate: today.local() });
-        this.getWorkoutSchedulesByMonth(today);
+        this.iDB;
     }
 
     render() {
@@ -54,10 +51,29 @@ class ProfileCalendar extends Component {
         );
     }
 
+    componentDidMount() {
+        connectIDB()().then((connection) => {
+            this.handleIDBOpenSuccess(connection);
+        });
+
+        var today = moment().startOf('day').utc();
+        this.setState({ calendarViewDate: today.local() });
+        this.getWorkoutSchedulesByMonth(today);
+
+    }
+
+    handleIDBOpenSuccess = (connection) => {
+        this.iDB = connection.result;
+        if (!isOnline()) {
+            // get data from idb
+            this.getDataFromIDB()
+        }
+    }
+
     componentDidUpdate(prevProps, prevState) {
         const { workouts, loading, profile } = this.props;
         if (!loading && prevProps.workouts !== workouts) {
-            var newWorkouts = [];
+            var newWorkoutss = [];
             _.forEach(workouts, (workout) => {
                 var newWorkout = {
                     id: workout._id,
@@ -72,9 +88,29 @@ class ProfileCalendar extends Component {
                     description: (workout.description) ? workout.description : '',
                     username: profile.username
                 }
-                newWorkouts.push(newWorkout);
+                newWorkoutss.push(newWorkout);
             });
-            this.setState({ workoutEvents: newWorkouts });
+            this.setState({ workoutEvents: newWorkoutss });
+            this.setCalenderDataInIdb()
+        }
+    }
+
+    setCalenderDataInIdb = () => {
+        const { workouts } = this.props;
+        try {
+            const idbData = { type: 'calender', data: JSON.stringify(workouts) };
+            const transaction = this.iDB.transaction([IDB_TBL_PROFILE], IDB_READ_WRITE);
+            const objectStore = transaction.objectStore(IDB_TBL_PROFILE);
+            const iDBGetReq = objectStore.get('calender');
+            iDBGetReq.onsuccess = (event) => {
+                const { target: { result } } = event;
+                if (result) {
+                    objectStore.put(idbData);
+                } else {
+                    objectStore.add(idbData);
+                }
+            }
+        } catch (error) {
         }
     }
 
@@ -92,7 +128,64 @@ class ProfileCalendar extends Component {
             this.setState({ calendarViewDate: _date.local() });
         }
         var requestObj = { date: _date }
-        dispatch(getUsersWorkoutSchedulesRequest(requestObj, profile.username));
+        if (isOnline()) {
+            dispatch(getUsersWorkoutSchedulesRequest(requestObj, profile.username));
+        }
+    }
+
+    getDataFromIDB = () => {
+        const { dispatch } = this.props;
+        // const data = { loadingIdbData: true }
+        // dispatch(setDatainIdb(data));
+
+        const idbTbls = [IDB_TBL_PROFILE];
+        try {
+            const transaction = this.iDB.transaction(idbTbls, IDB_READ);
+            if (transaction) {
+                const osPrivacy = transaction.objectStore(IDB_TBL_PROFILE);
+                const iDBGetReq = osPrivacy.get('calender');
+                iDBGetReq.onsuccess = (event) => {
+                    const { target: { result } } = event;
+                    if (result) {
+                        const resultObj = JSON.parse(result.data);
+                        const data = { calender: resultObj }
+                        this.successSaveData(data);
+                        dispatch(setDatainIdb(data));
+                    } else {
+                        const data = { calender: null }
+                        dispatch(setDatainIdb(data));
+                    }
+                }
+            }
+        } catch (error) {
+            const data = { calender: null }
+            dispatch(setDatainIdb(data));
+        }
+    }
+
+    successSaveData = (workouts) => {
+        try {
+            const { profile } = this.props;
+            var newWorkouts = [];
+            _.forEach(workouts.calender, (workout) => {
+                var newWorkout = {
+                    id: workout._id,
+                    title: (workout.title) ? workout.title : `Workout on ${(workout.date) ? moment(workout.date).format('DD/MM/YYYY') : ''}`,
+                    start: workout.date,
+                    end: workout.date,
+                    isCompleted: (workout.isCompleted) ? workout.isCompleted : 0,
+                    exercises: (workout.exercises && workout.exercises.length > 0) ? workout.exercises : [],
+                    exerciseType: (workout.type) ? workout.type : null,
+                    totalExercises: (workout.totalExercises) ? workout.totalExercises : 0,
+                    meta: workout,
+                    description: (workout.description) ? workout.description : '',
+                    username: profile.username
+                }
+                newWorkouts.push(newWorkout);
+            });
+            this.setState({ workoutEvents: newWorkouts });
+        } catch (error) {
+        }
     }
 
     handleNavigation = (date) => {

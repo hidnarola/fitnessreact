@@ -6,18 +6,20 @@ import {
     acceptFriendRequestRequest,
     cancelFriendRequestRequest,
     loadMoreApprovedFriendsRequest,
-    loadMorePendingFriendsRequest
+    loadMorePendingFriendsRequest,
+    setUserFriendRequestData
 } from '../../actions/friends';
 import ProfileFriendBlock from './ProfileFriendBlock';
 import { FRIENDSHIP_STATUS_SELF } from '../../constants/consts';
 import ProfilePendingFriendBlock from './ProfilePendingFriendBlock';
 import CancelFriendRequestModal from './CancelFriendRequestModal';
-import { ts } from '../../helpers/funs';
+import { tw, ts, isOnline, connectIDB } from '../../helpers/funs';
 import { getUserChannelRequest } from '../../actions/userMessages';
 import SweetAlert from "react-bootstrap-sweetalert";
 import { FaCircleONotch } from "react-icons/lib/fa";
 import ErrorCloud from "svg/error-cloud.svg";
 import NoRecordFound from '../Common/NoRecordFound';
+import { IDB_TBL_PROFILE, IDB_READ_WRITE, IDB_READ } from '../../constants/idb';
 
 class ProfileFriends extends Component {
     constructor(props) {
@@ -37,21 +39,6 @@ class ProfileFriends extends Component {
             showUnfriendModal: false,
             unfriendRequestInit: false,
             friendsActionDisabled: {},
-        }
-    }
-
-    componentWillMount() {
-        const { profile, dispatch } = this.props;
-        if (profile && Object.keys(profile).length > 0) {
-            var username = profile.username;
-            this.setState({ initApprovedFriendAction: true });
-            dispatch(getApprovedFriendsRequest(username, 0, 12));
-            if (profile.friendshipStatus === FRIENDSHIP_STATUS_SELF) {
-                this.setState({ initPendingFriendAction: true });
-                dispatch(getPendingFriendsRequest(username, 0, 12));
-            }
-        } else {
-            this.setState({ doLoadApprovedFriends: true, doLoadPendingFriends: true });
         }
     }
 
@@ -194,6 +181,40 @@ class ProfileFriends extends Component {
         );
     }
 
+    componentDidMount() {
+
+        connectIDB()().then((connection) => {
+            this.handleIDBOpenSuccess(connection);
+        });
+
+        const { profile, dispatch } = this.props;
+        if (profile && Object.keys(profile).length > 0) {
+            var username = profile.username;
+            this.setState({ initApprovedFriendAction: true });
+            if (isOnline()) {
+                dispatch(getApprovedFriendsRequest(username, 0, 12));
+            }
+            if (profile.friendshipStatus === FRIENDSHIP_STATUS_SELF) {
+                this.setState({ initPendingFriendAction: true });
+                if (isOnline()) {
+                    dispatch(getPendingFriendsRequest(username, 0, 12));
+                }
+            }
+        } else {
+            this.setState({ doLoadApprovedFriends: true, doLoadPendingFriends: true });
+        }
+    }
+
+    handleIDBOpenSuccess = (connection) => {
+        this.iDB = connection.result;
+        if (!isOnline()) {
+            // get data from IDB
+            // this.getDataFromIDB()
+            this.getApprovedFriendFromDb();
+            this.getPendingFriendFromDb();
+        }
+    }
+
     componentWillReceiveProps(nextProps) {
         const {
             profile,
@@ -206,10 +227,14 @@ class ProfileFriends extends Component {
         if ((doLoadApprovedFriends || doLoadPendingFriends) && profile && Object.keys(profile).length > 0) {
             var username = profile.username;
             this.setState({ initApprovedFriendAction: true });
-            dispatch(getApprovedFriendsRequest(username));
+            if (isOnline()) {
+                dispatch(getApprovedFriendsRequest(username));
+            }
             if (profile.friendshipStatus === FRIENDSHIP_STATUS_SELF) {
                 this.setState({ initPendingFriendAction: true });
-                dispatch(getPendingFriendsRequest(username));
+                if (isOnline()) {
+                    dispatch(getPendingFriendsRequest(username));
+                }
             } else {
                 this.setState({ doLoadPendingFriends: false });
             }
@@ -245,6 +270,9 @@ class ProfileFriends extends Component {
                 doLoadApprovedFriends: false,
                 pendingFriendsActionDisabled: {},
             });
+            if (isOnline()) {
+                this.setApprovedFriendDataInIdb();
+            }
         }
         if (initPendingFriendAction && !pendingLoading && (pendingFriendsState !== pendingFriends)) {
             this.setState({
@@ -253,6 +281,9 @@ class ProfileFriends extends Component {
                 doLoadPendingFriends: false,
                 pendingFriendsActionDisabled: {},
             });
+            if (isOnline()) {
+                this.setPendingFriendDataInIdb();
+            }
         }
         if (acceptFriendRequestInit && !requestAcceptLoading) {
             this.setState({
@@ -261,8 +292,10 @@ class ProfileFriends extends Component {
                 initPendingFriendAction: true
             });
             var username = profile.username;
-            dispatch(getApprovedFriendsRequest(username));
-            dispatch(getPendingFriendsRequest(username));
+            if (isOnline()) {
+                dispatch(getApprovedFriendsRequest(username));
+                dispatch(getPendingFriendsRequest(username));
+            }
             ts('Friend request accepted!')
         }
         if (rejectFriendRequestInit && !requestCancelLoading) {
@@ -273,8 +306,10 @@ class ProfileFriends extends Component {
             });
             this.handleHideRejectFriendRequest();
             var username = profile.username;
-            dispatch(getApprovedFriendsRequest(username));
-            dispatch(getPendingFriendsRequest(username));
+            if (isOnline()) {
+                dispatch(getApprovedFriendsRequest(username));
+                dispatch(getPendingFriendsRequest(username));
+            }
             ts('Friend request rejected!')
         }
         if (unfriendRequestInit && !requestCancelLoading) {
@@ -285,42 +320,151 @@ class ProfileFriends extends Component {
             });
             this.handleHideUnfriendRequest();
             var username = profile.username;
-            dispatch(getApprovedFriendsRequest(username));
-            dispatch(getPendingFriendsRequest(username));
+            if (isOnline()) {
+                dispatch(getApprovedFriendsRequest(username));
+                dispatch(getPendingFriendsRequest(username));
+            }
             ts('You are now no friends any more!');
         }
         if (forceUpdateChildComponents) {
             var username = profile.username;
             this.setState({ initApprovedFriendAction: true });
-            dispatch(getApprovedFriendsRequest(username));
+            if (isOnline()) {
+                dispatch(getApprovedFriendsRequest(username));
+            }
             if (profile.friendshipStatus === FRIENDSHIP_STATUS_SELF) {
                 this.setState({ initPendingFriendAction: true });
-                dispatch(getPendingFriendsRequest(username));
+                if (isOnline()) {
+                    dispatch(getPendingFriendsRequest(username));
+                }
             }
             setForceUpdateChildComponents(false);
         }
     }
 
+    setApprovedFriendDataInIdb = () => {
+
+        const { approvedFriends } = this.props;
+        try {
+            const idbData = { type: 'approvedFriends', data: JSON.stringify(approvedFriends) };
+            const transaction = this.iDB.transaction([IDB_TBL_PROFILE], IDB_READ_WRITE);
+            const objectStore = transaction.objectStore(IDB_TBL_PROFILE);
+            const iDBGetReq = objectStore.get('approvedFriends');
+            iDBGetReq.onsuccess = (event) => {
+                const { target: { result } } = event;
+                if (result) {
+                    objectStore.put(idbData);
+                } else {
+                    objectStore.add(idbData);
+                }
+            }
+        } catch (error) {
+        }
+    }
+
+    setPendingFriendDataInIdb = () => {
+
+        const { pendingFriends } = this.props;
+        try {
+            const idbData = { type: 'pendingFriends', data: JSON.stringify(pendingFriends) };
+            const transaction = this.iDB.transaction([IDB_TBL_PROFILE], IDB_READ_WRITE);
+            const objectStore = transaction.objectStore(IDB_TBL_PROFILE);
+            const iDBGetReq = objectStore.get('pendingFriends');
+            iDBGetReq.onsuccess = (event) => {
+                const { target: { result } } = event;
+                if (result) {
+                    objectStore.put(idbData);
+                } else {
+                    objectStore.add(idbData);
+                }
+            }
+        } catch (error) {
+            console.log("error pendingFriends => ", error);
+        }
+    }
+
+    getApprovedFriendFromDb = () => {
+        const { dispatch } = this.props;
+        const idbTbls = [IDB_TBL_PROFILE];
+        try {
+            const transaction = this.iDB.transaction(idbTbls, IDB_READ);
+            if (transaction) {
+                const osFriend = transaction.objectStore(IDB_TBL_PROFILE);
+                const iDBGetReq = osFriend.get('approvedFriends');
+                iDBGetReq.onsuccess = (event) => {
+                    const { target: { result } } = event;
+                    if (result) {
+                        const resultObj = JSON.parse(result.data);
+                        const data = { approvedFriends: resultObj }
+                        dispatch(setUserFriendRequestData(data));
+                    } else {
+                        const data = { approvedFriends: [] }
+                        dispatch(setUserFriendRequestData(data));
+                    }
+                }
+            }
+        } catch (error) {
+            const data = { approvedFriends: [] }
+            dispatch(setUserFriendRequestData(data));
+        }
+
+    }
+
+    getPendingFriendFromDb = () => {
+        const { dispatch } = this.props;
+        const idbTbls = [IDB_TBL_PROFILE];
+        try {
+            const transaction = this.iDB.transaction(idbTbls, IDB_READ);
+            if (transaction) {
+                const osFriend = transaction.objectStore(IDB_TBL_PROFILE);
+                const iDBGetReq = osFriend.get('pendingFriends');
+                iDBGetReq.onsuccess = (event) => {
+                    const { target: { result } } = event;
+                    if (result) {
+                        const resultObj = JSON.parse(result.data);
+                        const data = { pendingFriends: resultObj }
+                        dispatch(setUserFriendRequestData(data));
+                    } else {
+                        const data = { pendingFriends: [] }
+                        dispatch(setUserFriendRequestData(data));
+                    }
+                }
+            }
+        } catch (error) {
+            const data = { pendingFriends: [] }
+            dispatch(setUserFriendRequestData(data));
+        }
+
+    }
+
     //#region funs
     handleAcceptFriendRequest = (friendshipId) => {
-        const {
+        if (isOnline()) {
+            const {
             dispatch
         } = this.props;
-        var actionDisabledObj = {
-            [friendshipId]: true
+            var actionDisabledObj = {
+                [friendshipId]: true
+            }
+            this.setState({
+                acceptFriendRequestInit: true,
+                pendingFriendsActionDisabled: actionDisabledObj,
+            });
+            dispatch(acceptFriendRequestRequest(friendshipId));
+        } else {
+            tw("You are offline, please check your internet connection");
         }
-        this.setState({
-            acceptFriendRequestInit: true,
-            pendingFriendsActionDisabled: actionDisabledObj,
-        });
-        dispatch(acceptFriendRequestRequest(friendshipId));
     }
 
     handleShowRejectFriendRequest = (friendshipId) => {
-        this.setState({
-            showPendingFriendsRejectRequestModal: true,
-            selectedFriendshipId: friendshipId,
-        });
+        if (isOnline()) {
+            this.setState({
+                showPendingFriendsRejectRequestModal: true,
+                selectedFriendshipId: friendshipId,
+            });
+        } else {
+            tw("You are offline, please check your internet connection");
+        }
     }
 
     handleRejectFriendRequest = () => {
@@ -337,7 +481,9 @@ class ProfileFriends extends Component {
             rejectFriendRequestInit: true,
             pendingFriendsActionDisabled: actionDisabledObj,
         });
-        dispatch(cancelFriendRequestRequest(selectedFriendshipId));
+        if (isOnline()) {
+            dispatch(cancelFriendRequestRequest(selectedFriendshipId));
+        }
     }
 
     handleHideRejectFriendRequest = () => {
@@ -348,10 +494,14 @@ class ProfileFriends extends Component {
     }
 
     handleShowUnfriendRequest = (friendshipId) => {
-        this.setState({
-            showUnfriendModal: true,
-            selectedFriendshipId: friendshipId,
-        });
+        if (isOnline()) {
+            this.setState({
+                showUnfriendModal: true,
+                selectedFriendshipId: friendshipId,
+            });
+        } else {
+            tw("You are offline, please check your internet connection");
+        }
     }
 
     handleUnfriendRequest = () => {
@@ -368,7 +518,9 @@ class ProfileFriends extends Component {
             unfriendRequestInit: true,
             friendsActionDisabled: actionDisabledObj,
         });
-        dispatch(cancelFriendRequestRequest(selectedFriendshipId));
+        if (isOnline()) {
+            dispatch(cancelFriendRequestRequest(selectedFriendshipId));
+        }
     }
 
     handleHideUnfriendRequest = () => {
@@ -379,22 +531,28 @@ class ProfileFriends extends Component {
     }
 
     handleRequestMessageChannel = (profile) => {
-        const { loggedUserData, dispatch, socket } = this.props;
-        var profileId = '';
-        var userId = '';
-        if (profile && profile.authUserId) {
-            profileId = profile.authUserId;
-        }
-        if (loggedUserData && loggedUserData.userDetails && loggedUserData.userDetails.authUserId) {
-            userId = loggedUserData.userDetails.authUserId;
-        }
-        if (profileId && userId) {
-            dispatch(getUserChannelRequest());
-            var requestData = {
-                friendId: profileId,
-                userId,
-            };
-            socket.emit('get_channel_id', requestData);
+        if (isOnline()) {
+            const { loggedUserData, dispatch, socket } = this.props;
+            var profileId = '';
+            var userId = '';
+            if (profile && profile.authUserId) {
+                profileId = profile.authUserId;
+            }
+            if (loggedUserData && loggedUserData.userDetails && loggedUserData.userDetails.authUserId) {
+                userId = loggedUserData.userDetails.authUserId;
+            }
+            if (profileId && userId) {
+                if (isOnline()) {
+                    dispatch(getUserChannelRequest());
+                }
+                var requestData = {
+                    friendId: profileId,
+                    userId,
+                };
+                socket.emit('get_channel_id', requestData);
+            }
+        } else {
+            tw("You are offline, please check your internet connection");
         }
     }
 
@@ -403,7 +561,9 @@ class ProfileFriends extends Component {
         let username = profile.username;
         this.setState({ initApprovedFriendAction: true });
         let newSkip = (parseInt(approvedSkip) + parseInt(approvedLimit));
-        dispatch(loadMoreApprovedFriendsRequest(username, newSkip, approvedLimit));
+        if (isOnline()) {
+            dispatch(loadMoreApprovedFriendsRequest(username, newSkip, approvedLimit));
+        }
     }
 
     handleLoadMorePendingFriends = () => {
@@ -411,7 +571,9 @@ class ProfileFriends extends Component {
         let username = profile.username;
         this.setState({ initPendingFriendAction: true });
         let newSkip = (parseInt(pendingSkip) + parseInt(pendingLimit));
-        dispatch(loadMorePendingFriendsRequest(username, newSkip, pendingLimit));
+        if (isOnline()) {
+            dispatch(loadMorePendingFriendsRequest(username, newSkip, pendingLimit));
+        }
     }
     //#endregion
 }

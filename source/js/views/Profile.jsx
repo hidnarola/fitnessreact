@@ -19,7 +19,7 @@ import { setLoggedUserFromLocalStorage } from '../actions/user';
 import { FaCircleONotch } from "react-icons/lib/fa";
 import { getUserChannelRequest } from '../actions/userMessages';
 import SweetAlert from "react-bootstrap-sweetalert";
-import { getPrivacyOfTimelineUserRequest } from '../actions/userTimeline';
+import { getPrivacyOfTimelineUserRequest, setTimelineState } from '../actions/userTimeline';
 import { showPageLoader, hidePageLoader } from '../actions/pageLoader';
 import Follower from "svg/follower.svg";
 import Following from "svg/followers.svg";
@@ -29,6 +29,8 @@ import unitize from "unitize";
 import Lightbox from 'react-images';
 import UsersListModal from '../components/Common/UsersListModal';
 import ProfileCalendar from '../components/Profile/ProfileCalendar';
+import { IDB_TBL_PROFILE, IDB_READ_WRITE, IDB_READ } from '../constants/idb';
+import { connectIDB, isOnline } from '../helpers/funs';
 
 class Profile extends Component {
     constructor(props) {
@@ -61,20 +63,7 @@ class Profile extends Component {
             showProfilePictureModal: false
         }
         this.changeProfilePhotoRef = React.createRef();
-    }
-
-    componentWillMount() {
-        const { dispatch, match } = this.props;
-        if (typeof match.params.username !== 'undefined') {
-            var username = match.params.username;
-            this.setState({
-                loadProfileActionInit: true,
-                username
-            });
-            dispatch(getProfileDetailsRequest(username));
-            dispatch(getPrivacyOfTimelineUserRequest(username));
-        }
-        dispatch(getLoggedUserProfileSettingsRequest());
+        this.iDB;
     }
 
     componentWillReceiveProps(nextProps) {
@@ -87,8 +76,12 @@ class Profile extends Component {
                     loadProfileActionInit: true,
                     username: newUsername,
                 });
-                nextProps.dispatch(getProfileDetailsRequest(newUsername));
-                nextProps.dispatch(getPrivacyOfTimelineUserRequest(newUsername));
+                if(isOnline()) {
+                    nextProps.dispatch(getProfileDetailsRequest(newUsername));
+                    nextProps.dispatch(getPrivacyOfTimelineUserRequest(newUsername));
+                } else {
+                    this.getDataFromIDB()
+                }
             }
         }
     }
@@ -439,6 +432,81 @@ class Profile extends Component {
         );
     }
 
+
+    componentDidMount() {
+        connectIDB()().then((connection) => {
+            this.handleIDBOpenSuccess(connection);
+        });
+        if (isOnline()) {
+            const { dispatch, match } = this.props;
+            if (typeof match.params.username !== 'undefined') {
+                var username = match.params.username;
+                this.setState({
+                    loadProfileActionInit: true,
+                    username
+                });
+                dispatch(getProfileDetailsRequest(username));
+                dispatch(getPrivacyOfTimelineUserRequest(username));
+            }
+            dispatch(getLoggedUserProfileSettingsRequest());
+        }
+
+    }
+
+    handleIDBOpenSuccess = (connection) => {
+        this.iDB = connection.result;
+        if (!isOnline()) {
+            // get data from idb
+            this.getDataFromIDB()
+        }
+    }
+
+    getDataFromIDB = () => {
+        const { dispatch } = this.props;
+        const idbTbls = [IDB_TBL_PROFILE];
+        try {
+            const transaction = this.iDB.transaction(idbTbls, IDB_READ);
+            if (transaction) {
+                const osPrivacy = transaction.objectStore(IDB_TBL_PROFILE);
+                const iDBGetReq = osPrivacy.get('privacy');
+                iDBGetReq.onsuccess = (event) => {
+                    const { target: { result } } = event;
+                    if (result) {
+                        const resultObj = JSON.parse(result.data);
+                        const data = { workouts: resultObj }
+                        dispatch(setTimelineState(data));
+                    } else {
+                        const data = { workouts: null }
+                        dispatch(setTimelineState(data));
+                    }
+                }
+            }
+
+            if (transaction) {
+                const osPost = transaction.objectStore(IDB_TBL_PROFILE);
+                const iDBGetReqPost = osPost.get('profile');
+                iDBGetReqPost.onsuccess = (event) => {
+                    const { target: { result } } = event;
+                    if (result) {
+                        const resultObjPost = JSON.parse(result.data);
+                        const dataPost = { profile:  resultObjPost}
+                        dispatch(setUserProfileState(dataPost));
+                        this.setState({profile:  resultObjPost})
+                    } else {
+                        const dataPost = { profile: null }
+                        dispatch(setUserProfileState(dataPost));
+                    }
+                }
+            }
+
+        } catch (error) {
+            const data = { privacy: null }
+            dispatch(setTimelineState(data));
+            const dataPost = { profile: null }
+            dispatch(setUserProfileState(dataPost));
+        }
+    }
+
     componentDidUpdate(prevProps, prevState) {
         const {
             profile,
@@ -458,7 +526,8 @@ class Profile extends Component {
             stopFollowingError,
             deleteProfileImgLoding,
             deleteProfileImgStatus,
-            deleteProfileImgError
+            deleteProfileImgError,
+            privacyLoading
         } = this.props;
         const {
             loadProfileActionInit,
@@ -493,7 +562,11 @@ class Profile extends Component {
                 sendFriendRequestInit: false,
                 loadProfileActionInit: true
             });
+            if(isOnline()) {
             dispatch(getProfileDetailsRequest(username));
+            } else {
+                this.getDataFromIDB()
+            }
             if ((requestSendError && requestSendError.length > 0)) {
                 te('Something went wrong!');
             } else {
@@ -506,7 +579,9 @@ class Profile extends Component {
                 loadProfileActionInit: true,
             });
             this.handleHideCancelFriendRequestModal();
+            if(isOnline()) {            
             dispatch(getProfileDetailsRequest(username));
+            }
             if ((requestCancelError && requestCancelError.length > 0)) {
                 te('Something went wrong!');
             } else {
@@ -518,7 +593,11 @@ class Profile extends Component {
                 UnfriendRequestInit: false,
                 loadProfileActionInit: true,
             });
+            if(isOnline()) {            
             dispatch(getProfileDetailsRequest(username));
+            } else {
+                this.getDataFromIDB()
+            }
             if ((requestCancelError && requestCancelError.length > 0)) {
                 te('Something went wrong!');
             } else {
@@ -532,7 +611,11 @@ class Profile extends Component {
                 acceptFriendRequestReceivedInit: false,
                 loadProfileActionInit: true,
             });
+            if(isOnline()) {
             dispatch(getProfileDetailsRequest(username));
+            } else {
+                this.getDataFromIDB()
+            }
             if ((requestAcceptError && requestAcceptError.length > 0)) {
                 te('Something went wrong!');
             } else {
@@ -546,7 +629,11 @@ class Profile extends Component {
                 loadProfileActionInit: true,
             });
             this.handleHideRejectFriendRequestModal();
+            if(isOnline()) {            
             dispatch(getProfileDetailsRequest(username));
+            } else {
+                this.getDataFromIDB()
+            }
             if ((requestCancelError && requestCancelError.length > 0)) {
                 te('Something went wrong!');
             } else {
@@ -565,21 +652,33 @@ class Profile extends Component {
             } else {
                 ts('Profile image updated!');
             }
+            if(isOnline()) {            
             dispatch(hidePageLoader(username));
             dispatch(getProfileDetailsRequest(username));
+            } else {
+                this.getDataFromIDB()
+            }
             this.handleHideChangeProfilePhotoModal();
             this.setForceUpdateChildComponents(true);
         }
         if (!startFollowingLoading && prevProps.startFollowingLoading !== startFollowingLoading) {
             this.setState({ loadProfileActionInit: true });
+            if(isOnline()) {            
             dispatch(getProfileDetailsRequest(username));
+            } else {
+                this.getDataFromIDB()
+            }
             if (startFollowingError && startFollowingError.length > 0) {
                 te(startFollowingError[0]);
             }
         }
         if (!stopFollowingLoading && prevProps.stopFollowingLoading !== stopFollowingLoading) {
             this.setState({ loadProfileActionInit: true });
+            if(isOnline()) {            
             dispatch(getProfileDetailsRequest(username));
+            } else {
+                this.getDataFromIDB()
+            }
             this.hideUnfollowAlert();
             if (stopFollowingError && stopFollowingError.length > 0) {
                 te(stopFollowingError[0]);
@@ -588,7 +687,11 @@ class Profile extends Component {
         if (!deleteProfileImgLoding && prevProps.deleteProfileImgLoding !== deleteProfileImgLoding) {
             this.setState({ loadProfileActionInit: true, updateLocalStorageData: true, showProfilePictureModal: false });
             dispatch(hidePageLoader());
+            if(isOnline()) {            
             dispatch(getProfileDetailsRequest(username));
+            } else {
+                this.getDataFromIDB()
+            }
             this.setForceUpdateChildComponents(true);
             if (deleteProfileImgStatus) {
                 ts("Profile image removed");
@@ -596,6 +699,51 @@ class Profile extends Component {
                 const msg = deleteProfileImgError && deleteProfileImgError.length > 0 ? deleteProfileImgError[0] : "Something went wrong, Please try again later.";
                 te(msg);
             }
+        }
+        if (!profileLoading && prevProps.profileLoading !== profileLoading) {
+            this.setProfileDataInIdb()
+        }
+        if (!privacyLoading && prevProps.privacyLoading !== privacyLoading) {
+            this.setPrivacyDataInIdb()
+        }
+    }
+
+    setProfileDataInIdb = () => {
+        const { profile } = this.props;
+        try {
+            const idbData = { type: 'profile', data: JSON.stringify(profile) };
+            const transaction = this.iDB.transaction([IDB_TBL_PROFILE], IDB_READ_WRITE);
+            const objectStore = transaction.objectStore(IDB_TBL_PROFILE);
+            const iDBGetReq = objectStore.get('profile');
+            iDBGetReq.onsuccess = (event) => {
+                const { target: { result } } = event;
+                if (result) {
+                    objectStore.put(idbData);
+                } else {
+                    objectStore.add(idbData);
+                }
+            }
+        } catch (error) {
+        }
+    }
+
+
+    setPrivacyDataInIdb = () => {
+        const { timelineUserPrivacy } = this.props;
+        try {
+            const idbData = { type: 'privacy', data: JSON.stringify(timelineUserPrivacy) };
+            const transaction = this.iDB.transaction([IDB_TBL_PROFILE], IDB_READ_WRITE);
+            const objectStore = transaction.objectStore(IDB_TBL_PROFILE);
+            const iDBGetReq = objectStore.get('privacy');
+            iDBGetReq.onsuccess = (event) => {
+                const { target: { result } } = event;
+                if (result) {
+                    objectStore.put(idbData);
+                } else {
+                    objectStore.add(idbData);
+                }
+            }
+        } catch (error) {
         }
     }
 
@@ -817,6 +965,20 @@ class Profile extends Component {
     }
     //#endregion
 
+    componentWillUnmount() {
+        try {
+            const idbs = [IDB_TBL_PROFILE];
+            if (isOnline()) {
+                const transaction = this.iDB.transaction(idbs, IDB_READ_WRITE);
+                if (transaction) {
+                    const osProfile = transaction.objectStore(IDB_TBL_PROFILE);
+                    osProfile.clear();
+                }
+            }
+            this.iDB.close();
+        } catch (error) { }
+    }
+
 }
 
 const mapStateToProps = (state) => {
@@ -838,6 +1000,7 @@ const mapStateToProps = (state) => {
         socket: user.get('socket'),
         requestChannelLoading: userMessages.get('requestChannelLoading'),
         timelineUserPrivacy: userTimeline.get('privacy'),
+        privacyLoading: userTimeline.get('privacyLoading'),
         startFollowingLoading: follows.get('startFollowingLoading'),
         startFollowingStatus: follows.get('startFollowingStatus'),
         startFollowingError: follows.get('startFollowingError'),

@@ -8,11 +8,12 @@ import {
     getUserProgressPhotoRequest,
     deleteUserProgressPhotoRequest,
     removeSelectedProgressPhotosToUpload,
+    setProgressPhoto
 } from '../../actions/userProgressPhotos';
-import { ts, te } from '../../helpers/funs';
+import { ts, te, tw, isOnline, connectIDB } from '../../helpers/funs';
 import { FRIENDSHIP_STATUS_SELF, POST_TYPE_GALLERY, SERVER_BASE_URL } from '../../constants/consts';
 import AddGalleryPhotoModal from './AddGalleryPhotoModal';
-import { addUserGalleryPhotoRequest, getUserGalleryPhotoRequest, deleteUserGalleryPhotoRequest } from '../../actions/userGalleryPhotos';
+import { addUserGalleryPhotoRequest, getUserGalleryPhotoRequest, deleteUserGalleryPhotoRequest, setUserGalleryPhoto } from '../../actions/userGalleryPhotos';
 import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
 import { FaCircleONotch } from "react-icons/lib/fa";
 import ErrorCloud from "svg/error-cloud.svg";
@@ -23,6 +24,7 @@ import NoRecordFound from '../Common/NoRecordFound';
 import SweetAlert from "react-bootstrap-sweetalert";
 import moment from "moment";
 import { getUserBodypartsRequest } from '../../actions/userBodyparts';
+import { IDB_TBL_PROFILE, IDB_READ_WRITE, IDB_READ } from '../../constants/idb';
 
 class ProfilePhotos extends Component {
     constructor(props) {
@@ -48,28 +50,7 @@ class ProfilePhotos extends Component {
             typeOfImageToDelete: null,
             deleteImageData: null,
         }
-    }
-
-    componentWillMount() {
-        const {
-            dispatch,
-            profile
-        } = this.props;
-        if (profile && Object.keys(profile).length > 0) {
-            var username = profile.username;
-            this.setState({
-                initProgressPhotosAction: true,
-                initGalleryPhotosAction: true,
-            });
-            dispatch(getUserProgressPhotoRequest(username));
-            dispatch(getUserGalleryPhotoRequest(username, 0, 10));
-        } else {
-            this.setState({
-                doLoadProgressPhotos: true,
-                doLoadGalleryPhotos: true,
-            });
-        }
-        dispatch(getUserBodypartsRequest());
+        this.iDB;
     }
 
     render() {
@@ -142,7 +123,7 @@ class ProfilePhotos extends Component {
                             </ul>
                         }
                         {profile && profile.username && !progressPhotoloading && progressPhotos && progressPhotos.length > 0 && (!progressPhotoDataOver) &&
-                            <Link to={`${routeCodes.PROGRESS_PHOTOS}/${profile.username}`} className="fithub-photos-view-all-link">View All</Link>
+                            <Link onClick={(e) => { !isOnline() && this.userOfflineMessage(e) }} to={`${routeCodes.PROGRESS_PHOTOS}/${profile.username}`} className="fithub-photos-view-all-link">View All</Link>
                         }
                     </div>
                 </div>
@@ -198,7 +179,7 @@ class ProfilePhotos extends Component {
                             </ul>
                         }
                         {!galleryPhotoloading && galleryPhotos && galleryPhotos.length > 0 && (!galleryPhotoDataOver) &&
-                            <Link to={`${routeCodes.GALLERY_PHOTOS}/${profile.username}`} className="fithub-photos-view-all-link">View All</Link>
+                            <Link onClick={(e) => { !isOnline() && this.userOfflineMessage(e) }} to={`${routeCodes.GALLERY_PHOTOS}/${profile.username}`} className="fithub-photos-view-all-link">View All</Link>
                         }
                     </div>
                 </div>
@@ -247,6 +228,140 @@ class ProfilePhotos extends Component {
         );
     }
 
+    componentDidMount() {
+
+        connectIDB()().then((connection) => {
+            this.handleIDBOpenSuccess(connection);
+        });
+        const {
+            dispatch,
+            profile
+        } = this.props;
+
+        if (profile && Object.keys(profile).length > 0) {
+            var username = profile.username;
+            this.setState({
+                initProgressPhotosAction: true,
+                initGalleryPhotosAction: true,
+            });
+            if (isOnline()) {
+                dispatch(getUserProgressPhotoRequest(username));
+                dispatch(getUserGalleryPhotoRequest(username, 0, 10));
+            }
+        } else {
+            this.setState({
+                doLoadProgressPhotos: true,
+                doLoadGalleryPhotos: true,
+            });
+        }
+        if (isOnline()) {
+            dispatch(getUserBodypartsRequest());
+        }
+    }
+
+    handleIDBOpenSuccess = (connection) => {
+        this.iDB = connection.result;
+        if (!isOnline()) {
+            // get data from idb
+            this.getDataFromIDB()
+        }
+    }
+
+    getDataFromIDB = () => {
+
+        const { dispatch } = this.props;
+
+        const idbTbls = [IDB_TBL_PROFILE];
+
+        try {
+            const transaction = this.iDB.transaction(idbTbls, IDB_READ);
+            if (transaction) {
+                const osPrivacy = transaction.objectStore(IDB_TBL_PROFILE);
+                const iDBGetReq = osPrivacy.get('progressPhoto');
+                iDBGetReq.onsuccess = (event) => {
+                    const { target: { result } } = event;
+                    if (result) {
+                        const resultObj = JSON.parse(result.data);
+                        const data = { progressPhoto: resultObj }
+                        dispatch(setProgressPhoto(data));
+                    } else {
+                        const data = { progressPhoto: null }
+                        dispatch(setProgressPhoto(data));
+                    }
+                }
+            }
+        } catch (error) {
+            const data = { progressPhoto: null }
+            dispatch(setProgressPhoto(data));
+        }
+
+        try {
+            const transaction1 = this.iDB.transaction(idbTbls, IDB_READ);
+            if (transaction1) {
+                const osGalleryPhoto = transaction1.objectStore(IDB_TBL_PROFILE);
+                const iDBGetReqGalleryPhoto = osGalleryPhoto.get('calender');
+                iDBGetReqGalleryPhoto.onsuccess = (event) => {
+                    const { target: { result } } = event;
+                    if (result) {
+                        const resultObjGalleryPhoto = JSON.parse(result.data);
+                        const dataGalleryPhoto = { calender: resultObjGalleryPhoto }
+                        dispatch(setUserGalleryPhoto(dataGalleryPhoto));
+                    } else {
+                        const dataGalleryPhoto = { calender: null }
+                        dispatch(setUserGalleryPhoto(dataGalleryPhoto));
+                    }
+                }
+            }
+        } catch (error) {
+            const dataGalleryPhoto = { calender: null }
+            dispatch(setUserGalleryPhoto(dataGalleryPhoto));
+        }
+
+    }
+
+    userOfflineMessage = (e) => {
+        e.preventDefault();
+        tw("You are offline, please check your internet connection");
+    }
+
+    setprogressPhotoDataInDB = () => {
+        const { progressPhotos } = this.props;
+        try {
+            const idbData = { type: 'progressPhoto', data: JSON.stringify(progressPhotos) };
+            const transaction = this.iDB.transaction([IDB_TBL_PROFILE], IDB_READ_WRITE);
+            const objectStore = transaction.objectStore(IDB_TBL_PROFILE);
+            const iDBGetReq = objectStore.get('progressPhoto');
+            iDBGetReq.onsuccess = (event) => {
+                const { target: { result } } = event;
+                if (result) {
+                    objectStore.put(idbData);
+                } else {
+                    objectStore.add(idbData);
+                }
+            }
+        } catch (error) {
+        }
+    }
+
+    setGalleryPhotosDataInDB = () => {
+        const { galleryPhotos } = this.props;
+        try {
+            const idbData = { type: 'galleryPhotos', data: JSON.stringify(galleryPhotos) };
+            const transaction = this.iDB.transaction([IDB_TBL_PROFILE], IDB_READ_WRITE);
+            const objectStore = transaction.objectStore(IDB_TBL_PROFILE);
+            const iDBGetReq = objectStore.get('galleryPhotos');
+            iDBGetReq.onsuccess = (event) => {
+                const { target: { result } } = event;
+                if (result) {
+                    objectStore.put(idbData);
+                } else {
+                    objectStore.add(idbData);
+                }
+            }
+        } catch (error) {
+        }
+    }
+
     componentWillReceiveProps(nextProps) {
         const {
             profile,
@@ -261,14 +376,18 @@ class ProfilePhotos extends Component {
             this.setState({
                 initProgressPhotosAction: true,
             });
-            dispatch(getUserProgressPhotoRequest(username));
+            if (isOnline()) {
+                dispatch(getUserProgressPhotoRequest(username));
+            }
         }
         if ((doLoadGalleryPhotos) && profile && Object.keys(profile).length > 0) {
             var username = profile.username;
             this.setState({
                 initGalleryPhotosAction: true,
             });
-            dispatch(getUserGalleryPhotoRequest(username, 0, 10));
+            if (isOnline()) {
+                dispatch(getUserGalleryPhotoRequest(username, 0, 10));
+            }
         }
     }
 
@@ -302,6 +421,9 @@ class ProfilePhotos extends Component {
                 progressPhotos,
                 doLoadProgressPhotos: false,
             });
+            if (isOnline()) {
+                this.setprogressPhotoDataInDB()
+            }
         }
         if (initGalleryPhotosAction && !galleryPhotoloading && (galleryPhotosState !== galleryPhotos)) {
             this.setState({
@@ -309,6 +431,9 @@ class ProfilePhotos extends Component {
                 galleryPhotos,
                 doLoadGalleryPhotos: false,
             });
+            if (isOnline()) {
+                this.setGalleryPhotosDataInDB()
+            }
         }
         if (saveProgressPhotoActionInit && !progressPhotoloading) {
             this.setState({ saveProgressPhotoActionInit: false });
@@ -378,7 +503,11 @@ class ProfilePhotos extends Component {
 
     //#region funs
     handleShowAddProgressPhotoModal = () => {
-        this.setState({ showAddProgressPhotoModal: true });
+        if (isOnline()) {
+            this.setState({ showAddProgressPhotoModal: true });
+        } else {
+            tw("You are offline, please check your internet connection");
+        }
     }
 
     handleCloseAddProgressPhotoModal = (resetFormData = true) => {
@@ -391,41 +520,53 @@ class ProfilePhotos extends Component {
     }
 
     handleProgressPhotoSubmit = (data) => {
-        const { dispatch, selectedPhotos } = this.props;
-        if (selectedPhotos && selectedPhotos.length > 0) {
-            let logDate = moment();
-            let requestData = {
-                description: data.description ? data.description : '',
-                date: logDate,
-                progressPhotosData: selectedPhotos
-            };
-            this.setState({ saveProgressPhotoActionInit: true });
-            dispatch(showPageLoader());
-            dispatch(addUserProgressPhotoRequest(requestData));
+        if (isOnline()) {
+            const { dispatch, selectedPhotos } = this.props;
+            if (selectedPhotos && selectedPhotos.length > 0) {
+                let logDate = moment();
+                let requestData = {
+                    description: data.description ? data.description : '',
+                    date: logDate,
+                    progressPhotosData: selectedPhotos
+                };
+                this.setState({ saveProgressPhotoActionInit: true });
+                dispatch(showPageLoader());
+                dispatch(addUserProgressPhotoRequest(requestData));
+            }
+        } else {
+            tw("You are offline, please check your internet connection");
         }
     }
 
     handleGalleryPhotoSubmit = (data) => {
-        const { dispatch } = this.props;
-        var formData = new FormData();
-        formData.append('description', data.description);
-        formData.append('privacy', data.accessLevel);
-        formData.append('postType', POST_TYPE_GALLERY);
-        if (data.images.length > 0) {
-            for (let index = 0; index < data.images.length; index++) {
-                const file = data.images[index];
-                formData.append('images', file);
+        if (isOnline()) {
+            const { dispatch } = this.props;
+            var formData = new FormData();
+            formData.append('description', data.description);
+            formData.append('privacy', data.accessLevel);
+            formData.append('postType', POST_TYPE_GALLERY);
+            if (data.images.length > 0) {
+                for (let index = 0; index < data.images.length; index++) {
+                    const file = data.images[index];
+                    formData.append('images', file);
+                }
             }
+            this.setState({ saveGalleryPhotoActionInit: true });
+            dispatch(addUserGalleryPhotoRequest(formData));
+            dispatch(showPageLoader());
+        } else {
+            tw("You are offline, please check your internet connection");
         }
-        this.setState({ saveGalleryPhotoActionInit: true });
-        dispatch(addUserGalleryPhotoRequest(formData));
-        dispatch(showPageLoader());
     }
 
     handleShowGalleryPhotoModal = () => {
-        this.setState({
-            showGalleryPhotoModal: true,
-        });
+        if (isOnline()) {
+            this.setState({
+                showGalleryPhotoModal: true,
+            });
+        } else {
+            tw("You are offline, please check your internet connection");
+        }
     }
 
     handleCloseGalleryPhotoModal = () => {

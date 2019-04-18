@@ -11,7 +11,8 @@ import {
     CHANGE_TIMELINE_BODY_FAT_WIDGET_ERROR,
     CHANGE_TIMELINE_MUSCLE_INNER_DATA_REQUEST,
     CHANGE_TIMELINE_MUSCLE_INNER_DATA_SUCCESS,
-    CHANGE_TIMELINE_MUSCLE_INNER_DATA_ERROR
+    CHANGE_TIMELINE_MUSCLE_INNER_DATA_ERROR,
+    SET_TIMELINE_WIDGET_DATA
 } from "../actions/timelineWidgets";
 import { generateValidationErrorMsgArr } from "../helpers/funs";
 import { VALIDATION_FAILURE_STATUS } from "../constants/consts";
@@ -142,6 +143,9 @@ const actionMap = {
             muscle: nextMuscleState,
         }));
     },
+    [SET_TIMELINE_WIDGET_DATA]: (state, action) => {
+        return state.merge(Map(action.stateData));
+    }
 }
 
 function prepareResponseError(action) {

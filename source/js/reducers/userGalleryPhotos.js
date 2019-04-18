@@ -11,7 +11,8 @@ import {
     LOAD_MORE_USER_GALLERY_PHOTO_ERROR,
     DELETE_USER_GALLERY_PHOTO_REQUEST,
     DELETE_USER_GALLERY_PHOTO_ERROR,
-    DELETE_USER_GALLERY_PHOTO_SUCCESS
+    DELETE_USER_GALLERY_PHOTO_SUCCESS,
+    SET_USER_GALLERY_PHOTO,
 } from "../actions/userGalleryPhotos";
 import { VALIDATION_FAILURE_STATUS } from "../constants/consts";
 import { generateValidationErrorMsgArr } from "../helpers/funs";
@@ -196,6 +197,9 @@ const actionMap = {
         }
         return state.merge(Map(newState));
     },
+    [SET_USER_GALLERY_PHOTO] : (state, action) => {
+        return state.merge(Map(action.data));
+    }
 }
 
 export default function reducer(state = initialState, action = {}) {

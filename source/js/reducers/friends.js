@@ -29,6 +29,7 @@ import {
     LOAD_MORE_APPROVED_FRIENDS_MESSENGER_SUCCESS,
     LOAD_MORE_APPROVED_FRIENDS_MESSENGER_ERROR,
     UPDATE_APPROVED_FRIENDS_ONLINE_STATUS_MESSENGER,
+    SET_USER_FRIEND_REQUEST
 } from "../actions/friends";
 import { VALIDATION_FAILURE_STATUS } from "../constants/consts";
 import { generateValidationErrorMsgArr } from "../helpers/funs";
@@ -412,6 +413,9 @@ const actionMap = {
             pendingRequestsCount: action.count,
         }));
     },
+    [SET_USER_FRIEND_REQUEST] :(state, action) => {
+        return state.merge(Map(action.data));
+    }
 };
 
 export default function reducer(state = initialState, action = {}) {

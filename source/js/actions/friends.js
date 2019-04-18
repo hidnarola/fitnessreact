@@ -37,6 +37,7 @@ export const ACCEPT_FRIEND_REQUEST_ERROR = 'ACCEPT_FRIEND_REQUEST_ERROR';
 export const UPDATE_APPROVED_FRIENDS_ONLINE_STATUS_MESSENGER = 'UPDATE_APPROVED_FRIENDS_ONLINE_STATUS_MESSENGER';
 
 export const SET_USER_FRIEND_REQUESTS_COUNT = 'SET_USER_FRIEND_REQUESTS_COUNT';
+export const SET_USER_FRIEND_REQUEST = 'SET_USER_FRIEND_REQUEST';
 
 export function getApprovedFriendsRequest(username, skip = 0, limit = 10, sort = -1) {
     return {
@@ -250,5 +251,12 @@ export function setUserFriendRequestsCount(count) {
     return {
         type: SET_USER_FRIEND_REQUESTS_COUNT,
         count,
+    }
+}
+
+export function setUserFriendRequestData(data) {
+    return {
+        type: SET_USER_FRIEND_REQUEST,
+        data,
     }
 }

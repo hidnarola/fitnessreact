@@ -24,6 +24,8 @@ export const ADD_IMAGE_SELECTED_FROM_DETAILS_PAGE = 'ADD_IMAGE_SELECTED_FROM_DET
 export const DELETE_IMAGE_SELECTED_FROM_DETAILS_PAGE = 'DELETE_IMAGE_SELECTED_FROM_DETAILS_PAGE';
 export const REMOVE_SELECTED_PROGRESS_PHOTOS_TO_UPLOAD = 'REMOVE_SELECTED_PROGRESS_PHOTOS_TO_UPLOAD';
 
+export const SET_PROGRESS_PHOTOS = 'SET_PROGRESS_PHOTOS';
+
 export function getUserProgressPhotoRequest(username, start = 0, noOfPhotos = 5, sort = -1) {
     return {
         type: GET_USER_PROGRESS_PHOTO_REQUEST,
@@ -166,5 +168,12 @@ export function deleteImageSelectedFromDetailsPage(index) {
 export function removeSelectedProgressPhotosToUpload() {
     return {
         type: REMOVE_SELECTED_PROGRESS_PHOTOS_TO_UPLOAD
+    }
+}
+
+export function setProgressPhoto(data) {
+    return {
+        type: SET_PROGRESS_PHOTOS,
+        data
     }
 }

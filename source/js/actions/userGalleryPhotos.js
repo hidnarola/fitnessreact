@@ -14,6 +14,8 @@ export const DELETE_USER_GALLERY_PHOTO_REQUEST = 'DELETE_USER_GALLERY_PHOTO_REQU
 export const DELETE_USER_GALLERY_PHOTO_SUCCESS = 'DELETE_USER_GALLERY_PHOTO_SUCCESS';
 export const DELETE_USER_GALLERY_PHOTO_ERROR = 'DELETE_USER_GALLERY_PHOTO_ERROR';
 
+export const SET_USER_GALLERY_PHOTO = 'SET_USER_GALLERY_PHOTO';
+
 export function getUserGalleryPhotoRequest(username, start = 0, offset = 5, sort = -1) {
     return {
         type: GET_USER_GALLERY_PHOTO_REQUEST,
@@ -102,5 +104,12 @@ export function deleteUserGalleryPhotoError(error) {
     return {
         type: DELETE_USER_GALLERY_PHOTO_ERROR,
         error,
+    }
+}
+
+export function setUserGalleryPhoto(data) {
+    return {
+        type: SET_USER_GALLERY_PHOTO,
+        data,
     }
 }
