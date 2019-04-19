@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import FitnessHeader from '../components/global/FitnessHeader';
 import FitnessNav from '../components/global/FitnessNav';
-import { getUserProgressPhotoRequest, loadMoreUserProgressPhotoRequest, deleteUserProgressPhotoRequest } from '../actions/userProgressPhotos';
+import { getUserProgressPhotoRequest, loadMoreUserProgressPhotoRequest, deleteUserProgressPhotoRequest, setProgressPhoto } from '../actions/userProgressPhotos';
 import { FaCircleONotch } from "react-icons/lib/fa";
 import ErrorCloud from "svg/error-cloud.svg";
 import ProfilePhotoBlock from '../components/Profile/ProfilePhotoBlock';
@@ -13,7 +13,8 @@ import { Link } from "react-router-dom";
 import NoRecordFound from '../components/Common/NoRecordFound';
 import SweetAlert from "react-bootstrap-sweetalert";
 import { showPageLoader, hidePageLoader } from '../actions/pageLoader';
-import { te, ts } from '../helpers/funs';
+import { te, ts, tw, isOnline, connectIDB } from '../helpers/funs';
+import { IDB_TBL_PROGRESS_PHOTO, IDB_READ_WRITE, IDB_READ } from '../constants/idb';
 
 class ProgressPhotos extends Component {
     constructor(props) {
@@ -27,11 +28,7 @@ class ProgressPhotos extends Component {
             typeOfImageToDelete: null,
             deleteImageData: null,
         };
-    }
-
-    componentWillMount() {
-        const { dispatch, match } = this.props;
-        dispatch(getUserProgressPhotoRequest(match.params.username, 0, 10, -1));
+        this.iDB;
     }
 
     render() {
@@ -135,8 +132,28 @@ class ProgressPhotos extends Component {
         );
     }
 
+    componentDidMount() {
+        const { dispatch, match } = this.props;
+
+        connectIDB()().then((connection) => {
+            this.handleIDBOpenSuccess(connection);
+        });
+
+        if(isOnline()) {
+            dispatch(getUserProgressPhotoRequest(match.params.username, 0, 10, -1));
+        }
+    }
+
+    handleIDBOpenSuccess = (connection) => {
+        this.iDB = connection.result;
+        if(!isOnline()) {
+            // get data from idb
+            this.getDataFromIDB()
+        }
+    }
+
     componentDidUpdate(prevProps, prevState) {
-        const { dispatch, deleteLoading, deleteError } = this.props;
+        const { dispatch, deleteLoading, deleteError, loading } = this.props;
         if (!deleteLoading && prevProps.deleteLoading !== deleteLoading) {
             this.handleCancelDeleteImage();
             dispatch(hidePageLoader());
@@ -146,6 +163,58 @@ class ProgressPhotos extends Component {
                 ts('Progress photo deleted successfully.');
             }
         }
+        if(!loading && prevProps.loading !== loading) { 
+            this.setdataInDB();
+        }
+    }
+
+    setdataInDB = () => {
+        console.log("setdataInDB");
+        const { progressPhotos } = this.props;
+        try {
+            const idbData = { type: IDB_TBL_PROGRESS_PHOTO, data: JSON.stringify(progressPhotos) };
+            const transaction = this.iDB.transaction([IDB_TBL_PROGRESS_PHOTO], IDB_READ_WRITE);
+            const objectStore = transaction.objectStore(IDB_TBL_PROGRESS_PHOTO);
+            const iDBGetReq = objectStore.get(IDB_TBL_PROGRESS_PHOTO);
+            iDBGetReq.onsuccess = (event) => {
+                const { target: { result } } = event;
+                if (result) {
+                    objectStore.put(idbData);
+                } else {
+                    objectStore.add(idbData);
+                }
+            }
+        } catch (error) {
+            console.log("error =>", error);
+        }
+    }
+
+    getDataFromIDB = () => {
+
+        const { dispatch } = this.props;
+        const idbTbls = [IDB_TBL_PROGRESS_PHOTO];
+        try {
+            const transaction = this.iDB.transaction(idbTbls, IDB_READ);
+            if (transaction) {
+                const osFriend = transaction.objectStore(IDB_TBL_PROGRESS_PHOTO);
+                const iDBGetReq = osFriend.get(IDB_TBL_PROGRESS_PHOTO);
+                iDBGetReq.onsuccess = (event) => {
+                    const { target: { result } } = event;
+                    if (result) {
+                        const resultObj = JSON.parse(result.data);
+                        const data = { progressPhotos: resultObj }
+                        dispatch(setProgressPhoto(data));
+                    } else {
+                        const data = { progressPhotos: [] }
+                        dispatch(setProgressPhoto(data));
+                    }
+                }
+            }
+        } catch (error) {
+            const data = { progressPhotos: [] }
+            dispatch(setProgressPhoto(data));
+        }
+
     }
 
     handleOpenLightbox = (openFor = 'progress_photos', startFrom = 0) => {
@@ -201,7 +270,11 @@ class ProgressPhotos extends Component {
     }
 
     handleShowDeleteImageAlert = (type, imageData) => {
-        this.setState({ showImageDeleteAlert: true, typeOfImageToDelete: type, deleteImageData: imageData });
+        if(isOnline()){
+            this.setState({ showImageDeleteAlert: true, typeOfImageToDelete: type, deleteImageData: imageData });
+        } else {
+            tw("You are offline, please check your internet connection");
+        }
     }
 
     handleCancelDeleteImage = () => {
@@ -218,6 +291,20 @@ class ProgressPhotos extends Component {
             te('Something went wrong! please try again later.');
         }
         this.handleCancelDeleteImage();
+    }
+
+    componentWillUnmount() {
+        try {
+            const idbs = [IDB_TBL_PROGRESS_PHOTO];
+            if (isOnline()) {
+                const transaction = this.iDB.transaction(idbs, IDB_READ_WRITE);
+                if (transaction) {
+                    const osProgressPhoto = transaction.objectStore(IDB_TBL_PROGRESS_PHOTO);
+                    osProgressPhoto.clear();
+                }
+            }
+            this.iDB.close();
+        } catch (error) { }
     }
 }
 

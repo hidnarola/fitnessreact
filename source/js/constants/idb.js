@@ -18,4 +18,6 @@ export const IDB_TBL_WORKOUT_DATA = "workout_data";
 export const IDB_TBL_USER_PROGRAM = "user_program";
 export const IDB_TBL_FITNESS = "fitness";
 export const IDB_TBL_PROFILE = "profile";
+export const IDB_TBL_PROGRESS_PHOTO = "progress_photo";
+
 
