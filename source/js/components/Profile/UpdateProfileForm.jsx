@@ -388,16 +388,13 @@ class UpdateProfileForm extends Component {
     }
 
     handleIDBOpenSuccess = (connection) => {
-        console.log("handleIDBOpenSuccess");
         this.iDB = connection.result;
         if (!isOnline()) {
-            console.log("offline")
             this.getDataFromIDB();
         }
     }
 
     getDataFromIDB = () => {
-        console.log("getDataFromIDB");
         const { dispatch } = this.props;
         const idbTbls = [IDB_TBL_POFILE_SETTING];
 
@@ -420,7 +417,6 @@ class UpdateProfileForm extends Component {
                 }
             }
         } catch (error) {
-            console.log('error => ', error);
             const data = { settings: null }
             dispatch(setUserProfileState(data));
         }
@@ -445,7 +441,6 @@ class UpdateProfileForm extends Component {
                 }
             }
         } catch (error) {
-            console.log('error => ', error);
             const dataProfile = { profile: null }
             dispatch(setUserProfileState(dataProfile));
         }
@@ -527,9 +522,6 @@ class UpdateProfileForm extends Component {
             // set user data
             this.setUserDataInDb()
         }
-        if (!isOnline()) {
-            console.log("in offline mode ~~~>", profileSettings, profile);
-        }
     }
 
     componentWillUnmount() {
@@ -549,7 +541,6 @@ class UpdateProfileForm extends Component {
     setUserSettingDataInDb = () => {
         const { profileSettings } = this.props;
         try {
-            console.log("profileSettings =>", profileSettings)
             const idbData = { type: 'preferences', data: JSON.stringify(profileSettings) };
             const transaction = this.iDB.transaction([IDB_TBL_POFILE_SETTING], IDB_READ_WRITE);
             const objectStore = transaction.objectStore(IDB_TBL_POFILE_SETTING);
@@ -563,7 +554,6 @@ class UpdateProfileForm extends Component {
                 }
             }
         } catch (error) {
-            console.log('error => ', error);
         }
     }
 
@@ -583,7 +573,6 @@ class UpdateProfileForm extends Component {
                 }
             }
         } catch (error) {
-            console.log('error => ', error);
         }
     }
 
