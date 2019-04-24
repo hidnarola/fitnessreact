@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOMServer from "react-dom/server";
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
@@ -8,6 +9,10 @@ import { InputField, SelectField_ReactSelect, DateField, TextAreaField } from '.
 import { required, requiredReactSelectStatus, minLength, maxLength, mobile, min, max, validNumber } from '../../../formValidation/validationRules';
 import { adminRouteCodes } from '../../../constants/adminRoutes';
 import { capitalizeFirstLetter, convertUnits, te } from '../../../helpers/funs';
+import ContentEditable from 'react-contenteditable';
+// import { Emoji } from "emoji-mart";
+// import Emos from '../../Common/Emos';
+
 import {
     GOAL_GAIN_MUSCLE,
     GOAL_IMPROVE_MOBILITY,
@@ -255,12 +260,21 @@ class UserForm extends Component {
                             <Field
                                 id="about_me"
                                 name="about_me"
-                                component={TextAreaField}
+                                component={MyCustomTextarea}
                                 label="About Me"
-                                labelClass="display_block"
                                 wrapperClass="form-group"
                                 className="form-control min-height-242 resize-vertical"
                             />
+                            {/* <Emos
+                                id="emos"
+                                pickerProps={{
+                                    color: "#ff337f",
+                                    onClick: this.handleEmoClick,
+                                    onSelect: this.handleEmoSelect,
+                                }}
+                                positionClass="top-right"
+                                emosWrapClass="emotis-text-area"
+                            /> */}
                         </div>
                         <div className="col-md-4">
                             <div className="image-preview-wrapper mt-20">
@@ -287,9 +301,37 @@ class UserForm extends Component {
                         </div>
                     </div>
                 </form>
-            </div >
+            </div>
         );
     }
+
+
+    // handleEmoClick = (emoji, event) => {
+    //     const { id } = emoji;
+    //     console.log("id in handleEmoClick => ", id);
+    //     this.appendDescription(id);
+    // }
+
+    // handleEmoSelect = (emoji) => {
+    //     const { id } = emoji;
+    //     console.log("id in handleEmoSelect => ", id);        
+    //     this.appendDescription(id);
+    // }
+
+    // appendDescription = (id) => {
+    //     console.log("id",id)
+    //     if (id) {
+    //         const { selectUser, change } = this.props;
+    //         console.log("old aboutMe", selectUser.aboutMe);
+    //         const _aboutMe = selectUser.aboutMe +
+    //             ReactDOMServer.renderToString(<span contentEditable={false} dangerouslySetInnerHTML={{
+    //                 __html: Emoji({ html: true, set: 'emojione', emoji: id, size: 16 })
+    //             }}></span>) +
+    //             ReactDOMServer.renderToString(<span>&nbsp;</span>);
+    //             console.log('_aboutMe => ',_aboutMe);
+    //             change('about_me', _aboutMe);
+    //     }
+    // }
 
     componentDidUpdate(prevProps, prevState) {
         const { selectLoading, selectUser, selectError, initialize, dispatch, selectUserPref, history } = this.props;
@@ -361,3 +403,35 @@ const mapStateToProps = (state) => {
 }
 
 export default connect(mapStateToProps)(UserForm);
+
+class MyCustomTextarea extends Component {
+    constructor(props) {
+        super(props);
+        this.contentEditable = React.createRef();
+    }
+
+    render() {
+        const {
+            wrapperClass,
+            className,
+            input
+        } = this.props;
+        return (
+            <div className={wrapperClass}>
+                <ContentEditable
+                    innerRef={this.contentEditable}
+                    html={input.value}
+                    disabled={false}
+                    onChange={(e) => input.onChange(e.target.value)}
+                    tagName='div'
+                    className={className}
+                    placeholder="About me"
+                />
+            </div>
+        );
+    }
+
+    focus = () => {
+        this.contentEditable.current.focus();
+    }
+}

@@ -3,6 +3,7 @@ import ReactDOMServer from "react-dom/server";
 import { connect } from 'react-redux';
 import { Field, reduxForm, initialize, formValueSelector } from "redux-form";
 import DatePicker from "react-datepicker";
+
 import {
     WORKOUT_LOCATION_HOME,
     WORKOUT_LOCATION_GYM,
@@ -21,11 +22,12 @@ import {
     MEASUREMENT_UNIT_POUND,
     MEASUREMENT_UNIT_INCH,
 } from '../../constants/consts';
-import { capitalizeFirstLetter, ts, convertUnits, focusToControl, sanitizeEditableContentValue } from '../../helpers/funs';
+import { capitalizeFirstLetter, ts, convertUnits, focusToControl, sanitizeEditableContentValue, connectIDB, isOnline, tw } from '../../helpers/funs';
 import {
     getLoggedUserProfileDetailsRequest,
     saveLoggedUserProfileDetailsRequest,
-    getLoggedUserProfileSettingsRequest
+    getLoggedUserProfileSettingsRequest,
+    setUserProfileState
 } from '../../actions/profile';
 import moment from "moment";
 import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
@@ -40,6 +42,7 @@ import { setLoggedUserFromLocalStorage } from '../../actions/user';
 import Emos from '../Common/Emos';
 import ContentEditable from 'react-contenteditable';
 import { Emoji } from "emoji-mart";
+import { IDB_TBL_POFILE_SETTING, IDB_READ_WRITE, IDB_READ } from '../../constants/idb';
 
 const minLength2 = minLength(2);
 const maxLength15 = maxLength(15);
@@ -60,14 +63,7 @@ class UpdateProfileForm extends Component {
             weightUnit: MEASUREMENT_UNIT_GRAM,
             heightUnit: MEASUREMENT_UNIT_CENTIMETER,
         }
-    }
-
-    componentWillMount() {
-        const { dispatch } = this.props;
-        dispatch(showPageLoader());
-        this.setState({ selectActionInit: true });
-        dispatch(getLoggedUserProfileDetailsRequest());
-        dispatch(getLoggedUserProfileSettingsRequest());
+        this.iDB;
     }
 
     render() {
@@ -375,6 +371,89 @@ class UpdateProfileForm extends Component {
         );
     }
 
+    componentDidMount() {
+
+        connectIDB()().then((connection) => {
+            this.handleIDBOpenSuccess(connection);
+        });
+
+        this.setState({ selectActionInit: true });
+        if (isOnline()) {
+            const { dispatch } = this.props;
+            dispatch(showPageLoader());
+            dispatch(getLoggedUserProfileDetailsRequest());
+            dispatch(getLoggedUserProfileSettingsRequest());
+        }
+
+    }
+
+    handleIDBOpenSuccess = (connection) => {
+        console.log("handleIDBOpenSuccess");
+        this.iDB = connection.result;
+        if (!isOnline()) {
+            console.log("offline")
+            this.getDataFromIDB();
+        }
+    }
+
+    getDataFromIDB = () => {
+        console.log("getDataFromIDB");
+        const { dispatch } = this.props;
+        const idbTbls = [IDB_TBL_POFILE_SETTING];
+
+        // get preferences
+        try {
+            const transaction = this.iDB.transaction(idbTbls, IDB_READ);
+            if (transaction) {
+                const osPreference = transaction.objectStore(IDB_TBL_POFILE_SETTING);
+                const iDBGetReq = osPreference.get('preferences');
+                iDBGetReq.onsuccess = (event) => {
+                    const { target: { result } } = event;
+                    if (result) {
+                        const resultObj = JSON.parse(result.data);
+                        const data = { settings: resultObj }
+                        dispatch(setUserProfileState(data));
+                    } else {
+                        const data = { settings: null }
+                        dispatch(setUserProfileState(data));
+                    }
+                }
+            }
+        } catch (error) {
+            console.log('error => ', error);
+            const data = { settings: null }
+            dispatch(setUserProfileState(data));
+        }
+
+        // get profile
+
+        try {
+            const transaction1 = this.iDB.transaction(idbTbls, IDB_READ);
+            if (transaction1) {
+                const osProfile = transaction1.objectStore(IDB_TBL_POFILE_SETTING);
+                const iDBGetProfileReq = osProfile.get('profile');
+                iDBGetProfileReq.onsuccess = (event) => {
+                    const { target: { result } } = event;
+                    if (result) {
+                        const resultProfileObj = JSON.parse(result.data);
+                        const dataProfile = { profile: resultProfileObj }
+                        dispatch(setUserProfileState(dataProfile));
+                    } else {
+                        const dataProfile = { profile: null }
+                        dispatch(setUserProfileState(dataProfile));
+                    }
+                }
+            }
+        } catch (error) {
+            console.log('error => ', error);
+            const dataProfile = { profile: null }
+            dispatch(setUserProfileState(dataProfile));
+        }
+
+
+
+    }
+
     componentDidUpdate(prevProps, prevState) {
         const {
             selectActionInit,
@@ -439,6 +518,72 @@ class UpdateProfileForm extends Component {
                 this.props.change('weightUnit', weightUnit);
             }
             this.setState({ heightUnit, weightUnit });
+        }
+        if (!settingsLoading && prevProps.settingsLoading !== settingsLoading) {
+            // set user_settings data
+            this.setUserSettingDataInDb()
+        }
+        if (!loading && prevProps.loading !== loading) {
+            // set user data
+            this.setUserDataInDb()
+        }
+        if (!isOnline()) {
+            console.log("in offline mode ~~~>", profileSettings, profile);
+        }
+    }
+
+    componentWillUnmount() {
+        try {
+            const idbs = [IDB_TBL_POFILE_SETTING];
+            if (isOnline()) {
+                const transaction = this.iDB.transaction(idbs, IDB_READ_WRITE);
+                if (transaction) {
+                    const osProfile = transaction.objectStore(IDB_TBL_POFILE_SETTING);
+                    osProfile.clear();
+                }
+            }
+            this.iDB.close();
+        } catch (error) { }
+    }
+
+    setUserSettingDataInDb = () => {
+        const { profileSettings } = this.props;
+        try {
+            console.log("profileSettings =>", profileSettings)
+            const idbData = { type: 'preferences', data: JSON.stringify(profileSettings) };
+            const transaction = this.iDB.transaction([IDB_TBL_POFILE_SETTING], IDB_READ_WRITE);
+            const objectStore = transaction.objectStore(IDB_TBL_POFILE_SETTING);
+            const iDBGetReq = objectStore.get('preferences');
+            iDBGetReq.onsuccess = (event) => {
+                const { target: { result } } = event;
+                if (result) {
+                    objectStore.put(idbData);
+                } else {
+                    objectStore.add(idbData);
+                }
+            }
+        } catch (error) {
+            console.log('error => ', error);
+        }
+    }
+
+    setUserDataInDb = () => {
+        const { profile } = this.props;
+        try {
+            const idbData = { type: 'profile', data: JSON.stringify(profile) };
+            const transaction = this.iDB.transaction([IDB_TBL_POFILE_SETTING], IDB_READ_WRITE);
+            const objectStore = transaction.objectStore(IDB_TBL_POFILE_SETTING);
+            const iDBGetReq = objectStore.get('profile');
+            iDBGetReq.onsuccess = (event) => {
+                const { target: { result } } = event;
+                if (result) {
+                    objectStore.put(idbData);
+                } else {
+                    objectStore.add(idbData);
+                }
+            }
+        } catch (error) {
+            console.log('error => ', error);
         }
     }
 
@@ -511,7 +656,7 @@ const mapStateToProps = (state) => {
         profile: profile.get('profile'),
         profileError: profile.get('error'),
         profileSettings: profile.get('settings'),
-        settingsLoading: profile.get('loading'),
+        settingsLoading: profile.get('settingsLoading'),
         aboutMe: selector(state, 'about_me')
     };
 }

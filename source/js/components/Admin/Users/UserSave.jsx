@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import UserForm from './UserForm';
 import { userUpdateRequest, setUserState } from '../../../actions/admin/users';
-import { ts, focusToControl } from '../../../helpers/funs';
+import { ts, focusToControl, sanitizeEditableContentValue } from '../../../helpers/funs';
 import { hidePageLoader, showPageLoader } from '../../../actions/pageLoader';
 import { adminRouteCodes } from '../../../constants/adminRoutes';
 import { Alert } from "react-bootstrap";
@@ -72,6 +72,7 @@ class UserSave extends Component {
             if (data.dob) {
                 dob = data.dob.format('YYYY-MM-DD');
             }
+            // const sanitizeAboutMe = sanitizeEditableContentValue(data.about_me);
             const userData = {
                 firstName: data.first_name,
                 lastName: (data.last_name) ? data.last_name : '',
@@ -85,6 +86,7 @@ class UserSave extends Component {
                 workoutLocation: (data.workout_location) ? data.workout_location : '',
                 goal: (data.goal && data.goal.value) ? data.goal.value : '',
                 aboutMe: (data.about_me) ? data.about_me : '',
+                // aboutMe: (sanitizeAboutMe && sanitizeAboutMe.trim()) ? sanitizeAboutMe : '',
                 status: (data.status) ? data.status.value : '',
             }
             var formData = new FormData();

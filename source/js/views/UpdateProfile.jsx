@@ -5,6 +5,7 @@ import FitnessNav from '../components/global/FitnessNav';
 import UpdateProfileForm from '../components/Profile/UpdateProfileForm';
 import { submit } from 'redux-form';
 import { Alert } from "react-bootstrap";
+import { isOnline, tw } from '../helpers/funs';
 
 class UpdateProfile extends Component {
     constructor(props) {
@@ -28,7 +29,7 @@ class UpdateProfile extends Component {
                             <p>Your goal choice shapes how your fitness assistant will ceate your meal and exercise plans, it’s important that you set goals which are achieveable. Keep updating your profile and your fitness assistant will keep you on track and meeting the goals you’ve set out for yourself.</p>
                         </div>
                         <div className="body-head-r">
-                            <a href="javascript:void(0)" onClick={this.handleSave} className="pink-btn">Update Changes <i className="icon-restore"></i></a>
+                            <a href="javascript:void(0)" onClick={(e) => {isOnline() ? this.handleSave : tw("You are offline, please check your internet connection")}} className="pink-btn">Update Changes <i className="icon-restore"></i></a>
                         </div>
                     </div>
                     <div className="body-content row prefferences d-flex">

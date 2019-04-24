@@ -19,5 +19,6 @@ export const IDB_TBL_USER_PROGRAM = "user_program";
 export const IDB_TBL_FITNESS = "fitness";
 export const IDB_TBL_PROFILE = "profile";
 export const IDB_TBL_PROGRESS_PHOTO = "progress_photo";
+export const IDB_TBL_POFILE_SETTING = "profile_setting";
 
 
