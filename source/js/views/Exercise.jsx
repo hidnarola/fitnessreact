@@ -198,7 +198,7 @@ class Exercise extends Component {
                 if (transaction) {
                     const osExerciseData = transaction.objectStore(IDB_TBL_EXERCISE);
                     console.log('osExerciseData => ', osExerciseData);
-                    const isoDate = logDate.toString();
+                    const isoDate = logDate.setHours(0, 0, 0, 0);
                     console.log('isoDate => ', isoDate);
                     if (osExerciseData) {
                         console.log('osExerciseData => ', osExerciseData);
@@ -311,18 +311,18 @@ class Exercise extends Component {
         if (transaction) {
             const objectStore = transaction.objectStore(IDB_TBL_EXERCISE);
             if (objectStore) {
-                const iDBGetReq = objectStore.get(logDate.toString());
+                const iDBGetReq = objectStore.get((logDate.setHours(0, 0, 0, 0)));
                 iDBGetReq.onsuccess = (event) => {
                     const { target: { result } } = event;
                     if (firstWorkoutId !== null) {
                         if (result) {
                             console.log("store null in DB1");
-                            console.log("1 ======>", logDate.toString(), firstWorkoutId);
-                            objectStore.put({ firstWorkoutId: firstWorkoutId, logDate: logDate.toString() });
+                            console.log("1 ======>", (logDate.setHours(0, 0, 0, 0)), firstWorkoutId);
+                            objectStore.put({ firstWorkoutId: firstWorkoutId, logDate: (logDate.setHours(0, 0, 0, 0)) });
                         } else {
                             console.log("store null in DB2");
-                            console.log("2 ======>", logDate.toString(), firstWorkoutId);
-                            objectStore.add({ firstWorkoutId: firstWorkoutId, logDate: logDate.toString() });
+                            console.log("2 ======>", (logDate.setHours(0, 0, 0, 0)), firstWorkoutId);
+                            objectStore.add({ firstWorkoutId: firstWorkoutId, logDate: (logDate.setHours(0, 0, 0, 0)) });
                         }
                     }
                 }
@@ -404,11 +404,11 @@ class Exercise extends Component {
             if (transaction) {
                 const osExerciseData = transaction.objectStore(IDB_TBL_EXERCISE);
                 console.log('osExerciseData => ', osExerciseData);
-                const isoDate = logDate.toString();
+                const isoDate = logDate;
                 console.log('isoDate => ', isoDate);
                 if (osExerciseData) {
                     console.log('osExerciseData [e]=> ', osExerciseData);
-                    const iDBGetReq = osExerciseData.get(isoDate);
+                    const iDBGetReq = osExerciseData.get(isoDate.setHours(0, 0, 0, 0));
                     iDBGetReq.onsuccess = (event) => {
                         const { target: { result } } = event;
                         console.log('result [e]=> ', result);

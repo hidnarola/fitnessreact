@@ -19,8 +19,9 @@ import {
     ACCESS_LEVEL_NONE,
     ACCESS_LEVEL_NONE_STR,
 } from '../../constants/consts';
-import { getLoggedUserProfileSettingsRequest, saveLoggedUserProfileSettingsRequest } from '../../actions/profile';
-import { ts } from '../../helpers/funs';
+import { getLoggedUserProfileSettingsRequest, saveLoggedUserProfileSettingsRequest, setUserProfileState } from '../../actions/profile';
+import { ts, connectIDB, isOnline, tw } from '../../helpers/funs';
+import { IDB_TBL_SETTING, IDB_READ_WRITE, IDB_READ } from '../../constants/idb';
 
 class ProfileSettingsForm extends Component {
     constructor(props) {
@@ -28,6 +29,7 @@ class ProfileSettingsForm extends Component {
         this.state = {
             selectActionInit: false,
         };
+        this.iDB;
         this.distanceOptions = [];
         this.weightOptions = [];
         this.bodyMeasurementOptions = [];
@@ -57,13 +59,6 @@ class ProfileSettingsForm extends Component {
             { value: ACCESS_LEVEL_PUBLIC, label: ACCESS_LEVEL_PUBLIC_STR },
             { value: ACCESS_LEVEL_NONE, label: ACCESS_LEVEL_NONE_STR },
         ];
-    }
-
-    componentWillMount() {
-        const { dispatch } = this.props;
-        this.setState({ selectActionInit: true });
-        dispatch(showPageLoader());
-        dispatch(getLoggedUserProfileSettingsRequest());
     }
 
     render() {
@@ -197,6 +192,75 @@ class ProfileSettingsForm extends Component {
         );
     }
 
+    componentDidMount() {
+
+        connectIDB()().then((connection) => {
+            this.handleIDBOpenSuccess(connection);
+        });
+
+        this.setState({ selectActionInit: true });
+        if (isOnline()) {
+            const { dispatch } = this.props;
+            dispatch(showPageLoader());
+            dispatch(getLoggedUserProfileSettingsRequest());
+        }
+    }
+
+    handleIDBOpenSuccess = (connection) => {
+        this.iDB = connection.result;
+        if (!isOnline()) {
+            this.getDataFromIDB();
+        }
+    }
+
+    getDataFromIDB = () => {
+        const { dispatch } = this.props;
+        const idbTbls = [IDB_TBL_SETTING];
+
+        try {
+            const transaction = this.iDB.transaction(idbTbls, IDB_READ);
+            if (transaction) {
+                const osSettings = transaction.objectStore(IDB_TBL_SETTING);
+                const iDBGetReq = osSettings.get('settings');
+                iDBGetReq.onsuccess = (event) => {
+                    const { target: { result } } = event;
+                    if (result) {
+                        const resultObj = JSON.parse(result.data);
+                        const data = { settings: resultObj }
+                        dispatch(setUserProfileState(data));
+                    } else {
+                        const data = { settings: null }
+                        dispatch(setUserProfileState(data));
+                    }
+                }
+            }
+        } catch (error) {
+            const data = { settings: null }
+            dispatch(setUserProfileState(data));
+        }
+
+    }
+
+    setSettingDataInDb = () => {
+        const { settings } = this.props;
+        try {
+            const idbData = { type: 'settings', data: JSON.stringify(settings) };
+            const transaction = this.iDB.transaction([IDB_TBL_SETTING], IDB_READ_WRITE);
+            const objectStore = transaction.objectStore(IDB_TBL_SETTING);
+            const iDBGetReq = objectStore.get('settings');
+            iDBGetReq.onsuccess = (event) => {
+                const { target: { result } } = event;
+                if (result) {
+                    objectStore.put(idbData);
+                } else {
+                    objectStore.add(idbData);
+                }
+            }
+        } catch (error) {
+            console.log("error => ", error);
+        }
+    }
+
     componentDidUpdate() {
         const {
             selectActionInit,
@@ -228,6 +292,8 @@ class ProfileSettingsForm extends Component {
             }
             dispatch(initialize('update_profile_settings_form', formData));
             dispatch(hidePageLoader());
+            // set data in db
+            this.setSettingDataInDb()
         } else if (saveActionInit && !settingsLoading) {
             this.setState({ selectActionInit: true });
             dispatch(getLoggedUserProfileSettingsRequest());

@@ -510,7 +510,8 @@ class SaveScheduleWorkout extends Component {
             completeWorkoutActionInit,
             deleteWorkoutActionInit,
             addWorkoutTitleInit,
-            forceGetUsersWorkoutScheduleRequest
+            forceGetUsersWorkoutScheduleRequest,
+            logDate
         } = this.state;
         if (loadWorkoutInit && !loading) {
             dispatch(hidePageLoader());
@@ -531,10 +532,13 @@ class SaveScheduleWorkout extends Component {
             history.push(routeCodes.SCHEDULE_WORKOUT);
         } else if (loadWorkoutInit && !loading && workout && Object.keys(workout).length > 0) {
             this.setState({ loadWorkoutInit: false });
+            console.log("logDate ~~~>", logDate);
+            console.log("workout.date ~~~>", workout.date);
             if (workout.date) {
-                var logDate = new Date(workout.date);
+                var logDate1 = new Date(workout.date);
                 logDate.setHours(0, 0, 0, 0);
-                this.setState({ logDate: logDate });
+                this.setState({ logDate: new Date(workout.date) });
+                this.setfirstWorkoutDataInDb();
             }
         }
         if (loadWorkoutInit && !loading && error && error.length > 0) {
@@ -623,7 +627,7 @@ class SaveScheduleWorkout extends Component {
         }
         if (!firstWorkoutLoading && prevProps.firstWorkoutLoading !== firstWorkoutLoading) {
             // set firstworkout data in exercise table (IDB_TBL_EXERCISE)
-            this.setfirstWorkoutDataInDb(firstWorkoutId);
+            // this.setfirstWorkoutDataInDb(firstWorkoutId);
         }
         if (!exercisesLoading && prevProps.exercisesLoading !== exercisesLoading) {
             this.setExerciseNameInIdb();
@@ -722,31 +726,39 @@ class SaveScheduleWorkout extends Component {
         }
     }
 
-    setfirstWorkoutDataInDb = (firstWorkoutId) => {
-        const { logDate } = this.state;
+    setfirstWorkoutDataInDb = () => {
+        // const { logDate } = this.state;
+        const { workout, firstWorkoutId } = this.props;
         const transaction = this.iDB.transaction([IDB_TBL_EXERCISE], IDB_READ_WRITE);
+        if (workout) {
+            console.log("workout", workout);
+            console.log("workout.date", workout.date);
+        }
 
+        // console.log("logDate 736 saveScheduleWorkout.jsx", logDate.toISOString());
+        console.log("firstWorkoutId ~~>", firstWorkoutId);
         try {
             if (transaction) {
                 const objectStore = transaction.objectStore(IDB_TBL_EXERCISE);
                 if (objectStore) {
-                    const iDBGetReq = objectStore.get(logDate.toString());
+                    const iDBGetReq = objectStore.get((new Date(workout.date).setHours(0, 0, 0, 0)));
                     iDBGetReq.onsuccess = (event) => {
                         const { target: { result } } = event;
-                        if (firstWorkoutId !== null) {
+                        if (firstWorkoutId) {
                             if (result) {
-                                console.log("add({ firstWorkoutId:1", firstWorkoutId, logDate)
-                                objectStore.put({ firstWorkoutId: firstWorkoutId, logDate: logDate.toString() });
+                                console.log("put({ firstWorkoutId:1", firstWorkoutId);
+                                objectStore.put({ firstWorkoutId: firstWorkoutId, logDate: ((new Date(workout.date)).setHours(0, 0, 0, 0)), here: 1 });
                             } else {
-                                console.log("add({ firstWorkoutId:2", firstWorkoutId, logDate)
+                                console.log("add({ firstWorkoutId:2", firstWorkoutId, ((new Date(workout.date)).setHours(0, 0, 0, 0)));
                                 // alert(firstWorkoutId + logDate)  
-                                objectStore.add({ firstWorkoutId: firstWorkoutId, logDate: logDate.toString() });
+                                objectStore.add({ firstWorkoutId: firstWorkoutId, logDate: ((new Date(workout.date)).setHours(0, 0, 0, 0)), here: 2 });
                             }
                         }
                     }
                 }
             }
         } catch (e) {
+            console.log("e =>", e);
         }
     }
 
@@ -1233,11 +1245,11 @@ class SaveScheduleWorkout extends Component {
             if (transaction) {
                 const osExerciseData = transaction.objectStore(IDB_TBL_EXERCISE);
                 console.log('osExerciseData => ', osExerciseData);
-                const isoDate = logDate.toString();
+                const isoDate = logDate;
                 console.log('isoDate => ', isoDate);
                 if (osExerciseData) {
                     console.log('osExerciseData => ', osExerciseData);
-                    const iDBGetReq = osExerciseData.get(isoDate);
+                    const iDBGetReq = osExerciseData.get(isoDate.setHours(0, 0, 0, 0));
                     iDBGetReq.onsuccess = (event) => {
                         const { target: { result } } = event;
                         console.log('result => ', result);
@@ -1446,7 +1458,7 @@ class SaveScheduleWorkout extends Component {
             this.iDB.close();
         } catch (error) { }
     }
-    
+
 }
 
 const mapStateToProps = (state) => {

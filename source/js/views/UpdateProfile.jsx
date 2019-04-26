@@ -29,7 +29,7 @@ class UpdateProfile extends Component {
                             <p>Your goal choice shapes how your fitness assistant will ceate your meal and exercise plans, it’s important that you set goals which are achieveable. Keep updating your profile and your fitness assistant will keep you on track and meeting the goals you’ve set out for yourself.</p>
                         </div>
                         <div className="body-head-r">
-                            <a href="javascript:void(0)" onClick={(e) => {isOnline() ? this.handleSave : tw("You are offline, please check your internet connection")}} className="pink-btn">Update Changes <i className="icon-restore"></i></a>
+                            <a href="javascript:void(0)" onClick={this.userOfflineMessage} className="pink-btn">Update Changes <i className="icon-restore"></i></a>
                         </div>
                     </div>
                     <div className="body-content row prefferences d-flex">
@@ -48,6 +48,16 @@ class UpdateProfile extends Component {
                 </section>
             </div>
         );
+    }
+
+    userOfflineMessage = (e) => {
+        if (isOnline()) {
+            this.handleSave()
+        }
+        else {
+            e.preventDefault();
+            tw("You are offline, please check your internet connection");
+        }
     }
 
     handleSave = () => {
