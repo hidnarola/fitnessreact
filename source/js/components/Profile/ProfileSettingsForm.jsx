@@ -301,6 +301,20 @@ class ProfileSettingsForm extends Component {
             handleSaveActionFlag(false);
         }
     }
+
+    componentWillUnmount() {
+        try {
+            const idbs = [IDB_TBL_SETTING];
+            if (isOnline()) {
+                const transaction = this.iDB.transaction(idbs, IDB_READ_WRITE);
+                if (transaction) {
+                    const osProfile = transaction.objectStore(IDB_TBL_SETTING);
+                    osProfile.clear();
+                }
+            }
+            this.iDB.close();
+        } catch (error) { }
+    }
 }
 
 const handleSubmit = (data, dispatch, props) => {
