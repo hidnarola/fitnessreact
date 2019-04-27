@@ -1544,7 +1544,9 @@ class TodaysWorkoutListCard extends Component {
                                 type="checkbox"
                                 checked={isCompleted}
                                 onChange={() => {
-                                    this.setState({ isCompleted: !isCompleted });
+                                    if (isOnline()) {
+                                        this.setState({ isCompleted: !isCompleted });
+                                    }
                                     handleCompleteWorkout(workout);
                                 }}
                                 disabled={isCompleteSwitchUnderProcess}

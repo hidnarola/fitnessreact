@@ -41,6 +41,8 @@ export default function initIDBSchema(event) {
         objectStore = db.createObjectStore(idbConst.IDB_TBL_POFILE_SETTING, { keyPath: "type" });  
 
         objectStore = db.createObjectStore(idbConst.IDB_TBL_SETTING, { keyPath: "type" });  
+    
+        objectStore = db.createObjectStore(idbConst.IDB_TBL_SEARCH_USER, { keyPath: "type" });  
         
     } catch (error) { console.log("IDB init Error : ", error); }
 }

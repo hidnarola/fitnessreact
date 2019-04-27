@@ -3,7 +3,7 @@ import FitnessHeader from '../components/global/FitnessHeader';
 import FitnessNav from '../components/global/FitnessNav';
 import noProfileImg from 'img/common/no-profile-img.png'
 import { connect } from "react-redux";
-import { handleChangeUserSearchFor, getUsersPageSearchRequest } from '../actions/userSearch';
+import { handleChangeUserSearchFor, getUsersPageSearchRequest, setUserSearchState } from '../actions/userSearch';
 import InfiniteScroll from 'react-infinite-scroller';
 import { FaCircleONotch } from "react-icons/lib/fa";
 import ErrorCloud from "svg/error-cloud.svg";
@@ -11,6 +11,8 @@ import { NavLink } from "react-router-dom";
 import _ from "lodash";
 import { routeCodes } from '../constants/routes';
 import NoRecordFound from '../components/Common/NoRecordFound';
+import { ts, connectIDB, isOnline, tw } from '../helpers/funs';
+import { IDB_TBL_SEARCH_USER, IDB_READ_WRITE, IDB_READ } from '../constants/idb';
 
 class Users extends Component {
     constructor(props) {
@@ -23,27 +25,7 @@ class Users extends Component {
             offset: 20,
             isFirstReq: false,
         };
-    }
-
-    componentWillMount() {
-        const {
-            searchValue,
-            dispatch,
-        } = this.props;
-        const {
-            start,
-            offset,
-        } = this.state;
-        if (searchValue !== '') {
-            var requestData = { name: searchValue, start, offset };
-            this.setState({ selectActionInit: true, isFirstReq: true });
-            dispatch(handleChangeUserSearchFor('allUsersSearchValue', searchValue));
-            dispatch(getUsersPageSearchRequest(requestData));
-        } else {
-            this.setState({ start: 0, selectActionInit: true, allUsers: [], isFirstReq: true });
-            var requestData = { name: '', start: 0, offset: offset };
-            dispatch(getUsersPageSearchRequest(requestData));
-        }
+        this.iDB;
     }
 
     render() {
@@ -141,6 +123,94 @@ class Users extends Component {
         );
     }
 
+
+    componentDidMount() {
+
+        connectIDB()().then((connection) => {
+            this.handleIDBOpenSuccess(connection);
+        });
+        this.setState({ selectActionInit: true })
+        if (isOnline()) {
+            const {
+                searchValue,
+                dispatch,
+            } = this.props;
+            const {
+                start,
+                offset,
+            } = this.state;
+            if (searchValue !== '') {
+                var requestData = { name: searchValue, start, offset };
+                this.setState({ isFirstReq: true });
+                dispatch(handleChangeUserSearchFor('allUsersSearchValue', searchValue));
+                dispatch(getUsersPageSearchRequest(requestData));
+            } else {
+                this.setState({ start: 0, allUsers: [], isFirstReq: true });
+                var requestData = { name: '', start: 0, offset: offset };
+                dispatch(getUsersPageSearchRequest(requestData));
+            }
+        }
+
+    }
+
+    handleIDBOpenSuccess = (connection) => {
+        this.iDB = connection.result;
+        if (!isOnline()) {
+            this.getDataFromIDB();
+        }
+    }
+
+    getDataFromIDB = () => {
+        const { dispatch } = this.props;
+        const idbTbls = [IDB_TBL_SEARCH_USER];
+
+        try {
+            const transaction = this.iDB.transaction(idbTbls, IDB_READ);
+            if (transaction) {
+                const osSettings = transaction.objectStore(IDB_TBL_SEARCH_USER);
+                const iDBGetReq = osSettings.get('settings');
+                iDBGetReq.onsuccess = (event) => {
+                    const { target: { result } } = event;
+                    if (result) {
+                        const resultObj = JSON.parse(result.data);
+                        const data = { allUsers: resultObj };
+                        this.setState({ hasMoreData: false });
+                        dispatch(setUserSearchState(data));
+                    } else {
+                        const data = { allUsers: [] };
+                        this.setState({ hasMoreData: false });
+                        dispatch(setUserSearchState(data));
+                    }
+                }
+            }
+        } catch (error) {
+            const data = { allUsers: [] };
+            this.setState({ hasMoreData: false });
+            dispatch(setUserSearchState(data));
+        }
+
+    }
+
+    setDataInDb = (data) => {
+        const { allUsers } = this.state;
+        try {
+            const idbData = { type: 'users', data: JSON.stringify(data) };
+            const transaction = this.iDB.transaction([IDB_TBL_SEARCH_USER], IDB_READ_WRITE);
+            const objectStore = transaction.objectStore(IDB_TBL_SEARCH_USER);
+            const iDBGetReq = objectStore.get('users');
+            iDBGetReq.onsuccess = (event) => {
+                const { target: { result } } = event;
+                if (result) {
+                    objectStore.put(idbData);
+                } else {
+                    objectStore.add(idbData);
+                }
+            }
+        } catch (error) {
+            console.log("error => ", error);
+        }
+    }
+
     componentDidUpdate() {
         const { selectActionInit, start, offset } = this.state;
         const { allUsersLoading, allUsers } = this.props;
@@ -153,6 +223,8 @@ class Users extends Component {
                 hasMoreData,
                 isFirstReq: false,
             });
+            // set data in DB
+            this.setDataInDb(_.concat(this.state.allUsers, allUsers));
         }
     }
 
@@ -184,6 +256,20 @@ class Users extends Component {
             dispatch(getUsersPageSearchRequest(requestData));
             this.setState({ selectActionInit: true });
         }
+    }
+
+    componentWillUnmount() {
+        try {
+            const idbs = [IDB_TBL_SEARCH_USER];
+            if (isOnline()) {
+                const transaction = this.iDB.transaction(idbs, IDB_READ_WRITE);
+                if (transaction) {
+                    const osUsers = transaction.objectStore(IDB_TBL_SEARCH_USER);
+                    osUsers.clear();
+                }
+            }
+            this.iDB.close();
+        } catch (error) { }
     }
 }
 

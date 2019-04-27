@@ -10,6 +10,8 @@ export const RESET_USER_SEARCH = 'RESET_USER_SEARCH';
 
 export const HANDLE_CHANGE_USER_SEARCH_FOR = 'HANDLE_CHANGE_USER_SEARCH_FOR';
 
+export const SET_USER_SEARCH_STATE = 'SET_USER_SEARCH_STATE';
+
 export function getUserSearchRequest(requestData) {
     return {
         type: GET_USER_SEARCH_REQUEST,
@@ -66,3 +68,11 @@ export function handleChangeUserSearchFor(name, value) {
         value,
     }
 }
+
+export function setUserSearchState(data) {
+    return {
+        type: SET_USER_SEARCH_STATE,
+        data
+    }
+}
+

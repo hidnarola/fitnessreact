@@ -9,7 +9,8 @@ import {
     HANDLE_CHANGE_USER_SEARCH_FOR,
     GET_USERS_PAGE_SEARCH_REQUEST,
     GET_USERS_PAGE_SEARCH_SUCCESS,
-    GET_USERS_PAGE_SEARCH_ERROR
+    GET_USERS_PAGE_SEARCH_ERROR,
+    SET_USER_SEARCH_STATE
 } from "../actions/userSearch";
 
 const initialState = Map({
@@ -102,6 +103,9 @@ const actionMap = {
             [action.name]: action.value,
         }));
     },
+    [SET_USER_SEARCH_STATE]: (state, action) => {
+        return state.merge(Map(action.data));
+    }
 }
 
 export default function reducer(state = initialState, action = {}) {
