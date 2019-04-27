@@ -152,9 +152,9 @@ class Profile extends Component {
                                                             <a href="javascript:void(0)" className="upload-img" onClick={this.handleShowChangeProfilePhotoModal}>
                                                                 <i className="icon-add_a_photo"></i>
                                                             </a>
-                                                            <a href="javascript:void(0)" className="view-img">
+                                                            {profile.avatar && <a href="javascript:void(0)" className="view-img">
                                                                 <i className="icon-cancel" onClick={this.handleShowProfilePictureModal}></i>
-                                                            </a>
+                                                            </a>}
                                                         </Fragment>
                                                     }
 
