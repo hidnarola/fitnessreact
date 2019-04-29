@@ -9,6 +9,12 @@ import UserListing from '../../components/Admin/Users/UserListing';
 import UserSave from '../../components/Admin/Users/UserSave';
 
 class Users extends Component {
+
+    componentWillMount() {
+      // change title 
+      document.title = "Users";
+    }
+    
     render() {
         var error = this.props.error;
         return (

@@ -8,6 +8,12 @@ import BadgeListing from '../../components/Admin/Badges/BadgeListing';
 import BadgeSave from '../../components/Admin/Badges/BadgeSave';
 
 class Badges extends Component {
+
+    componentWillMount() {
+        // change title 
+        document.title = "Badges";
+    }
+
     render() {
         const { error } = this.props;
         return (

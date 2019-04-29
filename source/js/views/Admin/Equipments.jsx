@@ -7,6 +7,12 @@ import EquipmentListing from '../../components/Admin/Equipments/EquipmentListing
 import EquipmentSave from '../../components/Admin/Equipments/EquipmentSave';
 
 class Equipments extends Component {
+
+    componentWillMount() {
+      // change title 
+      document.title = "Equipments";
+    }
+    
     render() {
         return (
             <div className="admin-dashboard-wrapper">

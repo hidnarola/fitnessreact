@@ -9,6 +9,12 @@ import { adminRouteCodes } from '../../constants/adminRoutes';
 import { setLoggedAdminFromLocalStorage } from '../../actions/admin/admin';
 
 class Profile extends Component {
+
+    componentWillMount() {
+        // change title 
+        document.title = "Profile";
+    }
+
     render() {
         return (
             <div className="admin-dashboard-wrapper">

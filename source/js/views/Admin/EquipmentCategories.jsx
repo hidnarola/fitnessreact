@@ -7,6 +7,13 @@ import { adminRouteCodes } from '../../constants/adminRoutes';
 import EquipmentCategoriesListing from '../../components/Admin/EquipmentCategories/EquipmentCategoriesListing';
 
 class EquipmentCategories extends Component {
+
+    componentWillMount() {
+        // change title 
+        document.title = "Equipment Categories";
+
+    }
+
     render() {
         return (
             <div className="admin-dashboard-wrapper">

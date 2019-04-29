@@ -22,6 +22,10 @@ class AdminDashboard extends Component {
     }
 
     componentWillMount() {
+
+        // change title 
+        document.title = "Dashboard";
+
         const { dispatch } = this.props;
         const { dateRange } = this.state;
         let requestData = {

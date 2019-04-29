@@ -7,6 +7,11 @@ import ExerciseListing from '../../components/Admin/Exercises/ExerciseListing';
 import ExerciseSave from '../../components/Admin/Exercises/ExerciseSave';
 
 class Exercises extends Component {
+    componentWillMount() {
+      // change title 
+      document.title = "Exercise";
+    }
+    
     render() {
         return (
             <div className="admin-dashboard-wrapper">

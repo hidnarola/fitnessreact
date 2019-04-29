@@ -7,6 +7,12 @@ import { ts } from '../../helpers/funs';
 import { changePasswordRequest, setChangePasswordState } from '../../actions/admin/changePassword';
 
 class ChangePassword extends Component {
+
+    componentWillMount() {
+        // change title 
+        document.title = "Change Password";
+    }
+
     render() {
         return (
             <div className="admin-dashboard-wrapper">

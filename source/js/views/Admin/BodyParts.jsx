@@ -7,6 +7,12 @@ import { adminRouteCodes } from '../../constants/adminRoutes';
 import BodyPartsListing from '../../components/Admin/BodyParts/BodyPartsListing';
 
 class BodyParts extends Component {
+
+    componentWillMount() {
+        // change title 
+        document.title = "Body Parts";
+    }
+
     render() {
         return (
             <div className="admin-dashboard-wrapper">

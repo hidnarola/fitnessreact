@@ -8,6 +8,12 @@ import FitnessTestListing from '../../components/Admin/FitnessTests/FitnessTestL
 import FitnessTestSave from '../../components/Admin/FitnessTests/FitnessTestSave';
 
 class FitnessTests extends Component {
+
+    componentWillMount() {
+        // change title 
+        document.title = "Fitness Tests";
+    }
+
     render() {
         return (
             <div className="admin-dashboard-wrapper">
