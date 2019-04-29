@@ -12,6 +12,7 @@ import { setUserStatsState } from '../actions/userStats';
 import DateRangePickerCustomPeriod from '../components/Common/DateRangePickerCustomPeriod';
 import moment from "moment";
 import { tw, isOnline } from '../helpers/funs';
+import AddMetaDescription from '../components/global/AddMetaDescription';
 
 class StatsPage extends Component {
     constructor(props) {
@@ -33,6 +34,9 @@ class StatsPage extends Component {
         const { showSearch } = this.state;
         return (
             <div className='stat-page'>
+                <AddMetaDescription>
+                    <title>Stats | Fitly</title>
+                </AddMetaDescription>
                 <FitnessHeader />
                 <FitnessNav />
                 <section className="body-wrap starts-body">
@@ -75,12 +79,6 @@ class StatsPage extends Component {
             </div>
         );
     }
-
-    componentDidMount() {
-        // change title 
-        document.title = 'Stats';
-    }
-
 
     componentDidUpdate(prevProps, prevState) {
         const { match, history } = this.props;

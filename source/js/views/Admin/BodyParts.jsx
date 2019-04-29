@@ -5,17 +5,16 @@ import AdminHeader from '../../components/Admin/Template/AdminHeader';
 import AdminNav from '../../components/Admin/Template/AdminNav';
 import { adminRouteCodes } from '../../constants/adminRoutes';
 import BodyPartsListing from '../../components/Admin/BodyParts/BodyPartsListing';
+import AddMetaDescription from '../../components/global/AddMetaDescription';
 
 class BodyParts extends Component {
-
-    componentWillMount() {
-        // change title 
-        document.title = "Body Parts";
-    }
 
     render() {
         return (
             <div className="admin-dashboard-wrapper">
+                <AddMetaDescription>
+                    <title>Body parts | Fitly</title>
+                </AddMetaDescription>
                 <AdminHeader />
                 <AdminNav />
                 <section className="body-wrap">

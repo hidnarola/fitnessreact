@@ -5,17 +5,16 @@ import AdminNav from '../../components/Admin/Template/AdminNav';
 import ChangePasswordForm from '../../components/Admin/Profile/ChangePasswordForm';
 import { ts } from '../../helpers/funs';
 import { changePasswordRequest, setChangePasswordState } from '../../actions/admin/changePassword';
+import AddMetaDescription from '../../components/global/AddMetaDescription';
 
 class ChangePassword extends Component {
-
-    componentWillMount() {
-        // change title 
-        document.title = "Change Password";
-    }
 
     render() {
         return (
             <div className="admin-dashboard-wrapper">
+                <AddMetaDescription>
+                    <title>Change password | Fitly</title>
+                </AddMetaDescription>
                 <AdminHeader />
                 <AdminNav />
                 <section className="body-wrap">

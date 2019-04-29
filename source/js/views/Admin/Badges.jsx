@@ -6,18 +6,17 @@ import AdminNav from 'components/Admin/Template/AdminNav';
 import { adminRouteCodes } from '../../constants/adminRoutes';
 import BadgeListing from '../../components/Admin/Badges/BadgeListing';
 import BadgeSave from '../../components/Admin/Badges/BadgeSave';
+import AddMetaDescription from '../../components/global/AddMetaDescription';
 
 class Badges extends Component {
-
-    componentWillMount() {
-        // change title 
-        document.title = "Badges";
-    }
 
     render() {
         const { error } = this.props;
         return (
             <div className="admin-dashboard-wrapper">
+                <AddMetaDescription>
+                    <title>Badges | Fitly</title>
+                </AddMetaDescription>
                 <AdminHeader />
                 <AdminNav />
                 <section className="body-wrap">

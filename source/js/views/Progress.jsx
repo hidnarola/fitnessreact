@@ -15,6 +15,7 @@ import { setUserProgresDateRange } from '../actions/userProgress';
 import DateRangePickerCustomPeriod from '../components/Common/DateRangePickerCustomPeriod';
 import { IDB_TBL_PROGRESS, IDB_READ_WRITE } from '../constants/idb';
 import { connectIDB, isOnline, tw } from '../helpers/funs';
+import AddMetaDescription from '../components/global/AddMetaDescription';
 
 class Progress extends Component {
     constructor(props) {
@@ -43,6 +44,9 @@ class Progress extends Component {
         const { dateRange } = this.props;
         return (
             <div className='stat-page'>
+                <AddMetaDescription>
+                    <title>Progress | Fitly</title>
+                </AddMetaDescription>
                 <FitnessHeader />
                 <FitnessNav />
                 <section className="body-wrap starts-body">
@@ -94,8 +98,6 @@ class Progress extends Component {
     }
 
     componentDidMount() {
-        // change title 
-        document.title = "Progress";
         connectIDB()().then((connection) => {
             this.handleIDBOpenSuccess(connection);
         });

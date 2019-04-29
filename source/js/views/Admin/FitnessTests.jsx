@@ -6,17 +6,16 @@ import AdminNav from 'components/Admin/Template/AdminNav';
 import { adminRouteCodes } from '../../constants/adminRoutes';
 import FitnessTestListing from '../../components/Admin/FitnessTests/FitnessTestListing';
 import FitnessTestSave from '../../components/Admin/FitnessTests/FitnessTestSave';
+import AddMetaDescription from '../../components/global/AddMetaDescription';
 
 class FitnessTests extends Component {
-
-    componentWillMount() {
-        // change title 
-        document.title = "Fitness Tests";
-    }
 
     render() {
         return (
             <div className="admin-dashboard-wrapper">
+                <AddMetaDescription>
+                    <title>Fitness Test | Fitly</title>
+                </AddMetaDescription>
                 <AdminHeader />
                 <AdminNav />
                 <section className="body-wrap">

@@ -13,6 +13,7 @@ import AddWorkoutTitleForm from '../components/ScheduleWorkout/AddWorkoutTitleFo
 import { SCHEDULED_WORKOUT_TYPE_EXERCISE, SCHEDULED_WORKOUT_TYPE_RESTDAY, EXERCISE_MESUREMENT, EXERCISE_CALENDER } from '../constants/consts';
 import ReactCalender from 'react-calendar/dist/entry.nostyle';
 import { IDB_TBL_EXERCISE, IDB_TBL_EXERCISE_DATA, IDB_READ_WRITE, IDB_READ } from '../constants/idb';
+import AddMetaDescription from '../components/global/AddMetaDescription';
 
 class Exercise extends Component {
     constructor(props) {
@@ -37,6 +38,9 @@ class Exercise extends Component {
         var date = todaysWorkoutDate;
         return (
             <div className='stat-page'>
+                <AddMetaDescription>
+                    <title>Exercise | Fitly</title>
+                </AddMetaDescription>
                 <FitnessHeader />
                 <FitnessNav />
                 {console.log(!loadWorkoutsInit, !firstWorkoutLoading)}
@@ -144,9 +148,6 @@ class Exercise extends Component {
     }
 
     componentDidMount() {
-
-        // change title 
-        document.title = 'Exercise'
 
         connectIDB()().then((connection) => {
             this.handleIDBOpenSuccess(connection);

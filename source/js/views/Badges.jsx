@@ -10,6 +10,7 @@ import InComplete from 'components/Badges/InComplete';
 import Tracking from 'components/Badges/Tracking';
 import { IDB_TBL_BADGES, IDB_READ_WRITE } from '../constants/idb';
 import { connectIDB, isOnline } from '../helpers/funs';
+import AddMetaDescription from '../components/global/AddMetaDescription';
 
 class Badges extends Component {
 
@@ -28,6 +29,9 @@ class Badges extends Component {
     render() {
         return (
             <div className='stat-page'>
+                <AddMetaDescription>
+                    <title>Badges | Fitly</title>
+                </AddMetaDescription>
                 <FitnessHeader />
                 <FitnessNav />
                 <section className="body-wrap">
@@ -54,9 +58,6 @@ class Badges extends Component {
     }
 
     componentDidMount() {
-
-        // change title 
-        document.title = "badges";
 
         connectIDB()().then((connection) => {
             this.handleIDBOpenSuccess(connection);

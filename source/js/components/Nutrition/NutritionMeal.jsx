@@ -25,7 +25,7 @@ import {
 } from "react-bootstrap";
 import { FaTrash } from 'react-icons/lib/fa';
 import DeleteConfirmation from '../Admin/Common/DeleteConfirmation';
-
+import AddMetaDescription from '../../components/global/AddMetaDescription';
 
 const dayDriveOptions = [
     { value: DAY_DRIVE_BREAKFAST, label: capitalizeFirstLetter(DAY_DRIVE_BREAKFAST.replace('_', ' ')) },
@@ -70,6 +70,9 @@ class NutritionMeal extends Component {
         const { loading } = this.props;
         return (
             <div className="fitness-nutrition">
+                <AddMetaDescription>
+                    <title>Nutrition | Fitly</title>
+                </AddMetaDescription>
                 <FitnessHeader />
                 <FitnessNav />
                 <section className="body-wrap nutrition-todays-meal-section">
@@ -263,12 +266,6 @@ class NutritionMeal extends Component {
             </div>
         );
     }
-
-    componentDidMount() {
-      // change title 
-      document.title = "Nutrition";
-    }
-    
 
     componentDidUpdate() {
         const {

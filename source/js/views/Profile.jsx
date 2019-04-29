@@ -31,6 +31,7 @@ import UsersListModal from '../components/Common/UsersListModal';
 import ProfileCalendar from '../components/Profile/ProfileCalendar';
 import { IDB_TBL_PROFILE, IDB_READ_WRITE, IDB_READ } from '../constants/idb';
 import { connectIDB, isOnline } from '../helpers/funs';
+import AddMetaDescription from '../components/global/AddMetaDescription';
 
 class Profile extends Component {
     constructor(props) {
@@ -118,6 +119,9 @@ class Profile extends Component {
         }
         return (
             <div className='stat-page'>
+                <AddMetaDescription>
+                    <title>Profile | Fitly</title>
+                </AddMetaDescription>
                 <FitnessHeader />
                 <FitnessNav />
                 {loadProfileActionInit &&
@@ -434,8 +438,6 @@ class Profile extends Component {
 
 
     componentDidMount() {
-        // change title 
-        document.title = "Profile";
 
         connectIDB()().then((connection) => {
             this.handleIDBOpenSuccess(connection);

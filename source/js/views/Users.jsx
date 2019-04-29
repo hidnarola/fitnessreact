@@ -13,6 +13,7 @@ import { routeCodes } from '../constants/routes';
 import NoRecordFound from '../components/Common/NoRecordFound';
 import { ts, connectIDB, isOnline, tw } from '../helpers/funs';
 import { IDB_TBL_SEARCH_USER, IDB_READ_WRITE, IDB_READ } from '../constants/idb';
+import AddMetaDescription from '../components/global/AddMetaDescription';
 
 class Users extends Component {
     constructor(props) {
@@ -33,6 +34,9 @@ class Users extends Component {
         const { allUsers, hasMoreData, isFirstReq } = this.state;
         return (
             <div className="users-list-wrapper">
+                <AddMetaDescription>
+                    <title>Users | Fitly</title>
+                </AddMetaDescription>
                 <FitnessHeader />
                 <FitnessNav />
                 <section className="body-wrap">
@@ -125,9 +129,6 @@ class Users extends Component {
 
 
     componentDidMount() {
-
-        // change title 
-        document.title = "Users";
 
         connectIDB()().then((connection) => {
             this.handleIDBOpenSuccess(connection);

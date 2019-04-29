@@ -46,6 +46,8 @@ import WidgetBodyFatCard from '../components/Common/WidgetBodyFatCard';
 import WidgetBadgesCard from '../components/Common/WidgetBadgesCard';
 import ReactTooltip from "react-tooltip";
 import { IDB_TBL_DASHBOARD, IDB_READ_WRITE, IDB_READ } from '../constants/idb';
+import AddMetaDescription from '../components/global/AddMetaDescription';
+
 class Dashboard extends Component {
     constructor(props) {
         super(props);
@@ -81,6 +83,9 @@ class Dashboard extends Component {
         const { showWidgetsModal } = this.state;
         return (
             <div className="fitness-dashboard">
+                <AddMetaDescription>
+                    <title>Dashboard | Fitly</title>
+                </AddMetaDescription>
                 <FitnessHeader />
                 <FitnessNav />
                 <section className="body-wrap">
@@ -203,9 +208,6 @@ class Dashboard extends Component {
     }
 
     componentDidMount() {
-
-        // change title 
-        document.title = 'Dashboard'
 
         connectIDB()().then((connection) => {
             this.handleIDBOpenSuccess(connection);

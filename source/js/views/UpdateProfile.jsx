@@ -6,6 +6,7 @@ import UpdateProfileForm from '../components/Profile/UpdateProfileForm';
 import { submit } from 'redux-form';
 import { Alert } from "react-bootstrap";
 import { isOnline, tw } from '../helpers/funs';
+import AddMetaDescription from '../components/global/AddMetaDescription';
 
 class UpdateProfile extends Component {
     constructor(props) {
@@ -20,6 +21,9 @@ class UpdateProfile extends Component {
         const { profileError } = this.props;
         return (
             <div className='stat-page'>
+                <AddMetaDescription>
+                    <title>Update Profile | Fitly</title>
+                </AddMetaDescription>
                 <FitnessHeader />
                 <FitnessNav />
                 <section className="body-wrap">
@@ -49,12 +53,6 @@ class UpdateProfile extends Component {
             </div>
         );
     }
-
-    componentDidMount() {
-        // change title 
-        document.title = "Update Profile";
-    }
-
 
     userOfflineMessage = (e) => {
         if (isOnline()) {

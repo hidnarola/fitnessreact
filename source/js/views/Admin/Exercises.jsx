@@ -5,16 +5,16 @@ import AdminNav from 'components/Admin/Template/AdminNav';
 import { adminRouteCodes } from '../../constants/adminRoutes';
 import ExerciseListing from '../../components/Admin/Exercises/ExerciseListing';
 import ExerciseSave from '../../components/Admin/Exercises/ExerciseSave';
+import AddMetaDescription from '../../components/global/AddMetaDescription';
 
 class Exercises extends Component {
-    componentWillMount() {
-      // change title 
-      document.title = "Exercise";
-    }
-    
+   
     render() {
         return (
             <div className="admin-dashboard-wrapper">
+                <AddMetaDescription>
+                    <title>Exercise | Fitly</title>
+                </AddMetaDescription>
                 <AdminHeader />
                 <AdminNav />
                 <section className="body-wrap">

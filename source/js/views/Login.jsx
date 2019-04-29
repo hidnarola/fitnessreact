@@ -12,6 +12,7 @@ import { resetLoggedUserState } from '../actions/user';
 import { Link } from "react-router-dom";
 import logo from 'img/common/logo.png';
 import { hidePageLoader } from '../actions/pageLoader';
+import AddMetaDescription from '../components/global/AddMetaDescription';
 
 const auth = new Auth();
 
@@ -58,6 +59,9 @@ class Login extends Component {
     render() {
         return (
             <div className="step-wrap step-wrap-login login-wrapper">
+                <AddMetaDescription>
+                    <title>Fitly</title>
+                </AddMetaDescription>
                 <div className="step-box step-box_expried">
                     <div className="logo_login_page">
                         <Link to={routeCodes.HOME}>
@@ -87,13 +91,10 @@ class Login extends Component {
 
     componentDidMount() {
 
-        // change title 
-       document.title = "Fitly";
-
         $('body').addClass('no-padding');
         $('body').addClass('with_login');
     }
-    
+
     componentWillUnmount() {
         $('body').removeClass('no-padding');
         $('body').removeClass('with_login');

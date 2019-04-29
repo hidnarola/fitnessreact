@@ -6,11 +6,15 @@ import ChangePasswordForm from '../components/Profile/ChangePasswordForm';
 import { ts, clearCookies } from '../helpers/funs';
 import { setUserChangePasswordState, userChangePasswordRequest } from '../actions/changePassword';
 import { routeCodes } from '../constants/routes';
+import AddMetaDescription from '../components/global/AddMetaDescription';
 
 class ChangePassword extends Component {
     render() {
         return (
             <div className="fitness-dashboard">
+                <AddMetaDescription>
+                    <title>Change password | Fitly</title>
+                </AddMetaDescription>
                 <FitnessHeader />
                 <FitnessNav />
                 <section className="body-wrap">
@@ -37,11 +41,6 @@ class ChangePassword extends Component {
             </div>
         );
     }
-    componentDidMount() {
-        // change title 
-        document.title = "Change Password";
-    }
-
 
     componentDidUpdate(prevProps, prevState) {
         const { loading, error, history } = this.props;

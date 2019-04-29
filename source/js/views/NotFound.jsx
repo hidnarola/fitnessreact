@@ -3,6 +3,7 @@ import { Route } from 'react-router-dom';
 import $ from "jquery";
 import { Link } from "react-router-dom";
 import { routeCodes } from '../constants/routes';
+import AddMetaDescription from '../components/global/AddMetaDescription';
 
 // This component is used for Server rendering
 // When you want to return 40x http statuses
@@ -25,6 +26,9 @@ export default class NotFound extends Component {
         return (
             <RouteStatus code={404}>
                 <div className="not-found-page-wrapper step-wrap">
+                    <AddMetaDescription>
+                        <title>Not found | Fitly</title>
+                    </AddMetaDescription>
                     <div className="step-box step-box-not-found">
                         <div className="content-wrapper">
                             <h1>404</h1>
@@ -42,8 +46,6 @@ export default class NotFound extends Component {
     }
 
     componentDidMount() {
-        // change title 
-        document.title = 'Not Found'
         $('body').addClass('no-padding');
     }
 

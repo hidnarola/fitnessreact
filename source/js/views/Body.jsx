@@ -4,11 +4,15 @@ import FitnessHeader from '../components/global/FitnessHeader';
 import FitnessNav from '../components/global/FitnessNav';
 import { routeCodes } from '../constants/routes';
 import BodyMeasurement from '../components/BodyMeasurement/BodyMeasurement';
+import AddMetaDescription from '../components/global/AddMetaDescription';
 
 class Body extends Component {
     render() {
         return (
             <div className="fitness-body">
+                <AddMetaDescription>
+                    <title>Body | Fitly</title>
+                </AddMetaDescription>
                 <FitnessHeader />
                 <FitnessNav />
                 <section className="body-wrap">
@@ -18,11 +22,6 @@ class Body extends Component {
                 </section>
             </div>
         );
-    }
-
-    componentDidMount() {
-        // change title 
-        document.title = 'Body'
     }
 
 }

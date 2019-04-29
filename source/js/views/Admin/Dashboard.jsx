@@ -8,6 +8,7 @@ import moment from "moment";
 import DateRangePicker from 'react-daterange-picker';
 import { FaCircleONotch } from "react-icons/lib/fa";
 import ErrorCloud from "svg/error-cloud.svg";
+import AddMetaDescription from '../../components/global/AddMetaDescription';
 
 class AdminDashboard extends Component {
     constructor(props) {
@@ -22,10 +23,6 @@ class AdminDashboard extends Component {
     }
 
     componentWillMount() {
-
-        // change title 
-        document.title = "Dashboard";
-
         const { dispatch } = this.props;
         const { dateRange } = this.state;
         let requestData = {
@@ -40,6 +37,9 @@ class AdminDashboard extends Component {
         const { loading, data, error } = this.props;
         return (
             <div className="admin-dashboard-wrapper">
+                <AddMetaDescription>
+                    <title>Dashboard | Fitly</title>
+                </AddMetaDescription>
                 <AdminHeader />
                 <AdminNav />
                 <section className="body-wrap">

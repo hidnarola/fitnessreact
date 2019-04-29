@@ -5,18 +5,16 @@ import AdminHeader from '../../components/Admin/Template/AdminHeader';
 import AdminNav from '../../components/Admin/Template/AdminNav';
 import { adminRouteCodes } from '../../constants/adminRoutes';
 import EquipmentCategoriesListing from '../../components/Admin/EquipmentCategories/EquipmentCategoriesListing';
+import AddMetaDescription from '../../components/global/AddMetaDescription';
 
 class EquipmentCategories extends Component {
-
-    componentWillMount() {
-        // change title 
-        document.title = "Equipment Categories";
-
-    }
 
     render() {
         return (
             <div className="admin-dashboard-wrapper">
+                <AddMetaDescription>
+                    <title>Equipment categories | Fitly</title>
+                </AddMetaDescription>
                 <AdminHeader />
                 <AdminNav />
                 <section className="body-wrap equipment-categories-wrap">

@@ -5,7 +5,7 @@ import FitnessNav from '../components/global/FitnessNav';
 import ProfileSettingsForm from '../components/Profile/ProfileSettingsForm';
 import { submit } from 'redux-form';
 import { isOnline, tw } from '../helpers/funs';
-
+import AddMetaDescription from '../components/global/AddMetaDescription';
 
 class ProfileSettings extends Component {
     constructor(props) {
@@ -19,6 +19,9 @@ class ProfileSettings extends Component {
         const { saveActionInit } = this.state;
         return (
             <div className='stat-page'>
+                <AddMetaDescription>
+                    <title>Profile settings | Fitly</title>
+                </AddMetaDescription>
                 <FitnessHeader />
                 <FitnessNav />
                 <section className="body-wrap">
@@ -41,12 +44,6 @@ class ProfileSettings extends Component {
             </div>
         );
     }
-
-    componentDidMount() {
-        // change title 
-        document.title = "Settings";
-    }
-
 
     userOfflineMessage = (e) => {
         if (isOnline()) {

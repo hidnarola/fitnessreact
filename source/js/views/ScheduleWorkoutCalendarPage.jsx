@@ -35,6 +35,7 @@ import { createUserProgrramFromCalendarRequest, appendUserProgramFromCalendarReq
 import AppendProgramFromCalendarForm from '../components/ScheduleWorkout/AppendProgramFromCalendarForm';
 import $ from "jquery";
 import { IDB_TBL_CALENDER, IDB_READ_WRITE, IDB_READ } from '../constants/idb';
+import AddMetaDescription from '../components/global/AddMetaDescription';
 
 let dragEventActive = false;
 let dragEventCardOutside = false;
@@ -106,6 +107,9 @@ class ScheduleWorkoutCalendarPage extends Component {
         var selectedEvents = _.filter(workoutEvents, ['isSelectedForBulkAction', true]);
         return (
             <div className="fitness-body">
+                <AddMetaDescription>
+                    <title>Calendar | Fitly</title>
+                </AddMetaDescription>
                 <FitnessHeader />
                 <FitnessNav />
                 <section className="body-wrap">
@@ -321,8 +325,6 @@ class ScheduleWorkoutCalendarPage extends Component {
     }
 
     componentDidMount() {
-        // change title 
-        document.title = "Calendar";
 
         connectIDB()().then((connection) => {
             this.handleIDBOpenSuccess(connection);

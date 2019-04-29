@@ -4,12 +4,16 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { required, email } from 'formValidation/validationRules';
 import { InputField } from '../../../helpers/FormControlHelper';
+import AddMetaDescription from '../../../components/global/AddMetaDescription';
 
 class AdminLoginForm extends Component {
     render() {
         const { loginError, handleSubmit, match } = this.props;
         return (
             <form method="POST" onSubmit={handleSubmit} className="admin-login width-100-per">
+                <AddMetaDescription>
+                    <title>Fitly</title>
+                </AddMetaDescription>
                 <div className="step-box-r">
                     <div className="stepbox-head">
                         <h2>Admin Login</h2>

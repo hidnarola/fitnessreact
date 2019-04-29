@@ -7,17 +7,16 @@ import { updateProfileRequest } from '../../actions/admin/profile';
 import { ts, te } from '../../helpers/funs';
 import { adminRouteCodes } from '../../constants/adminRoutes';
 import { setLoggedAdminFromLocalStorage } from '../../actions/admin/admin';
+import AddMetaDescription from '../../components/global/AddMetaDescription';
 
 class Profile extends Component {
-
-    componentWillMount() {
-        // change title 
-        document.title = "Profile";
-    }
 
     render() {
         return (
             <div className="admin-dashboard-wrapper">
+                <AddMetaDescription>
+                    <title>Profile | Fitly</title>
+                </AddMetaDescription>
                 <AdminHeader />
                 <AdminNav />
                 <section className="body-wrap">

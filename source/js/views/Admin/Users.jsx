@@ -7,18 +7,17 @@ import AdminNav from 'components/Admin/Template/AdminNav';
 import { adminRouteCodes } from '../../constants/adminRoutes';
 import UserListing from '../../components/Admin/Users/UserListing';
 import UserSave from '../../components/Admin/Users/UserSave';
+import AddMetaDescription from '../../components/global/AddMetaDescription';
 
 class Users extends Component {
 
-    componentWillMount() {
-      // change title 
-      document.title = "Users";
-    }
-    
     render() {
         var error = this.props.error;
         return (
             <div className="users-wrapper">
+                <AddMetaDescription>
+                    <title>Users | Fitly</title>
+                </AddMetaDescription>
                 <AdminHeader />
                 <AdminNav />
                 <section className="body-wrap">
