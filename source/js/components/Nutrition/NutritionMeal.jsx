@@ -264,6 +264,12 @@ class NutritionMeal extends Component {
         );
     }
 
+    componentDidMount() {
+      // change title 
+      document.title = "Nutrition";
+    }
+    
+
     componentDidUpdate() {
         const {
             loading,

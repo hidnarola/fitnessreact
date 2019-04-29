@@ -61,6 +61,10 @@ class AdminLogin extends Component {
     }
 
     componentDidMount() {
+
+        // change title 
+       document.title = "Fitly";
+
         $('body').addClass('no-padding');
         $('body').addClass('with_login');
     }

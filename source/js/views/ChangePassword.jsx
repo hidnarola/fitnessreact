@@ -37,6 +37,11 @@ class ChangePassword extends Component {
             </div>
         );
     }
+    componentDidMount() {
+        // change title 
+        document.title = "Change Password";
+    }
+
 
     componentDidUpdate(prevProps, prevState) {
         const { loading, error, history } = this.props;

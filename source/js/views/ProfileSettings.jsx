@@ -42,6 +42,12 @@ class ProfileSettings extends Component {
         );
     }
 
+    componentDidMount() {
+        // change title 
+        document.title = "Settings";
+    }
+
+
     userOfflineMessage = (e) => {
         if (isOnline()) {
             this.handleSave()

@@ -145,6 +145,9 @@ class Exercise extends Component {
 
     componentDidMount() {
 
+        // change title 
+        document.title = 'Exercise'
+
         connectIDB()().then((connection) => {
             this.handleIDBOpenSuccess(connection);
         });

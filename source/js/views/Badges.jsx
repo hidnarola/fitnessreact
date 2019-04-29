@@ -54,6 +54,10 @@ class Badges extends Component {
     }
 
     componentDidMount() {
+
+        // change title 
+        document.title = "badges";
+
         connectIDB()().then((connection) => {
             this.handleIDBOpenSuccess(connection);
         });

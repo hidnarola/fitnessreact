@@ -122,7 +122,7 @@ class Mobility extends Component {
                     </div>
                 }
 
-                {!loading && (typeof progress === 'undefined' || (progress && progress.length <= 0)) && error && error.length <= 0 &&
+                {!loading && (typeof progress === 'undefined' || (progress && progress.length <= 0) || !progress) && error && error.length <= 0 &&
                     <NoRecordFound title="Fitness test(s) data are not available for these dates" />
                 }
 

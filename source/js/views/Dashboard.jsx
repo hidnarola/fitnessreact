@@ -203,6 +203,10 @@ class Dashboard extends Component {
     }
 
     componentDidMount() {
+
+        // change title 
+        document.title = 'Dashboard'
+
         connectIDB()().then((connection) => {
             this.handleIDBOpenSuccess(connection);
         });
@@ -233,12 +237,12 @@ class Dashboard extends Component {
                 te('Something went wrong! please try again later.');
             }
             this.handleCloseWidgetsModal();
-            if(isOnline()){
+            if (isOnline()) {
                 this.requestDashboardData();
             }
             this.storeUserWidgetDashboardInIDB();
         }
-        if ((!loading && !likeLoading && !commentLoading )) {
+        if ((!loading && !likeLoading && !commentLoading)) {
             this.storeDashboardInIDB();
         }
     }
@@ -341,7 +345,7 @@ class Dashboard extends Component {
                             const data = { activityFeed: [], loading: false }
                             dispatch(setDashboardPage(data));
                         }
-                    }   
+                    }
 
 
                 }
@@ -601,7 +605,7 @@ class Dashboard extends Component {
             ];
             requestData[WIDGET_MUSCLE] = _data;
         }
-        if(isOnline()) {
+        if (isOnline()) {
             dispatch(saveDashboardWidgetsDataRequest(requestData));
         } else {
             tw("You are offline, please check your internet connection");

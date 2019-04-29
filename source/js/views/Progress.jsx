@@ -94,6 +94,8 @@ class Progress extends Component {
     }
 
     componentDidMount() {
+        // change title 
+        document.title = "Progress";
         connectIDB()().then((connection) => {
             this.handleIDBOpenSuccess(connection);
         });

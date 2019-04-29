@@ -19,6 +19,12 @@ class Body extends Component {
             </div>
         );
     }
+
+    componentDidMount() {
+        // change title 
+        document.title = 'Body'
+    }
+
 }
 
 export default Body;

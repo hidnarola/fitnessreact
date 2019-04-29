@@ -76,7 +76,7 @@ class Profile extends Component {
                     loadProfileActionInit: true,
                     username: newUsername,
                 });
-                if(isOnline()) {
+                if (isOnline()) {
                     nextProps.dispatch(getProfileDetailsRequest(newUsername));
                     nextProps.dispatch(getPrivacyOfTimelineUserRequest(newUsername));
                 } else {
@@ -434,6 +434,9 @@ class Profile extends Component {
 
 
     componentDidMount() {
+        // change title 
+        document.title = "Profile";
+
         connectIDB()().then((connection) => {
             this.handleIDBOpenSuccess(connection);
         });
@@ -489,9 +492,9 @@ class Profile extends Component {
                     const { target: { result } } = event;
                     if (result) {
                         const resultObjPost = JSON.parse(result.data);
-                        const dataPost = { profile:  resultObjPost}
+                        const dataPost = { profile: resultObjPost }
                         dispatch(setUserProfileState(dataPost));
-                        this.setState({profile:  resultObjPost})
+                        this.setState({ profile: resultObjPost })
                     } else {
                         const dataPost = { profile: null }
                         dispatch(setUserProfileState(dataPost));
@@ -562,8 +565,8 @@ class Profile extends Component {
                 sendFriendRequestInit: false,
                 loadProfileActionInit: true
             });
-            if(isOnline()) {
-            dispatch(getProfileDetailsRequest(username));
+            if (isOnline()) {
+                dispatch(getProfileDetailsRequest(username));
             } else {
                 this.getDataFromIDB()
             }
@@ -579,8 +582,8 @@ class Profile extends Component {
                 loadProfileActionInit: true,
             });
             this.handleHideCancelFriendRequestModal();
-            if(isOnline()) {            
-            dispatch(getProfileDetailsRequest(username));
+            if (isOnline()) {
+                dispatch(getProfileDetailsRequest(username));
             }
             if ((requestCancelError && requestCancelError.length > 0)) {
                 te('Something went wrong!');
@@ -593,8 +596,8 @@ class Profile extends Component {
                 UnfriendRequestInit: false,
                 loadProfileActionInit: true,
             });
-            if(isOnline()) {            
-            dispatch(getProfileDetailsRequest(username));
+            if (isOnline()) {
+                dispatch(getProfileDetailsRequest(username));
             } else {
                 this.getDataFromIDB()
             }
@@ -611,8 +614,8 @@ class Profile extends Component {
                 acceptFriendRequestReceivedInit: false,
                 loadProfileActionInit: true,
             });
-            if(isOnline()) {
-            dispatch(getProfileDetailsRequest(username));
+            if (isOnline()) {
+                dispatch(getProfileDetailsRequest(username));
             } else {
                 this.getDataFromIDB()
             }
@@ -629,8 +632,8 @@ class Profile extends Component {
                 loadProfileActionInit: true,
             });
             this.handleHideRejectFriendRequestModal();
-            if(isOnline()) {            
-            dispatch(getProfileDetailsRequest(username));
+            if (isOnline()) {
+                dispatch(getProfileDetailsRequest(username));
             } else {
                 this.getDataFromIDB()
             }
@@ -652,9 +655,9 @@ class Profile extends Component {
             } else {
                 ts('Profile image updated!');
             }
-            if(isOnline()) {            
-            dispatch(hidePageLoader(username));
-            dispatch(getProfileDetailsRequest(username));
+            if (isOnline()) {
+                dispatch(hidePageLoader(username));
+                dispatch(getProfileDetailsRequest(username));
             } else {
                 this.getDataFromIDB()
             }
@@ -663,8 +666,8 @@ class Profile extends Component {
         }
         if (!startFollowingLoading && prevProps.startFollowingLoading !== startFollowingLoading) {
             this.setState({ loadProfileActionInit: true });
-            if(isOnline()) {            
-            dispatch(getProfileDetailsRequest(username));
+            if (isOnline()) {
+                dispatch(getProfileDetailsRequest(username));
             } else {
                 this.getDataFromIDB()
             }
@@ -674,8 +677,8 @@ class Profile extends Component {
         }
         if (!stopFollowingLoading && prevProps.stopFollowingLoading !== stopFollowingLoading) {
             this.setState({ loadProfileActionInit: true });
-            if(isOnline()) {            
-            dispatch(getProfileDetailsRequest(username));
+            if (isOnline()) {
+                dispatch(getProfileDetailsRequest(username));
             } else {
                 this.getDataFromIDB()
             }
@@ -687,8 +690,8 @@ class Profile extends Component {
         if (!deleteProfileImgLoding && prevProps.deleteProfileImgLoding !== deleteProfileImgLoding) {
             this.setState({ loadProfileActionInit: true, updateLocalStorageData: true, showProfilePictureModal: false });
             dispatch(hidePageLoader());
-            if(isOnline()) {            
-            dispatch(getProfileDetailsRequest(username));
+            if (isOnline()) {
+                dispatch(getProfileDetailsRequest(username));
             } else {
                 this.getDataFromIDB()
             }

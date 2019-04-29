@@ -20,6 +20,7 @@ class StatsPage extends Component {
     }
 
     componentWillMount() {
+
         const { match, history } = this.props;
         if (match.isExact) {
             let url = `${routeCodes.STATSPAGE}/${STATS_STRENGTH}`;
@@ -75,6 +76,12 @@ class StatsPage extends Component {
         );
     }
 
+    componentDidMount() {
+        // change title 
+        document.title = 'Stats';
+    }
+
+
     componentDidUpdate(prevProps, prevState) {
         const { match, history } = this.props;
         if (match.isExact) {
@@ -84,7 +91,7 @@ class StatsPage extends Component {
     }
 
     handleTimeDateRange = (range, state) => {
-        if(isOnline()){
+        if (isOnline()) {
             const { dispatch } = this.props;
             let stateData = {
                 dateRange: range,

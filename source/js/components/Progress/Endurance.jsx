@@ -51,7 +51,7 @@ class Endurance extends Component {
                     </div>
                 }
 
-                {!loading && (typeof progress === 'undefined' || (progress && progress.length <= 0)) && typeof error !== 'undefined' && error && error.length <= 0 &&
+                {!loading && (typeof progress === 'undefined' || (progress && progress.length <= 0) || !progress) && typeof error !== 'undefined' && error && error.length <= 0 &&
                     <NoRecordFound title="Endurance (Cardio) data are not available for these days" />
                 }
 

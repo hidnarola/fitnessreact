@@ -50,6 +50,12 @@ class UpdateProfile extends Component {
         );
     }
 
+    componentDidMount() {
+        // change title 
+        document.title = "Update Profile";
+    }
+
+
     userOfflineMessage = (e) => {
         if (isOnline()) {
             this.handleSave()

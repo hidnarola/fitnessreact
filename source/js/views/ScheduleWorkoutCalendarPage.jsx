@@ -321,6 +321,9 @@ class ScheduleWorkoutCalendarPage extends Component {
     }
 
     componentDidMount() {
+        // change title 
+        document.title = "Calendar";
+
         connectIDB()().then((connection) => {
             this.handleIDBOpenSuccess(connection);
         });

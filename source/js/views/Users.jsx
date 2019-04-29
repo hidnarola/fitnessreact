@@ -126,6 +126,9 @@ class Users extends Component {
 
     componentDidMount() {
 
+        // change title 
+        document.title = "Users";
+
         connectIDB()().then((connection) => {
             this.handleIDBOpenSuccess(connection);
         });

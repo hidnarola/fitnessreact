@@ -42,6 +42,8 @@ export default class NotFound extends Component {
     }
 
     componentDidMount() {
+        // change title 
+        document.title = 'Not Found'
         $('body').addClass('no-padding');
     }
 
