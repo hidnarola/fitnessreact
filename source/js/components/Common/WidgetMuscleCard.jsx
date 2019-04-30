@@ -91,7 +91,7 @@ class WidgetMuscleCard extends Component {
                     }
 
                     {data && !data.loading && data.graphData && data.graphData.length > 0 &&
-                        <div className="whitebox-body bodyfat-graph hyphen-30">
+                        <div className="whitebox-body bodyfat-graph">
                             <ResponsiveContainer>
                                 <AreaChart data={data.graphData}>
                                     <defs>

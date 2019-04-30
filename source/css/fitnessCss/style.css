@@ -107,7 +107,7 @@ h3.title-h3{padding:0;margin:0;display:block; color:#232B41; font-size:35px; fon
 .body-head-l{width:70%;}
 .body-head-l h2{margin:0;padding:0; color:#2F3684; font-size:60px; font-weight: 900;	line-height: 95px;	text-align: left;font-family: 'gt_walsheim_proregular' !important;}
 .body-head-l p{ color:#232B41; font-size:14px; line-height:20px; padding:0;margin:0;}
-.body-head-r{width:30%;max-width:310px;margin:20px 0px 0 auto;}
+.body-head-r{width:30%;max-width:310px;margin:23px 0px 0 auto;}
 .body-head-r a,
 .body-head-r button{margin:0 0 20px;padding:0 20px 0 30px;transition:ease-in-out .5s;display:block; text-align:left; width:100%; }
 .body-head-r a:last-child,
@@ -1692,6 +1692,7 @@ ul.workout-exercise-body-view-ul .workout-exercise-head-view-edit button{ color:
 .no-record-found-wrapper i { font-size: 100px; color: #ff337c; direction: ltr; }
 .no-record-found-wrapper h4 { font-size: 30px; color: #ff3370; direction: ltr; }
 .whitebox-head.d-flex.badge-category-card a i { position: absolute; right: 45px; }
+.fitness-dashboard .whitebox-head .btn-toolbar { margin:0;}
 .tab-wrap{ background:#fff; padding:15px; }
 .tab-wrap-body{ background:#F9FAFA; padding:15px;}
 .tab-wrap-body table.table{table-layout:fixed; border:0; margin:0; border-bottom:10px solid #F9FAFA;}
