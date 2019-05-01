@@ -19,6 +19,7 @@
 /* @import 'jquery-ui-slider/jquery-ui.css'; */
 @import "fitnessCss/jquery-ui.css";
 
+@import "fitnessCss/responsive.css";
 @import "fitnessCss/emos.css";
 @import "fitnessCss/style.css";
 @import "fitnessCss/custom.css";

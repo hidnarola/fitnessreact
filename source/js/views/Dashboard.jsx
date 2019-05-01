@@ -120,12 +120,12 @@ class Dashboard extends Component {
                     {!loading &&
                         <div className="body-content row d-flex col-md-12">
                             <div className={cns(
-                                { 'col-md-6': (userWidgets && typeof userWidgets[WIDGET_ACTIVITY_FEED] !== 'undefined' && userWidgets[WIDGET_ACTIVITY_FEED] === 1) },
+                                { 'col-md-6 col-sm-6 col-xs-12': (userWidgets && typeof userWidgets[WIDGET_ACTIVITY_FEED] !== 'undefined' && userWidgets[WIDGET_ACTIVITY_FEED] === 1) },
                                 { 'col-md-12': (!userWidgets || typeof userWidgets[WIDGET_ACTIVITY_FEED] === 'undefined' || userWidgets[WIDGET_ACTIVITY_FEED] === 0) },
                             )}>
                                 <div className="row">
                                     {userWidgets && typeof userWidgets[WIDGET_TODAYS_WORKOUT] !== 'undefined' && userWidgets[WIDGET_TODAYS_WORKOUT] === 1 &&
-                                        <div className="col-md-12">
+                                        <div className="col-md-12 col-sm-12 col-xs-12">
                                             <Workouts />
                                         </div>
                                     }
@@ -135,7 +135,7 @@ class Dashboard extends Component {
                                         </div>
                                     }
                                     {userWidgets && typeof userWidgets[WIDGET_BODY_FAT] !== 'undefined' && userWidgets[WIDGET_BODY_FAT] &&
-                                        <div className="col-md-12">
+                                        <div className="col-md-12 col-sm-12 col-xs-12">
                                             <WidgetBodyFatCard
                                                 type={WIDGETS_TYPE_DASHBOARD}
                                                 userWidgets={userWidgets}
@@ -147,18 +147,18 @@ class Dashboard extends Component {
                                         </div>
                                     }
                                     {userWidgets && userWidgets[WIDGET_MUSCLE] && userWidgets[WIDGET_MUSCLE].length > 0 &&
-                                        <div className="col-md-12 row dashboard-muscle-wrapper">
+                                        <div className="col-md-12 col-sm-12 col-xs-12 row dashboard-muscle-wrapper">
                                             <WidgetMuscleCard
                                                 type={WIDGETS_TYPE_DASHBOARD}
                                                 userWidgets={userWidgets}
                                                 muscle={widgetMuscle}
                                                 requestGraphData={this.requestGraphData}
-                                                bodyWrapperClass="col-md-12"
+                                                bodyWrapperClass="col-md-12 col-sm-12 col-xs-12"
                                             />
                                         </div>
                                     }
                                     {userWidgets && typeof userWidgets[WIDGET_BADGES] !== 'undefined' && userWidgets[WIDGET_BADGES] === 1 &&
-                                        <div className="col-md-12">
+                                        <div className="col-md-12 col-sm-12 col-xs-12">
                                             <WidgetBadgesCard
                                                 badges={widgetBadges}
                                             />
@@ -168,7 +168,7 @@ class Dashboard extends Component {
                             </div>
 
                             {userWidgets && typeof userWidgets[WIDGET_ACTIVITY_FEED] !== 'undefined' && userWidgets[WIDGET_ACTIVITY_FEED] === 1 &&
-                                <div className="col-md-6">
+                                <div className="col-md-6 col-sm-6 col-xs-12">
                                     <ActivityFeed />
                                 </div>
                             }
