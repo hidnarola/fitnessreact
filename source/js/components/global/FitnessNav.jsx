@@ -17,7 +17,7 @@ export default class FitnessNav extends Component {
 
     render() {
         return (
-            <div className='Menu'>
+            <div id="manu-navigation" className='Menu'>
                 <nav className="navigation" id="navigation">
                     <Scrollbars autoHide>
                         <ul>

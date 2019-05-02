@@ -169,6 +169,13 @@ export function toggleSideMenu(id, show) {
     }
 }
 
+export function toggleSideBar() {
+    $(`#search-header`).toggleClass("w100");
+    $(`#app-wrapper`).toggleClass("pl0");
+    $(`#manu-navigation`).toggleClass("menu-hide");
+    
+}
+
 export function toggleSmallChatWindow(id) {
     $(`#${id}`).slideToggle(300, 'swing');
 }

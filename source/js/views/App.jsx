@@ -154,7 +154,7 @@ class App extends Component {
         let chatWindowZIndex = 10;
         return (
             <div className="appWrapper">
-                <div className="app-wrapper-content">
+                <div id="app-wrapper" className="app-wrapper-content">
                     <div id="loader" className={cns({ 'display_none': !showPageLoader })}>
                         <FaCircleONotch className="loader-spinner fs-100" />
                     </div>

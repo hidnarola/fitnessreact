@@ -2361,6 +2361,8 @@ div[contenteditable="true"] {min-height: 15px;}
 .workout-calender .w-c-pink .custom_check [type="checkbox"]:checked + label:after { background: #ff337e; }
 #custom-cut-workout-wrap, #custom-drag-workout-wrap{border-radius: 10px;-webkit-box-shadow: 0 0 10px 0 rgba(0, 0, 0, .15);box-shadow: 0 0 10px 0 rgba(0, 0, 0, .15);}
 
+.header-r .mobile-menu{display: none;}
+
 @media(min-width: 992px){
     body.with_login .app-wrapper-content{ width: 100%; }
     body.with_login .appWrapper{ display: -ms-flexbox; display: flex; -ms-flex-align: center; align-items: center; height: 100vh; }
