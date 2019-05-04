@@ -1,3 +1,10 @@
+@media(max-width: 1280px){
+    .stats-wrapper .stats-content-body .stats-content-body-r {width: 70% !important;}
+    .stats-wrapper .stats-content-body .stats-content-body-l {width: 30% !important;}
+    .stats-wrapper .stats-content-head .stats-content-head-l , 
+    .stats-wrapper .stats-content-head .stats-content-head-m{width: 30% !important;}
+
+}
 @media(max-width: 1024px){	
     .header-r {padding: 25px 20px 25px 20px !important;}
     .search {padding: 30px 20px 30px 20px !important;}
@@ -5,12 +12,20 @@
     .body-content{padding-left: 20px !important;padding-right: 0px !important;}
     .white-box {padding: 15px !important;}
     .profile-list span a img {height: inherit !important;}
-    .body-head-l h2{font-size: 50px;line-height: 80px;}
+    .body-head-l h2{font-size: 50px !important;line-height: 80px !important;}
     h3.title-h3{font-size: 28px;line-height: 28px;}
 }
 
 @media(max-width: 992px){
-    .search div.search-form {width: 30vw !important;}    
+    .search div.search-form {width: 30vw !important;}   
+    .stat-page .body-head-l , .stat-page .body-head-r {width: 50%;} 
+    .stat-page .body-head-l h2 {line-height: 60px !important;}
+    .stat-page .DateRangePicker__Month {width: 255px;}
+    .stats-wrapper .stats-content-head{-ms-flex-wrap: wrap;flex-wrap: wrap;}
+    .stats-wrapper .stats-content-head .stats-content-head-l {width: 100% !important;}
+    .stats-wrapper .stats-content-head .stats-content-head-m {width: 40% !important;}
+    
+
 }
 @media(min-width:768px) and (max-width:990px){}
 
@@ -22,6 +37,13 @@
     .stepbox-b button.continues-btn{width: 170px !important;}
     .logo{border-right:none !important;}
     .header-user a {font-size: 0 !important;}
+    .stat-page .DateRangePicker__Month {width: 165px;}
+    .stats-wrapper .stats-content-body{-ms-flex-wrap: wrap;flex-wrap: wrap;}
+    .stats-wrapper .stats-content-body .stats-content-body-l , 
+    .stats-wrapper .stats-content-body .stats-content-body-r{width: 100% !important;}
+    .stats-wrapper .stats-content-body .stats-content-body-l button {height: 60px !important;}
+    .stats-wrapper .stats-content-body .stats-content-body-l button .stats-btn-body h3 {margin: 5px 0 5px 0 !important;font-size: 18px !important;}
+
 }
 @media(min-width:600px) and (max-width:767px){
     
@@ -60,6 +82,12 @@
     width: 120px !important;height: 120px !important;}
     .widget-popup .modal-content {padding: 30px 15px !important;}
     .body-head-l h2 {font-size: 35px !important;}  
+    .stat-page .body-head{flex-wrap: wrap;}
+    .stat-page .body-head-l, .stat-page .body-head-r {width: 100%;}
+    .stat-page .body-head-r {max-width: 100%;margin: 23px 0px 0 0;}
+    .stat-page .body-head-r a {margin: 0 0 20px;padding: 0 10px 0 10px;}
+    .stat-page .body-head-l-btm a {min-width: 100px !important;}
+    .stat-page .progress-date-range-picker{right: 10px;top: 330px;}
 }
 
 @media(max-width: 480px){
@@ -83,6 +111,7 @@
     .auth0-lock.auth0-lock.auth0-lock-opened .auth0-lock-center {overflow-y: auto;}
     .auth0-lock.auth0-lock .auth0-lock-center {vertical-align: middle;display: table-cell;margin: auto;}
 }
+
 @media(max-width: 380px){
     .header .logo {padding: 15px 0px 15px 7px;}
     .header .logo a {width: 60px;}

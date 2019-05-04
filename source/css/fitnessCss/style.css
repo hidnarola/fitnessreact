@@ -108,7 +108,7 @@ h3.title-h3{padding:0;margin:0;display:block; color:#232B41; font-size:35px; fon
 .body-head-l h2{margin:0;padding:0; color:#2F3684; font-size:60px; font-weight: 900;	line-height: 95px;	text-align: left;font-family: 'gt_walsheim_proregular' !important;}
 .body-head-l p{ color:#232B41; font-size:14px; line-height:20px; padding:0;margin:0;}
 .body-head-r{width:30%;max-width:310px;margin:23px 0px 0 auto;}
-.body-head-r a
+.body-head-r a,
 .body-head-r button{margin:0 0 20px;padding:0 20px 0 30px;transition:ease-in-out .5s;display:block; text-align:left; width:100%; }
 .body-head-r a:last-child,
 .body-head-r button:last-child{margin-bottom:0;}
