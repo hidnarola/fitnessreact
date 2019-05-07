@@ -115,7 +115,7 @@ class BodyMeasurementForm extends Component {
                     </Alert>
                 }
                 <div className="row">
-                    <div className="col-md-8">
+                    <div className="col-md-8 col-sm-8 col-xs-12">
                         <ul className="common-ul common_ul_body body-log-upper-textbox">
                             <li>
                                 <Field
@@ -159,7 +159,7 @@ class BodyMeasurementForm extends Component {
                             </div>
 
                             <div className="row d-flex whitebox-body">
-                                <div className="col-md-6">
+                                <div className="col-md-6 col-sm-6 measurements-wrap">
                                     <ul className="common-ul">
                                         <li>
                                             <Field
@@ -317,7 +317,7 @@ class BodyMeasurementForm extends Component {
                                         </li>
                                     </ul>
                                 </div>
-                                <div className="col-md-6">
+                                <div className="col-md-6 col-sm-6 measurements-img-wrap">
                                     <div className="whitebody-graph">
                                         <img src={bodyGraph} alt="Body" />
                                     </div>
@@ -325,7 +325,7 @@ class BodyMeasurementForm extends Component {
                             </div>
                         </div>
                     </div>
-                    <div className="col-md-4">
+                    <div className="col-md-4 col-sm-4 col-xs-12">
                         <div className="daily_img_wrapper">
                             <div className="whitebox-head"><h3 className="title-h3">Progress Photos</h3></div>
                             {!loadingProgressPhotos && userProgressPhotos && userProgressPhotos.length > 0 &&

@@ -118,7 +118,8 @@ class Dashboard extends Component {
                     }
 
                     {!loading &&
-                        <div className="body-content row d-flex col-md-12">
+                        <div className="body-content  d-flex col-md-12">
+                        <div className="row">
                             <div className={cns(
                                 { 'col-md-6 col-sm-6 col-xs-12': (userWidgets && typeof userWidgets[WIDGET_ACTIVITY_FEED] !== 'undefined' && userWidgets[WIDGET_ACTIVITY_FEED] === 1) },
                                 { 'col-md-12': (!userWidgets || typeof userWidgets[WIDGET_ACTIVITY_FEED] === 'undefined' || userWidgets[WIDGET_ACTIVITY_FEED] === 0) },
@@ -186,6 +187,7 @@ class Dashboard extends Component {
                                     <h3>Please add widgets on dashboard.</h3>
                                 </div>
                             }
+                            </div>
                         </div>
                     }
 
