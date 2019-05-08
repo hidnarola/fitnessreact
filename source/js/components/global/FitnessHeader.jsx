@@ -15,7 +15,7 @@ import noProfileImg from 'img/common/no-profile-img.png';
 import Autosuggest from "react-autosuggest";
 import _ from "lodash";
 import { getUserSearchRequest, resetUserSearch, handleChangeUserSearchFor } from '../../actions/userSearch';
-import { toggleSideMenu, getToken, toggleSideBar } from '../../helpers/funs';
+import { toggleSideMenu, getToken, isSidebarOpen, openSidebar, closeSidebar } from '../../helpers/funs';
 import AutosuggestHighlightMatch from 'autosuggest-highlight/match';
 import AutosuggestHighlightParse from 'autosuggest-highlight/parse';
 import cns from "classnames";
@@ -105,7 +105,7 @@ class FitnessHeader extends Component {
                     </div>
                     <div className="header-r d-flex">
                         <div className="mobile-menu">
-                        <a href="javascript:void(0)" onClick={() => toggleSideBar()}>
+                        <a href="javascript:void(0)" onClick={() =>{ isSidebarOpen() ? closeSidebar() :openSidebar() }}>
                             <FaMenu size={24} />
                         </a>
                         </div>
@@ -178,6 +178,16 @@ class FitnessHeader extends Component {
                 </header>
             </div >
         );
+    }
+
+    componentDidMount() {
+        if(isSidebarOpen())
+        {
+            openSidebar()
+        }
+        else {
+            closeSidebar() 
+        } 
     }
 
     componentDidUpdate(prevProps, prevState) {

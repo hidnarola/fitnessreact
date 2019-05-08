@@ -169,11 +169,34 @@ export function toggleSideMenu(id, show) {
     }
 }
 
+export function isSidebarOpen() {
+    if(document.getElementById('manu-navigation').classList.contains('menu-hide')) {
+        console.log("false");
+        return false;
+    } else {
+        console.log("true");
+        return true;
+    }
+}
+
+export function openSidebar() {
+    $(`#search-header`).removeClass("w100");
+    $(`#app-wrapper`).removeClass("pl0");
+    $(`#manu-navigation`).removeClass("menu-hide");
+    // addClass(‘highlight’);
+}
+
+export function closeSidebar() {
+    $(`#search-header`).addClass("w100");
+    $(`#app-wrapper`).addClass("pl0");
+    $(`#manu-navigation`).addClass("menu-hide");
+    // removeClass(‘highlight’)
+}
+
 export function toggleSideBar() {
     $(`#search-header`).toggleClass("w100");
     $(`#app-wrapper`).toggleClass("pl0");
     $(`#manu-navigation`).toggleClass("menu-hide");
-    
 }
 
 export function toggleSmallChatWindow(id) {
