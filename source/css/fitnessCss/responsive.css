@@ -19,13 +19,14 @@
 @media(max-width: 992px){
     .search div.search-form {width: 30vw !important;}   
     .stat-page .body-head-l , .stat-page .body-head-r {width: 50%;} 
-    .stat-page .body-head-l h2 {line-height: 60px !important;}
+    .stat-page .body-head-l h2 , .workout-schedule-save .body-head-l h2{line-height: 60px !important;}
     .stat-page .DateRangePicker__Month {width: 255px;}
     .stats-wrapper .stats-content-head{-ms-flex-wrap: wrap;flex-wrap: wrap;}
     .stats-wrapper .stats-content-head .stats-content-head-l {width: 100% !important;}
     .stats-wrapper .stats-content-head .stats-content-head-m {width: 40% !important;}
     .stats-wrapper .stats-content-head .stats-content-head-l select {margin-bottom: 25px;}
-
+    .workout-schedule-save .body-head-l-btm a {min-width: 125px;margin-right: 15px;line-height: 40px;}
+    .workout-schedule-save .body-head-l-btm {margin-top: 60px;}
 }
 @media(min-width:768px) and (max-width:992px){
     .stats-wrapper .date-range-picker {top: 120px;}
@@ -48,15 +49,26 @@
     .stats-wrapper .stats-content-body .stats-content-body-l button .stats-btn-body h3 {margin: 5px 0 5px 0 !important;font-size: 18px !important;}
     .stats-wrapper .stats-content-head .stats-content-head-m {width: 100% !important;margin-bottom: 15px !important;}
     .stats-wrapper .stats-content-head .stats-content-head-r {margin-left: inherit !important;}
-    .stats-wrapper .stats-content-body .stats-content-body-r {width: 90% !important; }
+    .stats-wrapper .stats-content-body .stats-content-body-r {width: 90% !important;height: 270px !important;}
     .stats-wrapper .date-range-picker {right: -13px!important;top: 190px !important;z-index: 9 !important;}
 
     .today-badges .customiser-box .tropy-icon-box {width: 15%;}
-    .stats-wrapper .stats-content-body .stats-content-body-l {padding: 0 !important;margin: 0 !important;}
+    .stats-wrapper .stats-content-body .stats-content-body-l {padding: 0 !important;margin: 0 !important;height: inherit !important;}
     .emos-launcher-wrap .emos-area-wrap.top-right {right: inherit !important;left: -30px !important;}
     .bodyfat-date-range-picker .DateRangePicker__Month , 
     .fithub-widget-date-range.custom_date_pdl .DateRangePicker__Month {width: 165px;}
+    .stats-wrapper .stats-content-body .stats-content-body-l button:last-child {margin-bottom: 5px !important;}
+    .workout-schedule-save .body-head.d-flex.justify-content-start.front-white-header{-ms-flex-wrap: wrap;flex-wrap: wrap;}
+    .workout-schedule-save .body-head-l , .workout-schedule-save .body-head-r {width: 100%;}
+    .workout-schedule-save .body-head-l-btm {margin-top: 30px;}
+    .workout-schedule-save .body-head-r {margin: 30px 0px 0 0;display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-pack: justify;
+    -ms-flex-pack: justify;justify-content: space-between;}
+    .workout-schedule-save .body-head-r a:first-child(){margin: 0px 15px 0 0;}
+    .workout-schedule-save .body-head-r a{width: 100%;}
 }
+
+
+
 @media(min-width:600px) and (max-width:767px){
     .body-measurement-list-section-wrapper .row.d-flex.whitebox-body {
         flex-wrap: inherit;
@@ -118,8 +130,8 @@
 }
 
 @media(max-width: 480px){
-    .auth0-lock.auth0-lock.auth0-lock-opened .auth0-lock-widget{width: 300px;opacity: 1;height: initial;margin: 0 auto;border-radius: 5px;position: absolute;
-    top: 50%;left: 50%;transform: translate(-50% , -50%);bottom: inherit;}
+    .auth0-lock.auth0-lock.auth0-lock-opened .auth0-lock-widget{width: 300px !important;opacity: 1;height: initial;margin: 0 auto;border-radius: 5px;position: absolute;
+    top: 50%!important;left: 50%!important;transform: translate(-50% , -50%) !important;bottom: inherit !important;}
     .auth0-lock.auth0-lock.auth0-lock-opened .auth0-lock-overlay{display: block;}
     .auth0-lock.auth0-lock.auth0-lock-opened .auth0-lock-body-content {min-height: initial !important;}
     html.auth0-lock-html body > * {display: inherit;}
