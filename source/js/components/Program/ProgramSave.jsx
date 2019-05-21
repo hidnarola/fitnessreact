@@ -141,6 +141,7 @@ class ProgramSave extends Component {
                 </section>
 
                 <SweetAlert
+                    customClass="sweetalert-responsive"
                     type="default"
                     title={`Select event for - Day ${selectedDay}`}
                     onCancel={this.cancelSelectDayAction}
@@ -771,14 +772,16 @@ class CustomDaysCalendarView extends Component {
             )
         }
         return (
-            <div className="program-save-custom-days-wrapper">
-                <div className="block-border-div"></div>
-                <div className="block-border-div"></div>
-                <div className="block-border-div"></div>
-                <div className="block-border-div"></div>
-                <div className="block-border-div"></div>
-                <div className="block-border-div"></div>
-                {rowsObj}
+            <div className="custome-table-edit-wrapper">
+                <div className="program-save-custom-days-wrapper">
+                    <div className="block-border-div"></div>
+                    <div className="block-border-div"></div>
+                    <div className="block-border-div"></div>
+                    <div className="block-border-div"></div>
+                    <div className="block-border-div"></div>
+                    <div className="block-border-div"></div>
+                    {rowsObj}
+                </div>
             </div>
         );
     }

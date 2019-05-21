@@ -52,15 +52,17 @@ class WorkoutExerciseSingleView extends Component {
         const { showAdvance } = this.state;
         return (
             <div className="workout-exercise-view">
-                <div className="workout-exercise-head-view d-flex">
-                    <div className="workout-exercise-head-view-l">
-                        <strong>{exercise.exercises.name}</strong>
-                    </div>
-                    <div className="workout-exercise-head-view-r">
-                        {exercise.differentSets === 1 &&
-                            <ToggleAdvanceSwitch exercise={exercise} showAdvance={showAdvance} handleAdvanceViewChange={() => this.setState({ showAdvance: !showAdvance })} />
-                        }
-                    </div>
+                <div className={exercise.differentSets === 1 ? "workout-exercise-head-view d-flex advance-switch-wrap" : "workout-exercise-head-view d-flex"}>
+                    
+                        <div className="workout-exercise-head-view-l">
+                            <strong>{exercise.exercises.name}</strong>
+                        </div>
+                        <div className="workout-exercise-head-view-r">
+                            {exercise.differentSets === 1 &&
+                                <ToggleAdvanceSwitch exercise={exercise} showAdvance={showAdvance} handleAdvanceViewChange={() => this.setState({ showAdvance: !showAdvance })} />
+                            }
+                        </div>
+                   
                 </div>
                 <div className="workout-exercise-body-view d-flex">
                     <div className="workout-exercise-body-view-l">
@@ -214,15 +216,17 @@ class WorkoutExerciseSupersetNormalView extends Component {
         const { showAdvance } = this.state;
         return (
             <div className="workout-exercise-body-view">
-                <div className="workout-exercise-body-head-view d-flex">
-                    <div className="workout-exercise-head-view-l">
-                        <strong>{exercise.exercises.name}</strong>
-                    </div>
-                    <div className="workout-exercise-head-view-r">
-                        {exercise.differentSets === 1 &&
-                            <ToggleAdvanceSwitch exercise={exercise} showAdvance={showAdvance} handleAdvanceViewChange={() => this.setState({ showAdvance: !showAdvance })} />
-                        }
-                    </div>
+                <div className={exercise.differentSets === 1 ? "workout-exercise-head-view d-flex advance-switch-wrap" : "workout-exercise-head-view d-flex"}>
+                    
+                        <div className="workout-exercise-head-view-l">
+                            <strong>{exercise.exercises.name}</strong>
+                        </div>
+                        <div className="workout-exercise-head-view-r">
+                            {exercise.differentSets === 1 &&
+                                <ToggleAdvanceSwitch exercise={exercise} showAdvance={showAdvance} handleAdvanceViewChange={() => this.setState({ showAdvance: !showAdvance })} />
+                            }
+                        </div>
+                    
                 </div>
                 <div className="workout-exercise-body-content-view d-flex">
                     <div className="workout-exercise-body-content-view-l">
@@ -281,16 +285,18 @@ class WorkoutExerciseCircuitNormalView extends Component {
         const { showAdvance } = this.state;
         return (
             <div className="workout-exercise-body-view">
-                <div className="workout-exercise-body-head-view d-flex">
-                    <div className="workout-exercise-head-view-l">
-                        <strong>{exercise.exercises.name}</strong>
-                    </div>
+                <div className={exercise.differentSets === 1 ? "workout-exercise-head-view d-flex advance-switch-wrap" : "workout-exercise-head-view d-flex"}>
+                    
+                        <div className="workout-exercise-head-view-l">
+                            <strong>{exercise.exercises.name}</strong>
+                        </div>
 
-                    <div className="workout-exercise-head-view-r">
-                        {exercise.differentSets === 1 &&
-                            <ToggleAdvanceSwitch exercise={exercise} showAdvance={showAdvance} handleAdvanceViewChange={() => this.setState({ showAdvance: !showAdvance })} />
-                        }
-                    </div>
+                        <div className="workout-exercise-head-view-r">
+                            {exercise.differentSets === 1 &&
+                                <ToggleAdvanceSwitch exercise={exercise} showAdvance={showAdvance} handleAdvanceViewChange={() => this.setState({ showAdvance: !showAdvance })} />
+                            }
+                        </div>
+                    
                 </div>
                 <div className="workout-exercise-body-content-view d-flex">
                     <div className="workout-exercise-body-content-view-l">

@@ -15,7 +15,7 @@ class SaveProgramMasterPageForm extends Component {
         return (
             <form method="POST" onSubmit={handleSubmit}>
                 <div className="d-flex">
-                    <div className="col-md-6">
+                    <div className="col-md-6 col-sm-6 col-xs-12">
                         <Field
                             name="title"
                             label="Name"
@@ -28,7 +28,7 @@ class SaveProgramMasterPageForm extends Component {
                             validate={[required, minLength2, maxLength100]}
                         />
                     </div>
-                    <div className="col-md-6">
+                    <div className="col-md-6 col-sm-6 col-xs-12">
                         <Field
                             id="privacy"
                             name="privacy"
@@ -45,7 +45,7 @@ class SaveProgramMasterPageForm extends Component {
                     </div>
                 </div>
                 <div className="d-flex">
-                    <div className="col-md-6">
+                    <div className="col-md-6 col-sm-6 col-xs-12">
                         <Field
                             id="goal"
                             name="goal"
@@ -60,7 +60,7 @@ class SaveProgramMasterPageForm extends Component {
                             validate={[requiredReactSelect]}
                         />
                     </div>
-                    <div className="col-md-6">
+                    <div className="col-md-6 col-sm-6 col-xs-12">
                         <Field
                             id="level"
                             name="level"
@@ -77,7 +77,7 @@ class SaveProgramMasterPageForm extends Component {
                     </div>
                 </div>
                 <div className="d-flex">
-                    <div className="col-md-12">
+                    <div className="col-md-12 col-sm-12 col-xs-12">
                         <Field
                             id="description"
                             name="description"
@@ -92,7 +92,7 @@ class SaveProgramMasterPageForm extends Component {
                     </div>
                 </div>
                 <div className="d-flex pull-right mt-10">
-                    <div className="col-md-12">
+                    <div className="col-md-12 col-sm-12 col-xs-12">
                         <Link to={backUrl} className="custom-medium-link-btn">
                             <span>Back</span>
                             <i className="icon-arrow_back"></i>

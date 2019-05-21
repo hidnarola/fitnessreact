@@ -1634,6 +1634,7 @@ ul.workout-exercise-body-view-ul .workout-exercise-head-view-edit button{ color:
 .workout-exercise-body-view-l{ width:20%;margin:auto;}
 .workout-exercise-body-content-view-l img,
 .workout-exercise-body-view-l img{max-width:150px;border-radius: 50%;}
+.workout-exercise-body-view-l img{width: 135px;height: 135px;}
 .workout-exercise-body-view-r{ width:78%; margin-left:auto;}
 .workout-exercise-body-view-desc{ height:40px; overflow:hidden;}
 .workout-exercise-head-view-r .btn-group.open .dropdown-toggle{ background:transparent !important;}
@@ -1651,7 +1652,7 @@ ul.workout-exercise-body-view-ul .workout-exercise-head-view-edit button{ color:
 .todays-workout-box-wrapper .whitebox-head{ margin-bottom:10px;}
 .todays-workout-list-card { padding: 15px 20px; border-radius:10px; text-align: left; color: #232B41; background:#44efd8;}
 .todays-workout-list-card a{color:#fff;word-wrap: break-word;}
-.todays-workout-list-card + .todays-workout-list-card{margin-top:20px;}
+.todays-workout-list-card + .todays-workout-list-card{margin-top:20px;display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-align: start;-ms-flex-align: start;align-items: flex-start;}
 .todays-workout-list-card .switch-wrap{ line-height:40px; margin: 10px -20px -20px; background:#f2f2f2; border-radius:0 0 10px 10px; box-shadow:none; border:0;}
 .todays-workout-list-card .switch-wrap small {margin:0 0 0 auto;}
 .todays-workout-list-card .switch-wrap .material-switch {margin:0 0 0 20px;}
@@ -2070,7 +2071,10 @@ button.close_btn {padding: 0;border-radius: 80%;border: 0;height: 20px;backgroun
 .sets-advance-view-block > label {position: absolute;left: 3px;top: 9px;margin: 0;}
 .sets-advance-view-block > div {float: left;width: 25%;position: relative;padding: 0 5px;}
 .sets-advance-view-block > div input {width: 100%;}
-.sets-advance-view-block > div select {margin: 0;position: absolute;right: 5px;top: 0;}
+/* .sets-advance-view-block > div select {margin: 0;position: absolute;right: 5px;top: 0;} */
+.sets-advance-view-block .adv-view-field-wrap  div:first-child{width: 60px;}
+.sets-advance-view-block .adv-view-field-wrap  div:last-child{position: absolute;left: 60px;top: 0;}
+
 .sets-advance-view-block button.sets-advance-view-cBtn {position: absolute;right: 0;top: 25px;}
 .sets-advance-view-block:After {content: " ";display: block;clear: both;}
 .erro_msg_single_wrapper + div select {top: 1px;right: 6px;}
@@ -2362,6 +2366,10 @@ div[contenteditable="true"] {min-height: 15px;}
 #custom-cut-workout-wrap, #custom-drag-workout-wrap{border-radius: 10px;-webkit-box-shadow: 0 0 10px 0 rgba(0, 0, 0, .15);box-shadow: 0 0 10px 0 rgba(0, 0, 0, .15);}
 
 .header-r .mobile-menu{display: none;}
+.profilephoto-content .custome-table {width: 100%;}
+
+
+
 
 @media(min-width: 992px){
     body.with_login .app-wrapper-content{ width: 100%; }

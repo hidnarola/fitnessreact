@@ -69,8 +69,9 @@ class Exercise extends Component {
                             </div>
                         </div>
 
-                        <div className="body-content d-flex row justify-content-start profilephoto-content">
-                            <div className="col-md-9">
+                        <div className="body-content justify-content-start profilephoto-content">
+                        <div className="row">
+                            <div className="col-md-9 col-sm-12 col-xs-12">
                                 <div className="white-exercise-block">
                                     {(typeof firstWorkoutId === 'undefined' || !firstWorkoutId) &&
                                         <a href="javascript:void(0)" onClick={this.handleAddWorkout}>Add Workout</a>
@@ -118,6 +119,7 @@ class Exercise extends Component {
                                     />
                                     <NavLink to={routeCodes.SCHEDULE_WORKOUT} onClick={(e) => { !isOnline() && this.userOfflineMessage(e) }} className="new-log-date-wrap-view">View Calendar</NavLink>
                                 </div>
+                            </div>
                             </div>
                         </div>
 

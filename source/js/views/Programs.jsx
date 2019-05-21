@@ -35,7 +35,7 @@ class Programs extends Component {
             <div className="fitness-body">
                 <FitnessHeader />
                 <FitnessNav />
-                <section className="body-wrap">
+                <section className="body-wrap program-wrap">
                     <div className="body-head d-flex justify-content-start front-white-header with-tabs">
                         <div className="body-head-l">
                             <h2>Programs</h2>

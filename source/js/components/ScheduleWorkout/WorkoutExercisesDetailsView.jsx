@@ -462,58 +462,60 @@ class WorkoutExerciseSingleView extends Component {
             exercise,
         } = this.props;
         return (
-            <div className="workout-exercise-head-view d-flex">
-                <div className="workout-exercise-head-view-l">
-                    <img
-                        src={SERVER_BASE_URL + exercise.exercises.images[0]}
-                        width="50"
-                        onError={(e) => {
-                            e.target.src = noImg
-                        }}
-                    />
-                    <strong>{exercise.exercises.name}</strong>
-                </div>
-                <div className="workout-exercise-head-view-r">
-                    {exercise.differentSets === 0 &&
-                        <div className="workout-exercise-head-view-data-row d-flex">
-                            {exercise.sets &&
-                                <div className="workout-exercise-head-view-data-col">
-                                    <strong>{exercise.sets}</strong>&nbsp;
-                                    <strong>{'Sets'}</strong>
-                                </div>
-                            }
-                            {typeof exercise.restTime !== 'undefined' &&
-                                <div className="workout-exercise-head-view-data-col">
-                                    <strong>{exercise.restTime}</strong>&nbsp;
-                                    <strong>{_.find(EXE_REST_TIME_UNITS, ['value', exercise.restTimeUnit]).label} Rest</strong>
-                                </div>
-                            }
-                            {exercise.setsDetails[0].field1 &&
-                                <div className="workout-exercise-head-view-data-col">
-                                    <strong>{exercise.setsDetails[0].field1.value}</strong>&nbsp;
-                                    <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[0].field1.unit]).label}</strong>
-                                </div>
-                            }
-                            {exercise.setsDetails[0].field2 &&
-                                <div className="workout-exercise-head-view-data-col">
-                                    <strong>{exercise.setsDetails[0].field2.value}</strong>&nbsp;
-                                    <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[0].field2.unit]).label}</strong>
-                                </div>
-                            }
-                            {exercise.setsDetails[0].field3 &&
-                                <div className="workout-exercise-head-view-data-col">
-                                    <strong>{exercise.setsDetails[0].field3.value}</strong>&nbsp;
-                                    <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[0].field3.unit]).label}</strong>
-                                </div>
-                            }
-                        </div>
-                    }
-                    {exercise.differentSets === 1 &&
-                        <WorkoutExerciseSingleAdvanceView
-                            exercise={exercise}
+            <div className={exercise.differentSets === 1 ? "workout-exercise-head-view d-flex advance-switch-wrap" : "workout-exercise-head-view d-flex"}>
+                
+                    <div className="workout-exercise-head-view-l">
+                        <img
+                            src={SERVER_BASE_URL + exercise.exercises.images[0]}
+                            width="50"
+                            onError={(e) => {
+                                e.target.src = noImg
+                            }}
                         />
-                    }
-                </div>
+                        <strong>{exercise.exercises.name}</strong>
+                    </div>
+                    <div className="workout-exercise-head-view-r">
+                        {exercise.differentSets === 0 &&
+                            <div className="workout-exercise-head-view-data-row d-flex">
+                                {exercise.sets &&
+                                    <div className="workout-exercise-head-view-data-col">
+                                        <strong>{exercise.sets}</strong>&nbsp;
+                                    <strong>{'Sets'}</strong>
+                                    </div>
+                                }
+                                {typeof exercise.restTime !== 'undefined' &&
+                                    <div className="workout-exercise-head-view-data-col">
+                                        <strong>{exercise.restTime}</strong>&nbsp;
+                                    <strong>{_.find(EXE_REST_TIME_UNITS, ['value', exercise.restTimeUnit]).label} Rest</strong>
+                                    </div>
+                                }
+                                {exercise.setsDetails[0].field1 &&
+                                    <div className="workout-exercise-head-view-data-col">
+                                        <strong>{exercise.setsDetails[0].field1.value}</strong>&nbsp;
+                                    <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[0].field1.unit]).label}</strong>
+                                    </div>
+                                }
+                                {exercise.setsDetails[0].field2 &&
+                                    <div className="workout-exercise-head-view-data-col">
+                                        <strong>{exercise.setsDetails[0].field2.value}</strong>&nbsp;
+                                    <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[0].field2.unit]).label}</strong>
+                                    </div>
+                                }
+                                {exercise.setsDetails[0].field3 &&
+                                    <div className="workout-exercise-head-view-data-col">
+                                        <strong>{exercise.setsDetails[0].field3.value}</strong>&nbsp;
+                                    <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[0].field3.unit]).label}</strong>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        {exercise.differentSets === 1 &&
+                            <WorkoutExerciseSingleAdvanceView
+                                exercise={exercise}
+                            />
+                        }
+                    </div>
+                
             </div>
         );
     }
@@ -553,46 +555,48 @@ class WorkoutExerciseSupersetView extends Component {
                             {exercises && exercises.length > 0 &&
                                 exercises.map((exercise, index) => {
                                     return (
-                                        <div key={index} className="workout-exercise-body-view d-flex">
-                                            <div className="workout-exercise-head-view-l">
-                                                <img
-                                                    src={SERVER_BASE_URL + exercise.exercises.images[0]}
-                                                    width="50"
-                                                    onError={(e) => {
-                                                        e.target.src = noImg
-                                                    }}
-                                                />
-                                                <strong>{exercise.exercises.name}</strong>
-                                            </div>
-                                            <div className="workout-exercise-head-view-r">
-                                                {exercise.differentSets === 0 &&
-                                                    <div className="workout-exercise-body-view-data-row d-flex">
-                                                        {exercise.setsDetails[0].field1 &&
-                                                            <div className="workout-exercise-body-view-data-col">
-                                                                <strong>{exercise.setsDetails[0].field1.value}</strong>&nbsp;
-                                                                <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[0].field1.unit]).label}</strong>
-                                                            </div>
-                                                        }
-                                                        {exercise.setsDetails[0].field2 &&
-                                                            <div className="workout-exercise-body-view-data-col">
-                                                                <strong>{exercise.setsDetails[0].field2.value}</strong>&nbsp;
-                                                                <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[0].field2.unit]).label}</strong>
-                                                            </div>
-                                                        }
-                                                        {exercise.setsDetails[0].field3 &&
-                                                            <div className="workout-exercise-body-view-data-col">
-                                                                <strong>{exercise.setsDetails[0].field3.value}</strong>&nbsp;
-                                                                <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[0].field3.unit]).label}</strong>
-                                                            </div>
-                                                        }
-                                                    </div>
-                                                }
-                                                {exercise.differentSets === 1 &&
-                                                    <WorkoutExerciseSupersetAdvanceView
-                                                        exercise={exercise}
+                                        <div key={index} className={exercise.differentSets === 1 ? "workout-exercise-head-view d-flex advance-switch-wrap" : "workout-exercise-head-view d-flex"}>
+                                           
+                                                <div className="workout-exercise-head-view-l">
+                                                    <img
+                                                        src={SERVER_BASE_URL + exercise.exercises.images[0]}
+                                                        width="50"
+                                                        onError={(e) => {
+                                                            e.target.src = noImg
+                                                        }}
                                                     />
-                                                }
-                                            </div>
+                                                    <strong>{exercise.exercises.name}</strong>
+                                                </div>
+                                                <div className="workout-exercise-head-view-r">
+                                                    {exercise.differentSets === 0 &&
+                                                        <div className="workout-exercise-body-view-data-row d-flex">
+                                                            {exercise.setsDetails[0].field1 &&
+                                                                <div className="workout-exercise-body-view-data-col">
+                                                                    <strong>{exercise.setsDetails[0].field1.value}</strong>&nbsp;
+                                                                <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[0].field1.unit]).label}</strong>
+                                                                </div>
+                                                            }
+                                                            {exercise.setsDetails[0].field2 &&
+                                                                <div className="workout-exercise-body-view-data-col">
+                                                                    <strong>{exercise.setsDetails[0].field2.value}</strong>&nbsp;
+                                                                <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[0].field2.unit]).label}</strong>
+                                                                </div>
+                                                            }
+                                                            {exercise.setsDetails[0].field3 &&
+                                                                <div className="workout-exercise-body-view-data-col">
+                                                                    <strong>{exercise.setsDetails[0].field3.value}</strong>&nbsp;
+                                                                <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[0].field3.unit]).label}</strong>
+                                                                </div>
+                                                            }
+                                                        </div>
+                                                    }
+                                                    {exercise.differentSets === 1 &&
+                                                        <WorkoutExerciseSupersetAdvanceView
+                                                            exercise={exercise}
+                                                        />
+                                                    }
+                                                </div>
+                                            
                                         </div>
                                     );
                                 })
@@ -639,46 +643,48 @@ class WorkoutExerciseCircuitView extends Component {
                             {exercises && exercises.length > 0 &&
                                 exercises.map((exercise, index) => {
                                     return (
-                                        <div key={index} className="workout-exercise-body-view d-flex">
-                                            <div className="workout-exercise-head-view-l">
-                                                <img
-                                                    src={SERVER_BASE_URL + exercise.exercises.images[0]}
-                                                    width="50"
-                                                    onError={(e) => {
-                                                        e.target.src = noImg
-                                                    }}
-                                                />
-                                                <strong>{exercise.exercises.name}</strong>
-                                            </div>
-                                            <div className="workout-exercise-head-view-r">
-                                                {exercise.differentSets === 0 &&
-                                                    <div className="workout-exercise-body-view-data-row d-flex">
-                                                        {exercise.setsDetails[0].field1 &&
-                                                            <div className="workout-exercise-body-view-data-col">
-                                                                <strong>{exercise.setsDetails[0].field1.value}</strong>&nbsp;
-                                                                <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[0].field1.unit]).label}</strong>
-                                                            </div>
-                                                        }
-                                                        {exercise.setsDetails[0].field2 &&
-                                                            <div className="workout-exercise-body-view-data-col">
-                                                                <strong>{exercise.setsDetails[0].field2.value}</strong>&nbsp;
-                                                                <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[0].field2.unit]).label}</strong>
-                                                            </div>
-                                                        }
-                                                        {exercise.setsDetails[0].field3 &&
-                                                            <div className="workout-exercise-body-view-data-col">
-                                                                <strong>{exercise.setsDetails[0].field3.value}</strong>&nbsp;
-                                                                <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[0].field3.unit]).label}</strong>
-                                                            </div>
-                                                        }
-                                                    </div>
-                                                }
-                                                {exercise.differentSets === 1 &&
-                                                    <WorkoutExerciseCircuitAdvanceView
-                                                        exercise={exercise}
+                                        <div key={index} className={exercise.differentSets === 1 ? "workout-exercise-head-view d-flex advance-switch-wrap" : "workout-exercise-head-view d-flex"}>
+                                           
+                                                <div className="workout-exercise-head-view-l">
+                                                    <img
+                                                        src={SERVER_BASE_URL + exercise.exercises.images[0]}
+                                                        width="50"
+                                                        onError={(e) => {
+                                                            e.target.src = noImg
+                                                        }}
                                                     />
-                                                }
-                                            </div>
+                                                    <strong>{exercise.exercises.name}</strong>
+                                                </div>
+                                                <div className="workout-exercise-head-view-r">
+                                                    {exercise.differentSets === 0 &&
+                                                        <div className="workout-exercise-body-view-data-row d-flex">
+                                                            {exercise.setsDetails[0].field1 &&
+                                                                <div className="workout-exercise-body-view-data-col">
+                                                                    <strong>{exercise.setsDetails[0].field1.value}</strong>&nbsp;
+                                                                <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[0].field1.unit]).label}</strong>
+                                                                </div>
+                                                            }
+                                                            {exercise.setsDetails[0].field2 &&
+                                                                <div className="workout-exercise-body-view-data-col">
+                                                                    <strong>{exercise.setsDetails[0].field2.value}</strong>&nbsp;
+                                                                <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[0].field2.unit]).label}</strong>
+                                                                </div>
+                                                            }
+                                                            {exercise.setsDetails[0].field3 &&
+                                                                <div className="workout-exercise-body-view-data-col">
+                                                                    <strong>{exercise.setsDetails[0].field3.value}</strong>&nbsp;
+                                                                <strong>{_.find(EXE_MEASUREMENT_UNITS, ['value', exercise.setsDetails[0].field3.unit]).label}</strong>
+                                                                </div>
+                                                            }
+                                                        </div>
+                                                    }
+                                                    {exercise.differentSets === 1 &&
+                                                        <WorkoutExerciseCircuitAdvanceView
+                                                            exercise={exercise}
+                                                        />
+                                                    }
+                                                </div>
+                                            
                                         </div>
                                     );
                                 })

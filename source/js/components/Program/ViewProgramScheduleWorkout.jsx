@@ -87,7 +87,7 @@ class ViewProgramScheduleWorkout extends Component {
                         </div>
                     </div>
                     <div className="body-content d-flex row justify-content-start profilephoto-content">
-                        <div className="col-md-9">
+                        <div className="col-md-9 col-sm-9 col-xs-12">
                             {workout && Object.keys(workout).length > 0 && workout.type && workout.type === SCHEDULED_WORKOUT_TYPE_EXERCISE &&
                                 <div className="">
                                     <div className="whitebox-body profile-body">
@@ -121,7 +121,7 @@ class ViewProgramScheduleWorkout extends Component {
                             }
                         </div>
 
-                        <div className="col-md-3">
+                        <div className="col-md-3 col-sm-12 col-xs-12">
                             {typeof workoutsList !== 'undefined' && workoutsList && workoutsList.length > 0 &&
                                 <div className="white-box space-btm-20 todays-workout-box-wrapper">
                                     <div className="whitebox-head d-flex">

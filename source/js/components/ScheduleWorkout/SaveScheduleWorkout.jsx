@@ -138,210 +138,212 @@ class SaveScheduleWorkout extends Component {
                             </NavLink>
                         </div>
                     </div>
-                    <div className="body-content d-flex row justify-content-start profilephoto-content">
-                        <div className="col-md-9">
-                            {workout && Object.keys(workout).length > 0 && workout.type && workout.type === SCHEDULED_WORKOUT_TYPE_EXERCISE &&
-                                <div className="">
-                                    <div className="whitebox-body profile-body">
-                                        {selectedWorkoutMainType &&
-                                            <div className="workout-main-types-view-wrapper">
-                                                {selectedWorkoutMainType === SCHEDULED_WORKOUT_TYPE_WARMUP &&
-                                                    <WorkoutExercisesView
-                                                        workoutType={SCHEDULED_WORKOUT_TYPE_WARMUP}
-                                                        exercises={workout.warmup}
-                                                    />
-                                                }
-                                                {selectedWorkoutMainType === SCHEDULED_WORKOUT_TYPE_EXERCISE &&
-                                                    <WorkoutExercisesView
-                                                        workoutType={SCHEDULED_WORKOUT_TYPE_EXERCISE}
-                                                        exercises={workout.exercise}
-                                                    />
-                                                }
-                                                {selectedWorkoutMainType === SCHEDULED_WORKOUT_TYPE_COOLDOWN &&
-                                                    <WorkoutExercisesView
-                                                        workoutType={SCHEDULED_WORKOUT_TYPE_COOLDOWN}
-                                                        exercises={workout.cooldown}
-                                                    />
-                                                }
-                                                {workoutFormAction && workoutFormAction === 'add' &&
-                                                    <div className="add-workout-form-wrapper">
-                                                        <SaveScheduleWorkoutForm onSubmit={this.handleSubmit} />
-                                                    </div>
-                                                }
-                                                <div id="edit-workout-form">
-                                                    {workoutFormAction && workoutFormAction === 'edit' &&
+                    <div className="body-content justify-content-start profilephoto-content">
+                        <div className="row">
+                            <div className="col-md-9 col-sm-12 col-xs-12">
+                                {workout && Object.keys(workout).length > 0 && workout.type && workout.type === SCHEDULED_WORKOUT_TYPE_EXERCISE &&
+                                    <div className="">
+                                        <div className="whitebox-body profile-body">
+                                            {selectedWorkoutMainType &&
+                                                <div className="workout-main-types-view-wrapper">
+                                                    {selectedWorkoutMainType === SCHEDULED_WORKOUT_TYPE_WARMUP &&
+                                                        <WorkoutExercisesView
+                                                            workoutType={SCHEDULED_WORKOUT_TYPE_WARMUP}
+                                                            exercises={workout.warmup}
+                                                        />
+                                                    }
+                                                    {selectedWorkoutMainType === SCHEDULED_WORKOUT_TYPE_EXERCISE &&
+                                                        <WorkoutExercisesView
+                                                            workoutType={SCHEDULED_WORKOUT_TYPE_EXERCISE}
+                                                            exercises={workout.exercise}
+                                                        />
+                                                    }
+                                                    {selectedWorkoutMainType === SCHEDULED_WORKOUT_TYPE_COOLDOWN &&
+                                                        <WorkoutExercisesView
+                                                            workoutType={SCHEDULED_WORKOUT_TYPE_COOLDOWN}
+                                                            exercises={workout.cooldown}
+                                                        />
+                                                    }
+                                                    {workoutFormAction && workoutFormAction === 'add' &&
                                                         <div className="add-workout-form-wrapper">
-                                                            <UpdateScheduleWorkoutForm
-                                                                onSubmit={this.handleUpdateSubmit}
-                                                                selectedWorkoutForEdit={selectedWorkoutForEdit}
-                                                            />
+                                                            <SaveScheduleWorkoutForm onSubmit={this.handleSubmit} />
                                                         </div>
                                                     }
+                                                    <div id="edit-workout-form">
+                                                        {workoutFormAction && workoutFormAction === 'edit' &&
+                                                            <div className="add-workout-form-wrapper">
+                                                                <UpdateScheduleWorkoutForm
+                                                                    onSubmit={this.handleUpdateSubmit}
+                                                                    selectedWorkoutForEdit={selectedWorkoutForEdit}
+                                                                />
+                                                            </div>
+                                                        }
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        }
-                                    </div>
-                                </div>
-                            }
-                        </div>
-
-                        <div className="col-md-3">
-                            {typeof workoutsList !== 'undefined' && workoutsList && workoutsList.length > 0 &&
-                                <div className="white-box space-btm-20 todays-workout-box-wrapper">
-                                    <div className="whitebox-head d-flex">
-                                        <h3 className="title-h3 size-14">Today's Workouts</h3>
-                                        <div className="right-btn">
-                                            <button type="button" onClick={this.handleAddWorkout}><i className="icon-add_circle"></i></button>
+                                            }
                                         </div>
                                     </div>
-                                    <div className="whitebox-body text-c">
-                                        {workoutsList.map((o, i) => {
-                                            let isActive = false;
-                                            if (match && match.params && match.params.id && match.params.id === o._id) {
-                                                isActive = true;
-                                            }
-                                            return (
-                                                <TodaysWorkoutListCard
-                                                    key={i}
-                                                    workout={o}
-                                                    handleCompleteWorkout={this.handleCompleteWorkout}
-                                                    handleWholeWorkoutDelete={this.handleShowWholeWorkoutDeleteAlert}
-                                                    isActive={isActive}
-                                                    openEditExerciseTitleModal={this.handleOpenEditExerciseTitleModal}
-                                                    isCompleteSwitchUnderProcess={completeWorkoutActionInit}
-                                                />
-                                            );
-                                        })}
-                                    </div>
-                                </div>
-                            }
-
-                            <div className="new-log-date-wrap log-date-wrap">
-                                <button type="button" onClick={this.handleGoToToday}>Go To Today</button>
-                                <ReactCalender
-                                    name="log_date"
-                                    onChange={this.onChangeLogDate}
-                                    onActiveDateChange={this.onActiveDateChange}
-                                    onClickMonth={this.onMonthClick}
-                                    value={logDate}
-                                    tileContent={({ date, view }) => {
-                                        if (view !== 'month') {
-                                            return '';
-                                        }
-                                        if (calendarList && calendarList.length > 0) {
-                                            return _.map(calendarList, (o, key) => {
-                                                let calDate = moment(date).format('YYYY-MM-DD');
-                                                let logDate = moment(o.date).format('YYYY-MM-DD');
-                                                if (calDate === logDate) {
-                                                    return (<span key={key} className="react-calendar__tile--highlight"></span>)
-                                                }
-                                                return '';
-                                            })
-                                        }
-                                    }}
-                                />
-                                <NavLink to={routeCodes.SCHEDULE_WORKOUT} onClick={(e) => { !isOnline() && this.userOfflineMessage(e) }} className="new-log-date-wrap-view">View Calendar</NavLink>
+                                }
                             </div>
 
-                            {workout && Object.keys(workout).length > 0 && workout.type && workout.type === SCHEDULED_WORKOUT_TYPE_EXERCISE && workoutStat &&
-                                <div className="white-box space-btm-20 padding-20">
-                                    <div className="whitebox-head">
-                                        <h3 className="title-h3 size-14 text-c">Workout Stats</h3>
+                            <div className="col-md-3">
+                                {typeof workoutsList !== 'undefined' && workoutsList && workoutsList.length > 0 &&
+                                    <div className="white-box space-btm-20 todays-workout-box-wrapper">
+                                        <div className="whitebox-head d-flex">
+                                            <h3 className="title-h3 size-14">Today's Workouts</h3>
+                                            <div className="right-btn">
+                                                <button type="button" onClick={this.handleAddWorkout}><i className="icon-add_circle"></i></button>
+                                            </div>
+                                        </div>
+                                        <div className="whitebox-body text-c">
+                                            {workoutsList.map((o, i) => {
+                                                let isActive = false;
+                                                if (match && match.params && match.params.id && match.params.id === o._id) {
+                                                    isActive = true;
+                                                }
+                                                return (
+                                                    <TodaysWorkoutListCard
+                                                        key={i}
+                                                        workout={o}
+                                                        handleCompleteWorkout={this.handleCompleteWorkout}
+                                                        handleWholeWorkoutDelete={this.handleShowWholeWorkoutDeleteAlert}
+                                                        isActive={isActive}
+                                                        openEditExerciseTitleModal={this.handleOpenEditExerciseTitleModal}
+                                                        isCompleteSwitchUnderProcess={completeWorkoutActionInit}
+                                                    />
+                                                );
+                                            })}
+                                        </div>
                                     </div>
-                                    <div className="whitebox-body">
-                                        {typeof workoutStat.total_workout !== 'undefined' && workoutStat.total_workout > 0 &&
-                                            <div className="workout-status">
-                                                <div className="workoutstatus-top">
-                                                    <h4>Total Exercises</h4>
-                                                    <h5>{workoutStat.total_workout}</h5>
-                                                </div>
-                                            </div>
-                                        }
-                                        {!(typeof workoutStat.total_workout !== 'undefined' && workoutStat.total_workout > 0) &&
-                                            <div className="workout-status">
-                                                <div className="workoutstatus-top">
-                                                    <h4>Total Exercises</h4>
-                                                    <h5>0</h5>
-                                                </div>
-                                            </div>
-                                        }
-                                        {typeof workoutStat.total_reps !== 'undefined' && workoutStat.total_reps > 0 &&
-                                            <div className="workout-status">
-                                                <div className="workoutstatus-top">
-                                                    <h4>Total Reps</h4>
-                                                    <h5>{workoutStat.total_reps}</h5>
-                                                </div>
-                                            </div>
-                                        }
-                                        {!(typeof workoutStat.total_reps !== 'undefined' && workoutStat.total_reps > 0) &&
-                                            <div className="workout-status">
-                                                <div className="workoutstatus-top">
-                                                    <h4>Total Reps</h4>
-                                                    <h5>0</h5>
-                                                </div>
-                                            </div>
-                                        }
-                                        {typeof workoutStat.total_sets !== 'undefined' && workoutStat.total_sets > 0 &&
-                                            <div className="workout-status">
-                                                <div className="workoutstatus-top">
-                                                    <h4>Total Sets</h4>
-                                                    <h5>{workoutStat.total_sets}</h5>
-                                                </div>
-                                            </div>
-                                        }
-                                        {!(typeof workoutStat.total_sets !== 'undefined' && workoutStat.total_sets > 0) &&
-                                            <div className="workout-status">
-                                                <div className="workoutstatus-top">
-                                                    <h4>Total Sets</h4>
-                                                    <h5>0</h5>
-                                                </div>
-                                            </div>
-                                        }
-                                        {typeof workoutStat.total_weight_lifted !== 'undefined' && workoutStat.total_weight_lifted > 0 &&
-                                            <div className="workout-status">
-                                                <div className="workoutstatus-top">
-                                                    <h4>Weight Lifted</h4>
-                                                    <h5>
-                                                        {convertUnits(MEASUREMENT_UNIT_GRAM, MEASUREMENT_UNIT_KILOGRAM, workoutStat.total_weight_lifted).toFixed(2)}
-                                                        {MEASUREMENT_UNIT_KILOGRAM}
-                                                    </h5>
-                                                </div>
-                                            </div>
-                                        }
-                                        {!(typeof workoutStat.total_weight_lifted !== 'undefined' && workoutStat.total_weight_lifted > 0) &&
-                                            <div className="workout-status">
-                                                <div className="workoutstatus-top">
-                                                    <h4>Weight Lifted</h4>
-                                                    <h5>
-                                                        0
-                                                    </h5>
-                                                </div>
-                                            </div>
-                                        }
-                                        {typeof workoutStat.muscle_work !== 'undefined' && workoutStat.muscle_work && workoutStat.muscle_work.length > 0 &&
-                                            <div className="workout-status">
-                                                <div className="workoutstatus-top">
-                                                    <h4>Muscles Worked</h4>
-                                                    <h5>{workoutStat.muscle_work.length}</h5>
-                                                </div>
-                                                <div className="workoutstatus-btm">
-                                                    <p>
-                                                        {workoutStat.muscle_work.join(', ')}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        }
-                                        {!(typeof workoutStat.muscle_work !== 'undefined' && workoutStat.muscle_work && workoutStat.muscle_work.length > 0) &&
-                                            <div className="workout-status">
-                                                <div className="workoutstatus-top">
-                                                    <h4>Muscles Worked</h4>
-                                                    <h5>0</h5>
-                                                </div>
-                                            </div>
-                                        }
-                                    </div>
+                                }
+
+                                <div className="new-log-date-wrap log-date-wrap">
+                                    <button type="button" onClick={this.handleGoToToday}>Go To Today</button>
+                                    <ReactCalender
+                                        name="log_date"
+                                        onChange={this.onChangeLogDate}
+                                        onActiveDateChange={this.onActiveDateChange}
+                                        onClickMonth={this.onMonthClick}
+                                        value={logDate}
+                                        tileContent={({ date, view }) => {
+                                            if (view !== 'month') {
+                                                return '';
+                                            }
+                                            if (calendarList && calendarList.length > 0) {
+                                                return _.map(calendarList, (o, key) => {
+                                                    let calDate = moment(date).format('YYYY-MM-DD');
+                                                    let logDate = moment(o.date).format('YYYY-MM-DD');
+                                                    if (calDate === logDate) {
+                                                        return (<span key={key} className="react-calendar__tile--highlight"></span>)
+                                                    }
+                                                    return '';
+                                                })
+                                            }
+                                        }}
+                                    />
+                                    <NavLink to={routeCodes.SCHEDULE_WORKOUT} onClick={(e) => { !isOnline() && this.userOfflineMessage(e) }} className="new-log-date-wrap-view">View Calendar</NavLink>
                                 </div>
-                            }
+
+                                {workout && Object.keys(workout).length > 0 && workout.type && workout.type === SCHEDULED_WORKOUT_TYPE_EXERCISE && workoutStat &&
+                                    <div className="white-box space-btm-20 padding-20">
+                                        <div className="whitebox-head">
+                                            <h3 className="title-h3 size-14 text-c">Workout Stats</h3>
+                                        </div>
+                                        <div className="whitebox-body">
+                                            {typeof workoutStat.total_workout !== 'undefined' && workoutStat.total_workout > 0 &&
+                                                <div className="workout-status">
+                                                    <div className="workoutstatus-top">
+                                                        <h4>Total Exercises</h4>
+                                                        <h5>{workoutStat.total_workout}</h5>
+                                                    </div>
+                                                </div>
+                                            }
+                                            {!(typeof workoutStat.total_workout !== 'undefined' && workoutStat.total_workout > 0) &&
+                                                <div className="workout-status">
+                                                    <div className="workoutstatus-top">
+                                                        <h4>Total Exercises</h4>
+                                                        <h5>0</h5>
+                                                    </div>
+                                                </div>
+                                            }
+                                            {typeof workoutStat.total_reps !== 'undefined' && workoutStat.total_reps > 0 &&
+                                                <div className="workout-status">
+                                                    <div className="workoutstatus-top">
+                                                        <h4>Total Reps</h4>
+                                                        <h5>{workoutStat.total_reps}</h5>
+                                                    </div>
+                                                </div>
+                                            }
+                                            {!(typeof workoutStat.total_reps !== 'undefined' && workoutStat.total_reps > 0) &&
+                                                <div className="workout-status">
+                                                    <div className="workoutstatus-top">
+                                                        <h4>Total Reps</h4>
+                                                        <h5>0</h5>
+                                                    </div>
+                                                </div>
+                                            }
+                                            {typeof workoutStat.total_sets !== 'undefined' && workoutStat.total_sets > 0 &&
+                                                <div className="workout-status">
+                                                    <div className="workoutstatus-top">
+                                                        <h4>Total Sets</h4>
+                                                        <h5>{workoutStat.total_sets}</h5>
+                                                    </div>
+                                                </div>
+                                            }
+                                            {!(typeof workoutStat.total_sets !== 'undefined' && workoutStat.total_sets > 0) &&
+                                                <div className="workout-status">
+                                                    <div className="workoutstatus-top">
+                                                        <h4>Total Sets</h4>
+                                                        <h5>0</h5>
+                                                    </div>
+                                                </div>
+                                            }
+                                            {typeof workoutStat.total_weight_lifted !== 'undefined' && workoutStat.total_weight_lifted > 0 &&
+                                                <div className="workout-status">
+                                                    <div className="workoutstatus-top">
+                                                        <h4>Weight Lifted</h4>
+                                                        <h5>
+                                                            {convertUnits(MEASUREMENT_UNIT_GRAM, MEASUREMENT_UNIT_KILOGRAM, workoutStat.total_weight_lifted).toFixed(2)}
+                                                            {MEASUREMENT_UNIT_KILOGRAM}
+                                                        </h5>
+                                                    </div>
+                                                </div>
+                                            }
+                                            {!(typeof workoutStat.total_weight_lifted !== 'undefined' && workoutStat.total_weight_lifted > 0) &&
+                                                <div className="workout-status">
+                                                    <div className="workoutstatus-top">
+                                                        <h4>Weight Lifted</h4>
+                                                        <h5>
+                                                            0
+                                                    </h5>
+                                                    </div>
+                                                </div>
+                                            }
+                                            {typeof workoutStat.muscle_work !== 'undefined' && workoutStat.muscle_work && workoutStat.muscle_work.length > 0 &&
+                                                <div className="workout-status">
+                                                    <div className="workoutstatus-top">
+                                                        <h4>Muscles Worked</h4>
+                                                        <h5>{workoutStat.muscle_work.length}</h5>
+                                                    </div>
+                                                    <div className="workoutstatus-btm">
+                                                        <p>
+                                                            {workoutStat.muscle_work.join(', ')}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            }
+                                            {!(typeof workoutStat.muscle_work !== 'undefined' && workoutStat.muscle_work && workoutStat.muscle_work.length > 0) &&
+                                                <div className="workout-status">
+                                                    <div className="workoutstatus-top">
+                                                        <h4>Muscles Worked</h4>
+                                                        <h5>0</h5>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                            </div>
                         </div>
                     </div>
                 </section>

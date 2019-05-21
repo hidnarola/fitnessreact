@@ -1,9 +1,22 @@
+@media(max-width: 1440px){
+    .workout-exercise-body-view-desc {height: inherit !important;}
+    .custome-table-edit-wrapper{width: 100%;margin-bottom: 15px;overflow-y: hidden;-ms-overflow-style: -ms-autohiding-scrollbar;min-height: .01%;overflow-x: auto;
+     border-left: 1px solid #ddd;border-right: 1px solid #ddd;}
+    .custome-table-edit-wrapper .program-save-custom-days-wrapper {width: 1168px;border-left: none;border-right: none;}
+    body , .appWrapper{display: block !important;}
+
+}
+
 @media(max-width: 1280px){
     .stats-wrapper .stats-content-body .stats-content-body-r {width: 70% !important;}
     .stats-wrapper .stats-content-body .stats-content-body-l {width: 30% !important;}
     .stats-wrapper .stats-content-head .stats-content-head-l , 
     .stats-wrapper .stats-content-head .stats-content-head-m{width: 30% !important;}
-
+    .workout-type-card-wrapper ul , .workout-type-card-wrapper ul li{display: -webkit-box !important;display: -ms-flexbox !important;display: flex !important;}
+    .workout-type-card-wrapper ul li > div > input{max-width: 60px !important;}
+    .workout-type-card-wrapper ul li .set-div {min-width: 60px;}
+    .super-set-wrraper .multiple-sets-header>div.sim-view-field-wrap input {width: 50px;}
+    .select-workout-type-wrapper .sets-advance-view-block > div {width: 25%;}
 }
 @media(max-width: 1024px){	
     .header-r {padding: 25px 20px 25px 20px !important;}
@@ -14,6 +27,7 @@
     .profile-list span a img {height: inherit !important;}
     .body-head-l h2{font-size: 50px !important;line-height: 80px !important;}
     h3.title-h3{font-size: 28px;line-height: 28px;}
+    .progress-popup .modal-dialog {max-width: 90% !important;position: absolute;top: 50%;left: 48%;transform: translate(-50% , -50%)!important;}
 }
 
 @media(max-width: 992px){
@@ -27,22 +41,40 @@
     .stats-wrapper .stats-content-head .stats-content-head-l select {margin-bottom: 25px;}
     .workout-schedule-save .body-head-l-btm a {min-width: 125px;margin-right: 15px;line-height: 40px;}
     .workout-schedule-save .body-head-l-btm {margin-top: 60px;}
+    .workout-exercise-body-content-view-l img, .workout-exercise-body-view-l img , .workout-exercise-body-content-view-l img ,
+    {max-width: 100%;}
+    .workout-exercise-body-view .workout-exercise-body-view-l , .workout-exercise-body-content-view .workout-exercise-body-content-view-l  {width: 30%;}
+    .workout-exercise-body-view .workout-exercise-body-view-r , .workout-exercise-body-content-view .workout-exercise-body-content-view-r  {width: 70%;}
+    
+    
 }
+
+
+
 @media(min-width:768px) and (max-width:992px){
     .stats-wrapper .date-range-picker {top: 120px;}
 }
 
 
 @media(max-width: 768px){	
-    
-}
+    .programs-table-wrapper .table>thead>tr>th:nth-child(2), .programs-table-wrapper .table>tbody>tr>td:nth-child(2), 
+    .programs-table-wrapper .table>thead>tr>th:nth-child(3), .programs-table-wrapper .table>tbody>tr>td:nth-child(3) , 
+    .programs-table-wrapper .table>thead>tr>th:last-child {width: auto !important;}
+    .programs-table-wrapper .table>tbody>tr>td > span {padding: 0px 8px !important;}
+    .programs-table-wrapper .table>tbody>tr>td:first-child > span p, .programs-table-wrapper .table>thead>tr>th:first-child > span p{
+     max-width: 100% !important;}
+     .program-wrap .programs-table-wrapper .table>thead>tr>th > span {padding: 15px 5px;text-align: center;}
+     .div_search_program , .program-search input{max-width: 100% !important;}
+     body , .appWrapper {display: inherit !important;}
+     .fitness-body .front-white-header .body-head-l h2 {line-height: 60px !important;}
+ }
 
 @media(max-width: 767px){	
     .stepbox-b button.continues-btn{width: 170px !important;}
     .logo{border-right:none !important;}
     .header-user a {font-size: 0 !important;}
     .stat-page .DateRangePicker__Month {width: 165px;}
-    .stats-wrapper .stats-content-body{-ms-flex-wrap: wrap;flex-wrap: wrap;}
+    .stats-wrapper .stats-content-body , .fitness-body .front-white-header{-ms-flex-wrap: wrap;flex-wrap: wrap;}
     .stats-wrapper .stats-content-body .stats-content-body-l , 
     .stats-wrapper .stats-content-body .stats-content-body-r{width: 100% !important;}
     .stats-wrapper .stats-content-body .stats-content-body-l button {height: 52px !important;}
@@ -60,11 +92,42 @@
     .stats-wrapper .stats-content-body .stats-content-body-l button:last-child {margin-bottom: 5px !important;}
     .workout-schedule-save .body-head.d-flex.justify-content-start.front-white-header{-ms-flex-wrap: wrap;flex-wrap: wrap;}
     .workout-schedule-save .body-head-l , .workout-schedule-save .body-head-r {width: 100%;}
-    .workout-schedule-save .body-head-l-btm {margin-top: 30px;}
-    .workout-schedule-save .body-head-r {margin: 30px 0px 0 0;display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-pack: justify;
-    -ms-flex-pack: justify;justify-content: space-between;}
+    .workout-schedule-save .body-head-l-btm ,   .fitness-body .front-white-header .body-head-l .body-head-l-btm{margin-top: 30px;}
+    .workout-schedule-save .body-head-r , .fitness-body .front-white-header .body-head-r{margin: 30px 0px 0 0;display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-pack: justify;
+    -ms-flex-pack: justify;justify-content: space-between;max-width: 100% !important;-ms-flex-wrap: wrap;flex-wrap: wrap}
     .workout-schedule-save .body-head-r a:first-child(){margin: 0px 15px 0 0;}
     .workout-schedule-save .body-head-r a{width: 100%;}
+    .progress-popup .modal-dialog .modal-content {padding: 30px 35px 35px 35px !important;}
+
+    .starts-body .body-head-l , .starts-body .body-head-r{width: 100%;}
+    .starts-body .body-head-l h2 {font-size: 34px !important;}
+    /* .workout-schedule-save .body-head-r a.pink-btn {margin: 0 15px 0 0;} */
+    #manu-navigation .workout-schedule-save .body-head-r a{margin: 0 0 20px;padding: 0 20px 0 30px;}
+    .workout-main-types-view-wrapper .add-workout-form-wrapper .workout-type-radios ul li label {padding: 10px 20px;}
+
+    .workout-exercise-body-view.d-flex , .workout-exercise-body-content-view.d-flex{-ms-flex-wrap: wrap;flex-wrap: wrap;}
+    .workout-exercise-body-view .workout-exercise-body-view-l , .workout-exercise-body-view .workout-exercise-body-view-r ,
+    .workout-exercise-body-content-view .workout-exercise-body-content-view-l , .workout-exercise-body-content-view .workout-exercise-body-content-view-r {width: 100%;}
+    .workout-type-card-wrapper ul li > div > input{max-width: 50px !important;}
+    .workout-type-card-wrapper ul li .set-div {min-width: 40px;}
+    .workout-type-card-wrapper ul li{margin: 0 10px 0 0 !important;}
+    .workout-exercise-body-view-desc {margin-top: 20px;}
+    .workout-exercise-head-view-data-col:last-child {margin: 0;}
+    .workout-exercise-head-view-wrapper .workout-exercise-head-view .workout-exercise-head-view-l , 
+    .workout-exercise-head-view-wrapper .workout-exercise-head-view .workout-exercise-head-view-r{width: 100%;}
+
+    .sets-advance-view-block .adv-view-field-wrap div:first-child {width: 40px !important;}
+    .sets-advance-view-block .adv-view-field-wrap div:last-child {left: 40px !important;}
+     .select-workout-type-wrapper .sets-advance-view-block > div {width: 50%;}
+    .select-workout-type-wrapper .sets-advance-view-block .adv-view-field-wrap:nth-child(4) div select {width: 77px;}
+    .sets-advance-view-block .adv-view-field-wrap:nth-child(2), .sets-advance-view-block .adv-view-field-wrap:nth-child(3) {margin-bottom: 10px;}
+    .sets-advance-view-block > label {left: 10px !important;}
+    .sets-advance-view-block button.sets-advance-view-cBtn {right: 5px !important;}
+    .program-wrap .table-responsive {border: none;}
+    .program-wrap .body-content.profilephoto-content > div , .fitness-body .front-white-header .body-head-l , 
+    .fitness-body .front-white-header .body-head-r {width: 100%;}
+  
+    
 }
 
 
@@ -114,8 +177,10 @@
     width: 120px !important;height: 120px !important;}
     .widget-popup .modal-content {padding: 30px 15px !important;}
     .body-head-l h2 {font-size: 35px !important;}  
-    .stat-page .body-head{flex-wrap: wrap;}
-    .stat-page .body-head-l, .stat-page .body-head-r {width: 100%;}
+    .stat-page .body-head , .fitness-body .front-white-header {-ms-flex-wrap: wrap;flex-wrap: wrap;}
+    .stat-page .body-head-l, .stat-page .body-head-r , 
+    .fitness-body .front-white-header .body-head-l , .fitness-body .front-white-header .body-head-r{width: 100%;}
+    .fitness-body .front-white-header .body-head-r {max-width: 100%;margin: 23px 0px 0 0;}
     .stat-page .body-head-r {max-width: 100%;margin: 23px 0px 0 0;}
     .stat-page .body-head-r a {margin: 0 0 20px;padding: 0 10px 0 10px;}
     .stat-page .body-head-l-btm a {min-width: 100px !important;}
@@ -127,6 +192,31 @@
     .body-measurement-list-section-wrapper .row .measurements-wrap {width: 65%;}
     .body-measurement-list-section-wrapper .row  .measurements-img-wrap{width: 35%;}
     .body-measurement-list-section-wrapper .body-head-l {width: 100%;}
+    .new-progress-popup .pregres-submit button{width: 100%;}
+    .progress-popup-head .close-round {top: -45px !important;right: -47px !important;width: 30px;height: 30px;line-height: 30px;}
+    .workout-schedule-save .body-head-l-btm a , .body-head-l-btm a{min-width: 110px !important;}
+    .starts-body .body-content .white-exercise-block {padding: 40px 15px;}    
+    .workout-exercise-body-view-r .d-flex , .workout-exercise-head-view-wrapper .workout-exercise-head-view , 
+    .program-wrap .front-white-header ,  .save-program-master-wrapper .validation_errors_wrapper form .d-flex{-ms-flex-wrap: wrap;flex-wrap: wrap;}
+    .workout-exercise-head-view-data-row>div{width: 45%;margin-bottom: 10px;}
+    .workout-exercise-head-view-data-col:nth-child(2){margin-right: 0;}
+    .workout-exercise-head-view-wrapper .workout-exercise-head-view .workout-exercise-head-view-r .workout-exercise-head-view-data-row{
+    -webkit-box-pack: initial;-ms-flex-pack: initial;justify-content: initial;width: 85%;}
+    .workout-exercise-head-view-wrapper .workout-exercise-head-view .workout-exercise-head-view-r {
+    -webkit-box-pack: justify;-ms-flex-pack: justify;justify-content: space-between;}
+
+    .workout-exercise-head-view-wrapper .workout-exercise-head-view .workout-exercise-head-view-r .workout-exercise-head-view-data-row 
+    div.workout-exercise-head-view-data-col{min-width: 50%;margin-bottom: 0;}
+    .workout-status .workoutstatus-top{min-height: 25px;}
+    .workout-status  h4{padding: 0 0 0 0px !important;font-size: 13px !important;}
+    .workout-status .workoutstatus-btm {padding: 15px 0px;}
+    .program-wrap .body-head-l , .program-wrap .body-head-r{width: 100%;max-width: 100%;}
+    .program-wrap .custome-table .col-xs-12 {padding: 0 !important;}
+    .program-save-custom-days-wrapper .program-save-custom-days-row .program-save-custom-days-block 
+    .program-save-custom-days-block-content {min-height: 80px !important;}
+    .program-save-custom-days-wrapper .program-save-custom-days-row .program-save-custom-days-block 
+    .program-save-custom-days-block-title {font-size: 12px;}
+    
 }
 
 @media(max-width: 480px){
@@ -166,7 +256,63 @@
     .body-measurement-list-section-wrapper ul.common-ul.common_ul_body > li .grey-white label {width: 130px;}
     .body-measurement-list-section-wrapper ul.common-ul.common_ul_body > li .cm-kg {width: 30px;}
     .body-measurement-list-section-wrapper .row .measurements-img-wrap img {width: 40%;}
+    .starts-body .body-content.profilephoto-content .white-exercise-block{display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-pack: justify;
+    -ms-flex-pack: justify;justify-content: space-between;}
+    .starts-body .body-content.profilephoto-content .white-exercise-block a{padding: 10px 5px;display: block;width: 33%;font-size: 12px;max-width: inherit;}
+    .workout-exercise-head-view-data-col strong {min-width: 45px !important;}
+    .workout-exercise-head-view-data-row>div {width: 46%;height: 90px;}
+    .workout-exercise-head-view-data-col > strong {height: 35px;}
+    .workout-main-types-view-wrapper .add-workout-form-wrapper .workout-type-radios ul li label {padding: 10px 10px;font-size: 13px;}
+    .select-workout-type-wrapper .workout-type-radios ul li:last-child {margin: 0;}
+    .select-workout-type-wrapper .workout-type-radios ul {display: -webkit-box;display: -ms-flexbox;display: flex; -webkit-box-pack: space-evenly;
+    -ms-flex-pack: space-evenly;justify-content: space-evenly;}
+    .select-workout-type-wrapper .workout-type-radios ul li {margin: 0 10px 0 0;}
+    .workout-schedule-save .body-head-l-btm a {min-width: 100% !important;margin: 0;}
+    .workout-schedule-save .body-head-l-btm {-ms-flex-wrap: wrap;flex-wrap: wrap}
+    .workout-schedule-save .body-head-l-btm a:nth-child(2) , .body-head-l-btm a:nth-child(2){margin: 15px 0;}
+
+    .workout-exercise-head-view-wrapper .workout-exercise-head-view .workout-exercise-head-view-r{-ms-flex-wrap: wrap;
+    flex-wrap: wrap;-webkit-box-align: start;-ms-flex-align: start;align-items: flex-start;}
+    .workout-exercise-head-view-wrapper .workout-exercise-head-view .workout-exercise-head-view-r .workout-exercise-head-view-data-row 
+    div.workout-exercise-head-view-data-col {min-width: 100%;margin: 10px 0;}
+    .workout-exercise-head-view-wrapper .workout-exercise-head-view .workout-exercise-head-view-r .workout-exercise-head-view-data-row{
+    -ms-flex-wrap: wrap;flex-wrap: wrap;}
+    .workout-exercise-head-view-wrapper.super-set-wrraper .workout-exercise-head-view .workout-exercise-head-view-r{flex-wrap: initial !important;}
+    .workout-exercise-head-view-wrapper.super-set-wrraper .workout-exercise-head-view .workout-exercise-head-view-l{width: 85%;}
+    .workout-exercise-head-view-wrapper.super-set-wrraper .workout-exercise-head-view .workout-exercise-head-view-r .btn-toolbar{margin-top: -22px !important;}
+    .super-set-wrraper .workout-exercise-head-view-data-row>div {height: inherit;}
+    ul.workout-exercise-body-view-ul .workout-exercise-body-view-data-row>div {min-width: 80px !important;}
+    .workout-exercises-view-wrapper ul>li + li .workout-exercise-view .workout-exercise-head-view{-ms-flex-wrap: wrap;flex-wrap: wrap;}
+    .workout-exercises-view-wrapper ul>li + li .workout-exercise-view .workout-exercise-head-view .workout-exercise-head-view-l ,
+    .workout-exercise-body-view-wrapper .workout-exercise-body-view .workout-exercise-body-head-view .workout-exercise-head-view-l , 
+    .workout-exercises-view-wrapper ul li .workout-exercise-view .workout-exercise-head-view .workout-exercise-head-view-l {width: 90%;}
+    .workout-exercises-view-wrapper ul>li + li .workout-exercise-view .workout-exercise-head-view .workout-exercise-head-view-r{width: 10%;
+    margin-left: 0;-webkit-box-pack: space-evenly;-ms-flex-pack: space-evenly;justify-content: space-evenly;}
+    .workout-exercises-view-wrapper ul>li + li .workout-exercise-view .workout-exercise-head-view.advance-switch-wrap .workout-exercise-head-view-l , 
+    .workout-exercises-view-wrapper ul>li + li .workout-exercise-view .workout-exercise-head-view.advance-switch-wrap .workout-exercise-head-view-r{width: 100%;}
+    .workout-exercises-view-wrapper ul>li + li .workout-exercise-view .workout-exercise-head-view.advance-switch-wrap .workout-exercise-head-view-l{margin-bottom: 15px;}
+    .workout-schedule-save .body-head-l h2 {line-height: 40px !important;}
+    .todays-workout-box-wrapper.white-box .todays-workout-list-card .switch-wrap{ -webkit-box-pack: justify;-ms-flex-pack: justify;justify-content: space-between;
+    padding: 0 20px 0 22px;}
+    .todays-workout-box-wrapper.white-box .todays-workout-list-card .switch-wrap small{margin: 0;}
+    .workout-status .workout-status h4{padding: 0 0 0 0px;font-size: 13px;}
+    .program-wrap .profile-new-menu.body-head-l-btm a {min-width: 110px !important;}
+    .save-program-master-wrapper .validation_errors_wrapper form .d-flex.pull-right{float: inherit !important;}
+    .save-program-master-wrapper .validation_errors_wrapper form .d-flex.pull-right a.custom-medium-link-btn , 
+    .save-program-master-wrapper .validation_errors_wrapper form .d-flex.pull-right .custom-medium-btn{width: 100%;max-width: 100%;}
+    .save-program-master-wrapper .validation_errors_wrapper form .d-flex.pull-right a.custom-medium-link-btn{display: -webkit-box;display: -ms-flexbox;
+    display: flex;-webkit-box-pack: justify;-ms-flex-pack: justify;justify-content: space-between;margin-bottom: 15px;}
+    .workout-type-card-wrapper .multiple-sets-header>div.sim-view-field-wrap input , 
+    .workout-type-card-wrapper .workout-type-card-block .workout-type-card-block-top > div , 
+    .workout-type-card-wrapper .multiple-sets-header>div.sim-view-field-wrap  {width: 100%;}
+    .workout-type-card-wrapper .multiple-sets-header>div.sim-view-field-wrap > div{width: calc(100% - 85px);}
+    .workout-type-card-wrapper .multiple-sets-header>div.sim-view-field-wrap > div.set-div {width: initial;}
+    .workout-type-card-wrapper .workout-type-card-block .workout-type-card-block-top > div:last-child {position: unset;}
+    .workout-type-card-wrapper .workout-type-card-block .workout-type-card-block-top {padding-right: 0;}
+    .fitness-body .body-head-l-btm a {min-width: 100% !important;}
+
 }
+
 
 @media(min-width: 481px){
     .auth0-lock.auth0-lock.auth0-lock-opened .auth0-lock-center {overflow-y: auto;}
@@ -177,7 +323,24 @@
     .header .logo {padding: 15px 0px 15px 7px;}
     .header .logo a {width: 60px;}
     .body-head-l h2 {font-size: 25px !important;}
-    .body-measurement-list-section-wrapper .whitebox-head h3.title-h3 {font-size: 28px;}    
+    .body-measurement-list-section-wrapper .whitebox-head h3.title-h3 {font-size: 28px;}
+    .workout-exercise-head-view-l strong {font-size: 16px;}  
+    .select-workout-type-wrapper .workout-type-radios ul li {margin: 0 !important;width: 100%;}
+    .select-workout-type-wrapper .workout-type-radios ul { -ms-flex-wrap: wrap;flex-wrap: wrap;}  
+    .select-workout-type-wrapper .workout-type-radios ul li:nth-child(2){margin: 10px 0 !important;}
+    ul.workout-exercise-body-view-ul .workout-exercise-body-view-data-row>div {min-width: 30px!important;padding: 7px !important;}
+    .workout-exercises-view-wrapper ul>li + li .workout-exercise-view .workout-exercise-head-view.advance-switch-wrap .workout-exercise-head-view-r{
+    -webkit-box-pack: justify;-ms-flex-pack: justify;justify-content: space-between;}
+    .workout-exercises-view-wrapper ul>li + li .workout-exercise-view .workout-exercise-head-view.advance-switch-wrap 
+    .workout-exercise-head-view-r .switch-wrap{padding: 0 20px 0 0px;}
+    .workout-schedule-save .body-content .react-calendar {width: 100% !important;}
+    .workout-schedule-save .body-content .react-calendar__month-view__weekdays__weekday{padding: .5em .1em;-ms-flex-preferred-size: 13.2857% !important;
+    flex-basis: 13.2857% !important;}
+    .workout-schedule-save .body-content .react-calendar .react-calendar__month-view__days button{padding: 0.55em .3em;-ms-flex-preferred-size: 13.2857% !important;
+    flex-basis: 13.2857% !important;max-width: 13.2857% !important;}
+    .workout-type-card-wrapper .multiple-sets-header>div.sim-view-field-wrap > div {width: calc(100% - 48px);}
+    .workout-type-card-wrapper .multiple-sets-header>div.sim-view-field-wrap .set-div{min-width: 50px;}
+    .workout-main-types-view-wrapper .add-workout-form-wrapper .add-workout-form-btm-btn {padding: 7px 30px;}
 }
 @media(max-width: 360px){
     .header-user a {line-height: 38px!important;}
@@ -185,4 +348,18 @@
     .header .avatar {width: 35px!important;height: 35px!important;}
     .header-user , .header-friend-requests , .header-alert{margin: 0 12px 0 0 !important;}
     .header-r .mobile-menu {margin-right: 7px;}
+    ul.workout-exercise-body-view-ul .workout-exercise-body-view-data-row>div strong:last-child {min-width: 40px !important;}
+    .workout-exercise-body-content-view-l img, .workout-exercise-body-view-l img {max-width: 115px !important;width: 100% !important;height: 100% !important;}
+    .whitebox-body.profile-body.programs-table-wrapper a.program-save-add-week-btn , a.program-save-delete-week-btn{width: 100%;}
+    .whitebox-body.profile-body.programs-table-wrapper a.program-save-delete-week-btn{margin-top: 10px;}
+    .whitebox-body.profile-body.programs-table-wrapper .week-btn-btm {-ms-flex-wrap: wrap;flex-wrap: wrap;}
+    .sweetalert-responsive .popup-link-wrap .popup-link button.btn{font-size: 12px;}
+}
+
+
+@media(max-width: 320px){
+    .todays-workout-box-wrapper.white-box .todays-workout-list-card .switch-wrap small {line-height: 1.4;display: -webkit-box;display: -ms-flexbox;
+    display: flex;-webkit-box-align: center;-ms-flex-align: center;align-items: center;}
+    .body-content .react-calendar{width: 215px !important;}
+    .body-measurement-list-section-wrapper ul.common-ul.common_ul_body > li .grey-white label{width: 100px;}
 }
