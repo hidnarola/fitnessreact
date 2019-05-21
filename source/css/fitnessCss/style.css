@@ -1652,6 +1652,7 @@ ul.workout-exercise-body-view-ul .workout-exercise-head-view-edit button{ color:
 .todays-workout-box-wrapper .whitebox-head{ margin-bottom:10px;}
 .todays-workout-list-card { padding: 15px 20px; border-radius:10px; text-align: left; color: #232B41; background:#44efd8;}
 .todays-workout-list-card a{color:#fff;word-wrap: break-word;}
+.todays-workout-list-card {display: inherit !important;}
 .todays-workout-list-card + .todays-workout-list-card{margin-top:20px;display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-align: start;-ms-flex-align: start;align-items: flex-start;}
 .todays-workout-list-card .switch-wrap{ line-height:40px; margin: 10px -20px -20px; background:#f2f2f2; border-radius:0 0 10px 10px; box-shadow:none; border:0;}
 .todays-workout-list-card .switch-wrap small {margin:0 0 0 auto;}

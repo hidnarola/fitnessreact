@@ -28,6 +28,7 @@
     .body-head-l h2{font-size: 50px !important;line-height: 80px !important;}
     h3.title-h3{font-size: 28px;line-height: 28px;}
     .progress-popup .modal-dialog {max-width: 90% !important;position: absolute;top: 50%;left: 48%;transform: translate(-50% , -50%)!important;}
+    .todays-workout-box-wrapper.white-box {margin-top: 20px;}
 }
 
 @media(max-width: 992px){
