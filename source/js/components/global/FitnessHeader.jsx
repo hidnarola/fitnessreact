@@ -105,9 +105,9 @@ class FitnessHeader extends Component {
                     </div>
                     <div className="header-r d-flex">
                         <div className="mobile-menu">
-                        <a href="javascript:void(0)" onClick={() =>{ isSidebarOpen() ? closeSidebar() :openSidebar() }}>
-                            <FaMenu size={24} />
-                        </a>
+                            <a href="javascript:void(0)" onClick={() => { isSidebarOpen() ? closeSidebar() : openSidebar() }}>
+                                <FaMenu size={24} />
+                            </a>
                         </div>
                         <div className="header-user">
                             {loggedUserData &&
@@ -164,7 +164,7 @@ class FitnessHeader extends Component {
                             <a href="javascript:void(0)" onClick={this.handleMessagePanel}>
                                 <FaMail />
                                 {(typeof messagesCount !== 'undefined' && messagesCount > 0) &&
-                                    < span > {(messagesCount) ? messagesCount : ''}</span>
+                                    <span> {(messagesCount) ? messagesCount : ''}</span>
                                 }
                             </a>
                         </div>
@@ -176,18 +176,17 @@ class FitnessHeader extends Component {
                         <ReactTooltip id='header-icons-tooltip' place="bottom" effect="solid" />
                     </div>
                 </header>
-            </div >
+            </div>
         );
     }
 
     componentDidMount() {
-        if(isSidebarOpen())
-        {
+        if (isSidebarOpen()) {
             openSidebar()
         }
         else {
-            closeSidebar() 
-        } 
+            closeSidebar()
+        }
     }
 
     componentDidUpdate(prevProps, prevState) {

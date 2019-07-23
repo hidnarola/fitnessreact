@@ -26,7 +26,8 @@ import {
 import { FaTrash } from 'react-icons/lib/fa';
 import DeleteConfirmation from '../Admin/Common/DeleteConfirmation';
 import AddMetaDescription from '../../components/global/AddMetaDescription';
-
+import ReactCalender from 'react-calendar/dist/entry.nostyle';
+import NutritionMealAddSearchForm from './NutritionMealAddSearchForm';
 const dayDriveOptions = [
     { value: DAY_DRIVE_BREAKFAST, label: capitalizeFirstLetter(DAY_DRIVE_BREAKFAST.replace('_', ' ')) },
     { value: DAY_DRIVE_LUNCH, label: capitalizeFirstLetter(DAY_DRIVE_LUNCH.replace('_', ' ')) },
@@ -38,12 +39,15 @@ const dayDriveOptions = [
 class NutritionMeal extends Component {
     constructor(props) {
         super(props);
+        var logDate = new Date();
+        logDate.setHours(0, 0, 0, 0);
         this.state = {
             selectActionInit: false,
             todaysMeal: [],
             showDeleteModal: false,
             selectedMealId: null,
             deleteActionInit: false,
+            logDate: logDate
         }
     }
 
@@ -66,6 +70,7 @@ class NutritionMeal extends Component {
         const {
             todaysMeal,
             showDeleteModal,
+            logDate
         } = this.state;
         const { loading } = this.props;
         return (
@@ -107,19 +112,152 @@ class NutritionMeal extends Component {
                         </div>
                     </div>
                     <div className="body-content d-flex row justify-content-start">
-                        <div className="col-md-8">
+                        <div className="col-md-3">
+                            <div className="new-log-date-wrap log-date-wrap">
+                                <button type="button" onClick={this.handleGoToToday}>Go To Today</button>
+                                <ReactCalender
+                                    name="log_date"
+                                    value={logDate}
+                                    onChange={this.onChangeLogDate}
+                                />
+                            </div>
+                            <div className="recipe-nutrition white-box">
+                                <div className="whitebox-head meal-paln">
+                                    <h3 className="title-h3 size-14">Meal Plan Stats</h3>
+                                </div>
+                                <div className="whitebox-body">
+                                    <div className="dtl-div">
+                                        <ul className="common-ul">
+                                            <li>
+                                                <div className="grey-white">
+                                                    <h4>
+                                                        Total Calories
+                                                        </h4>
+                                                    <h5>
+                                                        {total_enerc_kal}<sub>kcal</sub>
+                                                    </h5>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div className="grey-white">
+                                                    <h4>
+                                                        Total Protein
+                                                        </h4>
+                                                    <h5>
+                                                        {total_procnt}<sub>g</sub>
+                                                    </h5>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div className="grey-white">
+                                                    <h4>
+                                                        Total Fat
+                                                        </h4>
+                                                    <h5>
+                                                        {total_fat}<sub>g</sub>
+                                                    </h5>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div className="grey-white">
+                                                    <h4>
+                                                        Total Carbs
+                                                        </h4>
+                                                    <h5>
+                                                        {total_chocdf}<sub>g</sub>
+                                                    </h5>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div className="nutrition-chart">
+                                        <img src="" alt="" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-md-6">
                             <div className="white-box">
                                 <div className="whitebox-head d-flex profile-head">
-                                    <h3 className="title-h3">Today's Meals</h3>
+                                    <h3 className="title-h3">{logDate.getDate() === new Date().getDate() ? "Today's Meals" :
+                                        ('meal of ' + ((logDate) ? moment(logDate).local().format('DD/MM/YYYY') : ''))
+                                    }</h3>
                                     <div className="whitebox-head-r">
                                         <NavLink to={routeCodes.NUTRITION_ADD} className="green-blue">
-                                            Add meal<i className="icon-control_point"></i>
+                                            Add new meal <i className="icon-control_point"></i>
                                         </NavLink>
                                     </div>
                                 </div>
 
+
+                                <div className="whitebox-head d-flex profile-head">
+                                    <NutritionMealAddSearchForm onSubmit={this.handleSearch} />
+
+                                </div>
+
+
                                 <div className="whitebox-body">
-                                    {todaysMeal && todaysMeal.length <= 0 && (!loading) &&
+                                    <div className="meal-wrap d-flex" >
+                                        <div className="meal-img">
+                                            <img
+
+                                                alt="Recipe"
+                                                onError={(e) => {
+                                                    e.target.src = noImg
+                                                }}
+                                            />
+                                        </div>
+                                        <div className="meal-name">
+                                            {/* <small>{(dayDriveType) ? dayDriveType.label : ''}</small> */}
+                                            <h5>
+                                                <NavLink to="">
+                                                    Name
+                                                </NavLink>
+                                            </h5>
+                                        </div>
+                                        <div className="meal-info">
+                                            <small>Cals</small>
+                                            <big>
+                                                {/* {enerc_kal} */}
+                                                25
+                                                {/* {(meal.totalNutrients['ENERC_KCAL']) ? meal.totalNutrients['ENERC_KCAL'].unit : ''} */}
+                                            </big>
+                                        </div>
+                                        <div className="meal-info">
+                                            <small>Protein</small>
+                                            <big>
+                                                56
+                                                {/* {(meal.totalNutrients['PROCNT']) ? meal.totalNutrients['PROCNT'].unit : ''} */}
+                                            </big>
+                                        </div>
+                                        <div className="meal-info">
+                                            <small>Fat</small>
+                                            <big>
+                                                89
+                                                {/* {(meal.totalNutrients['FAT']) ? meal.totalNutrients['FAT'].unit : ''} */}
+                                            </big>
+                                        </div>
+                                        <div className="meal-info">
+                                            <small>Carbs</small>
+                                            <big>
+                                                77
+                                                {/* {(meal.totalNutrients['CHOCDF']) ? meal.totalNutrients['CHOCDF'].unit : ''} */}
+                                            </big>
+                                        </div>
+                                        <div className="meal-info">
+                                            <ButtonToolbar bsClass="">
+                                                <DropdownButton title="" className="icon-more_horiz no-border" id="dropdown-size-small" noCaret pullRight>
+                                                    <MenuItem eventKey="1">
+                                                        <FaTrash className="v-align-sub" /> Delete
+                                                                </MenuItem>
+                                                </DropdownButton>
+                                            </ButtonToolbar>
+                                        </div>
+                                    </div>
+                                    {
+
+                                    }
+                                    {/* {false && todaysMeal && todaysMeal.length <= 0 && (!loading) &&
                                         <span>No Records found</span>
                                     }
                                     {todaysMeal && todaysMeal.length > 0 &&
@@ -196,66 +334,14 @@ class NutritionMeal extends Component {
                                                 </div>
                                             )
                                         })
-                                    }
+                                    } */}
                                 </div>
                             </div>
                         </div>
-                        <div className="col-md-4">
-                            <div className="recipe-nutrition white-box">
-                                <div className="whitebox-head meal-paln">
-                                    <h3 className="title-h3 size-14">Meal Plan Stats</h3>
-                                </div>
-                                <div className="whitebox-body">
-                                    <div className="dtl-div">
-                                        <ul className="common-ul">
-                                            <li>
-                                                <div className="grey-white">
-                                                    <h4>
-                                                        Total Calories
-                                                        </h4>
-                                                    <h5>
-                                                        {total_enerc_kal}<sub>kcal</sub>
-                                                    </h5>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div className="grey-white">
-                                                    <h4>
-                                                        Total Protein
-                                                        </h4>
-                                                    <h5>
-                                                        {total_procnt}<sub>g</sub>
-                                                    </h5>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div className="grey-white">
-                                                    <h4>
-                                                        Total Fat
-                                                        </h4>
-                                                    <h5>
-                                                        {total_fat}<sub>g</sub>
-                                                    </h5>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div className="grey-white">
-                                                    <h4>
-                                                        Total Carbs
-                                                        </h4>
-                                                    <h5>
-                                                        {total_chocdf}<sub>g</sub>
-                                                    </h5>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div className="nutrition-chart">
-                                        <img src="" alt="" />
-                                    </div>
-                                </div>
-                            </div>
+                        <div className="col-md-3">
+                            my favourite meals
                         </div>
+
                     </div>
                 </section>
                 <DeleteConfirmation
@@ -317,6 +403,27 @@ class NutritionMeal extends Component {
         dispatch(showPageLoader());
         dispatch(deleteUserRecipeRequest(_id));
         this.setState({ deleteActionInit: true });
+    }
+
+    onChangeLogDate = (date) => {
+        const { logDate } = this.state;
+        if (moment(logDate).format('YYYY-MM-DD') !== moment(date).format('YYYY-MM-DD')) {
+            this.setState({
+                logDate: date
+            });
+        }
+    }
+
+    handleGoToToday = () => {
+        console.log("on Exercise.jsx handleGoToToday");
+        const { logDate } = this.state;
+        console.log('logDate => ', logDate);
+        const { dispatch } = this.props;
+        var date = new Date();
+        date.setHours(0, 0, 0, 0);
+        if (moment(logDate).format('YYYY-MM-DD') !== moment(date).format('YYYY-MM-DD')) {
+            this.setState({ logDate: date });
+        }
     }
 
 }

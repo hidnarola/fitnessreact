@@ -1,5 +1,8 @@
 import { postFormData, fetchResource } from '.';
 import { extraUserHeaders } from '../helpers/funs';
+import {
+    VALIDATION_FAILURE_STATUS,
+} from '../constants/consts';
 import axios from 'axios';
 
 const requestUrl = 'user/nutrition';

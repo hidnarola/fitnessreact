@@ -7,6 +7,7 @@ import userEquipments from 'sagas/userEquipments';
 import userExercisePreferences from 'sagas/userExercisePreferences';
 import userNutritionPreferences from 'sagas/userNutritionPreferences';
 import userNutritions from 'sagas/userNutritions';
+import new_nutrition from 'sagas/new_nutrition';
 import userExerciseTypes from 'sagas/userExerciseTypes';
 import userBodyparts from 'sagas/userBodyparts';
 import userExercises from 'sagas/userExercises';
@@ -59,6 +60,7 @@ export default function* rootSaga() {
     ...userExercisePreferences,
     ...userNutritionPreferences,
     ...userNutritions,
+    ...new_nutrition,
     ...userExerciseTypes,
     ...userBodyparts,
     ...userExercises,

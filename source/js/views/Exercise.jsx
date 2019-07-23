@@ -70,56 +70,56 @@ class Exercise extends Component {
                         </div>
 
                         <div className="body-content justify-content-start profilephoto-content">
-                        <div className="row">
-                            <div className="col-md-9 col-sm-12 col-xs-12">
-                                <div className="white-exercise-block">
-                                    {(typeof firstWorkoutId === 'undefined' || !firstWorkoutId) &&
-                                        <a href="javascript:void(0)" onClick={this.handleAddWorkout}>Add Workout</a>
-                                    }
-                                    {(typeof firstWorkoutId === 'undefined' || !firstWorkoutId) &&
-                                        <a href="javascript:void(0)" onClick={this.handleNewRestDay}>Make Rest Day</a>
-                                    }
-                                    {(typeof firstWorkoutId === 'undefined' || !firstWorkoutId) &&
-                                        <NavLink
-                                            onClick={(e) => { !isOnline() && this.userOfflineMessage(e) }}
-                                            to={routeCodes.SCHEDULE_WORKOUT}
-                                        >
-                                            <span>View Calendar</span>
-                                        </NavLink>
-                                    }
-                                    {typeof firstWorkoutError !== 'undefined' && firstWorkoutError && firstWorkoutError.length > 0 &&
-                                        <a href="javascript:void(0)" onClick={this.refresh}>Refresh</a>
-                                    }
+                            <div className="row">
+                                <div className="col-md-9 col-sm-12 col-xs-12">
+                                    <div className="white-exercise-block">
+                                        {(typeof firstWorkoutId === 'undefined' || !firstWorkoutId) &&
+                                            <a href="javascript:void(0)" onClick={this.handleAddWorkout}>Add Workout</a>
+                                        }
+                                        {(typeof firstWorkoutId === 'undefined' || !firstWorkoutId) &&
+                                            <a href="javascript:void(0)" onClick={this.handleNewRestDay}>Make Rest Day</a>
+                                        }
+                                        {(typeof firstWorkoutId === 'undefined' || !firstWorkoutId) &&
+                                            <NavLink
+                                                onClick={(e) => { !isOnline() && this.userOfflineMessage(e) }}
+                                                to={routeCodes.SCHEDULE_WORKOUT}
+                                            >
+                                                <span>View Calendar</span>
+                                            </NavLink>
+                                        }
+                                        {typeof firstWorkoutError !== 'undefined' && firstWorkoutError && firstWorkoutError.length > 0 &&
+                                            <a href="javascript:void(0)" onClick={this.refresh}>Refresh</a>
+                                        }
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="col-md-3">
-                                <div className="new-log-date-wrap log-date-wrap">
-                                    <button type="button" onClick={this.handleGoToToday}>Go To Today</button>
-                                    <ReactCalender
-                                        name="log_date"
-                                        onChange={this.onChangeLogDate}
-                                        onActiveDateChange={this.onActiveDateChange}
-                                        onClickMonth={this.onMonthClick}
-                                        value={logDate}
-                                        tileContent={({ date, view }) => {
-                                            if (view !== 'month') {
-                                                return '';
-                                            }
-                                            if (calendarList && calendarList.length > 0) {
-                                                return _.map(calendarList, (o, key) => {
-                                                    let calDate = moment(date).format('YYYY-MM-DD');
-                                                    let logDate = moment(o.date).format('YYYY-MM-DD');
-                                                    if (calDate === logDate) {
-                                                        return (<span key={key} className="react-calendar__tile--highlight"></span>)
-                                                    }
+                                <div className="col-md-3">
+                                    <div className="new-log-date-wrap log-date-wrap">
+                                        <button type="button" onClick={this.handleGoToToday}>Go To Today</button>
+                                        <ReactCalender
+                                            name="log_date"
+                                            onChange={this.onChangeLogDate}
+                                            onActiveDateChange={this.onActiveDateChange}
+                                            onClickMonth={this.onMonthClick}
+                                            value={logDate}
+                                            tileContent={({ date, view }) => {
+                                                if (view !== 'month') {
                                                     return '';
-                                                })
-                                            }
-                                        }}
-                                    />
-                                    <NavLink to={routeCodes.SCHEDULE_WORKOUT} onClick={(e) => { !isOnline() && this.userOfflineMessage(e) }} className="new-log-date-wrap-view">View Calendar</NavLink>
+                                                }
+                                                if (calendarList && calendarList.length > 0) {
+                                                    return _.map(calendarList, (o, key) => {
+                                                        let calDate = moment(date).format('YYYY-MM-DD');
+                                                        let logDate = moment(o.date).format('YYYY-MM-DD');
+                                                        if (calDate === logDate) {
+                                                            return (<span key={key} className="react-calendar__tile--highlight"></span>)
+                                                        }
+                                                        return '';
+                                                    })
+                                                }
+                                            }}
+                                        />
+                                        <NavLink to={routeCodes.SCHEDULE_WORKOUT} onClick={(e) => { !isOnline() && this.userOfflineMessage(e) }} className="new-log-date-wrap-view">View Calendar</NavLink>
+                                    </div>
                                 </div>
-                            </div>
                             </div>
                         </div>
 

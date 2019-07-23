@@ -291,7 +291,7 @@ class ExerciseForm extends Component {
                     handleClose={() => this.handleDeleteImageModel(false)}
                     handleYes={this.handleDeleteImage}
                 />
-            </div >
+            </div>
         );
     }
 

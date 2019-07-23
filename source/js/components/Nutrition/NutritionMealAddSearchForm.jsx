@@ -14,7 +14,7 @@ class NutritionMealAddSearchForm extends Component {
                             <Field
                                 name="search_term"
                                 className="form-control"
-                                placeholder="Search Recipe"
+                                placeholder="Search Meal"
                                 component={InputField}
                                 errorClass="help-block"
                                 validate={[required]}

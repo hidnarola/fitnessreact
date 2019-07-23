@@ -1,21 +1,21 @@
-import React,{Component} from 'react';
+import React, { Component } from 'react';
 import FitnessHeader from '../global/FitnessHeader';
 import FitnessNav from '../global/FitnessNav';
 
-export default class Receip extends Component{
+export default class Receip extends Component {
 
-    render(){
-        return(
+    render() {
+        return (
             <div>
-                <FitnessHeader/>
-                <FitnessNav/>
+                <FitnessHeader />
+                <FitnessNav />
                 <section className="body-wrap">
                     <div className="body-head d-flex justify-content-start">
                         <div className="body-head-l">
                             <h2>Vegan Mac ’n’ Cheese</h2>
                             <p>Make the ultimate comfort dish, macaroni cheese, but with vegan credentials. The recipe is quick and easy
                                 to make, so a great
-                                <br/> midweek meal for the family</p>
+                                <br /> midweek meal for the family</p>
                         </div>
                         <div className="body-head-r">
                             <a href="" className="pink-btn">Favourite Recipe

@@ -934,3 +934,13 @@ export const PROGRESS_PHOTO_CATEGORIES = [
     { value: 'isolation', label: 'Isolation' },
     { value: 'posed', label: 'Posed' }
 ];
+
+
+export const MEAL_OPTIONS = [{ label: 'Quick meal', value: 'quick_meal' },
+{ label: 'Lunch', value: 'lunch' },
+{ label: 'Dinner', value: 'dinner' }];
+
+export const MEAL_VISIBILITY = [
+    { label: 'Private', value: 'private' },
+    { label: 'Public', value: 'public' }
+]

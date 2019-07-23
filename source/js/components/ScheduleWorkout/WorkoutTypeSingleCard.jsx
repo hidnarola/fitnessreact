@@ -32,6 +32,7 @@ class WorkoutTypeSingleCard extends Component {
             exercises,
             exerciseMeasurements
         } = this.props;
+        console.log('exerciseMeasurements => ',exerciseMeasurements);
         const { validations } = this.state;
         var exerciseOptions = prepareExerciseOptions(exercises);
         return (
@@ -53,7 +54,10 @@ class WorkoutTypeSingleCard extends Component {
                     if (exerciseMeasurements && exerciseMeasurements.length > 0 && selectedExerciseObj) {
                         let cat = (selectedExerciseObj.cat) ? selectedExerciseObj.cat : '';
                         let subCat = (selectedExerciseObj.subCat) ? selectedExerciseObj.subCat : '';
+                        console.log('cat => ',cat);
+                        console.log('subCat => ',subCat);
                         let measObj = _.find(exerciseMeasurements, { 'category': cat, 'subCategory': subCat });
+                        console.log('measObj => ',measObj);
                         if (measObj) {
                             selectedExerciseMeasurementObj = measObj;
                             if (selectedExerciseMeasurementObj && selectedExerciseMeasurementObj.field1 && selectedExerciseMeasurementObj.field1.length > 0) {

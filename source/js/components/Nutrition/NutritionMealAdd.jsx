@@ -6,6 +6,7 @@ import { getUserNutritionPreferencesRequest } from '../../actions/userNutritionP
 import { getHealthLabelsRequest } from '../../actions/healthLabels';
 import { getDietLabelsRequest } from '../../actions/dietLabels';
 import { getNutritionsRequest } from '../../actions/nutritions';
+import WorkoutSelectField_ReactSelect from '../ScheduleWorkout/WorkoutSelectField_ReactSelect';
 import _ from "lodash";
 import {
     RECIPE_API_SEARCH_URL,
@@ -13,7 +14,9 @@ import {
     DAY_DRIVE_PRE_LUNCH_SNACKS,
     DAY_DRIVE_LUNCH,
     DAY_DRIVE_POST_LUNCH_SNACKS,
-    DAY_DRIVE_DINNER
+    DAY_DRIVE_DINNER,
+    MEAL_OPTIONS,
+    MEAL_VISIBILITY
 } from '../../constants/consts';
 import { searchRecipesApiRequest, addUserRecipeRequest } from '../../actions/userNutritions';
 import noImg from 'img/common/no-img.png'
@@ -21,16 +24,21 @@ import InfiniteScroll from 'react-infinite-scroller';
 import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
 import NutritionMealAddSearchForm from './NutritionMealAddSearchForm';
 import NutritionSearchRecipeDetailsModal from './NutritionSearchRecipeDetailsModal';
+import NutritionMealAddForm from './NutritionMealAddForm';
 import {
     DropdownButton,
     ButtonToolbar,
     MenuItem
 } from "react-bootstrap";
 import moment from "moment";
-import { ts, te } from '../../helpers/funs';
+import { ts, te, checkImageMagicCode } from '../../helpers/funs';
 import { NavLink } from "react-router-dom";
 import { routeCodes } from '../../constants/routes';
 import { FaCircleONotch } from "react-icons/lib/fa";
+import { Field, reduxForm } from "redux-form";
+import { required, minLength, maxLength, requiredReactSelect } from '../../formValidation/validationRules';
+import AddMetaDescription from '../../components/global/AddMetaDescription';
+import Dropzone from "react-dropzone";
 
 const dayDriveOptions = [
     { value: DAY_DRIVE_BREAKFAST, label: 'Breakfast' },
@@ -59,6 +67,10 @@ class NutritionMealAdd extends Component {
             selectedRecipe: {},
             showDetailedRecipeModal: false,
             addActionInit: false,
+
+            images: [],
+            noImageError: null,
+            invalidImage: [],
         }
     }
 
@@ -78,18 +90,25 @@ class NutritionMealAdd extends Component {
             hasMoreData,
             selectedRecipe,
             showDetailedRecipeModal,
+            images,
+            noImageError,
+            invalidImage
         } = this.state;
         const {
             searchRecipeLoading,
         } = this.props;
+        let dropzoneRef;
         return (
             <div className="fitness-nutrition">
+                <AddMetaDescription>
+                    <title>Add Meal | Fitly</title>
+                </AddMetaDescription>
                 <FitnessHeader />
                 <FitnessNav />
                 <section className="body-wrap">
                     <div className="body-head d-flex justify-content-start front-white-header">
                         <div className="body-head-l">
-                            <h2>Search Recipe</h2>
+                            <h2>Add New Meal</h2>
                             <p>Your meal plan is balanced and tailored to provide the right mix for your goal. For your fitness assistant
                                 to provide the best meal plans make sure you rate recipes you like. You can further fine tune the meals
                                 selected for you by changing your nutrition settings. </p>
@@ -103,128 +122,7 @@ class NutritionMealAdd extends Component {
                             </NavLink>
                         </div>
                     </div>
-                    <div className="body-content d-flex row justify-content-start nutrition-meal-add-wrapper ">
-                        <div className="col-md-12">
-                            <div className="white-box">
-                                <div className="whitebox-head d-flex profile-head">
-                                    <h3 className="title-h3 size-14">Search Recipes</h3>
-                                </div>
-
-                                <div className="whitebox-body">
-                                    <NutritionMealAddSearchForm onSubmit={this.handleSearch} />
-
-                                    {searchRecipes && searchRecipes.length <= 0 && !searchRecipeLoading && !hasMoreData &&
-                                        <span>No recipe found</span>
-                                    }
-                                    {searchRecipes && searchRecipes.length > 0 &&
-                                        <InfiniteScroll
-                                            pageStart={0}
-                                            loadMore={this.loadMore}
-                                            hasMore={hasMoreData}
-                                            className="margin-top-30"
-                                            loader={
-                                                <div className="loader" key={0}>
-                                                    <FaCircleONotch className="loader-spinner loader-spinner-icon" /> Loading ...
-                                                </div>
-                                            }
-                                        >
-                                            {
-                                                searchRecipes.map((recipeData, index) => {
-                                                    var recipe = recipeData.recipe;
-                                                    var enerc_kal = (recipe.totalNutrients['ENERC_KCAL']) ? recipe.totalNutrients['ENERC_KCAL'].quantity : 0;
-                                                    var procnt = (recipe.totalNutrients['PROCNT']) ? recipe.totalNutrients['PROCNT'].quantity : 0;
-                                                    var fat = (recipe.totalNutrients['FAT']) ? recipe.totalNutrients['FAT'].quantity : 0;
-                                                    var chocdf = (recipe.totalNutrients['CHOCDF']) ? recipe.totalNutrients['CHOCDF'].quantity : 0;
-                                                    enerc_kal = Math.round((enerc_kal / recipe.yield)).toFixed(0);
-                                                    procnt = Math.round((procnt / recipe.yield)).toFixed(0);
-                                                    fat = Math.round((fat / recipe.yield)).toFixed(0);
-                                                    chocdf = Math.round((chocdf / recipe.yield)).toFixed(0);
-                                                    var recipeIngreLines = '';
-                                                    if (recipe && recipe.ingredientLines && recipe.ingredientLines.length > 0) {
-                                                        recipe.ingredientLines.map((line, i) => {
-                                                            recipeIngreLines = recipeIngreLines + line + '<br />';
-                                                        })
-                                                    }
-                                                    return (
-                                                        <div className="meal-wrap d-flex" key={index}>
-                                                            <div className="meal-img">
-                                                                <img
-                                                                    src={recipe.image}
-                                                                    alt="Recipe"
-                                                                    onError={(e) => {
-                                                                        e.target.src = noImg
-                                                                    }}
-                                                                />
-                                                            </div>
-                                                            <div className="meal-name">
-                                                                <h5>
-                                                                    <a href="javascript:void(0)" onClick={() => this.getSelectedRecipeDetails(recipe)}>
-                                                                        {recipe.label}
-                                                                    </a>
-                                                                </h5>
-                                                                <small><small dangerouslySetInnerHTML={{ __html: recipeIngreLines }}></small></small>
-                                                            </div>
-                                                            <div className="meal-info">
-                                                                <small>Cals</small>
-                                                                <big>
-                                                                    {enerc_kal}
-                                                                    {(recipe.totalNutrients['ENERC_KCAL']) ? recipe.totalNutrients['ENERC_KCAL'].unit : ''}
-                                                                </big>
-                                                            </div>
-                                                            <div className="meal-info">
-                                                                <small>Protein</small>
-                                                                <big>
-                                                                    {procnt}
-                                                                    {(recipe.totalNutrients['PROCNT']) ? recipe.totalNutrients['PROCNT'].unit : ''}
-                                                                </big>
-                                                            </div>
-                                                            <div className="meal-info">
-                                                                <small>Fat</small>
-                                                                <big>
-                                                                    {fat}
-                                                                    {(recipe.totalNutrients['FAT']) ? recipe.totalNutrients['FAT'].unit : ''}
-                                                                </big>
-                                                            </div>
-                                                            <div className="meal-info">
-                                                                <small>Carbs</small>
-                                                                <big>
-                                                                    {chocdf}
-                                                                    {(recipe.totalNutrients['CHOCDF']) ? recipe.totalNutrients['CHOCDF'].unit : ''}
-                                                                </big>
-                                                            </div>
-                                                            <div className="meal-info">
-                                                                {dayDriveOptions && dayDriveOptions.length > 0 &&
-                                                                    <ButtonToolbar bsClass="">
-                                                                        <DropdownButton title="" className="icon-more_horiz no-border" id="add_recipe_actions" noCaret pullRight>
-                                                                            <MenuItem header>Add Recipe</MenuItem>
-                                                                            {dayDriveOptions.map((drive, index) => {
-                                                                                return (
-                                                                                    <MenuItem
-                                                                                        eventKey={index}
-                                                                                        key={index}
-                                                                                        onClick={() => this.handleAddRecipe(drive.value, recipe)}
-                                                                                    >
-                                                                                        {drive.label}
-                                                                                    </MenuItem>
-                                                                                )
-                                                                            })}
-                                                                            <MenuItem divider />
-                                                                            <MenuItem header>Details</MenuItem>
-                                                                            <MenuItem eventKey={10} onClick={() => this.getSelectedRecipeDetails(recipe)}>View</MenuItem>
-                                                                        </DropdownButton>
-                                                                    </ButtonToolbar>
-                                                                }
-                                                            </div>
-                                                        </div>
-                                                    )
-                                                })
-                                            }
-                                        </InfiniteScroll>
-                                    }
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <NutritionMealAddForm onSubmit={this.handleSubmit} />
                 </section>
                 <NutritionSearchRecipeDetailsModal
                     show={showDetailedRecipeModal}
@@ -234,6 +132,13 @@ class NutritionMealAdd extends Component {
             </div>
         );
     }
+
+    handleSubmit = (data) => {
+        console.log('data => ', data);
+        console.log('this.state => ', this.state);
+    }
+
+
 
     componentDidUpdate(prevProps, prevState) {
         const {
@@ -437,6 +342,11 @@ class NutritionMealAdd extends Component {
     }
 }
 
+NutritionMealAdd = reduxForm({
+    form: 'nutrition_add_form',
+})(NutritionMealAdd)
+
+
 const mapStateToProps = (state) => {
     const { userNutritionPreferences, healthLabels, dietLabels, nutritions, userNutritions } = state;
     return {
@@ -463,3 +373,52 @@ const mapStateToProps = (state) => {
 export default connect(
     mapStateToProps
 )(NutritionMealAdd);
+
+
+const InputField = (props) => {
+    const { input, meta, wrapperClass, className, placeholder, errorClass, type, disabled, properties } = props;
+    return (
+        <div
+            className={
+                `${wrapperClass} ${(meta.touched && meta.error) ? 'has-error' : ''}`
+            }
+        >
+            <input
+                {...input}
+                type={type ? type : 'text'}
+                disabled={disabled ? disabled : false}
+                className={className}
+                placeholder={placeholder}
+                {...properties}
+                autoComplete="off"
+            />
+            {meta.touched &&
+                ((meta.error && <div className={errorClass}>{meta.error}</div>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))
+            }
+        </div>
+    );
+}
+
+const TextAreaField = (props) => {
+    const { input, meta, wrapperClass, className, placeholder, errorClass, type, disabled, properties } = props;
+    return (
+        <div
+            className={
+                `${wrapperClass} ${(meta.touched && meta.error) ? 'has-error' : ''}`
+            }
+        >
+            <textarea
+                {...input}
+                type={type ? type : 'text'}
+                disabled={disabled ? disabled : false}
+                className={className}
+                placeholder={placeholder}
+                {...properties}
+                autoComplete="off"
+            />
+            {meta.touched &&
+                ((meta.error && <div className={errorClass}>{meta.error}</div>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))
+            }
+        </div>
+    );
+}
