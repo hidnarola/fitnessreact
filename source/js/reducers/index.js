@@ -54,6 +54,7 @@ import adminProfile from 'reducers/admin/profile';
 import adminChangePassword from 'reducers/admin/changePassword';
 import admin from 'reducers/admin/admin';
 import adminDashboard from 'reducers/admin/dashboard';
+import meal from 'reducers/meal';
 
 export default combineReducers({
     user,
@@ -110,6 +111,7 @@ export default combineReducers({
     adminChangePassword,
     admin,
     adminDashboard,
+    meal,
     // ...your other reducers here
     // you have to pass formReducer under 'form' key,
     // for custom keys look up the docs for 'getFormState'
