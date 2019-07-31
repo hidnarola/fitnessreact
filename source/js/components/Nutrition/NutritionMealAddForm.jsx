@@ -100,15 +100,26 @@ class NutritionMealAddForm extends Component {
         let dropzoneRef;
         var loggedUserImage = '';
         return (
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={this.props.handleSubmit(this.handleSubmit)}>
                 <div className="body-content d-flex row justify-content-start nutrition-meal-add-wrapper add-receipy">
                     <div className="col-md-3">
                         <div className="white-box">
                             <div className="whitebox-head d-flex profile-head">
                                 <h3 className="title-h3"> Details </h3>
                             </div>
+                            {/* {
+                                <Field
+                                    name="meal_ingredient"
+                                    value={meal_ingredient}
+                                    className="form-control"
+                                    wrapperClass=""
+                                    placeholder="Add a title"
+                                    component={InputField}
+                                    errorClass="help-block"
+                                />
+                            } */}
                             <Field
-                                name="Title"
+                                name="title"
                                 className="form-control"
                                 wrapperClass="form-group"
                                 placeholder="Add a title"
@@ -117,7 +128,7 @@ class NutritionMealAddForm extends Component {
                                 validate={[required]}
                             />
                             <Field
-                                name="dropdown-meals-type"
+                                name="dropdown_meals_type"
                                 wrapperClass="form-group"
                                 placeholder="select meals"
                                 component={WorkoutSelectField_ReactSelect}
@@ -127,7 +138,7 @@ class NutritionMealAddForm extends Component {
                             />
                             {document.getElementById('react-select-3--value-item') && console.log("==>", document.getElementById('react-select-3--value-item').innerText)}
                             <Field
-                                name="dropdown-meals-visibility"
+                                name="dropdown_meals_visibility"
                                 wrapperClass="form-group"
                                 placeholder="Meal visibility"
                                 component={WorkoutSelectField_ReactSelect}
@@ -185,7 +196,8 @@ class NutritionMealAddForm extends Component {
                                                     suggestions={searchSuggestions}
                                                     onSuggestionsFetchRequested={this.handleSuggestionsFetchRequested}
                                                     onSuggestionsClearRequested={this.handleSuggestionsClearRequested}
-                                                    getSuggestionValue={(value) => this.getSuggestionValue(value)}
+                                                    getSuggestionValue={(value) => console.log(value)}
+                                                    onSuggestionSelected={(e, value) => this.getSuggestionValue(value)}
                                                     renderSuggestion={this.renderSearchSuggestion}
                                                     inputProps={{
                                                         id: 'header_search_users',
@@ -219,24 +231,27 @@ class NutritionMealAddForm extends Component {
                                                     <div className="p_serve">
                                                         <p>Serving Size:</p>
                                                         <Field
+                                                            type="number"
                                                             name={"serving-input" + id}
                                                             className="form-control serving-input"
                                                             wrapperClass=""
                                                             placeholder="100.00"
+                                                            value={v.serving_size}
                                                             component={InputField}
                                                             errorClass="help-block"
                                                             validate={[required]}
-                                                            onChange={(e, value) => this.changeServing(id, v, value, null, null)}
+                                                            onChange={(e, serving_size) => this.changeServing(id, v, serving_size, null, null)}
                                                         />
                                                         <Field
                                                             name={"dropdown-ingredient-unit" + id}
+                                                            value={v.unit}
                                                             wrapperClass="form_drop_cstm"
                                                             placeholder="unit"
                                                             component={WorkoutSelectField_ReactSelect}
                                                             options={this.ingredientUnit(v)}
                                                             validate={[requiredReactSelect]}
                                                             errorClass="help-block"
-                                                            onChange={(e, value) => this.changeServing(id, v, null, value.value, null)}
+                                                            onChange={(e, unit) => this.changeServing(id, v, null, unit.value, null)}
                                                         />
 
                                                         <p>  Count:</p>
@@ -244,11 +259,14 @@ class NutritionMealAddForm extends Component {
                                                             name={"serving-unit" + id}
                                                             className="form-control serving-input"
                                                             wrapperClass=""
+                                                            parse={value => Number(value)}
                                                             placeholder="1"
+                                                            value={v.count}
                                                             component={InputField}
+                                                            type="number"
                                                             errorClass="help-block"
                                                             validate={[required]}
-                                                            onChange={(e, value) => this.changeServing(id, v, null, null, value)}
+                                                            onChange={(e, count) => this.changeServing(id, v, null, null, count)}
                                                         />
                                                     </div>
                                                     {/* <span className="star_one">
@@ -261,32 +279,32 @@ class NutritionMealAddForm extends Component {
                                                 <ul className="ul_six_wrap">
                                                     <li>
                                                         <div className="data_serve">
-                                                            <p>Kcal<span>350</span></p>
+                                                            <p>Kcal<span>{v.totalKcl}</span></p>
                                                         </div>
                                                     </li>
                                                     <li>
                                                         <div className="data_serve">
-                                                            <p>fat<span>350</span></p>
+                                                            <p>fat<span>{v.totalfat}</span></p>
                                                         </div>
                                                     </li>
                                                     <li>
                                                         <div className="data_serve">
-                                                            <p>Saturates<span>350</span></p>
+                                                            <p>Protin<span>{v.totalProtein}</span></p>
                                                         </div>
                                                     </li>
                                                     <li>
                                                         <div className="data_serve">
-                                                            <p>Carbs<span>350</span></p>
+                                                            <p>Carbs<span>{v.totalCarbs}</span></p>
                                                         </div>
                                                     </li>
                                                     <li>
                                                         <div className="data_serve">
-                                                            <p>Sugar<span>350</span></p>
+                                                            <p>Sugar<span>{v.totalSugar}</span></p>
                                                         </div>
                                                     </li>
                                                     <li>
                                                         <div className="data_serve">
-                                                            <p>Fiber<span>350</span></p>
+                                                            <p>Cholesterol<span>{v.totalCholesterol}</span></p>
                                                         </div>
                                                     </li>
                                                 </ul>
@@ -348,6 +366,7 @@ class NutritionMealAddForm extends Component {
                                                 existingImages={images}
                                                 showExistingImageDeleteModel={(path) => this.handleDeleteImageModel(true, path)}
                                             />
+
                                         </div>
                                     </div>}
 
@@ -406,11 +425,78 @@ class NutritionMealAddForm extends Component {
         );
     }
 
-    changeServing = (id, v, value1, value2, value3) => {
-        console.log("value =>", id, v, value1, value2, value3);
-        if (value1) {
+    handleSubmit = (a, b, c) => {
+        console.log('a => ', a);
+        console.log('b => ', b);
+        console.log('c => ', c);
+        // c.preventDefault();
+        {/* console.log("~~~~~~~~~~~~~~~~>", e)
+        console.log('data => ', data); */}
+        // event.preventDefault();
+        // const { handleSubmit } = this.props;
+        // console.log('data => ', data);
+        // handleSubmit(data);
+        // const {
+        //     meal_ingredient
+        // } = this.state;
+        a['proximates'] = this.state.meal_ingredient;
+        c.onSubmit(a)
+        // return a;
+    }
+
+    changeServing = (id, _vobj, serving_size, unit, count) => {
+        // console.log("value =>", id, vobj, serving_size, unit, typeof count);
+        const {
+            meal_ingredient
+        } = this.state;
+        let _array = meal_ingredient;
+        let vobj = _vobj
+        console.log('vobj => ', vobj);
+        if (serving_size) {
+            vobj.serving_input = serving_size;
+        }
+        if (unit) {
+            vobj.ingredient_unit = unit;
+        }
+        if (count) {
+            vobj.count = count;
+        }
+        if (vobj._id) {
+            vobj.ingredient_id = vobj._id;
+        }
+
+        if (vobj.serving_input && vobj.ingredient_unit && vobj.count) {
+
+            if (vobj.ingredient_unit !== 'g') {
+                console.log(vobj.serving_input, vobj.ingredient_unit, vobj.count);
+                // gram_total
+                var _serving_size = vobj.serving_input * vobj[vobj.ingredient_unit];
+
+                vobj.totalKcl = ((((_serving_size) * Number(vobj.energyKcal)) / 100) * (Number(vobj.count))).toFixed(2);
+                vobj.totalfat = (((_serving_size * Number(vobj.fat)) / 100) * (Number(vobj.count))).toFixed(2);
+                vobj.totalProtein = (((_serving_size * Number(vobj.protein)) / 100) * (Number(vobj.count))).toFixed(2);
+                vobj.totalCarbs = (((_serving_size * Number(vobj.carbohydrate)) / 100) * (Number(vobj.count))).toFixed(2);
+                vobj.totalSugar = (((_serving_size * Number(vobj.totalSugars)) / 100) * (Number(vobj.count))).toFixed(2);
+                vobj.totalWater = (((_serving_size * Number(vobj.water)) / 100) * (Number(vobj.count))).toFixed(2);
+                vobj.totalStarch = (((_serving_size * Number(vobj.starch)) / 100) * (Number(vobj.count))).toFixed(2);
+                vobj.totalCholesterol = (((_serving_size * Number(vobj.cholesterol)) / 100) * (Number(vobj.count))).toFixed(2);
+            } else {
+                vobj.totalKcl = (((vobj.serving_input * Number(vobj.energyKcal)) / 100) * (Number(vobj.count))).toFixed(2);
+                vobj.totalfat = (((vobj.serving_input * Number(vobj.fat)) / 100) * (Number(vobj.count))).toFixed(2);
+                vobj.totalProtein = (((vobj.serving_input * Number(vobj.protein)) / 100) * (Number(vobj.count))).toFixed(2);
+                vobj.totalCarbs = (((vobj.serving_input * Number(vobj.carbohydrate)) / 100) * (Number(vobj.count))).toFixed(2);
+                vobj.totalSugar = (((vobj.serving_input * Number(vobj.totalSugars)) / 100) * (Number(vobj.count))).toFixed(2);
+                vobj.totalWater = (((vobj.serving_input * Number(vobj.water)) / 100) * (Number(vobj.count))).toFixed(2);
+                vobj.totalStarch = (((vobj.serving_input * Number(vobj.starch)) / 100) * (Number(vobj.count))).toFixed(2);
+                vobj.totalCholesterol = (((vobj.serving_input * Number(vobj.cholesterol)) / 100) * (Number(vobj.count))).toFixed(2);
+            }
 
         }
+
+
+
+        _array[id] = vobj
+        this.setState({ meal_ingredient: _array });
     }
 
     ingredientUnit = (ingredient) => {
@@ -418,38 +504,37 @@ class NutritionMealAddForm extends Component {
         let a = [];
         a.push({ label: 'g', value: 'g' });
         for (let [key, value] of Object.entries(ingredient)) {
-            console.log('key => ', key);
+            // console.log('key => ', key);
             switch (key) {
                 case '_1tsp':
-                    a.push({ label: 'tsp', value: 'tsp' });
+                    a.push({ label: 'tsp', value: '_1tsp' });
                     break;
                 case '_1tbsp':
-                    a.push({ label: 'tbsp', value: 'tbsp' });
+                    a.push({ label: 'tbsp', value: '_1tbsp' });
                     break;
                 case '_1cup':
-                    a.push({ label: 'cup', value: 'cup' });
+                    a.push({ label: 'cup', value: '_1cup' });
                     break;
                 case '_1leaf':
-                    console.log('leaf => ');
-                    a.push({ label: 'leaf', value: 'leaf' });
+                    a.push({ label: 'leaf', value: '_1leaf' });
                     break;
                 case '_1large':
-                    a.push({ label: 'large', value: 'large' });
+                    a.push({ label: 'large', value: '_1large' });
                     break;
                 case '_1medium':
-                    a.push({ label: 'medium', value: 'medium' });
+                    a.push({ label: 'medium', value: '_1medium' });
                     break;
                 case '_1root':
-                    a.push({ label: 'root', value: 'root' });
+                    a.push({ label: 'root', value: '_1root' });
                     break;
                 case '_1small':
-                    a.push({ label: 'small', value: 'small' });
+                    a.push({ label: 'small', value: '_1small' });
                     break;
                 case '_1extra_large':
-                    a.push({ label: 'extra large', value: 'extra large' });
+                    a.push({ label: 'extra large', value: '_1extra_large' });
                     break;
                 case '_1tip':
-                    a.push({ label: 'tip', value: 'tip' });
+                    a.push({ label: 'tip', value: '_1tip' });
                     break;
 
                 default:
@@ -461,12 +546,8 @@ class NutritionMealAddForm extends Component {
 
     removeFromMeal = (value) => {
         const { meal_ingredient } = this.state;
-        console.log('value => ', value);
-
         if ((meal_ingredient.filter(e => e._id === value._id).length > 0)) {
-            console.log("remove");
             var a = meal_ingredient.filter(e => e._id !== value._id)
-            console.log('a => ', a);
             this.setState({ meal_ingredient: meal_ingredient.filter(e => e._id !== value._id) });
         }
 
@@ -509,7 +590,6 @@ class NutritionMealAddForm extends Component {
                             )
                         })}
                     </span>
-                    {console.log("fullName =>", fullName)}
                     {fullName !== 'No ingridient found' && <span className="click-to-add-btn">Click to add</span>}
                 </div>
             </a>
@@ -562,20 +642,36 @@ class NutritionMealAddForm extends Component {
         // });
     };
 
-    getSuggestionValue = (suggestion) => {
+    getSuggestionValue = (suggestionn) => {
+        console.log('getSuggestionValue => ', suggestion);
+        let suggestion = suggestionn.suggestion
         const {
             searchValue
         } = this.props;
         const {
             meal_ingredient
         } = this.state;
-        console.log('suggestion => ', suggestion);
-
 
         if (!(meal_ingredient.filter(e => e._id === suggestion._id).length > 0)) {
-            console.log("add");
+            suggestion.serving_size = 0;
+            suggestion.unit = '';
+            suggestion.count = 0;
+            suggestion.gram_total = 0;
+
+            suggestion.totalKcl = 0;
+            suggestion.totalfat = 0;
+            suggestion.totalProtein = 0;
+            suggestion.totalCarbs = 0;
+            suggestion.totalSugar = 0;
+            suggestion.totalWater = 0;
+            suggestion.totalStarch = 0;
+            suggestion.totalCholesterol = 0;
+
+
             meal_ingredient.push(suggestion);
             this.setState({ meal_ingredient: meal_ingredient });
+
+
         }
     }
 
@@ -586,7 +682,6 @@ class NutritionMealAddForm extends Component {
             this.setState({ showSearchLoader: true });
         }
         if (newValue !== undefined) {
-            console.log("newValue =>", newValue);
             dispatch(handleChangeIngridientsSearchFor('searchValue', newValue));
         }
     }
@@ -642,7 +737,7 @@ class NutritionMealAddForm extends Component {
 
 
 NutritionMealAddForm = reduxForm({
-    form: 'nutrition_meal_add_form',
+    form: 'nutrition_meal_add_form'
 })(NutritionMealAddForm);
 
 const selector = formValueSelector('nutrition_meal_add_form');

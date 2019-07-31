@@ -39,6 +39,8 @@ import { Field, reduxForm } from "redux-form";
 import { required, minLength, maxLength, requiredReactSelect } from '../../formValidation/validationRules';
 import AddMetaDescription from '../../components/global/AddMetaDescription';
 import Dropzone from "react-dropzone";
+import { mealAddRequest } from '../../actions/meal';
+
 
 const dayDriveOptions = [
     { value: DAY_DRIVE_BREAKFAST, label: 'Breakfast' },
@@ -136,9 +138,24 @@ class NutritionMealAdd extends Component {
     handleSubmit = (data) => {
         console.log('data => ', data);
         console.log('this.state => ', this.state);
+        const { dispatch } = this.props;
+
+        var formData = new FormData();
+        formData.append('title', data.title);
+        formData.append('meals_visibility', data.dropdown_meals_visibility.value)
+        formData.append('meals_type', data.dropdown_meals_type.value)
+        formData.append('ingredientsIncluded', JSON.stringify(data.proximates))
+        formData.append('notes', data.notes)
+        formData.append('instructions', data.instruction)
+        if (data.images) {
+            formData.append('equipment_img', data.images[0]);
+        }
+
+
+        dispatch(mealAddRequest(formData));
+
+
     }
-
-
 
     componentDidUpdate(prevProps, prevState) {
         const {
@@ -159,7 +176,20 @@ class NutritionMealAdd extends Component {
             dispatch,
             userNutritionsLoading,
             userNutritionsError,
+            meal,
+            saveLoading
         } = this.props;
+
+
+        if (!saveLoading && meal && prevProps.saveLoading !== saveLoading && prevProps.meal !== meal) {
+            // this.handleCloseSaveModal();
+            // let stateData = { saveLoading: false, meal: null, saveError: [] };
+            // dispatch(setBodyPartState(stateData));
+            ts('Meal saved!');
+            // this.refreshDtData();
+        }
+
+
         if (selectPageDataActionInit && !userNutriPrefLoading && !healthLabelLoading && !dietLabelLoading && !nutritionLoading) {
             this.setState({ selectPageDataActionInit: false });
             this.prepareNutriData();
@@ -346,9 +376,8 @@ NutritionMealAdd = reduxForm({
     form: 'nutrition_add_form',
 })(NutritionMealAdd)
 
-
 const mapStateToProps = (state) => {
-    const { userNutritionPreferences, healthLabels, dietLabels, nutritions, userNutritions } = state;
+    const { userNutritionPreferences, healthLabels, dietLabels, nutritions, userNutritions, meal } = state;
     return {
         userNutriPrefLoading: userNutritionPreferences.get('loading'),
         dietRestrictionLabels: userNutritionPreferences.get('dietRestrictionLabels'),
@@ -367,6 +396,11 @@ const mapStateToProps = (state) => {
         searchRecipeLoading: userNutritions.get('searchRecipeLoading'),
         searchRecipes: userNutritions.get('searchRecipes'),
         searchRecipeError: userNutritions.get('searchRecipeError'),
+
+        saveLoading: meal.get('saveLoading'),
+        meal: meal.get('meal'),
+        saveError: meal.get('saveError'),
+
     };
 }
 
