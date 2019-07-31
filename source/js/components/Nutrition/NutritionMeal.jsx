@@ -62,6 +62,10 @@ class NutritionMeal extends Component {
         dispatch(getUserTodaysMealRequest(requestObj));
     }
 
+    handleSearch = values => {
+      console.log(values)
+    }
+
     render() {
         var total_enerc_kal = 0;
         var total_procnt = 0;
@@ -176,7 +180,7 @@ class NutritionMeal extends Component {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-md-6">
+                        <div className="col-md-7">
                             <div className="white-box">
                                 <div className="whitebox-head d-flex profile-head">
                                     <h3 className="title-h3">{logDate.getDate() === new Date().getDate() ? "Today's Meals" :
@@ -197,66 +201,57 @@ class NutritionMeal extends Component {
 
 
                                 <div className="whitebox-body">
-                                    <div className="meal-wrap d-flex" >
-                                        <div className="meal-img">
-                                            <img
 
-                                                alt="Recipe"
-                                                onError={(e) => {
-                                                    e.target.src = noImg
-                                                }}
-                                            />
-                                        </div>
-                                        <div className="meal-name">
-                                            {/* <small>{(dayDriveType) ? dayDriveType.label : ''}</small> */}
-                                            <h5>
-                                                <NavLink to="">
-                                                    Name
-                                                </NavLink>
-                                            </h5>
-                                        </div>
-                                        <div className="meal-info">
-                                            <small>Cals</small>
-                                            <big>
-                                                {/* {enerc_kal} */}
-                                                25
-                                                {/* {(meal.totalNutrients['ENERC_KCAL']) ? meal.totalNutrients['ENERC_KCAL'].unit : ''} */}
-                                            </big>
-                                        </div>
-                                        <div className="meal-info">
-                                            <small>Protein</small>
-                                            <big>
-                                                56
-                                                {/* {(meal.totalNutrients['PROCNT']) ? meal.totalNutrients['PROCNT'].unit : ''} */}
-                                            </big>
-                                        </div>
-                                        <div className="meal-info">
-                                            <small>Fat</small>
-                                            <big>
-                                                89
-                                                {/* {(meal.totalNutrients['FAT']) ? meal.totalNutrients['FAT'].unit : ''} */}
-                                            </big>
-                                        </div>
-                                        <div className="meal-info">
-                                            <small>Carbs</small>
-                                            <big>
-                                                77
-                                                {/* {(meal.totalNutrients['CHOCDF']) ? meal.totalNutrients['CHOCDF'].unit : ''} */}
-                                            </big>
-                                        </div>
-                                        <div className="meal-info">
-                                            <ButtonToolbar bsClass="">
-                                                <DropdownButton title="" className="icon-more_horiz no-border" id="dropdown-size-small" noCaret pullRight>
-                                                    <MenuItem eventKey="1">
-                                                        <FaTrash className="v-align-sub" /> Delete
-                                                                </MenuItem>
-                                                </DropdownButton>
-                                            </ButtonToolbar>
-                                        </div>
-                                    </div>
-                                    {
+                                    <div key={1} className="box_wrap_one">
+                                                <div className="head_wrap">
+                                                    <h2>Apple</h2>
 
-                                    }
+                                                    {/* <span className="star_one">
+                                                        <Star />
+                                                    </span> */}
+                                                    <button type="button" className="timline-post-del-btn" >
+                                                        <i className="icon-cancel"></i>
+                                                    </button>
+                                                </div>
+                                                <ul className="ul_six_wrap">
+                                                    <li>
+                                                        <div className="data_serve">
+                                                        <img
+                                                          alt="Recipe"
+                                                          onError={(e) => {
+                                                              e.target.src = noImg
+                                                          }}
+                                                          style={{height: "100%"}}
+                                                          />
+                                                        </div>
+                                                    </li>
+                                                    <li className="ml-auto">
+                                                        <div className="data_serve">
+                                                            <p>Kcal<span>350</span></p>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div className="data_serve">
+                                                            <p>Protein<span>350</span></p>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div className="data_serve">
+                                                            <p>Fat<span>350</span></p>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div className="data_serve">
+                                                            <p>Carbs<span>350</span></p>
+                                                        </div>
+                                                    </li>
+
+                                                </ul>
+                                            </div>
+
+
+
+
                                     {/* {false && todaysMeal && todaysMeal.length <= 0 && (!loading) &&
                                         <span>No Records found</span>
                                     }
@@ -338,8 +333,16 @@ class NutritionMeal extends Component {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-md-3">
-                            my favourite meals
+                        <div className="col-md-2">
+                        <div className="blue_right_sidebar">
+                            <h2 className="h2_head_one">Recent Meals</h2>
+                            <div className="recent-ingredient">
+                                <ul>
+                                    <li>Banana bread, homemade<div className="add_drag"><i className="icon-control_point"></i> Click to Add</div></li>
+                                    <li>Apple juice, clear, ambient and chilled<div className="add_drag"><i className="icon-control_point"></i> Click to Add</div></li>
+                                </ul>
+                            </div>
+                        </div>
                         </div>
 
                     </div>
@@ -382,6 +385,7 @@ class NutritionMeal extends Component {
             dispatch(getUserTodaysMealRequest(requestObj));
         }
     }
+
 
     handleShowDeleteModal = (_id) => {
         this.setState({
