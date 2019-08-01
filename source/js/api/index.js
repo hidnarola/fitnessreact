@@ -151,44 +151,51 @@ export const postFormData = (path, data, headers) => {
         ...headers
     }
 
-    return axios({
-        method: 'POST',
-        url: url,
-        data: data,
-        headers: _headers
-    }).then(function (res) {
-        console.log('res => ', res);
-        return res.data;
-    }).catch(function (error) {
-        console.log('error => ', error);
-        if (error.response) {
-            if (error.response.status === UNAUTHORIZED) {
-                var userRole = localStorage.getItem(LOCALSTORAGE_ROLE_KEY);
-                var url = publicPath;
-                if (window.atob(userRole) === ADMIN_ROLE) {
-                    url = adminRootRoute + '/';;
+    try {
+
+
+        return axios({
+            method: 'POST',
+            url: url,
+            data: data,
+            headers: _headers
+        }).then(function (res) {
+            console.log('res => ', res);
+            return res.data;
+        }).catch(function (error) {
+            console.log('error => ', error);
+            if (error.response) {
+                if (error.response.status === UNAUTHORIZED) {
+                    var userRole = localStorage.getItem(LOCALSTORAGE_ROLE_KEY);
+                    var url = publicPath;
+                    if (window.atob(userRole) === ADMIN_ROLE) {
+                        url = adminRootRoute + '/';;
+                    }
+                    localStorage.removeItem(LOCALSTORAGE_ACCESS_TOKEN_KEY);
+                    localStorage.removeItem(LOCALSTORAGE_ID_TOKEN_KEY);
+                    localStorage.removeItem(LOCALSTORAGE_EXPIRES_AT_KEY);
+                    localStorage.removeItem(LOCALSTORAGE_ROLE_KEY);
+                    localStorage.removeItem(LOCALSTORAGE_USERNAME_KEY);
+                    localStorage.removeItem(LOCALSTORAGE_REFRESH_TOKEN_KEY);
+                    localStorage.removeItem(LOCALSTORAGE_USER_DETAILS_KEY);
+                    history.replace(`${url}${SESSION_EXPIRED_URL_TYPE}`);
+                } else if (error.response.status === BAD_REQUEST) {
+                    throw ApiError(error.response.data.message, error.response.data, error.response.status);
+                } else if (error.response.status === NOT_FOUND) {
+                    throw ApiError(`Request not found! please try again later.`, null, error.response.status);
+                } else if (error.response.status === VALIDATION_FAILURE_STATUS) {
+                    throw ApiError(`Validation errors.`, error.response.data, error.response.status);
+                } else {
+                    throw ApiError(`Request failed with status ${error.response.status}.`, error.response.data, error.response.status);
                 }
-                localStorage.removeItem(LOCALSTORAGE_ACCESS_TOKEN_KEY);
-                localStorage.removeItem(LOCALSTORAGE_ID_TOKEN_KEY);
-                localStorage.removeItem(LOCALSTORAGE_EXPIRES_AT_KEY);
-                localStorage.removeItem(LOCALSTORAGE_ROLE_KEY);
-                localStorage.removeItem(LOCALSTORAGE_USERNAME_KEY);
-                localStorage.removeItem(LOCALSTORAGE_REFRESH_TOKEN_KEY);
-                localStorage.removeItem(LOCALSTORAGE_USER_DETAILS_KEY);
-                history.replace(`${url}${SESSION_EXPIRED_URL_TYPE}`);
-            } else if (error.response.status === BAD_REQUEST) {
-                throw ApiError(error.response.data.message, error.response.data, error.response.status);
-            } else if (error.response.status === NOT_FOUND) {
-                throw ApiError(`Request not found! please try again later.`, null, error.response.status);
-            } else if (error.response.status === VALIDATION_FAILURE_STATUS) {
-                throw ApiError(`Validation errors.`, error.response.data, error.response.status);
             } else {
-                throw ApiError(`Request failed with status ${error.response.status}.`, error.response.data, error.response.status);
+                throw ApiError(error.toString(), null, 'REQUEST_FAILED');
             }
-        } else {
-            throw ApiError(error.toString(), null, 'REQUEST_FAILED');
-        }
-    });
+        });
+    } catch (error) {
+        throw ApiError(error.toString(), null, 'REQUEST_FAILED');
+    }
+
 };
 
 export const putFormData = (path, data, headers) => {

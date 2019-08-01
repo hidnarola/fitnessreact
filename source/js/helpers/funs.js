@@ -170,7 +170,7 @@ export function toggleSideMenu(id, show) {
 }
 
 export function isSidebarOpen() {
-    if(document.getElementById('manu-navigation').classList.contains('menu-hide')) {
+    if (document.getElementById('manu-navigation').classList.contains('menu-hide')) {
         console.log("false");
         return false;
     } else {

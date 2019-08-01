@@ -141,18 +141,34 @@ class NutritionMealAdd extends Component {
         const { dispatch } = this.props;
 
         var formData = new FormData();
-        formData.append('title', data.title);
-        formData.append('meals_visibility', data.dropdown_meals_visibility.value)
-        formData.append('meals_type', data.dropdown_meals_type.value)
-        formData.append('ingredientsIncluded', JSON.stringify(data.proximates))
-        formData.append('notes', data.notes)
-        formData.append('instructions', data.instruction)
+        if (data.title) {
+            formData.append('title', data.title);
+        }
+        if (data.dropdown_meals_visibility && data.dropdown_meals_visibility.value) {
+            formData.append('meals_visibility', data.dropdown_meals_visibility.value)
+        }
+        if (data.dropdown_meals_type && data.dropdown_meals_type.value) {
+            formData.append('meals_type', data.dropdown_meals_type.value)
+        }
+        if (data.proximates && data.proximates.length > 0) {
+            formData.append('ingredientsIncluded', JSON.stringify(data.proximates))
+        }
+        if (data.notes) {
+            formData.append('notes', data.notes)
+        }
+        if (data.instruction) {
+            formData.append('instructions', data.instruction)
+        }
         if (data.images) {
-            formData.append('equipment_img', data.images[0]);
+            formData.append('meal_img', data.images[0]);
         }
 
+        if (data.dropdown_meals_visibility && data.dropdown_meals_visibility.value === 'public' && !data.instruction) {
+            te("Instruction required for public meals");
+        } else {
+            dispatch(mealAddRequest(formData));
+        }
 
-        dispatch(mealAddRequest(formData));
 
 
     }
@@ -177,7 +193,9 @@ class NutritionMealAdd extends Component {
             userNutritionsLoading,
             userNutritionsError,
             meal,
-            saveLoading
+            saveLoading,
+            saveError,
+            history
         } = this.props;
 
 
@@ -187,6 +205,18 @@ class NutritionMealAdd extends Component {
             // dispatch(setBodyPartState(stateData));
             ts('Meal saved!');
             // this.refreshDtData();
+            history.push(routeCodes.NUTRITION);
+        }
+
+        if (!saveLoading && prevProps.saveLoading !== saveLoading && prevProps.saveError !== saveError && saveError.length > 0) {
+            var error_msg = ''
+            saveError.map((e, i) => {
+
+                error_msg = error_msg + e
+
+            })
+
+            te(error_msg);
         }
 
 
