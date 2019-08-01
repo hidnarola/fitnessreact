@@ -62,7 +62,7 @@ const dayDriveOptions = [
 ]
 import Star from "svg/star.svg";
 import { FILTER_BODY_PARTS_SUCCESS } from '../../actions/admin/bodyParts';
-
+import { Alert } from "react-bootstrap";
 class NutritionMealAddForm extends Component {
     constructor(props) {
         super(props);
@@ -100,24 +100,14 @@ class NutritionMealAddForm extends Component {
         let dropzoneRef;
         var loggedUserImage = '';
         return (
-            <form onSubmit={this.props.handleSubmit(this.handleSubmit)}>
+            <form method="POST" onSubmit={this.props.handleSubmit(this.handleSubmit)}>
                 <div className="body-content d-flex row justify-content-start nutrition-meal-add-wrapper add-receipy">
                     <div className="col-md-3">
                         <div className="white-box">
                             <div className="whitebox-head d-flex profile-head">
                                 <h3 className="title-h3"> Details </h3>
                             </div>
-                            {/* {
-                                <Field
-                                    name="meal_ingredient"
-                                    value={meal_ingredient}
-                                    className="form-control"
-                                    wrapperClass=""
-                                    placeholder="Add a title"
-                                    component={InputField}
-                                    errorClass="help-block"
-                                />
-                            } */}
+
                             <Field
                                 name="title"
                                 className="form-control"
@@ -279,32 +269,32 @@ class NutritionMealAddForm extends Component {
                                                 <ul className="ul_six_wrap">
                                                     <li>
                                                         <div className="data_serve">
-                                                            <p>Kcal<span>{v.totalKcl}</span></p>
+                                                            <p>Kcal<span>{(Number(v.totalKcl) !== NaN && v.totalKcl !== 'NaN') ? v.totalKcl : 0}</span></p>
                                                         </div>
                                                     </li>
                                                     <li>
                                                         <div className="data_serve">
-                                                            <p>fat<span>{v.totalfat}</span></p>
+                                                            <p>fat<span>{(Number(v.totalfat) !== NaN && (v.totalfat !== 'NaN')) ? v.totalfat : 0}</span></p>
                                                         </div>
                                                     </li>
                                                     <li>
                                                         <div className="data_serve">
-                                                            <p>Protin<span>{v.totalProtein}</span></p>
+                                                            <p>Protin<span>{(Number(v.totalProtein) !== NaN && (v.totalProtein !== 'NaN')) ? v.totalProtein : 0}</span></p>
                                                         </div>
                                                     </li>
                                                     <li>
                                                         <div className="data_serve">
-                                                            <p>Carbs<span>{v.totalCarbs}</span></p>
+                                                            <p>Carbs<span>{(Number(v.totalCarbs) !== NaN && (v.totalCarbs !== 'NaN')) ? v.totalCarbs : 0}</span></p>
                                                         </div>
                                                     </li>
                                                     <li>
                                                         <div className="data_serve">
-                                                            <p>Sugar<span>{v.totalSugar}</span></p>
+                                                            <p>Sugar<span>{(Number(v.totalSugar) !== NaN && (v.totalSugar !== 'NaN')) ? v.totalSugar : 0}</span></p>
                                                         </div>
                                                     </li>
                                                     <li>
                                                         <div className="data_serve">
-                                                            <p>Cholesterol<span>{v.totalCholesterol}</span></p>
+                                                            <p>Cholesterol<span>{(Number(v.totalCholesterol) !== NaN && (v.totalSugar !== 'NaN')) ? v.totalCholesterol : 0}</span></p>
                                                         </div>
                                                     </li>
                                                 </ul>
@@ -446,57 +436,100 @@ class NutritionMealAddForm extends Component {
 
     changeServing = (id, _vobj, serving_size, unit, count) => {
         // console.log("value =>", id, vobj, serving_size, unit, typeof count);
-        const {
+        try {
+
+            const {
             meal_ingredient
         } = this.state;
-        let _array = meal_ingredient;
-        let vobj = _vobj
-        console.log('vobj => ', vobj);
-        if (serving_size) {
-            vobj.serving_input = serving_size;
-        }
-        if (unit) {
-            vobj.ingredient_unit = unit;
-        }
-        if (count) {
-            vobj.count = count;
-        }
-        if (vobj._id) {
-            vobj.ingredient_id = vobj._id;
-        }
-
-        if (vobj.serving_input && vobj.ingredient_unit && vobj.count) {
-
-            if (vobj.ingredient_unit !== 'g') {
-                console.log(vobj.serving_input, vobj.ingredient_unit, vobj.count);
-                // gram_total
-                var _serving_size = vobj.serving_input * vobj[vobj.ingredient_unit];
-
-                vobj.totalKcl = ((((_serving_size) * Number(vobj.energyKcal)) / 100) * (Number(vobj.count))).toFixed(2);
-                vobj.totalfat = (((_serving_size * Number(vobj.fat)) / 100) * (Number(vobj.count))).toFixed(2);
-                vobj.totalProtein = (((_serving_size * Number(vobj.protein)) / 100) * (Number(vobj.count))).toFixed(2);
-                vobj.totalCarbs = (((_serving_size * Number(vobj.carbohydrate)) / 100) * (Number(vobj.count))).toFixed(2);
-                vobj.totalSugar = (((_serving_size * Number(vobj.totalSugars)) / 100) * (Number(vobj.count))).toFixed(2);
-                vobj.totalWater = (((_serving_size * Number(vobj.water)) / 100) * (Number(vobj.count))).toFixed(2);
-                vobj.totalStarch = (((_serving_size * Number(vobj.starch)) / 100) * (Number(vobj.count))).toFixed(2);
-                vobj.totalCholesterol = (((_serving_size * Number(vobj.cholesterol)) / 100) * (Number(vobj.count))).toFixed(2);
-            } else {
-                vobj.totalKcl = (((vobj.serving_input * Number(vobj.energyKcal)) / 100) * (Number(vobj.count))).toFixed(2);
-                vobj.totalfat = (((vobj.serving_input * Number(vobj.fat)) / 100) * (Number(vobj.count))).toFixed(2);
-                vobj.totalProtein = (((vobj.serving_input * Number(vobj.protein)) / 100) * (Number(vobj.count))).toFixed(2);
-                vobj.totalCarbs = (((vobj.serving_input * Number(vobj.carbohydrate)) / 100) * (Number(vobj.count))).toFixed(2);
-                vobj.totalSugar = (((vobj.serving_input * Number(vobj.totalSugars)) / 100) * (Number(vobj.count))).toFixed(2);
-                vobj.totalWater = (((vobj.serving_input * Number(vobj.water)) / 100) * (Number(vobj.count))).toFixed(2);
-                vobj.totalStarch = (((vobj.serving_input * Number(vobj.starch)) / 100) * (Number(vobj.count))).toFixed(2);
-                vobj.totalCholesterol = (((vobj.serving_input * Number(vobj.cholesterol)) / 100) * (Number(vobj.count))).toFixed(2);
+            let _array = meal_ingredient;
+            let vobj = _vobj
+            console.log('vobj => ', vobj);
+            if (serving_size) {
+                vobj.serving_input = serving_size;
+            }
+            if (unit) {
+                vobj.ingredient_unit = unit;
+            }
+            if (count) {
+                vobj.count = count;
+            }
+            if (vobj._id) {
+                vobj.ingredient_id = vobj._id;
             }
 
+            if (vobj.serving_input && vobj.ingredient_unit && vobj.count) {
+
+                if (vobj.ingredient_unit !== 'g') {
+                    console.log(vobj.serving_input, vobj.ingredient_unit, vobj.count);
+                    // gram_total
+                    var _serving_size = vobj.serving_input * vobj[vobj.ingredient_unit];
+
+                    if (Number(vobj.energyKcal) !== NaN) {
+                        vobj.totalKcl = ((((_serving_size) * Number(vobj.energyKcal)) / 100) * (Number(vobj.count))).toFixed(2);
+                    }
+                    if (Number(vobj.fat) !== NaN) {
+                        vobj.totalfat = (((_serving_size * Number(vobj.fat)) / 100) * (Number(vobj.count))).toFixed(2);
+                    }
+                    if (Number(vobj.protein) !== NaN) {
+                        vobj.totalProtein = (((_serving_size * Number(vobj.protein)) / 100) * (Number(vobj.count))).toFixed(2);
+                    }
+                    if (Number(vobj.carbohydrate) !== NaN) {
+                        vobj.totalCarbs = (((_serving_size * Number(vobj.carbohydrate)) / 100) * (Number(vobj.count))).toFixed(2);
+                    }
+                    console.log('Number(vobj.totalSugars) => ', Number(vobj.totalSugars), NaN);
+                    if (Number(vobj.totalSugars) !== NaN) {
+                        vobj.totalSugar = (((_serving_size * Number(vobj.totalSugars)) / 100) * (Number(vobj.count))).toFixed(2);
+                    }
+                    if (Number(vobj.water) !== NaN) {
+                        vobj.totalWater = (((_serving_size * Number(vobj.water)) / 100) * (Number(vobj.count))).toFixed(2);
+                    }
+                    if (Number(vobj.starch) !== NaN) {
+                        vobj.totalStarch = (((_serving_size * Number(vobj.starch)) / 100) * (Number(vobj.count))).toFixed(2);
+                    }
+                    if (Number(vobj.cholesterol) !== NaN) {
+                        vobj.totalCholesterol = (((_serving_size * Number(vobj.cholesterol)) / 100) * (Number(vobj.count))).toFixed(2);
+                    }
+
+
+                } else {
+                    if (Number(vobj.energyKcal) !== NaN) {
+                        vobj.totalKcl = (((vobj.serving_input * Number(vobj.energyKcal)) / 100) * (Number(vobj.count))).toFixed(2);
+                    }
+                    if (Number(vobj.fat) !== NaN) {
+                        vobj.totalfat = (((vobj.serving_input * Number(vobj.fat)) / 100) * (Number(vobj.count))).toFixed(2);
+                    }
+                    if (Number(vobj.protein) !== NaN) {
+                        vobj.totalProtein = (((vobj.serving_input * Number(vobj.protein)) / 100) * (Number(vobj.count))).toFixed(2);
+                    }
+                    if (Number(vobj.carbohydrate) !== NaN) {
+                        vobj.totalCarbs = (((vobj.serving_input * Number(vobj.carbohydrate)) / 100) * (Number(vobj.count))).toFixed(2);
+                    }
+                    // console.log('Number(vobj.totalSugars) => ', Number(vobj.totalSugars), NaN, Number(vobj.totalSugars) !== NaN, vobj.totalSugars);
+                    if (Number(vobj.totalSugars) !== NaN) {
+                        vobj.totalSugar = (((vobj.serving_input * Number(vobj.totalSugars)) / 100) * (Number(vobj.count))).toFixed(2);
+                    }
+                    if (Number(vobj.water) !== NaN) {
+                        vobj.totalWater = (((vobj.serving_input * Number(vobj.water)) / 100) * (Number(vobj.count))).toFixed(2);
+                    }
+                    if (Number(vobj.starch) !== NaN) {
+                        vobj.totalStarch = (((vobj.serving_input * Number(vobj.starch)) / 100) * (Number(vobj.count))).toFixed(2);
+                    }
+                    if (Number(vobj.cholesterol) !== NaN) {
+                        vobj.totalCholesterol = (((vobj.serving_input * Number(vobj.cholesterol)) / 100) * (Number(vobj.count))).toFixed(2);
+                    }
+                }
+
+            }
+
+
+
+            _array[id] = vobj
+            this.setState({ meal_ingredient: _array });
+
+
+        } catch (error) {
+            console.log('error => ', error);
         }
-
-
-
-        _array[id] = vobj
-        this.setState({ meal_ingredient: _array });
     }
 
     ingredientUnit = (ingredient) => {
