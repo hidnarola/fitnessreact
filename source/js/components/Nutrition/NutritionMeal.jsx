@@ -28,6 +28,9 @@ import DeleteConfirmation from '../Admin/Common/DeleteConfirmation';
 import AddMetaDescription from '../../components/global/AddMetaDescription';
 import ReactCalender from 'react-calendar/dist/entry.nostyle';
 import NutritionMealAddSearchForm from './NutritionMealAddSearchForm';
+import NutritionMealItems from './NutritionMealItems'
+
+
 const dayDriveOptions = [
     { value: DAY_DRIVE_BREAKFAST, label: capitalizeFirstLetter(DAY_DRIVE_BREAKFAST.replace('_', ' ')) },
     { value: DAY_DRIVE_LUNCH, label: capitalizeFirstLetter(DAY_DRIVE_LUNCH.replace('_', ' ')) },
@@ -47,7 +50,8 @@ class NutritionMeal extends Component {
             showDeleteModal: false,
             selectedMealId: null,
             deleteActionInit: false,
-            logDate: logDate
+            logDate: logDate,
+            today_meals: []
         }
     }
 
@@ -61,7 +65,12 @@ class NutritionMeal extends Component {
         dispatch(showPageLoader());
         dispatch(getUserTodaysMealRequest(requestObj));
     }
-
+    addTodayMeals = (obj) => {
+      const {today_meals} = this.state
+      today_meals.push(obj)
+      this.setState({today_meals})
+      console.log("todaymeals",today_meals)
+    }
     handleSearch = values => {
       console.log(values)
     }
@@ -193,61 +202,10 @@ class NutritionMeal extends Component {
                                     </div>
                                 </div>
 
-
-                                <div className="whitebox-head d-flex profile-head">
-                                    <NutritionMealAddSearchForm onSubmit={this.handleSearch} />
-
-                                </div>
-
+                                <NutritionMealAddSearchForm onSubmit={this.handleSearch} addTodayMeals={this.addTodayMeals}/>
 
                                 <div className="whitebox-body">
-
-                                    <div key={1} className="box_wrap_one">
-                                                <div className="head_wrap">
-                                                    <h2>Apple</h2>
-
-                                                    {/* <span className="star_one">
-                                                        <Star />
-                                                    </span> */}
-                                                    <button type="button" className="timline-post-del-btn" >
-                                                        <i className="icon-cancel"></i>
-                                                    </button>
-                                                </div>
-                                                <ul className="ul_six_wrap">
-                                                    <li>
-                                                        <div className="data_serve">
-                                                        <img
-                                                          alt="Recipe"
-                                                          onError={(e) => {
-                                                              e.target.src = noImg
-                                                          }}
-                                                          style={{height: "100%"}}
-                                                          />
-                                                        </div>
-                                                    </li>
-                                                    <li className="ml-auto">
-                                                        <div className="data_serve">
-                                                            <p>Kcal<span>350</span></p>
-                                                        </div>
-                                                    </li>
-                                                    <li>
-                                                        <div className="data_serve">
-                                                            <p>Protein<span>350</span></p>
-                                                        </div>
-                                                    </li>
-                                                    <li>
-                                                        <div className="data_serve">
-                                                            <p>Fat<span>350</span></p>
-                                                        </div>
-                                                    </li>
-                                                    <li>
-                                                        <div className="data_serve">
-                                                            <p>Carbs<span>350</span></p>
-                                                        </div>
-                                                    </li>
-
-                                                </ul>
-                                            </div>
+                                    {this.state.today_meals.map((item,index) => <NutritionMealItems key={index} meal={item} />)}
 
 
 

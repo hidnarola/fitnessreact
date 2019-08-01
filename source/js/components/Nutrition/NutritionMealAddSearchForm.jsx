@@ -36,17 +36,25 @@ class NutritionMealAddSearchForm extends Component {
     this.searchDebounce = _.debounce(this.searchMeals, 1000);
     this.state = {
       searchValue: "",
-      suggestions: [],
+      searchSuggestions: [],
       showSearchLoader: false,
       searchIsLoading: false
     };
   }
 
   handleSearchChange = (event, { newValue }) => {
-    this.setState({ searchValue: newValue });
-    console.log("chage", newValue);
     const { dispatch } = this.props;
-    dispatch(handleChnageSearchMeal(newValue));
+    if (
+      newValue &&
+      typeof newValue !== "undefined" &&
+      newValue !== "" &&
+      newValue.trim() !== ""
+    ) {
+      this.setState({ showSearchLoader: true });
+    }
+    if (newValue !== undefined) {
+      dispatch(handleChnageSearchMeal(newValue));
+    }
   };
 
   handleSuggestionsFetchRequested = ({ value }) => {
@@ -70,24 +78,42 @@ class NutritionMealAddSearchForm extends Component {
 
   handleSuggestionsClearRequested = () => {};
 
-  getSuggestions = value => {
-    const inputValue = value.trim().toLowerCase();
-    const inputLength = inputValue.length;
+  getSuggestionValue = ({ suggestion }) => {
+    const { dispatch, addTodayMeals } = this.props;
+    console.log("getSuggestionValue => ", suggestion);
+    addTodayMeals(suggestion);
 
-    return inputLength === 0
-      ? []
-      : languages.filter(
-          lang => lang.name.toLowerCase().slice(0, inputLength) === inputValue
-        );
-  };
+    dispatch(handleChnageSearchMeal(suggestion.title));
+    // let suggestion = suggestionn.suggestion;
+    // const { searchMealValue } = this.props;
+    // const { meal_suggestions } = this.state;
 
-  getSuggestionValue = suggestion => {
-    console.log(suggestion);
-    suggestion.name;
+    // if (!(meal_suggestions.filter(e => e._id === suggestion._id).length > 0)) {
+    //   // suggestion.serving_size = 0;
+    //   // suggestion.unit = "";
+    //   // suggestion.count = 0;
+    //   // suggestion.gram_total = 0;
+
+    //   // suggestion.totalKcl = 0;
+    //   // suggestion.totalfat = 0;
+    //   // suggestion.totalProtein = 0;
+    //   // suggestion.totalCarbs = 0;
+    //   // suggestion.totalSugar = 0;
+    //   // suggestion.totalWater = 0;
+    //   // suggestion.totalStarch = 0;
+    //   // suggestion.totalCholesterol = 0;
+
+    //   meal_ingredient.push(suggestion);
+    //   this.setState({ meal_suggestions: meal_suggestions });
+    // }
   };
 
   renderSuggestion = (suggestion, { query }) => {
-    var fullName = suggestion.name;
+    console.log("renderSuggestion", suggestion);
+    var fullName = suggestion.title;
+    // if (suggestion.lastName) {
+    //     fullName += ' ' + suggestion.lastName;
+    // }
     const matches = AutosuggestHighlightMatch(fullName, query);
     const parts = AutosuggestHighlightParse(fullName, matches);
     return (
@@ -113,8 +139,7 @@ class NutritionMealAddSearchForm extends Component {
               );
             })}
           </span>
-          {console.log("fullName =>", fullName)}
-          {fullName !== "No ingridient found" && (
+          {fullName !== "No meals found" && (
             <span className="click-to-add-btn">Click to add</span>
           )}
         </div>
@@ -122,9 +147,42 @@ class NutritionMealAddSearchForm extends Component {
     );
   };
 
+  componentDidUpdate(prevProps, prevState) {
+    const { searchSuggestions, searchLoading } = this.props;
+    const { searchIsLoading, showSearchLoader } = this.state;
+    console.log("prevProps", prevProps);
+    console.log("prevState", prevState);
+    console.log("searchSuggestions", searchSuggestions);
+    if (
+      searchSuggestions.length !== prevProps.searchSuggestions.length ||
+      searchSuggestions[searchSuggestions.length - 1] !==
+        prevProps.searchSuggestions[searchSuggestions.length - 1]
+    ) {
+      let suggestedUsers = [];
+      if (searchSuggestions.length > 0) {
+        suggestedUsers = searchSuggestions;
+        // suggestedUsers.push({
+        //     _id: 'view_all',
+        //     text: 'View All',
+        // });
+      } else {
+        // suggestedUsers = [];
+        suggestedUsers.push({
+          _id: "no_result",
+          title: "No meals found"
+        });
+      }
+      this.setState({
+        searchIsLoading: false,
+        showSearchLoader: false,
+        searchSuggestions: suggestedUsers
+      });
+    }
+  }
+
   render() {
-    const { handleSubmit } = this.props;
-    const { suggestions, searchValue, showSearchLoader } = this.state;
+    const { handleSubmit, searchMealValue } = this.props;
+    const { searchSuggestions, showSearchLoader } = this.state;
     return (
       <div className="nutrition-meal-add-search-form-wrapper">
         <div className="row">
@@ -135,19 +193,22 @@ class NutritionMealAddSearchForm extends Component {
               </span>
 
               <Autosuggest
-                suggestions={suggestions}
+                suggestions={searchSuggestions}
                 onSuggestionsFetchRequested={
                   this.handleSuggestionsFetchRequested
                 }
                 onSuggestionsClearRequested={
                   this.handleSuggestionsClearRequested
                 }
-                getSuggestionValue={value => this.getSuggestionValue(value)}
+                getSuggestionValue={value => console.log(value)}
+                onSuggestionSelected={(e, value) =>
+                  this.getSuggestionValue(value)
+                }
                 renderSuggestion={this.renderSuggestion}
                 inputProps={{
                   id: "header_search_users",
                   name: "header_search_users",
-                  value: searchValue,
+                  value: searchMealValue,
                   onChange: this.handleSearchChange,
                   placeholder: "Search Males"
                 }}
@@ -182,7 +243,14 @@ class NutritionMealAddSearchForm extends Component {
 //   form: "nutritionMealAddSearchForm"
 // })(NutritionMealAddSearchForm);
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => {
+  const { meal } = state;
+  return {
+    searchLoading: meal.get("searchLoading"),
+    searchMealValue: meal.get("searchMealValue"),
+    searchSuggestions: meal.get("searchMeals")
+  };
+};
 
 export default connect(mapStateToProps)(NutritionMealAddSearchForm);
 

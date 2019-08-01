@@ -15,21 +15,14 @@ const initialState = Map({
   saveLoading: false,
   meal: null,
   saveError: [],
+
   searchMeals: [],
-  searchMealValue: ""
+  searchMealValue: "",
+  searchLoading: false,
+  searchError: []
 });
 
 const actionMap = {
-  [MEAL_ADD_REQUEST]: (state, action) => {
-    return state.merge(
-      Map({
-        saveLoading: true,
-        meal: null,
-        saveError: []
-      })
-    );
-  },
-
   [MEAL_ADD_REQUEST]: (state, action) => {
     console.log("reducer request => ");
     return state.merge(
@@ -78,14 +71,50 @@ const actionMap = {
   [HANDLE_CHANGE_MEAL_SEARCH_VALUE]: (state, action) => {
     return state.merge(Map({ searchMealValue: action.requestData }));
   },
+
   [MEAL_SEARCH_REQUEST]: (state, action) => {
-    return state;
+    return state.merge(
+      Map({
+        searchLoading: true,
+        searchMeals: [],
+        searchError: []
+      })
+    );
   },
+
   [MEAL_SEARCH_SUCCESS]: (state, action) => {
-    return state;
+    let newState = { searchLoading: false };
+    if (action.data && action.data.status === 1) {
+      newState.searchMeals = action.data.meals;
+    } else {
+      let msg = action.data.message
+        ? action.data.message
+        : "Something went wrong! please try again later";
+      newState.searchError = [msg];
+    }
+    console.log("reducer", action);
+    return state.merge(Map(newState));
   },
+
   [MEAL_SEARCH_ERROR]: (state, action) => {
-    return state;
+    let error = [];
+    if (
+      action.error.status &&
+      action.error.status === VALIDATION_FAILURE_STATUS &&
+      action.error.response.message
+    ) {
+      error = generateValidationErrorMsgArr(action.error.response.message);
+    } else if (action.error && action.error.message) {
+      error = [action.error.message];
+    } else {
+      error = ["Something went wrong! please try again later"];
+    }
+    return state.merge(
+      Map({
+        searchLoading: false,
+        searchError: error
+      })
+    );
   }
 };
 

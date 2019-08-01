@@ -177,11 +177,11 @@ class NutritionMealAddForm extends Component {
                                     <div className={this.state.cuurentTab === "#Ingredients" ? "content active" : "content"} id="Ingredients">
                                         Content of Ingredients
                                         {/* <div className="search search_Cstm">
-                                            
+
                                             <Field
                                                 name="search_term"
                                                 className="form-control"
-                                                placeholder="Search Meal"   
+                                                placeholder="Search Meal"
                                                 component={InputField}
                                                 errorClass="help-block"
                                             />
@@ -560,7 +560,7 @@ class NutritionMealAddForm extends Component {
         //             <span>{suggestion.text}</span>
         //         </NavLink>
         //     );
-        // } 
+        // }
         // if (suggestion._id === 'no_result') {
         //     return (
         //         <a href="javascript:void(0)">

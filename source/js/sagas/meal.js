@@ -30,6 +30,7 @@ function searchMealData() {
     try {
       console.log("searchMealsData => action => ", action);
       const data = yield call(() => api.searchMeal(action.data));
+      console.log("response", data);
       yield put(mealSearchSuccess(data));
     } catch (error) {
       yield put(mealSearchError(error));
