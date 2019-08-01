@@ -30,6 +30,17 @@ const actionMap = {
     );
   },
 
+  [MEAL_ADD_REQUEST]: (state, action) => {
+    console.log("reducer request => ");
+    return state.merge(
+      Map({
+        saveLoading: true,
+        meal: null,
+        saveError: []
+      })
+    );
+  },
+
   [MEAL_ADD_SUCCESS]: (state, action) => {
     let newState = { saveLoading: false };
     if (action.data && action.data.status && action.data.status === 1) {

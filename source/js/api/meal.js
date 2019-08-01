@@ -1,9 +1,9 @@
-import { postFormData } from "..";
-import { extraHeaders } from "../../helpers/funs";
-import { fetchResource } from ".";
+import { postFormData } from "./index";
+import { extraHeaders } from "../helpers/funs";
+import { fetchResource } from "./index";
 
 const requestUrl = "/user/meals";
-const requestMeal = "/user/meals/search";
+const requestMeal = "user/meals/search";
 
 function addMeal(requestData) {
   console.log("api => ");
@@ -14,7 +14,7 @@ function addMeal(requestData) {
 function searchMeal(requestData) {
   console.log("api => ", requestData);
 
-  let headers = extraUserHeaders();
+  let headers = extraHeaders();
   var options = {
     method: "POST",
     headers: headers,
