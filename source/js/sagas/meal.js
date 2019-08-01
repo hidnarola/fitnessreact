@@ -4,26 +4,28 @@ import {
     mealAddError,
     mealAddSuccess,
 } from "../actions/meal";
-import api from '../api/meal';
+import api from 'api/meal';
 
 function postMealData() {
     console.log('saga => ');
     return function* (action) {
         try {
             const requestData = action.requestData;
+            console.log('action.requestData => ', action.requestData);
             const data = yield call(() => api.addMeal(requestData));
             yield put(mealAddSuccess(data));
         } catch (error) {
+            console.log('error => ', error);
             yield put(mealAddError(error));
         }
     }
 }
 
-
-export function* watchAdminBodyParts() {
+export function* watchMeal() {
+    console.log('watch => ');
     yield takeLatest(MEAL_ADD_REQUEST, postMealData());
 }
 
 export default [
-    watchAdminBodyParts(),
+    watchMeal(),
 ]

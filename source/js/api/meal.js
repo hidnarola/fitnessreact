@@ -1,7 +1,7 @@
-import { postFormData } from '..';
-import { extraHeaders } from '../../helpers/funs';
+import { postFormData } from './index';
+import { extraHeaders } from '../helpers/funs';
 
-const requestUrl = '/user/meals';
+const requestUrl = 'user/meals';
 
 function addMeal(requestData) {
     console.log('api => ');

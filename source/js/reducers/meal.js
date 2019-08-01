@@ -16,6 +16,7 @@ const initialState = Map({
 const actionMap = {
 
     [MEAL_ADD_REQUEST]: (state, action) => {
+        console.log('reducer request => ');
         return state.merge(Map({
             saveLoading: true,
             meal: null,

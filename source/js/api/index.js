@@ -157,8 +157,10 @@ export const postFormData = (path, data, headers) => {
         data: data,
         headers: _headers
     }).then(function (res) {
+        console.log('res => ', res);
         return res.data;
     }).catch(function (error) {
+        console.log('error => ', error);
         if (error.response) {
             if (error.response.status === UNAUTHORIZED) {
                 var userRole = localStorage.getItem(LOCALSTORAGE_ROLE_KEY);
