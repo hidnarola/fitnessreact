@@ -7,7 +7,9 @@ import FaSearch from "react-icons/lib/fa/search";
 import FaSpinner from "react-icons/lib/fa/spinner";
 import AutosuggestHighlightMatch from "autosuggest-highlight/match";
 import AutosuggestHighlightParse from "autosuggest-highlight/parse";
+import _ from "lodash";
 import cns from "classnames";
+import { mealSearchRequest, handleChnageSearchMeal } from "../../actions/meal";
 
 const languages = [
   {
@@ -29,20 +31,44 @@ const languages = [
 ];
 
 class NutritionMealAddSearchForm extends Component {
-  state = {
-    searchValue: "",
-    suggestions: [],
-    showSearchLoader: false
-  };
+  constructor(props) {
+    super(props);
+    this.searchDebounce = _.debounce(this.searchMeals, 1000);
+    this.state = {
+      searchValue: "",
+      suggestions: [],
+      showSearchLoader: false,
+      searchIsLoading: false
+    };
+  }
 
   handleSearchChange = (event, { newValue }) => {
     this.setState({ searchValue: newValue });
     console.log("chage", newValue);
+    const { dispatch } = this.props;
+    dispatch(handleChnageSearchMeal(newValue));
   };
 
   handleSuggestionsFetchRequested = ({ value }) => {
-    this.setState({ suggestions: this.getSuggestions(value) });
+    this.searchDebounce.cancel;
+    if (value && value.trim() && value.trim() !== "") {
+      this.searchDebounce(value.trim());
+    }
   };
+
+  searchMeals = value => {
+    const { dispatch } = this.props;
+    var requestData = {
+      name: value,
+      start: 0,
+      offset: 50
+    };
+    this.setState({ searchIsLoading: true });
+    // dispatch(getUserNutritionPreferencesRequest(requestData));
+    dispatch(mealSearchRequest(requestData));
+  };
+
+  handleSuggestionsClearRequested = () => {};
 
   getSuggestions = value => {
     const inputValue = value.trim().toLowerCase();
@@ -55,7 +81,10 @@ class NutritionMealAddSearchForm extends Component {
         );
   };
 
-  getSuggestionValue = suggestion => suggestion.name;
+  getSuggestionValue = suggestion => {
+    console.log(suggestion);
+    suggestion.name;
+  };
 
   renderSuggestion = (suggestion, { query }) => {
     var fullName = suggestion.name;
@@ -154,8 +183,6 @@ class NutritionMealAddSearchForm extends Component {
 // })(NutritionMealAddSearchForm);
 
 const mapStateToProps = state => ({});
-
-const mapDispatchToProps = {};
 
 export default connect(mapStateToProps)(NutritionMealAddSearchForm);
 
