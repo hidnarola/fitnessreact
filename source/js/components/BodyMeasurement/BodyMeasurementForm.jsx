@@ -83,6 +83,7 @@ class BodyMeasurementForm extends Component {
 
     render() {
         const { logDate, validationRules } = this.state;
+        console.log("LOG DATE====>",logDate)
         const {
             logDates,
             handleSubmit,
