@@ -1,55 +1,55 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { NavLink } from "react-router-dom";
-import { routeCodes } from "constants/routes";
-import FitnessHeader from "../global/FitnessHeader";
-import FitnessNav from "../global/FitnessNav";
-import moment from "moment";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { NavLink } from 'react-router-dom';
+import { routeCodes } from 'constants/routes';
+import FitnessHeader from '../global/FitnessHeader';
+import FitnessNav from '../global/FitnessNav';
+import moment from 'moment';
 import {
   getUserTodaysMealRequest,
-  deleteUserRecipeRequest
-} from "../../actions/userNutritions";
-import noImg from "img/common/no-img.png";
-import { capitalizeFirstLetter, ts, te } from "../../helpers/funs";
+  deleteUserRecipeRequest,
+} from '../../actions/userNutritions';
+import noImg from 'img/common/no-img.png';
+import { capitalizeFirstLetter, ts, te } from '../../helpers/funs';
 import {
   DAY_DRIVE_BREAKFAST,
   DAY_DRIVE_LUNCH,
   DAY_DRIVE_DINNER,
   DAY_DRIVE_PRE_LUNCH_SNACKS,
   DAY_DRIVE_SNACKS,
-  DAY_DRIVE_POST_LUNCH_SNACKS
-} from "../../constants/consts";
-import _ from "lodash";
-import { showPageLoader, hidePageLoader } from "../../actions/pageLoader";
-import { DropdownButton, ButtonToolbar, MenuItem } from "react-bootstrap";
-import { FaTrash } from "react-icons/lib/fa";
-import DeleteConfirmation from "../Admin/Common/DeleteConfirmation";
-import AddMetaDescription from "../../components/global/AddMetaDescription";
-import ReactCalender from "react-calendar/dist/entry.nostyle";
-import NutritionMealAddSearchForm from "./NutritionMealAddSearchForm";
-import NutritionMealItems from "./NutritionMealItems";
+  DAY_DRIVE_POST_LUNCH_SNACKS,
+} from '../../constants/consts';
+import _ from 'lodash';
+import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
+import { DropdownButton, ButtonToolbar, MenuItem } from 'react-bootstrap';
+import { FaTrash } from 'react-icons/lib/fa';
+import DeleteConfirmation from '../Admin/Common/DeleteConfirmation';
+import AddMetaDescription from '../../components/global/AddMetaDescription';
+import ReactCalender from 'react-calendar/dist/entry.nostyle';
+import NutritionMealAddSearchForm from './NutritionMealAddSearchForm';
+import NutritionMealItems from './NutritionMealItems';
 
 const dayDriveOptions = [
   {
     value: DAY_DRIVE_BREAKFAST,
-    label: capitalizeFirstLetter(DAY_DRIVE_BREAKFAST.replace("_", " "))
+    label: capitalizeFirstLetter(DAY_DRIVE_BREAKFAST.replace('_', ' ')),
   },
   {
     value: DAY_DRIVE_LUNCH,
-    label: capitalizeFirstLetter(DAY_DRIVE_LUNCH.replace("_", " "))
+    label: capitalizeFirstLetter(DAY_DRIVE_LUNCH.replace('_', ' ')),
   },
   {
     value: DAY_DRIVE_DINNER,
-    label: capitalizeFirstLetter(DAY_DRIVE_DINNER.replace("_", " "))
+    label: capitalizeFirstLetter(DAY_DRIVE_DINNER.replace('_', ' ')),
   },
   {
     value: DAY_DRIVE_PRE_LUNCH_SNACKS,
-    label: capitalizeFirstLetter(DAY_DRIVE_SNACKS.replace("_", " "))
+    label: capitalizeFirstLetter(DAY_DRIVE_SNACKS.replace('_', ' ')),
   },
   {
     value: DAY_DRIVE_POST_LUNCH_SNACKS,
-    label: capitalizeFirstLetter(DAY_DRIVE_SNACKS.replace("_", " "))
-  }
+    label: capitalizeFirstLetter(DAY_DRIVE_SNACKS.replace('_', ' ')),
+  },
 ];
 
 class NutritionMeal extends Component {
@@ -68,15 +68,18 @@ class NutritionMeal extends Component {
       total_enerc_kal: 0,
       total_procnt: 0,
       total_fat: 0,
-      total_chocdf: 0
+      total_chocdf: 0,
+      total_sugar: 0,
+      total_saturates: 0,
+      total_cabs: 0,
     };
   }
 
   componentWillMount() {
     const { dispatch } = this.props;
-    var todaysDate = moment().startOf("day");
+    var todaysDate = moment().startOf('day');
     var requestObj = {
-      date: todaysDate
+      date: todaysDate,
     };
     this.setState({ selectActionInit: true });
     dispatch(showPageLoader());
@@ -84,65 +87,124 @@ class NutritionMeal extends Component {
   }
 
   addTodayMeals = obj => {
-    console.log(obj);
+    console.log('OBJ====>', obj);
     let {
       today_meals,
       total_enerc_kal,
       total_procnt,
       total_fat,
-      total_chocdf
+      total_chocdf,
+      total_sugar,
+      total_saturates,
+      total_cabs,
     } = this.state;
 
-    today_meals = [];
-    total_enerc_kal = 0;
-    total_procnt = 0;
-    total_fat = 0;
-    total_chocdf = 0;
+    obj.total_enerc_kal = 0;
+    obj.total_procnt = 0;
+    obj.total_fat = 0;
+    obj.total_chocdf = 0;
+    obj.total_sugar = 0;
+    obj.total_saturates = 0;
+    obj.total_cabs = 0;
 
-    this.setState({
-      today_meals,
-      total_enerc_kal,
-      total_procnt,
-      total_fat,
-      total_chocdf
+    obj.ingredientsIncluded.forEach(ingredient => {
+      const {
+        totalKcl,
+        totalProtein,
+        totalfat,
+        totalCholesterol,
+        totalSugar,
+        totalStarch,
+        totalCarbs,
+      } = ingredient;
+      obj.total_enerc_kal =
+        totalKcl === 'NaN' ? 0 : parseInt(totalKcl) + obj.total_enerc_kal;
+      obj.total_procnt =
+        totalProtein === 'NaN' ? 0 : parseInt(totalProtein) + obj.total_procnt;
+      obj.total_fat =
+        totalfat === 'NaN' ? 0 : parseInt(totalfat) + obj.total_fat;
+      obj.total_chocdf =
+        totalCholesterol === 'NaN'
+          ? 0
+          : parseInt(totalCholesterol) + obj.total_chocdf;
+      obj.total_sugar =
+        totalSugar === 'NaN' ? 0 : parseInt(totalSugar) + obj.total_sugar;
+      obj.total_saturates =
+        totalStarch === 'NaN' ? 0 : parseInt(totalStarch) + obj.total_saturates;
+      obj.total_cabs =
+        totalCarbs === 'NaN' ? 0 : parseInt(totalCarbs) + obj.total_cabs;
     });
 
     today_meals.push(obj);
 
-    today_meals.length !== 0 &&
-      today_meals[0].ingredientsIncluded.length > 0 &&
-      today_meals[0].ingredientsIncluded.forEach(item => {
-        total_enerc_kal = parseInt(item.totalKcl) + total_enerc_kal;
-        total_procnt = parseInt(item.totalProtein) + total_procnt;
-        total_fat = parseInt(item.totalfat) + total_fat;
-        total_chocdf = parseInt(item.totalCarbs) + total_chocdf;
-      });
+    total_enerc_kal = _.sumBy(today_meals, 'total_enerc_kal');
+    total_procnt = _.sumBy(today_meals, 'total_procnt');
+    total_fat = _.sumBy(today_meals, 'total_fat');
+    total_chocdf = _.sumBy(today_meals, 'total_chocdf');
+    total_sugar = _.sumBy(today_meals, 'total_sugar');
+    total_saturates = _.sumBy(today_meals, 'total_saturates');
+    total_cabs = _.sumBy(today_meals, 'total_cabs');
 
+    total_fat = total_fat === NaN ? 0 : total_fat;
     this.setState({
       today_meals,
       total_enerc_kal,
       total_procnt,
       total_fat,
-      total_chocdf
+      total_chocdf,
+      total_sugar,
+      total_saturates,
+      total_cabs,
     });
-    console.log("todaymeals", today_meals);
+    console.log('todaymeals', today_meals);
   };
+
   handleRemoveMeals = index => {
-    console.log("Delete MEALs", index);
-    const { today_meals } = this.state;
+    console.log('Delete MEALs', index);
+    let {
+      today_meals,
+      total_enerc_kal,
+      total_procnt,
+      total_fat,
+      total_chocdf,
+      total_sugar,
+      total_saturates,
+      total_cabs,
+    } = this.state;
     today_meals.splice(index, 1);
+    total_enerc_kal = 0;
+    total_procnt = 0;
+    total_fat = 0;
+    total_chocdf = 0;
+    total_sugar = 0;
+    total_saturates = 0;
+    total_cabs = 0;
     this.setState({ today_meals });
 
+    total_enerc_kal = _.sumBy(today_meals, 'total_enerc_kal');
+    total_procnt = _.sumBy(today_meals, 'total_procnt');
+    total_fat = _.sumBy(today_meals, 'total_fat');
+    total_chocdf = _.sumBy(today_meals, 'total_chocdf');
+    total_sugar = _.sumBy(today_meals, 'total_sugar');
+    total_saturates = _.sumBy(today_meals, 'total_saturates');
+    total_cabs = _.sumBy(today_meals, 'total_cabs');
     this.setState({
-      total_enerc_kal: 0,
-      total_procnt: 0,
-      total_fat: 0,
-      total_chocdf: 0
+      total_enerc_kal,
+      total_procnt,
+      total_fat,
+      total_chocdf,
+      total_sugar,
+      total_saturates,
+      total_cabs,
     });
   };
 
   handleSearch = values => {
     console.log(values);
+  };
+
+  handleSaveMeals = () => {
+    console.log(this.state);
   };
 
   render() {
@@ -154,7 +216,7 @@ class NutritionMeal extends Component {
       total_enerc_kal,
       total_procnt,
       total_fat,
-      total_chocdf
+      total_cabs,
     } = this.state;
     const { loading } = this.props;
 
@@ -174,7 +236,7 @@ class NutritionMeal extends Component {
                 for your goal. For your fitness assistant to provide the best
                 meal plans make sure you rate recipes you like. You can further
                 fine tune the meals selected for you by changing your nutrition
-                settings.{" "}
+                settings.{' '}
               </p>
             </div>
             <div className="body-head-r ml-auto">
@@ -249,7 +311,7 @@ class NutritionMeal extends Component {
                         <div className="grey-white">
                           <h4>Total Carbs</h4>
                           <h5>
-                            {total_chocdf}
+                            {total_cabs}
                             <sub>g</sub>
                           </h5>
                         </div>
@@ -261,8 +323,9 @@ class NutritionMeal extends Component {
                             className="ml-auto"
                             style={{
                               cursor:
-                                today_meals.length === 0 ? "not-allowed" : ""
+                                today_meals.length === 0 ? 'not-allowed' : '',
                             }}
+                            onClick={this.handleSaveMeals}
                             disabled={today_meals.length > 0 ? false : true}
                           >
                             Save Log <i className="icon-control_point" />
@@ -283,12 +346,12 @@ class NutritionMeal extends Component {
                   <h3 className="title-h3">
                     {logDate.getDate() === new Date().getDate()
                       ? "Today's Meals"
-                      : "meal of " +
+                      : 'meal of ' +
                         (logDate
                           ? moment(logDate)
                               .local()
-                              .format("DD/MM/YYYY")
-                          : "")}
+                              .format('DD/MM/YYYY')
+                          : '')}
                   </h3>
                   <div className="whitebox-head-r">
                     <NavLink
@@ -307,14 +370,13 @@ class NutritionMeal extends Component {
 
                 <div className="whitebox-body">
                   {this.state.today_meals.map((item, index) => (
-                    <React.Fragment>
-                      <NutritionMealItems
-                        key={index}
-                        meal={item}
-                        index={index}
-                        handleRemoveMeals={this.handleRemoveMeals}
-                      />
-                    </React.Fragment>
+                    <NutritionMealItems
+                      key={index}
+                      meal={item}
+                      mealDetails={this.state}
+                      index={index}
+                      handleRemoveMeals={this.handleRemoveMeals}
+                    />
                   ))}
 
                   {/* {false && todaysMeal && todaysMeal.length <= 0 && (!loading) &&
@@ -404,12 +466,14 @@ class NutritionMeal extends Component {
                 <div className="recent-ingredient">
                   <ul>
                     <li>
-                      Banana bread, homemade<div className="add_drag">
+                      Banana bread, homemade
+                      <div className="add_drag">
                         <i className="icon-control_point" /> Click to Add
                       </div>
                     </li>
                     <li>
-                      Apple juice, clear, ambient and chilled<div className="add_drag">
+                      Apple juice, clear, ambient and chilled
+                      <div className="add_drag">
                         <i className="icon-control_point" /> Click to Add
                       </div>
                     </li>
@@ -438,11 +502,11 @@ class NutritionMeal extends Component {
       if (error && error.length > 0) {
         te(error[0]);
       } else {
-        ts("Recipe deleted from your todays meal!");
+        ts('Recipe deleted from your todays meal!');
       }
-      var todaysDate = moment().startOf("day");
+      var todaysDate = moment().startOf('day');
       var requestObj = {
-        date: todaysDate
+        date: todaysDate,
       };
       this.setState({ deleteActionInit: false, selectActionInit: true });
       this.handleCloseDeleteModal();
@@ -453,14 +517,14 @@ class NutritionMeal extends Component {
   handleShowDeleteModal = _id => {
     this.setState({
       selectedMealId: _id,
-      showDeleteModal: true
+      showDeleteModal: true,
     });
   };
 
   handleCloseDeleteModal = () => {
     this.setState({
       selectedMealId: null,
-      showDeleteModal: false
+      showDeleteModal: false,
     });
   };
 
@@ -475,23 +539,23 @@ class NutritionMeal extends Component {
   onChangeLogDate = date => {
     const { logDate } = this.state;
     if (
-      moment(logDate).format("YYYY-MM-DD") !== moment(date).format("YYYY-MM-DD")
+      moment(logDate).format('YYYY-MM-DD') !== moment(date).format('YYYY-MM-DD')
     ) {
       this.setState({
-        logDate: date
+        logDate: date,
       });
     }
   };
 
   handleGoToToday = () => {
-    console.log("on Exercise.jsx handleGoToToday");
+    console.log('on Exercise.jsx handleGoToToday');
     const { logDate } = this.state;
-    console.log("logDate => ", logDate);
+    console.log('logDate => ', logDate);
     const { dispatch } = this.props;
     var date = new Date();
     date.setHours(0, 0, 0, 0);
     if (
-      moment(logDate).format("YYYY-MM-DD") !== moment(date).format("YYYY-MM-DD")
+      moment(logDate).format('YYYY-MM-DD') !== moment(date).format('YYYY-MM-DD')
     ) {
       this.setState({ logDate: date });
     }
@@ -501,9 +565,9 @@ class NutritionMeal extends Component {
 const mapStateToProps = state => {
   const { userNutritions } = state;
   return {
-    loading: userNutritions.get("loading"),
-    error: userNutritions.get("error"),
-    todaysMeal: userNutritions.get("todaysMeal")
+    loading: userNutritions.get('loading'),
+    error: userNutritions.get('error'),
+    todaysMeal: userNutritions.get('todaysMeal'),
   };
 };
 
