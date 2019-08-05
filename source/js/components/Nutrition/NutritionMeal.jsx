@@ -28,6 +28,11 @@ import AddMetaDescription from '../../components/global/AddMetaDescription';
 import ReactCalender from 'react-calendar/dist/entry.nostyle';
 import NutritionMealAddSearchForm from './NutritionMealAddSearchForm';
 import NutritionMealItems from './NutritionMealItems';
+import {
+  userMealAddRequest,
+  getUserMealsLogDatesRequest,
+  getUserMealRequest,
+} from '../../actions/user_meal';
 
 const dayDriveOptions = [
   {
@@ -77,12 +82,16 @@ class NutritionMeal extends Component {
 
   componentWillMount() {
     const { dispatch } = this.props;
+    const { logDate } = this.state;
+    let requestData = { logDate };
+
     var todaysDate = moment().startOf('day');
     var requestObj = {
       date: todaysDate,
     };
     this.setState({ selectActionInit: true });
     dispatch(showPageLoader());
+    this.getUserMealsLogData(requestData);
     dispatch(getUserTodaysMealRequest(requestObj));
   }
 
@@ -118,21 +127,33 @@ class NutritionMeal extends Component {
         totalCarbs,
       } = ingredient;
       obj.total_enerc_kal =
-        totalKcl === 'NaN' ? 0 : parseInt(totalKcl) + obj.total_enerc_kal;
+        totalKcl === 'NaN' || totalKcl === NaN
+          ? 0
+          : parseInt(totalKcl) + obj.total_enerc_kal;
       obj.total_procnt =
-        totalProtein === 'NaN' ? 0 : parseInt(totalProtein) + obj.total_procnt;
+        totalProtein === 'NaN' || totalProtein === NaN
+          ? 0
+          : parseInt(totalProtein) + obj.total_procnt;
       obj.total_fat =
-        totalfat === 'NaN' ? 0 : parseInt(totalfat) + obj.total_fat;
+        totalfat === 'NaN' || totalfat === NaN
+          ? 0
+          : parseInt(totalfat) + obj.total_fat;
       obj.total_chocdf =
-        totalCholesterol === 'NaN'
+        totalCholesterol === 'NaN' || totalCholesterol === NaN
           ? 0
           : parseInt(totalCholesterol) + obj.total_chocdf;
       obj.total_sugar =
-        totalSugar === 'NaN' ? 0 : parseInt(totalSugar) + obj.total_sugar;
+        totalSugar === 'NaN' || totalSugar === NaN
+          ? 0
+          : parseInt(totalSugar) + obj.total_sugar;
       obj.total_saturates =
-        totalStarch === 'NaN' ? 0 : parseInt(totalStarch) + obj.total_saturates;
+        totalStarch === 'NaN' || totalStarch === NaN
+          ? 0
+          : parseInt(totalStarch) + obj.total_saturates;
       obj.total_cabs =
-        totalCarbs === 'NaN' ? 0 : parseInt(totalCarbs) + obj.total_cabs;
+        totalCarbs === 'NaN' || totalCarbs === NaN
+          ? 0
+          : parseInt(totalCarbs) + obj.total_cabs;
     });
 
     today_meals.push(obj);
@@ -203,8 +224,29 @@ class NutritionMeal extends Component {
     console.log(values);
   };
 
-  handleSaveMeals = () => {
-    console.log(this.state);
+  handleSaveMeals = async () => {
+    const { dispatch } = this.props;
+    console.log('PROPS=====>', this.props);
+    const { today_meals, logDate } = this.state;
+    if (today_meals.length > 0) {
+      const filterMealsID = today_meals.map(item => {
+        return {
+          meal_id: item._id,
+        };
+      });
+      const { logDate } = this.state;
+      const data = {
+        meals: filterMealsID,
+        date: logDate,
+      };
+      console.log(data);
+      console.log(this.state.logDate);
+      await dispatch(userMealAddRequest(data));
+      let requestData = { logDate };
+      this.getUserMealsLogData(requestData);
+    } else {
+      te('Please select meal plan');
+    }
   };
 
   render() {
@@ -218,7 +260,7 @@ class NutritionMeal extends Component {
       total_fat,
       total_cabs,
     } = this.state;
-    const { loading } = this.props;
+    const { loading, saveLoading, logDates } = this.props;
 
     return (
       <div className="fitness-nutrition">
@@ -269,8 +311,29 @@ class NutritionMeal extends Component {
                 </button>
                 <ReactCalender
                   name="log_date"
-                  value={logDate}
                   onChange={this.onChangeLogDate}
+                  onClickMonth={this.onMonthClick}
+                  onActiveDateChange={this.onActiveDateChange}
+                  minDate={new Date()}
+                  value={logDate}
+                  tileContent={({ date, view }) => {
+                    if (view !== 'month') {
+                      return '';
+                    }
+                    return _.map(logDates, (o, key) => {
+                      let calDate = moment(date).format('YYYY-MM-DD');
+                      let logDate = moment(o.date).format('YYYY-MM-DD');
+                      if (calDate === logDate) {
+                        return (
+                          <span
+                            key={key}
+                            className="react-calendar__tile--highlight"
+                          />
+                        );
+                      }
+                      return '';
+                    });
+                  }}
                 />
               </div>
               <div className="recipe-nutrition white-box">
@@ -322,11 +385,9 @@ class NutritionMeal extends Component {
                             type="submit"
                             className="ml-auto"
                             style={{
-                              cursor:
-                                today_meals.length === 0 ? 'not-allowed' : '',
+                              cursor: saveLoading ? 'not-allowed' : 'pointer',
                             }}
                             onClick={this.handleSaveMeals}
-                            disabled={today_meals.length > 0 ? false : true}
                           >
                             Save Log <i className="icon-control_point" />
                           </button>
@@ -494,7 +555,7 @@ class NutritionMeal extends Component {
 
   componentDidUpdate() {
     const { loading, todaysMeal, dispatch, error } = this.props;
-    const { selectActionInit, deleteActionInit } = this.state;
+    const { selectActionInit, deleteActionInit, logDate } = this.state;
     if (selectActionInit && !loading) {
       this.setState({ selectActionInit: false, todaysMeal });
       dispatch(hidePageLoader());
@@ -512,6 +573,8 @@ class NutritionMeal extends Component {
       this.handleCloseDeleteModal();
       dispatch(getUserTodaysMealRequest(requestObj));
     }
+    // let requestData = { logDate };
+    // this.getUserMealsLogData(requestData);
   }
 
   handleShowDeleteModal = _id => {
@@ -536,17 +599,6 @@ class NutritionMeal extends Component {
     this.setState({ deleteActionInit: true });
   };
 
-  onChangeLogDate = date => {
-    const { logDate } = this.state;
-    if (
-      moment(logDate).format('YYYY-MM-DD') !== moment(date).format('YYYY-MM-DD')
-    ) {
-      this.setState({
-        logDate: date,
-      });
-    }
-  };
-
   handleGoToToday = () => {
     console.log('on Exercise.jsx handleGoToToday');
     const { logDate } = this.state;
@@ -560,14 +612,90 @@ class NutritionMeal extends Component {
       this.setState({ logDate: date });
     }
   };
+
+  onChangeLogDate = date => {
+    console.log('Date====> ', date);
+    const { logDate } = this.state;
+    if (
+      moment(logDate).format('YYYY-MM-DD') !== moment(date).format('YYYY-MM-DD')
+    ) {
+      this.setState({
+        logDate: date,
+      });
+
+      let requestData = { logDate: date };
+      // if (isOnline()) {
+      this.getUserMealsLogData(requestData);
+      // } else {
+      // this.getDataFromIDB(requestData);
+    }
+  };
+
+  onMonthClick = date => {
+    let now = new Date();
+    now.setHours(0, 0, 0, 0);
+    let requestData = {};
+    if (
+      now.getMonth() === date.getMonth() &&
+      now.getFullYear() === date.getFullYear()
+    ) {
+      this.setState({ logDate: now });
+      requestData = { logDate: now };
+    } else {
+      this.setState({ logDate: date });
+      requestData = { logDate: date };
+    }
+    // if (isOnline()) {
+    this.getUserMealsLogData(requestData);
+    // } else {
+    // this.getDataFromIDB(requestData);
+    // }
+  };
+
+  onActiveDateChange = obj => {
+    if (obj.view === 'month') {
+      let date = obj.activeStartDate;
+      let now = new Date();
+      now.setHours(0, 0, 0, 0);
+      let requestData = {};
+      if (
+        now.getMonth() === date.getMonth() &&
+        now.getFullYear() === date.getFullYear()
+      ) {
+        this.setState({ logDate: now });
+        requestData = { logDate: now };
+      } else {
+        this.setState({ logDate: date });
+        requestData = { logDate: date };
+      }
+      // if (isOnline()) {
+      this.getUserMealsLogData(requestData);
+      // } else {
+      // this.getDataFromIDB(requestData);
+      // }
+    }
+  };
+
+  getUserMealsLogData = requestData => {
+    const { dispatch } = this.props;
+    this.setState({
+      selectActionInit: true,
+    });
+    // dispatch(showPageLoader());
+    // dispatch(getUserBodyMeasurementRequest(requestData));
+    dispatch(getUserMealRequest(requestData));
+    dispatch(getUserMealsLogDatesRequest(requestData));
+  };
 }
 
 const mapStateToProps = state => {
-  const { userNutritions } = state;
+  const { userNutritions, userMeal } = state;
   return {
     loading: userNutritions.get('loading'),
     error: userNutritions.get('error'),
     todaysMeal: userNutritions.get('todaysMeal'),
+    saveLoading: userMeal.get('saveLoading'),
+    logDates: userMeal.get('logDates'),
   };
 };
 

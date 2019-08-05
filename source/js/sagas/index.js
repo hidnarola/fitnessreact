@@ -50,7 +50,8 @@ import adminFitnessTestSagas from 'sagas/admin/fitnessTests';
 import adminProfile from 'sagas/admin/profile';
 import adminChangePasswordSagas from 'sagas/admin/changePassword';
 import adminDashboardSaga from 'sagas/admin/dashboard';
-import mealSaga from 'sagas/meal'
+import mealSaga from 'sagas/meal';
+import userMealSaga from '../sagas/user_meal';
 
 export default function* rootSaga() {
   yield all([
@@ -104,6 +105,7 @@ export default function* rootSaga() {
     ...adminProfile,
     ...adminChangePasswordSagas,
     ...adminDashboardSaga,
-    ...mealSaga
+    ...mealSaga,
+    ...userMealSaga,
   ]);
 }
