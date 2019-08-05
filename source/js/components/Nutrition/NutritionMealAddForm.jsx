@@ -8,7 +8,8 @@ import { getDietLabelsRequest } from "../../actions/dietLabels";
 import { getNutritionsRequest } from "../../actions/nutritions";
 import {
   getIngridientsRequest,
-  handleChangeIngridientsSearchFor
+  handleChangeIngridientsSearchFor,
+  getRecentIngridientsRequest
 } from "../../actions/new_nutrition";
 
 import AutosuggestHighlightMatch from "autosuggest-highlight/match";
@@ -68,6 +69,7 @@ const dayDriveOptions = [
 import Star from "svg/star.svg";
 import { FILTER_BODY_PARTS_SUCCESS } from "../../actions/admin/bodyParts";
 import { Alert } from "react-bootstrap";
+import { new_nutrition } from 'sagas/new_nutrition';
 class NutritionMealAddForm extends Component {
   constructor(props) {
     super(props);
@@ -89,8 +91,15 @@ class NutritionMealAddForm extends Component {
     this.searchDebounce = _.debounce(this.searchUsers, 1000);
   }
 
+  componentWillMount() {
+    const {
+      dispatch
+    } = this.props;
+    dispatch(getRecentIngridientsRequest());
+  }
+
   render() {
-    const { handleSubmit, searchValue } = this.props;
+    const { handleSubmit, searchValue, recent_ingredient } = this.props;
     const {
       images,
       noImageError,
@@ -258,7 +267,7 @@ class NutritionMealAddForm extends Component {
                           }
                           getSuggestionValue={value => console.log(value)}
                           onSuggestionSelected={(e, value) =>
-                            this.getSuggestionValue(value)
+                            this.getSuggestionValue(value.suggestion)
                           }
                           renderSuggestion={this.renderSearchSuggestion}
                           inputProps={{
@@ -367,7 +376,7 @@ class NutritionMealAddForm extends Component {
                                 <p>
                                   Kcal<span>
                                     {Number(v.totalKcl) !== NaN &&
-                                    v.totalKcl !== "NaN"
+                                      v.totalKcl !== "NaN"
                                       ? v.totalKcl
                                       : 0}
                                   </span>
@@ -379,7 +388,7 @@ class NutritionMealAddForm extends Component {
                                 <p>
                                   fat<span>
                                     {Number(v.totalfat) !== NaN &&
-                                    v.totalfat !== "NaN"
+                                      v.totalfat !== "NaN"
                                       ? v.totalfat
                                       : 0}
                                   </span>
@@ -391,7 +400,7 @@ class NutritionMealAddForm extends Component {
                                 <p>
                                   Protin<span>
                                     {Number(v.totalProtein) !== NaN &&
-                                    v.totalProtein !== "NaN"
+                                      v.totalProtein !== "NaN"
                                       ? v.totalProtein
                                       : 0}
                                   </span>
@@ -403,7 +412,7 @@ class NutritionMealAddForm extends Component {
                                 <p>
                                   Carbs<span>
                                     {Number(v.totalCarbs) !== NaN &&
-                                    v.totalCarbs !== "NaN"
+                                      v.totalCarbs !== "NaN"
                                       ? v.totalCarbs
                                       : 0}
                                   </span>
@@ -415,7 +424,7 @@ class NutritionMealAddForm extends Component {
                                 <p>
                                   Sugar<span>
                                     {Number(v.totalSugar) !== NaN &&
-                                    v.totalSugar !== "NaN"
+                                      v.totalSugar !== "NaN"
                                       ? v.totalSugar
                                       : 0}
                                   </span>
@@ -427,7 +436,7 @@ class NutritionMealAddForm extends Component {
                                 <p>
                                   Cholesterol<span>
                                     {Number(v.totalCholesterol) !== NaN &&
-                                    v.totalSugar !== "NaN"
+                                      v.totalSugar !== "NaN"
                                       ? v.totalCholesterol
                                       : 0}
                                   </span>
@@ -524,10 +533,10 @@ class NutritionMealAddForm extends Component {
                           document.getElementById(
                             "react-select-3--value-item"
                           ) &&
-                          document.getElementById("react-select-3--value-item")
-                            .innerText &&
-                          document.getElementById("react-select-3--value-item")
-                            .innerText === "Public"
+                            document.getElementById("react-select-3--value-item")
+                              .innerText &&
+                            document.getElementById("react-select-3--value-item")
+                              .innerText === "Public"
                             ? [required]
                             : []
                         }
@@ -567,18 +576,16 @@ class NutritionMealAddForm extends Component {
             <div className="blue_right_sidebar">
               <h2 className="h2_head_one">Recent Ingredients</h2>
               <div className="recent-ingredient">
-                <ul>
-                  <li>
-                    Banana bread, homemade<div className="add_drag">
-                      <i className="icon-control_point" /> Click to Add
+                {recent_ingredient && recent_ingredient.length > 0 &&
+                  <ul>
+                    {recent_ingredient.map((v, id) =>
+                      <li key={id} onClick={(e) => this.getSuggestionValue(v)}>
+                        {v.foodName}<div className="add_drag">
+                          <i className="icon-control_point" /> Click to Add
                     </div>
-                  </li>
-                  <li>
-                    Apple juice, clear, ambient and chilled<div className="add_drag">
-                      <i className="icon-control_point" /> Click to Add
-                    </div>
-                  </li>
-                </ul>
+                      </li>)}
+
+                  </ul>}
               </div>
             </div>
           </div>
@@ -627,7 +634,6 @@ class NutritionMealAddForm extends Component {
       if (vobj._id) {
         vobj.ingredient_id = vobj._id;
       }
-
       if (vobj.serving_input && vobj.ingredient_unit && vobj.count) {
         if (vobj.ingredient_unit !== "g") {
           console.log(vobj.serving_input, vobj.ingredient_unit, vobj.count);
@@ -771,7 +777,7 @@ class NutritionMealAddForm extends Component {
           }
         }
       }
-
+      delete vobj._id;
       _array[id] = vobj;
       this.setState({ meal_ingredient: _array });
     } catch (error) {
@@ -936,7 +942,8 @@ class NutritionMealAddForm extends Component {
 
   getSuggestionValue = suggestionn => {
     console.log("getSuggestionValue => ", suggestion);
-    let suggestion = suggestionn.suggestion;
+    // let suggestion = suggestionn.suggestion;
+    let suggestion = suggestionn;
     const { searchValue } = this.props;
     const { meal_ingredient } = this.state;
 
@@ -982,7 +989,7 @@ class NutritionMealAddForm extends Component {
     if (
       searchSuggestions.length !== prevProps.searchSuggestions.length ||
       searchSuggestions[searchSuggestions.length - 1] !==
-        prevProps.searchSuggestions[searchSuggestions.length - 1]
+      prevProps.searchSuggestions[searchSuggestions.length - 1]
     ) {
       let suggestedUsers = [];
       if (searchSuggestions.length > 0) {
@@ -1058,7 +1065,11 @@ const mapStateToProps = state => {
     searchRecipeError: userNutritions.get("searchRecipeError"),
 
     searchSuggestions: new_nutrition.get("ingridients"),
-    searchValue: new_nutrition.get("searchValue")
+    searchValue: new_nutrition.get("searchValue"),
+
+    recent_ingredient: new_nutrition.get("recent_ingredient"),
+    loading_recent: new_nutrition.get("loading_recent"),
+    error_recent: new_nutrition.get("error_recent")
   };
 };
 
@@ -1080,7 +1091,7 @@ const InputField = props => {
     <div
       className={`${wrapperClass} ${
         meta.touched && meta.error ? "has-error" : ""
-      }`}
+        }`}
     >
       <input
         {...input}
@@ -1116,7 +1127,7 @@ const TextAreaField = props => {
     <div
       className={`${wrapperClass} ${
         meta.touched && meta.error ? "has-error" : ""
-      }`}
+        }`}
     >
       <textarea
         {...input}

@@ -1,7 +1,7 @@
 import { postFormData, fetchResource } from '.';
 import { extraUserHeaders } from '../helpers/funs';
 
-const requestUrl = 'user/new_nutrition/ingrident/search';
+const requestUrl = 'user/new_nutrition';
 
 function getIngridients(data) {
     console.log('api ==================> data => ', data);
@@ -12,9 +12,21 @@ function getIngridients(data) {
         body: data
     }
 
-    return fetchResource(requestUrl, options);
+    return fetchResource(requestUrl + '/ingrident/search', options);
+}
+
+function getRecentIngridients() {
+    console.log('api ==================> data => ');
+    let headers = extraUserHeaders();
+    var options = {
+        method: 'GET',
+        headers: headers
+    }
+
+    return fetchResource(requestUrl + '/ingrident/recent_ingredient', options);
 }
 
 export default {
     getIngridients,
+    getRecentIngridients
 }
