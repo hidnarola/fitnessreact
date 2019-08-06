@@ -3,7 +3,7 @@ import Star from 'svg/star.svg';
 import StarWithBg from 'svg/start_with_bg.svg';
 
 const NutritionMealItems = props => {
-  const { meal, index, mealDetails } = props;
+  const { meal, index, mealDetails, addToFavourite } = props;
 
   console.log('Meal PROPS====>', meal);
   const {
@@ -21,7 +21,7 @@ const NutritionMealItems = props => {
         <div className="head_wrap">
           <h2>{meal.title}</h2>
 
-          <span className="star_one" style={{ right: '29px' }}>
+          <span className="star_one star_pink" style={{ right: '29px' }} onClick={(e) => addToFavourite(meal._id)}>
             <Star />
           </span>
 

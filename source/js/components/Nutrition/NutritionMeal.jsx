@@ -97,6 +97,7 @@ class NutritionMeal extends Component {
 
   addTodayMeals = obj => {
     console.log('OBJ====>', obj);
+
     let {
       today_meals,
       total_enerc_kal,
@@ -108,76 +109,82 @@ class NutritionMeal extends Component {
       total_cabs,
     } = this.state;
 
-    obj.total_enerc_kal = 0;
-    obj.total_procnt = 0;
-    obj.total_fat = 0;
-    obj.total_chocdf = 0;
-    obj.total_sugar = 0;
-    obj.total_saturates = 0;
-    obj.total_cabs = 0;
+    if (!(today_meals.filter(e => e._id === obj._id).length > 0)) {
 
-    obj.ingredientsIncluded.forEach(ingredient => {
-      const {
+
+      obj.total_enerc_kal = 0;
+      obj.total_procnt = 0;
+      obj.total_fat = 0;
+      obj.total_chocdf = 0;
+      obj.total_sugar = 0;
+      obj.total_saturates = 0;
+      obj.total_cabs = 0;
+
+      obj.ingredientsIncluded.forEach(ingredient => {
+        const {
         totalKcl,
-        totalProtein,
-        totalfat,
-        totalCholesterol,
-        totalSugar,
-        totalStarch,
-        totalCarbs,
+          totalProtein,
+          totalfat,
+          totalCholesterol,
+          totalSugar,
+          totalStarch,
+          totalCarbs,
       } = ingredient;
-      obj.total_enerc_kal =
-        totalKcl === 'NaN' || totalKcl === NaN
-          ? 0
-          : parseInt(totalKcl) + obj.total_enerc_kal;
-      obj.total_procnt =
-        totalProtein === 'NaN' || totalProtein === NaN
-          ? 0
-          : parseInt(totalProtein) + obj.total_procnt;
-      obj.total_fat =
-        totalfat === 'NaN' || totalfat === NaN
-          ? 0
-          : parseInt(totalfat) + obj.total_fat;
-      obj.total_chocdf =
-        totalCholesterol === 'NaN' || totalCholesterol === NaN
-          ? 0
-          : parseInt(totalCholesterol) + obj.total_chocdf;
-      obj.total_sugar =
-        totalSugar === 'NaN' || totalSugar === NaN
-          ? 0
-          : parseInt(totalSugar) + obj.total_sugar;
-      obj.total_saturates =
-        totalStarch === 'NaN' || totalStarch === NaN
-          ? 0
-          : parseInt(totalStarch) + obj.total_saturates;
-      obj.total_cabs =
-        totalCarbs === 'NaN' || totalCarbs === NaN
-          ? 0
-          : parseInt(totalCarbs) + obj.total_cabs;
-    });
+        obj.total_enerc_kal =
+          totalKcl === 'NaN' || totalKcl === NaN
+            ? 0
+            : parseInt(totalKcl) + obj.total_enerc_kal;
+        obj.total_procnt =
+          totalProtein === 'NaN' || totalProtein === NaN
+            ? 0
+            : parseInt(totalProtein) + obj.total_procnt;
+        obj.total_fat =
+          totalfat === 'NaN' || totalfat === NaN
+            ? 0
+            : parseInt(totalfat) + obj.total_fat;
+        obj.total_chocdf =
+          totalCholesterol === 'NaN' || totalCholesterol === NaN
+            ? 0
+            : parseInt(totalCholesterol) + obj.total_chocdf;
+        obj.total_sugar =
+          totalSugar === 'NaN' || totalSugar === NaN
+            ? 0
+            : parseInt(totalSugar) + obj.total_sugar;
+        obj.total_saturates =
+          totalStarch === 'NaN' || totalStarch === NaN
+            ? 0
+            : parseInt(totalStarch) + obj.total_saturates;
+        obj.total_cabs =
+          totalCarbs === 'NaN' || totalCarbs === NaN
+            ? 0
+            : parseInt(totalCarbs) + obj.total_cabs;
+      });
 
-    today_meals.push(obj);
+      today_meals.push(obj);
 
-    total_enerc_kal = _.sumBy(today_meals, 'total_enerc_kal');
-    total_procnt = _.sumBy(today_meals, 'total_procnt');
-    total_fat = _.sumBy(today_meals, 'total_fat');
-    total_chocdf = _.sumBy(today_meals, 'total_chocdf');
-    total_sugar = _.sumBy(today_meals, 'total_sugar');
-    total_saturates = _.sumBy(today_meals, 'total_saturates');
-    total_cabs = _.sumBy(today_meals, 'total_cabs');
+      total_enerc_kal = _.sumBy(today_meals, 'total_enerc_kal');
+      total_procnt = _.sumBy(today_meals, 'total_procnt');
+      total_fat = _.sumBy(today_meals, 'total_fat');
+      total_chocdf = _.sumBy(today_meals, 'total_chocdf');
+      total_sugar = _.sumBy(today_meals, 'total_sugar');
+      total_saturates = _.sumBy(today_meals, 'total_saturates');
+      total_cabs = _.sumBy(today_meals, 'total_cabs');
 
-    total_fat = total_fat === NaN ? 0 : total_fat;
-    this.setState({
-      today_meals,
-      total_enerc_kal,
-      total_procnt,
-      total_fat,
-      total_chocdf,
-      total_sugar,
-      total_saturates,
-      total_cabs,
-    });
-    console.log('todaymeals', today_meals);
+      total_fat = total_fat === NaN ? 0 : total_fat;
+      this.setState({
+        today_meals,
+        total_enerc_kal,
+        total_procnt,
+        total_fat,
+        total_chocdf,
+        total_sugar,
+        total_saturates,
+        total_cabs,
+      });
+      console.log('todaymeals', today_meals);
+
+
+    }
   };
 
   handleRemoveMeals = index => {
@@ -249,6 +256,11 @@ class NutritionMeal extends Component {
     }
   };
 
+
+  addToFavourite = (meal_id) => {
+    console.log("addToFavourite if not", meal_id);
+  }
+
   render() {
     const {
       todaysMeal,
@@ -309,12 +321,12 @@ class NutritionMeal extends Component {
                 <button type="button" onClick={this.handleGoToToday}>
                   Go To Today
                 </button>
+                {/* minDate={new Date()} */}
                 <ReactCalender
                   name="log_date"
                   onChange={this.onChangeLogDate}
                   onClickMonth={this.onMonthClick}
                   onActiveDateChange={this.onActiveDateChange}
-                  minDate={new Date()}
                   value={logDate}
                   tileContent={({ date, view }) => {
                     if (view !== 'month') {
@@ -408,11 +420,11 @@ class NutritionMeal extends Component {
                     {logDate.getDate() === new Date().getDate()
                       ? "Today's Meals"
                       : 'meal of ' +
-                        (logDate
-                          ? moment(logDate)
-                              .local()
-                              .format('DD/MM/YYYY')
-                          : '')}
+                      (logDate
+                        ? moment(logDate)
+                          .local()
+                          .format('DD/MM/YYYY')
+                        : '')}
                   </h3>
                   <div className="whitebox-head-r">
                     <NavLink
@@ -436,6 +448,7 @@ class NutritionMeal extends Component {
                       meal={item}
                       mealDetails={this.state}
                       index={index}
+                      addToFavourite={this.addToFavourite}
                       handleRemoveMeals={this.handleRemoveMeals}
                     />
                   ))}
