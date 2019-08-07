@@ -31,8 +31,9 @@ import NutritionMealItems from './NutritionMealItems';
 import {
   userMealAddRequest,
   getUserMealsLogDatesRequest,
-  getUserMealRequest,
+  getUserMealRequest
 } from '../../actions/user_meal';
+import { recentMealRequest, addMealToFavouriteRequest } from '../../actions/meal';
 
 const dayDriveOptions = [
   {
@@ -93,6 +94,7 @@ class NutritionMeal extends Component {
     dispatch(showPageLoader());
     this.getUserMealsLogData(requestData);
     dispatch(getUserTodaysMealRequest(requestObj));
+    dispatch(recentMealRequest());
   }
 
   addTodayMeals = obj => {
@@ -257,8 +259,13 @@ class NutritionMeal extends Component {
   };
 
 
-  addToFavourite = (meal_id) => {
+  addToFavourite = (meal_id, add) => {
+    const { dispatch } = this.props;
     console.log("addToFavourite if not", meal_id);
+    dispatch(addMealToFavouriteRequest({
+      "meal_id": meal_id,
+      "add": !add
+    }))
   }
 
   render() {
@@ -272,7 +279,7 @@ class NutritionMeal extends Component {
       total_fat,
       total_cabs,
     } = this.state;
-    const { loading, saveLoading, logDates } = this.props;
+    const { loading, saveLoading, logDates, recentMeals } = this.props;
 
     return (
       <div className="fitness-nutrition">
@@ -450,6 +457,7 @@ class NutritionMeal extends Component {
                       index={index}
                       addToFavourite={this.addToFavourite}
                       handleRemoveMeals={this.handleRemoveMeals}
+                      recentMeals={recentMeals}
                     />
                   ))}
 
@@ -536,21 +544,17 @@ class NutritionMeal extends Component {
             </div>
             <div className="col-md-2">
               <div className="blue_right_sidebar">
-                <h2 className="h2_head_one">Recent Meals</h2>
+                <h2 className="h2_head_one">Favourite Meals</h2>
                 <div className="recent-ingredient">
                   <ul>
-                    <li>
-                      Banana bread, homemade
-                      <div className="add_drag">
-                        <i className="icon-control_point" /> Click to Add
+                    {recentMeals && recentMeals.length > 0 && recentMeals.map((v, id) =>
+                      <li key={id} onClick={(e) => this.addTodayMeals(v)}>
+                        {v.title}
+                        <div className="add_drag">
+                          <i className="icon-control_point" /> Click to Add
                       </div>
-                    </li>
-                    <li>
-                      Apple juice, clear, ambient and chilled
-                      <div className="add_drag">
-                        <i className="icon-control_point" /> Click to Add
-                      </div>
-                    </li>
+                      </li>
+                    )}
                   </ul>
                 </div>
               </div>
@@ -566,8 +570,8 @@ class NutritionMeal extends Component {
     );
   }
 
-  componentDidUpdate() {
-    const { loading, todaysMeal, dispatch, error } = this.props;
+  componentDidUpdate(prevProos, prevSate) {
+    const { loading, todaysMeal, dispatch, error, recentMealsError, addtoFavouriteError, addtoFavouriteLoading, addtoFavouriteSuccessMessage } = this.props;
     const { selectActionInit, deleteActionInit, logDate } = this.state;
     if (selectActionInit && !loading) {
       this.setState({ selectActionInit: false, todaysMeal });
@@ -585,6 +589,10 @@ class NutritionMeal extends Component {
       this.setState({ deleteActionInit: false, selectActionInit: true });
       this.handleCloseDeleteModal();
       dispatch(getUserTodaysMealRequest(requestObj));
+    }
+
+    if (!addtoFavouriteLoading && prevProos.addtoFavouriteLoading !== addtoFavouriteLoading && addtoFavouriteError.length == 0 && addtoFavouriteSuccessMessage !== '') {
+      ts(addtoFavouriteSuccessMessage);
     }
     // let requestData = { logDate };
     // this.getUserMealsLogData(requestData);
@@ -702,13 +710,22 @@ class NutritionMeal extends Component {
 }
 
 const mapStateToProps = state => {
-  const { userNutritions, userMeal } = state;
+  const { userNutritions, userMeal, meal } = state;
   return {
     loading: userNutritions.get('loading'),
     error: userNutritions.get('error'),
     todaysMeal: userNutritions.get('todaysMeal'),
+
     saveLoading: userMeal.get('saveLoading'),
     logDates: userMeal.get('logDates'),
+
+    recentMealsLoading: meal.get('recentMealsLoading'),
+    recentMeals: meal.get('recentMeals'),
+    recentMealsError: meal.get('recentMealsError'),
+
+    addtoFavouriteLoading: meal.get('addtoFavouriteLoading'),
+    addtoFavouriteError: meal.get('addtoFavouriteError'),
+    addtoFavouriteSuccessMessage: meal.get('addtoFavouriteSuccessMessage')
   };
 };
 

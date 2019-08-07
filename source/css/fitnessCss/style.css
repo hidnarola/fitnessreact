@@ -14940,6 +14940,7 @@ span.star_one {
     fill: #ccc;
     width: 24px;
     height: 24px;
+    cursor: pointer;
 }
 
 .star_pink svg {

@@ -3,9 +3,19 @@ import {
   MEAL_ADD_REQUEST,
   MEAL_ADD_SUCCESS,
   MEAL_ADD_ERROR,
+
   MEAL_SEARCH_REQUEST,
   MEAL_SEARCH_SUCCESS,
   MEAL_SEARCH_ERROR,
+
+  RECENT_MEAL_REQUEST,
+  RECENT_MEAL_SUCCESS,
+  RECENT_MEAL_ERROR,
+
+  ADD_MEAL_TO_FAVOURITE_REQUEST,
+  ADD_MEAL_TO_FAVOURITE_SUCCESS,
+  ADD_MEAL_TO_FAVOURITE_ERROR,
+
   HANDLE_CHANGE_MEAL_SEARCH_VALUE
 } from "../actions/meal";
 import { VALIDATION_FAILURE_STATUS } from "../constants/consts";
@@ -19,10 +29,94 @@ const initialState = Map({
   searchMeals: [],
   searchMealValue: "",
   searchLoading: false,
-  searchError: []
+  searchError: [],
+
+  recentMealsLoading: false,
+  recentMeals: [],
+  recentMealsError: [],
+
+
+  addtoFavouriteLoading: false,
+  addtoFavouriteError: [],
+  addtoFavouriteSuccessMessage: ''
 });
 
 const actionMap = {
+  [ADD_MEAL_TO_FAVOURITE_REQUEST]: (state, action) => {
+
+    console.log("reducer request => ");
+    return state.merge(
+      Map({
+        addtoFavouriteLoading: true,
+        addtoFavouriteError: [],
+        addtoFavouriteSuccessMessage: ''
+      })
+    );
+  },
+  [ADD_MEAL_TO_FAVOURITE_SUCCESS]: (state, action) => {
+    let newState = { addtoFavouriteLoading: false };
+    if (action.data && action.data.status && action.data.status === 1) {
+      if (action.data.meal && action.data.meal.length > 0 && action.data.meal[0] && action.data.meal[0].meals) {
+        newState.recentMeals = action.data.meal[0].meals;
+        console.log('action.data => ', JSON.stringify(action.data));
+        newState.addtoFavouriteSuccessMessage = action.data.message
+      } else if (action.data.meal && action.data.meal) {
+        newState.recentMeals = [];
+      }
+    } else {
+      let msg = action.data.message
+        ? action.data.message
+        : "Something went wrong! please try again later";
+      newState.addtoFavouriteError = [msg];
+    }
+    return state.merge(Map(newState));
+  },
+  [ADD_MEAL_TO_FAVOURITE_ERROR]: (state, action) => {
+    let error = [];
+    if (
+      action.error.status &&
+      action.error.status === VALIDATION_FAILURE_STATUS &&
+      action.error.response.message
+    ) {
+      error = generateValidationErrorMsgArr(action.error.response.message);
+    } else if (action.error && action.error.message) {
+      error = [action.error.message];
+    } else {
+      error = ["Something went wrong! please try again later"];
+    }
+    return state.merge(
+      Map({
+        addtoFavouriteLoading: false,
+        addtoFavouriteError: error
+      })
+    );
+  },
+  [RECENT_MEAL_REQUEST]: (state, action) => {
+    console.log("reducer request => ");
+    return state.merge(
+      Map({
+        recentMealsLoading: true,
+        recentMeals: null,
+        recentMealsError: []
+      })
+    );
+  },
+
+  [RECENT_MEAL_SUCCESS]: (state, action) => {
+    let newState = { recentMealsLoading: false };
+    if (action.data && action.data.status && action.data.status === 1) {
+      if (action.data.userMeals && action.data.userMeals.length > 0 && action.data.userMeals[0] && action.data.userMeals[0].meals && action.data.userMeals[0].meals.length > 0) {
+        newState.recentMeals = action.data.userMeals[0].meals;
+      }
+    } else {
+      let msg = action.data.message
+        ? action.data.message
+        : "Something went wrong! please try again later";
+      newState.recentMealsError = [msg];
+    }
+    return state.merge(Map(newState));
+  },
+
   [MEAL_ADD_REQUEST]: (state, action) => {
     console.log("reducer request => ");
     return state.merge(

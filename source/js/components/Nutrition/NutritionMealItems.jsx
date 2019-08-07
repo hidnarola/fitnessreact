@@ -1,9 +1,10 @@
 import React from 'react';
 import Star from 'svg/star.svg';
 import StarWithBg from 'svg/start_with_bg.svg';
+import cns from "classnames";
 
 const NutritionMealItems = props => {
-  const { meal, index, mealDetails, addToFavourite } = props;
+  const { meal, index, mealDetails, addToFavourite, recentMeals } = props;
 
   console.log('Meal PROPS====>', meal);
   const {
@@ -20,8 +21,7 @@ const NutritionMealItems = props => {
       <div className="box_wrap_one">
         <div className="head_wrap">
           <h2>{meal.title}</h2>
-
-          <span className="star_one star_pink" style={{ right: '29px' }} onClick={(e) => addToFavourite(meal._id)}>
+          <span className={cns('star_one', { star_pink: _.some(recentMeals, { _id: meal._id }) })} style={{ right: '29px' }} onClick={(e) => addToFavourite(meal._id, _.some(recentMeals, { _id: meal._id }))}>
             <Star />
           </span>
 
@@ -89,7 +89,7 @@ const NutritionMealItems = props => {
           </li>
         </ul>
       </div>
-    </React.Fragment>
+    </React.Fragment >
   );
 };
 
