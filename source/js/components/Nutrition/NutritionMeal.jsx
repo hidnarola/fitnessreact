@@ -263,7 +263,6 @@ class NutritionMeal extends Component {
     dispatch(
       addMealToFavouriteRequest({
         meal_id: meal_id,
-        add: !add,
       }),
     );
   };
