@@ -44,6 +44,7 @@ function getUserMealByDate() {
   return function*(action) {
     try {
       const data = yield call(() => api.getUserMeal(action.requestData));
+      console.log('USER DATA ====>', data);
       yield put(getUserMealSuccess(data));
     } catch (error) {
       yield put(getUserMealError(error));

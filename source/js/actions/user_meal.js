@@ -70,7 +70,15 @@ export function getUserMealRequest(requestData) {
 }
 
 export function getUserMealSuccess(data) {
-  console.log('action===========>', data);
+  console.log('GET USER MEAL action===========>', data);
+  let meals = [];
+  const { userMeals } = data;
+  userMeals.forEach(item => {
+    item.meals.forEach(mealsdata => {
+      meals.push(mealsdata);
+    });
+  });
+  data.meals = meals;
   return {
     type: GET_USER_MEAL_SUCCESS,
     data,

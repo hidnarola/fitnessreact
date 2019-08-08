@@ -31,9 +31,12 @@ import NutritionMealItems from './NutritionMealItems';
 import {
   userMealAddRequest,
   getUserMealsLogDatesRequest,
-  getUserMealRequest
+  getUserMealRequest,
 } from '../../actions/user_meal';
-import { recentMealRequest, addMealToFavouriteRequest } from '../../actions/meal';
+import {
+  recentMealRequest,
+  addMealToFavouriteRequest,
+} from '../../actions/meal';
 
 const dayDriveOptions = [
   {
@@ -112,8 +115,6 @@ class NutritionMeal extends Component {
     } = this.state;
 
     if (!(today_meals.filter(e => e._id === obj._id).length > 0)) {
-
-
       obj.total_enerc_kal = 0;
       obj.total_procnt = 0;
       obj.total_fat = 0;
@@ -124,14 +125,14 @@ class NutritionMeal extends Component {
 
       obj.ingredientsIncluded.forEach(ingredient => {
         const {
-        totalKcl,
+          totalKcl,
           totalProtein,
           totalfat,
           totalCholesterol,
           totalSugar,
           totalStarch,
           totalCarbs,
-      } = ingredient;
+        } = ingredient;
         obj.total_enerc_kal =
           totalKcl === 'NaN' || totalKcl === NaN
             ? 0
@@ -184,8 +185,6 @@ class NutritionMeal extends Component {
         total_cabs,
       });
       console.log('todaymeals', today_meals);
-
-
     }
   };
 
@@ -258,15 +257,16 @@ class NutritionMeal extends Component {
     }
   };
 
-
   addToFavourite = (meal_id, add) => {
     const { dispatch } = this.props;
-    console.log("addToFavourite if not", meal_id);
-    dispatch(addMealToFavouriteRequest({
-      "meal_id": meal_id,
-      "add": !add
-    }))
-  }
+    console.log('addToFavourite if not', meal_id);
+    dispatch(
+      addMealToFavouriteRequest({
+        meal_id: meal_id,
+        add: !add,
+      }),
+    );
+  };
 
   render() {
     const {
@@ -427,11 +427,11 @@ class NutritionMeal extends Component {
                     {logDate.getDate() === new Date().getDate()
                       ? "Today's Meals"
                       : 'meal of ' +
-                      (logDate
-                        ? moment(logDate)
-                          .local()
-                          .format('DD/MM/YYYY')
-                        : '')}
+                        (logDate
+                          ? moment(logDate)
+                              .local()
+                              .format('DD/MM/YYYY')
+                          : '')}
                   </h3>
                   <div className="whitebox-head-r">
                     <NavLink
@@ -547,14 +547,16 @@ class NutritionMeal extends Component {
                 <h2 className="h2_head_one">Favourite Meals</h2>
                 <div className="recent-ingredient">
                   <ul>
-                    {recentMeals && recentMeals.length > 0 && recentMeals.map((v, id) =>
-                      <li key={id} onClick={(e) => this.addTodayMeals(v)}>
-                        {v.title}
-                        <div className="add_drag">
-                          <i className="icon-control_point" /> Click to Add
-                      </div>
-                      </li>
-                    )}
+                    {recentMeals &&
+                      recentMeals.length > 0 &&
+                      recentMeals.map((v, id) => (
+                        <li key={id} onClick={e => this.addTodayMeals(v)}>
+                          {v.title}
+                          <div className="add_drag">
+                            <i className="icon-control_point" /> Click to Add
+                          </div>
+                        </li>
+                      ))}
                   </ul>
                 </div>
               </div>
@@ -571,10 +573,22 @@ class NutritionMeal extends Component {
   }
 
   componentDidUpdate(prevProos, prevSate) {
-    const { loading, todaysMeal, dispatch, error, recentMealsError, addtoFavouriteError, addtoFavouriteLoading, addtoFavouriteSuccessMessage } = this.props;
+    let {
+      loading,
+      todaysMeal,
+      dispatch,
+      error,
+      recentMealsError,
+      addtoFavouriteError,
+      addtoFavouriteLoading,
+      addtoFavouriteSuccessMessage,
+      user_meals,
+      loading_user_meals,
+    } = this.props;
     const { selectActionInit, deleteActionInit, logDate } = this.state;
     if (selectActionInit && !loading) {
       this.setState({ selectActionInit: false, todaysMeal });
+      this.setState({ today_meals: user_meals });
       dispatch(hidePageLoader());
     } else if (deleteActionInit && !loading) {
       if (error && error.length > 0) {
@@ -591,11 +605,23 @@ class NutritionMeal extends Component {
       dispatch(getUserTodaysMealRequest(requestObj));
     }
 
-    if (!addtoFavouriteLoading && prevProos.addtoFavouriteLoading !== addtoFavouriteLoading && addtoFavouriteError.length == 0 && addtoFavouriteSuccessMessage !== '') {
+    if (
+      !addtoFavouriteLoading &&
+      prevProos.addtoFavouriteLoading !== addtoFavouriteLoading &&
+      addtoFavouriteError.length == 0 &&
+      addtoFavouriteSuccessMessage !== ''
+    ) {
       ts(addtoFavouriteSuccessMessage);
     }
     // let requestData = { logDate };
     // this.getUserMealsLogData(requestData);
+
+    if (
+      !loading_user_meals &&
+      prevProos.loading_user_meals !== loading_user_meals
+    ) {
+      this.setState({ today_meals: user_meals });
+    }
   }
 
   handleShowDeleteModal = _id => {
@@ -718,6 +744,8 @@ const mapStateToProps = state => {
 
     saveLoading: userMeal.get('saveLoading'),
     logDates: userMeal.get('logDates'),
+    user_meals: userMeal.get('user_meals'),
+    loading_user_meals: userMeal.get('loading_user_meals'),
 
     recentMealsLoading: meal.get('recentMealsLoading'),
     recentMeals: meal.get('recentMeals'),
@@ -725,7 +753,7 @@ const mapStateToProps = state => {
 
     addtoFavouriteLoading: meal.get('addtoFavouriteLoading'),
     addtoFavouriteError: meal.get('addtoFavouriteError'),
-    addtoFavouriteSuccessMessage: meal.get('addtoFavouriteSuccessMessage')
+    addtoFavouriteSuccessMessage: meal.get('addtoFavouriteSuccessMessage'),
   };
 };
 
