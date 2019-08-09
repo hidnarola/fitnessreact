@@ -122,7 +122,6 @@ class NutritionMeal extends Component {
       obj.total_sugar = 0;
       obj.total_saturates = 0;
       obj.total_cabs = 0;
-
       obj.ingredientsIncluded.forEach(ingredient => {
         const {
           totalKcl,
@@ -162,9 +161,7 @@ class NutritionMeal extends Component {
             ? 0
             : parseInt(totalCarbs) + obj.total_cabs;
       });
-
       today_meals.push(obj);
-
       total_enerc_kal = _.sumBy(today_meals, 'total_enerc_kal');
       total_procnt = _.sumBy(today_meals, 'total_procnt');
       total_fat = _.sumBy(today_meals, 'total_fat');
@@ -190,42 +187,10 @@ class NutritionMeal extends Component {
 
   handleRemoveMeals = index => {
     console.log('Delete MEALs', index);
-    let {
-      today_meals,
-      total_enerc_kal,
-      total_procnt,
-      total_fat,
-      total_chocdf,
-      total_sugar,
-      total_saturates,
-      total_cabs,
-    } = this.state;
+    let { today_meals } = this.state;
     today_meals.splice(index, 1);
-    total_enerc_kal = 0;
-    total_procnt = 0;
-    total_fat = 0;
-    total_chocdf = 0;
-    total_sugar = 0;
-    total_saturates = 0;
-    total_cabs = 0;
+    this.countIngredient(today_meals);
     this.setState({ today_meals });
-
-    total_enerc_kal = _.sumBy(today_meals, 'total_enerc_kal');
-    total_procnt = _.sumBy(today_meals, 'total_procnt');
-    total_fat = _.sumBy(today_meals, 'total_fat');
-    total_chocdf = _.sumBy(today_meals, 'total_chocdf');
-    total_sugar = _.sumBy(today_meals, 'total_sugar');
-    total_saturates = _.sumBy(today_meals, 'total_saturates');
-    total_cabs = _.sumBy(today_meals, 'total_cabs');
-    this.setState({
-      total_enerc_kal,
-      total_procnt,
-      total_fat,
-      total_chocdf,
-      total_sugar,
-      total_saturates,
-      total_cabs,
-    });
   };
 
   handleSearch = values => {
@@ -238,9 +203,7 @@ class NutritionMeal extends Component {
     const { today_meals, logDate } = this.state;
     if (today_meals.length > 0) {
       const filterMealsID = today_meals.map(item => {
-        return {
-          meal_id: item._id,
-        };
+        return { meal_id: item._id };
       });
       const { logDate } = this.state;
       const data = {
@@ -249,9 +212,12 @@ class NutritionMeal extends Component {
       };
       console.log(data);
       console.log(this.state.logDate);
-      await dispatch(userMealAddRequest(data));
-      let requestData = { logDate };
-      this.getUserMealsLogData(requestData);
+      await dispatch(
+        userMealAddRequest(data, res => {
+          let requestData = { logDate };
+          this.getUserMealsLogData(requestData);
+        }),
+      );
     } else {
       te('Please select meal plan');
     }
@@ -407,7 +373,10 @@ class NutritionMeal extends Component {
                             }}
                             onClick={this.handleSaveMeals}
                           >
-                            Save Log <i className="icon-control_point" />
+                            {today_meals.length === 0
+                              ? 'Save Log'
+                              : 'Update Log'}
+                            <i className="icon-control_point" />
                           </button>
                         </div>
                       </li>
@@ -570,8 +539,78 @@ class NutritionMeal extends Component {
       </div>
     );
   }
+  countIngredient = today_meals => {
+    let {
+      total_enerc_kal,
+      total_procnt,
+      total_fat,
+      total_chocdf,
+      total_sugar,
+      total_saturates,
+      total_cabs,
+    } = this.state;
+    total_enerc_kal = _.sumBy(today_meals, 'total_enerc_kal');
+    total_procnt = _.sumBy(today_meals, 'total_procnt');
+    total_fat = _.sumBy(today_meals, 'total_fat');
+    total_chocdf = _.sumBy(today_meals, 'total_chocdf');
+    total_sugar = _.sumBy(today_meals, 'total_sugar');
+    total_saturates = _.sumBy(today_meals, 'total_saturates');
+    total_cabs = _.sumBy(today_meals, 'total_cabs');
+    this.setState({
+      total_enerc_kal,
+      total_procnt,
+      total_fat,
+      total_chocdf,
+      total_sugar,
+      total_saturates,
+      total_cabs,
+    });
+  };
+
+  countIngredientValue = obj => {
+    return obj.ingredientsIncluded.forEach(ingredient => {
+      const {
+        totalKcl,
+        totalProtein,
+        totalfat,
+        totalCholesterol,
+        totalSugar,
+        totalStarch,
+        totalCarbs,
+      } = ingredient;
+      obj.total_enerc_kal =
+        totalKcl === 'NaN' || totalKcl === NaN
+          ? 0
+          : parseInt(totalKcl) + obj.total_enerc_kal;
+      obj.total_procnt =
+        totalProtein === 'NaN' || totalProtein === NaN
+          ? 0
+          : parseInt(totalProtein) + obj.total_procnt;
+      obj.total_fat =
+        totalfat === 'NaN' || totalfat === NaN
+          ? 0
+          : parseInt(totalfat) + obj.total_fat;
+      obj.total_chocdf =
+        totalCholesterol === 'NaN' || totalCholesterol === NaN
+          ? 0
+          : parseInt(totalCholesterol) + obj.total_chocdf;
+      obj.total_sugar =
+        totalSugar === 'NaN' || totalSugar === NaN
+          ? 0
+          : parseInt(totalSugar) + obj.total_sugar;
+      obj.total_saturates =
+        totalStarch === 'NaN' || totalStarch === NaN
+          ? 0
+          : parseInt(totalStarch) + obj.total_saturates;
+      obj.total_cabs =
+        totalCarbs === 'NaN' || totalCarbs === NaN
+          ? 0
+          : parseInt(totalCarbs) + obj.total_cabs;
+    });
+  };
 
   componentDidUpdate(prevProos, prevSate) {
+    console.log('CALL COMPONENT UPDATE');
     let {
       loading,
       todaysMeal,
@@ -585,9 +624,11 @@ class NutritionMeal extends Component {
       loading_user_meals,
     } = this.props;
     const { selectActionInit, deleteActionInit, logDate } = this.state;
+
     if (selectActionInit && !loading) {
       this.setState({ selectActionInit: false, todaysMeal });
-      this.setState({ today_meals: user_meals });
+      console.log('CALL RUN ====>');
+
       dispatch(hidePageLoader());
     } else if (deleteActionInit && !loading) {
       if (error && error.length > 0) {
@@ -619,7 +660,21 @@ class NutritionMeal extends Component {
       !loading_user_meals &&
       prevProos.loading_user_meals !== loading_user_meals
     ) {
-      this.setState({ today_meals: user_meals });
+      console.log('IF====>');
+      let userMeals = user_meals;
+      userMeals.forEach(obj => {
+        obj.total_enerc_kal = 0;
+        obj.total_enerc_kal = 0;
+        obj.total_procnt = 0;
+        obj.total_fat = 0;
+        obj.total_chocdf = 0;
+        obj.total_sugar = 0;
+        obj.total_saturates = 0;
+        obj.total_cabs = 0;
+        obj = this.countIngredientValue(obj);
+      });
+      this.countIngredient(userMeals);
+      this.setState({ today_meals: userMeals });
     }
   }
 
@@ -656,6 +711,11 @@ class NutritionMeal extends Component {
       moment(logDate).format('YYYY-MM-DD') !== moment(date).format('YYYY-MM-DD')
     ) {
       this.setState({ logDate: date });
+      let requestData = { logDate: date };
+      // if (isOnline()) {
+      this.getUserMealsLogData(requestData);
+      // } else {
+      // this.getDataFromIDB(requestData);
     }
   };
 
@@ -674,6 +734,7 @@ class NutritionMeal extends Component {
       this.getUserMealsLogData(requestData);
       // } else {
       // this.getDataFromIDB(requestData);
+
     }
   };
 
@@ -727,10 +788,11 @@ class NutritionMeal extends Component {
     this.setState({
       selectActionInit: true,
     });
-    // dispatch(showPageLoader());
+    dispatch(showPageLoader());
     // dispatch(getUserBodyMeasurementRequest(requestData));
     dispatch(getUserMealRequest(requestData));
     dispatch(getUserMealsLogDatesRequest(requestData));
+    dispatch(hidePageLoader());
   };
 }
 
