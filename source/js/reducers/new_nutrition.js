@@ -65,6 +65,11 @@ const actionMap = {
             loading: false,
         };
         if (action.data.status === 1) {
+            console.log('====>123 ', action.data.proximates.sort(function (a, b) {
+                if (a.foodName < b.foodName) { return -1; }
+                if (a.foodName > b.foodName) { return 1; }
+                return 0;
+            }));
             newState.ingridients = action.data.proximates.sort(function (a, b) {
                 if (a.foodName < b.foodName) { return -1; }
                 if (a.foodName > b.foodName) { return 1; }

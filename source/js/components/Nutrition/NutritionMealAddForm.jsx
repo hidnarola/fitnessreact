@@ -791,40 +791,42 @@ class NutritionMealAddForm extends Component {
     a.push({ label: "g", value: "g" });
     for (let [key, value] of Object.entries(ingredient)) {
       // console.log('key => ', key);
-      switch (key) {
-        case "_1tsp":
-          a.push({ label: "tsp", value: "_1tsp" });
-          break;
-        case "_1tbsp":
-          a.push({ label: "tbsp", value: "_1tbsp" });
-          break;
-        case "_1cup":
-          a.push({ label: "cup", value: "_1cup" });
-          break;
-        case "_1leaf":
-          a.push({ label: "leaf", value: "_1leaf" });
-          break;
-        case "_1large":
-          a.push({ label: "large", value: "_1large" });
-          break;
-        case "_1medium":
-          a.push({ label: "medium", value: "_1medium" });
-          break;
-        case "_1root":
-          a.push({ label: "root", value: "_1root" });
-          break;
-        case "_1small":
-          a.push({ label: "small", value: "_1small" });
-          break;
-        case "_1extra_large":
-          a.push({ label: "extra large", value: "_1extra_large" });
-          break;
-        case "_1tip":
-          a.push({ label: "tip", value: "_1tip" });
-          break;
+      if (value) {
+        switch (key) {
+          case "_1tsp":
+            a.push({ label: "tsp", value: "_1tsp" });
+            break;
+          case "_1tbsp":
+            a.push({ label: "tbsp", value: "_1tbsp" });
+            break;
+          case "_1cup":
+            a.push({ label: "cup", value: "_1cup" });
+            break;
+          case "_1leaf":
+            a.push({ label: "leaf", value: "_1leaf" });
+            break;
+          case "_1large":
+            a.push({ label: "large", value: "_1large" });
+            break;
+          case "_1medium":
+            a.push({ label: "medium", value: "_1medium" });
+            break;
+          case "_1root":
+            a.push({ label: "root", value: "_1root" });
+            break;
+          case "_1small":
+            a.push({ label: "small", value: "_1small" });
+            break;
+          case "_1extra_large":
+            a.push({ label: "extra large", value: "_1extra_large" });
+            break;
+          case "_1tip":
+            a.push({ label: "tip", value: "_1tip" });
+            break;
 
-        default:
-          break;
+          default:
+            break;
+        }
       }
     }
     return a;
@@ -984,12 +986,12 @@ class NutritionMealAddForm extends Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
-    const { searchSuggestions, userSearchLoading } = this.props;
+    const { searchSuggestions, userSearchLoading, searchLoading } = this.props;
     const { searchIsLoading, showSearchLoader } = this.state;
-    if (
-      searchSuggestions.length !== prevProps.searchSuggestions.length ||
-      searchSuggestions[searchSuggestions.length - 1] !==
-      prevProps.searchSuggestions[searchSuggestions.length - 1]
+    if ((searchLoading !== prevProps.searchLoading) ||
+      (searchSuggestions.length !== prevProps.searchSuggestions.length ||
+        searchSuggestions[searchSuggestions.length - 1] !==
+        prevProps.searchSuggestions[searchSuggestions.length - 1])
     ) {
       let suggestedUsers = [];
       if (searchSuggestions.length > 0) {
@@ -1066,6 +1068,7 @@ const mapStateToProps = state => {
 
     searchSuggestions: new_nutrition.get("ingridients"),
     searchValue: new_nutrition.get("searchValue"),
+    searchLoading: new_nutrition.get("loading"),
 
     recent_ingredient: new_nutrition.get("recent_ingredient"),
     loading_recent: new_nutrition.get("loading_recent"),
