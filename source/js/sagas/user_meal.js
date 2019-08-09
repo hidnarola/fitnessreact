@@ -20,6 +20,7 @@ function postUserMealData() {
       console.log('action.requestData => ', action.requestData);
       const data = yield call(() => api.addUserMeal(requestData));
       yield put(userMealAddSuccess(data));
+      action.callback(data);
     } catch (error) {
       console.log('error => ', error);
       yield put(userMealAddError(error));

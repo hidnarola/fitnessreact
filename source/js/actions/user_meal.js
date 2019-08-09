@@ -14,11 +14,12 @@ export const GET_USER_MEALS_LOG_DATES_SUCCESS =
   'GET_USER_MEALS_LOG_DATES_SUCCESS';
 export const GET_USER_MEALS_LOG_DATES_ERROR = 'GET_USER_MEALS_LOG_DATES_ERROR';
 
-export function userMealAddRequest(requestData) {
+export function userMealAddRequest(requestData, callback) {
   console.log('action => ', requestData);
   return {
     type: USER_MEAL_ADD_REQUEST,
     requestData,
+    callback,
   };
 }
 
