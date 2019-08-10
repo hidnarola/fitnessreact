@@ -37,6 +37,7 @@ import {
   recentMealRequest,
   addMealToFavouriteRequest,
 } from '../../actions/meal';
+import NutritionMealPlanStats from './NutritionMealPlanStats';
 
 const dayDriveOptions = [
   {
@@ -162,6 +163,7 @@ class NutritionMeal extends Component {
             : parseInt(totalCarbs) + obj.total_cabs;
       });
       today_meals.push(obj);
+      console.log('ADDDDDD ====> ', today_meals);
       total_enerc_kal = _.sumBy(today_meals, 'total_enerc_kal');
       total_procnt = _.sumBy(today_meals, 'total_procnt');
       total_fat = _.sumBy(today_meals, 'total_fat');
@@ -212,10 +214,12 @@ class NutritionMeal extends Component {
       };
       console.log(data);
       console.log(this.state.logDate);
+      await dispatch(showPageLoader());
       await dispatch(
         userMealAddRequest(data, res => {
           let requestData = { logDate };
           this.getUserMealsLogData(requestData);
+          dispatch(hidePageLoader());
         }),
       );
     } else {
@@ -320,73 +324,11 @@ class NutritionMeal extends Component {
                   }}
                 />
               </div>
-              <div className="recipe-nutrition white-box">
-                <div className="whitebox-head meal-paln">
-                  <h3 className="title-h3 size-14">Meal Plan Stats</h3>
-                </div>
-                <div className="whitebox-body">
-                  <div className="dtl-div">
-                    <ul className="common-ul">
-                      <li>
-                        <div className="grey-white">
-                          <h4>Total Calories</h4>
-                          <h5>
-                            {total_enerc_kal}
-                            <sub>kcal</sub>
-                          </h5>
-                        </div>
-                      </li>
-                      <li>
-                        <div className="grey-white">
-                          <h4>Total Protein</h4>
-                          <h5>
-                            {total_procnt}
-                            <sub>g</sub>
-                          </h5>
-                        </div>
-                      </li>
-                      <li>
-                        <div className="grey-white">
-                          <h4>Total Fat</h4>
-                          <h5>
-                            {total_fat}
-                            <sub>g</sub>
-                          </h5>
-                        </div>
-                      </li>
-                      <li>
-                        <div className="grey-white">
-                          <h4>Total Carbs</h4>
-                          <h5>
-                            {total_cabs}
-                            <sub>g</sub>
-                          </h5>
-                        </div>
-                      </li>
-                      <li className="mt-5">
-                        <div className="add-log d-flex add-log_change">
-                          <button
-                            type="submit"
-                            className="ml-auto"
-                            style={{
-                              cursor: saveLoading ? 'not-allowed' : 'pointer',
-                            }}
-                            onClick={this.handleSaveMeals}
-                          >
-                            {today_meals.length === 0
-                              ? 'Save Log'
-                              : 'Update Log'}
-                            <i className="icon-control_point" />
-                          </button>
-                        </div>
-                      </li>
-                    </ul>
-                  </div>
-                  <div className="nutrition-chart">
-                    <img src="" alt="" />
-                  </div>
-                </div>
-              </div>
+              <NutritionMealPlanStats
+                nutritation={this.state}
+                handleSaveMeals={this.handleSaveMeals}
+                saveLoading={saveLoading}
+              />
             </div>
             <div className="col-md-7">
               <div className="white-box">
@@ -628,7 +570,6 @@ class NutritionMeal extends Component {
     if (selectActionInit && !loading) {
       this.setState({ selectActionInit: false, todaysMeal });
       console.log('CALL RUN ====>');
-
       dispatch(hidePageLoader());
     } else if (deleteActionInit && !loading) {
       if (error && error.length > 0) {
@@ -673,6 +614,7 @@ class NutritionMeal extends Component {
         obj.total_cabs = 0;
         obj = this.countIngredientValue(obj);
       });
+      console.log('userMeals=====>', userMeals);
       this.countIngredient(userMeals);
       this.setState({ today_meals: userMeals });
     }
@@ -734,7 +676,6 @@ class NutritionMeal extends Component {
       this.getUserMealsLogData(requestData);
       // } else {
       // this.getDataFromIDB(requestData);
-
     }
   };
 

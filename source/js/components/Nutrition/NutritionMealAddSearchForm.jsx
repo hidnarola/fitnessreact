@@ -1,33 +1,33 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { Field, reduxForm } from "redux-form";
-import { required } from "../../formValidation/validationRules";
-import Autosuggest from "react-autosuggest";
-import FaSearch from "react-icons/lib/fa/search";
-import FaSpinner from "react-icons/lib/fa/spinner";
-import AutosuggestHighlightMatch from "autosuggest-highlight/match";
-import AutosuggestHighlightParse from "autosuggest-highlight/parse";
-import _ from "lodash";
-import cns from "classnames";
-import { mealSearchRequest, handleChnageSearchMeal } from "../../actions/meal";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Field, reduxForm } from 'redux-form';
+import { required } from '../../formValidation/validationRules';
+import Autosuggest from 'react-autosuggest';
+import FaSearch from 'react-icons/lib/fa/search';
+import FaSpinner from 'react-icons/lib/fa/spinner';
+import AutosuggestHighlightMatch from 'autosuggest-highlight/match';
+import AutosuggestHighlightParse from 'autosuggest-highlight/parse';
+import _ from 'lodash';
+import cns from 'classnames';
+import { mealSearchRequest, handleChnageSearchMeal } from '../../actions/meal';
 
 const languages = [
   {
-    name: "C",
-    year: 1972
+    name: 'C',
+    year: 1972,
   },
   {
-    name: "Ca",
-    year: 1972
+    name: 'Ca',
+    year: 1972,
   },
   {
-    name: "Caa",
-    year: 1972
+    name: 'Caa',
+    year: 1972,
   },
   {
-    name: "Elm",
-    year: 2012
-  }
+    name: 'Elm',
+    year: 2012,
+  },
 ];
 
 class NutritionMealAddSearchForm extends Component {
@@ -35,10 +35,10 @@ class NutritionMealAddSearchForm extends Component {
     super(props);
     this.searchDebounce = _.debounce(this.searchMeals, 1000);
     this.state = {
-      searchValue: "",
+      searchValue: '',
       searchSuggestions: [],
       showSearchLoader: false,
-      searchIsLoading: false
+      searchIsLoading: false,
     };
   }
 
@@ -46,9 +46,9 @@ class NutritionMealAddSearchForm extends Component {
     const { dispatch } = this.props;
     if (
       newValue &&
-      typeof newValue !== "undefined" &&
-      newValue !== "" &&
-      newValue.trim() !== ""
+      typeof newValue !== 'undefined' &&
+      newValue !== '' &&
+      newValue.trim() !== ''
     ) {
       this.setState({ showSearchLoader: true });
     }
@@ -59,7 +59,7 @@ class NutritionMealAddSearchForm extends Component {
 
   handleSuggestionsFetchRequested = ({ value }) => {
     this.searchDebounce.cancel;
-    if (value && value.trim() && value.trim() !== "") {
+    if (value && value.trim() && value.trim() !== '') {
       this.searchDebounce(value.trim());
     }
   };
@@ -69,7 +69,7 @@ class NutritionMealAddSearchForm extends Component {
     var requestData = {
       name: value,
       start: 0,
-      offset: 50
+      offset: 50,
     };
     this.setState({ searchIsLoading: true });
     // dispatch(getUserNutritionPreferencesRequest(requestData));
@@ -80,7 +80,7 @@ class NutritionMealAddSearchForm extends Component {
 
   getSuggestionValue = ({ suggestion }) => {
     const { dispatch, addTodayMeals } = this.props;
-    console.log("getSuggestionValue => ", suggestion);
+    console.log('getSuggestionValue => ', suggestion);
     addTodayMeals(suggestion);
 
     dispatch(handleChnageSearchMeal(suggestion.title));
@@ -109,7 +109,7 @@ class NutritionMealAddSearchForm extends Component {
   };
 
   renderSuggestion = (suggestion, { query }) => {
-    console.log("renderSuggestion", suggestion);
+    console.log('renderSuggestion', suggestion);
     var fullName = suggestion.title;
     // if (suggestion.lastName) {
     //     fullName += ' ' + suggestion.lastName;
@@ -132,14 +132,14 @@ class NutritionMealAddSearchForm extends Component {
               return (
                 <span
                   key={i}
-                  className={cns({ "search-word-highlight": part.highlight })}
+                  className={cns({ 'search-word-highlight': part.highlight })}
                 >
                   {part.text}
                 </span>
               );
             })}
           </span>
-          {fullName !== "No meals found" && (
+          {fullName !== 'No meals found' && (
             <span className="click-to-add-btn">Click to add</span>
           )}
         </div>
@@ -150,13 +150,14 @@ class NutritionMealAddSearchForm extends Component {
   componentDidUpdate(prevProps, prevState) {
     const { searchSuggestions, searchLoading } = this.props;
     const { searchIsLoading, showSearchLoader } = this.state;
-    console.log("prevProps", prevProps);
-    console.log("prevState", prevState);
-    console.log("searchSuggestions", searchSuggestions);
+    console.log('prevProps', prevProps);
+    console.log('prevState', prevState);
+    console.log('searchSuggestions', searchSuggestions);
     if (
-      searchSuggestions.length !== prevProps.searchSuggestions.length ||
-      searchSuggestions[searchSuggestions.length - 1] !==
-        prevProps.searchSuggestions[searchSuggestions.length - 1]
+      searchLoading !== prevProps.searchLoading ||
+      (searchSuggestions.length !== prevProps.searchSuggestions.length ||
+        searchSuggestions[searchSuggestions.length - 1] !==
+          prevProps.searchSuggestions[searchSuggestions.length - 1])
     ) {
       let suggestedUsers = [];
       if (searchSuggestions.length > 0) {
@@ -168,14 +169,14 @@ class NutritionMealAddSearchForm extends Component {
       } else {
         // suggestedUsers = [];
         suggestedUsers.push({
-          _id: "no_result",
-          title: "No meals found"
+          _id: 'no_result',
+          title: 'No meals found',
         });
       }
       this.setState({
         searchIsLoading: false,
         showSearchLoader: false,
-        searchSuggestions: suggestedUsers
+        searchSuggestions: suggestedUsers,
       });
     }
   }
@@ -206,11 +207,11 @@ class NutritionMealAddSearchForm extends Component {
                 }
                 renderSuggestion={this.renderSuggestion}
                 inputProps={{
-                  id: "header_search_users",
-                  name: "header_search_users",
+                  id: 'header_search_users',
+                  name: 'header_search_users',
                   value: searchMealValue,
                   onChange: this.handleSearchChange,
-                  placeholder: "Search Males"
+                  placeholder: 'Search Males',
                 }}
               />
               {showSearchLoader && (
@@ -246,9 +247,9 @@ class NutritionMealAddSearchForm extends Component {
 const mapStateToProps = state => {
   const { meal } = state;
   return {
-    searchLoading: meal.get("searchLoading"),
-    searchMealValue: meal.get("searchMealValue"),
-    searchSuggestions: meal.get("searchMeals")
+    searchLoading: meal.get('searchLoading'),
+    searchMealValue: meal.get('searchMealValue'),
+    searchSuggestions: meal.get('searchMeals'),
   };
 };
 
