@@ -15121,6 +15121,40 @@ button.timline-post-del-btn i {
     font-size: 14px;
 }
 
+.ingredient-image .dz-singl-default-wrapper i {
+    margin: 0;
+}
+
+.ingredient-image .dz-singl-default-wrapper span {
+    width: auto;
+    height: auto;
+}
+
+.ingredient-image .dz-singl-default-wrapper {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.ul_six_wrap.ul_meal_img li:first-child .data_serve {
+    padding: 5px;
+}
+
+.ul_six_wrap.ul_meal_img li {
+    flex: 0 0 14.28%;
+    max-width: 14.28%;
+}
+
+.ul_meal_img {
+    align-items: center;
+}
+
+.ul_meal_img .data_serve img {
+    display: inline-block;
+}
+
 /*********************** Responsive **************************/
 
 @media(min-width: 992px) {

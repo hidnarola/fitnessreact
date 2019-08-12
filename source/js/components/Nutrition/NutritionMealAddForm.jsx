@@ -498,7 +498,7 @@ class NutritionMealAddForm extends Component {
                         name="images"
                         label="Meal Image"
                         labelClass="control-label display_block"
-                        mainWrapperClass="image-form-main-wrapper"
+                        mainWrapperClass="image-form-main-wrapper ingredient-image"
                         wrapperClass="form-group"
                         placeholder="Images"
                         component={FileField_Dropzone_Single}
