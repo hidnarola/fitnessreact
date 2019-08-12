@@ -248,7 +248,7 @@ class NutritionMeal extends Component {
       total_fat,
       total_cabs,
     } = this.state;
-    const { loading, saveLoading, logDates, recentMeals } = this.props;
+    const { loading, saveLoading, logDates, recentMeals, user } = this.props;
 
     return (
       <div className="fitness-nutrition">
@@ -368,6 +368,7 @@ class NutritionMeal extends Component {
                       addToFavourite={this.addToFavourite}
                       handleRemoveMeals={this.handleRemoveMeals}
                       recentMeals={recentMeals}
+                      authuserId={user.authId}
                     />
                   ))}
 
@@ -738,8 +739,10 @@ class NutritionMeal extends Component {
 }
 
 const mapStateToProps = state => {
-  const { userNutritions, userMeal, meal } = state;
+  const { user, userNutritions, userMeal, meal } = state;
   return {
+    user: user.get('loggedUserData'),
+
     loading: userNutritions.get('loading'),
     error: userNutritions.get('error'),
     todaysMeal: userNutritions.get('todaysMeal'),

@@ -1,21 +1,33 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Star from 'svg/star.svg';
 import NoMealImage from '../../../assets/img/common/no-img.png';
 import StarWithBg from 'svg/start_with_bg.svg';
 import cns from 'classnames';
 import { SERVER_BASE_URL } from '../../constants/consts';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { routeCodes } from '../../constants/routes';
 
 const NutritionMealItems = props => {
-  const { meal, index, mealDetails, addToFavourite, recentMeals } = props;
+  const {
+    meal,
+    index,
+    mealDetails,
+    addToFavourite,
+    recentMeals,
+    authuserId,
+  } = props;
 
   console.log('Meal PROPS====>', meal);
   const {
+    _id,
     total_enerc_kal,
     total_procnt,
     total_fat,
     total_cabs,
     total_sugar,
     total_saturates,
+    userId,
   } = meal;
 
   return (
@@ -34,6 +46,19 @@ const NutritionMealItems = props => {
           >
             <Star />
           </span>
+          <Link
+            className="timline-post-edit-btn"
+            to={
+              authuserId === userId
+                ? `${routeCodes.NUTRITION_EDIT}/${_id}`
+                : `${routeCodes.NUTRITION_VIEW}/${_id}`
+            }
+          >
+            <FontAwesomeIcon
+              icon={authuserId === userId ? 'pencil-alt' : 'eye'}
+              size="2x"
+            />
+          </Link>
 
           <button
             type="button"
