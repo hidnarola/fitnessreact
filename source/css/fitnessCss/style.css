@@ -15044,8 +15044,31 @@ button.timline-post-del-btn {
     color: #999;
     border: 0;
 }
+a.timline-post-edit-btn {
+    width: auto;
+    height: auto;
+    background: no-repeat;
+    -webkit-box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .5);
+    box-shadow: none;
+    font-size: 14px;
+    text-align: center;
+    position: absolute;
+    top: 18px;
+    right: 71px;
+    display: block;
+    text-align: center;
+    border-radius: 80px;
+    line-height: normal;
+    color: #999;
+    border: 0;
+}
 
 button.timline-post-del-btn i {
+    font-size: 20px;
+}
+
+a.timline-post-edit-btn i,
+a.timline-post-edit-btn svg {
     font-size: 20px;
 }
 
