@@ -14917,6 +14917,11 @@ div[contenteditable="true"] {
     padding: 14px 0;
 }
 
+.data_serve img{
+    height: 58px;
+    width:100%;
+}
+
 .data_serve p {
     margin: 0;
     text-align: center;

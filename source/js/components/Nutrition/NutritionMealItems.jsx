@@ -1,6 +1,6 @@
 import React from 'react';
 import Star from 'svg/star.svg';
-import NoMealImage from 'svg/bell-covering-hot-dish.svg';
+import NoMealImage from '../../../assets/img/common/no-img.png';
 import StarWithBg from 'svg/start_with_bg.svg';
 import cns from 'classnames';
 import { SERVER_BASE_URL } from '../../constants/consts';
@@ -46,8 +46,11 @@ const NutritionMealItems = props => {
         <ul className="ul_six_wrap ul_meal_img">
           <li className="ml-auto">
             <div className="data_serve">
-              {meal.image ? <img src={`${SERVER_BASE_URL}${meal.image}`} alt="Meal image" /> :
-                <NoMealImage />}
+              {meal.image ? (
+                <img src={`${SERVER_BASE_URL}${meal.image}`} alt="Meal image" />
+              ) : (
+                <img src={NoMealImage} alt="Meal image" />
+              )}
             </div>
           </li>
           <li className="ml-auto">
