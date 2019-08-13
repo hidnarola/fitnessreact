@@ -43,7 +43,7 @@ import {
 } from '../../formValidation/validationRules';
 import AddMetaDescription from '../../components/global/AddMetaDescription';
 import Dropzone from 'react-dropzone';
-import { mealAddRequest } from '../../actions/meal';
+import { mealAddRequest, requestMealById } from '../../actions/meal';
 
 const dayDriveOptions = [
   { value: DAY_DRIVE_BREAKFAST, label: 'Breakfast' },
@@ -86,6 +86,8 @@ class NutritionMealEdit extends Component {
     dispatch(getDietLabelsRequest());
     dispatch(getHealthLabelsRequest());
     dispatch(getUserNutritionPreferencesRequest());
+    const MealID = this.props.match.params.id;
+    dispatch(requestMealById(MealID));
   }
 
   render() {
@@ -99,8 +101,11 @@ class NutritionMealEdit extends Component {
       noImageError,
       invalidImage,
     } = this.state;
-    const { searchRecipeLoading } = this.props;
+    const { searchRecipeLoading, mealDetailsLoading, dispatch } = this.props;
     let dropzoneRef;
+    mealDetailsLoading
+      ? dispatch(showPageLoader())
+      : dispatch(hidePageLoader());
     return (
       <div className="fitness-nutrition">
         <AddMetaDescription>
@@ -127,13 +132,11 @@ class NutritionMealEdit extends Component {
               </NavLink>
             </div>
           </div>
-          <NutritionMealEditForm onSubmit={this.handleSubmit} />
+          <NutritionMealEditForm
+            mealDetails={this.props.mealDetails}
+            onSubmit={this.handleSubmit}
+          />
         </section>
-        <NutritionSearchRecipeDetailsModal
-          show={showDetailedRecipeModal}
-          handleClose={this.handleCloseRecipeDetailesModal}
-          recipe={selectedRecipe}
-        />
       </div>
     );
   }
@@ -463,6 +466,8 @@ const mapStateToProps = state => {
     saveLoading: meal.get('saveLoading'),
     meal: meal.get('meal'),
     saveError: meal.get('saveError'),
+    mealDetailsLoading: meal.get('mealDetailsLoading'),
+    mealDetails: meal.get('mealDetails'),
   };
 };
 

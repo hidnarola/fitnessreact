@@ -101,9 +101,20 @@ class NutritionMealEditForm extends Component {
     const { dispatch } = this.props;
     dispatch(getRecentIngridientsRequest());
   }
-
+  componentDidMount() {
+    const { mealDetails } = this.props;
+    mealDetails &&
+      mealDetails.ingredient_detail.forEach(item => {
+        this.getSuggestionValue(item);
+      });
+  }
   render() {
-    const { handleSubmit, searchValue, recent_ingredient } = this.props;
+    const {
+      handleSubmit,
+      searchValue,
+      recent_ingredient,
+      mealDetails,
+    } = this.props;
     const {
       images,
       noImageError,
@@ -115,6 +126,7 @@ class NutritionMealEditForm extends Component {
     } = this.state;
     let dropzoneRef;
     var loggedUserImage = '';
+
     return (
       <form method="POST" onSubmit={this.props.handleSubmit(this.handleSubmit)}>
         <div className="body-content d-flex row justify-content-start nutrition-meal-add-wrapper add-receipy">

@@ -1,7 +1,7 @@
 import React from 'react';
 
 const NutritionMealPlanStats = props => {
-  const { saveLoading } = props;
+  const { saveLoading, males } = props;
   const {
     total_enerc_kal,
     total_procnt,
@@ -64,7 +64,7 @@ const NutritionMealPlanStats = props => {
                     }}
                     onClick={props.handleSaveMeals}
                   >
-                    {today_meals.length === 0 ? 'Save Log' : 'Update Log'}
+                    {males.length === 0 ? 'Save Log' : 'Update Log'}
                     <i className="icon-control_point" />
                   </button>
                 </div>

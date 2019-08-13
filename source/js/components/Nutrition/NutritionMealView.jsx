@@ -6,10 +6,28 @@ import { routeCodes } from '../../constants/routes';
 import { NavLink } from 'react-router-dom';
 import NutritionMealViewForm from './NutritionMealViewForm';
 import NutritionSearchRecipeDetailsModal from './NutritionSearchRecipeDetailsModal';
+import { requestMealById } from '../../actions/meal';
+import { connect } from 'react-redux';
+import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
+import NutritionMealViewItems from './NutritionMealViewItems';
 
 class NutritionMealView extends Component {
-  render() {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+  componentDidMount() {
+    console.log('====COMPONENT CALL=====');
+    const { dispatch } = this.props;
     const mealID = this.props.match.params.id;
+    dispatch(requestMealById(mealID));
+  }
+
+  render() {
+    const { mealDetailsLoading, mealDetails, dispatch } = this.props;
+    mealDetailsLoading
+      ? dispatch(showPageLoader())
+      : dispatch(hidePageLoader());
     return (
       <React.Fragment>
         <div className="fitness-nutrition">
@@ -37,7 +55,7 @@ class NutritionMealView extends Component {
                 </NavLink>
               </div>
             </div>
-            <NutritionMealViewForm />
+            <NutritionMealViewForm mealDetails={mealDetails} />
             <div className="whitebox-body" />
           </section>
         </div>
@@ -45,5 +63,12 @@ class NutritionMealView extends Component {
     );
   }
 }
+const mapStateToProps = state => {
+  const { meal } = state;
+  return {
+    mealDetailsLoading: meal.get('mealDetailsLoading'),
+    mealDetails: meal.get('mealDetails'),
+  };
+};
 
-export default NutritionMealView;
+export default connect(mapStateToProps)(NutritionMealView);

@@ -38,6 +38,7 @@ import {
   addMealToFavouriteRequest,
 } from '../../actions/meal';
 import NutritionMealPlanStats from './NutritionMealPlanStats';
+import SweetAlert from 'react-bootstrap-sweetalert';
 
 const dayDriveOptions = [
   {
@@ -82,6 +83,8 @@ class NutritionMeal extends Component {
       total_sugar: 0,
       total_saturates: 0,
       total_cabs: 0,
+      showDeleteAlert: false,
+      storeMealIndex: null,
     };
   }
 
@@ -188,11 +191,19 @@ class NutritionMeal extends Component {
   };
 
   handleRemoveMeals = index => {
+    this.setState({ storeMealIndex: index, showDeleteAlert: true });
+  };
+  handleRemoveMealsSubmit = () => {
+    const index = this.state.storeMealIndex;
     console.log('Delete MEALs', index);
     let { today_meals } = this.state;
     today_meals.splice(index, 1);
     this.countIngredient(today_meals);
-    this.setState({ today_meals });
+    this.setState({
+      today_meals,
+      storeMealIndex: null,
+      showDeleteAlert: false,
+    });
   };
 
   handleSearch = values => {
@@ -247,6 +258,7 @@ class NutritionMeal extends Component {
       total_procnt,
       total_fat,
       total_cabs,
+      showDeleteAlert,
     } = this.state;
     const { loading, saveLoading, logDates, recentMeals, user } = this.props;
 
@@ -325,6 +337,7 @@ class NutritionMeal extends Component {
                 />
               </div>
               <NutritionMealPlanStats
+                males={this.props.user_meals}
                 nutritation={this.state}
                 handleSaveMeals={this.handleSaveMeals}
                 saveLoading={saveLoading}
@@ -356,6 +369,24 @@ class NutritionMeal extends Component {
                 <NutritionMealAddSearchForm
                   onSubmit={this.handleSearch}
                   addTodayMeals={this.addTodayMeals}
+                />
+                <SweetAlert
+                  customClass="sweetalert-responsive"
+                  type="default"
+                  title={`Are sure want to delete it ?`}
+                  onCancel={() => {
+                    this.setState({
+                      storeMealIndex: null,
+                      showDeleteAlert: false,
+                    });
+                  }}
+                  onConfirm={this.handleRemoveMealsSubmit}
+                  btnSize="sm"
+                  cancelBtnBsStyle="danger"
+                  show={showDeleteAlert}
+                  showConfirm={true}
+                  showCancel={true}
+                  closeOnClickOutside={false}
                 />
 
                 <div className="whitebox-body">
