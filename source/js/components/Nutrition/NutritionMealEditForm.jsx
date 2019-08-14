@@ -31,6 +31,7 @@ import {
   DAY_DRIVE_DINNER,
   MEAL_OPTIONS,
   MEAL_VISIBILITY,
+  SERVER_BASE_URL,
 } from '../../constants/consts';
 import {
   searchRecipesApiRequest,
@@ -93,6 +94,7 @@ class NutritionMealEditForm extends Component {
       searchIsLoading: false,
       showSearchLoader: false,
       meal_ingredient: [],
+      selectActionInit: true,
     };
     this.searchDebounce = _.debounce(this.searchUsers, 1000);
   }
@@ -102,12 +104,20 @@ class NutritionMealEditForm extends Component {
     dispatch(getRecentIngridientsRequest());
   }
   componentDidMount() {
-    const { mealDetails } = this.props;
-    mealDetails &&
-      mealDetails.ingredient_detail.forEach(item => {
-        this.getSuggestionValue(item);
-      });
+    console.log(this.props);
+    // const { mealDetails, initialize } = this.props;
+    // mealDetails &&
+    //   mealDetails.ingredient_detail.forEach(item => {
+    //     this.getSuggestionValue(item);
+    //   });
+    // let measurementData = {
+    //   title: mealDetails.title,
+    //   dropdown_meals_type: mealDetails.meals_type,
+    //   dropdown_meals_visibility: mealDetails.meals_visibility,
+    // };
+    // mealDetails && initialize(measurementData);
   }
+
   render() {
     const {
       handleSubmit,
@@ -116,6 +126,7 @@ class NutritionMealEditForm extends Component {
       mealDetails,
     } = this.props;
     const {
+      title,
       images,
       noImageError,
       invalidImage,
@@ -172,7 +183,7 @@ class NutritionMealEditForm extends Component {
 
               <div className="add-log d-flex add-log_change">
                 <button type="submit" className="ml-auto">
-                  Save Log <i className="icon-control_point" />
+                  Update Log <i className="icon-control_point" />
                 </button>
               </div>
             </div>
@@ -978,8 +989,15 @@ class NutritionMealEditForm extends Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
-    const { searchSuggestions, userSearchLoading, searchLoading } = this.props;
-    const { searchIsLoading, showSearchLoader } = this.state;
+    const {
+      searchSuggestions,
+      userSearchLoading,
+      searchLoading,
+      mealDetails,
+      initialize,
+    } = this.props;
+    const { searchIsLoading, showSearchLoader, selectActionInit } = this.state;
+    console.log('this.props', this.props);
     if (
       searchLoading !== prevProps.searchLoading ||
       (searchSuggestions.length !== prevProps.searchSuggestions.length ||
@@ -1006,6 +1024,55 @@ class NutritionMealEditForm extends Component {
         searchSuggestions: suggestedUsers,
       });
     }
+
+    if (selectActionInit && mealDetails) {
+      this.setState({ meal_ingredient: mealDetails.ingredient_detail });
+      console.log('mealDetails', mealDetails);
+      mealDetails &&
+        mealDetails.ingredient_detail.forEach(item => {
+          this.getSuggestionValue(item);
+        });
+      let measurementData = {
+        title: mealDetails.title,
+        dropdown_meals_type: {
+          label: _.capitalize(mealDetails.meals_type),
+          value: mealDetails.meals_type,
+        },
+        dropdown_meals_visibility: {
+          label: _.capitalize(mealDetails.meals_visibility),
+          value: mealDetails.meals_visibility,
+        },
+        images: [
+          {
+            preview: mealDetails.image
+              ? SERVER_BASE_URL + mealDetails.image
+              : noImg,
+          },
+        ],
+        instruction: mealDetails.instructions,
+        notes: mealDetails.notes,
+      };
+      mealDetails.ingredientsIncluded.forEach((item, index) => {
+        measurementData['serving-input' + index] = item.serving_input;
+        measurementData['dropdown-ingredient-unit' + index] = {
+          label: item.ingredient_unit,
+          value: item.ingredient_unit,
+        };
+        measurementData['serving-unit' + index] = item.count;
+      });
+      this.state.meal_ingredient.forEach((item, index) => {
+        this.changeServing(
+          index,
+          item,
+          measurementData['serving-input' + index],
+          measurementData['dropdown-ingredient-unit' + index].value,
+          measurementData['serving-unit' + index],
+        );
+      });
+
+      this.setState({ selectActionInit: false });
+      initialize(measurementData);
+    }
   }
 
   componentWillUnmount() {
@@ -1022,10 +1089,10 @@ class NutritionMealEditForm extends Component {
 }
 
 NutritionMealEditForm = reduxForm({
-  form: 'nutrition_meal_add_form',
+  form: 'nutrition_meal_edit_form',
 })(NutritionMealEditForm);
 
-const selector = formValueSelector('nutrition_meal_add_form');
+const selector = formValueSelector('nutrition_meal_edit_form');
 
 const mapStateToProps = state => {
   const {

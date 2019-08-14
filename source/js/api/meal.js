@@ -14,6 +14,12 @@ function addMeal(requestData) {
   return postFormData(requestUrl, requestData, headers);
 }
 
+function editMeal(mealID, requestData) {
+  console.log('api => ');
+  let headers = extraUserHeaders();
+  return postFormData(`${requestUrl}/${mealID}`, requestData, headers);
+}
+
 function searchMeal(requestData) {
   console.log('api => ', requestData);
 
@@ -60,6 +66,7 @@ function requestMealById(requestData) {
 
 export default {
   addMeal,
+  editMeal,
   searchMeal,
   recentMeal,
   addToFavourite,

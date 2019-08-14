@@ -43,7 +43,11 @@ import {
 } from '../../formValidation/validationRules';
 import AddMetaDescription from '../../components/global/AddMetaDescription';
 import Dropzone from 'react-dropzone';
-import { mealAddRequest, requestMealById } from '../../actions/meal';
+import {
+  mealAddRequest,
+  requestMealById,
+  mealEditRequest,
+} from '../../actions/meal';
 
 const dayDriveOptions = [
   { value: DAY_DRIVE_BREAKFAST, label: 'Breakfast' },
@@ -179,7 +183,18 @@ class NutritionMealEdit extends Component {
     ) {
       te('Instruction required for public meals');
     } else {
-      dispatch(mealAddRequest(formData));
+      const { id } = this.props.match.params;
+      const requestData = {
+        title: data.title,
+        meals_visibility: data.dropdown_meals_visibility.value,
+        meals_type: data.dropdown_meals_type.value,
+        ingredientsIncluded: data.proximates,
+        notes: data.notes,
+        instructions: data.instruction,
+        meal_img: data.images[0],
+      };
+
+      dispatch(mealEditRequest(id, requestData));
     }
   };
 

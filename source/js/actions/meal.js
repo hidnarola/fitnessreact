@@ -1,6 +1,12 @@
+import { te, ts } from '../helpers/funs';
+
 export const MEAL_ADD_REQUEST = 'MEAL_ADD_REQUEST';
 export const MEAL_ADD_SUCCESS = 'MEAL_ADD_SUCCESS';
 export const MEAL_ADD_ERROR = 'MEAL_ADD_ERROR';
+
+export const MEAL_EDIT_REQUEST = 'MEAL_EDIT_REQUEST';
+export const MEAL_EDIT_SUCCESS = 'MEAL_EDIT_SUCCESS';
+export const MEAL_EDIT_ERROR = 'MEAL_EDIT_ERROR';
 
 export const MEAL_REQUEST_BY_ID = 'MEAL_REQUEST_BY_ID';
 export const MEAL_REQUEST_BY_ID_SUCCESS = 'MEAL_REQUEST_BY_ID_SUCCESS';
@@ -61,6 +67,33 @@ export function mealAddSuccess(data) {
 export function mealAddError(error) {
   return {
     type: MEAL_ADD_ERROR,
+    error,
+  };
+}
+
+export function mealEditRequest(mealID, requestData) {
+  console.log('action => ');
+  return {
+    type: MEAL_EDIT_REQUEST,
+    mealID,
+    requestData,
+  };
+}
+
+export function mealEditSuccess(data) {
+  console.log('Edit MEAL SUCCESS ====> ', data);
+  ts('Meal Successfully Updated');
+  return {
+    type: MEAL_EDIT_SUCCESS,
+    data,
+  };
+}
+
+export function mealEditError(error) {
+  console.log('Edit Meal error', error);
+  te('Error while updating meal');
+  return {
+    type: MEAL_EDIT_ERROR,
     error,
   };
 }

@@ -15,6 +15,9 @@ import {
   MEAL_REQUEST_BY_ID,
   requestMealByIdError,
   requestMealByIdSuccess,
+  mealEditSuccess,
+  mealEditError,
+  MEAL_EDIT_REQUEST,
 } from '../actions/meal';
 import api from 'api/meal';
 
@@ -29,6 +32,22 @@ function postMealData() {
     } catch (error) {
       console.log('error => ', error);
       yield put(mealAddError(error));
+    }
+  };
+}
+
+function postEditMealData() {
+  console.log('saga => ');
+  return function*(action) {
+    try {
+      const requestData = action.requestData;
+      const mealID = action.mealID;
+      console.log('action.requestData => ', action.requestData);
+      const data = yield call(() => api.editMeal(mealID, requestData));
+      yield put(mealEditSuccess(data));
+    } catch (error) {
+      console.log('error => ', error);
+      yield put(mealEditError(error));
     }
   };
 }
@@ -90,6 +109,7 @@ function mealRequestById() {
 
 export function* watchMeal() {
   yield takeLatest(MEAL_ADD_REQUEST, postMealData());
+  yield takeLatest(MEAL_EDIT_REQUEST, postEditMealData());
   yield takeLatest(MEAL_SEARCH_REQUEST, searchMealData());
   yield takeLatest(RECENT_MEAL_REQUEST, recentMealData());
   yield takeLatest(ADD_MEAL_TO_FAVOURITE_REQUEST, addToFavouriteMealData());
