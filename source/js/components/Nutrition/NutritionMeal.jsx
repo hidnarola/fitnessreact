@@ -542,45 +542,48 @@ class NutritionMeal extends Component {
   };
 
   countIngredientValue = obj => {
-    return obj.ingredientsIncluded.forEach(ingredient => {
-      const {
-        totalKcl,
-        totalProtein,
-        totalfat,
-        totalCholesterol,
-        totalSugar,
-        totalStarch,
-        totalCarbs,
-      } = ingredient;
-      obj.total_enerc_kal =
-        totalKcl === 'NaN' || totalKcl === NaN
-          ? 0
-          : parseInt(totalKcl) + obj.total_enerc_kal;
-      obj.total_procnt =
-        totalProtein === 'NaN' || totalProtein === NaN
-          ? 0
-          : parseInt(totalProtein) + obj.total_procnt;
-      obj.total_fat =
-        totalfat === 'NaN' || totalfat === NaN
-          ? 0
-          : parseInt(totalfat) + obj.total_fat;
-      obj.total_chocdf =
-        totalCholesterol === 'NaN' || totalCholesterol === NaN
-          ? 0
-          : parseInt(totalCholesterol) + obj.total_chocdf;
-      obj.total_sugar =
-        totalSugar === 'NaN' || totalSugar === NaN
-          ? 0
-          : parseInt(totalSugar) + obj.total_sugar;
-      obj.total_saturates =
-        totalStarch === 'NaN' || totalStarch === NaN
-          ? 0
-          : parseInt(totalStarch) + obj.total_saturates;
-      obj.total_cabs =
-        totalCarbs === 'NaN' || totalCarbs === NaN
-          ? 0
-          : parseInt(totalCarbs) + obj.total_cabs;
-    });
+    return (
+      obj.ingredientsIncluded &&
+      obj.ingredientsIncluded.forEach(ingredient => {
+        const {
+          totalKcl,
+          totalProtein,
+          totalfat,
+          totalCholesterol,
+          totalSugar,
+          totalStarch,
+          totalCarbs,
+        } = ingredient;
+        obj.total_enerc_kal =
+          totalKcl === 'NaN' || totalKcl === NaN
+            ? 0
+            : parseInt(totalKcl) + obj.total_enerc_kal;
+        obj.total_procnt =
+          totalProtein === 'NaN' || totalProtein === NaN
+            ? 0
+            : parseInt(totalProtein) + obj.total_procnt;
+        obj.total_fat =
+          totalfat === 'NaN' || totalfat === NaN
+            ? 0
+            : parseInt(totalfat) + obj.total_fat;
+        obj.total_chocdf =
+          totalCholesterol === 'NaN' || totalCholesterol === NaN
+            ? 0
+            : parseInt(totalCholesterol) + obj.total_chocdf;
+        obj.total_sugar =
+          totalSugar === 'NaN' || totalSugar === NaN
+            ? 0
+            : parseInt(totalSugar) + obj.total_sugar;
+        obj.total_saturates =
+          totalStarch === 'NaN' || totalStarch === NaN
+            ? 0
+            : parseInt(totalStarch) + obj.total_saturates;
+        obj.total_cabs =
+          totalCarbs === 'NaN' || totalCarbs === NaN
+            ? 0
+            : parseInt(totalCarbs) + obj.total_cabs;
+      })
+    );
   };
 
   componentDidUpdate(prevProos, prevSate) {
