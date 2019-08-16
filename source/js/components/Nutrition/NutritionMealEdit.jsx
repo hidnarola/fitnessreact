@@ -165,6 +165,8 @@ class NutritionMealEdit extends Component {
     }
     if (data.proximates && data.proximates.length > 0) {
       formData.append('ingredientsIncluded', JSON.stringify(data.proximates));
+    } else {
+      formData.append('ingredientsIncluded', JSON.stringify([]));
     }
     if (data.notes) {
       formData.append('notes', data.notes);
@@ -184,17 +186,18 @@ class NutritionMealEdit extends Component {
       te('Instruction required for public meals');
     } else {
       const { id } = this.props.match.params;
-      const requestData = {
-        title: data.title,
-        meals_visibility: data.dropdown_meals_visibility.value,
-        meals_type: data.dropdown_meals_type.value,
-        ingredientsIncluded: data.proximates,
-        notes: data.notes,
-        instructions: data.instruction,
-        meal_img: data.images[0],
-      };
+      // console.log("data.images[0]", data.images[0]);
+      // const requestData = {
+      //   title: data.title,
+      //   meals_visibility: data.dropdown_meals_visibility.value,
+      //   meals_type: data.dropdown_meals_type.value,
+      //   ingredientsIncluded: data.proximates,
+      //   notes: data.notes,
+      //   instructions: data.instruction,
+      //   meal_img: data.images,
+      // };
 
-      dispatch(mealEditRequest(id, requestData));
+      dispatch(mealEditRequest(id, formData));
     }
   };
 
@@ -504,7 +507,7 @@ const InputField = props => {
     <div
       className={`${wrapperClass} ${
         meta.touched && meta.error ? 'has-error' : ''
-      }`}
+        }`}
     >
       <input
         {...input}
@@ -540,7 +543,7 @@ const TextAreaField = props => {
     <div
       className={`${wrapperClass} ${
         meta.touched && meta.error ? 'has-error' : ''
-      }`}
+        }`}
     >
       <textarea
         {...input}
