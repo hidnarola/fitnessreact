@@ -18,6 +18,12 @@ function addUserMeal(requestData) {
   return postFormData(requestAddUserMealUrl, requestData, headers);
 }
 
+function updateUserMeal(id, requestData) {
+  console.log('api => ');
+  let headers = extraUserHeaders();
+  return postFormData(`${requestAddUserMealUrl}/${id}`, requestData, headers);
+}
+
 function getUserMealLogDatesData(requestData) {
   let headers = extraUserHeaders();
   return postFormData(request_GetLogDates_UserMealUrl, requestData, headers);
@@ -26,5 +32,6 @@ function getUserMealLogDatesData(requestData) {
 export default {
   addUserMeal,
   getUserMeal,
+  updateUserMeal,
   getUserMealLogDatesData,
 };

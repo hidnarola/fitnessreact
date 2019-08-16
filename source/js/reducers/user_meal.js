@@ -11,6 +11,9 @@ import {
   GET_USER_MEAL_REQUEST,
   GET_USER_MEAL_SUCCESS,
   GET_USER_MEAL_ERROR,
+  USER_MEAL_UPDATE_REQUEST,
+  USER_MEAL_UPDATE_SUCCESS,
+  USER_MEAL_UPDATE_ERROR,
 } from '../actions/user_meal';
 
 const initialState = Map({
@@ -25,6 +28,9 @@ const initialState = Map({
   loading_user_meals: true,
   user_meals: [],
   user_meals_Errors: [],
+
+  updateMeal: null,
+  updateMealErrors: [],
 });
 
 const actionMap = {
@@ -69,6 +75,51 @@ const actionMap = {
       Map({
         saveLoading: false,
         saveError: error,
+      }),
+    );
+  },
+
+  [USER_MEAL_UPDATE_REQUEST]: (state, action) => {
+    console.log('reducer request => ');
+    return state.merge(
+      Map({
+        loading: true,
+        updateMeal: null,
+        updateMealErrors: [],
+      }),
+    );
+  },
+
+  [USER_MEAL_UPDATE_SUCCESS]: (state, action) => {
+    let newState = { loading: false };
+    if (action.data && action.data.status && action.data.status === 1) {
+      newState.updateMeal = action.data.meal;
+    } else {
+      let msg = action.data.message
+        ? action.data.message
+        : 'Something went wrong! please try again later';
+      newState.updateMealErrors = [msg];
+    }
+    return state.merge(Map(newState));
+  },
+
+  [USER_MEAL_UPDATE_ERROR]: (state, action) => {
+    let error = [];
+    if (
+      action.error.status &&
+      action.error.status === VALIDATION_FAILURE_STATUS &&
+      action.error.response.message
+    ) {
+      error = generateValidationErrorMsgArr(action.error.response.message);
+    } else if (action.error && action.error.message) {
+      error = [action.error.message];
+    } else {
+      error = ['Something went wrong! please try again later'];
+    }
+    return state.merge(
+      Map({
+        loading: false,
+        updateMealErrors: error,
       }),
     );
   },

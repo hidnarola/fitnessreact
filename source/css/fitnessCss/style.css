@@ -14825,6 +14825,25 @@ div[contenteditable="true"] {
     font-weight: bold;
 }
 
+.workout-calender .big-calendar-custom-month-event-view-card.past-meal.w-c-lightgreen .pull-left.custom_check,
+#custom-cut-workout-wrap .big-calendar-custom-month-event-view-card.past-meal.w-c-lightgreen .pull-left.custom_check,
+#custom-drag-workout-wrap .big-calendar-custom-month-event-view-card.past-meal.w-c-lightgreen .pull-left.custom_check {
+    background: #7fe8b5;
+}
+
+.workout-calender .big-calendar-custom-month-event-view-card.w-c-darkgreen .pull-left.custom_check,
+#custom-cut-workout-wrap .big-calendar-custom-month-event-view-card.w-c-darkgreen .pull-left.custom_check,
+#custom-drag-workout-wrap .big-calendar-custom-month-event-view-card.w-c-darkgreen .pull-left.custom_check {
+    background: #1eaa64;
+}
+
+
+.workout-calender .big-calendar-custom-month-event-view-card.w-c-orange h5,
+#custom-cut-workout-wrap .big-calendar-custom-month-event-view-card.w-c-orange h5,
+#custom-drag-workout-wrap .big-calendar-custom-month-event-view-card.w-c-orange h5 {
+    font-weight: bold;
+}
+
 .w-c-pink .material-switch>label::after {
     background: #ff337e;
 }
