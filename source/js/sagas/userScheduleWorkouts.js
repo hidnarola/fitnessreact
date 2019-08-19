@@ -69,6 +69,7 @@ function getUsersWorkoutSchedulesByMonthData() {
         api.getUsersWorkoutSchedulesByMonths(requestData, username),
       );
       yield put(getUsersWorkoutSchedulesSuccess(data));
+      action.callback(data);
     } catch (error) {
       yield put(getUsersWorkoutSchedulesError(error));
     }
