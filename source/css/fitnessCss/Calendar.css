@@ -17,6 +17,7 @@
 .react-calendar button {
   border: 0;
   outline: none;
+  height: 4rem;
 }
 .react-calendar button:enabled:hover {
   cursor: pointer;
@@ -40,10 +41,10 @@
   text-align: center;
   text-transform: uppercase;
   font-weight: bold;
-  font-size: .75em;
+  font-size: 0.75em;
 }
 .react-calendar__month-view__weekdays__weekday {
-  padding: .5em;
+  padding: 0.5em;
 }
 .react-calendar__month-view__weekNumbers {
   font-weight: bold;
@@ -52,7 +53,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: .75em;
+  font-size: 0.75em;
   padding: calc(1em) calc(0.66666667em);
 }
 .react-calendar__month-view__days__day--weekend {
@@ -64,12 +65,12 @@
 .react-calendar__year-view .react-calendar__tile,
 .react-calendar__decade-view .react-calendar__tile,
 .react-calendar__century-view .react-calendar__tile {
-  padding: 2em .5em;
+  padding: 2em 0.5em;
 }
 .react-calendar__tile {
   max-width: 100%;
   text-align: center;
-  padding: .75em .5em;
+  padding: 0.75em 0.5em;
   background: none;
 }
 button.react-calendar__tile:disabled {
