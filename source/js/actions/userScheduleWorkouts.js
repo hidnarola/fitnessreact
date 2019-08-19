@@ -154,11 +154,16 @@ export function setSelectedSlotFromCalendar(slotInfo = null) {
   };
 }
 
-export function getUsersWorkoutSchedulesRequest(requestData, username = null) {
+export function getUsersWorkoutSchedulesRequest(
+  requestData,
+  username = null,
+  callback = res => {},
+) {
   return {
     type: GET_USERS_WORKOUT_SCHEDULES_REQUEST,
     requestData,
     username,
+    callback,
   };
 }
 

@@ -89,11 +89,23 @@ class NutritionMeal extends Component {
   }
 
   componentWillMount() {
+    console.log('PROPS ==>', this.props);
     const { dispatch } = this.props;
-    const { logDate } = this.state;
-    let requestData = { logDate };
+    let { logDate } = this.state;
 
-    var todaysDate = moment().startOf('day');
+    if (this.props.location.search) {
+      let search = new URLSearchParams(
+        decodeURIComponent(this.props.location.search),
+      );
+      let date = search.get('date');
+      logDate = new Date(date);
+      this.setState({ logDate });
+    }
+
+    let requestData = { logDate };
+    var todaysDate = this.props.location.search
+      ? logDate
+      : moment().startOf('day');
     var requestObj = {
       date: todaysDate,
     };
@@ -705,7 +717,6 @@ class NutritionMeal extends Component {
       this.setState({
         logDate: date,
       });
-
       let requestData = { logDate: date };
       // if (isOnline()) {
       this.getUserMealsLogData(requestData);

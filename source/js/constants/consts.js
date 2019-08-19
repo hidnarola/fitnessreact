@@ -555,6 +555,7 @@ export const SCHEDULED_WORKOUT_TYPE_SUPERSET = 'superset';
 export const SCHEDULED_WORKOUT_TYPE_WARMUP = 'warmup';
 export const SCHEDULED_WORKOUT_TYPE_COOLDOWN = 'cooldown';
 export const SCHEDULED_WORKOUT_TYPE_RESTDAY = 'restday';
+export const SCHEDULED_MEAL = 'meal';
 
 export const EXERCISE_MESUREMENT = 'exercise_mesurement';
 export const EXERCISE_NAMES = 'exercise_names';
