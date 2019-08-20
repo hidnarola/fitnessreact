@@ -272,8 +272,15 @@ class NutritionMeal extends Component {
       total_cabs,
       showDeleteAlert,
     } = this.state;
-    const { loading, saveLoading, logDates, recentMeals, user } = this.props;
-
+    const {
+      loading,
+      saveLoading,
+      logDates,
+      recentMeals,
+      user,
+      dispatch,
+    } = this.props;
+    saveLoading ? dispatch(showPageLoader()) : dispatch(hidePageLoader());
     return (
       <div className="fitness-nutrition">
         <AddMetaDescription>
@@ -792,7 +799,7 @@ const mapStateToProps = state => {
     error: userNutritions.get('error'),
     todaysMeal: userNutritions.get('todaysMeal'),
 
-    saveLoading: userMeal.get('saveLoading'),
+    saveLoading: userMeal.get('loading'),
     logDates: userMeal.get('logDates'),
     user_meals: userMeal.get('user_meals'),
     loading_user_meals: userMeal.get('loading_user_meals'),

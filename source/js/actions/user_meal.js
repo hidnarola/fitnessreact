@@ -43,12 +43,13 @@ export function userMealAddError(error) {
   };
 }
 
-export function userMealUpdateRequest(id, requestData) {
+export function userMealUpdateRequest(id, requestData, callback = res => {}) {
   console.log('update action => ', requestData);
   return {
     type: USER_MEAL_UPDATE_REQUEST,
     id,
     requestData,
+    callback,
   };
 }
 

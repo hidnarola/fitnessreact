@@ -17,7 +17,6 @@ import {
 } from '../actions/user_meal';
 
 const initialState = Map({
-  saveLoading: false,
   userMeal: null,
   saveError: [],
 
@@ -38,7 +37,7 @@ const actionMap = {
     console.log('reducer request => ');
     return state.merge(
       Map({
-        saveLoading: true,
+        loading: true,
         userMeal: null,
         saveError: [],
       }),
@@ -46,7 +45,7 @@ const actionMap = {
   },
 
   [USER_MEAL_ADD_SUCCESS]: (state, action) => {
-    let newState = { saveLoading: false };
+    let newState = { loading: false };
     if (action.data && action.data.status && action.data.status === 1) {
       newState.userMeal = action.data.meal;
     } else {
@@ -73,7 +72,7 @@ const actionMap = {
     }
     return state.merge(
       Map({
-        saveLoading: false,
+        loading: false,
         saveError: error,
       }),
     );

@@ -45,6 +45,8 @@ let dragEventDate = null;
 let dragEventCardX = null;
 let dragEventCardY = null;
 let dragEventType = null;
+let dragEventMealID = null;
+let dragEventDetailID = null;
 
 let calendarArea = null;
 
@@ -162,11 +164,11 @@ class ScheduleWorkoutCalendarPage extends Component {
                                     <BigCalendar
                                         selectable={true}
                                         localizer={BigCalendar.momentLocalizer(moment)}
-                                        defaultView={BigCalendar.Views.MONTH}
+                                        defaultView={BigCalendar.Views.WEEK}
                                         className="workout-calender"
                                         events={workoutEvents}
                                         onView={() => { }}
-                                        views={[BigCalendar.Views.MONTH]}
+                                        views={[BigCalendar.Views.MONTH,BigCalendar.Views.WEEK]}
                                         onNavigate={this.handleNavigation}
                                         onSelectEvent={(event) => { }}
                                         onSelectSlot={this.onSelectSlot}
@@ -203,6 +205,7 @@ class ScheduleWorkoutCalendarPage extends Component {
                         handleAddWorkout={this.handleAddWorkout}
                         handleNewRestDay={this.handleNewRestDay}
                         handlePaste={this.handlePaste}
+                        handlePasteMeal={this.handlePasteMeal}
                         handleSelectProgramToAssign={this.handleSelectProgramToAssign}
                     />
                 </SweetAlert>
@@ -340,12 +343,14 @@ class ScheduleWorkoutCalendarPage extends Component {
         document.addEventListener("mouseup", this.handleMouseUp, true);
         if (isOnline()) {
             const { dispatch } = this.props;
+            dispatch(showPageLoader())
             var today = moment().startOf('day').utc();
             this.setState({ calendarViewDate: today.local() });
             if (isOnline()) {
                 this.getWorkoutSchedulesByMonth(today);
                 dispatch(getProgramsNameRequest());
             }
+
         }
     }
 
@@ -433,31 +438,36 @@ class ScheduleWorkoutCalendarPage extends Component {
         }
         if(!mealLoading && prevProps.logDates !== logDates){
           var newWorkouts = workoutEvents;
-          _.forEach(logDates,(meal,index) => {
-            var mealDate = moment(meal.date).format('DD/MM/YYYY')
+          _.forEach(logDates,(mealsLog,index1) => {
+            console.log('MEALS===',mealsLog)
+            _.forEach(mealsLog.meals,(meal,index) => {
+            var mealDate = moment(mealsLog.date).format('DD/MM/YYYY')
             var todayDate = moment(new Date()).format('DD/MM/YYYY')
             var newMeal = {
-              id: meal._id,
-              title: mealDate === todayDate ? `Today Meals`: `Meals ${mealDate}`,
-              start: meal.date,
-              end: meal.date,
+              id: `${index1}${index}`,
+              meal_id: mealsLog._id,
+              mealDetail_id: meal._id,
+              title: `${meal.meals_type}`,
+              start: mealsLog.date,
+              end: mealsLog.date,
               allDay: true,
               isCompleted: 0,
               exercises: [],
               exerciseType: SCHEDULED_MEAL,
               totalExercises: 0,
               meta: meal,
-              description: meal.meals.map(item => `${item.title}, `),
+              description: meal.title,
               isSelectedForBulkAction: false,
               isCut: (cutWorkout === meal._id),
               isCutEnable: (cutWorkout) ? true : false,
               handleCut: (mealEvent) => this.handleCut(meal._id, mealEvent),
-              handleCopy: () => this.handleCopy(meal._id),
-              handleDelete: () => this.showDeleteConfirmation(meal._id, meal.date),
+              handleCopy: () => this.handleCopy(mealsLog._id,meal._id,SCHEDULED_MEAL),
+              handleDelete: () => this.showDeleteConfirmation(meal._id, mealsLog.date),
               handleCompleteWorkout: () => this.handleCompleteWorkout(meal._id),
               handleSelectForBulkAction: () => this.handleSelectForBulkAction(meal._id),
             }
           newWorkouts.push(newMeal)
+            })
           })
           this.setState({ workoutEvents: newWorkouts });
           this.resetDragContainer();
@@ -488,32 +498,37 @@ class ScheduleWorkoutCalendarPage extends Component {
                 }
                 newWorkouts.push(newWorkout);
             });
-            _.forEach(logDates,(meal,index) => {
-              var mealDate = moment(meal.date).format('DD/MM/YYYY')
-              var todayDate = moment(new Date()).format('DD/MM/YYYY')
-              var newMeal = {
-                id: meal._id,
-                title: mealDate === todayDate ? `Today Meals`: `Meals ${mealDate}`,
-                start: meal.date,
-                end: meal.date,
-                allDay: true,
-                isCompleted: 0,
-                exercises: [],
-                exerciseType: SCHEDULED_MEAL,
-                totalExercises: 0,
-                meta: meal,
-                description: meal.meals.map(item => `${item.title}, `),
-                isSelectedForBulkAction: false,
-                isCut: (cutWorkout === meal._id),
-                isCutEnable: (cutWorkout) ? true : false,
-                handleCut: (mealEvent) => this.handleCut(meal._id, mealEvent),
-                handleCopy: () => this.handleCopy(meal._id),
-                handleDelete: () => this.showDeleteConfirmation(meal._id, meal.date),
-                handleCompleteWorkout: () => this.handleCompleteWorkout(meal._id),
-                handleSelectForBulkAction: () => this.handleSelectForBulkAction(meal._id),
-              }
-            newWorkouts.push(newMeal)
-            })
+            _.forEach(logDates,(mealsLog,index1) => {
+                console.log('MEALS===',mealsLog)
+                _.forEach(mealsLog.meals,(meal,index) => {
+                var mealDate = moment(mealsLog.date).format('DD/MM/YYYY')
+                var todayDate = moment(new Date()).format('DD/MM/YYYY')
+                var newMeal = {
+                  id: `${index1}${index}`,
+                  meal_id: mealsLog._id,
+                  mealDetail_id: meal._id,
+                  title: `${meal.meals_type}`,
+                  start: mealsLog.date,
+                  end: mealsLog.date,
+                  allDay: true,
+                  isCompleted: 0,
+                  exercises: [],
+                  exerciseType: SCHEDULED_MEAL,
+                  totalExercises: 0,
+                  meta: meal,
+                  description: meal.title,
+                  isSelectedForBulkAction: false,
+                  isCut: (cutWorkout === meal._id),
+                  isCutEnable: (cutWorkout) ? true : false,
+                  handleCut: (mealEvent) => this.handleCut(meal._id, mealEvent),
+                  handleCopy: () =>  this.handleCopy(mealsLog._id,meal._id,SCHEDULED_MEAL),
+                  handleDelete: () => this.showDeleteConfirmation(meal._id, mealsLog.date),
+                  handleCompleteWorkout: () => this.handleCompleteWorkout(meal._id),
+                  handleSelectForBulkAction: () => this.handleSelectForBulkAction(meal._id),
+                }
+                    newWorkouts.push(newMeal)
+                })
+              })
             this.setState({ workoutEvents: newWorkouts });
         }
         if (workoutPasteAction && !loading) {
@@ -816,8 +831,8 @@ class ScheduleWorkoutCalendarPage extends Component {
         }
     }
 
-    onSelectSlot = (slotInfo) => {
-      console.log('ON SelectSlot Call')
+    onSelectSlot = async (slotInfo) => {
+      console.log('ON SelectSlot Call',slotInfo)
         const { dispatch, cutWorkout } = this.props;
         if (dragEventId) {
             hardResetContainer = false;
@@ -841,16 +856,20 @@ class ScheduleWorkoutCalendarPage extends Component {
                 };
                 if(dragEventType !== 'meal'){
                   dispatch(pasteUsersWorkoutScheduleRequest(requestData, 'cut'));
+                  this.setState({ workoutPasteAction: true });
                 }else {
                   var reqData = {
+                    meal_id : dragEventMealID,
                     date : date
                   }
-                  dispatch(userMealUpdateRequest(dragEventId,reqData))
+                  await dispatch(userMealUpdateRequest(dragEventDetailID,reqData,(res)=> {
+                    this.setState({ workoutPasteAction: true });
+                  }))
                 }
-                this.setState({ workoutPasteAction: true });
 
             }
         } else if (cutWorkout) {
+            console.log('CUTWORKOUT ====',cutWorkout)
             console.log('dragEventType',dragEventType)
             var startDay = moment(slotInfo.start).startOf('day');
             var date = moment.utc(startDay);
@@ -860,14 +879,17 @@ class ScheduleWorkoutCalendarPage extends Component {
                 date: date,
             };
             dispatch(pasteUsersWorkoutScheduleRequest(requestData, 'cut'));
+            this.setState({ workoutPasteAction: true });
             }else {
               console.log('DATE',date)
               var requestData = {
+                meal_id : dragEventMealID,
                 date: date,
               }
-              dispatch(userMealUpdateRequest(cutWorkout,requestData));
+              await dispatch(userMealUpdateRequest(dragEventDetailID,requestData,(res) => {
+                this.setState({ workoutPasteAction: true });
+              }));
             }
-            this.setState({ workoutPasteAction: true });
 
         } else {
           console.log('SELECT SLOT')
@@ -896,6 +918,8 @@ class ScheduleWorkoutCalendarPage extends Component {
         dragEventCardX = null;
         dragEventCardY = null;
         dragEventType= null;
+        dragEventDetailID=null;
+        dragEventMealID=null;
         $('#cal-panel-wrap').css({ boxShadow: "none" });
     }
 
@@ -968,36 +992,68 @@ class ScheduleWorkoutCalendarPage extends Component {
         const { dispatch } = this.props;
         if (_id) {
             dragEventType = workout.exerciseType
+            dragEventDetailID = workout.mealDetail_id
+            dragEventMealID = workout.meal_id
             dispatch(cutUserWorkoutSchedule(_id, workout));
             ts('Workout cut!');
         }
     }
 
-    handleCopy = (_id) => {
+    handleCopy = (_id, mealDetail_id=null,eventType=null) => {
       console.log('COPY CALL')
         const { dispatch } = this.props;
         if (_id) {
+            if(mealDetail_id !== null && eventType === SCHEDULED_MEAL){
+              dragEventType = eventType
+              dragEventDetailID = mealDetail_id
+              dragEventMealID = _id
+              console.log('DragEvent Type',dragEventType)
+              ts('Meal copied!');
+            }
+            else {
             dispatch(copyUserWorkoutSchedule(_id));
             ts('Workout copied!');
+            }
         }
     }
 
     handlePaste = () => {
       console.log('PASTE CALL')
+      console.log('Event Type',dragEventType)
         const { copiedWorkout, selectedSlot, dispatch } = this.props;
         if (copiedWorkout) {
             var startDay = moment(selectedSlot.start).startOf('day');
             var date = moment.utc(startDay);
-            var requestData = {
-                exerciseId: copiedWorkout,
-                date: date,
-            };
-            dispatch(pasteUsersWorkoutScheduleRequest(requestData));
-            this.setState({ workoutPasteAction: true });
-            dispatch(showPageLoader());
+              var requestData = {
+                  exerciseId: copiedWorkout,
+                  date: date,
+              };
+              dispatch(pasteUsersWorkoutScheduleRequest(requestData));
+              this.setState({ workoutPasteAction: true });
+              dispatch(showPageLoader());
         } else {
             te('There is no workout copied!');
         }
+    }
+
+    handlePasteMeal = async () => {
+      const { selectedSlot, dispatch } = this.props;
+      if(dragEventDetailID && dragEventMealID && dragEventType === SCHEDULED_MEAL){
+        var startDay = moment(selectedSlot.start).startOf('day');
+        var date = moment.utc(startDay);
+        var requestData = {
+          meal_id : dragEventMealID,
+          date: date,
+          status: "paste"
+        }
+        await dispatch(userMealUpdateRequest(dragEventDetailID,requestData,(res) => {
+          this.setState({ workoutPasteAction: true });
+        }))
+        dispatch(showPageLoader());
+      }
+      else {
+        te('There is no meal copied!');
+      }
     }
 
     showDeleteConfirmation = (id, date,type='workout') => {
@@ -1258,7 +1314,7 @@ export default connect(
 
 class SelectEventView extends Component {
     render() {
-        const { handleAddWorkout, handleNewRestDay, handlePaste, handleSelectProgramToAssign } = this.props;
+        const { handleAddWorkout, handleNewRestDay, handlePaste, handlePasteMeal, handleSelectProgramToAssign } = this.props;
         return (
             <div className="row">
                 <div className="popup-link-wrap">
@@ -1276,6 +1332,9 @@ class SelectEventView extends Component {
                     </div>
                     <div className="popup-link">
                         <NavLink to={routeCodes.NUTRITION} className="btn btn-primary">Add Meal</NavLink>
+                    </div>
+                    <div className="popup-link">
+                        <button type="button" onClick={handlePasteMeal} className="btn btn-primary">Paste Meal</button>
                     </div>
                 </div>
             </div>
@@ -1302,8 +1361,8 @@ class CustomEventCard extends Component {
           }
             showCompleteSwitch = true;
         }
-        const uri = `date=${event.start}`
-        const encode = encodeURIComponent(uri)
+
+
         return (
             <div
                 id={`workout-card-${event.id}`}
@@ -1345,11 +1404,14 @@ class CustomEventCard extends Component {
                             <NavLink to={routeCodes.SAVE_SCHEDULE_WORKOUT.replace(':id', event.id)} data-tip="Change" title=""><FaPencil /></NavLink>
                         }
                         {(event.exerciseType === SCHEDULED_MEAL) &&
-
-                            <NavLink to={`${routeCodes.NUTRITION}?${encode}`} data-tip="Details" title=""><FaEye /></NavLink>
+                            <a href="javascript:void(0)" data-tip="Copy" onClick={event.handleCopy} title=""><FaCopy /></a>
                         }
                         {(event.exerciseType === SCHEDULED_MEAL) &&
-                            <NavLink to={`${routeCodes.NUTRITION}?${encode}`} data-tip="Change" title=""><FaPencil /></NavLink>
+
+                            <NavLink to={`${routeCodes.NUTRITION_VIEW}/${event.mealDetail_id}`} data-tip="Details" title=""><FaEye /></NavLink>
+                        }
+                        {(event.exerciseType === SCHEDULED_MEAL) &&
+                            <NavLink to={`${routeCodes.NUTRITION_EDIT}/${event.mealDetail_id}`} data-tip="Change" title=""><FaPencil /></NavLink>
                         }
                         {
                         event.exerciseType !== SCHEDULED_MEAL && <a href="javascript:void(0)" data-tip="Delete" data-for="event-delete-tooltip" onClick={event.handleDelete} title=""><FaTrash /></a>}
@@ -1380,6 +1442,7 @@ class CustomEventCard extends Component {
     }
 
     handleMouseDown = (e, event) => {
+        console.log('MOUSE DOWN CALL',event)
         const selectedCard = $(`#workout-card-${event.id}`);
         const dragPlaceholder = $('#custom-drag-workout-wrap');
         const offsets = selectedCard.offset();
@@ -1395,7 +1458,9 @@ class CustomEventCard extends Component {
         dragEventDate = event.start;
         dragEventCardX = eventCardX;
         dragEventCardY = eventCardY;
-        dragEventType = event.exerciseType
+        dragEventType = event.exerciseType;
+        dragEventMealID = event.exerciseType === SCHEDULED_MEAL ? event.meal_id : null
+        dragEventDetailID = event.exerciseType === SCHEDULED_MEAL ? event.mealDetail_id : null
         $('#cal-panel-wrap').css({ boxShadow: "none" });
         selectedCard.css({ opacity: "0" });
     }
