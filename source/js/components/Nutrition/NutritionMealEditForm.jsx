@@ -369,8 +369,8 @@ class NutritionMealEditForm extends Component {
                                 }
                               />
 
-                              <p> Count:</p>
-                              <Field
+                              {false && <p> Count:</p>}
+                              {false && <Field
                                 name={'serving-unit' + id}
                                 className="form-control serving-input"
                                 wrapperClass=""
@@ -384,7 +384,7 @@ class NutritionMealEditForm extends Component {
                                 onChange={(e, count) =>
                                   this.changeServing(id, v, null, null, count)
                                 }
-                              />
+                              />}
                             </div>
                             {/* <span className="star_one">
                                                         <Star />
@@ -404,7 +404,7 @@ class NutritionMealEditForm extends Component {
                                   Kcal
                                   <span>
                                     {Number(v.totalKcl) !== NaN &&
-                                    v.totalKcl !== 'NaN'
+                                      v.totalKcl !== 'NaN'
                                       ? v.totalKcl
                                       : 0}
                                   </span>
@@ -417,7 +417,7 @@ class NutritionMealEditForm extends Component {
                                   fat
                                   <span>
                                     {Number(v.totalfat) !== NaN &&
-                                    v.totalfat !== 'NaN'
+                                      v.totalfat !== 'NaN'
                                       ? v.totalfat
                                       : 0}
                                   </span>
@@ -430,7 +430,7 @@ class NutritionMealEditForm extends Component {
                                   Protin
                                   <span>
                                     {Number(v.totalProtein) !== NaN &&
-                                    v.totalProtein !== 'NaN'
+                                      v.totalProtein !== 'NaN'
                                       ? v.totalProtein
                                       : 0}
                                   </span>
@@ -443,7 +443,7 @@ class NutritionMealEditForm extends Component {
                                   Carbs
                                   <span>
                                     {Number(v.totalCarbs) !== NaN &&
-                                    v.totalCarbs !== 'NaN'
+                                      v.totalCarbs !== 'NaN'
                                       ? v.totalCarbs
                                       : 0}
                                   </span>
@@ -456,7 +456,7 @@ class NutritionMealEditForm extends Component {
                                   Sugar
                                   <span>
                                     {Number(v.totalSugar) !== NaN &&
-                                    v.totalSugar !== 'NaN'
+                                      v.totalSugar !== 'NaN'
                                       ? v.totalSugar
                                       : 0}
                                   </span>
@@ -469,7 +469,7 @@ class NutritionMealEditForm extends Component {
                                   Cholesterol
                                   <span>
                                     {Number(v.totalCholesterol) !== NaN &&
-                                    v.totalSugar !== 'NaN'
+                                      v.totalSugar !== 'NaN'
                                       ? v.totalCholesterol
                                       : 0}
                                   </span>
@@ -566,10 +566,10 @@ class NutritionMealEditForm extends Component {
                           document.getElementById(
                             'react-select-3--value-item',
                           ) &&
-                          document.getElementById('react-select-3--value-item')
-                            .innerText &&
-                          document.getElementById('react-select-3--value-item')
-                            .innerText === 'Public'
+                            document.getElementById('react-select-3--value-item')
+                              .innerText &&
+                            document.getElementById('react-select-3--value-item')
+                              .innerText === 'Public'
                             ? [required]
                             : []
                         }
@@ -663,9 +663,9 @@ class NutritionMealEditForm extends Component {
       if (unit) {
         vobj.ingredient_unit = unit;
       }
-      if (count) {
-        vobj.count = count;
-      }
+      // if (count) {
+      vobj.count = 1;
+      // }
       if (vobj._id) {
         vobj.ingredient_id = vobj._id;
       }
@@ -1002,7 +1002,7 @@ class NutritionMealEditForm extends Component {
       searchLoading !== prevProps.searchLoading ||
       (searchSuggestions.length !== prevProps.searchSuggestions.length ||
         searchSuggestions[searchSuggestions.length - 1] !==
-          prevProps.searchSuggestions[searchSuggestions.length - 1])
+        prevProps.searchSuggestions[searchSuggestions.length - 1])
     ) {
       let suggestedUsers = [];
       if (searchSuggestions.length > 0) {
@@ -1154,7 +1154,7 @@ const InputField = props => {
     <div
       className={`${wrapperClass} ${
         meta.touched && meta.error ? 'has-error' : ''
-      }`}
+        }`}
     >
       <input
         {...input}
@@ -1190,7 +1190,7 @@ const TextAreaField = props => {
     <div
       className={`${wrapperClass} ${
         meta.touched && meta.error ? 'has-error' : ''
-      }`}
+        }`}
     >
       <textarea
         {...input}

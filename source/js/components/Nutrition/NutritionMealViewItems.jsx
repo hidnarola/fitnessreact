@@ -39,15 +39,15 @@ const NutritionMealViewItems = props => {
             <option>g</option>
           </select>
 
-          <p style={{ paddingLeft: '6px' }}> Count:</p>
-          <input
+          {false && <p style={{ paddingLeft: '6px' }}> Count:</p>}
+          {false && <input
             name={'serving-unit' + id}
             className="form-control serving-input"
             placeholder="1"
             value={count}
             type="number"
             onChange={() => ''}
-          />
+          />}
         </div>
       </div>
       <ul className="ul_six_wrap">
