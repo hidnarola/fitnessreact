@@ -341,9 +341,8 @@ class NutritionMealAddForm extends Component {
                                   )
                                 }
                               />
-
-                              <p> Count:</p>
-                              <Field
+                              {false && <p> Count:</p>}
+                              {false && <Field
                                 name={"serving-unit" + id}
                                 className="form-control serving-input"
                                 wrapperClass=""
@@ -357,7 +356,7 @@ class NutritionMealAddForm extends Component {
                                 onChange={(e, count) =>
                                   this.changeServing(id, v, null, null, count)
                                 }
-                              />
+                              />}
                             </div>
                             {/* <span className="star_one">
                                                         <Star />
@@ -628,9 +627,9 @@ class NutritionMealAddForm extends Component {
       if (unit) {
         vobj.ingredient_unit = unit;
       }
-      if (count) {
-        vobj.count = count;
-      }
+      // if (count) {
+      vobj.count = 1;
+      // }
       if (vobj._id) {
         vobj.ingredient_id = vobj._id;
       }
