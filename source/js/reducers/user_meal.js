@@ -32,6 +32,7 @@ const initialState = Map({
   updateMealErrors: [],
   cutMeal: null,
   cutMealData: null,
+  cutMealDetailId: null,
   copiedMealId: null,
   copiedMealDetailId: null,
 });
@@ -221,6 +222,7 @@ const actionMap = {
     return state.merge(
       Map({
         cutMeal: action.mealId,
+        cutMealDetailId: action.mealDetailId,
         cutMealData: action.mealData,
       }),
     );

@@ -128,10 +128,11 @@ export function getUserMealError(error) {
   };
 }
 
-export function cutUserMealSchedule(mealId, mealData) {
+export function cutUserMealSchedule(mealId, mealDetailId, mealData) {
   return {
     type: CUT_USER_MEAL_SCHEDULE,
     mealId,
+    mealDetailId,
     mealData,
   };
 }
