@@ -8660,7 +8660,7 @@ h5 {
     flex: 1;
     -webkit-box-flex: 1;
     -ms-flex: 1;
-    min-height: 900px;
+   /* min-height: 900px; */
 }
 
 .workout-exercise-card-block-wrapper {
@@ -9974,7 +9974,7 @@ td.close-td a i {
 }
 
 .workout-calender>.rbc-toolbar>.rbc-btn-group {
-    position: absolute;
+    /*position: absolute;*/
     right: 0;
     bottom: 0;
 }
@@ -15200,6 +15200,23 @@ a.timline-post-edit-btn svg {
 
 .ul_meal_img .data_serve img {
     display: inline-block;
+}
+
+/* .rbc-time-view .rbc-label {
+  display: none;
+}
+.rbc-time-view .rbc-allday-cell {
+  height: 100vh;
+  max-height: 100vh;
+} */
+.workout-calender  .rbc-label.rbc-time-header-gutter{
+  padding:0;
+}
+.workout-calender  .rbc-time-header-content{
+  border-left:0;
+}
+.workout-calender  .rbc-time-view .rbc-time-content {
+  display: none;
 }
 
 /*********************** Responsive **************************/

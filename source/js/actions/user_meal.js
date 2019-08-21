@@ -12,6 +12,10 @@ export const GET_USER_MEAL_REQUEST = 'GET_USER_MEAL_REQUEST';
 export const GET_USER_MEAL_SUCCESS = 'GET_USER_MEAL_SUCCESS';
 export const GET_USER_MEAL_ERROR = 'GET_USER_MEAL_ERROR';
 
+export const CUT_USER_MEAL_SCHEDULE = 'CUT_USER_MEAL_SCHEDULE';
+export const COPY_USER_MEAL_SCHEDULE = 'COPY_USER_MEAL_SCHEDULE';
+export const SET_SCHEDULE_MEALS_STATE = 'SET_SCHEDULE_MEALS_STATE';
+
 export const GET_USER_MEALS_LOG_DATES_REQUEST =
   'GET_USER_MEALS_LOG_DATES_REQUEST';
 export const GET_USER_MEALS_LOG_DATES_SUCCESS =
@@ -121,5 +125,28 @@ export function getUserMealError(error) {
   return {
     type: GET_USER_MEAL_ERROR,
     error,
+  };
+}
+
+export function cutUserMealSchedule(mealId, mealData) {
+  return {
+    type: CUT_USER_MEAL_SCHEDULE,
+    mealId,
+    mealData,
+  };
+}
+
+export function copyUserMealSchedule(mealId, mealDetailId) {
+  return {
+    type: COPY_USER_MEAL_SCHEDULE,
+    mealId,
+    mealDetailId,
+  };
+}
+
+export function setScheduleMealsState(stateData) {
+  return {
+    type: SET_SCHEDULE_MEALS_STATE,
+    stateData,
   };
 }

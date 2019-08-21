@@ -36,7 +36,7 @@ import AppendProgramFromCalendarForm from '../components/ScheduleWorkout/AppendP
 import $ from "jquery";
 import { IDB_TBL_CALENDER, IDB_READ_WRITE, IDB_READ } from '../constants/idb';
 import AddMetaDescription from '../components/global/AddMetaDescription';
-import { getUserMealsLogDatesRequest, userMealUpdateRequest } from '../actions/user_meal';
+import { getUserMealsLogDatesRequest, userMealUpdateRequest, copyUserMealSchedule } from '../actions/user_meal';
 
 let dragEventActive = false;
 let dragEventCardOutside = false;
@@ -113,6 +113,7 @@ class ScheduleWorkoutCalendarPage extends Component {
         var programOptions = prepareDropdownOptionsData(programs, '_id', 'name');
         var selectedEvents = _.filter(workoutEvents, ['isSelectedForBulkAction', true]);
         mealLoading ? dispatch(showPageLoader()) : dispatch(hidePageLoader())
+
         return (
             <div className="fitness-body">
                 <AddMetaDescription>
@@ -202,6 +203,9 @@ class ScheduleWorkoutCalendarPage extends Component {
                     closeOnClickOutside={false}
                 >
                     <SelectEventView
+                        selectedSlotStateDate={selectedSlotStateDate}
+                        copiedMealId={this.props.copiedMealId}
+                        copiedWorkout={this.props.copiedWorkout}
                         handleAddWorkout={this.handleAddWorkout}
                         handleNewRestDay={this.handleNewRestDay}
                         handlePaste={this.handlePaste}
@@ -834,6 +838,7 @@ class ScheduleWorkoutCalendarPage extends Component {
     onSelectSlot = async (slotInfo) => {
       console.log('ON SelectSlot Call',slotInfo)
         const { dispatch, cutWorkout } = this.props;
+
         if (dragEventId) {
             hardResetContainer = false;
             if (dragEventCardOutside) {
@@ -1004,10 +1009,7 @@ class ScheduleWorkoutCalendarPage extends Component {
         const { dispatch } = this.props;
         if (_id) {
             if(mealDetail_id !== null && eventType === SCHEDULED_MEAL){
-              dragEventType = eventType
-              dragEventDetailID = mealDetail_id
-              dragEventMealID = _id
-              console.log('DragEvent Type',dragEventType)
+              dispatch(copyUserMealSchedule(_id,mealDetail_id))
               ts('Meal copied!');
             }
             else {
@@ -1037,16 +1039,16 @@ class ScheduleWorkoutCalendarPage extends Component {
     }
 
     handlePasteMeal = async () => {
-      const { selectedSlot, dispatch } = this.props;
-      if(dragEventDetailID && dragEventMealID && dragEventType === SCHEDULED_MEAL){
+      const { selectedSlot, dispatch,copiedMealId,copiedMealDetailId } = this.props;
+      if(copiedMealId && copiedMealDetailId){
         var startDay = moment(selectedSlot.start).startOf('day');
         var date = moment.utc(startDay);
         var requestData = {
-          meal_id : dragEventMealID,
+          meal_id : copiedMealId,
           date: date,
           status: "paste"
         }
-        await dispatch(userMealUpdateRequest(dragEventDetailID,requestData,(res) => {
+        await dispatch(userMealUpdateRequest(copiedMealDetailId,requestData,(res) => {
           this.setState({ workoutPasteAction: true });
         }))
         dispatch(showPageLoader());
@@ -1304,7 +1306,9 @@ const mapStateToProps = (state) => {
         appendFromCalendarLoading: userPrograms.get('appendFromCalendarLoading'),
         appendFromCalendarStatus: userPrograms.get('appendFromCalendarStatus'),
         logDates : userMeal.get('logDates'),
-        mealLoading: userMeal.get('loading')
+        mealLoading: userMeal.get('loading'),
+        copiedMealDetailId: userMeal.get('copiedMealDetailId'),
+        copiedMealId: userMeal.get('copiedMealId')
     };
 }
 
@@ -1314,7 +1318,9 @@ export default connect(
 
 class SelectEventView extends Component {
     render() {
-        const { handleAddWorkout, handleNewRestDay, handlePaste, handlePasteMeal, handleSelectProgramToAssign } = this.props;
+        const { handleAddWorkout, handleNewRestDay, handlePaste, handlePasteMeal, handleSelectProgramToAssign,copiedWorkout,copiedMealId,selectedSlotStateDate } = this.props;
+        const date = new Date(selectedSlotStateDate).toISOString()
+        const encode = encodeURIComponent(`date=${date}`)
         return (
             <div className="row">
                 <div className="popup-link-wrap">
@@ -1328,13 +1334,13 @@ class SelectEventView extends Component {
                         <button type="button" onClick={handleSelectProgramToAssign} className="btn btn-primary">Assign Program</button>
                     </div>
                     <div className="popup-link">
-                        <button type="button" onClick={handlePaste} className="btn btn-primary">Paste Workout</button>
+                        <button type="button" onClick={handlePaste} className="btn btn-primary" disabled={copiedWorkout ? false : true}>Paste Workout</button>
                     </div>
                     <div className="popup-link">
-                        <NavLink to={routeCodes.NUTRITION} className="btn btn-primary">Add Meal</NavLink>
+                        <NavLink to={`${routeCodes.NUTRITION}?${encode}`} className="btn btn-primary">Add Meal</NavLink>
                     </div>
                     <div className="popup-link">
-                        <button type="button" onClick={handlePasteMeal} className="btn btn-primary">Paste Meal</button>
+                        <button type="button" onClick={handlePasteMeal} className="btn btn-primary" disabled={copiedMealId ? false : true}>Paste Meal</button>
                     </div>
                 </div>
             </div>

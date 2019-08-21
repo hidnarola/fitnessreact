@@ -14,22 +14,26 @@ import {
   USER_MEAL_UPDATE_REQUEST,
   USER_MEAL_UPDATE_SUCCESS,
   USER_MEAL_UPDATE_ERROR,
+  CUT_USER_MEAL_SCHEDULE,
+  COPY_USER_MEAL_SCHEDULE,
+  SET_SCHEDULE_MEALS_STATE,
 } from '../actions/user_meal';
 
 const initialState = Map({
   userMeal: null,
   saveError: [],
-
   loading: false,
   logDates: [],
   logDatesError: [],
-
   loading_user_meals: true,
   user_meals: [],
   user_meals_Errors: [],
-
   updateMeal: null,
   updateMealErrors: [],
+  cutMeal: null,
+  cutMealData: null,
+  copiedMealId: null,
+  copiedMealDetailId: null,
 });
 
 const actionMap = {
@@ -211,6 +215,28 @@ const actionMap = {
         user_meals_Errors: error,
       }),
     );
+  },
+
+  [CUT_USER_MEAL_SCHEDULE]: (state, action) => {
+    return state.merge(
+      Map({
+        cutMeal: action.mealId,
+        cutMealData: action.mealData,
+      }),
+    );
+  },
+
+  [COPY_USER_MEAL_SCHEDULE]: (state, action) => {
+    return state.merge(
+      Map({
+        copiedMealId: action.mealId,
+        copiedMealDetailId: action.mealDetailId,
+      }),
+    );
+  },
+
+  [SET_SCHEDULE_MEALS_STATE]: (state, action) => {
+    return state.merge(Map(action.stateData));
   },
 };
 
