@@ -17,14 +17,18 @@ import {
   CUT_USER_MEAL_SCHEDULE,
   COPY_USER_MEAL_SCHEDULE,
   SET_SCHEDULE_MEALS_STATE,
+  SET_MEAL_DATA_IN_IDB,
+  SET_USER_MEAL,
 } from '../actions/user_meal';
 
 const initialState = Map({
   userMeal: null,
   saveError: [],
   loading: false,
+
   logDates: [],
   logDatesError: [],
+
   loading_user_meals: true,
   user_meals: [],
   user_meals_Errors: [],
@@ -239,6 +243,25 @@ const actionMap = {
 
   [SET_SCHEDULE_MEALS_STATE]: (state, action) => {
     return state.merge(Map(action.stateData));
+  },
+
+  [SET_MEAL_DATA_IN_IDB]: (state, action) => {
+    console.log('Call Offline mode');
+    return state.merge(
+      Map({
+        logDates: action.data.meals,
+        logDatesError: action.data.error,
+      }),
+    );
+  },
+
+  [SET_USER_MEAL]: (state, action) => {
+    console.log('Call SET USER MEAL');
+    return state.merge(
+      Map({
+        user_meals: action.data,
+      }),
+    );
   },
 };
 

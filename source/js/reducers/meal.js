@@ -16,6 +16,7 @@ import {
   MEAL_REQUEST_BY_ID,
   MEAL_REQUEST_BY_ID_SUCCESS,
   MEAL_REQUEST_BY_ID_ERROR,
+  SET_RECENT_MEALS,
 } from '../actions/meal';
 import { VALIDATION_FAILURE_STATUS } from '../constants/consts';
 import { generateValidationErrorMsgArr } from '../helpers/funs';
@@ -265,6 +266,15 @@ const actionMap = {
       Map({
         mealDetailsLoading: false,
         mealDetailsError: error,
+      }),
+    );
+  },
+
+  [SET_RECENT_MEALS]: (state, action) => {
+    return state.merge(
+      Map({
+        recentMeals: data.meals,
+        recentMealsError: data.error,
       }),
     );
   },

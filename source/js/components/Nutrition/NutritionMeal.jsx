@@ -10,7 +10,14 @@ import {
   deleteUserRecipeRequest,
 } from '../../actions/userNutritions';
 import noImg from 'img/common/no-img.png';
-import { capitalizeFirstLetter, ts, te } from '../../helpers/funs';
+import {
+  capitalizeFirstLetter,
+  ts,
+  te,
+  isOnline,
+  connectIDB,
+  tw,
+} from '../../helpers/funs';
 import {
   DAY_DRIVE_BREAKFAST,
   DAY_DRIVE_LUNCH,
@@ -18,6 +25,8 @@ import {
   DAY_DRIVE_PRE_LUNCH_SNACKS,
   DAY_DRIVE_SNACKS,
   DAY_DRIVE_POST_LUNCH_SNACKS,
+  USER_MEALS,
+  RECENT_MEALS,
 } from '../../constants/consts';
 import _ from 'lodash';
 import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
@@ -32,13 +41,22 @@ import {
   userMealAddRequest,
   getUserMealsLogDatesRequest,
   getUserMealRequest,
+  setMealDatainIdb,
+  setUserMeals,
 } from '../../actions/user_meal';
 import {
   recentMealRequest,
   addMealToFavouriteRequest,
+  setRecentMeals,
 } from '../../actions/meal';
 import NutritionMealPlanStats from './NutritionMealPlanStats';
 import SweetAlert from 'react-bootstrap-sweetalert';
+import {
+  IDB_TBL_USER_MEAL,
+  IDB_READ_WRITE,
+  IDB_TBL_USER_MEAL_LOGDATES,
+  IDB_READ,
+} from '../../constants/idb';
 
 const dayDriveOptions = [
   {
@@ -86,35 +104,55 @@ class NutritionMeal extends Component {
       showDeleteAlert: false,
       storeMealIndex: null,
     };
+    this.iDB;
   }
 
   componentWillMount() {
-    console.log('PROPS ==>', this.props);
-    const { dispatch } = this.props;
-    let { logDate } = this.state;
+    connectIDB()().then(connection => {
+      this.handleIDBOpenSuccess(connection);
+    });
+  }
 
-    if (this.props.location.search) {
-      let search = new URLSearchParams(
-        decodeURIComponent(this.props.location.search),
-      );
-      let date = search.get('date');
-      logDate = new Date(date);
-      this.setState({ logDate });
+  handleIDBOpenSuccess = connection => {
+    console.log('IDB Connection => ', connection);
+    this.iDB = connection.result;
+    if (!isOnline()) {
+      // get data from iDB
+      // this.getWorkoutsDataFromIDB()
+      this.getMealsDataFromIDB();
+      // this.getProgramsDataFromIDB()
     }
 
-    let requestData = { logDate };
-    var todaysDate = this.props.location.search
-      ? logDate
-      : moment().startOf('day');
-    var requestObj = {
-      date: todaysDate,
-    };
-    this.setState({ selectActionInit: true });
-    dispatch(showPageLoader());
-    this.getUserMealsLogData(requestData);
-    dispatch(getUserTodaysMealRequest(requestObj));
-    dispatch(recentMealRequest());
-  }
+    if (isOnline()) {
+      console.log('PROPS ==>', this.props);
+      const { dispatch } = this.props;
+      let { logDate } = this.state;
+
+      if (this.props.location.search) {
+        let search = new URLSearchParams(
+          decodeURIComponent(this.props.location.search),
+        );
+        let date = search.get('date');
+        logDate = new Date(date);
+        this.setState({ logDate });
+      }
+
+      let requestData = { logDate };
+      var todaysDate = this.props.location.search
+        ? logDate
+        : moment().startOf('day');
+      var requestObj = {
+        date: todaysDate,
+      };
+      if (isOnline()) {
+        this.setState({ selectActionInit: true });
+        dispatch(showPageLoader());
+        this.getUserMealsLogData(requestData);
+        dispatch(getUserTodaysMealRequest(requestObj));
+        dispatch(recentMealRequest());
+      }
+    }
+  };
 
   addTodayMeals = obj => {
     console.log('OBJ====>', obj);
@@ -605,7 +643,7 @@ class NutritionMeal extends Component {
     );
   };
 
-  componentDidUpdate(prevProos, prevSate) {
+  componentDidUpdate(prevProps, prevSate) {
     console.log('CALL COMPONENT UPDATE');
     let {
       loading,
@@ -613,11 +651,14 @@ class NutritionMeal extends Component {
       dispatch,
       error,
       recentMealsError,
+      recentMeals,
       addtoFavouriteError,
       addtoFavouriteLoading,
       addtoFavouriteSuccessMessage,
       user_meals,
       loading_user_meals,
+      saveLoading,
+      logDates,
     } = this.props;
     const { selectActionInit, deleteActionInit, logDate } = this.state;
 
@@ -641,8 +682,34 @@ class NutritionMeal extends Component {
     }
 
     if (
+      !saveLoading &&
+      prevProps.saveLoading !== saveLoading &&
+      logDates &&
+      logDates.length > 0 &&
+      prevProps.logDates !== logDates
+    ) {
+      console.log('IDB CALL');
+      console.log('logDates =>', logDates);
+      if (isOnline()) {
+        this.storeMealDataInIDB();
+      }
+    }
+
+    if (
+      !loading_user_meals &&
+      prevProps.loading_user_meals !== loading_user_meals
+    ) {
+      console.log('loading USER');
+      if (isOnline()) {
+        user_meals.forEach(data => {
+          this.storeMealsDetailsLogDatesInIDB(data);
+        });
+      }
+    }
+
+    if (
       !addtoFavouriteLoading &&
-      prevProos.addtoFavouriteLoading !== addtoFavouriteLoading &&
+      prevProps.addtoFavouriteLoading !== addtoFavouriteLoading &&
       addtoFavouriteError.length == 0 &&
       addtoFavouriteSuccessMessage !== ''
     ) {
@@ -651,9 +718,18 @@ class NutritionMeal extends Component {
     // let requestData = { logDate };
     // this.getUserMealsLogData(requestData);
 
+    if (recentMeals && prevProps.recentMeals !== recentMeals) {
+      if (isOnline()) {
+        this.storeRecentMealDataInIDB();
+      } else {
+        this.getRecentMealsDataFromIDB();
+      }
+    }
+
     if (
-      !loading_user_meals &&
-      prevProos.loading_user_meals !== loading_user_meals
+      (!loading_user_meals &&
+        prevProps.loading_user_meals !== loading_user_meals) ||
+      (user_meals && prevProps.user_meals !== user_meals)
     ) {
       console.log('IF====>');
       let userMeals = user_meals;
@@ -725,10 +801,12 @@ class NutritionMeal extends Component {
         logDate: date,
       });
       let requestData = { logDate: date };
-      // if (isOnline()) {
-      this.getUserMealsLogData(requestData);
-      // } else {
-      // this.getDataFromIDB(requestData);
+      if (isOnline()) {
+        console.log('isOnline Call');
+        this.getUserMealsLogData(requestData);
+      } else {
+        this.getMealDetailLogDatesInIDB(date);
+      }
     }
   };
 
@@ -776,7 +854,6 @@ class NutritionMeal extends Component {
       // }
     }
   };
-
   getUserMealsLogData = requestData => {
     const { dispatch } = this.props;
     this.setState({
@@ -786,7 +863,174 @@ class NutritionMeal extends Component {
     // dispatch(getUserBodyMeasurementRequest(requestData));
     dispatch(getUserMealRequest(requestData));
     dispatch(getUserMealsLogDatesRequest(requestData));
+
     dispatch(hidePageLoader());
+  };
+
+  // =============== PWA =========================
+
+  getMealsDataFromIDB = () => {
+    const { dispatch } = this.props;
+    const idbTbls = [IDB_TBL_USER_MEAL];
+    try {
+      const transaction = this.iDB.transaction(idbTbls, IDB_READ);
+      if (transaction) {
+        const osCalender = transaction.objectStore(IDB_TBL_USER_MEAL);
+        const iDBGetReq = osCalender.get(USER_MEALS);
+        iDBGetReq.onsuccess = event => {
+          const {
+            target: { result },
+          } = event;
+          if (result) {
+            const resultObj = JSON.parse(result.data);
+            const data = { meals: resultObj, error: [] };
+            dispatch(setMealDatainIdb(data));
+          } else {
+            const data = { meals: [], error: [] };
+            dispatch(setMealDatainIdb(data));
+          }
+        };
+      }
+    } catch (error) {
+      const data = { meals: [], error: [] };
+      dispatch(setMealDatainIdb(data));
+    }
+  };
+
+  getRecentMealsDataFromIDB = () => {
+    const { dispatch } = this.props;
+    const idbTbls = [IDB_TBL_USER_MEAL];
+    try {
+      const transaction = this.iDB.transaction(idbTbls, IDB_READ);
+      if (transaction) {
+        const osCalender = transaction.objectStore(IDB_TBL_USER_MEAL);
+        const iDBGetReq = osCalender.get(RECENT_MEALS);
+        iDBGetReq.onsuccess = event => {
+          const {
+            target: { result },
+          } = event;
+          if (result) {
+            const resultObj = JSON.parse(result.data);
+            const data = { meals: resultObj, error: [] };
+            dispatch(setRecentMeals(data));
+          } else {
+            const data = { meals: [], error: [] };
+            dispatch(setRecentMeals(data));
+          }
+        };
+      }
+    } catch (error) {
+      const data = { meals: [], error: [] };
+      dispatch(setRecentMeals(data));
+    }
+  };
+
+  getMealDetailLogDatesInIDB = logDate => {
+    const { dispatch } = this.props;
+    try {
+      const transaction = this.iDB.transaction(
+        [IDB_TBL_USER_MEAL_LOGDATES],
+        IDB_READ,
+      );
+      if (transaction) {
+        const iDBlogdates = transaction.objectStore(IDB_TBL_USER_MEAL_LOGDATES);
+        const isoDate = logDate.toISOString();
+        if (iDBlogdates) {
+          const logDateIndex = iDBlogdates.index('date');
+          const iDBGetReq = logDateIndex.getAll(isoDate);
+          iDBGetReq.onsuccess = event => {
+            const {
+              target: { result },
+            } = event;
+            dispatch(setUserMeals(result));
+            if (result.length === 0) {
+              tw('You are offline, please check your internet connection');
+            }
+          };
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  storeMealDataInIDB = () => {
+    const { logDates } = this.props;
+    try {
+      console.log('Store Data in IDB', logDates);
+      const idbData = { type: USER_MEALS, data: JSON.stringify(logDates) };
+      console.log('IDB => ', this.iDB);
+      const transaction = this.iDB.transaction(
+        [IDB_TBL_USER_MEAL],
+        IDB_READ_WRITE,
+      );
+      const objectStore = transaction.objectStore(IDB_TBL_USER_MEAL);
+      const iDBGetReq = objectStore.get(USER_MEALS);
+      iDBGetReq.onsuccess = event => {
+        const {
+          target: { result },
+        } = event;
+        if (result) {
+          objectStore.put(idbData);
+        } else {
+          objectStore.add(idbData);
+        }
+      };
+    } catch (error) {
+      console.log('error idb =>', error);
+    }
+  };
+
+  storeRecentMealDataInIDB = () => {
+    const { recentMeals } = this.props;
+    try {
+      console.log('Store Data in IDB', recentMeals);
+      const idbData = { type: RECENT_MEALS, data: JSON.stringify(recentMeals) };
+      console.log('IDB => ', this.iDB);
+      const transaction = this.iDB.transaction(
+        [IDB_TBL_USER_MEAL],
+        IDB_READ_WRITE,
+      );
+      const objectStore = transaction.objectStore(IDB_TBL_USER_MEAL);
+      const iDBGetReq = objectStore.get(RECENT_MEALS);
+      iDBGetReq.onsuccess = event => {
+        const {
+          target: { result },
+        } = event;
+        if (result) {
+          objectStore.put(idbData);
+        } else {
+          objectStore.add(idbData);
+        }
+      };
+    } catch (error) {
+      console.log('error idb =>', error);
+    }
+  };
+
+  storeMealsDetailsLogDatesInIDB = data => {
+    console.log('MEAL DETAILS CALL', data);
+    const transaction = this.iDB.transaction(
+      [IDB_TBL_USER_MEAL_LOGDATES],
+      IDB_READ_WRITE,
+    );
+    if (transaction) {
+      const objectStore = transaction.objectStore(IDB_TBL_USER_MEAL_LOGDATES);
+      if (objectStore) {
+        const mealId = data._id;
+        const iDBGetReq = objectStore.get(mealId);
+        iDBGetReq.onsuccess = event => {
+          const {
+            target: { result },
+          } = event;
+          if (result) {
+            objectStore.put(data);
+          } else {
+            objectStore.add(data);
+          }
+        };
+      }
+    }
   };
 }
 

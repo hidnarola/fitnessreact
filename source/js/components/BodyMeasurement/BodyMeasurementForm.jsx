@@ -615,6 +615,7 @@ class BodyMeasurementForm extends Component {
     }
 
     storeBodyMeasurementInIDB = (data) => {
+      console.log('BODY MESUR CALL',data)
         const transaction = this.iDB.transaction([IDB_TBL_BODY_MEASUREMENT], IDB_READ_WRITE);
         if (transaction) {
             const objectStore = transaction.objectStore(IDB_TBL_BODY_MEASUREMENT);

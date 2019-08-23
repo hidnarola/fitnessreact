@@ -22,6 +22,9 @@ export const GET_USER_MEALS_LOG_DATES_SUCCESS =
   'GET_USER_MEALS_LOG_DATES_SUCCESS';
 export const GET_USER_MEALS_LOG_DATES_ERROR = 'GET_USER_MEALS_LOG_DATES_ERROR';
 
+export const SET_MEAL_DATA_IN_IDB = 'SET_MEAL_DATA_IN_IDB';
+export const SET_USER_MEAL = 'SET_USER_MEAL';
+
 export function userMealAddRequest(requestData, callback) {
   console.log('action => ', requestData);
   return {
@@ -110,6 +113,7 @@ export function getUserMealSuccess(data) {
   const { userMeals } = data;
   userMeals.forEach(item => {
     item.meals.forEach(mealsdata => {
+      mealsdata.date = item.date;
       meals.push(mealsdata);
     });
   });
@@ -149,5 +153,20 @@ export function setScheduleMealsState(stateData) {
   return {
     type: SET_SCHEDULE_MEALS_STATE,
     stateData,
+  };
+}
+
+export function setMealDatainIdb(data) {
+  console.log('IDB MEAL DATA', data);
+  return {
+    type: SET_MEAL_DATA_IN_IDB,
+    data,
+  };
+}
+
+export function setUserMeals(data) {
+  return {
+    type: SET_USER_MEAL,
+    data,
   };
 }

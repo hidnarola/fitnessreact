@@ -22,7 +22,7 @@ import {
 import { NavLink } from "react-router-dom";
 import { routeCodes } from '../constants/routes';
 import _ from "lodash";
-import { SCHEDULED_WORKOUT_TYPE_RESTDAY, SCHEDULED_WORKOUT_TYPE_EXERCISE, CALENDER_PROGRAMS, CALENDER_WORKOUTS, SCHEDULED_MEAL } from '../constants/consts';
+import { SCHEDULED_WORKOUT_TYPE_RESTDAY, SCHEDULED_WORKOUT_TYPE_EXERCISE, CALENDER_PROGRAMS, CALENDER_WORKOUTS, SCHEDULED_MEAL, CALENDER_MEALS } from '../constants/consts';
 import { ts, te, prepareDropdownOptionsData, capitalizeFirstLetter, getElementOffsetRelativeToBody, isOnline, tw, connectIDB } from '../helpers/funs';
 import { FaCopy, FaTrash, FaPencil, FaEye } from 'react-icons/lib/fa'
 import cns from "classnames";
@@ -36,7 +36,7 @@ import AppendProgramFromCalendarForm from '../components/ScheduleWorkout/AppendP
 import $ from "jquery";
 import { IDB_TBL_CALENDER, IDB_READ_WRITE, IDB_READ } from '../constants/idb';
 import AddMetaDescription from '../components/global/AddMetaDescription';
-import { getUserMealsLogDatesRequest, userMealUpdateRequest, copyUserMealSchedule, cutUserMealSchedule, setScheduleMealsState } from '../actions/user_meal';
+import { getUserMealsLogDatesRequest, userMealUpdateRequest, copyUserMealSchedule, cutUserMealSchedule, setScheduleMealsState, setMealDatainIdb } from '../actions/user_meal';
 
 let dragEventActive = false;
 let dragEventCardOutside = false;
@@ -370,6 +370,7 @@ class ScheduleWorkoutCalendarPage extends Component {
         if (!isOnline()) {
             // get data from iDB
             this.getWorkoutsDataFromIDB()
+            this.getMealsDataFromIDB()
             this.getProgramsDataFromIDB()
         }
     }
@@ -416,7 +417,7 @@ class ScheduleWorkoutCalendarPage extends Component {
             // store programs in iDB names
             this.storeProgramDataInIDB()
         }
-        if (!loading && prevProps.workouts !== workouts) {
+        if ((!loading && prevProps.workouts !== workouts) || (!mealLoading && prevProps.logDates !== logDates)) {
             var newWorkouts = [];
             _.forEach(workouts, (workout, index) => {
                 var newWorkout = {
@@ -442,50 +443,49 @@ class ScheduleWorkoutCalendarPage extends Component {
                 }
                 newWorkouts.push(newWorkout);
             });
+
+            _.forEach(logDates,(mealsLog,index1) => {
+              _.forEach(mealsLog.meals,(meal,index) => {
+              var mealDate = moment(mealsLog.date).format('DD/MM/YYYY')
+              var todayDate = moment(new Date()).format('DD/MM/YYYY')
+              var newMeal = {
+                id: `${index1}${index}`,
+                meal_id: mealsLog._id,
+                mealDetail_id: meal._id,
+                title: `${meal.meals_type}`,
+                start: mealsLog.date,
+                end: mealsLog.date,
+                allDay: true,
+                isCompleted: 0,
+                exercises: [],
+                exerciseType: SCHEDULED_MEAL,
+                totalExercises: 0,
+                meta: meal,
+                description: meal.title,
+                isSelectedForBulkAction: false,
+                isCut: (cutMealDetailId === meal._id),
+                isCutEnable: (cutMealDetailId) ? true : false,
+                handleCut: (mealEvent) => this.handleCut(meal._id, mealEvent),
+                handleCopy: () => this.handleCopy(mealsLog._id,meal._id,SCHEDULED_MEAL),
+                handleDelete: () => this.showDeleteConfirmation(meal._id, mealsLog.date),
+                handleCompleteWorkout: () => this.handleCompleteWorkout(meal._id),
+                handleSelectForBulkAction: () => this.handleSelectForBulkAction(meal._id),
+              }
+              newWorkouts.push(newMeal)
+              })
+            })
+
+
             this.setState({ workoutEvents: newWorkouts });
             this.resetDragContainer();
             // store workouts in iDB
             if (isOnline()) {
                 this.storeWorkoutDataInIDB()
+                this.storeMealDataInIDB()
             }
 
         }
-        if(!mealLoading && prevProps.logDates !== logDates){
-          var newWorkouts = workoutEvents;
-          _.forEach(logDates,(mealsLog,index1) => {
-            console.log('MEALS===',mealsLog)
-            _.forEach(mealsLog.meals,(meal,index) => {
-            var mealDate = moment(mealsLog.date).format('DD/MM/YYYY')
-            var todayDate = moment(new Date()).format('DD/MM/YYYY')
-            var newMeal = {
-              id: `${index1}${index}`,
-              meal_id: mealsLog._id,
-              mealDetail_id: meal._id,
-              title: `${meal.meals_type}`,
-              start: mealsLog.date,
-              end: mealsLog.date,
-              allDay: true,
-              isCompleted: 0,
-              exercises: [],
-              exerciseType: SCHEDULED_MEAL,
-              totalExercises: 0,
-              meta: meal,
-              description: meal.title,
-              isSelectedForBulkAction: false,
-              isCut: (cutMealDetailId === meal._id),
-              isCutEnable: (cutMealDetailId) ? true : false,
-              handleCut: (mealEvent) => this.handleCut(meal._id, mealEvent),
-              handleCopy: () => this.handleCopy(mealsLog._id,meal._id,SCHEDULED_MEAL),
-              handleDelete: () => this.showDeleteConfirmation(meal._id, mealsLog.date),
-              handleCompleteWorkout: () => this.handleCompleteWorkout(meal._id),
-              handleSelectForBulkAction: () => this.handleSelectForBulkAction(meal._id),
-            }
-          newWorkouts.push(newMeal)
-            })
-          })
-          this.setState({ workoutEvents: newWorkouts });
-          this.resetDragContainer();
-        }
+
         if ((cutWorkout && prevProps.cutWorkout !== cutWorkout) || (cutMeal && prevProps.cutMeal !== cutMeal)) {
             var newWorkouts = [];
             _.forEach(workouts, (workout, index) => {
@@ -708,6 +708,32 @@ class ScheduleWorkoutCalendarPage extends Component {
         }
     }
 
+    getMealsDataFromIDB = () => {
+        const { dispatch } = this.props;
+        const idbTbls = [IDB_TBL_CALENDER];
+        try {
+            const transaction = this.iDB.transaction(idbTbls, IDB_READ);
+            if (transaction) {
+                const osCalender = transaction.objectStore(IDB_TBL_CALENDER);
+                const iDBGetReq = osCalender.get(CALENDER_MEALS);
+                iDBGetReq.onsuccess = (event) => {
+                    const { target: { result } } = event;
+                    if (result) {
+                        const resultObj = JSON.parse(result.data);
+                        const data = { meals: resultObj, error: [] }
+                        dispatch(setMealDatainIdb(data));
+                    } else {
+                        const data = { meals: [], error: [] }
+                        dispatch(setMealDatainIdb(data));
+                    }
+                }
+            }
+        } catch (error) {
+            const data = { meals: [], error: [] }
+            dispatch(setMealDatainIdb(data));
+        }
+    }
+
     getProgramsDataFromIDB = () => {
         const { dispatch } = this.props;
         const idbTbls = [IDB_TBL_CALENDER];
@@ -772,6 +798,25 @@ class ScheduleWorkoutCalendarPage extends Component {
         } catch (error) {
         }
 
+    }
+    storeMealDataInIDB = () => {
+      const {logDates} = this.props
+      console.log('Store Data in IDB',logDates)
+      try {
+        const idbData = { type : CALENDER_MEALS, data : JSON.stringify(logDates)}
+        const transaction = this.iDB.transaction([IDB_TBL_CALENDER],IDB_READ_WRITE)
+        const objectStore = transaction.objectStore(IDB_TBL_CALENDER)
+        const iDBGetReq = objectStore.get(CALENDER_MEALS)
+        iDBGetReq.onsuccess = (event) => {
+          const {target : {result}} = event
+          if(result){
+            objectStore.put(idbData)
+          }else {
+            objectStore.add(idbData)
+          }
+        }
+      }catch(error){
+      }
     }
 
     handleKeyUp = (e) => {
@@ -849,6 +894,7 @@ class ScheduleWorkoutCalendarPage extends Component {
     }
 
     onSelectSlot = async (slotInfo) => {
+      if(isOnline()){
       console.log('ON SelectSlot Call',slotInfo)
         const { dispatch, cutWorkout,cutMeal,cutMealDetailId } = this.props;
         console.log('cutMeal',cutMeal)
@@ -913,6 +959,9 @@ class ScheduleWorkoutCalendarPage extends Component {
             this.setState({ showSelectEventAlert: true });
             dispatch(setSelectedSlotFromCalendar(slotInfo));
         }
+      }else {
+        tw("You are offline, please check your internet connection");
+      }
     }
 
     resetCutData = () => {
@@ -969,16 +1018,17 @@ class ScheduleWorkoutCalendarPage extends Component {
             dispatch
         } = this.props;
         var requestObj = { date: _date };
+        var requestData = {
+          logDate : _date
+        }
         if (isOnline()) {
             await dispatch(getUsersWorkoutSchedulesRequest(requestObj,null,(res) => {
-              const requestData = {
-                logDate : _date
-              }
               dispatch(getUserMealsLogDatesRequest(requestData))
             }));
         } else {
             // get data from iDB
             this.getWorkoutsDataFromIDB()
+            this.getMealsDataFromIDB()
         }
     }
 
@@ -988,10 +1038,7 @@ class ScheduleWorkoutCalendarPage extends Component {
         var day = moment.utc(momentDate);
         this.setState({ calendarViewDate: day.local() });
         this.getWorkoutSchedulesByMonth(day);
-        const requestData = {
-          logDate : day
-        }
-        dispatch(getUserMealsLogDatesRequest(requestData))
+
     }
 
     handleNewRestDay = () => {
@@ -1010,6 +1057,7 @@ class ScheduleWorkoutCalendarPage extends Component {
     }
 
     handleCut = (_id, workout) => {
+      if(isOnline()){
         console.log('HANDLE CUT',_id,workout)
         const { dispatch } = this.props;
         if (_id) {
@@ -1024,9 +1072,13 @@ class ScheduleWorkoutCalendarPage extends Component {
             ts('Workout cut!');
             }
         }
+      }else {
+      tw("You are offline, please check your internet connection");
+      }
     }
 
     handleCopy = (_id, mealDetail_id=null,eventType=null) => {
+      if(isOnline()){
       console.log('COPY CALL')
         const { dispatch } = this.props;
         if (_id) {
@@ -1039,6 +1091,9 @@ class ScheduleWorkoutCalendarPage extends Component {
             ts('Workout copied!');
             }
         }
+      }else {
+        tw("You are offline, please check your internet connection");
+      }
     }
 
     handlePaste = () => {

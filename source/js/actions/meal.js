@@ -27,6 +27,8 @@ export const ADD_MEAL_TO_FAVOURITE_ERROR = 'ADD_MEAL_TO_FAVOURITE_ERROR';
 export const HANDLE_CHANGE_MEAL_SEARCH_VALUE =
   'HANDLE_CHANGE_MEAL_SEARCH_VALUE';
 
+export const SET_RECENT_MEALS = 'SET_RECENT_MEALS';
+
 // export const SET_BODY_PARTS_STATE = 'SET_BODY_PARTS_STATE';
 
 export function recentMealRequest(requestData) {
@@ -171,5 +173,12 @@ export function requestMealByIdError(error) {
   return {
     type: MEAL_REQUEST_BY_ID_ERROR,
     error,
+  };
+}
+
+export function setRecentMeals(data) {
+  return {
+    type: SET_RECENT_MEALS,
+    data,
   };
 }
