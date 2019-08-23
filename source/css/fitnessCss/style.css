@@ -14837,6 +14837,11 @@ div[contenteditable="true"] {
     background: #1eaa64;
 }
 
+.workout-calender .big-calendar-custom-month-event-view-card.past-body.w-c-lightblue .pull-left.custom_check,
+#custom-cut-workout-wrap .big-calendar-custom-month-event-view-card.past-body.w-c-lightblue .pull-left.custom_check,
+#custom-drag-workout-wrap .big-calendar-custom-month-event-view-card.past-body.w-c-lightblue .pull-left.custom_check {
+    background: #34b1db;
+}
 
 .workout-calender .big-calendar-custom-month-event-view-card.w-c-orange h5,
 #custom-cut-workout-wrap .big-calendar-custom-month-event-view-card.w-c-orange h5,

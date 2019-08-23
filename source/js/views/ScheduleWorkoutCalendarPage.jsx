@@ -22,7 +22,7 @@ import {
 import { NavLink } from "react-router-dom";
 import { routeCodes } from '../constants/routes';
 import _ from "lodash";
-import { SCHEDULED_WORKOUT_TYPE_RESTDAY, SCHEDULED_WORKOUT_TYPE_EXERCISE, CALENDER_PROGRAMS, CALENDER_WORKOUTS, SCHEDULED_MEAL, CALENDER_MEALS } from '../constants/consts';
+import { SCHEDULED_WORKOUT_TYPE_RESTDAY, SCHEDULED_WORKOUT_TYPE_EXERCISE, CALENDER_PROGRAMS, CALENDER_WORKOUTS, SCHEDULED_MEAL, CALENDER_MEALS, SCHEDULED_BODY_MEASUREMENT } from '../constants/consts';
 import { ts, te, prepareDropdownOptionsData, capitalizeFirstLetter, getElementOffsetRelativeToBody, isOnline, tw, connectIDB } from '../helpers/funs';
 import { FaCopy, FaTrash, FaPencil, FaEye } from 'react-icons/lib/fa'
 import cns from "classnames";
@@ -37,6 +37,7 @@ import $ from "jquery";
 import { IDB_TBL_CALENDER, IDB_READ_WRITE, IDB_READ } from '../constants/idb';
 import AddMetaDescription from '../components/global/AddMetaDescription';
 import { getUserMealsLogDatesRequest, userMealUpdateRequest, copyUserMealSchedule, cutUserMealSchedule, setScheduleMealsState, setMealDatainIdb } from '../actions/user_meal';
+import { getUserBodyMeasurementLogDatesRequest, cutUserBodyMeasurementSchedule, updateUserBodyMeasurementRequest, setUserBodyMeasurementState } from '../actions/userBodyMeasurement';
 
 let dragEventActive = false;
 let dragEventCardOutside = false;
@@ -107,6 +108,8 @@ class ScheduleWorkoutCalendarPage extends Component {
             mealLoading,
             cutMeal,
             cutMealData,
+            cutBodyMeasurement,
+            cutBodyMeasurementData
         } = this.props;
         var selectedSlotStateDate = null;
         if (selectedSlot) {
@@ -193,6 +196,11 @@ class ScheduleWorkoutCalendarPage extends Component {
                     {cutMeal &&
                         <ReactTooltip id="custom-cut-workout-wrap" place="top" type="dark" effect="float">
                             <CustomEventCardView event={cutMealData} />
+                        </ReactTooltip>
+                    }
+                    {cutBodyMeasurement &&
+                        <ReactTooltip id="custom-cut-workout-wrap" place="top" type="dark" effect="float">
+                            <CustomEventCardView event={cutBodyMeasurementData} />
                         </ReactTooltip>
                     }
                     <div id="custom-drag-workout-wrap" style={{ position: 'absolute', minWidth: 178 }}></div>
@@ -399,6 +407,11 @@ class ScheduleWorkoutCalendarPage extends Component {
             cutMeal,
             cutMealData,
             cutMealDetailId,
+            bodyLogDates,
+            loadingLogDates,
+            cutBodyMeasurement,
+            bodyMeasurementLoading,
+            bodyMeasurementError
         } = this.props;
         const {
             workoutPasteAction,
@@ -417,12 +430,20 @@ class ScheduleWorkoutCalendarPage extends Component {
             // store programs in iDB names
             this.storeProgramDataInIDB()
         }
-        if ((!loading && prevProps.workouts !== workouts) || (!mealLoading && prevProps.logDates !== logDates)) {
+
+        if(!bodyMeasurementLoading && prevProps.bodyMeasurementError !== bodyMeasurementError){
+          te(bodyMeasurementError[0])
+          this.getWorkoutSchedulesByMonth();
+        }
+
+        if ((!loading && prevProps.workouts !== workouts) || (!mealLoading && prevProps.logDates !== logDates) || (!loadingLogDates && prevProps.bodyLogDates !== bodyLogDates)) {
+            console.log('BODY MESUREMENT',bodyLogDates)
             var newWorkouts = [];
             _.forEach(workouts, (workout, index) => {
                 var newWorkout = {
                     id: workout._id,
-                    title: (workout.title) ? workout.title : `Workout on ${(workout.date) ? moment(workout.date).format('DD/MM/YYYY') : ''}`,
+                    // title: (workout.title) ? workout.title : `Workout on ${(workout.date) ? moment(workout.date).format('DD/MM/YYYY') : ''}`,
+                    title : workout.type === SCHEDULED_WORKOUT_TYPE_RESTDAY ? "Rest Day" : "Workout",
                     start: workout.date,
                     end: workout.date,
                     allDay: true,
@@ -475,6 +496,31 @@ class ScheduleWorkoutCalendarPage extends Component {
               })
             })
 
+            _.forEach(bodyLogDates,(bodyLog,index) => {
+              var newBodyMesurement = {
+                id: bodyLog._id,
+                title: 'Body Measurement',
+                start: bodyLog.logDate,
+                end: bodyLog.logDate,
+                allDay: true,
+                isCompleted: 0,
+                exercises:  [],
+                exerciseType: SCHEDULED_BODY_MEASUREMENT,
+                totalExercises: 0,
+                meta: bodyLog,
+                description: '',
+                isSelectedForBulkAction: false,
+                isCut: (cutBodyMeasurement === bodyLog._id),
+                isCutEnable: (cutBodyMeasurement) ? true : false,
+                handleCut: (bodyEvent) => this.handleCut(bodyLog._id, bodyEvent),
+                handleCopy: () => this.handleCopy(bodyLog._id),
+                handleDelete: () => this.showDeleteConfirmation(bodyLog._id, bodyLog.logDate),
+                handleCompleteWorkout: () => this.handleCompleteWorkout(bodyLog._id),
+                handleSelectForBulkAction: () => this.handleSelectForBulkAction(bodyLog._id),
+            }
+              newWorkouts.push(newBodyMesurement);
+            })
+
 
             this.setState({ workoutEvents: newWorkouts });
             this.resetDragContainer();
@@ -486,7 +532,7 @@ class ScheduleWorkoutCalendarPage extends Component {
 
         }
 
-        if ((cutWorkout && prevProps.cutWorkout !== cutWorkout) || (cutMeal && prevProps.cutMeal !== cutMeal)) {
+        if ((cutWorkout && prevProps.cutWorkout !== cutWorkout) || (cutMeal && prevProps.cutMeal !== cutMeal) || (cutBodyMeasurement && prevProps.cutBodyMeasurement !== cutBodyMeasurement)) {
             var newWorkouts = [];
             _.forEach(workouts, (workout, index) => {
                 var newWorkout = {
@@ -543,6 +589,32 @@ class ScheduleWorkoutCalendarPage extends Component {
                   newWorkouts.push(newMeal)
               })
             })
+
+            _.forEach(bodyLogDates,(bodyLog,index) => {
+              var newBodyMesurement = {
+                id: bodyLog._id,
+                title: 'Body Measurement',
+                start: bodyLog.logDate,
+                end: bodyLog.logDate,
+                allDay: true,
+                isCompleted: 0,
+                exercises:  [],
+                exerciseType: SCHEDULED_BODY_MEASUREMENT,
+                totalExercises: 0,
+                meta: bodyLog,
+                description: '',
+                isSelectedForBulkAction: false,
+                isCut: (cutBodyMeasurement === bodyLog._id),
+                isCutEnable: (cutBodyMeasurement) ? true : false,
+                handleCut: (bodyEvent) => this.handleCut(bodyLog._id, bodyEvent),
+                handleCopy: () => this.handleCopy(bodyLog._id),
+                handleDelete: () => this.showDeleteConfirmation(bodyLog._id, bodyLog.logDate),
+                handleCompleteWorkout: () => this.handleCompleteWorkout(bodyLog._id),
+                handleSelectForBulkAction: () => this.handleSelectForBulkAction(bodyLog._id),
+            }
+              newWorkouts.push(newBodyMesurement);
+            })
+
             this.setState({ workoutEvents: newWorkouts });
         }
 
@@ -552,7 +624,7 @@ class ScheduleWorkoutCalendarPage extends Component {
             this.cancelSelectedSlotAction();
             const newWorkoutState = { cutWorkout: null, cutWorkoutData: null };
             const newMealState = { cutMeal: null, cutMealData: null,cutMealDetailId:null };
-
+            const newBodyMesurementState = { cutBodyMeasurement:null,cutBodyMeasurementData:null}
             dispatch(hidePageLoader());
             if (error && error.length > 0) {
                 te('Something went wrong! please try again later.');
@@ -561,7 +633,7 @@ class ScheduleWorkoutCalendarPage extends Component {
             }
             dispatch(setScheduleMealsState(newMealState))
             dispatch(setScheduleWorkoutsState(newWorkoutState));
-
+            dispatch(setUserBodyMeasurementState(newBodyMesurementState))
         }
         if (deleteWorkoutActionInit && selectedWorkoutId && !loading) {
             this.setState({ deleteWorkoutActionInit: false, selectedWorkoutId: null, selectedWorkoutDate: null });
@@ -896,8 +968,8 @@ class ScheduleWorkoutCalendarPage extends Component {
     onSelectSlot = async (slotInfo) => {
       if(isOnline()){
       console.log('ON SelectSlot Call',slotInfo)
-        const { dispatch, cutWorkout,cutMeal,cutMealDetailId } = this.props;
-        console.log('cutMeal',cutMeal)
+        const { dispatch, cutWorkout,cutMeal,cutMealDetailId,cutBodyMeasurement } = this.props;
+        console.log('cutBodyMeasurement',cutBodyMeasurement)
         if (dragEventId) {
             hardResetContainer = false;
             if (dragEventCardOutside) {
@@ -918,16 +990,26 @@ class ScheduleWorkoutCalendarPage extends Component {
                     exerciseId: dragEventId,
                     date: date,
                 };
-                if(dragEventType !== 'meal'){
+                if(dragEventType !== SCHEDULED_MEAL && dragEventType !== SCHEDULED_BODY_MEASUREMENT){
                   dispatch(pasteUsersWorkoutScheduleRequest(requestData, 'cut'));
                   this.setState({ workoutPasteAction: true });
-                }else {
+                }
+                if(dragEventType === SCHEDULED_MEAL){
                   var reqData = {
                     meal_id : dragEventMealID,
                     date : date
                   }
                   await dispatch(userMealUpdateRequest(dragEventDetailID,reqData,(res)=> {
                     this.setState({ workoutPasteAction: true });
+                  }))
+                }
+                if(dragEventType === SCHEDULED_BODY_MEASUREMENT){
+                  var requestData = {
+                    measurementId: dragEventId,
+                    logDate: date,
+                  };
+                  await dispatch(updateUserBodyMeasurementRequest(requestData,(res) => {
+                    this.setState({ workoutPasteAction: true })
                   }))
                 }
 
@@ -954,6 +1036,15 @@ class ScheduleWorkoutCalendarPage extends Component {
           await dispatch(userMealUpdateRequest(cutMealDetailId,requestData,(res) => {
             this.setState({ workoutPasteAction: true });
           }));
+        } else if (cutBodyMeasurement) {
+            var startDay = moment(slotInfo.start).startOf('day');
+            var date = moment.utc(startDay);
+            var requestData = {
+              measurementId: cutBodyMeasurement,
+              logDate: date,
+            };
+            dispatch(updateUserBodyMeasurementRequest(requestData));
+            this.setState({ workoutPasteAction: true });
         } else {
           console.log('SELECT SLOT')
             this.setState({ showSelectEventAlert: true });
@@ -1024,6 +1115,7 @@ class ScheduleWorkoutCalendarPage extends Component {
         if (isOnline()) {
             await dispatch(getUsersWorkoutSchedulesRequest(requestObj,null,(res) => {
               dispatch(getUserMealsLogDatesRequest(requestData))
+              dispatch(getUserBodyMeasurementLogDatesRequest(requestData));
             }));
         } else {
             // get data from iDB
@@ -1067,10 +1159,13 @@ class ScheduleWorkoutCalendarPage extends Component {
               dragEventMealID = workout.meal_id
               dispatch(cutUserMealSchedule(dragEventMealID,dragEventDetailID,workout))
               ts('Meal cut!');
-            }else {
-            dispatch(cutUserWorkoutSchedule(_id, workout));
-            ts('Workout cut!');
-            }
+            }else if(dragEventType === SCHEDULED_BODY_MEASUREMENT) {
+              dispatch(cutUserBodyMeasurementSchedule(_id,workout))
+              ts('Body Measurement cut!')
+            } else {
+                dispatch(cutUserWorkoutSchedule(_id, workout));
+                ts('Workout cut!');
+              }
         }
       }else {
       tw("You are offline, please check your internet connection");
@@ -1360,7 +1455,7 @@ class ScheduleWorkoutCalendarPage extends Component {
 }
 
 const mapStateToProps = (state) => {
-    const { userScheduleWorkouts, userPrograms,userMeal} = state;
+    const { userBodyMeasurement,userScheduleWorkouts, userPrograms,userMeal} = state;
     return {
         selectedSlot: userScheduleWorkouts.get('slotInfo'),
         workouts: userScheduleWorkouts.get('workouts'),
@@ -1389,6 +1484,14 @@ const mapStateToProps = (state) => {
         cutMeal: userMeal.get('cutMeal'),
         cutMealData: userMeal.get('cutMealData'),
         cutMealDetailId: userMeal.get('cutMealDetailId'),
+        bodyLogDates: userBodyMeasurement.get('logDates'),
+        loadingLogDates: userBodyMeasurement.get('loadingLogDates'),
+        errorLogDates: userBodyMeasurement.get('errorLogDates'),
+        cutBodyMeasurement: userBodyMeasurement.get('cutBodyMeasurement'),
+        cutBodyMeasurementData: userBodyMeasurement.get('cutBodyMeasurementData'),
+        bodyMeasurementLoading: userBodyMeasurement.get('loading'),
+        bodyMeasurementError: userBodyMeasurement.get('updateMeasurementError'),
+
     };
 }
 
@@ -1444,7 +1547,10 @@ class CustomEventCard extends Component {
             }
             else if (event.isCompleted === 0 && yesturday > eventDate && event.exerciseType === SCHEDULED_MEAL) {
               cardClassName = 'past-meal w-c-lightgreen';
-          }
+            }
+            else if (event.isCompleted === 0 && yesturday > eventDate && event.exerciseType === SCHEDULED_BODY_MEASUREMENT) {
+              cardClassName = 'past-body w-c-lightblue';
+            }
             showCompleteSwitch = true;
         }
 
@@ -1464,7 +1570,7 @@ class CustomEventCard extends Component {
             >
                 <div className="big-calendar-custom-month-event-view-card-header">
                     <div className="pull-left custom_check p-relative" onClick={event.exerciseType !== SCHEDULED_MEAL ? event.handleSelectForBulkAction : undefined}>
-                       { event.exerciseType !== SCHEDULED_MEAL &&
+                       { event.exerciseType !== SCHEDULED_MEAL && event.exerciseType !== SCHEDULED_BODY_MEASUREMENT &&
                         <input
                             type="checkbox"
                             id={`complete_workout_schedule_${event.id}`}
@@ -1499,8 +1605,18 @@ class CustomEventCard extends Component {
                         {(event.exerciseType === SCHEDULED_MEAL) &&
                             <NavLink to={`${routeCodes.NUTRITION_EDIT}/${event.mealDetail_id}`} data-tip="Change" title=""><FaPencil /></NavLink>
                         }
+
+                        {/* {(event.exerciseType === SCHEDULED_BODY_MEASUREMENT) &&
+                            <a href="javascript:void(0)" data-tip="Copy" onClick={event.handleCopy} title=""><FaCopy /></a>
+                        }
+                        {(event.exerciseType === SCHEDULED_BODY_MEASUREMENT) &&
+                            <NavLink to={routeCodes.SAVE_SCHEDULE_WORKOUT.replace(':id', event.id)} data-tip="Details" title=""><FaEye /></NavLink>
+                        }
+                        {(event.exerciseType === SCHEDULED_BODY_MEASUREMENT) &&
+                            <NavLink to={routeCodes.SAVE_SCHEDULE_WORKOUT.replace(':id', event.id)} data-tip="Change" title=""><FaPencil /></NavLink>
+                        } */}
                         {
-                        event.exerciseType !== SCHEDULED_MEAL && <a href="javascript:void(0)" data-tip="Delete" data-for="event-delete-tooltip" onClick={event.handleDelete} title=""><FaTrash /></a>}
+                        event.exerciseType !== SCHEDULED_MEAL && event.exerciseType !== SCHEDULED_BODY_MEASUREMENT && <a href="javascript:void(0)" data-tip="Delete" data-for="event-delete-tooltip" onClick={event.handleDelete} title=""><FaTrash /></a>}
                     </div>
                 </div>
                 {event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE && showCompleteSwitch && typeof event.totalExercises !== 'undefined' && event.totalExercises > 0 &&
