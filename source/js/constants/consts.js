@@ -562,6 +562,7 @@ export const SCHEDULED_WORKOUT_TYPE_COOLDOWN = 'cooldown';
 export const SCHEDULED_WORKOUT_TYPE_RESTDAY = 'restday';
 export const SCHEDULED_MEAL = 'meal';
 export const SCHEDULED_BODY_MEASUREMENT = 'body_measurement'
+export const SCHEDULED_FITNESS_TEST = 'fitness_test'
 
 export const EXERCISE_MESUREMENT = 'exercise_mesurement';
 export const EXERCISE_NAMES = 'exercise_names';

@@ -19,6 +19,15 @@ function updateBodyMeasurementData(requestData) {
   );
 }
 
+function pasteBodyMeasurementData(requestData) {
+  let headers = extraUserHeaders();
+  return postFormData(
+    requestUrl + '/paste_body_measurement',
+    requestData,
+    headers,
+  );
+}
+
 function getBodyMeasurementLogDatesData(requestData) {
   let headers = extraUserHeaders();
   return postFormData(
@@ -46,6 +55,7 @@ function getProgressPhotosByDateData(requestData) {
 export default {
   getBodyMeasurementData,
   updateBodyMeasurementData,
+  pasteBodyMeasurementData,
   getBodyMeasurementLogDatesData,
   saveBodyMeasurementData,
   saveBodyFatData,

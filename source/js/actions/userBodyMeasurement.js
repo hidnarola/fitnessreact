@@ -12,6 +12,13 @@ export const UPDATE_USER_BODY_MEASUREMENT_SUCCESS =
 export const UPDATE_USER_BODY_MEASUREMENT_ERROR =
   'UPDATE_USER_BODY_MEASUREMENT_ERROR';
 
+export const PASTE_USER_BODY_MEASUREMENT_REQUEST =
+  'PASTE_USER_BODY_MEASUREMENT_REQUEST';
+export const PASTE_USER_BODY_MEASUREMENT_SUCCESS =
+  'PASTE_USER_BODY_MEASUREMENT_SUCCESS';
+export const PASTE_USER_BODY_MEASUREMENT_ERROR =
+  'PASTE_USER_BODY_MEASUREMENT_ERROR';
+
 export const GET_USER_BODY_MEASUREMENT_LOG_DATES_REQUEST =
   'GET_USER_BODY_MEASUREMENT_LOG_DATES_REQUEST';
 export const GET_USER_BODY_MEASUREMENT_LOG_DATES_SUCCESS =
@@ -42,6 +49,9 @@ export const SET_USER_BODY_MEASUREMENT_STATE =
 
 export const CUT_USER_BODY_MEASUREMENT_SCHEDULE =
   'CUT_USER_BODY_MEASUREMENT_SCHEDULE';
+
+export const COPY_USER_BODY_MEASUREMENT_SCHEDULE =
+  'COPY_USER_BODY_MEASUREMENT_SCHEDULE';
 
 export function getUserBodyMeasurementRequest(requestData) {
   return {
@@ -86,6 +96,32 @@ export function updateUserBodyMeasurementError(error) {
   console.log('Error ==> ', error);
   return {
     type: UPDATE_USER_BODY_MEASUREMENT_ERROR,
+    error: error.response.error,
+  };
+}
+export function pasteUserBodyMeasurementRequest(
+  requestData,
+  callback = res => {},
+) {
+  return {
+    type: PASTE_USER_BODY_MEASUREMENT_REQUEST,
+    requestData,
+    callback,
+  };
+}
+
+export function pasteUserBodyMeasurementSuccess(data) {
+  console.log('SUCCESS COPY ==> ', data);
+  return {
+    type: PASTE_USER_BODY_MEASUREMENT_SUCCESS,
+    data,
+  };
+}
+
+export function pasteUserBodyMeasurementError(error) {
+  console.log('Error ==> ', error.response);
+  return {
+    type: PASTE_USER_BODY_MEASUREMENT_ERROR,
     error: error.response.error,
   };
 }
@@ -189,5 +225,12 @@ export function cutUserBodyMeasurementSchedule(
     type: CUT_USER_BODY_MEASUREMENT_SCHEDULE,
     selectedData,
     bodyMeasurementData,
+  };
+}
+
+export function copyUserBodyMeasurementSchedule(selectedData) {
+  return {
+    type: COPY_USER_BODY_MEASUREMENT_SCHEDULE,
+    selectedData,
   };
 }

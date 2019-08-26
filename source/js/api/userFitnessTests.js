@@ -4,24 +4,31 @@ import { extraUserHeaders } from '../helpers/funs';
 const requestUrl = 'user/test_exercise';
 
 function getUserFitnessTests(date) {
-    let headers = extraUserHeaders();
-    var requestData = { date };
-    return postFormData(requestUrl + '/today', requestData, headers);
+  let headers = extraUserHeaders();
+  var requestData = { date };
+  return postFormData(requestUrl + '/today', requestData, headers);
+}
+
+function getUserFitnessTestsLogDates(date) {
+  let headers = extraUserHeaders();
+  var requestData = { date };
+  return postFormData(requestUrl + '/logdates', requestData, headers);
 }
 
 function saveUserFitnessTests(requestData) {
-    let headers = extraUserHeaders();
-    return postFormData(requestUrl, requestData, headers);
+  let headers = extraUserHeaders();
+  return postFormData(requestUrl, requestData, headers);
 }
 
 function resetUserFitnessTests(date) {
-    var requestData = { date };
-    let headers = extraUserHeaders();
-    return postFormData(requestUrl + '/reset', requestData, headers);
+  var requestData = { date };
+  let headers = extraUserHeaders();
+  return postFormData(requestUrl + '/reset', requestData, headers);
 }
 
 export default {
-    getUserFitnessTests,
-    saveUserFitnessTests,
-    resetUserFitnessTests,
-}
+  getUserFitnessTests,
+  getUserFitnessTestsLogDates,
+  saveUserFitnessTests,
+  resetUserFitnessTests,
+};

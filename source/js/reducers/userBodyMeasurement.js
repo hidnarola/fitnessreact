@@ -2,6 +2,10 @@ import {
   UPDATE_USER_BODY_MEASUREMENT_REQUEST,
   UPDATE_USER_BODY_MEASUREMENT_SUCCESS,
   UPDATE_USER_BODY_MEASUREMENT_ERROR,
+  COPY_USER_BODY_MEASUREMENT_SCHEDULE,
+  PASTE_USER_BODY_MEASUREMENT_REQUEST,
+  PASTE_USER_BODY_MEASUREMENT_SUCCESS,
+  PASTE_USER_BODY_MEASUREMENT_ERROR,
 } from './../actions/userBodyMeasurement';
 import { Map } from 'immutable';
 import {
@@ -38,6 +42,7 @@ const initialState = Map({
   logDates: [],
   cutBodyMeasurement: null,
   cutBodyMeasurementData: null,
+  copiedBodyMeasurement: null,
   updateMeasurementLoading: false,
   updateMeasurementError: [],
 });
@@ -268,6 +273,13 @@ const actionMap = {
       }),
     );
   },
+  [COPY_USER_BODY_MEASUREMENT_SCHEDULE]: (state, action) => {
+    return state.merge(
+      Map({
+        copiedBodyMeasurement: action.selectedData,
+      }),
+    );
+  },
   [UPDATE_USER_BODY_MEASUREMENT_REQUEST]: (state, action) => {
     return state.merge(
       Map({
@@ -284,6 +296,29 @@ const actionMap = {
     );
   },
   [UPDATE_USER_BODY_MEASUREMENT_ERROR]: (state, action) => {
+    return state.merge(
+      Map({
+        loading: false,
+        updateMeasurementError: [action.error],
+      }),
+    );
+  },
+  [PASTE_USER_BODY_MEASUREMENT_REQUEST]: (state, action) => {
+    return state.merge(
+      Map({
+        loading: true,
+        updateMeasurementError: [],
+      }),
+    );
+  },
+  [PASTE_USER_BODY_MEASUREMENT_SUCCESS]: (state, action) => {
+    return state.merge(
+      Map({
+        loading: false,
+      }),
+    );
+  },
+  [PASTE_USER_BODY_MEASUREMENT_ERROR]: (state, action) => {
     return state.merge(
       Map({
         loading: false,

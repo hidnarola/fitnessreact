@@ -20,6 +20,9 @@ import {
   UPDATE_USER_BODY_MEASUREMENT_REQUEST,
   updateUserBodyMeasurementSuccess,
   updateUserBodyMeasurementError,
+  PASTE_USER_BODY_MEASUREMENT_REQUEST,
+  pasteUserBodyMeasurementSuccess,
+  pasteUserBodyMeasurementError,
 } from '../actions/userBodyMeasurement';
 
 function fetchBodyMeasurementData() {
@@ -45,6 +48,20 @@ function updateBodyMeasurementData() {
       action.callback(data);
     } catch (error) {
       yield put(updateUserBodyMeasurementError(error));
+    }
+  };
+}
+
+function pasteBodyMeasurementData() {
+  return function*(action) {
+    try {
+      const data = yield call(() =>
+        api.pasteBodyMeasurementData(action.requestData),
+      );
+      yield put(pasteUserBodyMeasurementSuccess(data));
+      action.callback(data);
+    } catch (error) {
+      yield put(pasteUserBodyMeasurementError(error));
     }
   };
 }
@@ -105,6 +122,10 @@ export function* watchBodyMeasurementData() {
   yield takeLatest(
     UPDATE_USER_BODY_MEASUREMENT_REQUEST,
     updateBodyMeasurementData(),
+  );
+  yield takeLatest(
+    PASTE_USER_BODY_MEASUREMENT_REQUEST,
+    pasteBodyMeasurementData(),
   );
   yield takeLatest(
     GET_USER_BODY_MEASUREMENT_LOG_DATES_REQUEST,
