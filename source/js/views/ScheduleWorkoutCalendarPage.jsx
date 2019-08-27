@@ -1220,7 +1220,7 @@ class ScheduleWorkoutCalendarPage extends Component {
     }
 
     getWorkoutSchedulesByMonth =  (date = null) => {
-        const { calendarViewDate,display_all_exercises,display_all_nutrition,display_all_logs } = this.state;
+        const { calendarViewDate} = this.state;
         let _date = null;
         if (date) {
             _date = date;
@@ -1240,12 +1240,10 @@ class ScheduleWorkoutCalendarPage extends Component {
         }
         var today = moment().startOf('day').utc();
         if (isOnline()) {
-          dispatch(getUsersWorkoutSchedulesRequest(requestObj,null,(res) => {
+          dispatch(getUsersWorkoutSchedulesRequest(requestObj,null))
             dispatch(getUserMealsLogDatesRequest(requestData))
             dispatch(getUserBodyMeasurementLogDatesRequest(requestData));
             dispatch(getUserFitnessTestsLogDatesRequest(today))
-          }))
-
         } else {
             // get data from iDB
             this.getWorkoutsDataFromIDB()
@@ -1720,7 +1718,7 @@ class CustomEventCard extends Component {
             <div
                 id={`workout-card-${event.id}`}
                 className={
-                    cns(`big-calendar-custom-month-event-view-card ${cardClassName}`, {
+                    cns(`animated fadeIn big-calendar-custom-month-event-view-card ${cardClassName}`, {
                         'restday w-c-orange': (event.exerciseType === SCHEDULED_WORKOUT_TYPE_RESTDAY),
                         'loss-opacity': event.isCut,
                         'disable-overlay': event.isCutEnable,
