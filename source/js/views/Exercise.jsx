@@ -156,7 +156,7 @@ class Exercise extends Component {
         });
 
         if (isOnline()) {
-            // call online dispatchs 
+            // call online dispatchs
             const { dispatch, todaysWorkoutDate } = this.props;
             var date = todaysWorkoutDate;
             if (!date) {
@@ -284,11 +284,15 @@ class Exercise extends Component {
         }
         if (!loadingCalender && prevProps.loadingCalender !== loadingCalender) {
             // set calender data in db
-            this.setCalenderDataInDb()
+            if(isOnline()){
+              this.setCalenderDataInDb()
+            }
         }
         if (!firstWorkoutLoading && prevProps.firstWorkoutLoading !== firstWorkoutLoading) {
             // set firstworkout data in exercise table (IDB_TBL_EXERCISE)
-            this.setfirstWorkoutDataInDb(firstWorkoutId)
+            if(isOnline()){
+              this.setfirstWorkoutDataInDb(firstWorkoutId)
+            }
         }
     }
 
@@ -308,10 +312,12 @@ class Exercise extends Component {
                 }
             }
         } catch (error) {
+          console.log('IDB ERROR',error)
         }
     }
 
     setfirstWorkoutDataInDb = (firstWorkoutId) => {
+      try {
         const { logDate } = this.state;
         const transaction = this.iDB.transaction([IDB_TBL_EXERCISE], IDB_READ_WRITE);
         if (transaction) {
@@ -334,6 +340,9 @@ class Exercise extends Component {
                 }
             }
         }
+      }catch(error){
+        console.log(error)
+      }
     }
 
     refresh = () => {
