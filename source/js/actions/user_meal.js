@@ -26,7 +26,6 @@ export const SET_MEAL_DATA_IN_IDB = 'SET_MEAL_DATA_IN_IDB';
 export const SET_USER_MEAL = 'SET_USER_MEAL';
 
 export function userMealAddRequest(requestData, callback) {
-  console.log('action => ', requestData);
   return {
     type: USER_MEAL_ADD_REQUEST,
     requestData,
@@ -35,7 +34,6 @@ export function userMealAddRequest(requestData, callback) {
 }
 
 export function userMealAddSuccess(data) {
-  console.log('SUCCESS====>', data);
   ts('Meal Successfully Added');
   return {
     type: USER_MEAL_ADD_SUCCESS,
@@ -51,7 +49,6 @@ export function userMealAddError(error) {
 }
 
 export function userMealUpdateRequest(id, requestData, callback = res => {}) {
-  console.log('update action => ', requestData);
   return {
     type: USER_MEAL_UPDATE_REQUEST,
     id,
@@ -61,7 +58,6 @@ export function userMealUpdateRequest(id, requestData, callback = res => {}) {
 }
 
 export function userMealUpdateSuccess(data) {
-  console.log('SUCCESS====>', data);
   ts('Meal Successfully Added');
   return {
     type: USER_MEAL_UPDATE_SUCCESS,
@@ -84,7 +80,6 @@ export function getUserMealsLogDatesRequest(requestData) {
 }
 
 export function getUserMealsLogDatesSuccess(data) {
-  console.log('action===========>', data);
   return {
     type: GET_USER_MEALS_LOG_DATES_SUCCESS,
     data,
@@ -92,7 +87,6 @@ export function getUserMealsLogDatesSuccess(data) {
 }
 
 export function getUserMealsLogDatesError(error) {
-  console.log('Error=====>', error);
   return {
     type: GET_USER_MEALS_LOG_DATES_ERROR,
     error,
@@ -100,7 +94,6 @@ export function getUserMealsLogDatesError(error) {
 }
 
 export function getUserMealRequest(requestData) {
-  console.log('GET USER MEAL =======>', requestData);
   return {
     type: GET_USER_MEAL_REQUEST,
     requestData,
@@ -108,7 +101,6 @@ export function getUserMealRequest(requestData) {
 }
 
 export function getUserMealSuccess(data) {
-  console.log('GET USER MEAL action===========>', data);
   let meals = [];
   const { userMeals } = data;
   userMeals.forEach(item => {
@@ -125,7 +117,6 @@ export function getUserMealSuccess(data) {
 }
 
 export function getUserMealError(error) {
-  console.log('Error=====>', error);
   return {
     type: GET_USER_MEAL_ERROR,
     error,
@@ -157,7 +148,6 @@ export function setScheduleMealsState(stateData) {
 }
 
 export function setMealDatainIdb(data) {
-  console.log('IDB MEAL DATA', data);
   return {
     type: SET_MEAL_DATA_IN_IDB,
     data,

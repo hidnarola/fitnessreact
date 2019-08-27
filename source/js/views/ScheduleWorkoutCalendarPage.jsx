@@ -22,7 +22,7 @@ import {
 import { NavLink } from "react-router-dom";
 import { routeCodes } from '../constants/routes';
 import _ from "lodash";
-import { SCHEDULED_WORKOUT_TYPE_RESTDAY, SCHEDULED_WORKOUT_TYPE_EXERCISE, CALENDER_PROGRAMS, CALENDER_WORKOUTS, SCHEDULED_MEAL, CALENDER_MEALS, SCHEDULED_BODY_MEASUREMENT, SCHEDULED_FITNESS_TEST } from '../constants/consts';
+import { SCHEDULED_WORKOUT_TYPE_RESTDAY, SCHEDULED_WORKOUT_TYPE_EXERCISE, CALENDER_PROGRAMS, CALENDER_WORKOUTS, SCHEDULED_MEAL, CALENDER_MEALS, SCHEDULED_BODY_MEASUREMENT, SCHEDULED_FITNESS_TEST, CALENDER_BODY_MEASUREMENT } from '../constants/consts';
 import { ts, te, prepareDropdownOptionsData, capitalizeFirstLetter, getElementOffsetRelativeToBody, isOnline, tw, connectIDB } from '../helpers/funs';
 import { FaCopy, FaTrash, FaPencil, FaEye } from 'react-icons/lib/fa'
 import cns from "classnames";
@@ -125,6 +125,7 @@ class ScheduleWorkoutCalendarPage extends Component {
         var programOptions = prepareDropdownOptionsData(programs, '_id', 'name');
         var selectedEvents = _.filter(workoutEvents, ['isSelectedForBulkAction', true]);
         mealLoading ? dispatch(showPageLoader()) : dispatch(hidePageLoader())
+
 
         return (
             <div className="fitness-body">
@@ -607,9 +608,11 @@ class ScheduleWorkoutCalendarPage extends Component {
 
         }
 
-        if ((cutWorkout && prevProps.cutWorkout !== cutWorkout) || (cutMeal && prevProps.cutMeal !== cutMeal) || (cutBodyMeasurement && prevProps.cutBodyMeasurement !== cutBodyMeasurement)) {
+        if (
+          (cutWorkout && prevProps.cutWorkout !== cutWorkout) || (cutMeal && prevProps.cutMeal !== cutMeal) || (cutBodyMeasurement && prevProps.cutBodyMeasurement !== cutBodyMeasurement)
+          ) {
             var newWorkouts = [];
-            _.forEach(workouts, (workout, index) => {
+            display_all_exercises && _.forEach(workouts, (workout, index) => {
                 var newWorkout = {
                     id: workout._id,
                     title: (workout.title) ? workout.title : `Workout on ${(workout.date) ? moment(workout.date).format('DD/MM/YYYY') : ''}`,
@@ -633,7 +636,7 @@ class ScheduleWorkoutCalendarPage extends Component {
                 }
                 newWorkouts.push(newWorkout);
             });
-            _.forEach(logDates,(mealsLog,index1) => {
+            display_all_nutrition && _.forEach(logDates,(mealsLog,index1) => {
               console.log('MEALS===',mealsLog)
               _.forEach(mealsLog.meals,(meal,index) => {
               var mealDate = moment(mealsLog.date).format('DD/MM/YYYY')
@@ -665,7 +668,7 @@ class ScheduleWorkoutCalendarPage extends Component {
               })
             })
 
-            _.forEach(bodyLogDates,(bodyLog,index) => {
+            display_all_logs && _.forEach(bodyLogDates,(bodyLog,index) => {
               var newBodyMesurement = {
                 id: bodyLog._id,
                 title: 'Body Measurement',
@@ -689,6 +692,23 @@ class ScheduleWorkoutCalendarPage extends Component {
             }
               newWorkouts.push(newBodyMesurement);
             })
+
+            display_all_logs && _.forEach(userFitnessTestsLogdates, (fitnessTest, index) => {
+              var newWorkout = {
+                  id: fitnessTest.id,
+                  title : "Fitness Test",
+                  start: fitnessTest.logdate,
+                  end: fitnessTest.logdate,
+                  allDay: true,
+                  isCompleted: 0,
+                  exercises: [],
+                  exerciseType: SCHEDULED_FITNESS_TEST,
+                  totalExercises: 0,
+                  meta: fitnessTest,
+                  description: 'Fitness Test'
+              }
+              newWorkouts.push(newWorkout);
+          });
 
             this.setState({ workoutEvents: newWorkouts });
         }
@@ -871,6 +891,32 @@ class ScheduleWorkoutCalendarPage extends Component {
                         dispatch(setMealDatainIdb(data));
                     } else {
                         const data = { meals: [], error: [] }
+                        dispatch(setMealDatainIdb(data));
+                    }
+                }
+            }
+        } catch (error) {
+            const data = { meals: [], error: [] }
+            dispatch(setMealDatainIdb(data));
+        }
+    }
+
+    getBodyMeasurementDataFromIDB = () => {
+        const { dispatch } = this.props;
+        const idbTbls = [IDB_TBL_CALENDER];
+        try {
+            const transaction = this.iDB.transaction(idbTbls, IDB_READ);
+            if (transaction) {
+                const osCalender = transaction.objectStore(IDB_TBL_CALENDER);
+                const iDBGetReq = osCalender.get(CALENDER_BODY_MEASUREMENT);
+                iDBGetReq.onsuccess = (event) => {
+                    const { target: { result } } = event;
+                    if (result) {
+                        const resultObj = JSON.parse(result.data);
+                        const data = { body_measurement: resultObj, error: [] }
+                        dispatch(setMealDatainIdb(data));
+                    } else {
+                        const data = { body_measurement: [], error: [] }
                         dispatch(setMealDatainIdb(data));
                     }
                 }
@@ -1194,11 +1240,11 @@ class ScheduleWorkoutCalendarPage extends Component {
         }
         var today = moment().startOf('day').utc();
         if (isOnline()) {
-          console.log('Nutrition',display_all_nutrition)
-          display_all_exercises && dispatch(getUsersWorkoutSchedulesRequest(requestObj,null))
-          display_all_nutrition && dispatch(getUserMealsLogDatesRequest(requestData))
-              display_all_logs && dispatch(getUserBodyMeasurementLogDatesRequest(requestData));
-              display_all_logs && dispatch(getUserFitnessTestsLogDatesRequest(today))
+          dispatch(getUsersWorkoutSchedulesRequest(requestObj,null,(res) => {
+            dispatch(getUserMealsLogDatesRequest(requestData))
+            dispatch(getUserBodyMeasurementLogDatesRequest(requestData));
+            dispatch(getUserFitnessTestsLogDatesRequest(today))
+          }))
 
         } else {
             // get data from iDB

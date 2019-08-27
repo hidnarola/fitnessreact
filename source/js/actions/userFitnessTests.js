@@ -60,7 +60,6 @@ export function getUserFitnessTestsLogDatesRequest(today) {
 }
 
 export function getUserFitnessTestsLogDatesSuccess(data) {
-  console.log('FITNESS LOG DATES', data);
   return {
     type: GET_USER_FITNESS_TESTS_LOGDATES_SUCCESS,
     data,

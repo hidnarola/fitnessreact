@@ -217,6 +217,8 @@ export const WORKOUT_LOCATION_GYM = 'gym';
 export const CALENDER_PROGRAMS = 'programs';
 export const CALENDER_WORKOUTS = 'workouts';
 export const CALENDER_MEALS = 'meals';
+export const CALENDER_FITNESS_TEST = 'fitnes_test';
+export const CALENDER_BODY_MEASUREMENT = 'body_measurement';
 
 export const RECENT_MEALS = "recent_meals";
 export const USER_MEALS = 'meals';

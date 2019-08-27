@@ -9,20 +9,16 @@ const add_to_favourite_url = 'user/user_meals/add_to_favourite';
 const meal_request_by_id_url = 'user/meals/';
 
 function addMeal(requestData) {
-  console.log('api => ');
   let headers = extraUserHeaders();
   return postFormData(requestUrl, requestData, headers);
 }
 
 function editMeal(mealID, requestData) {
-  console.log('api => ');
   let headers = extraUserHeaders();
   return postFormData(`${requestUrl}/${mealID}`, requestData, headers);
 }
 
 function searchMeal(requestData) {
-  console.log('api => ', requestData);
-
   let headers = extraUserHeaders();
   var options = {
     method: 'POST',
@@ -33,8 +29,6 @@ function searchMeal(requestData) {
 }
 
 function addToFavourite(requestData) {
-  console.log('api => ', requestData);
-
   let headers = extraUserHeaders();
   var options = {
     method: 'POST',
@@ -45,8 +39,6 @@ function addToFavourite(requestData) {
 }
 
 function recentMeal() {
-  console.log('api => ');
-
   let headers = extraUserHeaders();
   var options = {
     method: 'GET',

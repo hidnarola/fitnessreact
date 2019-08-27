@@ -93,7 +93,6 @@ export function updateUserBodyMeasurementSuccess(data) {
 }
 
 export function updateUserBodyMeasurementError(error) {
-  console.log('Error ==> ', error);
   return {
     type: UPDATE_USER_BODY_MEASUREMENT_ERROR,
     error: error.response.error,
@@ -111,7 +110,6 @@ export function pasteUserBodyMeasurementRequest(
 }
 
 export function pasteUserBodyMeasurementSuccess(data) {
-  console.log('SUCCESS COPY ==> ', data);
   return {
     type: PASTE_USER_BODY_MEASUREMENT_SUCCESS,
     data,
@@ -119,7 +117,6 @@ export function pasteUserBodyMeasurementSuccess(data) {
 }
 
 export function pasteUserBodyMeasurementError(error) {
-  console.log('Error ==> ', error.response);
   return {
     type: PASTE_USER_BODY_MEASUREMENT_ERROR,
     error: error.response.error,

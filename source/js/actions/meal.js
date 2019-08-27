@@ -52,7 +52,6 @@ export function recentMealError(error) {
 }
 
 export function mealAddRequest(requestData) {
-  console.log('action => ');
   return {
     type: MEAL_ADD_REQUEST,
     requestData,
@@ -74,7 +73,6 @@ export function mealAddError(error) {
 }
 
 export function mealEditRequest(mealID, requestData) {
-  console.log('action => ');
   return {
     type: MEAL_EDIT_REQUEST,
     mealID,
@@ -83,7 +81,6 @@ export function mealEditRequest(mealID, requestData) {
 }
 
 export function mealEditSuccess(data) {
-  console.log('Edit MEAL SUCCESS ====> ', data);
   ts('Meal Successfully Updated');
   return {
     type: MEAL_EDIT_SUCCESS,
@@ -92,7 +89,6 @@ export function mealEditSuccess(data) {
 }
 
 export function mealEditError(error) {
-  console.log('Edit Meal error', error);
   te('Error while updating meal');
   return {
     type: MEAL_EDIT_ERROR,
@@ -101,7 +97,6 @@ export function mealEditError(error) {
 }
 
 export function mealSearchRequest(data) {
-  console.log('action => ');
   return {
     type: MEAL_SEARCH_REQUEST,
     data,
@@ -109,7 +104,6 @@ export function mealSearchRequest(data) {
 }
 
 export function mealSearchSuccess(data) {
-  console.log('action search success => ');
   return {
     type: MEAL_SEARCH_SUCCESS,
     data,
@@ -124,7 +118,6 @@ export function mealSearchError(error) {
 }
 
 export function addMealToFavouriteRequest(data) {
-  console.log('action => ');
   return {
     type: ADD_MEAL_TO_FAVOURITE_REQUEST,
     data,
@@ -132,7 +125,6 @@ export function addMealToFavouriteRequest(data) {
 }
 
 export function addMealToFavouriteSuccess(data) {
-  console.log('action search success => ');
   return {
     type: ADD_MEAL_TO_FAVOURITE_SUCCESS,
     data,
@@ -154,7 +146,6 @@ export function handleChnageSearchMeal(requestData) {
 }
 
 export function requestMealById(mealID) {
-  console.log('requestMealById===>', mealID);
   return {
     type: MEAL_REQUEST_BY_ID,
     mealID,
@@ -162,14 +153,12 @@ export function requestMealById(mealID) {
 }
 
 export function requestMealByIdSuccess(data) {
-  console.log('SUCCESS=====>', data);
   return {
     type: MEAL_REQUEST_BY_ID_SUCCESS,
     data,
   };
 }
 export function requestMealByIdError(error) {
-  console.log('ERROR====>', error);
   return {
     type: MEAL_REQUEST_BY_ID_ERROR,
     error,
