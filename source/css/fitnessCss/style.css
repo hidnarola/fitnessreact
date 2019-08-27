@@ -15229,7 +15229,12 @@ a.timline-post-edit-btn svg {
 .workout-calender  .rbc-time-view .rbc-time-content {
   display: none;
 }
-
+.custom_check_wrap{flex-wrap:wrap;margin:0 0 20px;}
+.custom_check_wrap .custom_check{margin:0 15px 15px 0;}
+.custom_check_wrap .custom_check [type="checkbox"]:not(:checked)+label:after,
+.custom_check_wrap .custom_check [type="checkbox"]:checked+label:after {
+  background: linear-gradient(123.28deg, #303583 0%, #303583 100%);
+}
 /*********************** Responsive **************************/
 
 @media(min-width: 992px) {

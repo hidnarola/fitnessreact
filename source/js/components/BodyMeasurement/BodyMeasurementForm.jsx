@@ -71,8 +71,12 @@ class BodyMeasurementForm extends Component {
     }
 
     componentWillMount() {
-        const { logDate } = this.state;
-        const { change, dispatch } = this.props;
+        let { logDate } = this.state;
+        const { change, dispatch,date } = this.props;
+        if(date){
+          logDate = date
+          this.setState({logDate})
+        }
         change('log_date', logDate);
         let requestData = { logDate }
         if (isOnline()) {

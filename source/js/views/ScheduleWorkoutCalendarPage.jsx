@@ -175,6 +175,7 @@ class ScheduleWorkoutCalendarPage extends Component {
                                             <ReactTooltip id='event-bulk-incomplete-tooltip' place="top" type="warning" effect="solid" />
                                         </div>
                                     }
+                                    <div className="d-flex custom_check_wrap">
                                     <div className="custom_check">
                                       <input
                                         type="checkbox"
@@ -204,6 +205,7 @@ class ScheduleWorkoutCalendarPage extends Component {
                                         onChange={() => this.handleChangeCheckbox('display_all_logs')}
                                       />
                                       <label htmlFor="display_all_logs">Logs</label>
+                                      </div>
                                       </div>
                                     <BigCalendar
                                         selectable={true}
@@ -471,7 +473,6 @@ class ScheduleWorkoutCalendarPage extends Component {
             display_all_nutrition,
             display_all_exercises
         } = this.state;
-        console.log('PREV State',prevState)
         if (!loadingPrograms && prevProps.loadingPrograms !== loadingPrograms) {
             // store programs in iDB names
             this.storeProgramDataInIDB()
@@ -482,13 +483,19 @@ class ScheduleWorkoutCalendarPage extends Component {
           //this.getWorkoutSchedulesByMonth();
         }
 
-        if (
-          ((!loading && prevProps.workouts !== workouts) || (prevState.display_all_exercises !== display_all_exercises)) ||
-          (!mealLoading && prevProps.logDates !== logDates) ||
-          (!loadingLogDates && prevProps.bodyLogDates !== bodyLogDates) || (!userFitnessTestsLoading && prevProps.userFitnessTestsLogdates !== userFitnessTestsLogdates)
+        console.log('prevState',prevState)
+        console.log('CurrrentState',this.state)
 
+        if (
+          (
+            (prevState.display_all_exercises !== display_all_exercises) ||
+            (prevState.display_all_nutrition !== display_all_nutrition) ||
+            (prevState.display_all_logs !== display_all_logs)
+          ) ||
+          ((!loading && prevProps.workouts !== workouts) ||
+          (!mealLoading && prevProps.logDates !== logDates) ||
+          (!loadingLogDates && prevProps.bodyLogDates !== bodyLogDates) || (!userFitnessTestsLoading && prevProps.userFitnessTestsLogdates !== userFitnessTestsLogdates))
           ){
-            console.log('CALL in UPDATE')
             var newWorkouts = [];
             display_all_exercises && _.forEach(workouts, (workout, index) => {
                 var newWorkout = {
@@ -516,7 +523,7 @@ class ScheduleWorkoutCalendarPage extends Component {
                 newWorkouts.push(newWorkout);
             });
 
-            _.forEach(logDates,(mealsLog,index1) => {
+            display_all_nutrition && _.forEach(logDates,(mealsLog,index1) => {
               _.forEach(mealsLog.meals,(meal,index) => {
               var mealDate = moment(mealsLog.date).format('DD/MM/YYYY')
               var todayDate = moment(new Date()).format('DD/MM/YYYY')
@@ -524,7 +531,7 @@ class ScheduleWorkoutCalendarPage extends Component {
                 id: `${index1}${index}`,
                 meal_id: mealsLog._id,
                 mealDetail_id: meal._id,
-                title: `${meal.meals_type}`,
+                title: `Meal`,
                 start: mealsLog.date,
                 end: mealsLog.date,
                 allDay: true,
@@ -547,7 +554,7 @@ class ScheduleWorkoutCalendarPage extends Component {
               })
             })
 
-            _.forEach(bodyLogDates,(bodyLog,index) => {
+            display_all_logs && _.forEach(bodyLogDates,(bodyLog,index) => {
               var newBodyMesurement = {
                 id: bodyLog._id,
                 title: 'Body Measurement',
@@ -572,7 +579,7 @@ class ScheduleWorkoutCalendarPage extends Component {
               newWorkouts.push(newBodyMesurement);
             })
 
-            _.forEach(userFitnessTestsLogdates, (fitnessTest, index) => {
+            display_all_logs && _.forEach(userFitnessTestsLogdates, (fitnessTest, index) => {
               var newWorkout = {
                   id: fitnessTest.id,
                   title : "Fitness Test",
@@ -1165,8 +1172,8 @@ class ScheduleWorkoutCalendarPage extends Component {
         dispatch(setSelectedSlotFromCalendar(null));
     }
 
-    getWorkoutSchedulesByMonth = async (date = null) => {
-        const { calendarViewDate } = this.state;
+    getWorkoutSchedulesByMonth =  (date = null) => {
+        const { calendarViewDate,display_all_exercises,display_all_nutrition,display_all_logs } = this.state;
         let _date = null;
         if (date) {
             _date = date;
@@ -1186,11 +1193,12 @@ class ScheduleWorkoutCalendarPage extends Component {
         }
         var today = moment().startOf('day').utc();
         if (isOnline()) {
-            await dispatch(getUsersWorkoutSchedulesRequest(requestObj,null,(res) => {
-              dispatch(getUserMealsLogDatesRequest(requestData))
-              dispatch(getUserBodyMeasurementLogDatesRequest(requestData));
-              dispatch(getUserFitnessTestsLogDatesRequest(today))
-            }));
+          console.log('Nutrition',display_all_nutrition)
+          display_all_exercises && dispatch(getUsersWorkoutSchedulesRequest(requestObj,null))
+          display_all_nutrition && dispatch(getUserMealsLogDatesRequest(requestData))
+              display_all_logs && dispatch(getUserBodyMeasurementLogDatesRequest(requestData));
+              display_all_logs && dispatch(getUserFitnessTestsLogDatesRequest(today))
+
         } else {
             // get data from iDB
             this.getWorkoutsDataFromIDB()
@@ -1488,9 +1496,7 @@ class ScheduleWorkoutCalendarPage extends Component {
         this.changeAllWorkoutCheckedStatus(selectStatus);
     }
     handleChangeCheckbox = (name) => {
-      let stateData = this.state
-      stateData[name] = !stateData[name]
-      this.setState({stateData})
+      this.setState({ [name] : !this.state[name],workoutEvents:[] })
     }
 
     changeAllWorkoutCheckedStatus = (checked) => {
@@ -1660,7 +1666,8 @@ class CustomEventCard extends Component {
             }
             showCompleteSwitch = true;
         }
-
+        const date = new Date(eventDate).toISOString()
+        const encode = encodeURIComponent(`date=${date}`)
 
         return (
             <div
@@ -1723,7 +1730,7 @@ class CustomEventCard extends Component {
                             <a href="javascript:void(0)" data-tip="Copy" onClick={event.handleCopy} title=""><FaCopy /></a>
                         }
                         {(event.exerciseType === SCHEDULED_BODY_MEASUREMENT) &&
-                            <NavLink to={routeCodes.BODY} data-tip="Details" title=""><FaEye /></NavLink>
+                            <NavLink to={`${routeCodes.BODY}?${encode}`} data-tip="Details" title=""><FaEye /></NavLink>
                         }
                         {/* {(event.exerciseType === SCHEDULED_BODY_MEASUREMENT) &&
                             <NavLink to={routeCodes.SAVE_SCHEDULE_WORKOUT.replace(':id', event.id)} data-tip="Change" title=""><FaPencil /></NavLink>
