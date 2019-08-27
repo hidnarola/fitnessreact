@@ -37,7 +37,7 @@ import $ from "jquery";
 import { IDB_TBL_CALENDER, IDB_READ_WRITE, IDB_READ } from '../constants/idb';
 import AddMetaDescription from '../components/global/AddMetaDescription';
 import { getUserMealsLogDatesRequest, userMealUpdateRequest, copyUserMealSchedule, cutUserMealSchedule, setScheduleMealsState, setMealDatainIdb } from '../actions/user_meal';
-import { getUserBodyMeasurementLogDatesRequest, cutUserBodyMeasurementSchedule, updateUserBodyMeasurementRequest, setUserBodyMeasurementState, copyUserBodyMeasurementSchedule, pasteUserBodyMeasurementRequest } from '../actions/userBodyMeasurement';
+import { getUserBodyMeasurementLogDatesRequest, cutUserBodyMeasurementSchedule, updateUserBodyMeasurementRequest, setUserBodyMeasurementState, copyUserBodyMeasurementSchedule, pasteUserBodyMeasurementRequest, setBodyMeasurementDatainIdb } from '../actions/userBodyMeasurement';
 import { getUserFitnessTestsLogDatesRequest } from '../actions/userFitnessTests';
 
 let dragEventActive = false;
@@ -424,6 +424,7 @@ class ScheduleWorkoutCalendarPage extends Component {
             // get data from iDB
             this.getWorkoutsDataFromIDB()
             this.getMealsDataFromIDB()
+            this.getBodyMeasurementDataFromIDB()
             this.getProgramsDataFromIDB()
         }
     }
@@ -604,6 +605,7 @@ class ScheduleWorkoutCalendarPage extends Component {
             if (isOnline()) {
                 this.storeWorkoutDataInIDB()
                 this.storeMealDataInIDB()
+                this.storeBodyMeasurementDataInIDB()
             }
 
         }
@@ -914,16 +916,16 @@ class ScheduleWorkoutCalendarPage extends Component {
                     if (result) {
                         const resultObj = JSON.parse(result.data);
                         const data = { body_measurement: resultObj, error: [] }
-                        dispatch(setMealDatainIdb(data));
+                        dispatch(setBodyMeasurementDatainIdb(data));
                     } else {
                         const data = { body_measurement: [], error: [] }
-                        dispatch(setMealDatainIdb(data));
+                        dispatch(setBodyMeasurementDatainIdb(data));
                     }
                 }
             }
         } catch (error) {
-            const data = { meals: [], error: [] }
-            dispatch(setMealDatainIdb(data));
+            const data = { body_measurement: [], error: [] }
+            dispatch(setBodyMeasurementDatainIdb(data));
         }
     }
 
@@ -1000,6 +1002,26 @@ class ScheduleWorkoutCalendarPage extends Component {
         const transaction = this.iDB.transaction([IDB_TBL_CALENDER],IDB_READ_WRITE)
         const objectStore = transaction.objectStore(IDB_TBL_CALENDER)
         const iDBGetReq = objectStore.get(CALENDER_MEALS)
+        iDBGetReq.onsuccess = (event) => {
+          const {target : {result}} = event
+          if(result){
+            objectStore.put(idbData)
+          }else {
+            objectStore.add(idbData)
+          }
+        }
+      }catch(error){
+      }
+    }
+
+    storeBodyMeasurementDataInIDB = () => {
+      const {bodyLogDates} = this.props
+      console.log('Store Data in IDB',bodyLogDates)
+      try {
+        const idbData = { type : CALENDER_BODY_MEASUREMENT, data : JSON.stringify(bodyLogDates)}
+        const transaction = this.iDB.transaction([IDB_TBL_CALENDER],IDB_READ_WRITE)
+        const objectStore = transaction.objectStore(IDB_TBL_CALENDER)
+        const iDBGetReq = objectStore.get(CALENDER_BODY_MEASUREMENT)
         iDBGetReq.onsuccess = (event) => {
           const {target : {result}} = event
           if(result){
@@ -1248,6 +1270,7 @@ class ScheduleWorkoutCalendarPage extends Component {
             // get data from iDB
             this.getWorkoutsDataFromIDB()
             this.getMealsDataFromIDB()
+            this.getBodyMeasurementDataFromIDB()
         }
     }
 
@@ -1654,6 +1677,7 @@ export default connect(
 class SelectEventView extends Component {
     render() {
         const { handleAddWorkout, handleNewRestDay, handlePaste, handlePasteMeal, handleSelectProgramToAssign,copiedWorkout,copiedMealId,selectedSlotStateDate,handlePasteBodyMeasurement,copiedBodyMeasurement } = this.props;
+        const today = new Date().toISOString()
         const date = new Date(selectedSlotStateDate).toISOString()
         const encode = encodeURIComponent(`date=${date}`)
         return (
@@ -1668,18 +1692,27 @@ class SelectEventView extends Component {
                     <div className="popup-link">
                         <button type="button" onClick={handleSelectProgramToAssign} className="btn btn-primary">Assign Program</button>
                     </div>
+                    {copiedWorkout &&
                     <div className="popup-link">
                         <button type="button" onClick={handlePaste} className="btn btn-primary" disabled={copiedWorkout ? false : true}>Paste Workout</button>
                     </div>
+                    }
                     <div className="popup-link">
                         <NavLink to={`${routeCodes.NUTRITION}?${encode}`} className="btn btn-primary">Add Meal</NavLink>
                     </div>
+                    {copiedMealId &&
                     <div className="popup-link">
                         <button type="button" onClick={handlePasteMeal} className="btn btn-primary" disabled={copiedMealId ? false : true}>Paste Meal</button>
-                    </div>
+                    </div>}
+
+                    {date <= today &&
+                    <React.Fragment>
                     <div className="popup-link">
-                        <button type="button" onClick={handlePasteBodyMeasurement} className="btn btn-primary" disabled={copiedBodyMeasurement ? false : true}>Paste Body Measurement</button>
+                        <NavLink to={`${routeCodes.BODY}?${encode}`} className="btn btn-primary">Add Body Measurement</NavLink>
                     </div>
+                     {copiedBodyMeasurement && <div className="popup-link">
+                        <button type="button" onClick={handlePasteBodyMeasurement} className="btn btn-primary" disabled={copiedBodyMeasurement ? false : true}>Paste Body Measurement</button>
+                    </div>}</React.Fragment> }
                 </div>
             </div>
         );

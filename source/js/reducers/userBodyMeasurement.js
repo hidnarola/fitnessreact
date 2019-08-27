@@ -6,6 +6,7 @@ import {
   PASTE_USER_BODY_MEASUREMENT_REQUEST,
   PASTE_USER_BODY_MEASUREMENT_SUCCESS,
   PASTE_USER_BODY_MEASUREMENT_ERROR,
+  SET_BODY_MEASUREMENT_DATA_IN_IDB,
 } from './../actions/userBodyMeasurement';
 import { Map } from 'immutable';
 import {
@@ -323,6 +324,15 @@ const actionMap = {
       Map({
         loading: false,
         updateMeasurementError: [action.error],
+      }),
+    );
+  },
+  [SET_BODY_MEASUREMENT_DATA_IN_IDB]: (state, action) => {
+    console.log('Call Offline mode');
+    return state.merge(
+      Map({
+        logDates: action.data.body_measurement,
+        logDatesError: action.data.error,
       }),
     );
   },

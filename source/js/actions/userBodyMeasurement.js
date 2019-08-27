@@ -53,6 +53,9 @@ export const CUT_USER_BODY_MEASUREMENT_SCHEDULE =
 export const COPY_USER_BODY_MEASUREMENT_SCHEDULE =
   'COPY_USER_BODY_MEASUREMENT_SCHEDULE';
 
+export const SET_BODY_MEASUREMENT_DATA_IN_IDB =
+  'SET_BODY_MEASUREMENT_DATA_IN_IDB';
+
 export function getUserBodyMeasurementRequest(requestData) {
   return {
     type: GET_USER_BODY_MEASUREMENT_REQUEST,
@@ -229,5 +232,12 @@ export function copyUserBodyMeasurementSchedule(selectedData) {
   return {
     type: COPY_USER_BODY_MEASUREMENT_SCHEDULE,
     selectedData,
+  };
+}
+
+export function setBodyMeasurementDatainIdb(data) {
+  return {
+    type: SET_BODY_MEASUREMENT_DATA_IN_IDB,
+    data,
   };
 }
