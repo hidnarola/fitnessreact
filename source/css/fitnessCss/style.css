@@ -15235,6 +15235,7 @@ a.timline-post-edit-btn svg {
 .custom_check_wrap .custom_check [type="checkbox"]:checked+label:after {
   background: linear-gradient(123.28deg, #303583 0%, #303583 100%);
 }
+.custom_check_wrap h5{line-height: 1.5em;margin: 0 10px 0 0;font-weight: 700;}
 /*********************** Responsive **************************/
 
 @media(min-width: 992px) {

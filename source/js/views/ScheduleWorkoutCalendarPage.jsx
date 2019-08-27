@@ -176,6 +176,7 @@ class ScheduleWorkoutCalendarPage extends Component {
                                         </div>
                                     }
                                     <div className="d-flex custom_check_wrap">
+                                    <h5 className="mr-2">Display : </h5>
                                     <div className="custom_check">
                                       <input
                                         type="checkbox"
