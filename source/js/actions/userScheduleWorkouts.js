@@ -17,6 +17,13 @@ export const GET_USERS_WORKOUT_SCHEDULE_SUCCESS =
 export const GET_USERS_WORKOUT_SCHEDULE_ERROR =
   'GET_USERS_WORKOUT_SCHEDULE_ERROR';
 
+export const GET_USERS_WORKOUT_OVERVIEW_REQUEST =
+  'GET_USERS_WORKOUT_OVERVIEW_REQUEST';
+export const GET_USERS_WORKOUT_OVERVIEW_SUCCESS =
+  'GET_USERS_WORKOUT_OVERVIEW_SUCCESS';
+export const GET_USERS_WORKOUT_OVERVIEW_ERROR =
+  'GET_USERS_WORKOUT_OVERVIEW_ERROR';
+
 export const GET_EXERCISES_NAME_REQUEST = 'GET_EXERCISES_NAME_REQUEST';
 export const GET_EXERCISES_NAME_SUCCESS = 'GET_EXERCISES_NAME_SUCCESS';
 export const GET_EXERCISES_NAME_ERROR = 'GET_EXERCISES_NAME_ERROR';
@@ -199,6 +206,27 @@ export function getUsersWorkoutScheduleSuccess(data) {
 export function getUsersWorkoutScheduleError(error) {
   return {
     type: GET_USERS_WORKOUT_SCHEDULE_ERROR,
+    error,
+  };
+}
+
+export function getUsersWorkoutOverviewRequest(date) {
+  return {
+    type: GET_USERS_WORKOUT_OVERVIEW_REQUEST,
+    date,
+  };
+}
+
+export function getUsersWorkoutOverviewSuccess(data) {
+  return {
+    type: GET_USERS_WORKOUT_OVERVIEW_SUCCESS,
+    data,
+  };
+}
+
+export function getUsersWorkoutOverviewError(error) {
+  return {
+    type: GET_USERS_WORKOUT_OVERVIEW_ERROR,
     error,
   };
 }
@@ -516,11 +544,16 @@ export function changeUsersWorkoutFormAction(action = 'add', data = null) {
   };
 }
 
-export function getUserFirstWorkoutByDateRequest(requestData, username = null) {
+export function getUserFirstWorkoutByDateRequest(
+  requestData,
+  username = null,
+  callback = res => {},
+) {
   return {
     type: GET_USER_FIRST_WORKOUT_BY_DATE_REQUEST,
     requestData,
     username,
+    callback,
   };
 }
 

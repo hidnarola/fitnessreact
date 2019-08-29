@@ -68,6 +68,7 @@ export const routeCodes = {
 
   //Calendar Route
   CALENDAR: `${publicPath}calendar`,
+  CALENDAR_OVERVIEW: `${publicPath}calendar/overview`,
 
   //Progress Route
   PROGRESS: `${publicPath}progress`,

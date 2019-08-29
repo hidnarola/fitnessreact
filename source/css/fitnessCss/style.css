@@ -633,11 +633,16 @@ h3.title-h3 {
     padding: 0;
     margin: 0;
 }
-
+.custome_header {
+  flex-direction: row-reverse;
+}
+.custome_header .body-head-r {
+  margin: 2px auto 0 0;
+}
 .body-head-r {
     width: 30%;
     max-width: 310px;
-    margin: 23px 0px 0 auto;
+    margin: 2px 0px 0 auto;
 }
 
 .body-head-r a,
@@ -15236,6 +15241,83 @@ a.timline-post-edit-btn svg {
   background: linear-gradient(123.28deg, #303583 0%, #303583 100%);
 }
 .custom_check_wrap h5{line-height: 1.5em;margin: 0 10px 0 0;font-weight: 700;}
+
+.workouts-bg .tab-content h3 {
+  display: block;
+  font-family: 'gt_walsheim_proregular';
+  color:#2F3684;
+  margin: 0 0 30px;
+  line-height: 1;
+  font-weight: 900;
+}
+.workouts-bg .white-box .whitebox-head {
+  margin-bottom: 0px;
+  align-items: center;
+}
+.workouts-bg .white-box .whitebox-head h3 {
+  display: block;
+  font-family: 'gt_walsheim_proregular';
+  color:#2F3684;
+  margin: 0;
+  line-height: 1;
+  font-weight: 900;
+}
+
+.workouts-bg .white-box .whitebox-head .switch-wrap {
+  background: none;
+  box-shadow: none;
+  padding:0;
+}
+
+.workouts-bg .white-box .navbar-running {
+  margin: 20px 0 40px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.workouts-bg .white-box .excercise-boxs {
+  display: flex;
+  flex-wrap: wrap;
+  background: #eee;
+  border-radius: 10px;
+  margin-bottom:20px;
+}
+.workouts-bg .white-box .excercise-boxs .topbar-title {
+  display: flex;
+  flex-wrap: wrap;
+  width:100%;
+  padding:1.5em;
+  align-items: center;
+}
+.workouts-bg .white-box .excercise-boxs .topbar-title h3 {
+  margin:0px;
+}
+.workouts-bg .white-box .excercise-boxs .topbar-title .btn-toolbar .dropdown .dropdown-toggle {
+  border: 0;
+  padding: 0;
+  line-height: 1;
+  background: none;
+}
+.workouts-bg .white-box .excercise-boxs .list-boxs {
+  margin: 0px;
+  width:100%;
+}
+.workouts-bg .white-box .excercise-boxs .list-boxs ul {
+  margin: 0px;
+  padding: 0px;
+}
+.workouts-bg .white-box .excercise-boxs .list-boxs ul li {
+  padding: 0.8em 1.5em;
+  font-size: 18px;
+  display: flex;
+  flex-wrap: wrap;
+  border-top: solid 2px #fff;
+  color:#2F3684;
+  font-family: 'gt_walsheim_proregular';
+  font-weight: 500;
+}
+
+
 /*********************** Responsive **************************/
 
 @media(min-width: 992px) {

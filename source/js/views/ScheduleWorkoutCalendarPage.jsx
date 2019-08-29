@@ -1111,8 +1111,8 @@ class ScheduleWorkoutCalendarPage extends Component {
     onSelectSlot = async (slotInfo) => {
       if(isOnline()){
       console.log('ON SelectSlot Call',slotInfo)
-        const { dispatch, cutWorkout,cutMeal,cutMealDetailId,cutBodyMeasurement } = this.props;
-        console.log('cutBodyMeasurement',cutBodyMeasurement)
+        const { dispatch, cutWorkout,cutMeal,cutMealDetailId,cutBodyMeasurement,copiedWorkout,copiedBodyMeasurement,copiedMealId } = this.props;
+
         if (dragEventId) {
             hardResetContainer = false;
             if (dragEventCardOutside) {
@@ -1188,10 +1188,11 @@ class ScheduleWorkoutCalendarPage extends Component {
             };
             dispatch(updateUserBodyMeasurementRequest(requestData));
             this.setState({ workoutPasteAction: true });
-        } else {
-          console.log('SELECT SLOT')
-            this.setState({ showSelectEventAlert: true });
+        } else if(copiedWorkout || copiedMealId || copiedBodyMeasurement) {
+          this.setState({ showSelectEventAlert: true });
             dispatch(setSelectedSlotFromCalendar(slotInfo));
+        } else {
+          this.props.history.push(routeCodes.CALENDAR_OVERVIEW);
         }
       }else {
         tw("You are offline, please check your internet connection");
@@ -1713,6 +1714,9 @@ class SelectEventView extends Component {
                      {copiedBodyMeasurement && <div className="popup-link">
                         <button type="button" onClick={handlePasteBodyMeasurement} className="btn btn-primary" disabled={copiedBodyMeasurement ? false : true}>Paste Body Measurement</button>
                     </div>}</React.Fragment> }
+                    <div className="popup-link">
+                        <NavLink to={`${routeCodes.CALENDAR_OVERVIEW}?${encode}`} className="btn btn-primary">Day Overview</NavLink>
+                    </div>
                 </div>
             </div>
         );

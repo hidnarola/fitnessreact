@@ -66,7 +66,10 @@ import {
     REORDER_WORKOUT_EXERCISES,
     SET_SCHEDULE_WORKOUTS_STATE,
     CUT_USER_WORKOUT_SCHEDULE,
-    SET_DATA_IN_IDB
+    SET_DATA_IN_IDB,
+    GET_USERS_WORKOUT_OVERVIEW_REQUEST,
+    GET_USERS_WORKOUT_OVERVIEW_SUCCESS,
+    GET_USERS_WORKOUT_OVERVIEW_ERROR
 } from "../actions/userScheduleWorkouts";
 import { VALIDATION_FAILURE_STATUS, SCHEDULED_WORKOUT_TYPE_WARMUP, SCHEDULED_WORKOUT_TYPE_EXERCISE, SCHEDULED_WORKOUT_TYPE_COOLDOWN } from "../constants/consts";
 import { generateValidationErrorMsgArr, createNewStateForWorkout } from "../helpers/funs";
@@ -762,7 +765,42 @@ const actionMap = {
     [SET_DATA_IN_IDB]: (state, action) => {
         console.log('action.data => ',action.data);
         return state.merge(Map(action.data));
-    }
+    },
+    [GET_USERS_WORKOUT_OVERVIEW_REQUEST]: (state, action) => {
+      return state.merge(Map({
+          loading: true,
+          error: [],
+          workoutsList: []
+      }));
+  },
+  [GET_USERS_WORKOUT_OVERVIEW_SUCCESS]: (state, action) => {
+      console.log('DATA ====> ',action.data)
+      var newState = {
+          loading: false,
+      };
+      if (action.data.status === 1) {
+          newState.workoutsList = action.data.workouts;
+      } else {
+          var msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
+          newState.error = [msg];
+      }
+      return state.merge(Map(newState));
+  },
+  [GET_USERS_WORKOUT_OVERVIEW_ERROR]: (state, action) => {
+      let error = [];
+      if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+          error = generateValidationErrorMsgArr(action.error.response.message);
+      } else if (action.error && action.error.message) {
+          error = [action.error.message];
+      } else {
+          error = ['Something went wrong! please try again later'];
+      }
+      return state.merge(Map({
+          loading: false,
+          error: error,
+          workoutsList:[]
+      }));
+  },
 }
 
 function reorderExercises(workout, newOrder) {

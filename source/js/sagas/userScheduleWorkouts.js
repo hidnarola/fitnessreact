@@ -58,6 +58,9 @@ import {
   REORDER_WORKOUT_EXERCISES_REQUEST,
   reorderWorkoutExercisesSuccess,
   reorderWorkoutExercisesError,
+  GET_USERS_WORKOUT_OVERVIEW_REQUEST,
+  getUsersWorkoutOverviewSuccess,
+  getUsersWorkoutOverviewError,
 } from '../actions/userScheduleWorkouts';
 
 function getUsersWorkoutSchedulesByMonthData() {
@@ -85,6 +88,18 @@ function getUsersWorkoutScheduleData() {
       yield put(getUsersWorkoutScheduleSuccess(data));
     } catch (error) {
       yield put(getUsersWorkoutScheduleError(error));
+    }
+  };
+}
+
+function getUsersWorkoutOverviewData() {
+  return function*(action) {
+    try {
+      let requestData = { date: action.date };
+      const data = yield call(() => api.getUsersWorkoutOverview(requestData));
+      yield put(getUsersWorkoutOverviewSuccess(data));
+    } catch (error) {
+      yield put(getUsersWorkoutOverviewError(error));
     }
   };
 }
@@ -263,6 +278,7 @@ function getUserFirstWorkoutByDateData() {
         api.getUserFirstWorkoutByDate(requestData, username),
       );
       yield put(getUserFirstWorkoutByDateSuccess(data));
+      action.callback(data);
     } catch (error) {
       yield put(getUserFirstWorkoutByDateError(error));
     }
@@ -316,6 +332,10 @@ export function* watchUsersWorkoutSchedulesData() {
   yield takeLatest(
     GET_USERS_WORKOUT_SCHEDULE_REQUEST,
     getUsersWorkoutScheduleData(),
+  );
+  yield takeLatest(
+    GET_USERS_WORKOUT_OVERVIEW_REQUEST,
+    getUsersWorkoutOverviewData(),
   );
   yield takeLatest(GET_EXERCISES_NAME_REQUEST, getExercisesName());
   yield takeLatest(

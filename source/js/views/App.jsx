@@ -108,6 +108,7 @@ import ViewScheduleWorkout from '../components/Profile/ViewScheduleWorkout';
 import initIDBSchema from '../helpers/idbInitialiser';
 import NutritionMealEdit from '../components/Nutrition/NutritionMealEdit';
 import NutritionMealView from '../components/Nutrition/NutritionMealView';
+import CalendarDayOverView from '../components/Calendar/CalendarDayOverView';
 JavascriptTimeAgo.locale(en);
 
 const auth = new Auth();
@@ -207,6 +208,8 @@ class App extends Component {
                                 <PrivateRoute path={routeCodes.NUTRITIONSHOP} component={NutritionShopping} />
 
                                 <PrivateRoute exact path={routeCodes.CALENDAR} component={ScheduleWorkoutCalendarPage} />
+
+                                <PrivateRoute exact path={routeCodes.CALENDAR_OVERVIEW} component={CalendarDayOverView} />
 
                                 <PrivateRoute path={routeCodes.BADGES} component={Badges} />
 
