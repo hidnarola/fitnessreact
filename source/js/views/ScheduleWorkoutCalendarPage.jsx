@@ -84,6 +84,7 @@ class ScheduleWorkoutCalendarPage extends Component {
             display_all_exercises: true,
             display_all_nutrition: true,
             display_all_logs: true,
+            cuurentTab:"#weekview"
         }
         this.iDB;
     }
@@ -134,49 +135,58 @@ class ScheduleWorkoutCalendarPage extends Component {
                 </AddMetaDescription>
                 <FitnessHeader />
                 <FitnessNav />
-                <section className="body-wrap">
-                    <div className="body-head d-flex justify-content-start front-white-header">
-                        <div className="body-head-l">
+                <section className="body-wrap nutrition-todays-meal-section">
+                    <div className="body-head d-flex justify-content-start front-white-header custome_header">
+                        {/* <div className="body-head-l">
                             <h2>Calendar</h2>
                             <p>Your goal choice shapes how your fitness assistant will ceate your meal and exercise plans, it’s important that you set goals which are achieveable. Keep updating your profile and your fitness assistant will keep you on track and meeting the goals you’ve set out for yourself.</p>
-                        </div>
-
-                    </div>
+                        </div> */}
+                        <div className="body-head-l">
+                            <div className="tabs">
+                            <div
+                              className={this.state.cuurentTab === '#weekview'
+                              ? 'tab active'
+                              : 'tab '
+                              }
+                              id="weekview"
+                  >
+                    <a
+                      onClick={e => {
+                        this.setState({ cuurentTab: '#weekview' });
+                      }}
+                      href="#weekview"
+                    >
+                      Weekview
+                    </a>
+                  </div>
+                  <div className={this.state.cuurentTab === '#monthview'
+                              ? 'tab active'
+                              : 'tab'
+                              }
+                              id="monthview"
+                            >
+                    <a
+                      onClick={e => {
+                        this.setState({ cuurentTab: '#monthview' });
+                      }}
+                      href="#monthview"
+                    >
+                      Monthview
+                    </a>
+                  </div>
+                  </div>
+                </div>
+                <div className="body-head-r">
+                <h2>
+                  Calendar
+                </h2>
+              </div>
+            </div>
 
                     <div className="body-content d-flex row justify-content-start profilephoto-content" data-for="custom-cut-workout-wrap" data-tip>
                         <div className="col-md-12">
-                            <div id="cal-panel-wrap" className="white-box space-btm-20">
-                                <div className="whitebox-body profile-body">
-                                    {selectedEvents && selectedEvents.length > 0 &&
-                                        <div className="fixed-btm-bar d-flex">
-                                            <div className="fixed-btm-bar-l d-flex">
-                                                <div className="custom_check">
-                                                    <input
-                                                        type="checkbox"
-                                                        id={'select_all_workouts'}
-                                                        name={'select_all_workouts'}
-                                                        checked={selectAllChecked}
-                                                        onChange={this.handleSelectAll}
-                                                    />
-                                                    <label htmlFor="select_all_workouts">Select All</label>
-                                                </div>
-                                                <div className="count-leadeboard bg-pink">{selectedEvents.length}</div>
-                                            </div>
-                                            <div className="fixed-btm-bar-c">
-                                                <a href="javascript:void(0)" data-for="create-program-tooltip" data-tip="Create program" onClick={() => this.setState({ showCreateProgram: true })}><i className="icon-add_box"></i> </a>
-                                                <a href="javascript:void(0)" data-for="append-program-tooltip" data-tip="Append program" onClick={() => this.setState({ showAppendProgram: true })}><i className="icon-playlist_add"></i> </a>
-                                                <a href="javascript:void(0)" data-for="event-bulk-delete-tooltip" data-tip="Delete" onClick={() => this.setState({ deleteBulkActionAlert: true })}><i className="icon-delete_forever"></i> </a>
-                                                <a href="javascript:void(0)" data-for="event-bulk-complete-tooltip" data-tip="Mark as complete" onClick={() => this.setState({ completeBulkActionAlert: true })}><i className="icon-check_circle"></i></a>
-                                                <a href="javascript:void(0)" data-for="event-bulk-incomplete-tooltip" data-tip="Mark as incomplete" onClick={() => this.setState({ incompleteBulkActionAlert: true })}><i className="icon-cancel"></i></a>
-                                            </div>
-                                            <ReactTooltip id='create-program-tooltip' place="top" type="info" effect="solid" />
-                                            <ReactTooltip id='append-program-tooltip' place="top" type="dark" effect="solid" />
-                                            <ReactTooltip id='event-bulk-delete-tooltip' place="top" type="error" effect="solid" />
-                                            <ReactTooltip id='event-bulk-complete-tooltip' place="top" type="success" effect="solid" />
-                                            <ReactTooltip id='event-bulk-incomplete-tooltip' place="top" type="warning" effect="solid" />
-                                        </div>
-                                    }
-                                    <div className="d-flex custom_check_wrap">
+
+                        <div className="d-flex custom_check_wrap" style={{margin: "20px 0 0"}}>
                                     <h5 className="mr-2">Display : </h5>
                                     <div className="custom_check">
                                       <input
@@ -209,6 +219,39 @@ class ScheduleWorkoutCalendarPage extends Component {
                                       <label htmlFor="display_all_logs">Logs</label>
                                       </div>
                                       </div>
+
+                            <div id="cal-panel-wrap" className="white-box space-btm-20">
+                                <div className="whitebox-body profile-body">
+                                    {selectedEvents && selectedEvents.length > 0 &&
+                                        <div className="fixed-btm-bar d-flex">
+                                            <div className="fixed-btm-bar-l d-flex">
+                                                <div className="custom_check">
+                                                    <input
+                                                        type="checkbox"
+                                                        id={'select_all_workouts'}
+                                                        name={'select_all_workouts'}
+                                                        checked={selectAllChecked}
+                                                        onChange={this.handleSelectAll}
+                                                    />
+                                                    <label htmlFor="select_all_workouts">Select All</label>
+                                                </div>
+                                                <div className="count-leadeboard bg-pink">{selectedEvents.length}</div>
+                                            </div>
+                                            <div className="fixed-btm-bar-c">
+                                                <a href="javascript:void(0)" data-for="create-program-tooltip" data-tip="Create program" onClick={() => this.setState({ showCreateProgram: true })}><i className="icon-add_box"></i> </a>
+                                                <a href="javascript:void(0)" data-for="append-program-tooltip" data-tip="Append program" onClick={() => this.setState({ showAppendProgram: true })}><i className="icon-playlist_add"></i> </a>
+                                                <a href="javascript:void(0)" data-for="event-bulk-delete-tooltip" data-tip="Delete" onClick={() => this.setState({ deleteBulkActionAlert: true })}><i className="icon-delete_forever"></i> </a>
+                                                <a href="javascript:void(0)" data-for="event-bulk-complete-tooltip" data-tip="Mark as complete" onClick={() => this.setState({ completeBulkActionAlert: true })}><i className="icon-check_circle"></i></a>
+                                                <a href="javascript:void(0)" data-for="event-bulk-incomplete-tooltip" data-tip="Mark as incomplete" onClick={() => this.setState({ incompleteBulkActionAlert: true })}><i className="icon-cancel"></i></a>
+                                            </div>
+                                            <ReactTooltip id='create-program-tooltip' place="top" type="info" effect="solid" />
+                                            <ReactTooltip id='append-program-tooltip' place="top" type="dark" effect="solid" />
+                                            <ReactTooltip id='event-bulk-delete-tooltip' place="top" type="error" effect="solid" />
+                                            <ReactTooltip id='event-bulk-complete-tooltip' place="top" type="success" effect="solid" />
+                                            <ReactTooltip id='event-bulk-incomplete-tooltip' place="top" type="warning" effect="solid" />
+                                        </div>
+                                    }
+
                                     <BigCalendar
                                         selectable={true}
                                         localizer={BigCalendar.momentLocalizer(moment)}

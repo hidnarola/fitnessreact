@@ -188,7 +188,10 @@ class NutritionMealAddSearchForm extends Component {
       <div className="nutrition-meal-add-search-form-wrapper">
         <div className="row">
           <div id="search-header" className="search meal-search">
-            <div className="search-form header-search-form">
+            <div
+              className="search-form header-search-form"
+              style={{ backgroundColor: '#fff' }}
+            >
               <span className="search-icon">
                 <FaSearch size={22} />
               </span>

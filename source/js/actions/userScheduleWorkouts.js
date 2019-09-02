@@ -351,10 +351,14 @@ export function deleteUsersBulkWorkoutScheduleError(error) {
   };
 }
 
-export function completeUsersBulkWorkoutScheduleRequest(requestData) {
+export function completeUsersBulkWorkoutScheduleRequest(
+  requestData,
+  callback = res => {},
+) {
   return {
     type: COMPLETE_USERS_BULK_WORKOUT_SCHEDULE_REQUEST,
     requestData,
+    callback,
   };
 }
 

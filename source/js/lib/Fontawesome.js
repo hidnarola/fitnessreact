@@ -10,6 +10,7 @@ import { faChartPie } from '@fortawesome/free-solid-svg-icons/faChartPie';
 import { faThLarge } from '@fortawesome/free-solid-svg-icons/faThLarge';
 import { faPencilAlt } from '@fortawesome/free-solid-svg-icons/faPencilAlt';
 import { faEye } from '@fortawesome/free-solid-svg-icons/faEye';
+import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
 
 library.add(
   faUtensils,
@@ -22,4 +23,5 @@ library.add(
   faThLarge,
   faPencilAlt,
   faEye,
+  faPlus,
 );

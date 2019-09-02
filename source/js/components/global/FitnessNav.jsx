@@ -24,7 +24,7 @@ export default class FitnessNav extends Component {
                   <span>Dashboard</span>
                 </NavLink>
               </li>
-              <li>
+              {/* <li>
                 <NavLink
                   activeClassName="active"
                   className="Menu-link"
@@ -35,9 +35,9 @@ export default class FitnessNav extends Component {
                   <FontAwesomeIcon icon="chart-pie" />
                   <span>Stats</span>
                 </NavLink>
-              </li>
+              </li> */}
 
-              <li>
+              {/* <li>
                 <NavLink
                   activeClassName="active"
                   className="Menu-link"
@@ -48,9 +48,9 @@ export default class FitnessNav extends Component {
                   <FontAwesomeIcon icon="user" />
                   <span>Body</span>
                 </NavLink>
-              </li>
+              </li> */}
 
-              <li>
+              {/* <li>
                 <NavLink
                   activeClassName="active"
                   className="Menu-link"
@@ -61,8 +61,8 @@ export default class FitnessNav extends Component {
                   <FontAwesomeIcon icon="dumbbell" />
                   <span>Exercise</span>
                 </NavLink>
-              </li>
-              <li>
+              </li> */}
+              {/* <li>
                 <NavLink
                   activeClassName="active"
                   className="Menu-link"
@@ -73,7 +73,7 @@ export default class FitnessNav extends Component {
                   <FontAwesomeIcon icon="utensils" />
                   <span>Nutrition</span>
                 </NavLink>
-              </li>
+              </li> */}
               <li>
                 <NavLink
                   activeClassName="active"
@@ -98,7 +98,7 @@ export default class FitnessNav extends Component {
                   <span>Progress</span>
                 </NavLink>
               </li>
-              <li>
+              {/* <li>
                 <NavLink
                   activeClassName="active"
                   className="Menu-link"
@@ -109,7 +109,7 @@ export default class FitnessNav extends Component {
                   <FontAwesomeIcon icon="trophy" />
                   <span>Badges</span>
                 </NavLink>
-              </li>
+              </li> */}
             </ul>
           </Scrollbars>
         </nav>

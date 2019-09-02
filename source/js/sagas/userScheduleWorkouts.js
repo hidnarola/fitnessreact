@@ -189,6 +189,7 @@ function completeUsersBulkWorkoutScheduleData() {
         api.completeUsersBulkWorkoutSchedule(requestData),
       );
       yield put(completeUsersBulkWorkoutScheduleSuccess(data));
+      action.callback(data);
     } catch (error) {
       yield put(completeUsersBulkWorkoutScheduleError(error));
     }

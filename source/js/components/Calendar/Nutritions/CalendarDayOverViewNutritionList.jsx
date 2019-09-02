@@ -4,9 +4,11 @@ import { SERVER_BASE_URL } from '../../../constants/consts';
 import { routeCodes } from '../../../constants/routes';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
+import cns from 'classnames';
+import Star from '../../../../assets/svg/star.svg';
 
 const CalendarDayOverViewNutritionList = props => {
-  const { meal, authuserId } = props;
+  const { meal, authuserId, recentMeals, addToFavourite, index } = props;
   const {
     _id,
     total_enerc_kal,
@@ -22,6 +24,17 @@ const CalendarDayOverViewNutritionList = props => {
       <div className="box_wrap_one">
         <div className="head_wrap">
           <h2>{meal.title}</h2>
+          <span
+            className={cns('star_one', {
+              star_pink: _.some(recentMeals, { _id: meal._id }),
+            })}
+            style={{ right: '40px' }}
+            onClick={e =>
+              addToFavourite(meal._id, _.some(recentMeals, { _id: meal._id }))
+            }
+          >
+            <Star />
+          </span>
           <Link
             className="timline-post-edit-btn"
             to={
@@ -35,6 +48,13 @@ const CalendarDayOverViewNutritionList = props => {
               size="2x"
             />
           </Link>
+          <button
+            type="button"
+            className="timline-post-del-btn"
+            onClick={() => props.handleRemoveMeals(index)}
+          >
+            <i className="icon-cancel" />
+          </button>
         </div>
         <ul className="ul_six_wrap ul_meal_img">
           <li className="ml-auto">
