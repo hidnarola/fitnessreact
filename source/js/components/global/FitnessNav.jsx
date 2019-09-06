@@ -3,13 +3,20 @@ import { NavLink } from 'react-router-dom';
 import { Scrollbars } from 'react-custom-scrollbars';
 import { routeCodes } from '../../constants/routes';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import logo from 'img/common/logo.png';
 import ReactTooltip from 'react-tooltip';
+import { publicPath } from '../../constants/routes';
 
 export default class FitnessNav extends Component {
   render() {
     return (
       <div id="manu-navigation" className="Menu">
         <nav className="navigation" id="navigation">
+          <div className="logo">
+            <NavLink to={publicPath}>
+              <img src={logo} />
+            </NavLink>
+          </div>
           <Scrollbars autoHide>
             <ul>
               <li>
@@ -24,7 +31,7 @@ export default class FitnessNav extends Component {
                   <span>Dashboard</span>
                 </NavLink>
               </li>
-              {/* <li>
+              <li>
                 <NavLink
                   activeClassName="active"
                   className="Menu-link"
@@ -35,9 +42,9 @@ export default class FitnessNav extends Component {
                   <FontAwesomeIcon icon="chart-pie" />
                   <span>Stats</span>
                 </NavLink>
-              </li> */}
+              </li>
 
-              {/* <li>
+              <li>
                 <NavLink
                   activeClassName="active"
                   className="Menu-link"
@@ -48,9 +55,9 @@ export default class FitnessNav extends Component {
                   <FontAwesomeIcon icon="user" />
                   <span>Body</span>
                 </NavLink>
-              </li> */}
+              </li>
 
-              {/* <li>
+              <li>
                 <NavLink
                   activeClassName="active"
                   className="Menu-link"
@@ -61,8 +68,8 @@ export default class FitnessNav extends Component {
                   <FontAwesomeIcon icon="dumbbell" />
                   <span>Exercise</span>
                 </NavLink>
-              </li> */}
-              {/* <li>
+              </li>
+              <li>
                 <NavLink
                   activeClassName="active"
                   className="Menu-link"
@@ -73,7 +80,7 @@ export default class FitnessNav extends Component {
                   <FontAwesomeIcon icon="utensils" />
                   <span>Nutrition</span>
                 </NavLink>
-              </li> */}
+              </li>
               <li>
                 <NavLink
                   activeClassName="active"
@@ -98,7 +105,7 @@ export default class FitnessNav extends Component {
                   <span>Progress</span>
                 </NavLink>
               </li>
-              {/* <li>
+              <li>
                 <NavLink
                   activeClassName="active"
                   className="Menu-link"
@@ -109,9 +116,15 @@ export default class FitnessNav extends Component {
                   <FontAwesomeIcon icon="trophy" />
                   <span>Badges</span>
                 </NavLink>
-              </li> */}
+              </li>
             </ul>
           </Scrollbars>
+
+          <div className="settingnav">
+            <NavLink to={publicPath}>
+              <FontAwesomeIcon icon="cog" />
+            </NavLink>
+          </div>
         </nav>
         <ReactTooltip
           id="menu-title-tooltip"

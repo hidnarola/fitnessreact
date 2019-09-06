@@ -11,6 +11,14 @@ import { faThLarge } from '@fortawesome/free-solid-svg-icons/faThLarge';
 import { faPencilAlt } from '@fortawesome/free-solid-svg-icons/faPencilAlt';
 import { faEye } from '@fortawesome/free-solid-svg-icons/faEye';
 import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
+import { faPlusCircle } from '@fortawesome/free-solid-svg-icons/faPlusCircle';
+import { faMinus } from '@fortawesome/free-solid-svg-icons/faMinus';
+import { faCog } from '@fortawesome/free-solid-svg-icons/faCog';
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons/faChevronLeft';
+import { faChevronRight } from '@fortawesome/free-solid-svg-icons/faChevronRight';
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons/faChevronDown';
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons/faTrashAlt';
+import { faEdit } from '@fortawesome/free-solid-svg-icons/faEdit';
 
 library.add(
   faUtensils,
@@ -24,4 +32,12 @@ library.add(
   faPencilAlt,
   faEye,
   faPlus,
+  faPlusCircle,
+  faMinus,
+  faCog,
+  faChevronLeft,
+  faChevronRight,
+  faChevronDown,
+  faTrashAlt,
+  faEdit,
 );

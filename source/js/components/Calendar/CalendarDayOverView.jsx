@@ -20,6 +20,8 @@ import CalendarDayOverViewNutrition from './Nutritions/CalendarDayOverViewNutrit
 import CalendarDayOverViewLogs from './Logs/CalendarDayOverViewLogs';
 import { getUserBodyMeasurementRequest } from '../../actions/userBodyMeasurement';
 import { recentMealRequest } from '../../actions/meal';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import CalendarImage from '../../../assets/svg/calendar-alt.svg';
 
 class CalendarDayOverView extends Component {
   constructor(props) {
@@ -33,6 +35,7 @@ class CalendarDayOverView extends Component {
       mealsList: [],
       logsList: [],
       measurement: {},
+      showCalendar: false,
     };
   }
 
@@ -218,203 +221,189 @@ class CalendarDayOverView extends Component {
           <AddMetaDescription>
             <title>Calendar | Fitly</title>
           </AddMetaDescription>
-          <FitnessHeader />
+          <FitnessHeader
+            text="Calendar"
+            routes={routeCodes.CALENDAR}
+            enableBackLink={true}
+          />
           <FitnessNav />
           <section className="body-wrap nutrition-todays-meal-section">
             <div className="body-head d-flex justify-content-start front-white-header custome_header">
               <div className="body-head-l">
-                <div className="tabs">
-                  <div
-                    className={
-                      this.state.cuurentTab === '#Exercise'
-                        ? 'tab active'
-                        : 'tab '
-                    }
-                    id="Exercise"
-                  >
-                    <a
-                      onClick={e => {
-                        this.setState({ cuurentTab: '#Exercise' });
-                      }}
-                      href="#Exercise"
-                    >
-                      Exercise
-                    </a>
-                  </div>
-
-                  <div
-                    className={
-                      this.state.cuurentTab === '#Nutrition'
-                        ? 'tab active'
-                        : 'tab'
-                    }
-                    id="Nutrition"
-                  >
-                    <a
-                      onClick={e => {
-                        this.setState({ cuurentTab: '#Nutrition' });
-                      }}
-                      href="#Nutrition"
-                    >
-                      Nutrition
-                    </a>
-                  </div>
-
-                  <div
-                    className={
-                      this.state.cuurentTab === '#Logs' ? 'tab active' : 'tab'
-                    }
-                    id="Logs"
-                  >
-                    <a
-                      onClick={e => {
-                        this.setState({ cuurentTab: '#Logs' });
-                      }}
-                      href="#Logs"
-                    >
-                      Logs
-                    </a>
-                  </div>
-
-                  <div
-                    className={
-                      this.state.cuurentTab === '#Photos'
-                        ? 'tab  active'
-                        : 'tab'
-                    }
-                    id="Photos"
-                  >
-                    <a
-                      onClick={e => {
-                        this.setState({ cuurentTab: '#Photos' });
-                      }}
-                      href="#Photos"
-                    >
-                      Photos
-                    </a>
-                  </div>
+                <div className="display-date">
+                  <span className="display-calendar">
+                    <CalendarImage />
+                    <FontAwesomeIcon icon="chevron-down" />
+                  </span>
+                  <span className="date-arrow-left">
+                    <FontAwesomeIcon icon="chevron-left" />
+                  </span>
+                  <span className="date-text">
+                    {logDate
+                      ? moment(logDate)
+                          .local()
+                          .format('Do MMMM YYYY')
+                      : ''}
+                  </span>
+                  <span className="date-arrow-right">
+                    <FontAwesomeIcon icon="chevron-right" />
+                  </span>
                 </div>
-              </div>
-              <div className="body-head-r">
-                <NavLink to={routeCodes.CALENDAR}>
-                  <i className="icon-arrow_back"></i>
-                  Back to Calendar
-                </NavLink>
               </div>
             </div>
-            <div className="body-content d-flex row justify-content-start workouts-bg ml-0 mr-0 pl-0 pr-0">
-              <div className="col-md-3 left-sidebar">
-                <div className="new-log-date-wrap log-date-wrap">
-                  {/* <button type="button" onClick={this.handleGoToToday}>
-                    Go To Today
-                  </button> */}
-                  <ReactCalender
-                    name="log_date"
-                    onChange={this.onChangeLogDate}
-                    onClickMonth={this.onMonthClick}
-                    onActiveDateChange={this.onActiveDateChange}
-                    showNavigation={true}
-                    value={logDate}
-                  />
+            <div className="body-sub-head">
+              <div className="tabs">
+                <div
+                  className={
+                    this.state.cuurentTab === '#Exercise'
+                      ? 'tab active'
+                      : 'tab '
+                  }
+                  id="Exercise"
+                >
+                  <a
+                    onClick={e => {
+                      this.setState({ cuurentTab: '#Exercise' });
+                    }}
+                    href="#Exercise"
+                  >
+                    Exercise
+                  </a>
                 </div>
-                <CalendarDayOverViewCounts
-                  measurement={measurement}
-                  workoutsList={workoutsList}
-                  logsList={logsList}
-                  mealsList={mealsList}
-                />
+
+                <div
+                  className={
+                    this.state.cuurentTab === '#Nutrition'
+                      ? 'tab active'
+                      : 'tab'
+                  }
+                  id="Nutrition"
+                >
+                  <a
+                    onClick={e => {
+                      this.setState({ cuurentTab: '#Nutrition' });
+                    }}
+                    href="#Nutrition"
+                  >
+                    Nutrition
+                  </a>
+                </div>
+
+                <div
+                  className={
+                    this.state.cuurentTab === '#Logs' ? 'tab active' : 'tab'
+                  }
+                  id="Logs"
+                >
+                  <a
+                    onClick={e => {
+                      this.setState({ cuurentTab: '#Logs' });
+                    }}
+                    href="#Logs"
+                  >
+                    Logs
+                  </a>
+                </div>
+
+                <div
+                  className={
+                    this.state.cuurentTab === '#Photos' ? 'tab  active' : 'tab'
+                  }
+                  id="Photos"
+                >
+                  <a
+                    onClick={e => {
+                      this.setState({ cuurentTab: '#Photos' });
+                    }}
+                    href="#Photos"
+                  >
+                    Photos
+                  </a>
+                </div>
               </div>
-              <div className="col-md-9 pr-0">
-                <div className={'tab-content'}>
-                  {this.state.cuurentTab === '#Exercise' && (
-                    <div
-                      className={
-                        this.state.cuurentTab === '#Exercise'
-                          ? 'content active'
-                          : 'content'
-                      }
-                      id="Exercise"
-                    >
-                      {workoutsList.length > 0 ? (
-                        workoutsList.map((workout, index) => (
-                          <CalendarDayOverViewWorkouts
-                            loading={loading}
-                            key={index}
-                            workout={workout}
-                            index={index}
-                          />
-                        ))
-                      ) : (
-                        <div
-                          className="white-box"
-                          style={{ marginBottom: '2rem' }}
-                        >
-                          <div className="whitebox-head d-flex profile-head">
-                            <h3>No Workouts Found</h3>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                  {this.state.cuurentTab === '#Nutrition' && (
-                    <div
-                      className={
-                        this.state.cuurentTab === '#Nutrition'
-                          ? 'content active'
-                          : 'content'
-                      }
-                      id="Nutrition"
-                    >
-                      {mealsList && (
-                        <CalendarDayOverViewNutrition
-                          recentMeals={this.props.recentMeals}
-                          logDate={this.state.logDate}
-                          mealsList={mealsList}
-                          authuserId={this.props.user.authId}
-                        />
-                      )}
-                    </div>
-                  )}
-                  {this.state.cuurentTab === '#Logs' && (
-                    <div
-                      className={
-                        this.state.cuurentTab === '#Logs'
-                          ? 'content active'
-                          : 'content'
-                      }
-                      id="Logs"
-                    >
-                      <h3>Logs - {this.getDisplayDate()}</h3>
-                      {typeof measurement !== 'undefined' &&
-                      measurement !== null &&
-                      Object.keys(measurement).length > 0 ? (
-                        <CalendarDayOverViewLogs measurement={measurement} />
-                      ) : (
-                        <div
-                          className="white-box"
-                          style={{ marginBottom: '2rem' }}
-                        >
-                          <div className="whitebox-head d-flex profile-head">
-                            <h3>No Logs Found</h3>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                  {this.state.cuurentTab === '#Photos' && (
-                    <div
-                      className={
-                        this.state.cuurentTab === '#Photos'
-                          ? 'content active'
-                          : 'content'
-                      }
-                      id="Photos"
-                    >
-                      <h3>Photos - {this.getDisplayDate()}</h3>
+            </div>
+
+            <div className={'tab-content'}>
+              {this.state.cuurentTab === '#Exercise' && (
+                <div
+                  className={
+                    this.state.cuurentTab === '#Exercise'
+                      ? 'content active'
+                      : 'content'
+                  }
+                  id="Exercise"
+                >
+                  {workoutsList.length > 0 ? (
+                    workoutsList.map((workout, index) => (
+                      <CalendarDayOverViewWorkouts
+                        loading={loading}
+                        key={index}
+                        workout={workout}
+                        index={index}
+                      />
+                    ))
+                  ) : (
+                    <div className="white-box" style={{ marginBottom: '2rem' }}>
+                      <div className="whitebox-head d-flex profile-head">
+                        <h3>No Workouts Found</h3>
+                      </div>
                     </div>
                   )}
                 </div>
-              </div>
+              )}
+              {this.state.cuurentTab === '#Nutrition' && (
+                <div
+                  className={
+                    this.state.cuurentTab === '#Nutrition'
+                      ? 'content active'
+                      : 'content'
+                  }
+                  id="Nutrition"
+                >
+                  {mealsList && (
+                    <CalendarDayOverViewNutrition
+                      recentMeals={this.props.recentMeals}
+                      logDate={this.state.logDate}
+                      mealsList={mealsList}
+                      authuserId={this.props.user.authId}
+                    />
+                  )}
+                </div>
+              )}
+              {this.state.cuurentTab === '#Logs' && (
+                <div
+                  className={
+                    this.state.cuurentTab === '#Logs'
+                      ? 'content active'
+                      : 'content'
+                  }
+                  id="Logs"
+                >
+                  {typeof measurement !== 'undefined' &&
+                  measurement !== null &&
+                  Object.keys(measurement).length > 0 ? (
+                    <CalendarDayOverViewLogs measurement={measurement} />
+                  ) : (
+                    <div className="white-box" style={{ marginBottom: '2rem' }}>
+                      <div className="whitebox-head d-flex profile-head">
+                        <h3>No Logs Found</h3>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+              {this.state.cuurentTab === '#Photos' && (
+                <div
+                  className={
+                    this.state.cuurentTab === '#Photos'
+                      ? 'content active'
+                      : 'content'
+                  }
+                  id="Photos"
+                >
+                  <h3>Photos - {this.getDisplayDate()}</h3>
+                </div>
+              )}
             </div>
           </section>
         </div>

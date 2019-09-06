@@ -82,10 +82,13 @@ class CalendarDayOverViewWorkouts extends Component {
     return (
       <React.Fragment>
         {title !== 'Rest Day' ? (
-          <div className="row mr-0">
-            <div className="col-md-12 pl-0 pr-0">
-              <div className="overview">
-                <div className="white-box" style={{ marginBottom: '2rem' }}>
+          <div className="body-content workouts-bg">
+            <div className="row justify-content-start no-gutters">
+              <div className="col-xs-12 col-md-9 d-flex">
+                <div
+                  className="white-box border-right"
+                  style={{ marginBottom: '2rem', width: '100%' }}
+                >
                   <div className="whitebox-head d-flex profile-head">
                     <h3>{title}</h3>
                     <div className="switch-wrap ml-auto">
@@ -119,7 +122,9 @@ class CalendarDayOverViewWorkouts extends Component {
                       >
                         <a
                           onClick={e => {
-                            this.setState({ cuurentTab: `#warmup${index}` });
+                            this.setState({
+                              cuurentTab: `#warmup${index}`,
+                            });
                           }}
                           href={'#warmup' + index}
                         >
@@ -137,7 +142,9 @@ class CalendarDayOverViewWorkouts extends Component {
                       >
                         <a
                           onClick={e => {
-                            this.setState({ cuurentTab: `#workout${index}` });
+                            this.setState({
+                              cuurentTab: `#workout${index}`,
+                            });
                           }}
                           href={'#workout' + index}
                         >
@@ -155,7 +162,9 @@ class CalendarDayOverViewWorkouts extends Component {
                       >
                         <a
                           onClick={e => {
-                            this.setState({ cuurentTab: `#cooldown${index}` });
+                            this.setState({
+                              cuurentTab: `#cooldown${index}`,
+                            });
                           }}
                           href={'#cooldown' + index}
                         >

@@ -106,7 +106,11 @@ class NutritionMealAdd extends Component {
         <AddMetaDescription>
           <title>Add Meal | Fitly</title>
         </AddMetaDescription>
-        <FitnessHeader />
+        <FitnessHeader
+          routes={routeCodes.CALENDAR_OVERVIEW}
+          enableBackLink={true}
+          text="Nutrition"
+        />
         <FitnessNav />
         <section className="body-wrap nutrition-todays-meal-section">
           <div className="body-head d-flex justify-content-start front-white-header custome_header">
@@ -181,12 +185,12 @@ class NutritionMealAdd extends Component {
                 </div>
               </div>
             </div>
-            <div className="body-head-r">
+            {/* <div className="body-head-r">
               <NavLink to={routeCodes.CALENDAR_OVERVIEW}>
                 <i className="icon-arrow_back"></i>
                 Back to Nutrition
               </NavLink>
-            </div>
+            </div> */}
           </div>
           <NutritionMealAddForm
             onSubmit={this.handleSubmit}

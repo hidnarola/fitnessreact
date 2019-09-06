@@ -197,45 +197,49 @@ class NutritionMealAddForm extends Component {
                                         </div> */}
                         <div className="whitebox">
                           <div className="whitebox-body">
-                            <div
-                              id="search-header"
-                              className="search meal-search"
-                            >
-                              <div className="search-form header-search-form">
-                                <span className="search-icon">
-                                  <FaSearch size={22} />
-                                </span>
-                                <Autosuggest
-                                  suggestions={searchSuggestions}
-                                  onSuggestionsFetchRequested={
-                                    this.handleSuggestionsFetchRequested
-                                  }
-                                  onSuggestionsClearRequested={
-                                    this.handleSuggestionsClearRequested
-                                  }
-                                  getSuggestionValue={value =>
-                                    console.log(value)
-                                  }
-                                  onSuggestionSelected={(e, value) =>
-                                    this.getSuggestionValue(value.suggestion)
-                                  }
-                                  renderSuggestion={this.renderSearchSuggestion}
-                                  inputProps={{
-                                    id: 'header_search_users',
-                                    name: 'header_search_users',
-                                    value: searchValue,
-                                    onChange: this.handleSearchChange,
-                                    placeholder: 'Search Ingredient',
-                                  }}
-                                />
-                                {showSearchLoader && (
-                                  <span className="loader-icon">
-                                    <FaSpinner
-                                      size={22}
-                                      className="loader-spinner"
-                                    />
+                            <div className="search-body">
+                              <div
+                                id="search-header"
+                                className="search meal-search"
+                              >
+                                <div className="search-form header-search-form">
+                                  <span className="search-icon">
+                                    <FaSearch size={22} />
                                   </span>
-                                )}
+                                  <Autosuggest
+                                    suggestions={searchSuggestions}
+                                    onSuggestionsFetchRequested={
+                                      this.handleSuggestionsFetchRequested
+                                    }
+                                    onSuggestionsClearRequested={
+                                      this.handleSuggestionsClearRequested
+                                    }
+                                    getSuggestionValue={value =>
+                                      console.log(value)
+                                    }
+                                    onSuggestionSelected={(e, value) =>
+                                      this.getSuggestionValue(value.suggestion)
+                                    }
+                                    renderSuggestion={
+                                      this.renderSearchSuggestion
+                                    }
+                                    inputProps={{
+                                      id: 'header_search_users',
+                                      name: 'header_search_users',
+                                      value: searchValue,
+                                      onChange: this.handleSearchChange,
+                                      placeholder: 'Search Ingredient',
+                                    }}
+                                  />
+                                  {showSearchLoader && (
+                                    <span className="loader-icon">
+                                      <FaSpinner
+                                        size={22}
+                                        className="loader-spinner"
+                                      />
+                                    </span>
+                                  )}
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -252,7 +256,10 @@ class NutritionMealAddForm extends Component {
                         {meal_ingredient &&
                           meal_ingredient.length > 0 &&
                           meal_ingredient.map((v, id) => (
-                            <div key={id} className="box_wrap_one">
+                            <div
+                              key={id}
+                              className="box_wrap_one ingredient-box"
+                            >
                               <div className="head_wrap">
                                 <h2>{v.foodName}</h2>
                                 <div className="p_serve">
