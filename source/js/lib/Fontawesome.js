@@ -19,6 +19,8 @@ import { faChevronRight } from '@fortawesome/free-solid-svg-icons/faChevronRight
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons/faChevronDown';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons/faTrashAlt';
 import { faEdit } from '@fortawesome/free-solid-svg-icons/faEdit';
+import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
+import { faCalculator } from '@fortawesome/free-solid-svg-icons/faCalculator';
 
 library.add(
   faUtensils,
@@ -40,4 +42,6 @@ library.add(
   faChevronDown,
   faTrashAlt,
   faEdit,
+  faTimes,
+  faCalculator,
 );

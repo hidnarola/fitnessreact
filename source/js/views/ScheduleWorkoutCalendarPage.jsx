@@ -142,47 +142,9 @@ class ScheduleWorkoutCalendarPage extends Component {
                             <p>Your goal choice shapes how your fitness assistant will ceate your meal and exercise plans, it’s important that you set goals which are achieveable. Keep updating your profile and your fitness assistant will keep you on track and meeting the goals you’ve set out for yourself.</p>
                         </div> */}
                         <div className="body-head-l">
-                            <div className="tabs">
-                            <div
-                              className={this.state.cuurentTab === '#weekview'
-                              ? 'tab active'
-                              : 'tab '
-                              }
-                              id="weekview"
-                  >
-                    <a
-                      onClick={e => {
-                        this.setState({ cuurentTab: '#weekview' });
-                      }}
-                      href="#weekview"
-                    >
-                      Weekview
-                    </a>
-                  </div>
-                  <div className={this.state.cuurentTab === '#monthview'
-                              ? 'tab active'
-                              : 'tab'
-                              }
-                              id="monthview"
-                            >
-                    <a
-                      onClick={e => {
-                        this.setState({ cuurentTab: '#monthview' });
-                      }}
-                      href="#monthview"
-                    >
-                      Monthview
-                    </a>
-                  </div>
-                  </div>
-                </div>
-                <div className="body-head-r">
-                <h2>
-                  Calendar
-                </h2>
-              </div>
-            </div>
-
+                            <h2>Calendar</h2>
+                        </div>
+                    </div>
                     <div className="body-content d-flex row justify-content-start profilephoto-content" data-for="custom-cut-workout-wrap" data-tip>
                         <div className="col-md-12">
 

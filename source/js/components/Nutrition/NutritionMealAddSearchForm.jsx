@@ -39,6 +39,7 @@ class NutritionMealAddSearchForm extends Component {
       searchSuggestions: [],
       showSearchLoader: false,
       searchIsLoading: false,
+      isSearch: false,
     };
   }
 
@@ -183,14 +184,22 @@ class NutritionMealAddSearchForm extends Component {
 
   render() {
     const { handleSubmit, searchMealValue } = this.props;
-    const { searchSuggestions, showSearchLoader } = this.state;
+    const { searchSuggestions, showSearchLoader, isSearch } = this.state;
     return (
       <div id="search-header" className="search meal-search">
         <div
-          className="search-form header-search-form"
-          style={{ backgroundColor: '#fff' }}
+          className={
+            isSearch
+              ? 'search-form header-search-form open'
+              : 'search-form header-search-form'
+          }
         >
-          <span className="search-icon">
+          <span
+            className="search-icon"
+            onClick={() => {
+              this.setState({ isSearch: !this.state.isSearch });
+            }}
+          >
             <FaSearch size={22} />
           </span>
 

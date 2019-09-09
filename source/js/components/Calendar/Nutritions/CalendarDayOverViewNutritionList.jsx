@@ -151,7 +151,7 @@ class CalendarDayOverViewNutritionList extends Component {
 
             <div className="fullnutrition-boxs">
               <h3>Full Nutrition</h3>
-              {open && <Scrollbars>{renderField}</Scrollbars>}
+              {open && <Scrollbars autoHide>{renderField}</Scrollbars>}
               {!open && renderField}
             </div>
           </div>

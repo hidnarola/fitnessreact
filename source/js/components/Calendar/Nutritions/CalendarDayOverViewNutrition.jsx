@@ -315,14 +315,15 @@ class CalendarDayOverViewNutrition extends Component {
                   /> */}
                   <h3 className="title-h3 size-14">Meals</h3>
                   <Link
-                    to={routeCodes.NUTRITION_ADD}
+                    to="#"
                     className="btn btn-success ml-auto plus-btn"
+                    onClick={this.props.setNutritionTab}
                   >
                     <FontAwesomeIcon icon="plus" />
                   </Link>
                 </div>
                 <div className="nutrition-list">
-                  <Scrollbars>
+                  <Scrollbars autoHide>
                     <div className="nutrition-boxs">
                       <SweetAlert
                         customClass="sweetalert-responsive"
@@ -411,7 +412,7 @@ class CalendarDayOverViewNutrition extends Component {
                 </div>
                 <div className={'tab-content'}>
                   <div className="recent-ingredient">
-                    <Scrollbars>
+                    <Scrollbars autoHide>
                       {this.state.quickTab === '#recentmeals' && <ul></ul>}
                       {this.state.quickTab === '#favrioutmeals' && (
                         <ul>

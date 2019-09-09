@@ -16,7 +16,7 @@ const CalendarDayOverViewCounts = props => {
           <h3 className="title-h3 size-14">Stats</h3>
         </div>
         <div className="overview-body">
-          <Scrollbars>
+          <Scrollbars autoHide>
             <div className="progress-wrap">
               <div className="nutrition-progress">
                 <div className="nutrition-title">

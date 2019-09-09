@@ -22,6 +22,7 @@ import { getUserBodyMeasurementRequest } from '../../actions/userBodyMeasurement
 import { recentMealRequest } from '../../actions/meal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import CalendarImage from '../../../assets/svg/calendar-alt.svg';
+import NutritionMeal from '../Nutrition/NutritionMeal';
 
 class CalendarDayOverView extends Component {
   constructor(props) {
@@ -31,6 +32,7 @@ class CalendarDayOverView extends Component {
     this.state = {
       logDate: logDate,
       cuurentTab: '#Exercise',
+      nutritionTab: '#overview',
       workoutsList: [],
       mealsList: [],
       logsList: [],
@@ -212,6 +214,7 @@ class CalendarDayOverView extends Component {
       mealsList,
       logsList,
       measurement,
+      nutritionTab,
     } = this.state;
     const { firstWorkoutId, loading, dispatch } = this.props;
 
@@ -333,22 +336,14 @@ class CalendarDayOverView extends Component {
                   }
                   id="Exercise"
                 >
-                  {workoutsList.length > 0 ? (
-                    workoutsList.map((workout, index) => (
-                      <CalendarDayOverViewWorkouts
-                        loading={loading}
-                        key={index}
-                        workout={workout}
-                        index={index}
-                      />
-                    ))
-                  ) : (
-                    <div className="white-box" style={{ marginBottom: '2rem' }}>
-                      <div className="whitebox-head d-flex profile-head">
-                        <h3>No Workouts Found</h3>
-                      </div>
-                    </div>
-                  )}
+                  {workoutsList.map((workout, index) => (
+                    <CalendarDayOverViewWorkouts
+                      loading={loading}
+                      key={index}
+                      workout={workout}
+                      index={index}
+                    />
+                  ))}
                 </div>
               )}
               {this.state.cuurentTab === '#Nutrition' && (
@@ -360,14 +355,30 @@ class CalendarDayOverView extends Component {
                   }
                   id="Nutrition"
                 >
-                  {mealsList && (
-                    <CalendarDayOverViewNutrition
-                      recentMeals={this.props.recentMeals}
-                      logDate={this.state.logDate}
-                      mealsList={mealsList}
-                      authuserId={this.props.user.authId}
-                    />
-                  )}
+                  {
+                    <React.Fragment>
+                      {nutritionTab === '#overview' && mealsList && (
+                        <CalendarDayOverViewNutrition
+                          setNutritionTab={() => {
+                            this.setState({ nutritionTab: '#list' });
+                          }}
+                          recentMeals={this.props.recentMeals}
+                          logDate={this.state.logDate}
+                          mealsList={mealsList}
+                          authuserId={this.props.user.authId}
+                        />
+                      )}
+
+                      {nutritionTab === '#list' && (
+                        <NutritionMeal
+                          mealsList={mealsList}
+                          setNutritionTab={() => {
+                            this.setState({ nutritionTab: '#overview' });
+                          }}
+                        />
+                      )}
+                    </React.Fragment>
+                  }
                 </div>
               )}
               {this.state.cuurentTab === '#Logs' && (
