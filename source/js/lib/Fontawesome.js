@@ -21,6 +21,7 @@ import { faTrashAlt } from '@fortawesome/free-solid-svg-icons/faTrashAlt';
 import { faEdit } from '@fortawesome/free-solid-svg-icons/faEdit';
 import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 import { faCalculator } from '@fortawesome/free-solid-svg-icons/faCalculator';
+import { faSave } from '@fortawesome/free-solid-svg-icons/faSave';
 
 library.add(
   faUtensils,
@@ -44,4 +45,5 @@ library.add(
   faEdit,
   faTimes,
   faCalculator,
+  faSave,
 );

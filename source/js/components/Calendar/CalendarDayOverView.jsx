@@ -217,7 +217,7 @@ class CalendarDayOverView extends Component {
       nutritionTab,
     } = this.state;
     const { firstWorkoutId, loading, dispatch } = this.props;
-
+    console.log('WORKOUTLIST', workoutsList);
     return (
       <React.Fragment>
         <div className="fitness-nutrition">

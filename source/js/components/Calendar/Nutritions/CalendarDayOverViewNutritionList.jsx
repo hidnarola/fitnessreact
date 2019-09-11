@@ -78,7 +78,7 @@ class CalendarDayOverViewNutritionList extends Component {
     );
     return (
       <React.Fragment>
-        <div className="box_wrap_one">
+        <div className="box_wrap_one animated fadeIn">
           <div className="head_wrap">
             <span
               className={cns('star_one', {

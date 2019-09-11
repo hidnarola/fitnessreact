@@ -170,6 +170,12 @@ img {
 .border-right {
   border-right:3px solid rgba(237, 245, 253, 1) !important;
 }
+.border-down {
+  border-left:3px solid rgba(237, 245, 253, 1) !important;
+}
+.border-up {
+  border-right:3px solid rgba(237, 245, 253, 1) !important;
+}
 
 .no-gutters {
   margin-right: 0 !important;
@@ -244,6 +250,97 @@ input:focus {
     display: -ms-flexbox !important;
     display: flex !important;
 }
+
+.flex-row {
+    -webkit-box-orient: horizontal !important;
+    -webkit-box-direction: normal !important;
+    -ms-flex-direction: row !important;
+    flex-direction: row !important;
+}
+
+.flex-column {
+    -webkit-box-orient: vertical !important;
+    -webkit-box-direction: normal !important;
+    -ms-flex-direction: column !important;
+    flex-direction: column !important;
+}
+
+.flex-row-reverse {
+    -webkit-box-orient: horizontal !important;
+    -webkit-box-direction: reverse !important;
+    -ms-flex-direction: row-reverse !important;
+    flex-direction: row-reverse !important;
+}
+
+.flex-column-reverse {
+    -webkit-box-orient: vertical !important;
+    -webkit-box-direction: reverse !important;
+    -ms-flex-direction: column-reverse !important;
+    flex-direction: column-reverse !important;
+}
+
+.flex-wrap {
+    -ms-flex-wrap: wrap !important;
+    flex-wrap: wrap !important;
+}
+
+.flex-nowrap {
+    -ms-flex-wrap: nowrap !important;
+    flex-wrap: nowrap !important;
+}
+
+.flex-wrap-reverse {
+    -ms-flex-wrap: wrap-reverse !important;
+    flex-wrap: wrap-reverse !important;
+}
+
+.justify-content-start {
+    -webkit-box-pack: start !important;
+    -ms-flex-pack: start !important;
+    justify-content: flex-start !important;
+}
+
+.justify-content-end {
+    -webkit-box-pack: end !important;
+    -ms-flex-pack: end !important;
+    justify-content: flex-end !important;
+}
+
+.justify-content-center {
+    -webkit-box-pack: center !important;
+    -ms-flex-pack: center !important;
+    justify-content: center !important;
+}
+
+.justify-content-between {
+    -webkit-box-pack: justify !important;
+    -ms-flex-pack: justify !important;
+    justify-content: space-between !important;
+}
+
+.justify-content-around {
+    -ms-flex-pack: distribute !important;
+    justify-content: space-around !important;
+}
+
+.align-items-start {
+    -webkit-box-align: start !important;
+    -ms-flex-align: start !important;
+    align-items: flex-start !important;
+}
+
+.align-items-end {
+    -webkit-box-align: end !important;
+    -ms-flex-align: end !important;
+    align-items: flex-end !important;
+}
+
+.align-items-center {
+    -webkit-box-align: center !important;
+    -ms-flex-align: center !important;
+    align-items: center !important;
+}
+
 
 .p-relative {
     position: relative !important;
@@ -13291,7 +13388,7 @@ a.profile-about-section i {
 .app-wrapper-content .fitness-nutrition .body-wrap.nutrition-todays-meal-section .tab-content .content {height:100%;}
 .app-wrapper-content .fitness-nutrition .body-wrap.nutrition-todays-meal-section .tab-content .content .body-content {height:100%;}
 .app-wrapper-content .fitness-nutrition .body-wrap.nutrition-todays-meal-section .tab-content .content .body-content .row {height:100%;}
-.app-wrapper-content .fitness-nutrition .body-wrap.nutrition-todays-meal-section .tab-content .content .body-content .row > div {height:100%;}
+/* .app-wrapper-content .fitness-nutrition .body-wrap.nutrition-todays-meal-section .tab-content .content .body-content .row > div {height:100%;} */
 
 .app-footer {
     grid-row-start: 2;
@@ -15624,7 +15721,7 @@ a.timline-post-edit-btn svg {
 .meals-bg .meals-search-boxs  .search.meal-search .search-form .search-icon svg {fill: #fff;}
 .meals-bg .meals-search-boxs  .search.meal-search .search-form {width: 0vw; padding-right: 40px; transition: all 0.5s;}
 .meals-bg .meals-search-boxs  .search.meal-search .search-form.open {width: 16vw;}
-.meals-bg .nutrition-list {height: 44vh;}
+.meals-bg .nutrition-list {height: 52vh;}
 
 /* .rbc-time-view .rbc-label {
   display: none;
@@ -15687,19 +15784,9 @@ a.timline-post-edit-btn svg {
 .nutrition-list .nutrition-boxs .box_wrap_one .display-serve .serving-boxs {position: relative; width: 40%; margin: 0 5px 0 auto;}
 .nutrition-list .nutrition-boxs .box_wrap_one .display-serve .serving-boxs .btn {position: absolute; left: 5px; top:50%; transform: translateY(-50%); border-radius: 50%; background: #A6A5BF; fill: #201F60; font-size:13px; width: 25px; height: 25px; border: 0px; display: flex; flex-wrap: wrap; align-items: center; justify-content: center;}
 .nutrition-list .nutrition-boxs .box_wrap_one .display-serve .serving-boxs .btn.btn-plus {left: auto; right: 5px;}
-.nutrition-list .nutrition-boxs .box_wrap_one .display-serve .serving-boxs .form-control {
-    box-shadow: none;
-    height: auto;
-    padding: 9px 0;
-    text-align: center;
-    font-size: 20px;
-    color:#201F60;
-    line-height: 1;
-    font-family: 'Neuzeit' !important;
-    font-weight: 900;
-    border: 0px;
-    border-radius:5px;
-}
+.nutrition-list .nutrition-boxs .box_wrap_one .display-serve .serving-boxs .form-control { box-shadow: none; height: auto; padding: 9px 0; text-align: center; font-size: 20px; color:#201F60; line-height: 1; font-family: 'Neuzeit' !important; font-weight: 900; border: 0px; border-radius:5px; }
+
+
 .nutrition-list .nutrition-boxs .box_wrap_one .display-serve .serving-boxs input[type=number]::-webkit-inner-spin-button,
 .nutrition-list .nutrition-boxs .box_wrap_one .display-serve .serving-boxs input[type=number]::-webkit-outer-spin-button {
     -webkit-appearance: none;
@@ -15884,10 +15971,21 @@ a.timline-post-edit-btn svg {
 .overview .overview-body .list-measurement .list-measurement-items .display-serve .serving-select .form-control {box-shadow: none;height: auto;padding: 9px 15px;text-align: left;font-size: 20px;color:#201F60;line-height: 1;font-family: 'Neuzeit' !important;font-weight: 900;border: 0px;border-radius:5px;-webkit-appearance: none;-moz-appearance: none;appearance: none;background: #fff url('../assets/img/caret-down.svg') right 15px center no-repeat;}
 
 .overview .overview-body .list-measurement .list-measurement-items .display-serve span.btn-trash {font-size: 20px;color: #FE676D;margin-left: 10px}
-.overview .overview-body .list-measurement .list-measurement-items .display-serve .serving-percentage {margin-left: 98px;}
+.overview .overview-body .list-measurement .list-measurement-items .display-serve .serving-percentage {margin-left:auto;}
 .overview .overview-body .list-measurement .list-measurement-items .display-serve .serving-percentage button.btn {border-radius: 50%;height: 41px;width: 43px;}
 
 .overview .overview-body .list-measurement .list-measurement-items .display-serve .serving-percentage button.btn svg {color: #053095;font-size: 20px;}
+
+
+.overview .overview-body .list-measurement li.list-measurement-items .collapse-list-section {border-bottom: 3px solid #EDF5FD; padding: 0 0 5px; margin: 0 0 10px;}
+.overview .overview-body .list-measurement li.list-measurement-items .collapse-list-section h2 {font-size: 25px; font-family: 'Neuzeit'; font-weight: 900; color: #201F60; margin: 0 0 10px; display: block;}
+.overview .overview-body .list-measurement li.list-measurement-items .collapse-list-section p {font-size: 14px; font-family: 'gt_walsheim_proregular'; font-weight: 500; color: #201F60; margin: 0 0 15px; display: block; line-height: 20px;}
+
+
+
+.body-list-items {
+    list-style-type: none;
+}
 
 
 .sub-tab {
@@ -15951,6 +16049,73 @@ a.timline-post-edit-btn svg {
     display: block;
 }
 
+.exercise-header { display: flex; flex-wrap: wrap; border-bottom: 3px solid #EDF5FD;}
+.exercise-header .tabs {margin: 15px 0 15px 15px;}
+.exercise-header .tabs .tab {position: relative;}
+.exercise-header .tabs .tab a {padding: 11px 35px; position: relative;}
+.exercise-header .tabs .tab a:before {content: ''; position: absolute; left: 2px; top:2px; bottom: 2px; background: #3ED1A9; width:10px; border-radius: 4px;}
+.exercise-header .tabs .tab.active a:before {background: #FE676D;}
+.exercise-header .tabs .tab .star-icon {position: absolute; right: 0px; top:0px; background: #EF9732; border-radius: 0px 4px 0px 7px; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; fill: #fff; width:18px; height: 18px; border: 0px;}
+.exercise-header .tabs .tab .star-icon svg {width:12px; height: 12px;}
+.exercise-header .tabs .tab:last-child a {padding-left: 20px; padding-right: 20px;}
+.exercise-header .tabs .tab:last-child a::before {display: none;}
+
+.exercise-header .switch-wrap {background: none; box-shadow: none; align-items: center; border-left: 3px solid #EDF5FD; border-radius: 0px; padding: 0 15px;}
+.exercise-header .switch-wrap small {font-size: 19px; color: #201F60; margin: 0px 18px 0 0; font-family: 'Neuzeit'; font-weight: 700;}
+.exercise-header .switch-wrap .material-switch {margin: 0px;}
+.exercise-header .switch-wrap .material-switch .label-default {margin: 0px; width: 50px;}
+.exercise-header .switch-wrap .material-switch .label-default:before {width: 50px; background: #DDD; height: 20px; margin-top:-13px;}
+.exercise-header .switch-wrap .material-switch .label-default:after {width: 30px; height: 30px; background: #3ED1A9; margin-top:-18px;}
+
+.exercise-header .star-icon {border-left: 3px solid #EDF5FD; width:80px; height: 80px; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; fill: #D1DAE2;}
+.exercise-header .star-icon svg {width:30px; height: 30px;}
+
+.exercise-navbar {display: flex; flex-wrap: wrap; padding: 15px; align-items: center;}
+.exercise-navbar .tabs.sub-tab {width: auto;}
+.exercise-navbar .list-notes {display: flex; flex-wrap: wrap; margin-right: 15px;}
+.exercise-navbar .list-notes ul {display: flex; flex-wrap: wrap; margin: 0px; padding: 0px; list-style: none;}
+.exercise-navbar .list-notes ul li {padding: 0 15px;}
+.exercise-navbar .list-notes ul li a {padding: 0px; margin: 0px; display: block; font-size: 20px; color: #201F60; font-family: 'gt_walsheim_proregular'; font-weight: 700;}
+
+.app-wrapper-content .fitness-nutrition .body-wrap.nutrition-todays-meal-section .tab-content.exercise-tabs {height: auto; padding: 0 15px;}
+
+.exercise-tabs .excercise-boxs {background: #D1DAE2 !important; border: 3px solid #D1DAE2; display: flex; flex-wrap: wrap; overflow:hidden;}
+.exercise-tabs .excercise-boxs .excercise-number {background: #201F60; width: 50px; text-align: center; display: flex; flex-wrap: wrap; align-items: center; justify-content: center;}
+.exercise-tabs .excercise-boxs .excercise-number span {font-size: 25px; color: #fff; font-family: 'gt_walsheim_proregular'; font-weight: 900;}
+.exercise-tabs .excercise-boxs .excercise-right {width: calc(100% - 50px);}
+.exercise-tabs .excercise-boxs .excercise-right .topbar-title {width: 100%; display: flex; flex-wrap: wrap; background: #fff; padding: 0px;}
+.exercise-tabs .excercise-boxs .excercise-right .topbar-title h3 {padding: 13px 0 13px 15px; font-size: 25px; color: #201F60; font-family: 'Neuzeit'; font-weight: 900; line-height: 1; margin: 0px;}
+
+.exercise-tabs .excercise-boxs .excercise-right .excercise-content {display: block;}
+.exercise-tabs .excercise-boxs .excercise-right .excercise-content .row {height: auto !important; border-bottom: 3px solid #FFFFFF;}
+.exercise-tabs .excercise-boxs .excercise-right .excercise-content .warmup-title {display: block; background: #fff; padding: 14px 0 14px 20px; font-size: 20px; color:#201F60; line-height: 1; font-family: 'Neuzeit'; font-weight: 700;}
+
+.exercise-tabs .excercise-boxs .excercise-right .excercise-content .serving-boxs {position: relative; width: calc(100% - 10px); margin: 3px 5px;}
+.exercise-tabs .excercise-boxs .excercise-right .excercise-content .serving-boxs .btn {position: absolute; left: 5px; top:50%; transform: translateY(-50%); border-radius: 50%; background: #A6A5BF; fill: #201F60; font-size:13px; width: 25px; height: 25px; border: 0px; display: flex; flex-wrap: wrap; align-items: center; justify-content: center;}
+.exercise-tabs .excercise-boxs .excercise-right .excercise-content .serving-boxs .btn.btn-plus {left: auto; right: 5px;}
+.exercise-tabs .excercise-boxs .excercise-right .excercise-content .serving-boxs .form-control { box-shadow: none; height: auto; padding: 9px 0; text-align: center; font-size: 20px; color:#201F60; line-height: 1; font-family: 'Neuzeit' !important; font-weight: 900; border: 0px; border-radius:5px; }
+
+.exercise-tabs .excercise-boxs .excercise-right .excercise-content .serving-select {width: calc(100% - 10px); margin: 3px 5px;}
+.exercise-tabs .excercise-boxs .excercise-right .excercise-content .serving-select select::-ms-expand {
+    display: none;
+}
+.exercise-tabs .excercise-boxs .excercise-right .excercise-content .serving-select .form-control { box-shadow: none; height: auto; padding: 9px 15px; text-align: left; font-size: 20px; color:#201F60; line-height: 1; font-family: 'Neuzeit' !important; font-weight: 900; border: 0px; border-radius:5px; -webkit-appearance: none; -moz-appearance: none; appearance: none; background: #fff url('../assets/img/caret-down.svg') right 15px center no-repeat; }
+
+
+
+.exercise-tabs .excercise-boxs .excercise-right .topbar-title .btn-toolbar {display: flex; flex-wrap: wrap; align-items: center;}
+.exercise-tabs .excercise-boxs .excercise-right .topbar-title .btn-toolbar .switch-wrap {line-height: 54px; padding: 0 20px; background: none; box-shadow: none; border-right: 3px solid #D1DAE2; border-radius: 0px;}
+.exercise-tabs .excercise-boxs .excercise-right .topbar-title .btn-toolbar .switch-wrap small {font-size: 19px; color: #201F60; font-family: 'Neuzeit'; font-weight: 700;}
+.exercise-tabs .excercise-boxs .excercise-right .topbar-title .btn-toolbar .switch-wrap .material-switch .label-default {width: 40px;}
+.exercise-tabs .excercise-boxs .excercise-right .topbar-title .btn-toolbar .switch-wrap .material-switch .label-default::before {width: 40px; height: 16px; background: #ddd;}
+.exercise-tabs .excercise-boxs .excercise-right .topbar-title .btn-toolbar .switch-wrap .material-switch .label-default::after {width: 22px; height: 22px; right: -10px; background: #FE676D;}
+
+
+.exercise-tabs .excercise-boxs .excercise-right .topbar-title .btn-toolbar .timline-post-del-btn {padding: 15px 15px 15px 20px;}
+
+.exercise-tabs .excercise-boxs .excercise-right .topbar-title .btn-toolbar .boxing-icon {padding: 13px 25px;}
+.exercise-tabs .excercise-boxs .excercise-right .topbar-title .btn-toolbar .boxing-icon .dropdown {margin: 0px;}
+.exercise-tabs .excercise-boxs .excercise-right .topbar-title .btn-toolbar .boxing-icon .dropdown .dropdown-toggle {margin: 0px;}
 
 
 /*********************** Responsive **************************/
