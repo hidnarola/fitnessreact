@@ -20,6 +20,7 @@ class CalendarDayNoteList extends Component {
     const { editorState } = this.state;
     return (
       <React.Fragment>
+        <h3>Notes</h3>
         <div className="excercise-boxs">
           <div className="excercise-number">
             <span>1.</span>
@@ -42,6 +43,9 @@ class CalendarDayNoteList extends Component {
             </div>
           </div>
         </div>
+        <button className="addnote btn">
+          <FontAwesomeIcon icon="plus" /> Add Note
+        </button>
       </React.Fragment>
     );
   }

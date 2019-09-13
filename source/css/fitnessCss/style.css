@@ -15648,6 +15648,13 @@ a.timline-post-edit-btn svg {
 .draftbox {
     height: 200px;
 }
+.addnote,.addnote:hover {
+    background-color: #201F60;
+    font-weight: 700;
+    font-family: 'Neuzeit';
+    color: #fff;
+}
+
 
 .btn.plus-btn {
   padding: 12px;
