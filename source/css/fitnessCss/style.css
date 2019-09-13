@@ -15947,8 +15947,8 @@ a.timline-post-edit-btn svg {
 .overview .overview-body .today-meals-list li.today-meals-items {font-size: 25px;color: #201F60;font-weight: 700;border: solid 2px #D1DAE2;border-radius: 5px;margin: 0 20px 10px 20px;padding: 7px;box-shadow: 2px 2px 2px #CFCFCF24;}
 
 .overview .overview-body .previous-measurement .measurement-items { list-style: none;margin: 5px 20px 5px 20px; background: #EDF5FD; display: flex; flex-wrap: wrap; padding: 12px; border-radius: 5px;}
-.overview .overview-body .previous-measurement .measurement-items span.body-name {color: #201F60;font-size: 20px;font-weight: 800;}
-.overview .overview-body .previous-measurement .measurement-items span.body-text {margin-left: 118px;font-weight: 800;color: #201F60;font-size: 20px;}
+.overview .overview-body .previous-measurement .measurement-items span.body-name {color: #201F60;font-size: 20px;font-weight: 800; display: block;}
+.overview .overview-body .previous-measurement .measurement-items span.body-text {font-weight: 800;color: #201F60;font-size: 20px; display: block; text-align: right;}
 .overview .overview-body .previous-measurement .measurement-items span.date-text {color: #201F60;font-size: 14px;font-weight: 600;}
 .overview .overview-body .previous-measurement .measurement-items span.day-text {margin-left: auto;color: #201F60;font-size: 14px;font-weight: 600;}
 
@@ -16079,29 +16079,27 @@ a.timline-post-edit-btn svg {
 
 .app-wrapper-content .fitness-nutrition .body-wrap.nutrition-todays-meal-section .tab-content.exercise-tabs {height: auto; padding: 0 15px;}
 
-.exercise-tabs .excercise-boxs {background: #D1DAE2 !important; border: 3px solid #D1DAE2; display: flex; flex-wrap: wrap; overflow:hidden;}
+.exercise-tabs .excercise-boxs {background: #D1DAE2 !important; display: flex; flex-wrap: wrap; overflow:hidden; position: relative;}
 .exercise-tabs .excercise-boxs .excercise-number {background: #201F60; width: 50px; text-align: center; display: flex; flex-wrap: wrap; align-items: center; justify-content: center;}
 .exercise-tabs .excercise-boxs .excercise-number span {font-size: 25px; color: #fff; font-family: 'gt_walsheim_proregular'; font-weight: 900;}
-.exercise-tabs .excercise-boxs .excercise-right {width: calc(100% - 50px);}
-.exercise-tabs .excercise-boxs .excercise-right .topbar-title {width: 100%; display: flex; flex-wrap: wrap; background: #fff; padding: 0px;}
+.exercise-tabs .excercise-boxs .excercise-right {width: calc(100% - 50px); margin-left: auto; padding:3px 3px 3px 0;}
+.exercise-tabs .excercise-boxs .excercise-right .topbar-title {width: 100%; display: flex; flex-wrap: wrap; background: #fff; padding: 0px; border-bottom: solid 3px #D1DAE2; border-radius: 0px 7px 0px 0px;}
 .exercise-tabs .excercise-boxs .excercise-right .topbar-title h3 {padding: 13px 0 13px 15px; font-size: 25px; color: #201F60; font-family: 'Neuzeit'; font-weight: 900; line-height: 1; margin: 0px;}
 
 .exercise-tabs .excercise-boxs .excercise-right .excercise-content {display: block;}
 .exercise-tabs .excercise-boxs .excercise-right .excercise-content .row {height: auto !important; border-bottom: 3px solid #FFFFFF;}
+.exercise-tabs .excercise-boxs .excercise-right .excercise-content .row:last-child {border-bottom: 0;}
 .exercise-tabs .excercise-boxs .excercise-right .excercise-content .warmup-title {display: block; background: #fff; padding: 14px 0 14px 20px; font-size: 20px; color:#201F60; line-height: 1; font-family: 'Neuzeit'; font-weight: 700;}
 
-.exercise-tabs .excercise-boxs .excercise-right .excercise-content .serving-boxs {position: relative; width: calc(100% - 10px); margin: 3px 5px;}
+.exercise-tabs .excercise-boxs .excercise-right .excercise-content .serving-boxs {position: relative; width: calc(100% - 5px); margin: 3px 0 3px 5px;}
 .exercise-tabs .excercise-boxs .excercise-right .excercise-content .serving-boxs .btn {position: absolute; left: 5px; top:50%; transform: translateY(-50%); border-radius: 50%; background: #A6A5BF; fill: #201F60; font-size:13px; width: 25px; height: 25px; border: 0px; display: flex; flex-wrap: wrap; align-items: center; justify-content: center;}
 .exercise-tabs .excercise-boxs .excercise-right .excercise-content .serving-boxs .btn.btn-plus {left: auto; right: 5px;}
-.exercise-tabs .excercise-boxs .excercise-right .excercise-content .serving-boxs .form-control { box-shadow: none; height: auto; padding: 9px 0; text-align: center; font-size: 20px; color:#201F60; line-height: 1; font-family: 'Neuzeit' !important; font-weight: 900; border: 0px; border-radius:5px; }
-
-.exercise-tabs .excercise-boxs .excercise-right .excercise-content .serving-select {width: calc(100% - 10px); margin: 3px 5px;}
+.exercise-tabs .excercise-boxs .excercise-right .excercise-content .serving-boxs .form-control { box-shadow: none; height: auto; padding: 9px 0 8px; text-align: center; font-size: 20px; color:#201F60; line-height: 1; font-family: 'Neuzeit' !important; font-weight: 900; border: 0px; border-radius:5px; }
+.exercise-tabs .excercise-boxs .excercise-right .excercise-content .serving-select {width: calc(100% - 5px); margin: 3px 0 3px 5px;}
 .exercise-tabs .excercise-boxs .excercise-right .excercise-content .serving-select select::-ms-expand {
     display: none;
 }
-.exercise-tabs .excercise-boxs .excercise-right .excercise-content .serving-select .form-control { box-shadow: none; height: auto; padding: 9px 15px; text-align: left; font-size: 20px; color:#201F60; line-height: 1; font-family: 'Neuzeit' !important; font-weight: 900; border: 0px; border-radius:5px; -webkit-appearance: none; -moz-appearance: none; appearance: none; background: #fff url('../assets/img/caret-down.svg') right 15px center no-repeat; }
-
-
+.exercise-tabs .excercise-boxs .excercise-right .excercise-content .serving-select .form-control { box-shadow: none; height: auto; padding: 10px 15px; text-align: left; font-size: 20px; color:#201F60; line-height: 1; font-family: 'Neuzeit' !important; font-weight: 900; border: 0px; border-radius:5px; -webkit-appearance: none; -moz-appearance: none; appearance: none; background: #fff url('../assets/img/caret-down.svg') right 15px center no-repeat; }
 
 .exercise-tabs .excercise-boxs .excercise-right .topbar-title .btn-toolbar {display: flex; flex-wrap: wrap; align-items: center;}
 .exercise-tabs .excercise-boxs .excercise-right .topbar-title .btn-toolbar .switch-wrap {line-height: 54px; padding: 0 20px; background: none; box-shadow: none; border-right: 3px solid #D1DAE2; border-radius: 0px;}
@@ -16109,14 +16107,27 @@ a.timline-post-edit-btn svg {
 .exercise-tabs .excercise-boxs .excercise-right .topbar-title .btn-toolbar .switch-wrap .material-switch .label-default {width: 40px;}
 .exercise-tabs .excercise-boxs .excercise-right .topbar-title .btn-toolbar .switch-wrap .material-switch .label-default::before {width: 40px; height: 16px; background: #ddd;}
 .exercise-tabs .excercise-boxs .excercise-right .topbar-title .btn-toolbar .switch-wrap .material-switch .label-default::after {width: 22px; height: 22px; right: -10px; background: #FE676D;}
-
-
 .exercise-tabs .excercise-boxs .excercise-right .topbar-title .btn-toolbar .timline-post-del-btn {padding: 15px 15px 15px 20px;}
 
 .exercise-tabs .excercise-boxs .excercise-right .topbar-title .btn-toolbar .boxing-icon {padding: 13px 25px;}
 .exercise-tabs .excercise-boxs .excercise-right .topbar-title .btn-toolbar .boxing-icon .dropdown {margin: 0px;}
 .exercise-tabs .excercise-boxs .excercise-right .topbar-title .btn-toolbar .boxing-icon .dropdown .dropdown-toggle {margin: 0px;}
 
+.exercise-tabs .excercise-boxs .excercise-right .excercise-content .table {margin: 0px;}
+.exercise-tabs .excercise-boxs .excercise-right .excercise-content .table tr th {font-size: 20px; color: #201F60; font-family: 'Neuzeit'; font-weight: 700; vertical-align: middle; border-right: solid 2px #fff; padding: 5px; border-bottom-color: #D1DAE2;}
+.exercise-tabs .excercise-boxs .excercise-right .excercise-content .table tr th:last-child {border-right: 0;}
+.exercise-tabs .excercise-boxs .excercise-right .excercise-content .table tr th:nth-last-child(2) {border-right: 0;}
+.exercise-tabs .excercise-boxs .excercise-right .excercise-content .table tr th .serving-select {display: flex; flex-wrap: wrap; align-items: center; margin: 0px; width: 100%;}
+.exercise-tabs .excercise-boxs .excercise-right .excercise-content .table tr th .serving-select label {font-size: 20px; color: #201F60; font-family: 'Neuzeit'; font-weight: 700; margin: 0px;}
+.exercise-tabs .excercise-boxs .excercise-right .excercise-content .table tr th .serving-select .form-control {width: calc(100% - 60px); margin-left:auto;}
+
+.exercise-tabs .excercise-boxs .excercise-right .excercise-content .table tbody tr td {font-size: 20px; color: #201F60; font-family: 'Neuzeit'; font-weight: 700; vertical-align: middle; border-right: solid 2px #D1DAE2; padding: 0; border-bottom:solid 2px #D1DAE2; border-top:0px; background: #fff;}
+.exercise-tabs .excercise-boxs .excercise-right .excercise-content .table tbody tr td:last-child {border-right: 0;}
+.exercise-tabs .excercise-boxs .excercise-right .excercise-content .table tbody tr td.red {color: #FE676D;}
+
+.exercise-tabs .excercise-boxs .excercise-right .excercise-content .table tfoot tr td {font-size: 20px; color: #201F60; font-family: 'Neuzeit'; font-weight: 700; padding: 13px 15px;}
+.exercise-tabs .excercise-boxs .excercise-right .excercise-content .table tfoot tr td .btn-addset {font-size: 20px; color: #201F60; font-family: 'Neuzeit'; font-weight: 700; background: none; border: 0px; padding: 0px; margin: 0px; line-height: 1; display: flex; flex-wrap: wrap; align-items: center; cursor: pointer;}
+.exercise-tabs .excercise-boxs .excercise-right .excercise-content .table tfoot tr td .btn-addset span {padding-left:10px;}
 
 /*********************** Responsive **************************/
 

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import CalendarDayOverViewWorkoutsList from './CalendarDayOverViewWorkoutsList';
+
 import { completeUsersBulkWorkoutScheduleRequest } from '../../../actions/userScheduleWorkouts';
 import { connect } from 'react-redux';
 import { isOnline } from '../../../helpers/funs';

@@ -5,6 +5,7 @@ import { Scrollbars } from 'react-custom-scrollbars';
 import Button from 'react-bootstrap/lib/Button';
 import Collapse from 'react-bootstrap/lib/Collapse';
 import CalendarMeasurementList from './CalendarMeasurementList';
+import CalendarPreviousMeasurementList from './CalendarPreviousMeasurementList';
 
 class CalendarDayOverViewLogs extends Component {
   constructor(props) {
@@ -16,6 +17,7 @@ class CalendarDayOverViewLogs extends Component {
   render() {
     const { open } = this.state;
     const { measurement } = this.props;
+
     console.log('THIS>PROPS ===== > ', measurement);
     return (
       <React.Fragment>
@@ -29,24 +31,23 @@ class CalendarDayOverViewLogs extends Component {
                 <div className="overview-body">
                   <Scrollbars autoHide>
                     <ul className="previous-measurement">
-                      <li className="measurement-items">
-                        <span className="body-name">Weight</span>
-                        <span className="body-text">86 kg</span>
-                        <span className="date-text">05/03/2019</span>
-                        <span className="day-text">6 day ago</span>
-                      </li>
-                      <li className="measurement-items">
-                        <span className="body-name">Body Fat</span>
-                        <span className="body-text">13 %</span>
-                        <span className="date-text">05/03/2019</span>
-                        <span className="day-text">6 day ago</span>
-                      </li>
-                      <li className="measurement-items">
-                        <span className="body-name">Calf</span>
-                        <span className="body-text">24 cm</span>
-                        <span className="date-text">05/03/2019</span>
-                        <span className="day-text">6 day ago</span>
-                      </li>
+                      {Object.keys(measurement).map(item => {
+                        console.log('item ====', item);
+                        if (
+                          item !== 'createdAt' &&
+                          item !== 'modifiedAt' &&
+                          item !== '_id' &&
+                          item !== 'userId' &&
+                          item !== 'logDate'
+                        ) {
+                          return (
+                            <CalendarPreviousMeasurementList
+                              measurement={measurement}
+                              item={item}
+                            />
+                          );
+                        }
+                      })}
                     </ul>
                   </Scrollbars>
                 </div>
