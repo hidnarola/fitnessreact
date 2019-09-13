@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Star from '../../../../assets/svg/star.svg';
 import { Link } from 'react-router-dom';
 import { Scrollbars } from 'react-custom-scrollbars';
+import CalendarDayNoteList from './CalendarDayNoteList';
 
 class CalendarDayOverViewWorkouts extends Component {
   constructor(props) {
@@ -213,7 +214,16 @@ class CalendarDayOverViewWorkouts extends Component {
                   <div className="list-notes ml-auto">
                     <ul>
                       <li>
-                        <a href="#">Notes</a>
+                        <a
+                          href={'#notes' + index}
+                          onClick={e => {
+                            this.setState({
+                              cuurentTab: `#notes${index}`,
+                            });
+                          }}
+                        >
+                          Notes
+                        </a>
                       </li>
                       <li>
                         <a href="#">Stats</a>
@@ -293,6 +303,18 @@ class CalendarDayOverViewWorkouts extends Component {
                       ) : (
                         <h3>No records found</h3>
                       )}
+                    </div>
+                  )}
+                  {this.state.cuurentTab === `#notes${index}` && (
+                    <div
+                      className={
+                        this.state.cuurentTab === `#notes${index}`
+                          ? 'content active'
+                          : 'content'
+                      }
+                      id={'notes' + index}
+                    >
+                      <CalendarDayNoteList />
                     </div>
                   )}
                 </div>

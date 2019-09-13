@@ -15645,6 +15645,10 @@ a.timline-post-edit-btn svg {
   line-height: 1;
 }
 
+.draftbox {
+    height: 200px;
+}
+
 .btn.plus-btn {
   padding: 12px;
   border-radius: 50%;
