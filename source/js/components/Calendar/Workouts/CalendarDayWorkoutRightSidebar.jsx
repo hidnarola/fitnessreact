@@ -14,7 +14,7 @@ class CalendarDayWorkoutRightSidebar extends Component {
     return (
       <React.Fragment>
         <div className="blue_right_sidebar">
-          <h2 className="h2_head_one">Quick Add</h2>
+          <h2 className="h2_head_one">Add Exercise</h2>
           <div className="tabs">
             <div
               className={
