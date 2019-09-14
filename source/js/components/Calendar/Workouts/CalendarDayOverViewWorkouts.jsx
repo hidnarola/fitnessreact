@@ -10,6 +10,8 @@ import Star from '../../../../assets/svg/star.svg';
 import { Link } from 'react-router-dom';
 import { Scrollbars } from 'react-custom-scrollbars';
 import CalendarDayNoteList from './CalendarDayNoteList';
+import CalendarDayWorkoutRightSidebar from './CalendarDayWorkoutRightSidebar';
+import CalendarDayRecentWorkoutList from './CalendarDayRecentWorkoutList';
 
 class CalendarDayOverViewWorkouts extends Component {
   constructor(props) {
@@ -18,7 +20,7 @@ class CalendarDayOverViewWorkouts extends Component {
       cuurentTab: '#warmup0',
       completeWorkout: false,
       completeWorkoutActionInit: false,
-      quickTab: '#recentmeals',
+      isActiveQuickTab: false,
     };
   }
   componentDidMount() {
@@ -76,7 +78,7 @@ class CalendarDayOverViewWorkouts extends Component {
     }
   };
   render() {
-    const { completeWorkout } = this.state;
+    const { completeWorkout, isActiveQuickTab } = this.state;
     const { index } = this.props;
     const {
       title,
@@ -91,7 +93,11 @@ class CalendarDayOverViewWorkouts extends Component {
       <React.Fragment>
         <div className="body-content workouts-bg">
           <div className="row justify-content-start no-gutters">
-            <div className="col-xs-12 col-md-9">
+            <div
+              className={
+                isActiveQuickTab ? 'col-xs-12 col-md-7' : 'col-xs-12 col-md-9'
+              }
+            >
               <div className="white-box border-right width-100-per p-0">
                 <div className="exercise-header">
                   <ul className="tabs">
@@ -132,7 +138,13 @@ class CalendarDayOverViewWorkouts extends Component {
                   </div>
                 </div>
 
-                <div className="exercise-navbar">
+                <div
+                  className={
+                    isActiveQuickTab
+                      ? 'exercise-navbar exercise-navbar-active'
+                      : 'exercise-navbar'
+                  }
+                >
                   <div className="tabs sub-tab">
                     <div
                       className={
@@ -213,25 +225,43 @@ class CalendarDayOverViewWorkouts extends Component {
                   </div>
                   <div className="list-notes ml-auto">
                     <ul>
-                      <li>
-                        <a
-                          href={'#notes' + index}
-                          onClick={e => {
-                            this.setState({
-                              cuurentTab: `#notes${index}`,
-                            });
-                          }}
-                        >
-                          Notes
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#">Stats</a>
-                      </li>
+                      {!isActiveQuickTab && (
+                        <React.Fragment>
+                          <li>
+                            <a
+                              href={'#notes' + index}
+                              onClick={e => {
+                                this.setState({
+                                  cuurentTab: `#notes${index}`,
+                                });
+                              }}
+                            >
+                              Notes
+                            </a>
+                          </li>
+                          <li>
+                            <a href="#">Stats</a>
+                          </li>
+                        </React.Fragment>
+                      )}
                     </ul>
                   </div>
-                  <Link to="#" className="btn btn-success plus-btn">
-                    <FontAwesomeIcon icon="plus" />
+                  <Link
+                    to="#"
+                    className={
+                      isActiveQuickTab
+                        ? 'btn btn-danger plus-btn'
+                        : 'btn btn-success plus-btn'
+                    }
+                    onClick={() =>
+                      this.setState({
+                        isActiveQuickTab: !isActiveQuickTab,
+                      })
+                    }
+                  >
+                    <FontAwesomeIcon
+                      icon={isActiveQuickTab ? 'times' : 'plus'}
+                    />
                   </Link>
                 </div>
 
@@ -321,96 +351,20 @@ class CalendarDayOverViewWorkouts extends Component {
               </div>
             </div>
 
-            <div className="col-xs-12 col-md-3 d-flex">
-              <div className="blue_right_sidebar">
-                <h2 className="h2_head_one">Quick Add</h2>
-                <div className="tabs">
-                  <div
-                    className={
-                      this.state.quickTab === '#recentmeals'
-                        ? 'tab active'
-                        : 'tab'
-                    }
-                    id="recentmeals"
-                  >
-                    <a
-                      href="#recentMeals"
-                      onClick={() => {
-                        this.setState({ quickTab: '#recentmeals' });
-                      }}
-                    >
-                      Recent
-                    </a>
-                  </div>
-                  <div
-                    className={
-                      this.state.quickTab === '#favrioutmeals'
-                        ? 'tab active'
-                        : 'tab'
-                    }
-                    id="favrioutmeals"
-                  >
-                    <a
-                      href="#favrioutmeals"
-                      onClick={() => {
-                        this.setState({ quickTab: '#favrioutmeals' });
-                      }}
-                    >
-                      Favourite
-                    </a>
-                  </div>
-                </div>
-                <div className={'tab-content'}>
-                  <div className="recent-ingredient">
-                    <Scrollbars autoHide>
-                      {this.state.quickTab === '#recentmeals' && (
-                        <ul>
-                          <li>
-                            <span className={'star_one active'}>
-                              <Star />
-                            </span>
-                            <h3>Bench Press</h3>
-                            <div className="add_drag">
-                              <FontAwesomeIcon icon="plus-circle" />
-                            </div>
-                          </li>
-                          <li>
-                            <h3>Upright Row</h3>
-                            <div className="add_drag">
-                              <FontAwesomeIcon icon="plus-circle" />
-                            </div>
-                          </li>
-                          <li>
-                            <span className={'star_one active'}>
-                              <Star />
-                            </span>
-                            <h3>Pull up</h3>
-                            <div className="add_drag">
-                              <FontAwesomeIcon icon="plus-circle" />
-                            </div>
-                          </li>
-                        </ul>
-                      )}
-                      {this.state.quickTab === '#favrioutmeals' && (
-                        <ul>
-                          <li>
-                            <h3>Bench Press</h3>
-                            <div className="add_drag">
-                              <FontAwesomeIcon icon="plus-circle" />
-                            </div>
-                          </li>
-                          <li>
-                            <h3>Pull up</h3>
-                            <div className="add_drag">
-                              <FontAwesomeIcon icon="plus-circle" />
-                            </div>
-                          </li>
-                        </ul>
-                      )}
-                    </Scrollbars>
-                  </div>
-                </div>
-              </div>
+            <div
+              className={
+                isActiveQuickTab
+                  ? 'col-xs-12 col-md-5 d-flex'
+                  : 'col-xs-12 col-md-3 d-flex'
+              }
+            >
+              {isActiveQuickTab ? (
+                <CalendarDayWorkoutRightSidebar />
+              ) : (
+                <CalendarDayRecentWorkoutList
+                  isActiveQuickTab={isActiveQuickTab}
+                />
+              )}
             </div>
           </div>
         </div>
