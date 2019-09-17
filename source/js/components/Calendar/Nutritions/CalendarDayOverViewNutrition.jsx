@@ -374,7 +374,7 @@ class CalendarDayOverViewNutrition extends Component {
             <div className="col-xs-12 col-md-3 d-flex">
               <div className="blue_right_sidebar">
                 <h2 className="h2_head_one">Quick Add</h2>
-                <div className="tabs">
+                <div className="tabs tabs-active ">
                   <div
                     className={
                       this.state.quickTab === '#recentmeals'

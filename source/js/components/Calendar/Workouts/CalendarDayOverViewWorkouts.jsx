@@ -12,6 +12,9 @@ import { Scrollbars } from 'react-custom-scrollbars';
 import CalendarDayNoteList from './CalendarDayNoteList';
 import CalendarDayWorkoutRightSidebar from './CalendarDayWorkoutRightSidebar';
 import CalendarDayRecentWorkoutList from './CalendarDayRecentWorkoutList';
+import CalendarDayStatsList from './CalendarDayStatsList';
+import WorkoutHeader from './Header/WorkoutHeader';
+import WorkoutNav from './Header/WorkoutNav';
 
 class CalendarDayOverViewWorkouts extends Component {
   constructor(props) {
@@ -77,6 +80,12 @@ class CalendarDayOverViewWorkouts extends Component {
       tw('You are offline, please check your internet connection');
     }
   };
+  handleChangeTab = tab => {
+    this.setState({ cuurentTab: tab });
+  };
+  handleSetActiveQuickTab = tab => {
+    this.setState({ isActiveQuickTab: tab });
+  };
   render() {
     const { completeWorkout, isActiveQuickTab } = this.state;
     const { index } = this.props;
@@ -89,6 +98,7 @@ class CalendarDayOverViewWorkouts extends Component {
       isCompleted,
     } = this.props.workout;
     console.log('THIS.PROPS ===>', this.props.workout);
+
     return (
       <React.Fragment>
         <div className="body-content workouts-bg">
@@ -99,171 +109,23 @@ class CalendarDayOverViewWorkouts extends Component {
               }
             >
               <div className="white-box border-right width-100-per p-0">
-                <div className="exercise-header">
-                  <ul className="tabs">
-                    <li className="tab active">
-                      <a href="#">Running 1</a>
-                    </li>
-                    <li className="tab">
-                      <a href="#">Chest 3</a>
-                      <span className="star-icon">
-                        <Star />
-                      </span>
-                    </li>
-                    <li className="tab">
-                      <a href="#">
-                        <FontAwesomeIcon icon="plus" />
-                      </a>
-                    </li>
-                  </ul>
-                  <div className="switch-wrap ml-auto">
-                    <small>Workout complete</small>
-                    <div className="material-switch">
-                      <input
-                        id={'workout' + index}
-                        type="checkbox"
-                        checked={completeWorkout}
-                        onChange={() =>
-                          this.handleCompleteWorkout(this.props.workout)
-                        }
-                      />
-                      <label
-                        htmlFor={'workout' + index}
-                        className="label-default"
-                      ></label>
-                    </div>
-                  </div>
-                  <div className="star-icon">
-                    <Star style={{ width: '25px' }} />
-                  </div>
-                </div>
-
-                <div
-                  className={
-                    isActiveQuickTab
-                      ? 'exercise-navbar exercise-navbar-active'
-                      : 'exercise-navbar'
-                  }
-                >
-                  <div className="tabs sub-tab">
-                    <div
-                      className={
-                        this.state.cuurentTab === `#warmup${index}`
-                          ? 'tab active'
-                          : 'tab '
-                      }
-                      id={'warmup' + index}
-                    >
-                      <a
-                        onClick={e => {
-                          this.setState({
-                            cuurentTab: `#warmup${index}`,
-                          });
-                        }}
-                        href={'#warmup' + index}
-                      >
-                        Warmup
-                      </a>
-                    </div>
-                    <div
-                      className={
-                        this.state.cuurentTab === `#workout${index}`
-                          ? 'tab active'
-                          : 'tab'
-                      }
-                      id={'workout' + index}
-                    >
-                      <a
-                        onClick={e => {
-                          this.setState({
-                            cuurentTab: `#workout${index}`,
-                          });
-                        }}
-                        href={'#workout' + index}
-                      >
-                        Workout
-                      </a>
-                    </div>
-                    <div
-                      className={
-                        this.state.cuurentTab === `#cooldown${index}`
-                          ? 'tab active'
-                          : 'tab'
-                      }
-                      id={'cooldown' + index}
-                    >
-                      <a
-                        onClick={e => {
-                          this.setState({
-                            cuurentTab: `#cooldown${index}`,
-                          });
-                        }}
-                        href={'#cooldown' + index}
-                      >
-                        Cooldown
-                      </a>
-                    </div>
-                    <div
-                      className={
-                        this.state.cuurentTab === `#fitnesstest${index}`
-                          ? 'tab  active'
-                          : 'tab'
-                      }
-                      id={'fitnesstest' + index}
-                    >
-                      <a
-                        onClick={e => {
-                          this.setState({
-                            cuurentTab: `#fitnesstest${index}`,
-                          });
-                        }}
-                        href={'#fitnesstest' + index}
-                      >
-                        Fitness Tests
-                      </a>
-                    </div>
-                  </div>
-                  <div className="list-notes ml-auto">
-                    <ul>
-                      {!isActiveQuickTab && (
-                        <React.Fragment>
-                          <li>
-                            <a
-                              href={'#notes' + index}
-                              onClick={e => {
-                                this.setState({
-                                  cuurentTab: `#notes${index}`,
-                                });
-                              }}
-                            >
-                              Notes
-                            </a>
-                          </li>
-                          <li>
-                            <a href="#">Stats</a>
-                          </li>
-                        </React.Fragment>
-                      )}
-                    </ul>
-                  </div>
-                  <Link
-                    to="#"
-                    className={
-                      isActiveQuickTab
-                        ? 'btn btn-danger plus-btn'
-                        : 'btn btn-success plus-btn'
-                    }
-                    onClick={() =>
-                      this.setState({
-                        isActiveQuickTab: !isActiveQuickTab,
-                      })
-                    }
-                  >
-                    <FontAwesomeIcon
-                      icon={isActiveQuickTab ? 'times' : 'plus'}
-                    />
-                  </Link>
-                </div>
+                <WorkoutHeader
+                  index={index}
+                  completeWorkout={completeWorkout}
+                  workout={this.props.workout}
+                  handleCompleteWorkout={this.handleCompleteWorkout}
+                />
+                {this.state.cuurentTab !== `#stats${index}` ? (
+                  <WorkoutNav
+                    index={index}
+                    cuurentTab={this.state.cuurentTab}
+                    isActiveQuickTab={isActiveQuickTab}
+                    handleChangeTab={this.handleChangeTab}
+                    handleSetActiveQuickTab={this.handleSetActiveQuickTab}
+                  />
+                ) : (
+                  ''
+                )}
 
                 <div className={'exercise-tabs tab-content'}>
                   {this.state.cuurentTab === `#warmup${index}` && (
@@ -345,6 +207,21 @@ class CalendarDayOverViewWorkouts extends Component {
                       id={'notes' + index}
                     >
                       <CalendarDayNoteList />
+                    </div>
+                  )}
+                  {this.state.cuurentTab === `#stats${index}` && (
+                    <div
+                      className={
+                        this.state.cuurentTab === `#stats${index}`
+                          ? 'content active'
+                          : 'content'
+                      }
+                      id={'stats' + index}
+                    >
+                      <CalendarDayStatsList
+                        index={index}
+                        handleChangeTab={this.handleChangeTab}
+                      />
                     </div>
                   )}
                 </div>

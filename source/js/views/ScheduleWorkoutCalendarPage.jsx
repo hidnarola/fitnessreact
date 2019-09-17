@@ -39,6 +39,10 @@ import AddMetaDescription from '../components/global/AddMetaDescription';
 import { getUserMealsLogDatesRequest, userMealUpdateRequest, copyUserMealSchedule, cutUserMealSchedule, setScheduleMealsState, setMealDatainIdb } from '../actions/user_meal';
 import { getUserBodyMeasurementLogDatesRequest, cutUserBodyMeasurementSchedule, updateUserBodyMeasurementRequest, setUserBodyMeasurementState, copyUserBodyMeasurementSchedule, pasteUserBodyMeasurementRequest, setBodyMeasurementDatainIdb } from '../actions/userBodyMeasurement';
 import { getUserFitnessTestsLogDatesRequest } from '../actions/userFitnessTests';
+import Toolbar from 'react-big-calendar/lib/Toolbar';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Bars1 from '../../assets/svg/bars-duotone1.svg'
+import Bars2 from '../../assets/svg/bars-duotone2.svg'
 
 let dragEventActive = false;
 let dragEventCardOutside = false;
@@ -84,11 +88,19 @@ class ScheduleWorkoutCalendarPage extends Component {
             display_all_exercises: true,
             display_all_nutrition: true,
             display_all_logs: true,
-            cuurentTab:"#weekview"
+            cuurentTab:"#weekview",
+            isActiveCalendarList: false,
+            isActiveView: "#list",
+            calendarView: "week"
         }
         this.iDB;
     }
-
+    handleChangeActiveCalendarList = (status,tab) => {
+        this.setState({ isActiveCalendarList : status,isActiveView : tab})
+    }
+    handleCalendarTabView = (tab) => {
+        this.setState({ calendarView : tab })
+    }
     render() {
         const {
             showSelectEventAlert,
@@ -104,7 +116,10 @@ class ScheduleWorkoutCalendarPage extends Component {
             showAppendProgram,
             display_all_exercises,
             display_all_logs,
-            display_all_nutrition
+            display_all_nutrition,
+            isActiveCalendarList,
+            isActiveView,
+            calendarView
         } = this.state;
         const {
             dispatch,
@@ -141,49 +156,50 @@ class ScheduleWorkoutCalendarPage extends Component {
                             <h2>Calendar</h2>
                             <p>Your goal choice shapes how your fitness assistant will ceate your meal and exercise plans, it’s important that you set goals which are achieveable. Keep updating your profile and your fitness assistant will keep you on track and meeting the goals you’ve set out for yourself.</p>
                         </div> */}
-                        <div className="body-head-l">
-                            <h2>Calendar</h2>
+                        <div className="body-head-l d-flex flex-wrap align-items-center pl-4 pr-4">
+                            <h2 className="sm-cal-title">Calendar</h2>
+                            <div className="custom_check_wrap ml-auto d-flex flex-wrap align-items-center mb-0">
+                                <h5 className="mr-2">Display : </h5>
+                                <div className="custom_check mb-0">
+                                    <input
+                                    type="checkbox"
+                                    id={'display_all_exercises'}
+                                    name={'display_all_exercises'}
+                                    checked={display_all_exercises}
+                                    onChange={() => this.handleChangeCheckbox('display_all_exercises')}
+                                    />
+                                    <label className="mb-0" htmlFor="display_all_exercises">Exercise</label>
+                                </div>
+                                <div className="custom_check mb-0">
+                                    <input
+                                    type="checkbox"
+                                    id={'display_all_nutrition'}
+                                    name={'display_all_nutrition'}
+                                    checked={display_all_nutrition}
+                                    onChange={() => this.handleChangeCheckbox('display_all_nutrition')}
+                                    />
+                                    <label className="mb-0" htmlFor="display_all_nutrition">Nutrition</label>
+                                </div>
+                                <div className="custom_check mb-0">
+                                    <input
+                                    type="checkbox"
+                                    id={'display_all_logs'}
+                                    name={'display_all_logs'}
+                                    checked={display_all_logs}
+                                    onChange={() => this.handleChangeCheckbox('display_all_logs')}
+                                    />
+                                    <label className="mb-0" htmlFor="display_all_logs">Logs</label>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                     <div className="body-content d-flex row justify-content-start profilephoto-content" data-for="custom-cut-workout-wrap" data-tip>
                         <div className="col-md-12">
 
-                        <div className="d-flex custom_check_wrap" style={{margin: "20px 0 0"}}>
-                                    <h5 className="mr-2">Display : </h5>
-                                    <div className="custom_check">
-                                      <input
-                                        type="checkbox"
-                                        id={'display_all_exercises'}
-                                        name={'display_all_exercises'}
-                                        checked={display_all_exercises}
-                                        onChange={() => this.handleChangeCheckbox('display_all_exercises')}
-                                      />
-                                      <label htmlFor="display_all_exercises">Exercise</label>
-                                      </div>
-                                    <div className="custom_check">
-                                      <input
-                                        type="checkbox"
-                                        id={'display_all_nutrition'}
-                                        name={'display_all_nutrition'}
-                                        checked={display_all_nutrition}
-                                        onChange={() => this.handleChangeCheckbox('display_all_nutrition')}
-                                      />
-                                      <label htmlFor="display_all_nutrition">Nutrition</label>
-                                      </div>
-                                    <div className="custom_check">
-                                      <input
-                                        type="checkbox"
-                                        id={'display_all_logs'}
-                                        name={'display_all_logs'}
-                                        checked={display_all_logs}
-                                        onChange={() => this.handleChangeCheckbox('display_all_logs')}
-                                      />
-                                      <label htmlFor="display_all_logs">Logs</label>
-                                      </div>
-                                      </div>
 
-                            <div id="cal-panel-wrap" className="white-box space-btm-20">
-                                <div className="whitebox-body profile-body">
+                            <div id="cal-panel-wrap">
+                                <div className="profile-body">
                                     {selectedEvents && selectedEvents.length > 0 &&
                                         <div className="fixed-btm-bar d-flex">
                                             <div className="fixed-btm-bar-l d-flex">
@@ -215,6 +231,8 @@ class ScheduleWorkoutCalendarPage extends Component {
                                     }
 
                                     <BigCalendar
+                                        popup={true}
+                                        popupOffset={20}
                                         selectable={true}
                                         localizer={BigCalendar.momentLocalizer(moment)}
                                         defaultView={BigCalendar.Views.WEEK}
@@ -225,10 +243,10 @@ class ScheduleWorkoutCalendarPage extends Component {
                                         onNavigate={this.handleNavigation}
                                         onSelectEvent={(event) => { }}
                                         onSelectSlot={this.onSelectSlot}
-                                        popup={true}
-                                        popupOffset={50}
                                         components={{
-                                            event: CustomEventCard,
+                                            event: CustomEventsCard(isActiveCalendarList),
+                                            toolbar : CustomBars(isActiveCalendarList,this.handleChangeActiveCalendarList,isActiveView,this.handleCalendarTabView,calendarView),
+
                                         }}
                                     />
                                 </div>
@@ -1728,168 +1746,176 @@ class SelectEventView extends Component {
     }
 }
 
-class CustomEventCard extends Component {
-    render() {
-        const { event } = this.props;
-        let today = moment().utc();
-        let yesturday = moment().subtract('1', 'day');
-        let eventDate = moment(event.start);
-        let cardClassName = '';
-        let showCompleteSwitch = false;
-        if (today > eventDate) {
-            if (event.isCompleted === 1 && event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE) {
-                cardClassName = 'w-c-green';
-            } else if (event.isCompleted === 0 && yesturday > eventDate && event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE) {
-                cardClassName = 'w-c-pink';
-            }
-            else if (event.isCompleted === 0 && yesturday > eventDate && event.exerciseType === SCHEDULED_MEAL) {
-              cardClassName = 'past-meal w-c-lightgreen';
-            }
-            else if (event.isCompleted === 0 && yesturday > eventDate && event.exerciseType === SCHEDULED_BODY_MEASUREMENT) {
-              cardClassName = 'past-body w-c-lightblue';
-            }
-            else if (event.isCompleted === 0 && yesturday > eventDate && event.exerciseType === SCHEDULED_FITNESS_TEST) {
-              cardClassName = 'past-body w-c-darkorange';
-            }
-            showCompleteSwitch = true;
-        }
-        const date = new Date(eventDate).toISOString()
-        const encode = encodeURIComponent(`date=${date}`)
-
-        return (
-            <div
-                id={`workout-card-${event.id}`}
-                className={
-                    cns(`animated fadeIn big-calendar-custom-month-event-view-card ${cardClassName}`, {
-                        'restday w-c-orange': (event.exerciseType === SCHEDULED_WORKOUT_TYPE_RESTDAY),
-                        'loss-opacity': event.isCut,
-                        'disable-overlay': event.isCutEnable,
-                        'opacity-0': dragEventId === event.id,
-                        'w-c-darkgreen': (event.exerciseType === SCHEDULED_MEAL && eventDate > today),
-                        'past-body w-c-darkorange' : (event.exerciseType === SCHEDULED_FITNESS_TEST && eventDate > today)
-                    })
+const CustomEventsCard = (isActiveCalendarList) => {
+    return class CustomEventCard extends Component {
+        render() {
+            const { event } = this.props;
+            let today = moment().utc();
+            let yesturday = moment().subtract('1', 'day');
+            let eventDate = moment(event.start);
+            let cardClassName = '';
+            let showCompleteSwitch = false;
+            // if (today > eventDate) {
+                if (event.isCompleted === 1 && event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE) {
+                    cardClassName = 'w-c-blue';
+                } else if (event.isCompleted === 0  && event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE) {
+                    cardClassName = 'w-c-blue';
                 }
-            >
-                <div className="big-calendar-custom-month-event-view-card-header">
-                    <div className="pull-left custom_check p-relative" onClick={event.exerciseType !== SCHEDULED_MEAL ? event.handleSelectForBulkAction : undefined}>
-                       { event.exerciseType !== SCHEDULED_MEAL && event.exerciseType !== SCHEDULED_BODY_MEASUREMENT && event.exerciseType !== SCHEDULED_FITNESS_TEST &&
-                        <input
-                            type="checkbox"
-                            id={`complete_workout_schedule_${event.id}`}
-                            name={`complete_workout_schedule_${event.id}`}
-                            checked={event.isSelectedForBulkAction}
-                            onChange={() => { }}
-                        />}
-                        <label><h5>{event.title}</h5></label>
+                else if (event.isCompleted === 0  && event.exerciseType === SCHEDULED_MEAL) {
+                cardClassName = 'w-c-greendark';
+                }
+                else if (event.isCompleted === 0  && event.exerciseType === SCHEDULED_BODY_MEASUREMENT) {
+                cardClassName = 'w-c-greenlight';
+                }
+                else if (event.isCompleted === 0  && event.exerciseType === SCHEDULED_FITNESS_TEST) {
+                cardClassName = 'w-c-red';
+                }
+                showCompleteSwitch = true;
+            // }
+            const date = new Date(eventDate).toISOString()
+            const encode = encodeURIComponent(`date=${date}`)
 
-                        { event.exerciseType !== SCHEDULED_FITNESS_TEST &&
-                          <a href="javascript:void(0)" data-tip="Cut" className="workout-cut-card-btn" onClick={(e) => { e.stopPropagation(); event.handleCut(event) }}><i className="icon-flip_to_front"></i></a>
-                        }
-                        {  event.exerciseType !== SCHEDULED_FITNESS_TEST &&
-                          <div className="calendar-custom-drag-handle" onMouseDown={(e) => this.handleMouseDown(e, event)} onMouseUp={this.handleMouseUp} onClick={(e) => e.stopPropagation()}><i className="icon-open_with"></i></div>
-                        }
-                    </div>
-                    <div className={cns("big-calendar-custom-month-event-view-card-body", { "w-c-brb": !showCompleteSwitch })}>
-                        {event.description &&
-                            <div><p>{event.description}</p></div>
-                        }
-                        {(event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
-                            <a href="javascript:void(0)" data-tip="Copy" onClick={event.handleCopy} title=""><FaCopy /></a>
-                        }
-                        {(event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
-                            <NavLink to={routeCodes.SAVE_SCHEDULE_WORKOUT.replace(':id', event.id)} data-tip="Details" title=""><FaEye /></NavLink>
-                        }
-                        {(event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
-                            <NavLink to={routeCodes.SAVE_SCHEDULE_WORKOUT.replace(':id', event.id)} data-tip="Change" title=""><FaPencil /></NavLink>
-                        }
-                        {(event.exerciseType === SCHEDULED_MEAL) &&
-                            <a href="javascript:void(0)" data-tip="Copy" onClick={event.handleCopy} title=""><FaCopy /></a>
-                        }
-                        {(event.exerciseType === SCHEDULED_MEAL) &&
+            return (
+                <div
+                    id={`workout-card-${event.id}`}
+                    className={
+                        cns(`animated fadeIn big-calendar-custom-month-event-view-card ${cardClassName}`, {
+                            'restday w-c-blue': (event.exerciseType === SCHEDULED_WORKOUT_TYPE_RESTDAY),
+                            'loss-opacity': event.isCut,
+                            'disable-overlay': event.isCutEnable,
+                            'opacity-0': dragEventId === event.id,
+                            'w-c-darkgreen': (event.exerciseType === SCHEDULED_MEAL && eventDate > today),
+                            'past-body w-c-darkorange' : (event.exerciseType === SCHEDULED_FITNESS_TEST && eventDate > today)
+                        })
+                    }
 
-                            <NavLink to={`${routeCodes.NUTRITION_VIEW}/${event.mealDetail_id}`} data-tip="Details" title=""><FaEye /></NavLink>
-                        }
-                        {(event.exerciseType === SCHEDULED_MEAL) &&
-                            <NavLink to={`${routeCodes.NUTRITION_EDIT}/${event.mealDetail_id}`} data-tip="Change" title=""><FaPencil /></NavLink>
-                        }
+                >
+                    <div className="big-calendar-custom-month-event-view-card-header">
 
-                        {(event.exerciseType === SCHEDULED_BODY_MEASUREMENT) &&
-                            <a href="javascript:void(0)" data-tip="Copy" onClick={event.handleCopy} title=""><FaCopy /></a>
-                        }
-                        {(event.exerciseType === SCHEDULED_BODY_MEASUREMENT) &&
-                            <NavLink to={`${routeCodes.BODY}?${encode}`} data-tip="Details" title=""><FaEye /></NavLink>
-                        }
-                        {/* {(event.exerciseType === SCHEDULED_BODY_MEASUREMENT) &&
-                            <NavLink to={routeCodes.SAVE_SCHEDULE_WORKOUT.replace(':id', event.id)} data-tip="Change" title=""><FaPencil /></NavLink>
-                        } */}
-                        {/* {(event.exerciseType === SCHEDULED_FITNESS_TEST) &&
-                            <NavLink to={routeCodes.EXERCISEFITNESS} data-tip="Details" title=""><FaEye /></NavLink>
-                        } */}
+                        <div className="pull-left custom_check p-relative" onClick={event.exerciseType !== SCHEDULED_MEAL ? event.handleSelectForBulkAction : undefined}>
                         {
-                        event.exerciseType !== SCHEDULED_MEAL && event.exerciseType !== SCHEDULED_BODY_MEASUREMENT && event.exerciseType !== SCHEDULED_FITNESS_TEST && <a href="javascript:void(0)" data-tip="Delete" data-for="event-delete-tooltip" onClick={event.handleDelete} title=""><FaTrash /></a>}
-                    </div>
-                </div>
-                {event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE && showCompleteSwitch && typeof event.totalExercises !== 'undefined' && event.totalExercises > 0 &&
-                    <div className="big-calendar-custom-month-event-view-card-footer">
-                        <div className="switch-wrap">
-                            <small>Workout Completed</small>
-                            <div className="material-switch" onClick={event.handleCompleteWorkout}>
-                                <input
-                                    id={`complete_switch_${event.id}`}
-                                    name={`complete_switch_${event.id}`}
-                                    checked={event.isCompleted}
-                                    onChange={() => { }}
-                                    type="checkbox"
-                                />
-                                <label htmlFor={`complete_switch_${event.id}`} className="label-default"></label>
-                            </div>
+                            <input
+                                type="checkbox"
+                                id={`complete_workout_schedule_${event.id}`}
+                                name={`complete_workout_schedule_${event.id}`}
+                                checked={event.isSelectedForBulkAction}
+                                onChange={() => { }}
+                            />}
+                            <label><h5>{event.title}</h5></label>
+
+                            {/* { event.exerciseType !== SCHEDULED_FITNESS_TEST &&
+                            <a href="javascript:void(0)" data-tip="Cut" className="workout-cut-card-btn" onClick={(e) => { e.stopPropagation(); event.handleCut(event) }}><i className="icon-flip_to_front"></i></a>
+                            }
+                            {  event.exerciseType !== SCHEDULED_FITNESS_TEST &&
+                            <div className="calendar-custom-drag-handle" onMouseDown={(e) => this.handleMouseDown(e, event)} onMouseUp={this.handleMouseUp} onClick={(e) => e.stopPropagation()}><i className="icon-open_with"></i></div>
+                            } */}
+
+                        </div>
+
+                        <div className={cns("big-calendar-custom-month-event-view-card-body", { "w-c-brb": !showCompleteSwitch })} onMouseDown={(e) => this.handleMouseDown(e, event)} onMouseUp={this.handleMouseUp} onClick={(e) => e.stopPropagation()}>
+                            {isActiveCalendarList && event.description &&
+                                <div><p>{event.description}</p></div>
+                            }
+                            {/* {(event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
+                                <a href="javascript:void(0)" data-tip="Copy" onClick={event.handleCopy} title=""><FaCopy /></a>
+                            }
+                            {(event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
+                                <NavLink to={routeCodes.SAVE_SCHEDULE_WORKOUT.replace(':id', event.id)} data-tip="Details" title=""><FaEye /></NavLink>
+                            }
+                            {(event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
+                                <NavLink to={routeCodes.SAVE_SCHEDULE_WORKOUT.replace(':id', event.id)} data-tip="Change" title=""><FaPencil /></NavLink>
+                            }
+                            {(event.exerciseType === SCHEDULED_MEAL) &&
+                                <a href="javascript:void(0)" data-tip="Copy" onClick={event.handleCopy} title=""><FaCopy /></a>
+                            }
+                            {(event.exerciseType === SCHEDULED_MEAL) &&
+
+                                <NavLink to={`${routeCodes.NUTRITION_VIEW}/${event.mealDetail_id}`} data-tip="Details" title=""><FaEye /></NavLink>
+                            }
+                            {(event.exerciseType === SCHEDULED_MEAL) &&
+                                <NavLink to={`${routeCodes.NUTRITION_EDIT}/${event.mealDetail_id}`} data-tip="Change" title=""><FaPencil /></NavLink>
+                            }
+
+                            {(event.exerciseType === SCHEDULED_BODY_MEASUREMENT) &&
+                                <a href="javascript:void(0)" data-tip="Copy" onClick={event.handleCopy} title=""><FaCopy /></a>
+                            }
+                            {(event.exerciseType === SCHEDULED_BODY_MEASUREMENT) &&
+                                <NavLink to={`${routeCodes.BODY}?${encode}`} data-tip="Details" title=""><FaEye /></NavLink>
+                            } */}
+
+                            {/* {(event.exerciseType === SCHEDULED_BODY_MEASUREMENT) &&
+                                <NavLink to={routeCodes.SAVE_SCHEDULE_WORKOUT.replace(':id', event.id)} data-tip="Change" title=""><FaPencil /></NavLink>
+                            } */}
+                            {/* {(event.exerciseType === SCHEDULED_FITNESS_TEST) &&
+                                <NavLink to={routeCodes.EXERCISEFITNESS} data-tip="Details" title=""><FaEye /></NavLink>
+                            } */}
+
+                            {/* {
+                            event.exerciseType !== SCHEDULED_MEAL && event.exerciseType !== SCHEDULED_BODY_MEASUREMENT && event.exerciseType !== SCHEDULED_FITNESS_TEST && <a href="javascript:void(0)" data-tip="Delete" data-for="event-delete-tooltip" onClick={event.handleDelete} title=""><FaTrash /></a>} */}
                         </div>
                     </div>
-                }
+                    {event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE && showCompleteSwitch && typeof event.totalExercises !== 'undefined' && event.totalExercises > 0 &&
+                        <div className="big-calendar-custom-month-event-view-card-footer">
+                            <div className="switch-wrap">
+                                <small>Workout Completed</small>
+                                <div className="material-switch" onClick={event.handleCompleteWorkout}>
+                                    <input
+                                        id={`complete_switch_${event.id}`}
+                                        name={`complete_switch_${event.id}`}
+                                        checked={event.isCompleted}
+                                        onChange={() => { }}
+                                        type="checkbox"
+                                    />
+                                    <label htmlFor={`complete_switch_${event.id}`} className="label-default"></label>
+                                </div>
+                            </div>
+                        </div>
+                    }
 
-                <ReactTooltip place="top" type="dark" effect="solid" />
-                <ReactTooltip id='event-delete-tooltip' place="top" type="error" effect="solid" />
-            </div>
-        );
-    }
+                    <ReactTooltip place="top" type="dark" effect="solid" />
+                    <ReactTooltip id='event-delete-tooltip' place="top" type="error" effect="solid" />
+                </div>
+            );
+        }
 
-    handleMouseDown = (e, event) => {
-        console.log('MOUSE DOWN CALL',event)
-        const selectedCard = $(`#workout-card-${event.id}`);
-        const dragPlaceholder = $('#custom-drag-workout-wrap');
-        const offsets = selectedCard.offset();
-        const offsetLeft = offsets && offsets.left ? offsets.left : 0;
-        const offsetRight = offsets && offsets.top ? offsets.top : 0;
-        const eventCardX = (offsetLeft - e.clientX);
-        const eventCardY = (offsetRight - e.clientY);
-        dragPlaceholder.html(selectedCard.parent().html());
-        dragPlaceholder.css({ top: (eventCardY + e.clientY), left: (eventCardX + e.clientX) });
-        dragEventActive = true;
-        dragEventCardOutside = false;
-        dragEventId = event.id;
-        dragEventDate = event.start;
-        dragEventCardX = eventCardX;
-        dragEventCardY = eventCardY;
-        dragEventType = event.exerciseType;
-        dragEventMealID = event.exerciseType === SCHEDULED_MEAL ? event.meal_id : null
-        dragEventDetailID = event.exerciseType === SCHEDULED_MEAL ? event.mealDetail_id : null
-        $('#cal-panel-wrap').css({ boxShadow: "none" });
-        selectedCard.css({ opacity: "0" });
-    }
+        handleMouseDown = (e, event) => {
+            console.log('MOUSE DOWN CALL',event)
+            const selectedCard = $(`#workout-card-${event.id}`);
+            const dragPlaceholder = $('#custom-drag-workout-wrap');
+            const offsets = selectedCard.offset();
+            const offsetLeft = offsets && offsets.left ? offsets.left : 0;
+            const offsetRight = offsets && offsets.top ? offsets.top : 0;
+            const eventCardX = (offsetLeft - e.clientX);
+            const eventCardY = (offsetRight - e.clientY);
+            dragPlaceholder.html(selectedCard.parent().html());
+            dragPlaceholder.css({ top: (eventCardY + e.clientY), left: (eventCardX + e.clientX) });
+            dragEventActive = true;
+            dragEventCardOutside = false;
+            dragEventId = event.id;
+            dragEventDate = event.start;
+            dragEventCardX = eventCardX;
+            dragEventCardY = eventCardY;
+            dragEventType = event.exerciseType;
+            dragEventMealID = event.exerciseType === SCHEDULED_MEAL ? event.meal_id : null
+            dragEventDetailID = event.exerciseType === SCHEDULED_MEAL ? event.mealDetail_id : null
+            $('#cal-panel-wrap').css({ boxShadow: "none" });
+            selectedCard.css({ opacity: "0" });
+        }
 
-    handleMouseUp = (e) => {
-        const selectedCard = $(`#workout-card-${dragEventId}`);
-        const dragPlaceholder = $('#custom-drag-workout-wrap');
-        dragPlaceholder.html('');
-        dragEventActive = false;
-        dragEventCardOutside = false;
-        dragEventId = null;
-        dragEventDate = null;
-        dragEventCardX = null;
-        dragEventCardY = null;
-        $('#cal-panel-wrap').css({ boxShadow: "none" });
-        selectedCard.removeClass("opacity-0");
-        selectedCard.css({ opacity: "1" });
+        handleMouseUp = (e) => {
+            const selectedCard = $(`#workout-card-${dragEventId}`);
+            const dragPlaceholder = $('#custom-drag-workout-wrap');
+            dragPlaceholder.html('');
+            dragEventActive = false;
+            dragEventCardOutside = false;
+            dragEventId = null;
+            dragEventDate = null;
+            dragEventCardX = null;
+            dragEventCardY = null;
+            $('#cal-panel-wrap').css({ boxShadow: "none" });
+            selectedCard.removeClass("opacity-0");
+            selectedCard.css({ opacity: "1" });
+        }
     }
 }
 
@@ -1901,19 +1927,32 @@ class CustomEventCardView extends Component {
         let eventDate = moment(event.start);
         let cardClassName = '';
         let showCompleteSwitch = false;
-        if (today > eventDate) {
+        // if (today > eventDate) {
+
             if (event.isCompleted === 1 && event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE) {
-                cardClassName = 'w-c-green';
-            } else if (event.isCompleted === 0 && yesturday > eventDate && event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE) {
-                cardClassName = 'w-c-pink';
+                cardClassName = 'w-c-blue';
+            } else if (event.isCompleted === 0  && event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE) {
+                cardClassName = 'w-c-blue';
+            }
+            else if (event.isCompleted === 0  && event.exerciseType === SCHEDULED_MEAL) {
+              cardClassName = 'w-c-greendark';
+            }
+            else if (event.isCompleted === 0  && event.exerciseType === SCHEDULED_BODY_MEASUREMENT) {
+              cardClassName = 'w-c-greenlight';
+            }
+            else if (event.isCompleted === 0  && event.exerciseType === SCHEDULED_FITNESS_TEST) {
+              cardClassName = 'w-c-red';
             }
             showCompleteSwitch = true;
-        }
+        // }
         return (
             <div
                 className={
                     cns(`cut-workout-wrap big-calendar-custom-month-event-view-card ${cardClassName}`, {
-                        'restday w-c-orange': (event.exerciseType === SCHEDULED_WORKOUT_TYPE_RESTDAY)
+                        'restday w-c-orange': (event.exerciseType === SCHEDULED_WORKOUT_TYPE_RESTDAY),
+                        'opacity-0': dragEventId === event.id,
+                        'w-c-darkgreen': (event.exerciseType === SCHEDULED_MEAL && eventDate > today),
+                        'past-body w-c-darkorange' : (event.exerciseType === SCHEDULED_FITNESS_TEST && eventDate > today)
                     })
                 }
             >
@@ -1963,5 +2002,59 @@ class CustomEventCardView extends Component {
                 }
             </div>
         );
+    }
+}
+
+const CustomBars = (isActiveCalendarList,handleChangeActiveList,isActiveView,handleCalendarTabView,calendarView) => {
+    return class CustomToolbar extends Toolbar {
+        constructor(props){
+            super(props)
+        }
+        view = action => {
+            console.log("Props",this.props)
+            this.props.onViewChange(action);
+            handleCalendarTabView(action)
+        };
+        handleChange = (tab,active) => {
+            handleChangeActiveList(active,tab)
+        }
+        render() {
+        return (
+            <div className='rbc-toolbar'>
+                <div className="rbc-btn-group">
+                    <button type="button" className={calendarView === "month" ? "rbc-active" : ""} onClick={() => this.view('month')}>Month</button>
+                    <button type="button" className={calendarView === "week" ? "rbc-active" : ""} onClick={() => this.view('week')}>Week</button>
+                </div>
+
+                <div className="liststyle-navbar d-flex flex-wrap ml-auto align-items-center">
+                    <h4>list style</h4>
+                    <div className="tabs ml-4 mr-4 align-items-center">
+                        <div className={isActiveView === '#list' ? "tab active" : "tab"} >
+                            <a href="#list" onClick={() => this.handleChange("#list",false)} id={'list'}><Bars1 /></a>
+                        </div>
+                        <div className={isActiveView === '#collaps' ? "tab active" : "tab"}>
+                            <a href="#collaps"  onClick={() => this.handleChange("#collaps",true)} id={'collaps'}><Bars2 /></a>
+                        </div>
+                    </div>
+                </div>
+
+                <span className="nextprev-button">
+                    <button type="button" className="back-btn" onClick={() => this.navigate('PREV')}>
+                        <FontAwesomeIcon icon="arrow-left"/>
+                    </button>
+                    <span className="rbc-toolbar-label">{this.props.label}</span>
+                    <button type="button" className="next-btn" onClick={() => this.navigate('NEXT')}>
+                        <FontAwesomeIcon icon="arrow-right"/>
+                    </button>
+                </span>
+            </div>
+        );
+        }
+
+        navigate = action => {
+        console.log(action);
+
+        this.props.onNavigate(action)
+        }
     }
 }

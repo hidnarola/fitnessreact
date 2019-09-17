@@ -22,6 +22,9 @@ import { faEdit } from '@fortawesome/free-solid-svg-icons/faEdit';
 import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 import { faCalculator } from '@fortawesome/free-solid-svg-icons/faCalculator';
 import { faSave } from '@fortawesome/free-solid-svg-icons/faSave';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons/faArrowLeft';
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons/faArrowRight';
+import { faEllipsisH } from '@fortawesome/free-solid-svg-icons/faEllipsisH';
 
 library.add(
   faUtensils,
@@ -46,4 +49,7 @@ library.add(
   faTimes,
   faCalculator,
   faSave,
+  faArrowLeft,
+  faArrowRight,
+  faEllipsisH,
 );
