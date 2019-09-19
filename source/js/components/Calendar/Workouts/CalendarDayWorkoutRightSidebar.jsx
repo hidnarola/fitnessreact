@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Scrollbars } from 'react-custom-scrollbars';
 import Star from '../../../../assets/svg/star.svg';
+import Search from '../../../../assets/svg/square.svg';
 
 class CalendarDayWorkoutRightSidebar extends Component {
   constructor(props) {
@@ -66,32 +67,44 @@ class CalendarDayWorkoutRightSidebar extends Component {
             <div className="recent-ingredient">
               <Scrollbars autoHide>
                 {this.state.exerciseTab === '#single' && (
-                  <ul>
-                    <li>
-                      <span className={'star_one active'}>
-                        <Star />
-                      </span>
-                      <h3>Bench Press</h3>
-                      <div className="add_drag">
-                        <FontAwesomeIcon icon="plus-circle" />
-                      </div>
-                    </li>
-                    <li>
-                      <h3>Upright Row</h3>
-                      <div className="add_drag">
-                        <FontAwesomeIcon icon="plus-circle" />
-                      </div>
-                    </li>
-                    <li>
-                      <span className={'star_one active'}>
-                        <Star />
-                      </span>
-                      <h3>Pull up</h3>
-                      <div className="add_drag">
-                        <FontAwesomeIcon icon="plus-circle" />
-                      </div>
-                    </li>
-                  </ul>
+                  <React.Fragment>
+                    <ul>
+                      <li className="input-box-group">
+                        <input
+                          className="form-control"
+                          type="text"
+                          placeholder="Search"
+                        />
+                        <span className="search-icon">
+                          <FontAwesomeIcon icon="search" />
+                        </span>
+                      </li>
+                      <li>
+                        <span className={'star_one active'}>
+                          <Star />
+                        </span>
+                        <h3>Bench Press</h3>
+                        <div className="add_drag">
+                          <FontAwesomeIcon icon="plus-circle" />
+                        </div>
+                      </li>
+                      <li>
+                        <h3>Upright Row</h3>
+                        <div className="add_drag">
+                          <FontAwesomeIcon icon="plus-circle" />
+                        </div>
+                      </li>
+                      <li>
+                        <span className={'star_one active'}>
+                          <Star />
+                        </span>
+                        <h3>Pull up</h3>
+                        <div className="add_drag">
+                          <FontAwesomeIcon icon="plus-circle" />
+                        </div>
+                      </li>
+                    </ul>
+                  </React.Fragment>
                 )}
                 {this.state.exerciseTab === '#superset' && (
                   <React.Fragment>
@@ -151,13 +164,13 @@ class CalendarDayWorkoutRightSidebar extends Component {
                             </div>
                           </li>
                           <li>
-                            <div class="input-group">
+                            <div className="input-group">
                               <input
                                 type="text"
-                                class="form-control"
+                                className="form-control"
                                 placeholder="Add exercise"
                               />
-                              <div class="input-group-prepend">
+                              <div className="input-group-prepend">
                                 <FontAwesomeIcon icon="plus-circle" />
                               </div>
                             </div>

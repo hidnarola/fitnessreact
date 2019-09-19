@@ -9321,8 +9321,9 @@ h5 {
     overflow: visible;
     height: auto;
     flex-wrap: wrap;
-    flex: 1;
+    flex: 1 0 auto;
     min-height: 180px;
+    margin-top:15px;
 }
 
 .workout-calender .big-calendar-custom-month-event-view-card.restday .pull-left.custom_check,
@@ -9360,11 +9361,14 @@ h5 {
 .workout-calender .rbc-month-view {
     flex: 1
 }
-
 .big-calendar-custom-month-event-view-card-body {
     background-color: #fff;
     /* padding: 15px 8px; */
     padding: 0;
+    /* animation-name: slideInDown;
+    animation-duration: 2s; */
+    /* padding: 15px;
+    height:52px; */
 }
 
 .big-calendar-custom-month-event-view-card-footer .switch-wrap {
@@ -15539,9 +15543,12 @@ a.timline-post-edit-btn svg {
 }
 
 .blue_right_sidebar .recent-ingredient > div > div:last-child { width:10px !important; right: 20px !important; background: #201F60; }
-.blue_right_sidebar .recent-ingredient > div > div:last-child > div { background: #3E67FF !important; }
-
-
+.blue_right_sidebar .recent-ingredient > div > div:last-child > div { background: #3E67FF !important;}
+.blue_right_sidebar .recent-ingredient ul li.input-box-group{padding: 0 0 0 0;background: unset;position: relative;}
+.blue_right_sidebar .recent-ingredient ul li.input-box-group .search-icon{right: 18px;position: absolute;top: 10px;}
+.blue_right_sidebar .recent-ingredient ul li.input-box-group .search-icon svg{color:#808080;}
+.blue_right_sidebar .recent-ingredient ul li.input-box-group input{height: 40px;}
+.blue_right_sidebar .recent-ingredient ul li.input-box-group input::placeholder {color: #201F60;font-size: 20px;font-weight:bold;opacity: 0.4;}
 .blue_right_sidebar .recent-ingredient ul li {
     padding: 10px 15px 10px 30px;
     background: #3E67FF;
@@ -15775,7 +15782,7 @@ a.timline-post-edit-btn svg {
   max-height: 100vh;
 } */
 .workout-calender  .rbc-label.rbc-time-header-gutter{
-  padding:0;
+  padding:0; width: auto !important;
 }
 .workout-calender  .rbc-time-header-content{
   border-left:0;
@@ -16199,26 +16206,42 @@ a.timline-post-edit-btn svg {
 
 .rbc-calendar .rbc-month-view {border: 0px; margin: 0 -6px 30px;}
 .rbc-calendar .rbc-month-view .rbc-month-header .rbc-header {background: #fff; padding: 12px 14px; border-radius: 10px; border:0px; margin: 0 6px; border-bottom: solid 0px #EDF5FD; font-size:20px; font-weight: 700; font-family: 'gt_walsheim_proregular'; display: flex; flex-wrap: wrap; color: #201F60}
-.rbc-calendar .rbc-month-view .rbc-month-row .rbc-row-bg .rbc-day-bg {margin: 15px 6px 0; background: #fff; border-radius: 10px;}
+.rbc-calendar .rbc-month-view .rbc-month-row .rbc-row-bg .rbc-day-bg {margin: 0px 6px; background: #fff; border-radius: 10px;}
 .rbc-calendar .rbc-month-view .rbc-month-row + .rbc-month-row {border-top:0px;}
 .rbc-calendar .rbc-month-view .rbc-month-row .rbc-row-bg .rbc-day-bg + .rbc-day-bg {border-left:0px;}
 
 
-.rbc-calendar .rbc-month-view .rbc-month-row .rbc-row-content {padding: 10px 0px;}
+.rbc-calendar .rbc-month-view .rbc-month-row .rbc-row-content {padding: 0px 0px;}
 .rbc-calendar .rbc-month-view .rbc-month-row .rbc-row-content .rbc-row .rbc-date-cell {padding: 10px 5px; text-align: left; border-bottom: solid 1px #EDF5FD; font-size:20px; font-weight: 700; font-family: 'gt_walsheim_proregular'; margin: 0 6px;}
 .rbc-calendar .rbc-month-view .rbc-month-row .rbc-row-content .rbc-row .rbc-date-cell a {display: block; font-size:15px; font-weight: 700; font-family: 'gt_walsheim_proregular' !important; color: #3E67FF; line-height: 1;}
 .rbc-calendar .rbc-month-view .rbc-month-row .rbc-row-content .rbc-row .rbc-date-cell.rbc-off-range a { opacity: 0.4 }
 
 .rbc-calendar .rbc-month-view .rbc-month-row .rbc-row-content .rbc-row .rbc-row-segment {padding: 5px 16px;}
 .rbc-calendar .big-calendar-custom-month-event-view-card {padding:0;}
-.rbc-calendar .big-calendar-custom-month-event-view-card-header .custom_check {background: none !important; padding: 8px 8px 0 8px; height: auto; border-radius:0px;}
+
+.rbc-calendar .big-calendar-custom-month-event-view-card-header .calendar-icon {display: none; flex-wrap: wrap; justify-content: flex-end; padding: 8px; background: rgba(0, 0, 0, .05);}
+.rbc-calendar .big-calendar-custom-month-event-view-card-header .calendar-icon.active {display: flex;}
+.rbc-calendar .big-calendar-custom-month-event-view-card-header .calendar-icon a {background: none; padding: 0px; color: #201F60; font-size: 14px; width: auto; margin: 0 6px;}
+
+#custom-drag-workout-wrap .big-calendar-custom-month-event-view-card-header .calendar-icon {display: none; flex-wrap: wrap; justify-content: flex-end; padding: 8px; background: rgba(0, 0, 0, .05);}
+#custom-drag-workout-wrap .big-calendar-custom-month-event-view-card-header .calendar-icon.active {display: flex;}
+#custom-drag-workout-wrap .big-calendar-custom-month-event-view-card-header .calendar-icon a {background: none; padding: 0px; color: #201F60; font-size: 14px; width: auto; margin: 0 6px;}
+
+
+.rbc-calendar .big-calendar-custom-month-event-view-card-header .calendar-top {display: flex; flex-wrap: wrap; width:100%; align-items: center; padding: 8px; position: relative;}
+.rbc-calendar .big-calendar-custom-month-event-view-card-header .custom_check {background: none !important; height: auto; border-radius:0px; width:100%;}
 .rbc-calendar .big-calendar-custom-month-event-view-card .big-calendar-custom-month-event-view-card-header .custom_check input + label {display: block; padding: 0px; width: 100% !important;}
-.rbc-calendar .big-calendar-custom-month-event-view-card .big-calendar-custom-month-event-view-card-header .custom_check input + label::before {top: 0px; right: 0px; left: auto; width: 13px; height: 13px; border: solid 1px #053095;}
-.rbc-calendar .big-calendar-custom-month-event-view-card .big-calendar-custom-month-event-view-card-header .custom_check input:checked + label::after {background: #053095; top:3px; right: 3px; left: auto; width: 7px; height: 7px;}
+.rbc-calendar .big-calendar-custom-month-event-view-card .big-calendar-custom-month-event-view-card-header .custom_check input + label::before {top: 2px; right: 0px; left: auto; width: 13px; height: 13px; border: solid 1px #053095;}
+.rbc-calendar .big-calendar-custom-month-event-view-card .big-calendar-custom-month-event-view-card-header .custom_check input:checked + label::after {background: #053095; top:5px; right: 3px; left: auto; width: 7px; height: 7px;}
 .rbc-calendar .big-calendar-custom-month-event-view-card .big-calendar-custom-month-event-view-card-header .custom_check input + label h5 {color: #053095; font-family: 'Neuzeit'; font-weight: 700;}
 
-.rbc-calendar .big-calendar-custom-month-event-view-card-header .big-calendar-custom-month-event-view-card-body {background: none; padding: 8px;}
-.rbc-calendar .big-calendar-custom-month-event-view-card-header .big-calendar-custom-month-event-view-card-body p {font-size: 13px; color:#053095 !important; font-family: 'gt_walsheim_proregular'; font-weight: 500; margin: 0;}
+.rbc-calendar .big-calendar-custom-month-event-view-card-header .calendar-top .dropdown {position: absolute; right: 30px; top:8px; z-index: 2;}
+.rbc-calendar .big-calendar-custom-month-event-view-card-header .calendar-top .dropdown.open::before {content: ''; position: absolute; left:-7px; top: -8px; width: 24px; height: 30px; background: rgba(0, 0, 0, .05); border-radius: 0 0 10px 10px;}
+.rbc-calendar .big-calendar-custom-month-event-view-card-header .calendar-top .dropdown.open svg {fill: #FFC2C5;}
+
+
+.rbc-calendar .big-calendar-custom-month-event-view-card-header .big-calendar-custom-month-event-view-card-body {background: none; padding: 0;}
+.rbc-calendar .big-calendar-custom-month-event-view-card-header .big-calendar-custom-month-event-view-card-body p {font-size: 13px; color:#053095 !important; font-family: 'gt_walsheim_proregular'; font-weight: 500; margin: 0;padding: 8px; height: 52px;}
 
 .rbc-calendar .big-calendar-custom-month-event-view-card-footer .switch-wrap {padding: 6px 8px; line-height: 1; align-items: center;}
 .rbc-calendar .big-calendar-custom-month-event-view-card-footer .switch-wrap small {font-size: 10px; color: #fff; width: auto;}
@@ -16233,10 +16256,6 @@ a.timline-post-edit-btn svg {
 .big-calendar-custom-month-event-view-card.w-c-purple {background: #83D2DB;}
 .big-calendar-custom-month-event-view-card.w-c-greendark {background: #93E7E4;}
 
-
-
-
-
 .rbc-calendar .rbc-time-view {border: 0px;}
 .rbc-calendar .rbc-time-view .rbc-time-header .rbc-time-header-content {margin: 0 -6px;}
 .rbc-calendar .rbc-time-view .rbc-time-header .rbc-time-header-content .rbc-time-header-cell .rbc-header {background: #fff; padding: 0px; border-radius: 10px 10px 0px 0px; border:0px; margin: 0 6px; border-bottom: solid 1px #EDF5FD;}
@@ -16244,14 +16263,8 @@ a.timline-post-edit-btn svg {
 .rbc-calendar .rbc-time-view .rbc-time-header .rbc-time-header-content .rbc-time-header-cell .rbc-header a span {display: block;}
 .rbc-calendar .rbc-time-view .rbc-time-header .rbc-time-header-content .rbc-allday-cell .rbc-row-bg .rbc-day-bg {margin: 0 6px; background: #fff; border-radius: 0 0 10px 10px;}
 .rbc-calendar .rbc-time-view .rbc-time-header .rbc-time-header-content .rbc-allday-cell .rbc-row-bg .rbc-day-bg + .rbc-day-bg {border: 0px;}
-.rbc-calendar .rbc-time-view .rbc-time-header .rbc-time-header-content .rbc-allday-cell .rbc-row-content .rbc-row .rbc-row-segment {padding: 12px;}
+.rbc-calendar .rbc-time-view .rbc-time-header .rbc-time-header-content .rbc-allday-cell .rbc-row-content .rbc-row .rbc-row-segment {padding: 12px 12px 0 12px;}
 .rbc-calendar .rbc-time-view .rbc-time-header .rbc-time-header-content .rbc-allday-cell .rbc-row-content .rbc-row .rbc-row-segment .big-calendar-custom-month-event-view-card {box-shadow: none;}
-
-
-
-
-
-
 
 .stats { margin : 10px 0}
 .stats .stats-header {background: #D7E0E8;font-size: 20px;font-family: 'gt_walsheim_proregular';color: #053095;padding: 15px;font-weight: 700;margin-bottom: 2px; border-radius: 5px 5px 0 0}
@@ -16260,10 +16273,21 @@ a.timline-post-edit-btn svg {
 .stats .stats-body .weight-label {padding: 15px;font-size: 20px;font-family: 'gt_walsheim_proregular'; font-weight: 700;color: #201F60;}
 
 
-
+.fitness-body {height: 100%;}
+.fitness-body .body-wrap.nutrition-todays-meal-section {height: 100%;}
+.fitness-body .body-wrap.nutrition-todays-meal-section .body-content.profilephoto-content {height: calc(100% - 7%);}
+.fitness-body .body-wrap.nutrition-todays-meal-section .body-content.profilephoto-content #cal-panel-wrap {height:100%;}
+.fitness-body .body-wrap.nutrition-todays-meal-section .body-content.profilephoto-content #cal-panel-wrap .profile-body {height:100%;}
+.fitness-body .body-wrap.nutrition-todays-meal-section .body-content.profilephoto-content #cal-panel-wrap .profile-body .rbc-time-header {height:100%;}
+.fitness-body .body-wrap.nutrition-todays-meal-section .body-content.profilephoto-content #cal-panel-wrap .profile-body .rbc-time-header .rbc-allday-cell {height:calc(100% - 15%);}
 
 
 /*********************** Responsive **************************/
+
+@media(max-width: 1660px) {
+    .fitness-body .body-wrap.nutrition-todays-meal-section .body-content.profilephoto-content {height: calc(100% - 17%);}
+}
+
 
 @media(min-width: 992px) {
     body.with_login .app-wrapper-content {

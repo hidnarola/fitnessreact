@@ -25,6 +25,9 @@ import { faSave } from '@fortawesome/free-solid-svg-icons/faSave';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons/faArrowLeft';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons/faArrowRight';
 import { faEllipsisH } from '@fortawesome/free-solid-svg-icons/faEllipsisH';
+import { faCopy } from '@fortawesome/free-solid-svg-icons/faCopy';
+import { faCut } from '@fortawesome/free-solid-svg-icons/faCut';
+import { faSearch } from '@fortawesome/free-solid-svg-icons/faSearch';
 
 library.add(
   faUtensils,
@@ -52,4 +55,7 @@ library.add(
   faArrowLeft,
   faArrowRight,
   faEllipsisH,
+  faCopy,
+  faCut,
+  faSearch,
 );

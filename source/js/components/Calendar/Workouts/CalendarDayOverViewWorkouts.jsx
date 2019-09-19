@@ -15,6 +15,10 @@ import CalendarDayRecentWorkoutList from './CalendarDayRecentWorkoutList';
 import CalendarDayStatsList from './CalendarDayStatsList';
 import WorkoutHeader from './Header/WorkoutHeader';
 import WorkoutNav from './Header/WorkoutNav';
+import CalendarDayFitnessTestList from '../FitnessTest/CalendarDayFitnessTestList';
+import CalendarDayFitnessTestQuickAdd from '../FitnessTest/CalendarDayFitnessTestQuickAdd';
+import { createUserProgramFromCalendarError } from '../../../actions/userPrograms';
+import CalendarDayFitnessTestAddList from '../FitnessTest/CalendarDayFitnessTestAddList';
 
 class CalendarDayOverViewWorkouts extends Component {
   constructor(props) {
@@ -86,8 +90,9 @@ class CalendarDayOverViewWorkouts extends Component {
   handleSetActiveQuickTab = tab => {
     this.setState({ isActiveQuickTab: tab });
   };
+
   render() {
-    const { completeWorkout, isActiveQuickTab } = this.state;
+    const { completeWorkout, isActiveQuickTab, cuurentTab } = this.state;
     const { index } = this.props;
     const {
       title,
@@ -115,10 +120,10 @@ class CalendarDayOverViewWorkouts extends Component {
                   workout={this.props.workout}
                   handleCompleteWorkout={this.handleCompleteWorkout}
                 />
-                {this.state.cuurentTab !== `#stats${index}` ? (
+                {cuurentTab !== `#stats${index}` ? (
                   <WorkoutNav
                     index={index}
-                    cuurentTab={this.state.cuurentTab}
+                    cuurentTab={cuurentTab}
                     isActiveQuickTab={isActiveQuickTab}
                     handleChangeTab={this.handleChangeTab}
                     handleSetActiveQuickTab={this.handleSetActiveQuickTab}
@@ -128,10 +133,10 @@ class CalendarDayOverViewWorkouts extends Component {
                 )}
 
                 <div className={'exercise-tabs tab-content'}>
-                  {this.state.cuurentTab === `#warmup${index}` && (
+                  {cuurentTab === `#warmup${index}` && (
                     <div
                       className={
-                        this.state.cuurentTab === `#warmup${index}`
+                        cuurentTab === `#warmup${index}`
                           ? 'content active'
                           : 'content'
                       }
@@ -151,10 +156,10 @@ class CalendarDayOverViewWorkouts extends Component {
                       )}
                     </div>
                   )}
-                  {this.state.cuurentTab === `#workout${index}` && (
+                  {cuurentTab === `#workout${index}` && (
                     <div
                       className={
-                        this.state.cuurentTab === `#workout${index}`
+                        cuurentTab === `#workout${index}`
                           ? 'content active'
                           : 'content'
                       }
@@ -174,10 +179,10 @@ class CalendarDayOverViewWorkouts extends Component {
                       )}
                     </div>
                   )}
-                  {this.state.cuurentTab === `#cooldown${index}` && (
+                  {cuurentTab === `#cooldown${index}` && (
                     <div
                       className={
-                        this.state.cuurentTab === `#cooldown${index}`
+                        cuurentTab === `#cooldown${index}`
                           ? 'content active'
                           : 'content'
                       }
@@ -197,10 +202,23 @@ class CalendarDayOverViewWorkouts extends Component {
                       )}
                     </div>
                   )}
-                  {this.state.cuurentTab === `#notes${index}` && (
+                  {cuurentTab === `#fitnesstest${index}` && (
                     <div
                       className={
-                        this.state.cuurentTab === `#notes${index}`
+                        cuurentTab === `#notes${index}`
+                          ? 'content active'
+                          : 'content'
+                      }
+                      id={'fitnesstest' + index}
+                    >
+                      <CalendarDayFitnessTestList />
+                    </div>
+                  )}
+
+                  {cuurentTab === `#notes${index}` && (
+                    <div
+                      className={
+                        cuurentTab === `#notes${index}`
                           ? 'content active'
                           : 'content'
                       }
@@ -209,10 +227,10 @@ class CalendarDayOverViewWorkouts extends Component {
                       <CalendarDayNoteList />
                     </div>
                   )}
-                  {this.state.cuurentTab === `#stats${index}` && (
+                  {cuurentTab === `#stats${index}` && (
                     <div
                       className={
-                        this.state.cuurentTab === `#stats${index}`
+                        cuurentTab === `#stats${index}`
                           ? 'content active'
                           : 'content'
                       }
@@ -235,19 +253,34 @@ class CalendarDayOverViewWorkouts extends Component {
                   : 'col-xs-12 col-md-3 d-flex'
               }
             >
-              {isActiveQuickTab ? (
-                <CalendarDayWorkoutRightSidebar />
-              ) : (
-                <CalendarDayRecentWorkoutList
-                  isActiveQuickTab={isActiveQuickTab}
-                />
-              )}
+              {this.displayRightSidebar(cuurentTab, isActiveQuickTab, index)}
             </div>
           </div>
         </div>
       </React.Fragment>
     );
   }
+  displayRightSidebar = (cuurentTab, isActiveQuickTab, index) => {
+    var rightSidebar = null;
+    if (isActiveQuickTab) {
+      if (cuurentTab !== `#fitnesstest${index}`) {
+        rightSidebar = <CalendarDayWorkoutRightSidebar />;
+      } else {
+        rightSidebar = <CalendarDayFitnessTestAddList />;
+      }
+    } else {
+      if (cuurentTab === `#fitnesstest${index}`) {
+        rightSidebar = (
+          <CalendarDayFitnessTestQuickAdd isActiveQuickTab={isActiveQuickTab} />
+        );
+      } else {
+        rightSidebar = (
+          <CalendarDayRecentWorkoutList isActiveQuickTab={isActiveQuickTab} />
+        );
+      }
+    }
+    return rightSidebar;
+  };
 }
 const mapStateToProps = state => {
   return state;
