@@ -2331,24 +2331,24 @@ const CustomEventsCard = (
                 <FontAwesomeIcon icon={isActive ? 'times' : 'ellipsis-h'} />
               </div>
             </div>
-            {isActiveCalendarList && (
-              <div
-                className={cns(
-                  'big-calendar-custom-month-event-view-card-body',
-                  {
-                    'w-c-brb': !showCompleteSwitch,
-                  },
-                )}
-                onMouseDown={e => this.handleMouseDown(e, event)}
-                onMouseUp={this.handleMouseUp}
-                onClick={e => e.stopPropagation()}
-              >
-                {event.description && (
-                  <div>
-                    <p>{event.description}</p>
-                  </div>
-                )}
-                {/* {(event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
+            {}
+          </div>
+          <div
+            className={cns('big-calendar-custom-month-event-view-card-body', {
+              'w-c-brb': !showCompleteSwitch,
+              'list-cal': !isActiveCalendarList,
+              // 'animated slideInDown': isActiveCalendarList
+            })}
+            onMouseDown={e => this.handleMouseDown(e, event)}
+            onMouseUp={this.handleMouseUp}
+            onClick={e => e.stopPropagation()}
+          >
+            {event.description && (
+              <div>
+                <p>{event.description}</p>
+              </div>
+            )}
+            {/* {(event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
                                 <a href="javascript:void(0)" data-tip="Copy" onClick={event.handleCopy} title=""><FaCopy /></a>
                             }
                             {(event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE) &&
@@ -2375,17 +2375,15 @@ const CustomEventsCard = (
                                 <NavLink to={`${routeCodes.BODY}?${encode}`} data-tip="Details" title=""><FaEye /></NavLink>
                             } */}
 
-                {/* {(event.exerciseType === SCHEDULED_BODY_MEASUREMENT) &&
+            {/* {(event.exerciseType === SCHEDULED_BODY_MEASUREMENT) &&
                                 <NavLink to={routeCodes.SAVE_SCHEDULE_WORKOUT.replace(':id', event.id)} data-tip="Change" title=""><FaPencil /></NavLink>
                             } */}
-                {/* {(event.exerciseType === SCHEDULED_FITNESS_TEST) &&
+            {/* {(event.exerciseType === SCHEDULED_FITNESS_TEST) &&
                                 <NavLink to={routeCodes.EXERCISEFITNESS} data-tip="Details" title=""><FaEye /></NavLink>
                             } */}
 
-                {/* {
+            {/* {
                             event.exerciseType !== SCHEDULED_MEAL && event.exerciseType !== SCHEDULED_BODY_MEASUREMENT && event.exerciseType !== SCHEDULED_FITNESS_TEST && <a href="javascript:void(0)" data-tip="Delete" data-for="event-delete-tooltip" onClick={event.handleDelete} title=""><FaTrash /></a>} */}
-              </div>
-            )}
           </div>
           {event.exerciseType === SCHEDULED_WORKOUT_TYPE_EXERCISE &&
             showCompleteSwitch &&

@@ -1165,6 +1165,7 @@ h3.title-h3 {
     background-color: #fff;
     padding: 30px;
     display: block;
+    height: 100%;
 }
 
 .ingredients ul {
@@ -9365,8 +9366,6 @@ h5 {
     background-color: #fff;
     /* padding: 15px 8px; */
     padding: 0;
-    /* animation-name: slideInDown;
-    animation-duration: 2s; */
     /* padding: 15px;
     height:52px; */
 }
@@ -13394,6 +13393,7 @@ a.profile-about-section i {
 .app-wrapper-content .fitness-nutrition {height: 100%;}
 .app-wrapper-content .fitness-nutrition .body-wrap.nutrition-todays-meal-section {height:100%;}
 .app-wrapper-content .fitness-nutrition .body-wrap.nutrition-todays-meal-section .tab-content {height:calc(100% - 170px);}
+.app-wrapper-content .fitness-nutrition .body-wrap.nutrition-todays-meal-section .addfitnesstest-sidebar .tab-content {height:calc(100% - 87px);}
 .app-wrapper-content .fitness-nutrition .body-wrap.nutrition-todays-meal-section .tab-content .content {height:100%;}
 .app-wrapper-content .fitness-nutrition .body-wrap.nutrition-todays-meal-section .tab-content .content .body-content {height:100%;}
 .app-wrapper-content .fitness-nutrition .body-wrap.nutrition-todays-meal-section .tab-content .content .body-content .row {height:100%;}
@@ -15539,8 +15539,10 @@ a.timline-post-edit-btn svg {
     list-style: none;
     padding: 0;
     margin: 0;
-    height: calc(100vh - 61vh);
+    height: calc(100vh - 46vh);
 }
+.blue_right_sidebar.measurement-sidebar .recent-ingredient {height: calc(100vh - 40vh);}
+.blue_right_sidebar.addfitnesstest-sidebar .recent-ingredient {height: calc(100vh - 22vh);}
 
 .blue_right_sidebar .recent-ingredient > div > div:last-child { width:10px !important; right: 20px !important; background: #201F60; }
 .blue_right_sidebar .recent-ingredient > div > div:last-child > div { background: #3E67FF !important;}
@@ -15772,7 +15774,7 @@ a.timline-post-edit-btn svg {
 .meals-bg .meals-search-boxs  .search.meal-search .search-form .search-icon svg {fill: #fff;}
 .meals-bg .meals-search-boxs  .search.meal-search .search-form {width: 0vw; padding-right: 40px; transition: all 0.5s;}
 .meals-bg .meals-search-boxs  .search.meal-search .search-form.open {width: 16vw;}
-.meals-bg .nutrition-list {height: 52vh;}
+.meals-bg .nutrition-list {height: 64vh;}
 
 /* .rbc-time-view .rbc-label {
   display: none;
@@ -15961,7 +15963,7 @@ a.timline-post-edit-btn svg {
 }
 .overview .overview-body {
   padding : 0;
-  height: calc(100vh - 49vh);
+  height: calc(100vh - 38vh);
 }
 
 .overview .overview-body > div > div:last-child {
@@ -16134,7 +16136,7 @@ a.timline-post-edit-btn svg {
 
 .exercise-navbar-active:before {content: ''; position: absolute; right: -3px; top:15px; width: 63px; height: 50px; background: #053095; border-radius: 50px 0px 0 50px;}
 
-.app-wrapper-content .fitness-nutrition .body-wrap.nutrition-todays-meal-section .tab-content.exercise-tabs {height: auto; padding: 0 15px;}
+.app-wrapper-content .fitness-nutrition .body-wrap.nutrition-todays-meal-section .tab-content.exercise-tabs {height: auto; padding: 0 15px 15px;}
 
 .exercise-tabs .excercise-boxs {background: #D1DAE2 !important; display: flex; flex-wrap: wrap; overflow:hidden; position: relative;}
 .exercise-tabs .excercise-boxs .excercise-number {background: #201F60; width: 50px; text-align: center; display: flex; flex-wrap: wrap; align-items: center; justify-content: center;}
@@ -16240,8 +16242,11 @@ a.timline-post-edit-btn svg {
 .rbc-calendar .big-calendar-custom-month-event-view-card-header .calendar-top .dropdown.open svg {fill: #FFC2C5;}
 
 
-.rbc-calendar .big-calendar-custom-month-event-view-card-header .big-calendar-custom-month-event-view-card-body {background: none; padding: 0;}
-.rbc-calendar .big-calendar-custom-month-event-view-card-header .big-calendar-custom-month-event-view-card-body p {font-size: 13px; color:#053095 !important; font-family: 'gt_walsheim_proregular'; font-weight: 500; margin: 0;padding: 8px; height: 52px;}
+.rbc-calendar .big-calendar-custom-month-event-view-card-body {background: none; padding: 0; height: auto; overflow: hidden; transition: all 1s;}
+.rbc-calendar .big-calendar-custom-month-event-view-card-body.list-cal {height: 0px;}
+
+
+.rbc-calendar .big-calendar-custom-month-event-view-card-body p {font-size: 13px; color:#053095 !important; font-family: 'gt_walsheim_proregular'; font-weight: 500; margin: 0;padding: 8px; height: 52px;}
 
 .rbc-calendar .big-calendar-custom-month-event-view-card-footer .switch-wrap {padding: 6px 8px; line-height: 1; align-items: center;}
 .rbc-calendar .big-calendar-custom-month-event-view-card-footer .switch-wrap small {font-size: 10px; color: #fff; width: auto;}
@@ -16279,7 +16284,9 @@ a.timline-post-edit-btn svg {
 .fitness-body .body-wrap.nutrition-todays-meal-section .body-content.profilephoto-content #cal-panel-wrap {height:100%;}
 .fitness-body .body-wrap.nutrition-todays-meal-section .body-content.profilephoto-content #cal-panel-wrap .profile-body {height:100%;}
 .fitness-body .body-wrap.nutrition-todays-meal-section .body-content.profilephoto-content #cal-panel-wrap .profile-body .rbc-time-header {height:100%;}
-.fitness-body .body-wrap.nutrition-todays-meal-section .body-content.profilephoto-content #cal-panel-wrap .profile-body .rbc-time-header .rbc-allday-cell {height:calc(100% - 15%);}
+.fitness-body .body-wrap.nutrition-todays-meal-section .body-content.profilephoto-content #cal-panel-wrap .profile-body .rbc-time-header .rbc-allday-cell {height:calc(100% - 5%);}
+
+.slider-img svg {font-size: 25px; color: #201F60;}
 
 
 /*********************** Responsive **************************/

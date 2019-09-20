@@ -335,9 +335,9 @@ class App extends Component {
                         </ScrollToTop>
                     </Router>
                 </div>
-                <div className="app-footer">
+                {/* <div className="app-footer">
                     <p>&copy; Copyright <a href="http://fitly.co/">fitly.co</a>. All Right Reserved.</p>
-                </div>
+                </div> */}
             </div>
         );
     }

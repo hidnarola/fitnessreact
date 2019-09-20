@@ -142,18 +142,14 @@ class CalendarDayOverViewWorkouts extends Component {
                       }
                       id={'warmup' + index}
                     >
-                      {warmup.length > 0 ? (
-                        warmup &&
+                      {warmup &&
                         warmup.map((warmup, index) => (
                           <CalendarDayOverViewWorkoutsList
                             workout={warmup}
                             key={index}
                             index={index}
                           />
-                        ))
-                      ) : (
-                        <h3>No records found</h3>
-                      )}
+                        ))}
                     </div>
                   )}
                   {cuurentTab === `#workout${index}` && (
@@ -165,18 +161,14 @@ class CalendarDayOverViewWorkouts extends Component {
                       }
                       id={'workout' + index}
                     >
-                      {exercise.length > 0 ? (
-                        exercise &&
+                      {exercise &&
                         exercise.map((exercise, index) => (
                           <CalendarDayOverViewWorkoutsList
                             workout={exercise}
                             key={index}
                             index={index}
                           />
-                        ))
-                      ) : (
-                        <h3>No records found</h3>
-                      )}
+                        ))}
                     </div>
                   )}
                   {cuurentTab === `#cooldown${index}` && (
@@ -188,18 +180,14 @@ class CalendarDayOverViewWorkouts extends Component {
                       }
                       id={'cooldown' + index}
                     >
-                      {cooldown.length > 0 ? (
-                        cooldown &&
+                      {cooldown &&
                         cooldown.map((cooldown, index) => (
                           <CalendarDayOverViewWorkoutsList
                             workout={cooldown}
                             key={index}
                             index={index}
                           />
-                        ))
-                      ) : (
-                        <h3>No records found</h3>
-                      )}
+                        ))}
                     </div>
                   )}
                   {cuurentTab === `#fitnesstest${index}` && (

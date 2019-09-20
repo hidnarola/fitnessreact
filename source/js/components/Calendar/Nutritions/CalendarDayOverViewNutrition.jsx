@@ -19,6 +19,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import CalendarDayOverViewCounts from '../CalendarDayOverViewCounts';
 import { Scrollbars } from 'react-custom-scrollbars';
 import Star from '../../../../assets/svg/star.svg';
+import CalendarDayNutritionView from './CalendarDayNutritionView';
+import CalendarDayNutritionTargetList from './CalendarDayNutritionTargetList';
+import NutritionQuickAdd from './sidebar/NutritionQuickAdd';
+import NutrientsList from './sidebar/NutrientsList';
 
 class CalendarDayOverViewNutrition extends Component {
   constructor(props) {
@@ -35,7 +39,61 @@ class CalendarDayOverViewNutrition extends Component {
       total_saturates: 0,
       total_cabs: 0,
       quickTab: '#favrioutmeals',
+      isNutritionTargetTab: false,
     };
+  }
+
+  render() {
+    const { meal_list, isNutritionTargetTab, quickTab } = this.state;
+    const { mealsList, authuserId, recentMeals } = this.props;
+    console.log('=========================');
+    console.log('MealsList', meal_list);
+    console.log('=========================');
+    return (
+      <React.Fragment>
+        <div className="body-content workouts-bg">
+          <div className="row justify-content-start no-gutters">
+            <div className="col-xs-12 col-md-3 d-flex">
+              <CalendarDayOverViewCounts
+                isNutritionTargetTab={isNutritionTargetTab}
+                handleChangeNutritionTarget={this.handleChangeNutritionTarget}
+              />
+            </div>
+            <div className="col-xs-12 col-md-6 d-flex">
+              {isNutritionTargetTab ? (
+                <CalendarDayNutritionTargetList
+                  setNutritionTab={this.props.setNutritionTab}
+                  handleChangeNutritionTarget={this.handleChangeNutritionTarget}
+                />
+              ) : (
+                <CalendarDayNutritionView
+                  setNutritionTab={this.props.setNutritionTab}
+                  handleRemoveMealsSubmit={this.handleRemoveMealsSubmit}
+                  showDeleteAlert={this.state.showDeleteAlert}
+                  meal_list={meal_list}
+                  recentMeals={recentMeals}
+                  addToFavourite={this.addToFavourite}
+                  handleRemoveMeals={this.handleRemoveMeals}
+                  authuserId={authuserId}
+                />
+              )}
+            </div>
+            <div className="col-xs-12 col-md-3 d-flex">
+              {isNutritionTargetTab ? (
+                <NutrientsList />
+              ) : (
+                <NutritionQuickAdd
+                  quickTab={quickTab}
+                  recentMeals={recentMeals}
+                  addTodayMeals={this.addTodayMeals}
+                  handleChangeQuickTab={this.handleChangeQuickTab}
+                />
+              )}
+            </div>
+          </div>
+        </div>
+      </React.Fragment>
+    );
   }
   componentDidMount() {
     let newMealList = this.props.mealsList;
@@ -289,164 +347,15 @@ class CalendarDayOverViewNutrition extends Component {
     // dispatch(getUserBodyMeasurementRequest(requestData));
     dispatch(getUserMealRequest(requestData));
     //dispatch(getUserMealsLogDatesRequest(requestData));
-
     dispatch(hidePageLoader());
   };
 
-  render() {
-    const { meal_list } = this.state;
-    const { mealsList, authuserId, recentMeals } = this.props;
-    console.log('=========================');
-    console.log('MealsList', meal_list);
-    console.log('=========================');
-    return (
-      <React.Fragment>
-        <div className="body-content workouts-bg">
-          <div className="row justify-content-start no-gutters">
-            <div className="col-xs-12 col-md-3 d-flex">
-              <CalendarDayOverViewCounts />
-            </div>
-            <div className="col-xs-12 col-md-6 d-flex">
-              <div className="whitebox-body meals-bg border-left border-right">
-                <div className="meals-top d-flex">
-                  {/* <NutritionMealAddSearchForm
-                    onSubmit={this.handleSearch}
-                    addTodayMeals={this.addTodayMeals}
-                  /> */}
-                  <h3 className="title-h3 size-14">Meals</h3>
-                  <Link
-                    to="#"
-                    className="btn btn-success ml-auto plus-btn"
-                    onClick={this.props.setNutritionTab}
-                  >
-                    <FontAwesomeIcon icon="plus" />
-                  </Link>
-                </div>
-                <div className="nutrition-list">
-                  <Scrollbars autoHide>
-                    <div className="nutrition-boxs">
-                      <SweetAlert
-                        customClass="sweetalert-responsive"
-                        type="default"
-                        title={`Are sure want to delete it ?`}
-                        onCancel={() => {
-                          this.setState({
-                            storeMealIndex: null,
-                            showDeleteAlert: false,
-                          });
-                        }}
-                        onConfirm={this.handleRemoveMealsSubmit}
-                        btnSize="sm"
-                        cancelBtnBsStyle="danger"
-                        show={this.state.showDeleteAlert}
-                        showConfirm={true}
-                        showCancel={true}
-                        closeOnClickOutside={false}
-                      />
-                      {meal_list.map((meal, index) => (
-                        <CalendarDayOverViewNutritionList
-                          key={index}
-                          index={index}
-                          meal={meal}
-                          recentMeals={recentMeals}
-                          addToFavourite={this.addToFavourite}
-                          handleRemoveMeals={this.handleRemoveMeals}
-                          authuserId={authuserId}
-                        />
-                      ))}
-                    </div>
-                  </Scrollbars>
-                  {/* <div className="add-log d-flex add-log_change">
-                    <button
-                      type="submit"
-                      style={{
-                        cursor: 'pointer',
-                      }}
-                      onClick={this.handleSaveMeals}
-                    >
-                      {meal_list.length === 0 ? 'Save Log' : 'Update Log'}
-                      <i className="icon-control_point" />
-                    </button>
-                  </div> */}
-                </div>
-              </div>
-            </div>
-            <div className="col-xs-12 col-md-3 d-flex">
-              <div className="blue_right_sidebar">
-                <h2 className="h2_head_one">Quick Add</h2>
-                <div className="tabs tabs-active ">
-                  <div
-                    className={
-                      this.state.quickTab === '#recentmeals'
-                        ? 'tab active'
-                        : 'tab'
-                    }
-                    id="recentmeals"
-                  >
-                    <a
-                      href="#recentMeals"
-                      onClick={() => {
-                        this.setState({ quickTab: '#recentmeals' });
-                      }}
-                    >
-                      Recent
-                    </a>
-                  </div>
-                  <div
-                    className={
-                      this.state.quickTab === '#favrioutmeals'
-                        ? 'tab active'
-                        : 'tab'
-                    }
-                    id="favrioutmeals"
-                  >
-                    <a
-                      href="#favrioutmeals"
-                      onClick={() => {
-                        this.setState({ quickTab: '#favrioutmeals' });
-                      }}
-                    >
-                      Favourite
-                    </a>
-                  </div>
-                </div>
-                <div className={'tab-content'}>
-                  <div className="recent-ingredient">
-                    <Scrollbars autoHide>
-                      {this.state.quickTab === '#recentmeals' && <ul></ul>}
-                      {this.state.quickTab === '#favrioutmeals' && (
-                        <ul>
-                          {recentMeals &&
-                            recentMeals.length > 0 &&
-                            recentMeals.map((v, id) => (
-                              <li key={id} onClick={e => this.addTodayMeals(v)}>
-                                <span className={'star_one active'}>
-                                  <Star />
-                                </span>
-                                <h3>{v.title}</h3>
-                                <div className="add_drag">
-                                  <FontAwesomeIcon icon="plus-circle" />
-                                </div>
-                              </li>
-                            ))}
-                          {/* <li>
-                    Pasta
-                    <div className="add_drag">
-                      <i className="icon-control_point" /> Click to Add
-                    </div>
-                  </li> */}
-                        </ul>
-                      )}
-                    </Scrollbars>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </React.Fragment>
-    );
-  }
+  handleChangeNutritionTarget = () => {
+    this.setState({ isNutritionTargetTab: !this.state.isNutritionTargetTab });
+  };
+  handleChangeQuickTab = action => {
+    this.setState({ quickTab: action });
+  };
 }
 const mapStateToProps = state => {
   return state;

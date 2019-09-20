@@ -8,7 +8,7 @@ class CalendarDayFitnessTestAddList extends Component {
     return (
       <React.Fragment>
         <React.Fragment>
-          <div className="blue_right_sidebar">
+          <div className="blue_right_sidebar addfitnesstest-sidebar">
             <h2 className="h2_head_one">Add Fitness Test</h2>
 
             <div className="tab-content">

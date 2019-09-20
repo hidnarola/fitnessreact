@@ -28,6 +28,7 @@ import { faEllipsisH } from '@fortawesome/free-solid-svg-icons/faEllipsisH';
 import { faCopy } from '@fortawesome/free-solid-svg-icons/faCopy';
 import { faCut } from '@fortawesome/free-solid-svg-icons/faCut';
 import { faSearch } from '@fortawesome/free-solid-svg-icons/faSearch';
+import { faSlidersH } from '@fortawesome/free-solid-svg-icons/faSlidersH';
 
 library.add(
   faUtensils,
@@ -58,4 +59,5 @@ library.add(
   faCopy,
   faCut,
   faSearch,
+  faSlidersH,
 );

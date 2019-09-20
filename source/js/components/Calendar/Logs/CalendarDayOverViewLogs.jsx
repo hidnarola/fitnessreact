@@ -99,7 +99,7 @@ class CalendarDayOverViewLogs extends Component {
                       <li className="list-measurement-items">
                         <Collapse in={open}>
                           <div
-                            id="example-collapse-text"
+                            id="example-collap  se-text"
                             className="collapse-list-section"
                           >
                             <h2>Body fat calculator</h2>
@@ -269,6 +269,516 @@ class CalendarDayOverViewLogs extends Component {
                           </div>
                         </div>
                       </li>
+                      <li className="list-measurement-items">
+                        <div className="display-serve">
+                          <div className="row no-gutters width-100-per d-flex flex-wrap align-items-center">
+                            <div className="col-xs-12 col-lg-2">
+                              <h3>Ankle</h3>
+                            </div>
+                            <div className="col-xs-12 col-lg-5">
+                              <div className="serving-boxs width-100-per">
+                                <button className="btn btn-minus">
+                                  <FontAwesomeIcon icon="minus" />
+                                </button>
+                                <input
+                                  type="number"
+                                  className="form-control"
+                                  defaultValue="15"
+                                />
+                                <button className="btn btn-plus">
+                                  <FontAwesomeIcon icon="plus" />
+                                </button>
+                              </div>
+                            </div>
+                            <div className="col-xs-12 col-lg-5 d-flex flex-wrep align-items-center">
+                              <div className="serving-select pl-3 width-100-per">
+                                <select className="form-control">
+                                  <option>cm</option>
+                                </select>
+                              </div>
+                              <span className="btn-trash">
+                                <FontAwesomeIcon icon="trash-alt" />
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                      <li className="list-measurement-items">
+                        <div className="display-serve">
+                          <div className="row no-gutters width-100-per d-flex flex-wrap align-items-center">
+                            <div className="col-xs-12 col-lg-2">
+                              <h3>Neck</h3>
+                            </div>
+                            <div className="col-xs-12 col-lg-5">
+                              <div className="serving-boxs width-100-per">
+                                <button className="btn btn-minus">
+                                  <FontAwesomeIcon icon="minus" />
+                                </button>
+                                <input
+                                  type="number"
+                                  className="form-control"
+                                  defaultValue="15"
+                                />
+                                <button className="btn btn-plus">
+                                  <FontAwesomeIcon icon="plus" />
+                                </button>
+                              </div>
+                            </div>
+                            <div className="col-xs-12 col-lg-5 d-flex flex-wrep align-items-center">
+                              <div className="serving-select pl-3 width-100-per">
+                                <select className="form-control">
+                                  <option>cm</option>
+                                </select>
+                              </div>
+                              <span className="btn-trash">
+                                <FontAwesomeIcon icon="trash-alt" />
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                      <li className="list-measurement-items">
+                        <div className="display-serve">
+                          <div className="row no-gutters width-100-per d-flex flex-wrap align-items-center">
+                            <div className="col-xs-12 col-lg-2">
+                              <h3>Forearm</h3>
+                            </div>
+                            <div className="col-xs-12 col-lg-5">
+                              <div className="serving-boxs width-100-per">
+                                <button className="btn btn-minus">
+                                  <FontAwesomeIcon icon="minus" />
+                                </button>
+                                <input
+                                  type="number"
+                                  className="form-control"
+                                  defaultValue="15"
+                                />
+                                <button className="btn btn-plus">
+                                  <FontAwesomeIcon icon="plus" />
+                                </button>
+                              </div>
+                            </div>
+                            <div className="col-xs-12 col-lg-5 d-flex flex-wrep align-items-center">
+                              <div className="serving-select pl-3 width-100-per">
+                                <select className="form-control">
+                                  <option>cm</option>
+                                </select>
+                              </div>
+                              <span className="btn-trash">
+                                <FontAwesomeIcon icon="trash-alt" />
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                      <li className="list-measurement-items">
+                        <div className="display-serve">
+                          <div className="row no-gutters width-100-per d-flex flex-wrap align-items-center">
+                            <div className="col-xs-12 col-lg-2">
+                              <h3>UpperArm</h3>
+                            </div>
+                            <div className="col-xs-12 col-lg-5">
+                              <div className="serving-boxs width-100-per">
+                                <button className="btn btn-minus">
+                                  <FontAwesomeIcon icon="minus" />
+                                </button>
+                                <input
+                                  type="number"
+                                  className="form-control"
+                                  defaultValue="15"
+                                />
+                                <button className="btn btn-plus">
+                                  <FontAwesomeIcon icon="plus" />
+                                </button>
+                              </div>
+                            </div>
+                            <div className="col-xs-12 col-lg-5 d-flex flex-wrep align-items-center">
+                              <div className="serving-select pl-3 width-100-per">
+                                <select className="form-control">
+                                  <option>cm</option>
+                                </select>
+                              </div>
+                              <span className="btn-trash">
+                                <FontAwesomeIcon icon="trash-alt" />
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                      <li className="list-measurement-items">
+                        <div className="display-serve">
+                          <div className="row no-gutters width-100-per d-flex flex-wrap align-items-center">
+                            <div className="col-xs-12 col-lg-2">
+                              <h3>Calf</h3>
+                            </div>
+                            <div className="col-xs-12 col-lg-5">
+                              <div className="serving-boxs width-100-per">
+                                <button className="btn btn-minus">
+                                  <FontAwesomeIcon icon="minus" />
+                                </button>
+                                <input
+                                  type="number"
+                                  className="form-control"
+                                  defaultValue="15"
+                                />
+                                <button className="btn btn-plus">
+                                  <FontAwesomeIcon icon="plus" />
+                                </button>
+                              </div>
+                            </div>
+                            <div className="col-xs-12 col-lg-5 d-flex flex-wrep align-items-center">
+                              <div className="serving-select pl-3 width-100-per">
+                                <select className="form-control">
+                                  <option>cm</option>
+                                </select>
+                              </div>
+                              <span className="btn-trash">
+                                <FontAwesomeIcon icon="trash-alt" />
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                      <li className="list-measurement-items">
+                        <div className="display-serve">
+                          <div className="row no-gutters width-100-per d-flex flex-wrap align-items-center">
+                            <div className="col-xs-12 col-lg-2">
+                              <h3>Ankle</h3>
+                            </div>
+                            <div className="col-xs-12 col-lg-5">
+                              <div className="serving-boxs width-100-per">
+                                <button className="btn btn-minus">
+                                  <FontAwesomeIcon icon="minus" />
+                                </button>
+                                <input
+                                  type="number"
+                                  className="form-control"
+                                  defaultValue="15"
+                                />
+                                <button className="btn btn-plus">
+                                  <FontAwesomeIcon icon="plus" />
+                                </button>
+                              </div>
+                            </div>
+                            <div className="col-xs-12 col-lg-5 d-flex flex-wrep align-items-center">
+                              <div className="serving-select pl-3 width-100-per">
+                                <select className="form-control">
+                                  <option>cm</option>
+                                </select>
+                              </div>
+                              <span className="btn-trash">
+                                <FontAwesomeIcon icon="trash-alt" />
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                      <li className="list-measurement-items">
+                        <div className="display-serve">
+                          <div className="row no-gutters width-100-per d-flex flex-wrap align-items-center">
+                            <div className="col-xs-12 col-lg-2">
+                              <h3>Ankle</h3>
+                            </div>
+                            <div className="col-xs-12 col-lg-5">
+                              <div className="serving-boxs width-100-per">
+                                <button className="btn btn-minus">
+                                  <FontAwesomeIcon icon="minus" />
+                                </button>
+                                <input
+                                  type="number"
+                                  className="form-control"
+                                  defaultValue="15"
+                                />
+                                <button className="btn btn-plus">
+                                  <FontAwesomeIcon icon="plus" />
+                                </button>
+                              </div>
+                            </div>
+                            <div className="col-xs-12 col-lg-5 d-flex flex-wrep align-items-center">
+                              <div className="serving-select pl-3 width-100-per">
+                                <select className="form-control">
+                                  <option>cm</option>
+                                </select>
+                              </div>
+                              <span className="btn-trash">
+                                <FontAwesomeIcon icon="trash-alt" />
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                      <li className="list-measurement-items">
+                        <div className="display-serve">
+                          <div className="row no-gutters width-100-per d-flex flex-wrap align-items-center">
+                            <div className="col-xs-12 col-lg-2">
+                              <h3>Ankle</h3>
+                            </div>
+                            <div className="col-xs-12 col-lg-5">
+                              <div className="serving-boxs width-100-per">
+                                <button className="btn btn-minus">
+                                  <FontAwesomeIcon icon="minus" />
+                                </button>
+                                <input
+                                  type="number"
+                                  className="form-control"
+                                  defaultValue="15"
+                                />
+                                <button className="btn btn-plus">
+                                  <FontAwesomeIcon icon="plus" />
+                                </button>
+                              </div>
+                            </div>
+                            <div className="col-xs-12 col-lg-5 d-flex flex-wrep align-items-center">
+                              <div className="serving-select pl-3 width-100-per">
+                                <select className="form-control">
+                                  <option>cm</option>
+                                </select>
+                              </div>
+                              <span className="btn-trash">
+                                <FontAwesomeIcon icon="trash-alt" />
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                      <li className="list-measurement-items">
+                        <div className="display-serve">
+                          <div className="row no-gutters width-100-per d-flex flex-wrap align-items-center">
+                            <div className="col-xs-12 col-lg-2">
+                              <h3>Waist</h3>
+                            </div>
+                            <div className="col-xs-12 col-lg-5">
+                              <div className="serving-boxs width-100-per">
+                                <button className="btn btn-minus">
+                                  <FontAwesomeIcon icon="minus" />
+                                </button>
+                                <input
+                                  type="number"
+                                  className="form-control"
+                                  defaultValue="15"
+                                />
+                                <button className="btn btn-plus">
+                                  <FontAwesomeIcon icon="plus" />
+                                </button>
+                              </div>
+                            </div>
+                            <div className="col-xs-12 col-lg-5 d-flex flex-wrep align-items-center">
+                              <div className="serving-select pl-3 width-100-per">
+                                <select className="form-control">
+                                  <option>cm</option>
+                                </select>
+                              </div>
+                              <span className="btn-trash">
+                                <FontAwesomeIcon icon="trash-alt" />
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                      <li className="list-measurement-items">
+                        <div className="display-serve">
+                          <div className="row no-gutters width-100-per d-flex flex-wrap align-items-center">
+                            <div className="col-xs-12 col-lg-2">
+                              <h3>Thigh</h3>
+                            </div>
+                            <div className="col-xs-12 col-lg-5">
+                              <div className="serving-boxs width-100-per">
+                                <button className="btn btn-minus">
+                                  <FontAwesomeIcon icon="minus" />
+                                </button>
+                                <input
+                                  type="number"
+                                  className="form-control"
+                                  defaultValue="15"
+                                />
+                                <button className="btn btn-plus">
+                                  <FontAwesomeIcon icon="plus" />
+                                </button>
+                              </div>
+                            </div>
+                            <div className="col-xs-12 col-lg-5 d-flex flex-wrep align-items-center">
+                              <div className="serving-select pl-3 width-100-per">
+                                <select className="form-control">
+                                  <option>cm</option>
+                                </select>
+                              </div>
+                              <span className="btn-trash">
+                                <FontAwesomeIcon icon="trash-alt" />
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                      <li className="list-measurement-items">
+                        <div className="display-serve">
+                          <div className="row no-gutters width-100-per d-flex flex-wrap align-items-center">
+                            <div className="col-xs-12 col-lg-2">
+                              <h3>Hips</h3>
+                            </div>
+                            <div className="col-xs-12 col-lg-5">
+                              <div className="serving-boxs width-100-per">
+                                <button className="btn btn-minus">
+                                  <FontAwesomeIcon icon="minus" />
+                                </button>
+                                <input
+                                  type="number"
+                                  className="form-control"
+                                  defaultValue="15"
+                                />
+                                <button className="btn btn-plus">
+                                  <FontAwesomeIcon icon="plus" />
+                                </button>
+                              </div>
+                            </div>
+                            <div className="col-xs-12 col-lg-5 d-flex flex-wrep align-items-center">
+                              <div className="serving-select pl-3 width-100-per">
+                                <select className="form-control">
+                                  <option>cm</option>
+                                </select>
+                              </div>
+                              <span className="btn-trash">
+                                <FontAwesomeIcon icon="trash-alt" />
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                      <li className="list-measurement-items">
+                        <div className="display-serve">
+                          <div className="row no-gutters width-100-per d-flex flex-wrap align-items-center">
+                            <div className="col-xs-12 col-lg-2">
+                              <h3>Wrist</h3>
+                            </div>
+                            <div className="col-xs-12 col-lg-5">
+                              <div className="serving-boxs width-100-per">
+                                <button className="btn btn-minus">
+                                  <FontAwesomeIcon icon="minus" />
+                                </button>
+                                <input
+                                  type="number"
+                                  className="form-control"
+                                  defaultValue="15"
+                                />
+                                <button className="btn btn-plus">
+                                  <FontAwesomeIcon icon="plus" />
+                                </button>
+                              </div>
+                            </div>
+                            <div className="col-xs-12 col-lg-5 d-flex flex-wrep align-items-center">
+                              <div className="serving-select pl-3 width-100-per">
+                                <select className="form-control">
+                                  <option>cm</option>
+                                </select>
+                              </div>
+                              <span className="btn-trash">
+                                <FontAwesomeIcon icon="trash-alt" />
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                      <li className="list-measurement-items">
+                        <div className="display-serve">
+                          <div className="row no-gutters width-100-per d-flex flex-wrap align-items-center">
+                            <div className="col-xs-12 col-lg-2">
+                              <h3>Bicep</h3>
+                            </div>
+                            <div className="col-xs-12 col-lg-5">
+                              <div className="serving-boxs width-100-per">
+                                <button className="btn btn-minus">
+                                  <FontAwesomeIcon icon="minus" />
+                                </button>
+                                <input
+                                  type="number"
+                                  className="form-control"
+                                  defaultValue="15"
+                                />
+                                <button className="btn btn-plus">
+                                  <FontAwesomeIcon icon="plus" />
+                                </button>
+                              </div>
+                            </div>
+                            <div className="col-xs-12 col-lg-5 d-flex flex-wrep align-items-center">
+                              <div className="serving-select pl-3 width-100-per">
+                                <select className="form-control">
+                                  <option>cm</option>
+                                </select>
+                              </div>
+                              <span className="btn-trash">
+                                <FontAwesomeIcon icon="trash-alt" />
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                      <li className="list-measurement-items">
+                        <div className="display-serve">
+                          <div className="row no-gutters width-100-per d-flex flex-wrap align-items-center">
+                            <div className="col-xs-12 col-lg-2">
+                              <h3>Chest</h3>
+                            </div>
+                            <div className="col-xs-12 col-lg-5">
+                              <div className="serving-boxs width-100-per">
+                                <button className="btn btn-minus">
+                                  <FontAwesomeIcon icon="minus" />
+                                </button>
+                                <input
+                                  type="number"
+                                  className="form-control"
+                                  defaultValue="15"
+                                />
+                                <button className="btn btn-plus">
+                                  <FontAwesomeIcon icon="plus" />
+                                </button>
+                              </div>
+                            </div>
+                            <div className="col-xs-12 col-lg-5 d-flex flex-wrep align-items-center">
+                              <div className="serving-select pl-3 width-100-per">
+                                <select className="form-control">
+                                  <option>cm</option>
+                                </select>
+                              </div>
+                              <span className="btn-trash">
+                                <FontAwesomeIcon icon="trash-alt" />
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                      <li className="list-measurement-items">
+                        <div className="display-serve">
+                          <div className="row no-gutters width-100-per d-flex flex-wrap align-items-center">
+                            <div className="col-xs-12 col-lg-2">
+                              <h3>Neck</h3>
+                            </div>
+                            <div className="col-xs-12 col-lg-5">
+                              <div className="serving-boxs width-100-per">
+                                <button className="btn btn-minus">
+                                  <FontAwesomeIcon icon="minus" />
+                                </button>
+                                <input
+                                  type="number"
+                                  className="form-control"
+                                  defaultValue="15"
+                                />
+                                <button className="btn btn-plus">
+                                  <FontAwesomeIcon icon="plus" />
+                                </button>
+                              </div>
+                            </div>
+                            <div className="col-xs-12 col-lg-5 d-flex flex-wrep align-items-center">
+                              <div className="serving-select pl-3 width-100-per">
+                                <select className="form-control">
+                                  <option>cm</option>
+                                </select>
+                              </div>
+                              <span className="btn-trash">
+                                <FontAwesomeIcon icon="trash-alt" />
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
                     </ul>
                   </Scrollbars>
                 </div>
@@ -276,7 +786,7 @@ class CalendarDayOverViewLogs extends Component {
             </div>
 
             <div className="col-xs-12 col-md-3 d-flex">
-              <div className="blue_right_sidebar">
+              <div className="blue_right_sidebar measurement-sidebar">
                 <h2 className="h2_head_one">Add Measurement</h2>
                 <div className={'tab-content'}>
                   <div className="recent-ingredient">
