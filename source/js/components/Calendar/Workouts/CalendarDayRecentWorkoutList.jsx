@@ -12,17 +12,24 @@ class CalendarDayRecentWorkoutList extends Component {
   }
   render() {
     const { isActiveQuickTab } = this.props;
+    const { quickTab } = this.state;
     return (
       <React.Fragment>
         <div
           className={
             isActiveQuickTab
-              ? 'blue_right_sidebar animated slideInLeft'
-              : 'blue_right_sidebar'
+              ? 'blue_right_sidebar animated slideInLeft h-100'
+              : 'blue_right_sidebar h-100'
           }
         >
-          <h2 className="h2_head_one">Quick Add</h2>
-          <div className={isActiveQuickTab ? 'tabs' : 'tabs tabs-active'}>
+          <div className="d-flex width-100-per sidebar-header">
+            <h2 className="h2_head_one pt-3 pb-3">Add Excercise</h2>
+
+            <button className="btn btn-plus-right ml-auto">
+              <FontAwesomeIcon icon="plus" />
+            </button>
+          </div>
+          {/* <div className={isActiveQuickTab ? 'tabs' : 'tabs tabs-active'}>
             <div
               className={
                 this.state.quickTab === '#recentmeals' ? 'tab active' : 'tab'
@@ -53,6 +60,24 @@ class CalendarDayRecentWorkoutList extends Component {
                 Favourite
               </a>
             </div>
+          </div> */}
+          <div className="quick-tabs">
+            <div
+              className={quickTab === '#recentmeals' ? 'tab active' : 'tab'}
+              onClick={() => {
+                this.setState({ quickTab: '#recentmeals' });
+              }}
+            >
+              <a href="#">Recent</a>
+            </div>
+            <div
+              className={quickTab === '#favrioutmeals' ? 'tab active' : 'tab'}
+              onClick={() => {
+                this.setState({ quickTab: '#favrioutmeals' });
+              }}
+            >
+              <a href="#">Favourite</a>
+            </div>
           </div>
           <div className={'tab-content'}>
             <div className="recent-ingredient">
@@ -64,24 +89,24 @@ class CalendarDayRecentWorkoutList extends Component {
                         <Star />
                       </span>
                       <h3>Bench Press</h3>
-                      <div className="add_drag">
+                      {/* <div className="add_drag">
                         <FontAwesomeIcon icon="plus-circle" />
-                      </div>
+                      </div> */}
                     </li>
                     <li>
                       <h3>Upright Row</h3>
-                      <div className="add_drag">
+                      {/* <div className="add_drag">
                         <FontAwesomeIcon icon="plus-circle" />
-                      </div>
+                      </div> */}
                     </li>
                     <li>
                       <span className={'star_one active'}>
                         <Star />
                       </span>
                       <h3>Pull up</h3>
-                      <div className="add_drag">
+                      {/* <div className="add_drag">
                         <FontAwesomeIcon icon="plus-circle" />
-                      </div>
+                      </div> */}
                     </li>
                   </ul>
                 )}
@@ -89,15 +114,15 @@ class CalendarDayRecentWorkoutList extends Component {
                   <ul>
                     <li>
                       <h3>Bench Press</h3>
-                      <div className="add_drag">
+                      {/* <div className="add_drag">
                         <FontAwesomeIcon icon="plus-circle" />
-                      </div>
+                      </div> */}
                     </li>
                     <li>
                       <h3>Pull up</h3>
-                      <div className="add_drag">
+                      {/* <div className="add_drag">
                         <FontAwesomeIcon icon="plus-circle" />
-                      </div>
+                      </div> */}
                     </li>
                   </ul>
                 )}

@@ -235,6 +235,17 @@ input:focus {
     outline-offset: none !important;
 }
 
+.h-auto {
+    height: auto !important;
+}
+.h-100 {
+    height: 100% !important;
+}
+
+.h-exercise {
+    height: calc(100% - 48px) !important;
+}
+
 .row {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -871,6 +882,7 @@ h3.title-h3 {
     top: 0;
     left: 0;
     padding: 100px 0 200px 0px;
+    border-right: 3px solid #edf5fd;
 }
 
 .navigationul {
@@ -991,6 +1003,7 @@ h3.title-h3 {
 }
 .body-head-l .display-date .display-calendar {
   padding: 19px 15px 19px 20px;
+  border-left: 3px solid rgba(237, 245, 253, 1);
   border-right: 3px solid rgba(237, 245, 253, 1);
   display: flex;
   flex-wrap: wrap;
@@ -13392,7 +13405,7 @@ a.profile-about-section i {
 
 .app-wrapper-content .fitness-nutrition {height: 100%;}
 .app-wrapper-content .fitness-nutrition .body-wrap.nutrition-todays-meal-section {height:100%;}
-.app-wrapper-content .fitness-nutrition .body-wrap.nutrition-todays-meal-section .tab-content {height:calc(100% - 170px);}
+.app-wrapper-content .fitness-nutrition .body-wrap.nutrition-todays-meal-section .tab-content {height:calc(100% - 86px);}
 .app-wrapper-content .fitness-nutrition .body-wrap.nutrition-todays-meal-section .addfitnesstest-sidebar .tab-content {height:calc(100% - 87px);}
 .app-wrapper-content .fitness-nutrition .body-wrap.nutrition-todays-meal-section .tab-content .content {height:100%;}
 .app-wrapper-content .fitness-nutrition .body-wrap.nutrition-todays-meal-section .tab-content .content .body-content {height:100%;}
@@ -15508,14 +15521,14 @@ a.timline-post-edit-btn svg {
 }
 
 .recent-ingredient ul {
-    padding: 0 40px 0 20px;
+    padding: 0;
     margin: 0;
     list-style: none;
 }
 .blue_right_sidebar {
     display: flex;
     flex-direction: column;
-    background: #053095;
+    background: #93e7e4;
     width:100%;
 }
 
@@ -15524,7 +15537,7 @@ a.timline-post-edit-btn svg {
   font-family: 'Neuzeit';
   font-size: 25px;
   padding: 30px 20px;
-  color: #fff;
+  color: #201f60;
   font-weight: 900;
 }
 
@@ -15539,12 +15552,12 @@ a.timline-post-edit-btn svg {
     list-style: none;
     padding: 0;
     margin: 0;
-    height: calc(100vh - 46vh);
+    height: calc(100vh - 39vh);
 }
 .blue_right_sidebar.measurement-sidebar .recent-ingredient {height: calc(100vh - 40vh);}
 .blue_right_sidebar.addfitnesstest-sidebar .recent-ingredient {height: calc(100vh - 22vh);}
 
-.blue_right_sidebar .recent-ingredient > div > div:last-child { width:10px !important; right: 20px !important; background: #201F60; }
+.blue_right_sidebar .recent-ingredient > div > div:last-child { width:10px !important; right: 10px !important; background: #201F60; }
 .blue_right_sidebar .recent-ingredient > div > div:last-child > div { background: #3E67FF !important;}
 .blue_right_sidebar .recent-ingredient ul li.input-box-group{padding: 0 0 0 0;background: unset;position: relative;}
 .blue_right_sidebar .recent-ingredient ul li.input-box-group .search-icon{right: 18px;position: absolute;top: 10px;}
@@ -15552,16 +15565,19 @@ a.timline-post-edit-btn svg {
 .blue_right_sidebar .recent-ingredient ul li.input-box-group input{height: 40px;}
 .blue_right_sidebar .recent-ingredient ul li.input-box-group input::placeholder {color: #201F60;font-size: 20px;font-weight:bold;opacity: 0.4;}
 .blue_right_sidebar .recent-ingredient ul li {
-    padding: 10px 15px 10px 30px;
-    background: #3E67FF;
-    color: #fff;
+    padding: 15px 15px 15px 30px;
+    background: none;
+    color: #201f60;
     font-size:20px;
-    margin-bottom: 10px;
-    border-radius: 6px;
+    margin-bottom: 0;
+    border-radius: 0px;
     font-family: 'Neuzeit';
     font-weight: 700;
     display: flex;
     flex-wrap: wrap;
+    border-bottom: solid 1px rgba(237, 245, 253, 0.1);
+    box-shadow: 0 5px 5px rgba(39, 26, 26, 0.1);
+
 }
 
 .blue_right_sidebar .recent-ingredient ul li h3 {
@@ -15572,7 +15588,7 @@ a.timline-post-edit-btn svg {
     text-overflow: ellipsis;
     overflow: hidden;
     width:67%;
-    color: #fff
+    color: #201f60
 }
 
 .blue_right_sidebar .recent-ingredient ul li .star_one {
@@ -16126,17 +16142,20 @@ a.timline-post-edit-btn svg {
 .exercise-header .star-icon {border-left: 3px solid #EDF5FD; width:80px; height: 80px; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; fill: #D1DAE2;}
 .exercise-header .star-icon svg {width:30px; height: 30px;}
 
-.exercise-navbar {display: flex; flex-wrap: wrap; padding: 15px; align-items: center; position: relative;}
+.exercise-navbar {display: flex; flex-wrap: wrap; padding: 0; align-items: center; position: relative; background: #053095;}
 .exercise-navbar .tabs.sub-tab {width: auto;}
-.exercise-navbar .list-notes {display: flex; flex-wrap: wrap; margin-right: 15px;}
+.exercise-navbar .tabs.sub-tab .tab {background: none;}
+.exercise-navbar .tabs.sub-tab .tab a {background: none; color: rgba(255, 255, 255, 0.5);}
+.exercise-navbar .tabs.sub-tab .tab.active a {background: none; color: #fff;}
+.exercise-navbar .list-notes {display: flex; flex-wrap: wrap; margin-left: auto;}
 .exercise-navbar .list-notes ul {display: flex; flex-wrap: wrap; margin: 0px; padding: 0px; list-style: none;}
 .exercise-navbar .list-notes ul li {padding: 0 15px;}
-.exercise-navbar .list-notes ul li a {padding: 0px; margin: 0px; display: block; font-size: 20px; color: #201F60; font-family: 'gt_walsheim_proregular'; font-weight: 700;}
+.exercise-navbar .list-notes ul li a {padding: 0px; margin: 0px; display: block; font-size: 24px; color: rgba(255, 255, 255, 0.5); font-family: 'gt_walsheim_proregular'; font-weight: 700;}
 .exercise-navbar .plus-btn {position: relative;}
 
 .exercise-navbar-active:before {content: ''; position: absolute; right: -3px; top:15px; width: 63px; height: 50px; background: #053095; border-radius: 50px 0px 0 50px;}
 
-.app-wrapper-content .fitness-nutrition .body-wrap.nutrition-todays-meal-section .tab-content.exercise-tabs {height: auto; padding: 0 15px 15px;}
+.app-wrapper-content .fitness-nutrition .body-wrap.nutrition-todays-meal-section .tab-content.exercise-tabs {height: auto; padding: 15px;}
 
 .exercise-tabs .excercise-boxs {background: #D1DAE2 !important; display: flex; flex-wrap: wrap; overflow:hidden; position: relative;}
 .exercise-tabs .excercise-boxs .excercise-number {background: #201F60; width: 50px; text-align: center; display: flex; flex-wrap: wrap; align-items: center; justify-content: center;}
@@ -16288,7 +16307,52 @@ a.timline-post-edit-btn svg {
 
 .slider-img svg {font-size: 25px; color: #201F60;}
 
+.workout-list {list-style-type: none;width: 100%;}
+.workout-list .workout-list-items.active:before { content: '';height: 94px;width: 9px;background: #FF337E;border-radius: 0 5px 5px 0;}
 
+.workout-list .workout-list-items {margin: 10px 0;opacity: 0.4;}
+.workout-list .workout-list-items.active {margin: 10px 0; opacity: 1;}
+.workout-list .workout-list-items .title {padding: 10px;background: #201f60;color: #fff;border-radius: 5px 5px 0 0;font-size: 20px;font-weight: bold; cursor: pointer;}
+.workout-list .workout-list-items .is-complete {background: #d1dae2;border-radius: 0 0 5px 5px;}
+.workout-list .workout-list-items .is-complete .workout-switch-wrap {display: flex;padding: 0 20px 0 10px;color: #1A2032;font-family: "gt_walsheim_proregular";font-size: 17px;font-weight: 500;line-height: 46px;}
+.workout-list .workout-list-items-btn a {background: #d1dae2;color: #201f60;font-size: 20px;font-weight: bold;}
+.workout-list .workout-list-items-btn { margin : 0 20px;}
+.workout-list .workout-list-items.active .workout-content {margin: 0 20px 0 12px;}
+.workout-list .workout-list-items .workout-content {margin: 0 20px;}
+
+.blue_right_sidebar .quick-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    background: #267d79;
+    color: #fff;
+    align-items: center;
+    justify-content: left;
+    /* margin: 0 0 15px; */
+    padding: 0 0 0 5px;
+}
+.blue_right_sidebar .quick-tabs .tab {
+    padding: 10px 16px;
+}
+.blue_right_sidebar .quick-tabs .tab a {
+    font-size: 24px;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.5);
+}
+.blue_right_sidebar .quick-tabs .tab.active a {
+    color:#fff;
+}
+
+.blue_right_sidebar .sidebar-header button.btn.btn-plus-right {
+    border-radius: 50%;
+    height: 6rem;
+    width: 6rem;
+    background: #fff;
+    position: absolute;
+    right: -16px;
+    top: -10px;
+    box-shadow: 1px 4px 10px -3px;
+    font-size: 20px;
+}
 /*********************** Responsive **************************/
 
 @media(max-width: 1660px) {

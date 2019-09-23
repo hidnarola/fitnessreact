@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 import CalendarDayOverViewWorkoutsList from './CalendarDayOverViewWorkoutsList';
 
-import { completeUsersBulkWorkoutScheduleRequest } from '../../../actions/userScheduleWorkouts';
+import {
+  completeUsersBulkWorkoutScheduleRequest,
+  getUserFirstWorkoutByDateRequest,
+  getUsersWorkoutScheduleRequest,
+} from '../../../actions/userScheduleWorkouts';
 import { connect } from 'react-redux';
 import { isOnline } from '../../../helpers/funs';
 import { hidePageLoader, showPageLoader } from '../../../actions/pageLoader';
@@ -24,35 +28,270 @@ class CalendarDayOverViewWorkouts extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      cuurentTab: '#warmup0',
+      cuurentTab: '#warmup',
       completeWorkout: false,
       completeWorkoutActionInit: false,
       isActiveQuickTab: false,
+      isActiveWorkoutTab: '#workout1',
+      workout: null,
+      workoutsList: [],
     };
   }
-  componentDidMount() {
-    const { index, workout } = this.props;
-    const complete = workout.isCompleted === 0 ? false : true;
-    this.setState({ cuurentTab: `#warmup${index}`, completeWorkout: complete });
+
+  render() {
+    const {
+      completeWorkout,
+      isActiveQuickTab,
+      cuurentTab,
+      isActiveWorkoutTab,
+      workout,
+      workoutsList,
+    } = this.state;
+    let { index = 1 } = this.props;
+
+    console.log('===========Workout State===========');
+    console.log(this.state.workout);
+    console.log('==========================');
+
+    return (
+      <React.Fragment>
+        <div className="body-content workouts-bg">
+          <div className="row justify-content-start no-gutters">
+            <div className="col-xs-12 col-md-3">
+              <div className="overview white-box width-100-per p-0 border-right">
+                <div className="overview-header d-flex align-items-center">
+                  <h3 className="title-h3 size-14">Today's Workouts</h3>
+                </div>
+                <div className="workout-body">
+                  <ul className="workout-list">
+                    {workoutsList.map((workout, index) => (
+                      <li
+                        key={index}
+                        className={
+                          isActiveWorkoutTab === `#workout${index + 1}`
+                            ? 'workout-list-items active d-flex'
+                            : 'workout-list-items d-flex'
+                        }
+                      >
+                        <div className="workout-content width-100-per">
+                          <div
+                            className="title"
+                            onClick={() =>
+                              this.handleChangeWorkoutTab(
+                                `#workout${index + 1}`,
+                                workout._id,
+                              )
+                            }
+                          >
+                            {workout.title}
+                          </div>
+                          <div className="is-complete">
+                            <div className="workout-switch-wrap">
+                              <small>Workout complete</small>
+                              <div className="material-switch ml-auto">
+                                <input
+                                  id={'workout' + index}
+                                  type="checkbox"
+                                  checked={completeWorkout}
+                                  onChange={() =>
+                                    this.handleCompleteWorkout(workout)
+                                  }
+                                />
+                                <label
+                                  htmlFor={'workout' + index}
+                                  className="label-default"
+                                ></label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                    ))}
+
+                    <li className="workout-list-items-btn">
+                      <a href="#" className="btn width-100-per">
+                        <FontAwesomeIcon icon="plus" /> Add Workout
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            {/* <div
+              className={
+                isActiveQuickTab ? 'col-xs-12 col-md-6' : 'col-xs-12 col-md-6'
+              }
+            > */}
+            <div className="col-xs-12 col-md-9">
+              <div className="white-box width-100-per p-0">
+                {/* <WorkoutHeader
+                  index={index}
+                  completeWorkout={completeWorkout}
+                  workout={this.props.workout}
+                  handleCompleteWorkout={this.handleCompleteWorkout}
+                /> */}
+                {cuurentTab !== `#stats` ? (
+                  <WorkoutNav
+                    cuurentTab={cuurentTab}
+                    isActiveQuickTab={isActiveQuickTab}
+                    handleChangeTab={this.handleChangeTab}
+                    handleSetActiveQuickTab={this.handleSetActiveQuickTab}
+                  />
+                ) : (
+                  ''
+                )}
+
+                <div className="row no-gutters h-exercise">
+                  <div className="col-xs-12 col-md-8">
+                    <div className={'exercise-tabs tab-content'}>
+                      {cuurentTab === `#warmup` && (
+                        <div
+                          className={
+                            cuurentTab === `#warmup`
+                              ? 'content active'
+                              : 'content'
+                          }
+                          id={'warmup'}
+                        >
+                          {workout &&
+                            workout.warmup.map((warmup, index) => (
+                              <CalendarDayOverViewWorkoutsList
+                                workout={warmup}
+                                key={index}
+                                index={index}
+                              />
+                            ))}
+                        </div>
+                      )}
+                      {cuurentTab === `#workout` && (
+                        <div
+                          className={
+                            cuurentTab === `#workout`
+                              ? 'content active'
+                              : 'content'
+                          }
+                          id={'workout'}
+                        >
+                          {workout &&
+                            workout.exercise.map((exercise, index) => (
+                              <CalendarDayOverViewWorkoutsList
+                                workout={exercise}
+                                key={index}
+                                index={index}
+                              />
+                            ))}
+                        </div>
+                      )}
+                      {cuurentTab === `#cooldown` && (
+                        <div
+                          className={
+                            cuurentTab === `#cooldown`
+                              ? 'content active'
+                              : 'content'
+                          }
+                          id={'cooldown'}
+                        >
+                          {workout &&
+                            workout.cooldown.map((cooldown, index) => (
+                              <CalendarDayOverViewWorkoutsList
+                                workout={cooldown}
+                                key={index}
+                                index={index}
+                              />
+                            ))}
+                        </div>
+                      )}
+                      {cuurentTab === `#fitnesstest` && (
+                        <div
+                          className={
+                            cuurentTab === `#notes`
+                              ? 'content active'
+                              : 'content'
+                          }
+                          id={'fitnesstest'}
+                        >
+                          <CalendarDayFitnessTestList />
+                        </div>
+                      )}
+
+                      {cuurentTab === `#notes` && (
+                        <div
+                          className={
+                            cuurentTab === `#notes`
+                              ? 'content active'
+                              : 'content'
+                          }
+                          id={'notes'}
+                        >
+                          <CalendarDayNoteList />
+                        </div>
+                      )}
+                      {cuurentTab === `#stats` && (
+                        <div
+                          className={
+                            cuurentTab === `#stats`
+                              ? 'content active'
+                              : 'content'
+                          }
+                          id={'stats'}
+                        >
+                          <CalendarDayStatsList
+                            index={index}
+                            handleChangeTab={this.handleChangeTab}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="col-xs-12 col-md-4">
+                    {this.displayRightSidebar(cuurentTab, isActiveQuickTab)}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </React.Fragment>
+    );
   }
+
+  componentDidMount() {
+    const { index, workout, logDate, dispatch } = this.props;
+    // const complete = workout.isCompleted === 0 ? false : true;
+    this.setState({ cuurentTab: `#warmup`, completeWorkout: false });
+    const requestData = {
+      date: logDate,
+    };
+    dispatch(
+      getUserFirstWorkoutByDateRequest(requestData, null, res => {
+        const { workout_id } = res;
+        dispatch(getUsersWorkoutScheduleRequest(workout_id));
+      }),
+    );
+  }
+
   componentDidUpdate(prevProps, prevState) {
     const { completeWorkoutActionInit } = this.state;
-    const { dispatch, workout, loading } = this.props;
-
-    if (
-      !loading &&
-      prevProps.workout !== workout &&
-      typeof workout.isCompleted !== 'undefined'
-    ) {
-      const complete = workout.isCompleted === 0 ? false : true;
-      this.setState({ completeWorkout: complete });
+    const { dispatch, workout, workoutsList, loading } = this.props;
+    console.log('===========workoutList===========');
+    console.log(workoutsList);
+    console.log('==========================');
+    if (!loading) {
       dispatch(hidePageLoader());
     }
-
-    if (prevState.completeWorkoutActionInit !== completeWorkoutActionInit) {
-      dispatch(hidePageLoader());
+    if (!loading && prevProps.workout !== workout) {
+      this.setState({ workout });
+    }
+    if (!loading && prevProps.workoutsList !== workoutsList) {
+      this.setState({ workoutsList });
     }
   }
+  handleChangeWorkoutTab = (workoutTab, id) => {
+    const { dispatch } = this.props;
+    this.setState({ isActiveWorkoutTab: workoutTab });
+    dispatch(getUsersWorkoutScheduleRequest(id));
+  };
 
   handleCompleteWorkout = workout => {
     if (isOnline()) {
@@ -91,173 +330,16 @@ class CalendarDayOverViewWorkouts extends Component {
     this.setState({ isActiveQuickTab: tab });
   };
 
-  render() {
-    const { completeWorkout, isActiveQuickTab, cuurentTab } = this.state;
-    const { index } = this.props;
-    const {
-      title,
-      warmup,
-      exercise,
-      cooldown,
-      _id,
-      isCompleted,
-    } = this.props.workout;
-    console.log('THIS.PROPS ===>', this.props.workout);
-
-    return (
-      <React.Fragment>
-        <div className="body-content workouts-bg">
-          <div className="row justify-content-start no-gutters">
-            <div
-              className={
-                isActiveQuickTab ? 'col-xs-12 col-md-7' : 'col-xs-12 col-md-9'
-              }
-            >
-              <div className="white-box border-right width-100-per p-0">
-                <WorkoutHeader
-                  index={index}
-                  completeWorkout={completeWorkout}
-                  workout={this.props.workout}
-                  handleCompleteWorkout={this.handleCompleteWorkout}
-                />
-                {cuurentTab !== `#stats${index}` ? (
-                  <WorkoutNav
-                    index={index}
-                    cuurentTab={cuurentTab}
-                    isActiveQuickTab={isActiveQuickTab}
-                    handleChangeTab={this.handleChangeTab}
-                    handleSetActiveQuickTab={this.handleSetActiveQuickTab}
-                  />
-                ) : (
-                  ''
-                )}
-
-                <div className={'exercise-tabs tab-content'}>
-                  {cuurentTab === `#warmup${index}` && (
-                    <div
-                      className={
-                        cuurentTab === `#warmup${index}`
-                          ? 'content active'
-                          : 'content'
-                      }
-                      id={'warmup' + index}
-                    >
-                      {warmup &&
-                        warmup.map((warmup, index) => (
-                          <CalendarDayOverViewWorkoutsList
-                            workout={warmup}
-                            key={index}
-                            index={index}
-                          />
-                        ))}
-                    </div>
-                  )}
-                  {cuurentTab === `#workout${index}` && (
-                    <div
-                      className={
-                        cuurentTab === `#workout${index}`
-                          ? 'content active'
-                          : 'content'
-                      }
-                      id={'workout' + index}
-                    >
-                      {exercise &&
-                        exercise.map((exercise, index) => (
-                          <CalendarDayOverViewWorkoutsList
-                            workout={exercise}
-                            key={index}
-                            index={index}
-                          />
-                        ))}
-                    </div>
-                  )}
-                  {cuurentTab === `#cooldown${index}` && (
-                    <div
-                      className={
-                        cuurentTab === `#cooldown${index}`
-                          ? 'content active'
-                          : 'content'
-                      }
-                      id={'cooldown' + index}
-                    >
-                      {cooldown &&
-                        cooldown.map((cooldown, index) => (
-                          <CalendarDayOverViewWorkoutsList
-                            workout={cooldown}
-                            key={index}
-                            index={index}
-                          />
-                        ))}
-                    </div>
-                  )}
-                  {cuurentTab === `#fitnesstest${index}` && (
-                    <div
-                      className={
-                        cuurentTab === `#notes${index}`
-                          ? 'content active'
-                          : 'content'
-                      }
-                      id={'fitnesstest' + index}
-                    >
-                      <CalendarDayFitnessTestList />
-                    </div>
-                  )}
-
-                  {cuurentTab === `#notes${index}` && (
-                    <div
-                      className={
-                        cuurentTab === `#notes${index}`
-                          ? 'content active'
-                          : 'content'
-                      }
-                      id={'notes' + index}
-                    >
-                      <CalendarDayNoteList />
-                    </div>
-                  )}
-                  {cuurentTab === `#stats${index}` && (
-                    <div
-                      className={
-                        cuurentTab === `#stats${index}`
-                          ? 'content active'
-                          : 'content'
-                      }
-                      id={'stats' + index}
-                    >
-                      <CalendarDayStatsList
-                        index={index}
-                        handleChangeTab={this.handleChangeTab}
-                      />
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            <div
-              className={
-                isActiveQuickTab
-                  ? 'col-xs-12 col-md-5 d-flex'
-                  : 'col-xs-12 col-md-3 d-flex'
-              }
-            >
-              {this.displayRightSidebar(cuurentTab, isActiveQuickTab, index)}
-            </div>
-          </div>
-        </div>
-      </React.Fragment>
-    );
-  }
-  displayRightSidebar = (cuurentTab, isActiveQuickTab, index) => {
+  displayRightSidebar = (cuurentTab, isActiveQuickTab) => {
     var rightSidebar = null;
     if (isActiveQuickTab) {
-      if (cuurentTab !== `#fitnesstest${index}`) {
+      if (cuurentTab !== `#fitnesstest`) {
         rightSidebar = <CalendarDayWorkoutRightSidebar />;
       } else {
         rightSidebar = <CalendarDayFitnessTestAddList />;
       }
     } else {
-      if (cuurentTab === `#fitnesstest${index}`) {
+      if (cuurentTab === `#fitnesstest`) {
         rightSidebar = (
           <CalendarDayFitnessTestQuickAdd isActiveQuickTab={isActiveQuickTab} />
         );
@@ -271,6 +353,12 @@ class CalendarDayOverViewWorkouts extends Component {
   };
 }
 const mapStateToProps = state => {
-  return state;
+  const { userScheduleWorkouts } = state;
+  return {
+    workout: userScheduleWorkouts.get('workout'),
+    workoutsList: userScheduleWorkouts.get('workoutsList'),
+    loading: userScheduleWorkouts.get('loading'),
+    error: userScheduleWorkouts.get('error'),
+  };
 };
 export default connect(mapStateToProps)(CalendarDayOverViewWorkouts);

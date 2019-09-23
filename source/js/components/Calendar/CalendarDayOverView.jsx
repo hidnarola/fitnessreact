@@ -61,7 +61,7 @@ class CalendarDayOverView extends Component {
     //     dispatch(getUsersWorkoutScheduleRequest(workout_id));
     //   }),
     // );
-    dispatch(getUsersWorkoutOverviewRequest(logDate));
+    // dispatch(getUsersWorkoutOverviewRequest(logDate));
     dispatch(getUserMealRequest(requestObj));
     dispatch(getUserBodyMeasurementRequest(requestObj));
     dispatch(recentMealRequest());
@@ -90,10 +90,10 @@ class CalendarDayOverView extends Component {
       dispatch(showPageLoader());
     }
 
-    if (!loading && prevProps.workoutsList !== workoutsList) {
-      this.setState({ workoutsList });
-      dispatch(hidePageLoader());
-    }
+    // if (!loading && prevProps.workoutsList !== workoutsList) {
+    //   this.setState({ workoutsList });
+    //   dispatch(hidePageLoader());
+    // }
     if (!loading_user_meals && prevProps.user_meals !== user_meals) {
       this.setState({ mealsList: user_meals });
       dispatch(hidePageLoader());
@@ -234,11 +234,78 @@ class CalendarDayOverView extends Component {
             <div className="body-head d-flex justify-content-start front-white-header custome_header">
               <div className="body-head-l">
                 <div className="display-date">
-                  <span className="display-calendar">
-                    <CalendarImage />
-                    <FontAwesomeIcon icon="chevron-down" />
-                  </span>
-                  <span className="date-arrow-left">
+                  <div className="tabs ml-4">
+                    <div
+                      className={
+                        this.state.cuurentTab === '#Exercise'
+                          ? 'tab active'
+                          : 'tab '
+                      }
+                      id="Exercise"
+                    >
+                      <a
+                        onClick={e => {
+                          this.setState({ cuurentTab: '#Exercise' });
+                        }}
+                        href="#Exercise"
+                      >
+                        Exercise
+                      </a>
+                    </div>
+
+                    <div
+                      className={
+                        this.state.cuurentTab === '#Nutrition'
+                          ? 'tab active'
+                          : 'tab'
+                      }
+                      id="Nutrition"
+                    >
+                      <a
+                        onClick={e => {
+                          this.setState({ cuurentTab: '#Nutrition' });
+                        }}
+                        href="#Nutrition"
+                      >
+                        Nutrition
+                      </a>
+                    </div>
+
+                    <div
+                      className={
+                        this.state.cuurentTab === '#Logs' ? 'tab active' : 'tab'
+                      }
+                      id="Logs"
+                    >
+                      <a
+                        onClick={e => {
+                          this.setState({ cuurentTab: '#Logs' });
+                        }}
+                        href="#Logs"
+                      >
+                        Logs
+                      </a>
+                    </div>
+
+                    <div
+                      className={
+                        this.state.cuurentTab === '#Photos'
+                          ? 'tab  active'
+                          : 'tab'
+                      }
+                      id="Photos"
+                    >
+                      <a
+                        onClick={e => {
+                          this.setState({ cuurentTab: '#Photos' });
+                        }}
+                        href="#Photos"
+                      >
+                        Photos
+                      </a>
+                    </div>
+                  </div>
+                  <span className="date-arrow-left  ml-auto">
                     <FontAwesomeIcon icon="chevron-left" />
                   </span>
                   <span className="date-text">
@@ -251,80 +318,14 @@ class CalendarDayOverView extends Component {
                   <span className="date-arrow-right">
                     <FontAwesomeIcon icon="chevron-right" />
                   </span>
+                  <span className="display-calendar">
+                    <CalendarImage />
+                    <FontAwesomeIcon icon="chevron-down" />
+                  </span>
                 </div>
               </div>
             </div>
-            <div className="body-sub-head">
-              <div className="tabs">
-                <div
-                  className={
-                    this.state.cuurentTab === '#Exercise'
-                      ? 'tab active'
-                      : 'tab '
-                  }
-                  id="Exercise"
-                >
-                  <a
-                    onClick={e => {
-                      this.setState({ cuurentTab: '#Exercise' });
-                    }}
-                    href="#Exercise"
-                  >
-                    Exercise
-                  </a>
-                </div>
-
-                <div
-                  className={
-                    this.state.cuurentTab === '#Nutrition'
-                      ? 'tab active'
-                      : 'tab'
-                  }
-                  id="Nutrition"
-                >
-                  <a
-                    onClick={e => {
-                      this.setState({ cuurentTab: '#Nutrition' });
-                    }}
-                    href="#Nutrition"
-                  >
-                    Nutrition
-                  </a>
-                </div>
-
-                <div
-                  className={
-                    this.state.cuurentTab === '#Logs' ? 'tab active' : 'tab'
-                  }
-                  id="Logs"
-                >
-                  <a
-                    onClick={e => {
-                      this.setState({ cuurentTab: '#Logs' });
-                    }}
-                    href="#Logs"
-                  >
-                    Logs
-                  </a>
-                </div>
-
-                <div
-                  className={
-                    this.state.cuurentTab === '#Photos' ? 'tab  active' : 'tab'
-                  }
-                  id="Photos"
-                >
-                  <a
-                    onClick={e => {
-                      this.setState({ cuurentTab: '#Photos' });
-                    }}
-                    href="#Photos"
-                  >
-                    Photos
-                  </a>
-                </div>
-              </div>
-            </div>
+            <div className="body-sub-head"></div>
 
             <div className={'tab-content'}>
               {this.state.cuurentTab === '#Exercise' && (
@@ -336,14 +337,7 @@ class CalendarDayOverView extends Component {
                   }
                   id="Exercise"
                 >
-                  {workoutsList.map((workout, index) => (
-                    <CalendarDayOverViewWorkouts
-                      loading={loading}
-                      key={index}
-                      workout={workout}
-                      index={index}
-                    />
-                  ))}
+                  <CalendarDayOverViewWorkouts logDate={logDate} />
                 </div>
               )}
               {this.state.cuurentTab === '#Nutrition' && (

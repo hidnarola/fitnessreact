@@ -6,7 +6,6 @@ const WorkoutNav = props => {
   const {
     isActiveQuickTab,
     cuurentTab,
-    index,
     handleChangeTab,
     handleSetActiveQuickTab,
   } = props;
@@ -21,71 +20,52 @@ const WorkoutNav = props => {
       >
         <div className="tabs sub-tab">
           <div
-            className={cuurentTab === `#warmup${index}` ? 'tab active' : 'tab '}
-            id={'warmup' + index}
+            className={cuurentTab === `#warmup` ? 'tab active' : 'tab '}
+            id={'warmup'}
           >
-            <a
-              onClick={e => handleChangeTab(`#warmup${index}`)}
-              href={'#warmup' + index}
-            >
+            <a onClick={e => handleChangeTab(`#warmup`)} href={'#warmup'}>
               Warmup
             </a>
           </div>
           <div
-            className={cuurentTab === `#workout${index}` ? 'tab active' : 'tab'}
-            id={'workout' + index}
+            className={cuurentTab === `#workout` ? 'tab active' : 'tab'}
+            id={'workout'}
           >
-            <a
-              onClick={e => handleChangeTab(`#workout${index}`)}
-              href={'#workout' + index}
-            >
+            <a onClick={e => handleChangeTab(`#workout`)} href={'#workout'}>
               Workout
             </a>
           </div>
           <div
-            className={
-              cuurentTab === `#cooldown${index}` ? 'tab active' : 'tab'
-            }
-            id={'cooldown' + index}
+            className={cuurentTab === `#cooldown` ? 'tab active' : 'tab'}
+            id={'cooldown'}
           >
-            <a
-              onClick={e => handleChangeTab(`#cooldown${index}`)}
-              href={'#cooldown' + index}
-            >
+            <a onClick={e => handleChangeTab(`#cooldown`)} href={'#cooldown'}>
               Cooldown
             </a>
           </div>
           <div
-            className={
-              cuurentTab === `#fitnesstest${index}` ? 'tab  active' : 'tab'
-            }
-            id={'fitnesstest' + index}
+            className={cuurentTab === `#fitnesstest` ? 'tab  active' : 'tab'}
+            id={'fitnesstest'}
           >
             <a
-              onClick={e => handleChangeTab(`#fitnesstest${index}`)}
-              href={'#fitnesstest' + index}
+              onClick={e => handleChangeTab(`#fitnesstest`)}
+              href={'#fitnesstest'}
             >
               Fitness Tests
             </a>
           </div>
         </div>
-        <div className="list-notes ml-auto">
+        <div className="list-notes">
           <ul>
             {!isActiveQuickTab && (
               <React.Fragment>
                 <li>
-                  <a
-                    href={'#notes' + index}
-                    onClick={e => handleChangeTab(`#notes${index}`)}
-                  >
+                  <a href={'#notes'} onClick={e => handleChangeTab(`#notes`)}>
                     Notes
                   </a>
                 </li>
                 <li>
-                  <a
-                    href={'#stats' + index}
-                    onClick={e => handleChangeTab(`#stats${index}`)}
-                  >
+                  <a href={'#stats'} onClick={e => handleChangeTab(`#stats`)}>
                     Stats
                   </a>
                 </li>
@@ -93,7 +73,7 @@ const WorkoutNav = props => {
             )}
           </ul>
         </div>
-        <Link
+        {/* <Link
           to="#"
           className={
             isActiveQuickTab
@@ -103,7 +83,7 @@ const WorkoutNav = props => {
           onClick={() => handleSetActiveQuickTab(!isActiveQuickTab)}
         >
           <FontAwesomeIcon icon={isActiveQuickTab ? 'times' : 'plus'} />
-        </Link>
+        </Link> */}
       </div>
     </React.Fragment>
   );

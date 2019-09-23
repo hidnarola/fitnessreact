@@ -12,9 +12,14 @@ class CalendarDayOverViewWorkoutsList extends Component {
       isAdvanceView: false,
     };
   }
-  handelChange = () => {
-    this.setState({ isAdvanceView: !this.state.isAdvanceView });
+  handelChange = view => {
+    if (view === 'advanceView') {
+      this.setState({ isAdvanceView: true });
+    } else {
+      this.setState({ isAdvanceView: false });
+    }
   };
+
   render() {
     const { workout, index } = this.props;
     const { isAdvanceView } = this.state;
@@ -40,7 +45,7 @@ class CalendarDayOverViewWorkoutsList extends Component {
             <div className="topbar-title">
               <h3>{exercises.name}</h3>
               <div role="toolbar" className="btn-toolbar ml-auto">
-                <div className="switch-wrap">
+                {/* <div className="switch-wrap">
                   <small>Advanced View</small>
                   <div className="material-switch">
                     <input
@@ -54,32 +59,42 @@ class CalendarDayOverViewWorkoutsList extends Component {
                       className="label-default"
                     ></label>
                   </div>
-                </div>
+                </div> */}
+                <ButtonToolbar className="boxing-icon border-right">
+                  <Dropdown id={`workout-actions-1`} pullRight>
+                    <Dropdown.Toggle noCaret>
+                      <i className="icon-more_horiz"></i>
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu>
+                      <MenuItem
+                        eventKey="1"
+                        onClick={() => this.handelChange('advanceView')}
+                      >
+                        Advance Display
+                      </MenuItem>
+                      <MenuItem
+                        eventKey="2"
+                        onClick={() => this.handelChange('normalView')}
+                      >
+                        Move Exercise
+                      </MenuItem>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </ButtonToolbar>
                 <button type="button" className="timline-post-del-btn">
                   <FontAwesomeIcon icon="trash-alt" />
                 </button>
-
-                {/* <ButtonToolbar className="boxing-icon">
-                <Dropdown id={`workout-actions-1`} pullRight>
-                  <Dropdown.Toggle noCaret>
-                    <i className="icon-more_horiz"></i>
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu>
-                    <MenuItem eventKey="1" onClick={() => console.log('')}>
-                      <FaPencil /> Edit
-                    </MenuItem>
-                    <MenuItem eventKey="2" onClick={() => console.log('')}>
-                      <FaTrash /> Delete
-                    </MenuItem>
-                  </Dropdown.Menu>
-                </Dropdown>
-              </ButtonToolbar> */}
               </div>
             </div>
             {isAdvanceView ? (
               <CaledarDayWorkoutAdvanceView />
             ) : (
-              <CalendarDayWorkoutView />
+              <CalendarDayWorkoutView
+                sets={sets}
+                restTime={restTime}
+                restTimeUnit={restTimeUnit}
+                setsDetails={setsDetails}
+              />
             )}
           </div>
         </div>
