@@ -1,4 +1,4 @@
-import { library } from '@fortawesome/fontawesome-svg-core';
+import { library, config } from '@fortawesome/fontawesome-svg-core';
 
 import { faUtensils } from '@fortawesome/free-solid-svg-icons/faUtensils';
 import { faCalendar } from '@fortawesome/free-solid-svg-icons/faCalendar';
@@ -29,6 +29,7 @@ import { faCopy } from '@fortawesome/free-solid-svg-icons/faCopy';
 import { faCut } from '@fortawesome/free-solid-svg-icons/faCut';
 import { faSearch } from '@fortawesome/free-solid-svg-icons/faSearch';
 import { faSlidersH } from '@fortawesome/free-solid-svg-icons/faSlidersH';
+import { faSortDown } from '@fortawesome/free-solid-svg-icons/faSortDown';
 
 library.add(
   faUtensils,
@@ -60,4 +61,5 @@ library.add(
   faCut,
   faSearch,
   faSlidersH,
+  faSortDown,
 );

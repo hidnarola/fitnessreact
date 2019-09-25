@@ -25,7 +25,12 @@ class CalendarDayRecentWorkoutList extends Component {
           <div className="d-flex width-100-per sidebar-header">
             <h2 className="h2_head_one pt-3 pb-3">Add Excercise</h2>
 
-            <button className="btn btn-plus-right ml-auto">
+            <button
+              className="btn btn-plus-right bg-white ml-auto"
+              onClick={() =>
+                this.props.handleSetActiveQuickTab(!isActiveQuickTab)
+              }
+            >
               <FontAwesomeIcon icon="plus" />
             </button>
           </div>

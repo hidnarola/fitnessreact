@@ -57,20 +57,16 @@ const WorkoutNav = props => {
         </div>
         <div className="list-notes">
           <ul>
-            {!isActiveQuickTab && (
-              <React.Fragment>
-                <li>
-                  <a href={'#notes'} onClick={e => handleChangeTab(`#notes`)}>
-                    Notes
-                  </a>
-                </li>
-                <li>
-                  <a href={'#stats'} onClick={e => handleChangeTab(`#stats`)}>
-                    Stats
-                  </a>
-                </li>
-              </React.Fragment>
-            )}
+            <li>
+              <a href={'#notes'} onClick={e => handleChangeTab(`#notes`)}>
+                Notes
+              </a>
+            </li>
+            <li>
+              <a href={'#stats'} onClick={e => handleChangeTab(`#stats`)}>
+                Stats
+              </a>
+            </li>
           </ul>
         </div>
         {/* <Link

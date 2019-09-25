@@ -23,6 +23,8 @@ import CalendarDayNutritionView from './CalendarDayNutritionView';
 import CalendarDayNutritionTargetList from './CalendarDayNutritionTargetList';
 import NutritionQuickAdd from './sidebar/NutritionQuickAdd';
 import NutrientsList from './sidebar/NutrientsList';
+import NutritionNav from './Header/NutritionNav';
+import NutritionStatsRightSidebar from './sidebar/NutritionStatsRightSidebar';
 
 class CalendarDayOverViewNutrition extends Component {
   constructor(props) {
@@ -40,11 +42,17 @@ class CalendarDayOverViewNutrition extends Component {
       total_cabs: 0,
       quickTab: '#favrioutmeals',
       isNutritionTargetTab: false,
+      nutritionTab: '#breakfast',
     };
   }
 
   render() {
-    const { meal_list, isNutritionTargetTab, quickTab } = this.state;
+    const {
+      meal_list,
+      isNutritionTargetTab,
+      quickTab,
+      nutritionTab,
+    } = this.state;
     const { mealsList, authuserId, recentMeals } = this.props;
     console.log('=========================');
     console.log('MealsList', meal_list);
@@ -53,13 +61,7 @@ class CalendarDayOverViewNutrition extends Component {
       <React.Fragment>
         <div className="body-content workouts-bg">
           <div className="row justify-content-start no-gutters">
-            <div className="col-xs-12 col-md-3 d-flex">
-              <CalendarDayOverViewCounts
-                isNutritionTargetTab={isNutritionTargetTab}
-                handleChangeNutritionTarget={this.handleChangeNutritionTarget}
-              />
-            </div>
-            <div className="col-xs-12 col-md-6 d-flex">
+            <div className="col-xs-12 col-md-9 d-flex">
               {isNutritionTargetTab ? (
                 <CalendarDayNutritionTargetList
                   setNutritionTab={this.props.setNutritionTab}
@@ -75,10 +77,16 @@ class CalendarDayOverViewNutrition extends Component {
                   addToFavourite={this.addToFavourite}
                   handleRemoveMeals={this.handleRemoveMeals}
                   authuserId={authuserId}
+                  nutritionTab={nutritionTab}
+                  handleChangeTab={this.handleChangeTab}
+                  quickTab={quickTab}
+                  recentMeals={recentMeals}
+                  addTodayMeals={this.addTodayMeals}
+                  handleChangeQuickTab={this.handleChangeQuickTab}
                 />
               )}
             </div>
-            <div className="col-xs-12 col-md-3 d-flex">
+            {/* <div className="col-xs-12 col-md-3 d-flex">
               {isNutritionTargetTab ? (
                 <NutrientsList />
               ) : (
@@ -88,6 +96,16 @@ class CalendarDayOverViewNutrition extends Component {
                   addTodayMeals={this.addTodayMeals}
                   handleChangeQuickTab={this.handleChangeQuickTab}
                 />
+              )}
+            </div> */}
+            <div className="col-xs-12 col-md-3 d-flex">
+              {isNutritionTargetTab ? (
+                <CalendarDayOverViewCounts
+                  isNutritionTargetTab={isNutritionTargetTab}
+                  handleChangeNutritionTarget={this.handleChangeNutritionTarget}
+                />
+              ) : (
+                <NutritionStatsRightSidebar />
               )}
             </div>
           </div>
@@ -355,6 +373,9 @@ class CalendarDayOverViewNutrition extends Component {
   };
   handleChangeQuickTab = action => {
     this.setState({ quickTab: action });
+  };
+  handleChangeTab = tab => {
+    this.setState({ nutritionTab: tab });
   };
 }
 const mapStateToProps = state => {

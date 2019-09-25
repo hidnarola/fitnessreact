@@ -142,7 +142,13 @@ class CalendarDayOverViewWorkouts extends Component {
                 )}
 
                 <div className="row no-gutters h-exercise">
-                  <div className="col-xs-12 col-md-8">
+                  <div
+                    className={
+                      isActiveQuickTab
+                        ? 'col-xs-12 col-md-6'
+                        : 'col-xs-12 col-md-8'
+                    }
+                  >
                     <div className={'exercise-tabs tab-content'}>
                       {cuurentTab === `#warmup` && (
                         <div
@@ -244,7 +250,13 @@ class CalendarDayOverViewWorkouts extends Component {
                     </div>
                   </div>
 
-                  <div className="col-xs-12 col-md-4">
+                  <div
+                    className={
+                      isActiveQuickTab
+                        ? 'col-xs-12 col-md-6'
+                        : 'col-xs-12 col-md-4'
+                    }
+                  >
                     {this.displayRightSidebar(cuurentTab, isActiveQuickTab)}
                   </div>
                 </div>
@@ -334,7 +346,12 @@ class CalendarDayOverViewWorkouts extends Component {
     var rightSidebar = null;
     if (isActiveQuickTab) {
       if (cuurentTab !== `#fitnesstest`) {
-        rightSidebar = <CalendarDayWorkoutRightSidebar />;
+        rightSidebar = (
+          <CalendarDayWorkoutRightSidebar
+            isActiveQuickTab={isActiveQuickTab}
+            handleSetActiveQuickTab={this.handleSetActiveQuickTab}
+          />
+        );
       } else {
         rightSidebar = <CalendarDayFitnessTestAddList />;
       }
@@ -345,7 +362,10 @@ class CalendarDayOverViewWorkouts extends Component {
         );
       } else {
         rightSidebar = (
-          <CalendarDayRecentWorkoutList isActiveQuickTab={isActiveQuickTab} />
+          <CalendarDayRecentWorkoutList
+            isActiveQuickTab={isActiveQuickTab}
+            handleSetActiveQuickTab={this.handleSetActiveQuickTab}
+          />
         );
       }
     }

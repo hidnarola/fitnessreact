@@ -12,11 +12,22 @@ class CalendarDayWorkoutRightSidebar extends Component {
     };
   }
   render() {
+    const { isActiveQuickTab } = this.props;
     return (
       <React.Fragment>
-        <div className="blue_right_sidebar">
-          <h2 className="h2_head_one">Add Exercise</h2>
-          <div className="tabs">
+        <div className="blue_right_sidebar h-100">
+          <div className="d-flex width-100-per sidebar-header">
+            <h2 className="h2_head_one pt-3 pb-3">Add Exercise</h2>
+            <button
+              className="btn bg-red btn-plus-right text-white ml-auto"
+              onClick={() =>
+                this.props.handleSetActiveQuickTab(!isActiveQuickTab)
+              }
+            >
+              <FontAwesomeIcon icon="times" />
+            </button>
+          </div>
+          <div className="quick-tabs">
             <div
               className={
                 this.state.exerciseTab === '#single' ? 'tab active' : 'tab'
@@ -64,7 +75,7 @@ class CalendarDayWorkoutRightSidebar extends Component {
             </div>
           </div>
           <div className={'tab-content'}>
-            <div className="recent-ingredient">
+            <div className="recent-ingredient h-100">
               <Scrollbars autoHide>
                 {this.state.exerciseTab === '#single' && (
                   <React.Fragment>
@@ -80,38 +91,38 @@ class CalendarDayWorkoutRightSidebar extends Component {
                         </span>
                       </li>
                       <li>
-                        <span className={'star_one active'}>
+                        {/* <span className={'star_one active'}>
                           <Star />
-                        </span>
+                        </span> */}
                         <h3>Bench Press</h3>
-                        <div className="add_drag">
+                        {/* <div className="add_drag">
                           <FontAwesomeIcon icon="plus-circle" />
-                        </div>
+                        </div> */}
                       </li>
                       <li>
                         <h3>Upright Row</h3>
-                        <div className="add_drag">
+                        {/* <div className="add_drag">
                           <FontAwesomeIcon icon="plus-circle" />
-                        </div>
+                        </div> */}
                       </li>
                       <li>
-                        <span className={'star_one active'}>
+                        {/* <span className={'star_one active'}>
                           <Star />
-                        </span>
+                        </span> */}
                         <h3>Pull up</h3>
-                        <div className="add_drag">
+                        {/* <div className="add_drag">
                           <FontAwesomeIcon icon="plus-circle" />
-                        </div>
+                        </div> */}
                       </li>
                     </ul>
                   </React.Fragment>
                 )}
                 {this.state.exerciseTab === '#superset' && (
                   <React.Fragment>
-                    <div className="superset-section">
+                    <div className="superset-section mt-3">
                       <div className="superset-boxs">
                         <h4>Sets</h4>
-                        <div className="superset-input ml-auto">
+                        <div className="superset-input">
                           <div className="serving-boxs">
                             <button className="btn btn-minus">
                               <FontAwesomeIcon icon="minus" />
@@ -129,7 +140,7 @@ class CalendarDayWorkoutRightSidebar extends Component {
                       </div>
                       <div className="superset-boxs">
                         <h4>Rest</h4>
-                        <div className="superset-input ml-auto">
+                        <div className="superset-input">
                           <div className="serving-boxs">
                             <button className="btn btn-minus">
                               <FontAwesomeIcon icon="minus" />
@@ -151,32 +162,38 @@ class CalendarDayWorkoutRightSidebar extends Component {
                           </div>
                         </div>
                       </div>
-                      <div className="exercies-boxs">
+                      <div className="superset-boxs">
                         <h4>Exercies</h4>
-                        <ul>
-                          <li>
-                            <h3>Incline Bench Press</h3>
-                            <div className="add_drag">
-                              <FontAwesomeIcon icon="chevron-right" />
-                            </div>
-                            <div className="delete-icon">
-                              <FontAwesomeIcon icon="trash-alt" />
-                            </div>
-                          </li>
-                          <li>
-                            <div className="input-group">
-                              <input
-                                type="text"
-                                className="form-control"
-                                placeholder="Add exercise"
-                              />
-                              <div className="input-group-prepend">
-                                <FontAwesomeIcon icon="plus-circle" />
-                              </div>
-                            </div>
-                          </li>
-                        </ul>
                       </div>
+                      <ul>
+                        <li>
+                          <h3>Deadlift</h3>
+                          <div className="add_drag">
+                            <FontAwesomeIcon icon="chevron-right" />
+                          </div>
+                          <div className="delete-icon">
+                            <FontAwesomeIcon icon="trash-alt" />
+                          </div>
+                        </li>
+                        <li>
+                          <div className="input-group">
+                            <input
+                              type="text"
+                              className="form-control"
+                              placeholder="Add exercise"
+                            />
+                            <div className="input-group-prepend">
+                              <FontAwesomeIcon icon="plus-circle" />
+                            </div>
+                          </div>
+                        </li>
+
+                        <li className="btn-add">
+                          <button className="btn">
+                            <i className="far fa-arrow-to-left" /> Add and save
+                          </button>
+                        </li>
+                      </ul>
                     </div>
                   </React.Fragment>
                 )}
