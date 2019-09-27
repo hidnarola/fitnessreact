@@ -3,15 +3,18 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Scrollbars } from 'react-custom-scrollbars';
 import Star from '../../../../assets/svg/star.svg';
 import Search from '../../../../assets/svg/square.svg';
+import Collapse from 'react-bootstrap/lib/Collapse';
 
 class CalendarDayWorkoutRightSidebar extends Component {
   constructor(props) {
     super(props);
     this.state = {
       exerciseTab: '#single',
+      isOpenExerciseDetail: false,
     };
   }
   render() {
+    const { isOpenExerciseDetail } = this.state;
     const { isActiveQuickTab } = this.props;
     return (
       <React.Fragment>
@@ -168,13 +171,81 @@ class CalendarDayWorkoutRightSidebar extends Component {
                       <ul>
                         <li>
                           <h3>Deadlift</h3>
-                          <div className="add_drag">
-                            <FontAwesomeIcon icon="chevron-right" />
+                          <div
+                            className="add_drag"
+                            onClick={() =>
+                              this.setState({
+                                isOpenExerciseDetail: !isOpenExerciseDetail,
+                              })
+                            }
+                            aria-controls="exerciseDetail-collapse"
+                            aria-expanded={isOpenExerciseDetail}
+                          >
+                            <FontAwesomeIcon
+                              icon={
+                                isOpenExerciseDetail
+                                  ? 'chevron-down'
+                                  : 'chevron-right'
+                              }
+                            />
                           </div>
                           <div className="delete-icon">
                             <FontAwesomeIcon icon="trash-alt" />
                           </div>
                         </li>
+                        <Collapse in={isOpenExerciseDetail}>
+                          <div id="exerciseDetail-collapse">
+                            <li
+                              style={{ background: '#267D79', margin: '0px 0' }}
+                            >
+                              <div className="superset-section">
+                                <div className="superset-boxs">
+                                  <h4>Weight</h4>
+                                  <div className="superset-input">
+                                    <div className="serving-boxs">
+                                      <button className="btn btn-minus">
+                                        <FontAwesomeIcon icon="minus" />
+                                      </button>
+                                      <input
+                                        type="number"
+                                        className="form-control"
+                                        defaultValue="86"
+                                      />
+                                      <button className="btn btn-plus">
+                                        <FontAwesomeIcon icon="plus" />
+                                      </button>
+                                    </div>
+                                    <div className="serving-select">
+                                      <select className="form-control">
+                                        <option>Seconds</option>
+                                        <option>Minutes</option>
+                                      </select>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="superset-boxs">
+                                  <h4>Reps</h4>
+                                  <div className="superset-input">
+                                    <div className="serving-boxs">
+                                      <button className="btn btn-minus">
+                                        <FontAwesomeIcon icon="minus" />
+                                      </button>
+                                      <input
+                                        type="number"
+                                        className="form-control"
+                                        defaultValue="86"
+                                      />
+                                      <button className="btn btn-plus">
+                                        <FontAwesomeIcon icon="plus" />
+                                      </button>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </li>
+                          </div>
+                        </Collapse>
+
                         <li>
                           <div className="input-group">
                             <input

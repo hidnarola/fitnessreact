@@ -109,6 +109,7 @@ import initIDBSchema from '../helpers/idbInitialiser';
 import NutritionMealEdit from '../components/Nutrition/NutritionMealEdit';
 import NutritionMealView from '../components/Nutrition/NutritionMealView';
 import CalendarDayOverView from '../components/Calendar/CalendarDayOverView';
+import NutritionMealCreate from '../components/Nutrition/Meal/NutritionMealCreate';
 JavascriptTimeAgo.locale(en);
 
 const auth = new Auth();
@@ -199,7 +200,7 @@ class App extends Component {
                                 <PrivateRoute exact path={routeCodes.VIEW_PROGRAM_SCHEDULE_WORKOUT} component={ViewProgramScheduleWorkout} />
 
                                 <PrivateRoute exact path={routeCodes.NUTRITION} component={NutritionMeal} />
-                                <PrivateRoute exact path={routeCodes.NUTRITION_ADD} component={NutritionMealAdd} />
+                                <PrivateRoute exact path={routeCodes.NUTRITION_ADD} component={NutritionMealCreate} />
                                 <PrivateRoute exact path={`${routeCodes.NUTRITION_EDIT}/:id`} component={NutritionMealEdit} />
                                 <PrivateRoute exact path={`${routeCodes.NUTRITION_VIEW}/:id`} component={NutritionMealView} />
 

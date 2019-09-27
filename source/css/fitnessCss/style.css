@@ -232,7 +232,7 @@ a:focus {
 select:focus,
 input:focus {
     outline: none !important;
-    outline-offset: none !important;
+    outline-offset:0 !important;
 }
 
 .h-auto {
@@ -16194,14 +16194,28 @@ a.timline-post-edit-btn svg {
 .exercise-tabs .excercise-boxs .excercise-right .excercise-content .row:last-child {border-bottom: 0;}
 .exercise-tabs .excercise-boxs .excercise-right .excercise-content .warmup-title {display: block; background: #fff; padding: 14px 0 14px 20px; font-size: 20px; color:#201F60; line-height: 1; font-family: 'Neuzeit'; font-weight: 700;}
 
+.nutrition-create .nutrition-body .details .serving-boxs,
+.nutrition-create .ingredient-sidebar .ingredient-body .serving-boxs,
 .exercise-tabs .excercise-boxs .excercise-right .excercise-content .serving-boxs {position: relative; width: calc(100% - 5px); margin: 3px 0 3px 5px;}
+.nutrition-create .nutrition-body .details .serving-boxs .btn,
+.nutrition-create .ingredient-sidebar .ingredient-body .serving-boxs .btn,
 .exercise-tabs .excercise-boxs .excercise-right .excercise-content .serving-boxs .btn {position: absolute; left: 5px; top:50%; transform: translateY(-50%); border-radius: 50%; background: #A6A5BF; fill: #201F60; font-size:13px; width: 25px; height: 25px; border: 0px; display: flex; flex-wrap: wrap; align-items: center; justify-content: center;}
+.nutrition-create .nutrition-body .details .serving-boxs .btn.btn-plus,
+.nutrition-create .ingredient-sidebar .ingredient-body .serving-boxs .btn.btn-plus,
 .exercise-tabs .excercise-boxs .excercise-right .excercise-content .serving-boxs .btn.btn-plus {left: auto; right: 5px;}
+.nutrition-create .nutrition-body .details .serving-boxs .form-control,
+.nutrition-create .ingredient-sidebar .ingredient-body .serving-boxs .form-control,
 .exercise-tabs .excercise-boxs .excercise-right .excercise-content .serving-boxs .form-control { box-shadow: none; height: auto; padding: 9px 0 8px; text-align: center; font-size: 20px; color:#201F60; line-height: 1; font-family: 'Neuzeit' !important; font-weight: 900; border: 0px; border-radius:5px; }
+.nutrition-create .nutrition-body .details .serving-select,
+.nutrition-create .ingredient-sidebar .ingredient-body .serving-select,
 .exercise-tabs .excercise-boxs .excercise-right .excercise-content .serving-select {width: calc(100% - 5px); margin: 3px 0 3px 5px;}
+.nutrition-create .nutrition-body .details .serving-select select::-ms-expand,
+.nutrition-create .ingredient-sidebar .ingredient-body .serving-select select::-ms-expand,
 .exercise-tabs .excercise-boxs .excercise-right .excercise-content .serving-select select::-ms-expand {
     display: none;
 }
+.nutrition-create .nutrition-body .details .serving-select .form-control,
+.nutrition-create .ingredient-sidebar .ingredient-body .serving-select .form-control,
 .exercise-tabs .excercise-boxs .excercise-right .excercise-content .serving-select .form-control { box-shadow: none; height: auto; padding: 10px 15px; text-align: left; font-size: 20px; color:#201F60; line-height: 1; font-family: 'Neuzeit' !important; font-weight: 900; border: 0px; border-radius:5px; -webkit-appearance: none; -moz-appearance: none; appearance: none; background: #fff url('../assets/img/caret-down.svg') right 15px center no-repeat; }
 
 .exercise-tabs .excercise-boxs .excercise-right .topbar-title .btn-toolbar {display: flex; flex-wrap: wrap; align-items: center;}
@@ -16379,6 +16393,7 @@ a.timline-post-edit-btn svg {
 }
 
 .blue_right_sidebar .sidebar-header button.btn.btn-plus-right {border-radius: 50%;height: 6rem;width: 6rem;position: absolute;right: -16px;top: -6px;box-shadow: 1px 4px 10px -3px;font-size: 20px;z-index: 1;}
+.blue_right_sidebar .sidebar-header a.btn.btn-plus-right {border-radius: 50%;height: 6rem;width: 6rem;position: absolute;right: -16px;top: -6px;box-shadow: 1px 4px 10px -3px;font-size: 20px;z-index: 1;padding: 15px; color: #000;}
 .text-white{
     color: #fff !important;
 }
@@ -16418,6 +16433,105 @@ a.timline-post-edit-btn svg {
 
 .white_right_sidebar .progress-wrap .display-status{ align-items: flex-end;}
 .white_right_sidebar .progress-wrap .display-status .nutrition-progress {width : 80%}
+
+.nutrition-create .meal-input input.form-control:focus,
+.nutrition-create .meal-input input.form-control {border: 0;padding: 30px 20px;font-size: 40px;box-shadow: none;font-weight: 800;color: #3e67ff;border-bottom: solid 3px #EDF5FD;}
+.nutrition-create .meal-input input.form-control::placeholder { font-weight: 800;color: #3E67FF;opacity: 0.4;  }
+.nutrition-create .ingredient-sidebar .ingredient-header { padding:  5px 10px;}
+.nutrition-create .ingredient-sidebar .ingredient-header h3 {margin: 0;font-size: 26px;color: #053095;font-weight: 800;}
+.nutrition-create .ingredient-sidebar .ingredient-header button {border: 0;background: #fff;}
+.nutrition-create .ingredient-sidebar .ingredient-header button svg {font-size: 35px;color: #053095;}
+.nutrition-create .ingredient-sidebar .ingredient-body ul {list-style: none;background: #fff;padding: 5px;}
+.nutrition-create .ingredient-sidebar .ingredient-body li {background: #edf5fd;margin-bottom: 3px}
+.nutrition-create .ingredient-sidebar .ingredient-body li .ingredient-items .box-header {padding: 5px 10px;}
+.nutrition-create .ingredient-sidebar .ingredient-body li .ingredient-items .box-header h3 {margin: 0;font-size: 20px;color: #201f60;font-weight: 700;}
+.nutrition-create .ingredient-sidebar .ingredient-body li .ingredient-items .box-header svg {color: #FE676D;margin: 0 0 0 auto;font-size: 20px;}
+.nutrition-create .ingredient-sidebar .ingredient-body li .ingredient-items .box-inputs {padding: 0 3px 0 0;}
+.nutrition-create .ingredient-sidebar .ingredient-body li .ingredient-items .serving-boxs {margin: 3px 0 3px 3px;}
+.nutrition-create .ingredient-sidebar .ingredient-body li .ingredient-items .serving-select {width: calc(100% - 2px);margin: 3px 0 3px 1px;}
+
+.nutrition-create .nutrition-body {padding: 3px;}
+.nutrition-create .nutrition-body .description-box {background: #e8ecf0}
+.nutrition-create .nutrition-body .description-box .title {font-size: 20px;color: #201f60;font-weight: 600;padding: 5px 10px;}
+.nutrition-create .nutrition-body .description-box .detail-body {padding: 0 5px 5px 5px;}
+.nutrition-create .nutrition-body .description-box .detail-body textarea.form-control {border: 0;color: #201f60;font-size: 15px;font-weight: 600;}
+.nutrition-create .nutrition-body .serves-box{background: #e8ecf0;padding: 5px 3px 5px 10px;}
+.nutrition-create .nutrition-body .serves-box .serves-title{font-size: 20px;color: #201f60;font-weight: 600;}
+.nutrition-create .nutrition-body .serves-box .display-serve .serving-select {margin : 0 0 0 3px;}
+
+.nutrition-create .nutrition-body .details .cooking-time-box .timebox-header {background: #201f60;}
+.nutrition-create .nutrition-body .details .cooking-time-box .timebox-header h3 {color: #fff;font-size: 20px;font-weight: 600;padding: 10px;margin: 0;}
+.nutrition-create .nutrition-body .details .cooking-time-box .timebox-body {color: #fff;font-size: 20px;font-weight: 600;padding: 3px 5px 3px 10px;margin: 0;background: #e8ecf0;}
+.nutrition-create .nutrition-body .details .cooking-time-box .timebox-body .display-serve .serves-title {font-size: 20px;color: #201f60;font-weight: 600;}
+.nutrition-create .nutrition-body .details .categories-box .categories-header {background: #201f60;}
+.nutrition-create .nutrition-body .details .categories-box .categories-header h3 {color: #fff;font-size: 20px;font-weight: 600;padding: 10px;margin: 0;}
+.nutrition-create .nutrition-body .details .categories-box .categories-body {color: #fff;font-size: 20px;font-weight: 600;padding: 3px 5px 3px 10px;margin: 0;background: #e8ecf0;}
+.nutrition-create .nutrition-body .details .categories-box .categories-body .categories-content {padding: 3px;}
+.nutrition-create .nutrition-body .details .categories-box .categories-body .categories-items {background: #fff;padding: 12px 10px;margin: 2px 0;}
+.nutrition-create .nutrition-body .details .categories-box .categories-body .categories-items .categories-title{color: #201f60;font-size: 20px;font-weight: 600;}
+.nutrition-create .nutrition-body .details .categories-box .categories-body .categories-items .custom-checkbox .custom_check [type="checkbox"]:not(:checked)+label:before, .custom_check [type="checkbox"]:checked+label:before {width: 26px; height: 26px; border-radius: 50%; background: #e8ecf0;}
+.nutrition-create .nutrition-body .details .categories-box .categories-body .categories-items .custom-checkbox .custom_check [type="checkbox"]:not(:checked)+label:after, .custom_check [type="checkbox"]:checked+label:after {width: 19px; height: 19px; border-radius: 50%; background: #3ed1a9}
+
+.custom-select {
+  position: relative;
+  font-family: Arial;
+}
+
+.custom-select select {
+  display: none; /*hide original SELECT element:*/
+}
+
+.select-selected {
+  background-color: #5CB1AD;
+}
+
+/*style the arrow inside the select element:*/
+.select-selected:after {
+  position: absolute;
+  content: "";
+  top: 14px;
+  right: 10px;
+  width: 0;
+  height: 0;
+  border: 6px solid transparent;
+  border-color: #fff transparent transparent transparent;
+}
+
+/*point the arrow upwards when the select box is open (active):*/
+.select-selected.select-arrow-active:after {
+  border-color: transparent transparent #fff transparent;
+  top: 7px;
+}
+
+/*style the items (options), including the selected item:*/
+.select-items div,.select-selected {
+  color: #201F60;
+  padding: 8px 16px;
+  border: 1px solid transparent;
+  border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+  cursor: pointer;
+  user-select: none;
+}
+.select-items div { color: #201F60;}
+.select-selected {color: #fff}
+/*style items (options):*/
+.select-items {
+  position: absolute;
+  background-color: #93E7E4;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 99;
+}
+
+/*hide the items when the select box is closed:*/
+.select-hide {
+  display: none;
+}
+
+.select-items div:hover, .same-as-selected {
+  background-color: rgba(0, 0, 0, 0.1);
+}
 
 
 
