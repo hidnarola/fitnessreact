@@ -3,12 +3,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class NutritionMealCreateLeftSidebar extends Component {
   render() {
+    const { handleChangeIngredientTab } = this.props;
     return (
       <React.Fragment>
         <div className="ingredient-sidebar">
           <div className="ingredient-header d-flex flex-wrap align-items-center">
             <h3>Ingredient</h3>
-            <button className="ml-auto">
+            <button
+              className="ml-auto"
+              onClick={() => handleChangeIngredientTab(true)}
+            >
               <FontAwesomeIcon icon="chevron-circle-right" />
             </button>
           </div>

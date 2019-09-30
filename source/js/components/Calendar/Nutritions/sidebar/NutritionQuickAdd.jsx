@@ -5,12 +5,33 @@ import Star from '../../../../../assets/svg/star.svg';
 import Collapse from 'react-bootstrap/lib/Collapse';
 import { routeCodes } from '../../../../constants/routes';
 import { Link } from 'react-router-dom';
+import Select from 'react-select';
+
+const msgStyles = {
+  background: '#5CB1AD',
+  color: 'white',
+};
+
+const options = [
+  { value: 'apple', label: 'Apple' },
+  { value: 'banana', label: 'Banana' },
+  { value: 'egg', label: 'Egg' },
+  { value: 'test meal', label: 'Test meal' },
+  { value: 'pasta', label: 'Pasta' },
+  { value: 'apple juice', label: 'Apple juice' },
+];
 
 class NutritionQuickAdd extends Component {
-  state = {
-    favOpen: true,
-    recentOpen: false,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      favOpen: false,
+      recentOpen: false,
+      favouritesMale: '',
+      isSearchable: false,
+    };
+  }
+
   render() {
     const {
       quickTab,
@@ -32,10 +53,7 @@ class NutritionQuickAdd extends Component {
             </Link>
           </div>
           <div className="quick-tabs">
-            <div
-              className={quickTab === '#recentmeals' ? 'tab active' : 'tab'}
-              id="recentmeals"
-            >
+            <div className={quickTab === '#recentmeals' ? 'tab active' : 'tab'}>
               <a
                 href="#recentMeals"
                 onClick={() => handleChangeQuickTab('#recentmeals')}
@@ -45,7 +63,6 @@ class NutritionQuickAdd extends Component {
             </div>
             <div
               className={quickTab === '#favrioutmeals' ? 'tab active' : 'tab'}
-              id="favrioutmeals"
             >
               <a
                 href="#favrioutmeals"
@@ -61,7 +78,7 @@ class NutritionQuickAdd extends Component {
                 {quickTab === '#recentmeals' && <ul></ul>}
                 {quickTab === '#favrioutmeals' && (
                   <ul>
-                    <li
+                    {/* <li
                       className="display-dropdown align-items-center"
                       onClick={() => this.setState({ favOpen: !favOpen })}
                       aria-controls="favourites-collapse"
@@ -93,10 +110,12 @@ class NutritionQuickAdd extends Component {
                           </div>
                         </li>
                       </div>
-                    </Collapse>
+                    </Collapse> */}
                     <li
                       className="display-dropdown"
-                      onClick={() => this.setState({ recentOpen: !recentOpen })}
+                      onClick={() =>
+                        this.setState({ recentOpen: !this.state.recentOpen })
+                      }
                       aria-controls="recent-collapse"
                       aria-expanded={recentOpen}
                     >
@@ -124,7 +143,7 @@ class NutritionQuickAdd extends Component {
                     </Collapse>
                     <li className="p-0">
                       <div className="custom-select width-100-per">
-                        <select>
+                        {/* <select>
                           <option value="0" style={{ color: '#fff' }}>
                             For Demo:
                           </option>
@@ -134,7 +153,16 @@ class NutritionQuickAdd extends Component {
                           <option value="4">Egg</option>
                           <option value="5">Onions</option>
                           <option value="6">Pizza</option>
-                        </select>
+                        </select> */}
+                        <Select
+                          className="quick-sidebar-dropdown"
+                          escapeClearsValue={false}
+                          isSearchable={false}
+                          options={options}
+                          onChange={this.handleChangeSelect}
+                          placeholder="Favourites"
+                          value={this.state.favouritesMale}
+                        />
                       </div>
                     </li>
                   </ul>
@@ -146,82 +174,85 @@ class NutritionQuickAdd extends Component {
       </React.Fragment>
     );
   }
+  handleChangeSelect = val => {
+    this.setState({ favouritesMale: val.value });
+  };
   componentDidMount() {
-    var x, i, j, selElmnt, a, b, c;
-    /*look for any elements with the class "custom-select":*/
-    x = document.getElementsByClassName('custom-select');
-    for (i = 0; i < x.length; i++) {
-      selElmnt = x[i].getElementsByTagName('select')[0];
-      /*for each element, create a new DIV that will act as the selected item:*/
-      a = document.createElement('DIV');
-      a.setAttribute('class', 'select-selected');
-      a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
-      x[i].appendChild(a);
-      /*for each element, create a new DIV that will contain the option list:*/
-      b = document.createElement('DIV');
-      b.setAttribute('class', 'select-items select-hide');
-      for (j = 1; j < selElmnt.length; j++) {
-        /*for each option in the original select element,
-    create a new DIV that will act as an option item:*/
-        c = document.createElement('DIV');
-        c.innerHTML = selElmnt.options[j].innerHTML;
-        c.addEventListener('click', function(e) {
-          /*when an item is clicked, update the original select box,
-        and the selected item:*/
-          var y, i, k, s, h;
-          s = this.parentNode.parentNode.getElementsByTagName('select')[0];
-          h = this.parentNode.previousSibling;
-          for (i = 0; i < s.length; i++) {
-            if (s.options[i].innerHTML == this.innerHTML) {
-              s.selectedIndex = i;
-              h.innerHTML = this.innerHTML;
-              y = this.parentNode.getElementsByClassName('same-as-selected');
-              for (k = 0; k < y.length; k++) {
-                y[k].removeAttribute('class');
-              }
-              this.setAttribute('class', 'same-as-selected');
-              break;
-            }
-          }
-          h.click();
-        });
-        b.appendChild(c);
-      }
-      x[i].appendChild(b);
-      a.addEventListener('click', function(e) {
-        /*when the select box is clicked, close any other select boxes,
-      and open/close the current select box:*/
-        e.stopPropagation();
-        closeAllSelect(this);
-        this.nextSibling.classList.toggle('select-hide');
-        this.classList.toggle('select-arrow-active');
-      });
-    }
-    function closeAllSelect(elmnt) {
-      /*a function that will close all select boxes in the document,
-  except the current select box:*/
-      var x,
-        y,
-        i,
-        arrNo = [];
-      x = document.getElementsByClassName('select-items');
-      y = document.getElementsByClassName('select-selected');
-      for (i = 0; i < y.length; i++) {
-        if (elmnt == y[i]) {
-          arrNo.push(i);
-        } else {
-          y[i].classList.remove('select-arrow-active');
-        }
-      }
-      for (i = 0; i < x.length; i++) {
-        if (arrNo.indexOf(i)) {
-          x[i].classList.add('select-hide');
-        }
-      }
-    }
-    /*if the user clicks anywhere outside the select box,
-then close all select boxes:*/
-    document.addEventListener('click', closeAllSelect);
+    //     var x, i, j, selElmnt, a, b, c;
+    //     /*look for any elements with the class "custom-select":*/
+    //     x = document.getElementsByClassName('custom-select');
+    //     for (i = 0; i < x.length; i++) {
+    //       selElmnt = x[i].getElementsByTagName('select')[0];
+    //       /*for each element, create a new DIV that will act as the selected item:*/
+    //       a = document.createElement('DIV');
+    //       a.setAttribute('class', 'select-selected');
+    //       a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
+    //       x[i].appendChild(a);
+    //       /*for each element, create a new DIV that will contain the option list:*/
+    //       b = document.createElement('DIV');
+    //       b.setAttribute('class', 'select-items select-hide');
+    //       for (j = 1; j < selElmnt.length; j++) {
+    //         /*for each option in the original select element,
+    //     create a new DIV that will act as an option item:*/
+    //         c = document.createElement('DIV');
+    //         c.innerHTML = selElmnt.options[j].innerHTML;
+    //         c.addEventListener('click', function(e) {
+    //           /*when an item is clicked, update the original select box,
+    //         and the selected item:*/
+    //           var y, i, k, s, h;
+    //           s = this.parentNode.parentNode.getElementsByTagName('select')[0];
+    //           h = this.parentNode.previousSibling;
+    //           for (i = 0; i < s.length; i++) {
+    //             if (s.options[i].innerHTML == this.innerHTML) {
+    //               s.selectedIndex = i;
+    //               h.innerHTML = this.innerHTML;
+    //               y = this.parentNode.getElementsByClassName('same-as-selected');
+    //               for (k = 0; k < y.length; k++) {
+    //                 y[k].removeAttribute('class');
+    //               }
+    //               this.setAttribute('class', 'same-as-selected');
+    //               break;
+    //             }
+    //           }
+    //           h.click();
+    //         });
+    //         b.appendChild(c);
+    //       }
+    //       x[i].appendChild(b);
+    //       a.addEventListener('click', function(e) {
+    //         /*when the select box is clicked, close any other select boxes,
+    //       and open/close the current select box:*/
+    //         e.stopPropagation();
+    //         closeAllSelect(this);
+    //         this.nextSibling.classList.toggle('select-hide');
+    //         this.classList.toggle('select-arrow-active');
+    //       });
+    //     }
+    //     function closeAllSelect(elmnt) {
+    //       /*a function that will close all select boxes in the document,
+    //   except the current select box:*/
+    //       var x,
+    //         y,
+    //         i,
+    //         arrNo = [];
+    //       x = document.getElementsByClassName('select-items');
+    //       y = document.getElementsByClassName('select-selected');
+    //       for (i = 0; i < y.length; i++) {
+    //         if (elmnt == y[i]) {
+    //           arrNo.push(i);
+    //         } else {
+    //           y[i].classList.remove('select-arrow-active');
+    //         }
+    //       }
+    //       for (i = 0; i < x.length; i++) {
+    //         if (arrNo.indexOf(i)) {
+    //           x[i].classList.add('select-hide');
+    //         }
+    //       }
+    //     }
+    //     /*if the user clicks anywhere outside the select box,
+    // then close all select boxes:*/
+    //     document.addEventListener('click', closeAllSelect);
   }
 }
 

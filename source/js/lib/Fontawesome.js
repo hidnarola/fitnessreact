@@ -31,6 +31,7 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons/faSearch';
 import { faSlidersH } from '@fortawesome/free-solid-svg-icons/faSlidersH';
 import { faSortDown } from '@fortawesome/free-solid-svg-icons/faSortDown';
 import { faChevronCircleRight } from '@fortawesome/free-solid-svg-icons/faChevronCircleRight';
+import { faChevronCircleLeft } from '@fortawesome/free-solid-svg-icons/faChevronCircleLeft';
 
 library.add(
   faUtensils,
@@ -64,4 +65,5 @@ library.add(
   faSlidersH,
   faSortDown,
   faChevronCircleRight,
+  faChevronCircleLeft,
 );

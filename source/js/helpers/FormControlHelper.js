@@ -6,6 +6,7 @@ import StarRatingComponent from 'react-star-rating-component';
 import DatePicker from 'react-datepicker';
 import { SERVER_BASE_URL } from '../constants/consts';
 import noImg from 'img/common/no-img.png'
+import uploadImg from '../../assets/img/cloud-upload.png'
 
 export const InputField = (props) => {
     const { label, input, meta, wrapperClass, className, labelClass, placeholder, errorClass, type, disabled, properties, autoComplete, requiredAstrisk } = props;
@@ -247,7 +248,7 @@ export class FileField_Dropzone_Single extends Component {
                 }
             >
                 {label && <label htmlFor={input.name} className={labelClass}>{label} {requiredAstrisk && <span style={{ color: "red" }}>*</span>}</label>}
-                <div className="image-form-flex-wrapper">
+                <div className="image-form-flex-wrapper width-100-per">
                     {_existingImages}
                     <div
                         className={
@@ -270,17 +271,25 @@ export class FileField_Dropzone_Single extends Component {
                                     input.onChange('');
                                 }
                             }}
-                            multiple={false}
-                            className={className ? className : 'default-dropzone-wrapper'}
+                            multiple={true}
+                            className={className ? className : 'default-dropzone-wrapper width-100-per'}
                         >
-                            {input.value && images}
-                            {!input.value &&
-                                <div className="dz-singl-default-wrapper">
-                                    <i className="icon-add_a_photo"></i>
-                                    <span>Select Image</span>
+
+
+                                <div className="dz-singl-default-wrapper d-flex flex-wrap width-100-per">
+
+
+                                        <img src={uploadImg} alt="upload" />
+
+                                    <div className="display-text">
+                                        <span className="title">Drag and drop images</span>
+                                        <span className="sub-title">or <font>browse</font> to choose files</span>
+                                    </div>
+
                                 </div>
-                            }
+
                         </Dropzone>
+                        {input.value && images}
                         {meta.touched &&
                             ((meta.error && <span className={errorClass ? errorClass : 'help-block'}>{meta.error}</span>) || (meta.warning && <span className={warningClass ? warningClass : 'help-block'}>{meta.warning}</span>))
                         }
