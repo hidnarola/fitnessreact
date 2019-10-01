@@ -18,6 +18,11 @@ class CalendarDayOverViewNutritionList extends Component {
       open: false,
     };
   }
+  componentDidMount() {
+    const { index } = this.props;
+    this.setState({ servingSize: 5 });
+  }
+
   render() {
     const { meal, authuserId, recentMeals, addToFavourite, index } = this.props;
     const {
@@ -30,56 +35,163 @@ class CalendarDayOverViewNutritionList extends Component {
       total_saturates,
       userId,
     } = meal;
-    const { open } = this.state;
-    // const renderField = (
-    //   <ul className="ul_six_wrap ul_meal_img">
-    //     <li>
-    //       <div className="data_serve">
-    //         <span className="title">Kcal</span>
-    //         <span className="total-text">{total_enerc_kal}</span>
-    //         <span className="kcal-text">Kcal</span>
-    //       </div>
-    //     </li>
-    //     <li>
-    //       <div className="data_serve">
-    //         <span className="title">Fat</span>
-    //         <span className="total-text">{total_fat}</span>
-    //         <span className="kcal-text">Kcal</span>
-    //       </div>
-    //     </li>
-    //     <li>
-    //       <div className="data_serve">
-    //         <span className="title">Saturates</span>
-    //         <span className="total-text">{total_saturates}</span>
-    //         <span className="kcal-text">Kcal</span>
-    //       </div>
-    //     </li>
-    //     <li>
-    //       <div className="data_serve">
-    //         <span className="title">Carbs</span>
-    //         <span className="total-text">{total_cabs}</span>
-    //         <span className="kcal-text">Kcal</span>
-    //       </div>
-    //     </li>
-    //     <li>
-    //       <div className="data_serve">
-    //         <span className="title">Sugar</span>
-    //         <span className="total-text">{total_sugar}</span>
-    //         <span className="kcal-text">Kcal</span>
-    //       </div>
-    //     </li>
-    //     <li>
-    //       <div className="data_serve">
-    //         <span className="title">Protein</span>
-    //         <span className="total-text">{total_procnt}</span>
-    //         <span className="kcal-text">Kcal</span>
-    //       </div>
-    //     </li>
-    //   </ul>
-    // );
+    const { open, servingSize = 0 } = this.state;
+
     return (
       <React.Fragment>
-        {/* <div className="box_wrap_one animated fadeIn">
+        <div className="nutrition-box">
+          <div className="nutrition-header align-items-center">
+            <div className="display-star">
+              <Star />
+            </div>
+            <div className="title">{meal.title}</div>
+            <ButtonToolbar className="boxing-icon ml-auto">
+              <Dropdown id={`workout-actions-1`} pullRight>
+                <Dropdown.Toggle noCaret>
+                  <i className="icon-more_horiz"></i>
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  <MenuItem
+                    eventKey="1"
+                    onClick={() => console.log('advanceView')}
+                  >
+                    Advance Display
+                  </MenuItem>
+                  <MenuItem
+                    eventKey="2"
+                    onClick={() => console.log('normalView')}
+                  >
+                    Move Exercise
+                  </MenuItem>
+                </Dropdown.Menu>
+              </Dropdown>
+            </ButtonToolbar>
+            <button type="button" className="timline-post-del-btn">
+              <FontAwesomeIcon icon="trash-alt" />
+            </button>
+          </div>
+          <div className="nutrition-body d-flex flex-wrap">
+            <div className="nutrition-panel">
+              <h3>M</h3>
+              <ul>
+                <li>Ve</li>
+                <li>Ka</li>
+              </ul>
+            </div>
+            <div className="nutrition-serve-box ml-2 mr-2">
+              <div className="row width-100-per no-gutters">
+                <div className="col-md-4">
+                  <div className="serving-size mr-3">Serving Size</div>
+                </div>
+                <div className="col-md-4">
+                  <div className="serving-boxs width-100-per m-0">
+                    <button
+                      className="btn btn-minus"
+                      onClick={() =>
+                        this.setState({
+                          servingSize:
+                            e.target.value >= 0 && e.target.value <= 999
+                              ? servingSize - 1
+                              : servingSize,
+                        })
+                      }
+                    >
+                      <FontAwesomeIcon icon="minus" />
+                    </button>
+                    <input
+                      type="number"
+                      name="servingSize"
+                      className="form-control"
+                      value={servingSize}
+                      onChange={e =>
+                        this.setState({
+                          servingSize:
+                            e.target.value >= 0 && e.target.value <= 999
+                              ? e.target.value
+                              : servingSize,
+                        })
+                      }
+                      max={999}
+                      min={1}
+                    />
+                    <button
+                      className="btn btn-plus"
+                      onClick={() =>
+                        this.setState({
+                          servingSize:
+                            e.target.value >= 0 && e.target.value <= 999
+                              ? servingSize + 1
+                              : servingSize,
+                        })
+                      }
+                    >
+                      <FontAwesomeIcon icon="plus" />
+                    </button>
+                  </div>
+                </div>
+                <div className="col-md-4">
+                  <div className="serving-select pl-3 width-100-per">
+                    <select className="form-control">
+                      <option>cm</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="col-md-6">
+                  <div className="ingredient-boxs mt-2 mr-2">
+                    <div className="title">Ingredients</div>
+                    <ul>
+                      <li className="d-flex width-100-per">
+                        <span>Plain Flour</span>
+                        <span className="ml-auto">350g</span>
+                      </li>
+                      <li className="d-flex width-100-per">
+                        <span>Eggs</span>
+                        <span className="ml-auto">2 whole</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div className="col-md-6">
+                  <div className="ingredient-boxs mt-2">
+                    <div className="title d-flex width-100-per">
+                      <div>Nutrition</div>
+                      <div className="ml-auto">
+                        <FontAwesomeIcon icon="search" />
+                      </div>
+                    </div>
+                    <ul>
+                      <li className="d-flex width-100-per">
+                        <span>Calories</span>
+                        <span className="ml-auto">800 kcal</span>
+                      </li>
+                      <li className="d-flex width-100-per">
+                        <span>Fat</span>
+                        <span className="ml-auto">350g</span>
+                      </li>
+                      <li className="d-flex width-100-per">
+                        <span>Sugar</span>
+                        <span className="ml-auto">350g</span>
+                      </li>
+                      <li className="d-flex width-100-per">
+                        <span>Carbohydrates</span>
+                        <span className="ml-auto">350g</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </React.Fragment>
+    );
+  }
+}
+
+export default CalendarDayOverViewNutritionList;
+
+{
+  /* <div className="box_wrap_one animated fadeIn">
           <div className="head_wrap">
             <span
               className={cns('star_one', {
@@ -156,218 +268,5 @@ class CalendarDayOverViewNutritionList extends Component {
               {!open && renderField}
             </div>
           </div>
-        </div> */}
-        <div className="nutrition-box">
-          <div className="nutrition-header align-items-center">
-            <div className="display-star">
-              <Star />
-            </div>
-            <div className="title">{meal.title}</div>
-            <ButtonToolbar className="boxing-icon ml-auto">
-              <Dropdown id={`workout-actions-1`} pullRight>
-                <Dropdown.Toggle noCaret>
-                  <i className="icon-more_horiz"></i>
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  <MenuItem
-                    eventKey="1"
-                    onClick={() => console.log('advanceView')}
-                  >
-                    Advance Display
-                  </MenuItem>
-                  <MenuItem
-                    eventKey="2"
-                    onClick={() => console.log('normalView')}
-                  >
-                    Move Exercise
-                  </MenuItem>
-                </Dropdown.Menu>
-              </Dropdown>
-            </ButtonToolbar>
-            <button type="button" className="timline-post-del-btn">
-              <FontAwesomeIcon icon="trash-alt" />
-            </button>
-          </div>
-          <div className="nutrition-body d-flex flex-wrap">
-            <div className="nutrition-panel">
-              <h3>M</h3>
-              <ul>
-                <li>Ve</li>
-                <li>Ka</li>
-              </ul>
-            </div>
-            <div className="nutrition-serve-box ml-2 mr-2">
-              <div className="row width-100-per no-gutters">
-                <div className="col-md-4">
-                  <div className="serving-size mr-3">Serving Size</div>
-                </div>
-                <div className="col-md-4">
-                  <div className="serving-boxs width-100-per m-0">
-                    <button className="btn btn-minus">
-                      <FontAwesomeIcon icon="minus" />
-                    </button>
-                    <input
-                      type="number"
-                      className="form-control"
-                      defaultValue="86"
-                    />
-                    <button className="btn btn-plus">
-                      <FontAwesomeIcon icon="plus" />
-                    </button>
-                  </div>
-                </div>
-                <div className="col-md-4">
-                  <div className="serving-select pl-3 width-100-per">
-                    <select className="form-control">
-                      <option>cm</option>
-                    </select>
-                  </div>
-                </div>
-                <div className="col-md-6">
-                  <div className="ingredient-boxs mt-2 mr-2">
-                    <div className="title">Ingredients</div>
-                    <ul>
-                      <li className="d-flex width-100-per">
-                        <span>Plain Flour</span>
-                        <span className="ml-auto">350g</span>
-                      </li>
-                      <li className="d-flex width-100-per">
-                        <span>Eggs</span>
-                        <span className="ml-auto">2 whole</span>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-                <div className="col-md-6">
-                  <div className="ingredient-boxs mt-2">
-                    <div className="title d-flex width-100-per">
-                      <div>Nutrition</div>
-                      <div className="ml-auto">
-                        <FontAwesomeIcon icon="search" />
-                      </div>
-                    </div>
-                    <ul>
-                      <li className="d-flex width-100-per">
-                        <span>Calories</span>
-                        <span className="ml-auto">800 kcal</span>
-                      </li>
-                      <li className="d-flex width-100-per">
-                        <span>Fat</span>
-                        <span className="ml-auto">350g</span>
-                      </li>
-                      <li className="d-flex width-100-per">
-                        <span>Sugar</span>
-                        <span className="ml-auto">350g</span>
-                      </li>
-                      <li className="d-flex width-100-per">
-                        <span>Carbohydrates</span>
-                        <span className="ml-auto">350g</span>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="nutrition-box">
-          <div className="nutrition-header align-items-center">
-            <div className="display-star">
-              <Star />
-            </div>
-            <div className="title">{meal.title}</div>
-            <ButtonToolbar className="boxing-icon ml-auto">
-              <Dropdown id={`workout-actions-1`} pullRight>
-                <Dropdown.Toggle noCaret>
-                  <i className="icon-more_horiz"></i>
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  <MenuItem
-                    eventKey="1"
-                    onClick={() => console.log('advanceView')}
-                  >
-                    Advance Display
-                  </MenuItem>
-                  <MenuItem
-                    eventKey="2"
-                    onClick={() => console.log('normalView')}
-                  >
-                    Move Exercise
-                  </MenuItem>
-                </Dropdown.Menu>
-              </Dropdown>
-            </ButtonToolbar>
-            <button type="button" className="timline-post-del-btn">
-              <FontAwesomeIcon icon="trash-alt" />
-            </button>
-          </div>
-          <div className="nutrition-body d-flex flex-wrap">
-            <div className="nutrition-panel">
-              <h3>F</h3>
-            </div>
-            <div className="nutrition-serve-box ml-2 mr-2">
-              <div className="row width-100-per no-gutters">
-                <div className="col-md-4">
-                  <div className="serving-size mr-3">Serving Size</div>
-                </div>
-                <div className="col-md-4">
-                  <div className="serving-boxs width-100-per m-0">
-                    <button className="btn btn-minus">
-                      <FontAwesomeIcon icon="minus" />
-                    </button>
-                    <input
-                      type="number"
-                      className="form-control"
-                      defaultValue="86"
-                    />
-                    <button className="btn btn-plus">
-                      <FontAwesomeIcon icon="plus" />
-                    </button>
-                  </div>
-                </div>
-                <div className="col-md-4">
-                  <div className="serving-select pl-3 width-100-per">
-                    <select className="form-control">
-                      <option>cm</option>
-                    </select>
-                  </div>
-                </div>
-                <div className="col-md-12">
-                  <div className="ingredient-boxs mt-2">
-                    <div className="title d-flex width-100-per">
-                      <div>Nutrition</div>
-                      <div className="ml-auto">
-                        <FontAwesomeIcon icon="search" />
-                      </div>
-                    </div>
-                    <ul>
-                      <li className="d-flex width-100-per">
-                        <span>Calories</span>
-                        <span className="ml-auto">800 kcal</span>
-                      </li>
-                      <li className="d-flex width-100-per">
-                        <span>Fat</span>
-                        <span className="ml-auto">350g</span>
-                      </li>
-                      <li className="d-flex width-100-per">
-                        <span>Sugar</span>
-                        <span className="ml-auto">350g</span>
-                      </li>
-                      <li className="d-flex width-100-per">
-                        <span>Carbohydrates</span>
-                        <span className="ml-auto">350g</span>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </React.Fragment>
-    );
-  }
+        </div> */
 }
-
-export default CalendarDayOverViewNutritionList;

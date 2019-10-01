@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Collapse from 'react-bootstrap/lib/Collapse';
 import { PieChart, Pie, Sector, Cell } from 'recharts';
-import DropdownButton from 'react-bootstrap/lib/DropdownButton';
-import MenuItem from 'react-bootstrap/lib/MenuItem';
 
 const data = [
   { name: 'Group A', value: 450 },
@@ -14,14 +11,13 @@ const COLORS = ['#201f60', '#3e67ff', '#93e7e4'];
 
 const RADIAN = Math.PI / 180;
 
-class NutritionStatsRightSidebar extends Component {
+class NutritionMealCreateSidebar extends Component {
   state = {
     quickTab: '#macro',
     isallMeal: true,
-    selectedMeal: 'All Meals',
   };
   render() {
-    const { quickTab, isallMeal, selectedMeal } = this.state;
+    const { quickTab, isallMeal } = this.state;
 
     return (
       <React.Fragment>
@@ -53,52 +49,6 @@ class NutritionStatsRightSidebar extends Component {
               {quickTab === '#macro' && (
                 <React.Fragment>
                   <ul>
-                    <li style={{ padding: '0' }}>
-                      <div className="display-select-menu">
-                        <DropdownButton
-                          bsStyle={selectedMeal.toLowerCase()}
-                          title={selectedMeal}
-                          key={1}
-                          id={`dropdown-basic-${1}`}
-                        >
-                          <MenuItem
-                            eventKey="1"
-                            onClick={() =>
-                              this.handleChangeMealType('All Meals')
-                            }
-                          >
-                            All Meals
-                          </MenuItem>
-                          <MenuItem
-                            eventKey="2"
-                            onClick={() =>
-                              this.handleChangeMealType('Break Fast')
-                            }
-                          >
-                            Break Fast
-                          </MenuItem>
-                          <MenuItem
-                            eventKey="3"
-                            onClick={() => this.handleChangeMealType('Lunch')}
-                          >
-                            Lunch
-                          </MenuItem>
-                          <MenuItem
-                            eventKey="3"
-                            onClick={() => this.handleChangeMealType('Dinner')}
-                          >
-                            Dinner
-                          </MenuItem>
-                          <MenuItem
-                            eventKey="3"
-                            onClick={() => this.handleChangeMealType('Snacks')}
-                          >
-                            Snacks
-                          </MenuItem>
-                        </DropdownButton>
-                      </div>
-                    </li>
-
                     <li className="d-flex width-100-per">
                       <div>Calories</div>
                       <div className="ml-auto">1350 kcal</div>
@@ -211,9 +161,6 @@ class NutritionStatsRightSidebar extends Component {
       </React.Fragment>
     );
   }
-  handleChangeMealType = action => {
-    this.setState({ selectedMeal: action });
-  };
 }
 
-export default NutritionStatsRightSidebar;
+export default NutritionMealCreateSidebar;

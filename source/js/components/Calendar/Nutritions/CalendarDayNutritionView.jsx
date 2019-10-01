@@ -83,6 +83,7 @@ const CalendarDayNutritionView = props => {
               recentMeals={props.recentMeals}
               addTodayMeals={props.addTodayMeals}
               handleChangeQuickTab={props.handleChangeQuickTab}
+              addToFavourite={props.addToFavourite}
             />
           </div>
         </div>

@@ -3,10 +3,10 @@ import AddMetaDescription from '../../global/AddMetaDescription';
 import { routeCodes } from '../../../constants/routes';
 import FitnessHeader from '../../global/FitnessHeader';
 import FitnessNav from '../../global/FitnessNav';
-import NutritionStatsRightSidebar from '../../Calendar/Nutritions/sidebar/NutritionStatsRightSidebar';
 import NutritionMealBodyContent from './NutritionMealBodyContent';
 import { connect } from 'react-redux';
 import { showPageLoader, hidePageLoader } from '../../../actions/pageLoader';
+import NutritionMealCreateSidebar from './Header/NutritionMealCreateSidebar';
 
 class NutritionMealCreate extends Component {
   state = {
@@ -46,7 +46,7 @@ class NutritionMealCreate extends Component {
                   />
                 </div>
                 <div className="col-xs-12 col-md-3 d-flex">
-                  <NutritionStatsRightSidebar />
+                  <NutritionMealCreateSidebar />
                 </div>
               </div>
             </div>

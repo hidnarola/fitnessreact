@@ -80,7 +80,6 @@ class CalendarDayOverViewNutrition extends Component {
                   nutritionTab={nutritionTab}
                   handleChangeTab={this.handleChangeTab}
                   quickTab={quickTab}
-                  recentMeals={recentMeals}
                   addTodayMeals={this.addTodayMeals}
                   handleChangeQuickTab={this.handleChangeQuickTab}
                 />
