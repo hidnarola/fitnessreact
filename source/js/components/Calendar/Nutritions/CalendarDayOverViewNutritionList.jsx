@@ -90,7 +90,7 @@ class CalendarDayOverViewNutritionList extends Component {
                       onClick={() =>
                         this.setState({
                           servingSize:
-                            e.target.value >= 0 && e.target.value <= 999
+                            servingSize > 0 && servingSize < 999
                               ? servingSize - 1
                               : servingSize,
                         })
@@ -119,7 +119,7 @@ class CalendarDayOverViewNutritionList extends Component {
                       onClick={() =>
                         this.setState({
                           servingSize:
-                            e.target.value >= 0 && e.target.value <= 999
+                            servingSize >= 0 && servingSize < 999
                               ? servingSize + 1
                               : servingSize,
                         })
