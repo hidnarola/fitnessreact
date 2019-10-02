@@ -64,10 +64,11 @@ const NutritionMealDetails = (props) => {
                                   <div className="serving-select">
                                     <select
                                       className="form-control"
-                                      defaultValue={'second'}
+                                      defaultValue={'easy'}
                                     >
-                                      <option value="second">Seconds</option>
-                                      <option value="minute">Minutes</option>
+                                      <option value="easy">Easy</option>
+                                      <option value="medium">Medium</option>
+                                      <option value="hard">Hard</option>
                                     </select>
                                   </div>
                                 </div>

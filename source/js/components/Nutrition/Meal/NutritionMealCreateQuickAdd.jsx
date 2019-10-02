@@ -18,74 +18,91 @@ class NutritionMealCreateQuickAdd extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      favOpen: false,
-      recentOpen: false,
-      favouritesMale: '',
-      isOpenSearch: false,
       selectedMeal: 'Favourites',
     };
   }
 
   render() {
+    const { selectedMeal } = this.state;
     const {
-      quickTab,
-      recentMeals,
-      addTodayMeals,
-      handleChangeQuickTab,
-      addToFavourite,
+      handleSuggestionsFetchRequested,
+      handleAddIngredient,
+      searchSuggestions,
+      searchIsLoading,
     } = this.props;
-    const { favOpen, recentOpen, isOpenSearch, selectedMeal } = this.state;
-
     return (
       <React.Fragment>
         <div className="blue_right_sidebar h-100">
           <div className="d-flex width-100-per sidebar-header">
             <h2 className="h2_head_one pt-3 pb-3">Add Food</h2>
           </div>
-          <div className="quick-tabs">
-            <div className={quickTab === '#recentmeals' ? 'tab active' : 'tab'}>
-              <a
-                href="#recentMeals"
-                onClick={() => handleChangeQuickTab('#recentmeals')}
-              >
-                Food
-              </a>
-            </div>
-            <div
-              className={quickTab === '#favrioutmeals' ? 'tab active' : 'tab'}
-            >
-              <a
-                href="#favrioutmeals"
-                onClick={() => handleChangeQuickTab('#favrioutmeals')}
-              >
-                Meals
-              </a>
-            </div>
-          </div>
           <div className={'tab-content'}>
             <div className="recent-ingredient">
+              <ul>
+                <li className="p-0">
+                  <div className="custom-select width-100-per">
+                    <div className="display-select-menu width-100-per">
+                      <DropdownButton
+                        bsStyle={selectedMeal.toLowerCase()}
+                        title={selectedMeal}
+                        key={1}
+                        id={`dropdown-basic-${1}`}
+                        style={{ background: '#267D79' }}
+                      >
+                        <MenuItem
+                          eventKey="1"
+                          onClick={() =>
+                            this.handleChangeMealType('Favourites')
+                          }
+                        >
+                          Favourites
+                        </MenuItem>
+                        <MenuItem
+                          eventKey="2"
+                          onClick={() => this.handleChangeMealType('Recent')}
+                        >
+                          Recent
+                        </MenuItem>
+                      </DropdownButton>
+                    </div>
+                  </div>
+                </li>
+                <li className="input-box-group">
+                  <input
+                    className="form-control"
+                    type="text"
+                    placeholder="Search Ingredient"
+                    name="serachIngredient"
+                    onChange={e =>
+                      handleSuggestionsFetchRequested(e.target.value)
+                    }
+                  />
+                  {searchIsLoading ? (
+                    <span className="spinner">
+                      <i className="fa fa-spinner fa-spin"></i>
+                    </span>
+                  ) : (
+                    <span className="search-icon">
+                      <i className="fad fa-search"></i>
+                    </span>
+                  )}
+                </li>
+              </ul>
               <Scrollbars autoHide>
-                {quickTab === '#recentmeals' && <ul></ul>}
-                {quickTab === '#favrioutmeals' && (
-                  <ul>
-                    <li className="input-box-group">
-                      <input
-                        className="form-control"
-                        type="text"
-                        placeholder="Search Ingredient"
-                      />
-                      <span className="search-icon">
-                        <FontAwesomeIcon icon="search" />
-                      </span>
+                <ul>
+                  {searchSuggestions.map((ingredient, index) => (
+                    <li
+                      key={index}
+                      onClick={() => handleAddIngredient(ingredient)}
+                      className="animated slideInDown faster"
+                    >
+                      <h3>{ingredient.foodName}</h3>
+                      <div className="input-group-prepend ml-auto">
+                        <FontAwesomeIcon icon="plus-circle" />
+                      </div>
                     </li>
-                    <li>
-                      <span className={'star_one active'}>
-                        <Star />
-                      </span>
-                      <h3>Apple</h3>
-                    </li>
-                  </ul>
-                )}
+                  ))}
+                </ul>
               </Scrollbars>
             </div>
           </div>
@@ -93,9 +110,7 @@ class NutritionMealCreateQuickAdd extends Component {
       </React.Fragment>
     );
   }
-  handleChangeSelect = val => {
-    this.setState({ favouritesMale: val.value });
-  };
+
   handleChangeMealType = action => {
     this.setState({ selectedMeal: action });
   };

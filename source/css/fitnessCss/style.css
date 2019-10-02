@@ -1028,13 +1028,11 @@ h3.title-h3 {
   color: #053095;
 }
 
-.body-head-l .display-date .date-text{
-  color : #053095;
-  font-size: 40px;
-  font-weight: 900;
-  line-height: 1;
-  font-family: 'gt_walsheim_proregular';
-}
+.body-head-l .display-date .date-text {color : #053095;font-size: 40px;font-weight: 900;line-height: 1;font-family: 'gt_walsheim_proregular';}
+.body-head-l .save-btn-group .btn-save {height: 50px;width: 200px;margin: 0;border-radius: 0;background: #201F60;color: #fff;border: solid 1px #201F60;font-size: 20px;font-weight: 600;}
+.body-head-l .save-btn-group .dropdown button,
+.body-head-l .save-btn-group .dropdown button:hover,
+.body-head-l .save-btn-group .dropdown button:active {margin: 0;height: 50px;border-radius: 0;background: #053095 !important;color: #fff !important;border: solid 1px #053095;}
 
 .custome_header {
   flex-direction: row-reverse;
@@ -15548,62 +15546,28 @@ a.timline-post-edit-btn svg {
     margin: 0;
     height: calc(100vh - 39vh);
 }
-.blue_right_sidebar.measurement-sidebar .recent-ingredient {height: calc(100vh - 40vh);}
+.nutrition-create .blue_right_sidebar .recent-ingredient {height: calc(100vh - 49vh);}
+.blue_right_sidebar.measurement-sidebar .recent-ingredient {height: calc(100vh - 29vh);}
 .blue_right_sidebar.addfitnesstest-sidebar .recent-ingredient {height: calc(100vh - 22vh);}
 
 .blue_right_sidebar .recent-ingredient > div > div:last-child { width:10px !important; right: 10px !important; background: #201F60; }
 .blue_right_sidebar .recent-ingredient > div > div:last-child > div { background: #3E67FF !important;}
 .blue_right_sidebar .recent-ingredient ul li.input-box-group{padding: 0 0 0 0;background: unset;position: relative;}
-.blue_right_sidebar .recent-ingredient ul li.input-box-group .search-icon{right: 18px;position: absolute;top: 10px;}
+.blue_right_sidebar .recent-ingredient ul li.input-box-group .search-icon{right: 18px;position: absolute;top: 10px;color:#fff}
 .blue_right_sidebar .recent-ingredient ul li.input-box-group .search-icon svg{color:#808080;}
-.blue_right_sidebar .recent-ingredient ul li.input-box-group input{height: 40px;background: #5cb1ad;border-color: #5cb1ad;border-radius: 0px; padding: 0 20px;}
-.blue_right_sidebar .recent-ingredient ul li.input-box-group input::placeholder {color: #201F60;font-size: 20px;font-weight:bold;opacity: 0.4;}
-.blue_right_sidebar .recent-ingredient ul li {
-    padding: 15px 15px 15px 20px;
-    background: none;
-    color: #201f60;
-    font-size:20px;
-    margin-bottom: 0;
-    border-radius: 0px;
-    font-family: 'Neuzeit';
-    font-weight: 700;
-    display: flex;
-    flex-wrap: wrap;
-    border-bottom: solid 1px rgba(237, 245, 253, 0.1);
-    box-shadow: 0 5px 5px rgba(39, 26, 26, 0.1);
+.blue_right_sidebar .recent-ingredient ul li.input-box-group input{height: 50px;background: #5cb1ad;border-color: #5cb1ad;border-radius: 0px; padding: 0 20px;font-size:25px;font-weight: 600;color: #fff}
+.blue_right_sidebar .recent-ingredient ul li.input-box-group input::placeholder {color: #201F60;font-size: 25px;font-weight:600;opacity: 0.4;}
+.blue_right_sidebar .recent-ingredient ul li.input-box-group .spinner {position: absolute;top: 10px;right: 19px;}
+.blue_right_sidebar .recent-ingredient ul li.input-box-group .spinner i {font-size: 19px;color: #267D79;}
 
-}
+.blue_right_sidebar .recent-ingredient ul li {padding: 15px 15px 15px 20px;background: none;color: #201f60;font-size:20px;margin-bottom: 0;border-radius: 0px;font-family: 'Neuzeit';font-weight: 700;display: flex;flex-wrap: wrap;border-bottom: solid 1px rgba(237, 245, 253, 0.1);box-shadow: 0 2px 3px rgba(39, 26, 26, 0.1);}
+.blue_right_sidebar .recent-ingredient ul li .input-group-prepend {color: #267d79}
 
-.blue_right_sidebar .recent-ingredient ul li h3 {
-    font-family: 'Neuzeit';
-    font-weight: 700;
-    margin: 0;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    width:67%;
-    color: #201f60
-}
-.blue_right_sidebar .recent-ingredient ul li .star_one {
-    position: absolute;
-    left:0px;
-    top:0px;
-    width: 18px;
-    height: 18px;
-    border-radius: 5px 0 5px 0;
-    background: #EF9732;
-    fill: #fff;
-    display: flex;
-    flex-wrap:wrap;
-    align-items: center;
-    justify-content: center;
-}
+.blue_right_sidebar .recent-ingredient ul li h3 { font-family: 'Neuzeit'; font-weight: 700; margin: 0; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; width:88%; color: #201f60 }
 
-.blue_right_sidebar .recent-ingredient ul li .star_one svg {
-    width:12px;
-    height: 12px;
-    fill: #fff;
-}
+.blue_right_sidebar .recent-ingredient ul li .star_one { position: absolute; left:0px; top:0px; width: 18px; height: 18px; border-radius: 5px 0 5px 0; background: #EF9732; fill: #fff; display: flex; flex-wrap:wrap; align-items: center; justify-content: center; }
+
+.blue_right_sidebar .recent-ingredient ul li .star_one svg { width:12px; height: 12px; fill: #fff; }
 
 
 .blue_right_sidebar .recent-ingredient ul li .add_drag {width: auto;font-size: 28px;color:#267D79;margin-left:auto;display: flex;flex-wrap: wrap;align-items: center;}
@@ -16012,7 +15976,7 @@ a.timline-post-edit-btn svg {
 }
 .overview .overview-body {
   padding : 0;
-  height: calc(100vh - 38vh);
+  height: calc(100vh - 27vh);
 }
 
 .overview .overview-body > div > div:last-child {
@@ -16421,7 +16385,7 @@ a.timline-post-edit-btn svg {
 .ingredient-list .nutrition-box .nutrition-header .display-star svg,
 .nutrition-list .nutrition-box .nutrition-header .display-star svg {fill:#B8C2CB;}
 .ingredient-list .nutrition-box .nutrition-header .title,
-.nutrition-list .nutrition-box .nutrition-header .title {font-size: 24px;color: #053095;font-weight: 700;}
+.nutrition-list .nutrition-box .nutrition-header .title {font-size: 24px;color: #053095;font-weight: 700;width: 80%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;}
 .ingredient-list .nutrition-box .nutrition-header .timline-post-del-btn,
 .nutrition-list .nutrition-box .nutrition-header .timline-post-del-btn {margin: 0 10px;}
 .ingredient-list .nutrition-box .nutrition-header .boxing-icon button,
@@ -16465,6 +16429,9 @@ a.timline-post-edit-btn svg {
 .white_right_sidebar .progress-wrap .display-status{ align-items: flex-end;}
 .white_right_sidebar .progress-wrap .display-status .nutrition-progress {width : 80%}
 
+.nutrition-create .row {height: calc(100% - 60px) !important;}
+.nutrition-create .row .ingredient-list {height: 66vh !important;}
+
 .nutrition-create .meal-input input.form-control:focus,
 .nutrition-create .meal-input input.form-control {border: 0;padding: 30px 20px;font-size: 40px;box-shadow: none;font-weight: 800;color: #3e67ff;border-bottom: solid 3px #EDF5FD;}
 .nutrition-create .meal-input input.form-control::placeholder { font-weight: 800;color: #3E67FF;opacity: 0.4;  }
@@ -16475,7 +16442,8 @@ a.timline-post-edit-btn svg {
 .nutrition-create .ingredient-sidebar .ingredient-body ul {list-style: none;background: #fff;padding: 5px;}
 .nutrition-create .ingredient-sidebar .ingredient-body li {background: #edf5fd;margin-bottom: 3px}
 .nutrition-create .ingredient-sidebar .ingredient-body li .ingredient-items .box-header {padding: 5px 10px;}
-.nutrition-create .ingredient-sidebar .ingredient-body li .ingredient-items .box-header h3 {margin: 0;font-size: 20px;color: #201f60;font-weight: 700;}
+.nutrition-create .ingredient-sidebar .ingredient-body li .ingredient-items .box-header h3 {margin: 0;font-size: 20px;color: #201f60;font-weight: 700;width: 80%;text-overflow: ellipsis;
+white-space: nowrap;overflow: hidden;}
 .nutrition-create .ingredient-sidebar .ingredient-body li .ingredient-items .box-header svg {color: #FE676D;margin: 0 0 0 auto;font-size: 20px;}
 .nutrition-create .ingredient-sidebar .ingredient-body li .ingredient-items .box-inputs {padding: 0 3px 0 0;}
 .nutrition-create .ingredient-sidebar .ingredient-body li .ingredient-items .serving-boxs {margin: 3px 0 3px 3px;}
