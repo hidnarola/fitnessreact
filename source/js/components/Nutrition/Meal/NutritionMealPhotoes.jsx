@@ -31,6 +31,7 @@ class NutritionMealPhotoes extends Component {
 }
 NutritionMealPhotoes = reduxForm({
   form: 'nutrition_meal_add_form',
+  destroyOnUnmount: false,
 })(NutritionMealPhotoes);
 
 export default connect()(NutritionMealPhotoes);

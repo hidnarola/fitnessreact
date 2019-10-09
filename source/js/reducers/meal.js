@@ -19,7 +19,7 @@ import {
   SET_RECENT_MEALS,
 } from '../actions/meal';
 import { VALIDATION_FAILURE_STATUS } from '../constants/consts';
-import { generateValidationErrorMsgArr } from '../helpers/funs';
+import { generateValidationErrorMsgArr, ts, te } from '../helpers/funs';
 
 const initialState = Map({
   saveLoading: false,
@@ -145,10 +145,12 @@ const actionMap = {
     let newState = { saveLoading: false };
     if (action.data && action.data.status && action.data.status === 1) {
       newState.meal = action.data.meal;
+      ts('Your meal successfully inserted.');
     } else {
       let msg = action.data.message
         ? action.data.message
         : 'Something went wrong! please try again later';
+      te(msg);
       newState.saveError = [msg];
     }
     return state.merge(Map(newState));

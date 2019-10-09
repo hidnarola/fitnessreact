@@ -23,6 +23,8 @@ import { recentMealRequest } from '../../actions/meal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import CalendarImage from '../../../assets/svg/calendar-alt.svg';
 import NutritionMeal from '../Nutrition/NutritionMeal';
+import DatePicker from 'react-datepicker';
+import Photos from '../Photos/Photos';
 
 class CalendarDayOverView extends Component {
   constructor(props) {
@@ -218,6 +220,12 @@ class CalendarDayOverView extends Component {
     } = this.state;
     const { firstWorkoutId, loading, dispatch } = this.props;
     console.log('WORKOUTLIST', workoutsList);
+    const ExampleCustomInput = ({ value, onClick }) => (
+      <span className="display-calendar" onClick={onClick}>
+        <CalendarImage />
+        <FontAwesomeIcon icon="chevron-down" />
+      </span>
+    );
     return (
       <React.Fragment>
         <div className="fitness-nutrition">
@@ -318,10 +326,10 @@ class CalendarDayOverView extends Component {
                   <span className="date-arrow-right">
                     <FontAwesomeIcon icon="chevron-right" />
                   </span>
-                  <span className="display-calendar">
-                    <CalendarImage />
-                    <FontAwesomeIcon icon="chevron-down" />
-                  </span>
+                  <DatePicker
+                    selected={moment(new Date())}
+                    customInput={<ExampleCustomInput />}
+                  />
                 </div>
               </div>
             </div>
@@ -406,7 +414,7 @@ class CalendarDayOverView extends Component {
                   }
                   id="Photos"
                 >
-                  <h3>Photos - {this.getDisplayDate()}</h3>
+                  <Photos />
                 </div>
               )}
             </div>

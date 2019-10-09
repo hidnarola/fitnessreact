@@ -2,6 +2,7 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ButtonToolbar, Dropdown, MenuItem } from 'react-bootstrap';
 import Star from '../../../../assets/svg/star.svg';
+import { Scrollbars } from 'react-custom-scrollbars';
 
 const NutritionMealIngredientItems = props => {
   const {
@@ -11,6 +12,20 @@ const NutritionMealIngredientItems = props => {
     meal_proximates,
     handleChangeDelete,
   } = props;
+  const {
+    totalKcl,
+    totalfat,
+    totalSugar,
+    totalCarbs,
+    totalCholesterol,
+    totalNitrogen,
+    totalProtein,
+    totalStarch,
+    totalWater,
+  } = ingredient;
+  console.log('===========props.ingredientUnit(meal_proximates)===========');
+  console.log(ingredient, meal_proximates);
+  console.log('==========================');
   return (
     <React.Fragment>
       <div className="nutrition-box">
@@ -50,11 +65,8 @@ const NutritionMealIngredientItems = props => {
         </div>
         <div className="nutrition-body d-flex flex-wrap">
           <div className="nutrition-panel">
-            <h3>M</h3>
-            <ul>
-              <li>Ve</li>
-              <li>Ka</li>
-            </ul>
+            <h3>F</h3>
+            <ul></ul>
           </div>
           <div className="nutrition-serve-box ml-2 mr-2">
             <div className="row width-100-per no-gutters">
@@ -65,15 +77,16 @@ const NutritionMealIngredientItems = props => {
                 <div className="serving-boxs width-100-per m-0">
                   <button
                     className="btn btn-minus"
-                    onClick={e =>
+                    type="button"
+                    onClick={(e, serving_size) =>
                       props.changeServing(
                         id,
-                        ingredient,
+                        meal_proximates,
                         ingredient.serving_input === 0
                           ? parseInt(ingredient.serving_input)
                           : parseInt(ingredient.serving_input) - 1,
-                        null,
-                        null,
+                        ingredient.ingredient_unit,
+                        1,
                       )
                     }
                   >
@@ -83,25 +96,26 @@ const NutritionMealIngredientItems = props => {
                     type="number"
                     className="form-control"
                     value={ingredient.serving_input}
-                    onChange={e =>
+                    onChange={(e, serving_size) =>
                       props.changeServing(
                         id,
-                        ingredient,
-                        parseInt(e.target.value),
-                        null,
-                        null,
+                        meal_proximates,
+                        e.target.value,
+                        ingredient.ingredient_unit,
+                        1,
                       )
                     }
                   />
                   <button
                     className="btn btn-plus"
+                    type="button"
                     onClick={e =>
                       props.changeServing(
                         id,
-                        ingredient,
+                        meal_proximates,
                         parseInt(ingredient.serving_input) + 1,
-                        null,
-                        null,
+                        ingredient.ingredient_unit,
+                        1,
                       )
                     }
                   >
@@ -112,20 +126,28 @@ const NutritionMealIngredientItems = props => {
               <div className="col-md-4">
                 <div className="serving-select pl-3 width-100-per">
                   <select
+                    name="serving_unit"
                     className="form-control"
+                    value={ingredient.ingredient_unit}
                     onChange={e =>
-                      this.changeServing(id, v, null, e.target.value, null)
+                      props.changeServing(
+                        id,
+                        meal_proximates,
+                        ingredient.serving_input,
+                        e.target.value,
+                        1,
+                      )
                     }
                   >
-                    {props.ingredientUnit(ingredient).map(i => (
-                      <option key={i} value={i.value}>
-                        {i.label}
+                    {props.ingredientUnit(meal_proximates).map((item, i) => (
+                      <option key={i} value={item.value}>
+                        {item.label}
                       </option>
                     ))}
                   </select>
                 </div>
               </div>
-              <div className="col-md-6">
+              {/* <div className="col-md-6">
                 <div className="ingredient-boxs mt-2 mr-2">
                   <div className="title">Ingredients</div>
                   <ul>
@@ -139,8 +161,8 @@ const NutritionMealIngredientItems = props => {
                     </li>
                   </ul>
                 </div>
-              </div>
-              <div className="col-md-6">
+              </div> */}
+              <div className="col-md-12">
                 <div className="ingredient-boxs mt-2">
                   <div className="title d-flex width-100-per">
                     <div>Nutrition</div>
@@ -148,24 +170,44 @@ const NutritionMealIngredientItems = props => {
                       <FontAwesomeIcon icon="search" />
                     </div>
                   </div>
-                  <ul>
-                    <li className="d-flex width-100-per">
-                      <span>Calories</span>
-                      <span className="ml-auto">800 kcal</span>
-                    </li>
-                    <li className="d-flex width-100-per">
-                      <span>Fat</span>
-                      <span className="ml-auto">350g</span>
-                    </li>
-                    <li className="d-flex width-100-per">
-                      <span>Sugar</span>
-                      <span className="ml-auto">350g</span>
-                    </li>
-                    <li className="d-flex width-100-per">
-                      <span>Carbohydrates</span>
-                      <span className="ml-auto">350g</span>
-                    </li>
-                  </ul>
+                  <div className="ingredients-list">
+                    <Scrollbars autoHide>
+                      <ul>
+                        <li className="d-flex width-100-per">
+                          <span>Calories</span>
+                          <span className="ml-auto">{totalKcl} kcal</span>
+                        </li>
+                        <li className="d-flex width-100-per">
+                          <span>Fat</span>
+                          <span className="ml-auto">{totalfat} g</span>
+                        </li>
+                        <li className="d-flex width-100-per">
+                          <span>Sugar</span>
+                          <span className="ml-auto">{totalSugar} g</span>
+                        </li>
+                        <li className="d-flex width-100-per">
+                          <span>Carbohydrates</span>
+                          <span className="ml-auto">{totalCarbs} g</span>
+                        </li>
+                        <li className="d-flex width-100-per">
+                          <span>Protein</span>
+                          <span className="ml-auto">{totalProtein} g</span>
+                        </li>
+                        <li className="d-flex width-100-per">
+                          <span>Water</span>
+                          <span className="ml-auto">{totalWater} g</span>
+                        </li>
+                        <li className="d-flex width-100-per">
+                          <span>Starch</span>
+                          <span className="ml-auto">{totalStarch} g</span>
+                        </li>
+                        <li className="d-flex width-100-per">
+                          <span>Nitrogen</span>
+                          <span className="ml-auto">{totalNitrogen} g</span>
+                        </li>
+                      </ul>
+                    </Scrollbars>
+                  </div>
                 </div>
               </div>
             </div>

@@ -1029,7 +1029,13 @@ h3.title-h3 {
 }
 
 .body-head-l .display-date .date-text {color : #053095;font-size: 40px;font-weight: 900;line-height: 1;font-family: 'gt_walsheim_proregular';}
-.body-head-l .save-btn-group .btn-save {height: 50px;width: 200px;margin: 0;border-radius: 0;background: #201F60;color: #fff;border: solid 1px #201F60;font-size: 20px;font-weight: 600;}
+.whitebox-body .save-btn-group{position: absolute;top: -90px;right: calc(100% - 134%);}
+.whitebox-body .save-btn-group .btn-save,
+.body-head-l .save-btn-group .btn-save
+{height: 50px;width: 200px;margin: 0;border-radius: 0;background: #201F60;color: #fff;border: solid 1px #201F60;font-size: 20px;font-weight: 600;}
+.whitebox-body .save-btn-group .dropdown button,
+.whitebox-body .save-btn-group .dropdown button:hover,
+.whitebox-body .save-btn-group .dropdown button:active,
 .body-head-l .save-btn-group .dropdown button,
 .body-head-l .save-btn-group .dropdown button:hover,
 .body-head-l .save-btn-group .dropdown button:active {margin: 0;height: 50px;border-radius: 0;background: #053095 !important;color: #fff !important;border: solid 1px #053095;}
@@ -16381,11 +16387,13 @@ a.timline-post-edit-btn svg {
 .ingredient-list .nutrition-box .nutrition-header,
 .nutrition-list .nutrition-box .nutrition-header {display: flex; flex-wrap: wrap;padding: 5px;}
 .ingredient-list .nutrition-box .nutrition-header .display-star,
-.nutrition-list .nutrition-box .nutrition-header .display-star {width: 20px;margin: 0 10px;color:#B8C2CB;}
+.nutrition-list .nutrition-box .nutrition-header .display-star {width: 20px;margin: 0 10px;color:#B8C2CB;cursor: pointer;}
 .ingredient-list .nutrition-box .nutrition-header .display-star svg,
 .nutrition-list .nutrition-box .nutrition-header .display-star svg {fill:#B8C2CB;}
+.ingredient-list .nutrition-box .nutrition-header .display-star.active svg,
+.nutrition-list .nutrition-box .nutrition-header .display-star.active svg {fill:#EF9732}
 .ingredient-list .nutrition-box .nutrition-header .title,
-.nutrition-list .nutrition-box .nutrition-header .title {font-size: 24px;color: #053095;font-weight: 700;width: 80%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;}
+.nutrition-list .nutrition-box .nutrition-header .title {font-size: 24px;color: #053095;font-weight: 700;width: 79%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;}
 .ingredient-list .nutrition-box .nutrition-header .timline-post-del-btn,
 .nutrition-list .nutrition-box .nutrition-header .timline-post-del-btn {margin: 0 10px;}
 .ingredient-list .nutrition-box .nutrition-header .boxing-icon button,
@@ -16425,6 +16433,7 @@ a.timline-post-edit-btn svg {
 .nutrition-list .nutrition-box .nutrition-body .ingredient-boxs ul li {background: #fff;margin: 2px 0;padding: 5px 5px 5px 10px;}
 .ingredient-list .nutrition-box .nutrition-body .ingredient-boxs ul li span,
 .nutrition-list .nutrition-box .nutrition-body .ingredient-boxs ul li span { font-size: 19px;font-weight: 600;color: #201f60;font-family: 'Neuzeit'}
+.ingredient-list .nutrition-box .nutrition-body .ingredient-boxs .ingredients-list {height: 20vh;}
 
 .white_right_sidebar .progress-wrap .display-status{ align-items: flex-end;}
 .white_right_sidebar .progress-wrap .display-status .nutrition-progress {width : 80%}
@@ -16444,6 +16453,7 @@ a.timline-post-edit-btn svg {
 .nutrition-create .ingredient-sidebar .ingredient-body li .ingredient-items .box-header {padding: 5px 10px;}
 .nutrition-create .ingredient-sidebar .ingredient-body li .ingredient-items .box-header h3 {margin: 0;font-size: 20px;color: #201f60;font-weight: 700;width: 80%;text-overflow: ellipsis;
 white-space: nowrap;overflow: hidden;}
+.nutrition-create .ingredient-sidebar .ingredient-body li .ingredient-items .box-header .btn-delete {margin : 0 0 0 auto;cursor:pointer;}
 .nutrition-create .ingredient-sidebar .ingredient-body li .ingredient-items .box-header svg {color: #FE676D;margin: 0 0 0 auto;font-size: 20px;}
 .nutrition-create .ingredient-sidebar .ingredient-body li .ingredient-items .box-inputs {padding: 0 3px 0 0;}
 .nutrition-create .ingredient-sidebar .ingredient-body li .ingredient-items .serving-boxs {margin: 3px 0 3px 3px;}

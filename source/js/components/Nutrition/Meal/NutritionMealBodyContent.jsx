@@ -10,8 +10,14 @@ import NutritionMealCreateNavbar from './Header/NutritionMealCreateNavbar';
 import NutritionQuickAdd from '../../Calendar/Nutritions/sidebar/NutritionQuickAdd';
 import NutritionMealIngredientList from './NutritionMealIngredientList';
 import NutritionMealCreateQuickAdd from './NutritionMealCreateQuickAdd';
-import { getIngridientsRequest } from '../../../actions/new_nutrition';
+import {
+  getIngridientsRequest,
+  getRecentIngridientsRequest,
+} from '../../../actions/new_nutrition';
 import { connect } from 'react-redux';
+import { Field, reduxForm, formValueSelector } from 'redux-form';
+import DropdownButton from 'react-bootstrap/lib/DropdownButton';
+import MenuItem from 'react-bootstrap/lib/MenuItem';
 
 class NutritionMealBodyContent extends Component {
   constructor(props) {
@@ -20,6 +26,7 @@ class NutritionMealBodyContent extends Component {
       isActiveTab: '#details',
       isActiveIngredientTab: false,
       searchIsLoading: false,
+      selectedMealMode: 'All',
       ingredient_list: [],
       meal_proximates: [],
     };
@@ -32,79 +39,142 @@ class NutritionMealBodyContent extends Component {
       isActiveIngredientTab,
       ingredient_list,
       meal_proximates,
+      selectedMealMode,
     } = this.state;
-    const { searchSuggestions } = this.props;
+    const { searchSuggestions, mealVisibility, recent_ingredient } = this.props;
     return (
       <React.Fragment>
-        <div className="whitebox-body meals-bg nutrition-create border-left border-right">
-          <div className="meal-input">
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Add a title"
-            />
-          </div>
-          <div className="row no-gutters">
-            {!isActiveIngredientTab && (
-              <React.Fragment>
-                <div className="col-md-4 border-right">
-                  <NutritionMealCreateLeftSidebar
-                    isActiveIngredientTab={isActiveIngredientTab}
-                    handleChangeIngredientTab={this.handleChangeIngredientTab}
-                    ingredient_list={ingredient_list}
-                    meal_proximates={meal_proximates}
-                  />
-                </div>
-                <div className="col-md-8">
-                  <NutritionMealCreateNavbar
-                    isActiveTab={isActiveTab}
-                    handleChangeTab={this.handleChangeTab}
-                  />
-                  <div className="tab-content nutrition-body">
-                    {isActiveTab === `#details` && <NutritionMealDetails />}
-                    {isActiveTab === `#instructions` && (
-                      <NutritionMealInstruction />
-                    )}
-                    {isActiveTab === `#notes` && <NutritionMealNote />}
-                    {isActiveTab === `#photos` && <NutritionMealPhotoes />}
-                  </div>
-                </div>
-              </React.Fragment>
-            )}
-            {isActiveIngredientTab && (
-              <React.Fragment>
-                <div className="col-md-8 border-right">
-                  <NutritionMealIngredientList
-                    handleChangeIngredientTab={this.handleChangeIngredientTab}
-                    ingredient_list={ingredient_list}
-                    meal_proximates={meal_proximates}
-                    changeServing={this.changeServing}
-                    ingredientUnit={this.ingredientUnit}
-                    handleRemoveIngredient={this.handleRemoveIngredient}
-                  />
-                </div>
-                <div className="col-md-4">
-                  <NutritionMealCreateQuickAdd
-                    key={654}
-                    searchIsLoading={this.state.searchIsLoading}
-                    quickTab={this.props.quickTab}
-                    recentMeals={this.props.recentMeals}
-                    addTodayMeals={this.props.addTodayMeals}
-                    handleChangeQuickTab={this.props.handleChangeQuickTab}
-                    handleSuggestionsFetchRequested={
-                      this.handleSuggestionsFetchRequested
+        <form
+          method="POST"
+          onSubmit={this.props.handleSubmit(this.handleSubmit)}
+          className="width-100-per"
+        >
+          <div className="whitebox-body meals-bg nutrition-create border-left border-right">
+            <div className="meal-input">
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Add a title"
+                name="mealTitle"
+                value={this.props.mealTitle}
+                onChange={this.props.handleChangeMealTitle}
+                onKeyPress={e => {
+                  e.key === 'Enter' && e.preventDefault();
+                }}
+              />
+            </div>
+            <div className="save-btn-group">
+              <button type="submit" className="btn btn-save">
+                Save and add
+              </button>
+              <DropdownButton
+                title={
+                  <i
+                    className={
+                      mealVisibility === 'private'
+                        ? 'fad fa-user-shield'
+                        : 'fad fa-users'
                     }
-                    searchSuggestions={searchSuggestions}
-                    handleAddIngredient={this.handleAddIngredient}
                   />
-                </div>
-              </React.Fragment>
-            )}
+                }
+                key={1}
+                id={`dropdown-basic-${1}`}
+                pullRight
+              >
+                <MenuItem
+                  eventKey="1"
+                  onClick={() => this.handleChangeMealVisibility('private')}
+                >
+                  <i className="fad fa-user-shield" /> Private
+                </MenuItem>
+                <MenuItem
+                  eventKey="2"
+                  onClick={() => this.handleChangeMealVisibility('public')}
+                >
+                  <i className="fad fa-users" /> Public
+                </MenuItem>
+              </DropdownButton>
+            </div>
+            <div className="row no-gutters">
+              {!isActiveIngredientTab && (
+                <React.Fragment>
+                  <div className="col-md-4 border-right">
+                    <NutritionMealCreateLeftSidebar
+                      isActiveIngredientTab={isActiveIngredientTab}
+                      handleChangeIngredientTab={this.handleChangeIngredientTab}
+                      ingredient_list={ingredient_list}
+                      meal_proximates={meal_proximates}
+                      changeServing={this.changeServing}
+                      ingredientUnit={this.ingredientUnit}
+                      handleRemoveIngredient={this.handleRemoveIngredient}
+                    />
+                  </div>
+                  <div className="col-md-8">
+                    <NutritionMealCreateNavbar
+                      isActiveTab={isActiveTab}
+                      handleChangeTab={this.handleChangeTab}
+                    />
+                    <div className="tab-content nutrition-body">
+                      {isActiveTab === `#details` && <NutritionMealDetails />}
+                      {isActiveTab === `#instructions` && (
+                        <NutritionMealInstruction
+                          handleChangeInstructions={
+                            this.props.handleChangeInstructions
+                          }
+                          instructions={this.props.instructions}
+                        />
+                      )}
+                      {isActiveTab === `#notes` && (
+                        <NutritionMealNote
+                          handleChangeNotes={this.props.handleChangeNotes}
+                        />
+                      )}
+                      {isActiveTab === `#photos` && <NutritionMealPhotoes />}
+                    </div>
+                  </div>
+                </React.Fragment>
+              )}
+              {isActiveIngredientTab && (
+                <React.Fragment>
+                  <div className="col-md-8 border-right">
+                    <NutritionMealIngredientList
+                      handleChangeIngredientTab={this.handleChangeIngredientTab}
+                      ingredient_list={ingredient_list}
+                      meal_proximates={meal_proximates}
+                      changeServing={this.changeServing}
+                      ingredientUnit={this.ingredientUnit}
+                      handleRemoveIngredient={this.handleRemoveIngredient}
+                    />
+                  </div>
+                  <div className="col-md-4">
+                    <NutritionMealCreateQuickAdd
+                      key={654}
+                      searchIsLoading={this.state.searchIsLoading}
+                      quickTab={this.props.quickTab}
+                      recentMeals={this.props.recentMeals}
+                      addTodayMeals={this.props.addTodayMeals}
+                      handleChangeQuickTab={this.props.handleChangeQuickTab}
+                      selectedMealMode={selectedMealMode}
+                      handleChangeMealMode={this.handleChangeMealMode}
+                      handleSuggestionsFetchRequested={
+                        this.handleSuggestionsFetchRequested
+                      }
+                      searchSuggestions={searchSuggestions}
+                      handleAddIngredient={this.handleAddIngredient}
+                      recent_ingredient={recent_ingredient}
+                    />
+                  </div>
+                </React.Fragment>
+              )}
+            </div>
           </div>
-        </div>
+        </form>
       </React.Fragment>
     );
   }
+  handleChangeMealMode = action => {
+    this.setState({ selectedMealMode: action });
+  };
   handleChangeTab = tab => {
     this.setState({ isActiveTab: tab });
   };
@@ -128,6 +198,7 @@ class NutritionMealBodyContent extends Component {
     let ingredientObj = {};
     ingredientObj.serving_size = 0;
     ingredientObj.serving_input = 0;
+    ingredientObj.ingredient_unit = 'g';
     ingredientObj.unit = '';
     ingredientObj.count = 0;
     ingredientObj.totalKcl = 0;
@@ -145,20 +216,24 @@ class NutritionMealBodyContent extends Component {
   };
   searchIngredient = value => {
     const { dispatch } = this.props;
-    var requestData = {
-      name: value,
-      start: 0,
-      offset: 50,
-    };
+    const { selectedMealMode } = this.state;
+    var requestData = { name: value, start: 0, offset: 50 };
     this.setState({ searchIsLoading: true });
-    // dispatch(getUserNutritionPreferencesRequest(requestData));
-    dispatch(getIngridientsRequest(requestData));
+    selectedMealMode === 'All' && dispatch(getIngridientsRequest(requestData));
   };
   componentDidUpdate(prevProps, prevState) {
     const { searchloading, searchSuggestions } = this.props;
+    const { meal_proximates } = this.state;
     if (!searchloading && prevProps.searchSuggestions !== searchSuggestions) {
       this.setState({ searchIsLoading: false });
     }
+    if (prevState.meal_proximates !== meal_proximates) {
+      this.setState({ meal_proximates });
+    }
+  }
+  componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch(getRecentIngridientsRequest());
   }
 
   changeServing = (id, _vobj, serving_size, unit, count) => {
@@ -294,6 +369,10 @@ class NutritionMealBodyContent extends Component {
       delete vobj._id;
       _array[id] = vobj;
       this.setState({ ingredient_list: _array });
+      console.log(
+        'this.state.ingredient_list ======= >',
+        this.state.ingredient_list,
+      );
     } catch (error) {
       console.log('error => ', error);
     }
@@ -304,6 +383,7 @@ class NutritionMealBodyContent extends Component {
     a.push({ label: 'g', value: 'g' });
     for (let [key, value] of Object.entries(ingredient)) {
       // console.log('key => ', key);
+      // console.log('value => ', value);
       if (value) {
         switch (key) {
           case '_1tsp':
@@ -344,12 +424,58 @@ class NutritionMealBodyContent extends Component {
     }
     return a;
   };
+  handleSubmit = (a, b, c) => {
+    console.log('a => ', a);
+    console.log('b => ', b);
+    console.log('c => ', c);
+    // c.preventDefault();
+    {
+      /* console.log("~~~~~~~~~~~~~~~~>", e)
+        console.log('data => ', data); */
+    }
+    // event.preventDefault();
+    // const { handleSubmit } = this.props;
+    // console.log('data => ', data);
+    // handleSubmit(data);
+    // const {
+    //     meal_ingredient
+    // } = this.state;
+    const { ingredient_list } = this.state;
+    let newIngredientList = [];
+    ingredient_list.forEach(item => {
+      newIngredientList.push({
+        ingredient_id: item.ingredient_id,
+        ingredient_unit: item.ingredient_unit,
+        serving_input: item.serving_input,
+        count: item.count,
+        totalKcl: item.totalKcl,
+        totalfat: item.totalfat,
+        totalProtein: item.totalProtein,
+        totalCarbs: item.totalCarbs,
+        totalSugar: item.totalSugar,
+        totalWater: item.totalWater,
+        totalStarch: item.totalStarch,
+        totalCholesterol: item.totalCholesterol,
+        totalNitrogen: item.totalNitrogen,
+      });
+    });
+    a['proximates'] = newIngredientList;
+    c.onSubmit(a);
+    // return a;
+  };
 }
+
+NutritionMealBodyContent = reduxForm({
+  form: 'nutrition_meal_add_form',
+})(NutritionMealBodyContent);
+const selector = formValueSelector('nutrition_meal_add_form');
+
 const mapStateToProps = state => {
   const { new_nutrition } = state;
   return {
     searchSuggestions: new_nutrition.get('ingridients'),
     searchloading: new_nutrition.get('loading'),
+    recent_ingredient: new_nutrition.get('recent_ingredient'),
   };
 };
 

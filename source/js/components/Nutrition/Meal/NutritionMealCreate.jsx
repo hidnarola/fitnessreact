@@ -9,15 +9,29 @@ import { showPageLoader, hidePageLoader } from '../../../actions/pageLoader';
 import NutritionMealCreateSidebar from './Header/NutritionMealCreateSidebar';
 import DropdownButton from 'react-bootstrap/lib/DropdownButton';
 import MenuItem from 'react-bootstrap/lib/MenuItem';
+import { EditorState, convertToRaw, ContentState } from 'draft-js';
+import draftToHtml from 'draftjs-to-html';
+import { mealAddRequest } from '../../../actions/meal';
+import { userMealAddRequest } from '../../../actions/user_meal';
+import moment from 'moment';
+import { Redirect, withRouter } from 'react-router-dom';
 
 class NutritionMealCreate extends Component {
   state = {
     quickTab: '#favrioutmeals',
     mealVisibility: 'private',
+    mealTitle: '',
+    mealType: 'breakfast',
+    instructions: [],
+    notes: [],
+    logDate: new Date(),
   };
   render() {
-    const { quickTab, mealVisibility } = this.state;
-    const { recentMeals } = this.props;
+    const { quickTab, mealVisibility, instructions, mealTitle } = this.state;
+    const { recentMeals, location } = this.props;
+    console.log('===========this.props===========');
+    console.log(this.props);
+    console.log('==========================');
     return (
       <React.Fragment>
         <div className="fitness-nutrition">
@@ -35,42 +49,7 @@ class NutritionMealCreate extends Component {
               <div className="body-head-l" style={{ padding: '15px' }}>
                 <div className="display-date">
                   <span className="date-text">Create a Meal</span>
-                  <div className="ml-auto">
-                    <div className="save-btn-group">
-                      <button className="btn btn-save">Save and add</button>
-                      <DropdownButton
-                        title={
-                          <i
-                            className={
-                              mealVisibility === 'private'
-                                ? 'fad fa-user-shield'
-                                : 'fad fa-users'
-                            }
-                          />
-                        }
-                        key={1}
-                        id={`dropdown-basic-${1}`}
-                        pullRight
-                      >
-                        <MenuItem
-                          eventKey="1"
-                          onClick={() =>
-                            this.handleChangeMealVisibility('private')
-                          }
-                        >
-                          <i className="fad fa-user-shield" /> Private
-                        </MenuItem>
-                        <MenuItem
-                          eventKey="2"
-                          onClick={() =>
-                            this.handleChangeMealVisibility('public')
-                          }
-                        >
-                          <i className="fad fa-users" /> Public
-                        </MenuItem>
-                      </DropdownButton>
-                    </div>
-                  </div>
+                  <div className="ml-auto"></div>
                 </div>
               </div>
             </div>
@@ -84,6 +63,14 @@ class NutritionMealCreate extends Component {
                         recentMeals={recentMeals}
                         addTodayMeals={this.addTodayMeals}
                         handleChangeQuickTab={this.handleChangeQuickTab}
+                        onSubmit={this.handleSubmit}
+                        handleChangeNotes={this.handleChangeNotes}
+                        handleChangeInstructions={this.handleChangeInstructions}
+                        instructions={instructions}
+                        handleChangeNotes={this.handleChangeNotes}
+                        mealTitle={mealTitle}
+                        handleChangeMealTitle={this.handleChangeMealTitle}
+                        mealVisibility={mealVisibility}
                       />
                     </div>
                     <div className="col-xs-12 col-md-3 d-flex">
@@ -99,12 +86,23 @@ class NutritionMealCreate extends Component {
     );
   }
   addTodayMeals = () => {};
+  handleChangeMealTitle = e => {
+    this.setState({ mealTitle: e.target.value });
+  };
   handleChangeQuickTab = action => {
     this.setState({ quickTab: action });
   };
   handleChangeMealVisibility = action => {
     this.setState({ mealVisibility: action });
   };
+  componentDidMount() {
+    let search = new URLSearchParams(
+      decodeURIComponent(this.props.location.search),
+    );
+    let date = search.get('date');
+    this.setState({ logDate: new Date(date) });
+  }
+
   componentDidUpdate(prevProps, prevState) {
     const { dispatch, recentMealsLoading, recentMeals } = this.props;
     if (recentMealsLoading) {
@@ -114,6 +112,115 @@ class NutritionMealCreate extends Component {
       dispatch(hidePageLoader());
     }
   }
+  handleChangeInstructions = action => {
+    let data = action.map(item =>
+      draftToHtml(convertToRaw(item.instruction.getCurrentContent())),
+    );
+    this.setState({ instructions: data });
+    console.log('===========this.state.instructions===========');
+    console.log(this.state.instructions);
+    console.log('==========================');
+  };
+  handleChangeNotes = action => {
+    let data = action.map(item =>
+      draftToHtml(convertToRaw(item.note.getCurrentContent())),
+    );
+    this.setState({ notes: data });
+    console.log('===========this.state.instructions===========');
+    console.log(this.state.notes);
+    console.log('==========================');
+  };
+  handleSubmit = async data => {
+    console.log('===========Form Submit===========');
+    console.log(data, this.state);
+    console.log('==========================');
+    const {
+      mealVisibility,
+      mealTitle,
+      mealType,
+      notes,
+      instructions,
+      logDate,
+    } = this.state;
+    const { dispatch } = this.props;
+    const categories = {
+      vegetarian: data.vegetarian,
+      kosher: data.kosher,
+      vegan: data.vegan,
+      coelaic: data.coelaic,
+      paleo: data.paleo,
+      keto: data.keto,
+    };
+    const cookingTime = {
+      prep_time: data.prepTime,
+      prep_time_unit: data.preptime_unit,
+      cook_time: data.cookTime,
+      cook_time_unit: data.cooktime_unit,
+    };
+    var formData = new FormData();
+    if (mealTitle) {
+      formData.append('title', mealTitle);
+    }
+    if (data.description) {
+      formData.append('description', data.description);
+    }
+    if (mealVisibility) {
+      formData.append('meals_visibility', mealVisibility);
+    }
+    if (mealType) {
+      formData.append('meals_type', mealType);
+    }
+    if (data.proximates && data.proximates.length > 0) {
+      formData.append('ingredientsIncluded', JSON.stringify(data.proximates));
+    }
+    if (notes) {
+      formData.append('notes', notes);
+    }
+    if (instructions) {
+      formData.append('instructions', instructions);
+    }
+    if (data.serving_difficulty) {
+      formData.append('serving_difficulty', data.serving_difficulty);
+    }
+    if (data.serves) {
+      formData.append('serves', data.serves);
+    }
+    if (data.images) {
+      formData.append('meal_img', data.images[0]);
+    }
+    if (categories) {
+      formData.append('categories', JSON.stringify(categories));
+    }
+    if (cookingTime) {
+      formData.append('cooking_time', JSON.stringify(cookingTime));
+    }
+
+    if (mealVisibility && mealVisibility === 'private') {
+      //   te('Instruction required for public meals');
+      // } else {
+      // console.log(new Date(logDate).toISOString());
+
+      await dispatch(showPageLoader());
+      await dispatch(
+        mealAddRequest(formData, res => {
+          console.log('CALL', moment(new Date(logDate)).toISOString());
+
+          if (res.meal._id) {
+            const data = {
+              meals: [{ meal_id: res.meal._id }],
+              date: logDate,
+            };
+            dispatch(
+              userMealAddRequest(data, res => {
+                dispatch(hidePageLoader());
+                this.props.history.push(routeCodes.CALENDAR_OVERVIEW);
+              }),
+            );
+          }
+        }),
+      );
+    }
+  };
 }
 
 const mapStateToProps = state => {

@@ -5,25 +5,21 @@ import Star from '../../../../assets/svg/star.svg';
 import Collapse from 'react-bootstrap/lib/Collapse';
 import { routeCodes } from '../../../constants/routes';
 import { Link } from 'react-router-dom';
-import Select from 'react-select';
 import DropdownButton from 'react-bootstrap/lib/DropdownButton';
 import MenuItem from 'react-bootstrap/lib/MenuItem';
 import cns from 'classnames';
 
-const colourOptions = [
-  { value: 'favourites', label: 'Favourites' },
-  { value: 'recent', label: 'Recent' },
-];
 class NutritionMealCreateQuickAdd extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      selectedMeal: 'Favourites',
-    };
   }
 
   render() {
-    const { selectedMeal } = this.state;
+    const {
+      selectedMealMode,
+      handleChangeMealMode,
+      recent_ingredient,
+    } = this.props;
     const {
       handleSuggestionsFetchRequested,
       handleAddIngredient,
@@ -43,23 +39,26 @@ class NutritionMealCreateQuickAdd extends Component {
                   <div className="custom-select width-100-per">
                     <div className="display-select-menu width-100-per">
                       <DropdownButton
-                        bsStyle={selectedMeal.toLowerCase()}
-                        title={selectedMeal}
+                        title={selectedMealMode}
                         key={1}
                         id={`dropdown-basic-${1}`}
                         style={{ background: '#267D79' }}
                       >
                         <MenuItem
                           eventKey="1"
-                          onClick={() =>
-                            this.handleChangeMealType('Favourites')
-                          }
+                          onClick={() => handleChangeMealMode('All')}
+                        >
+                          All
+                        </MenuItem>
+                        <MenuItem
+                          eventKey="2"
+                          onClick={() => handleChangeMealMode('Favourites')}
                         >
                           Favourites
                         </MenuItem>
                         <MenuItem
-                          eventKey="2"
-                          onClick={() => this.handleChangeMealType('Recent')}
+                          eventKey="3"
+                          onClick={() => handleChangeMealMode('Recent')}
                         >
                           Recent
                         </MenuItem>
@@ -76,6 +75,9 @@ class NutritionMealCreateQuickAdd extends Component {
                     onChange={e =>
                       handleSuggestionsFetchRequested(e.target.value)
                     }
+                    onKeyPress={e => {
+                      e.key === 'Enter' && e.preventDefault();
+                    }}
                   />
                   {searchIsLoading ? (
                     <span className="spinner">
@@ -90,18 +92,32 @@ class NutritionMealCreateQuickAdd extends Component {
               </ul>
               <Scrollbars autoHide>
                 <ul>
-                  {searchSuggestions.map((ingredient, index) => (
-                    <li
-                      key={index}
-                      onClick={() => handleAddIngredient(ingredient)}
-                      className="animated slideInDown faster"
-                    >
-                      <h3>{ingredient.foodName}</h3>
-                      <div className="input-group-prepend ml-auto">
-                        <FontAwesomeIcon icon="plus-circle" />
-                      </div>
-                    </li>
-                  ))}
+                  {selectedMealMode === 'All' &&
+                    searchSuggestions.map((ingredient, index) => (
+                      <li
+                        key={index}
+                        onClick={() => handleAddIngredient(ingredient)}
+                        className="animated slideInDown faster"
+                      >
+                        <h3>{ingredient.foodName}</h3>
+                        <div className="input-group-prepend ml-auto">
+                          <FontAwesomeIcon icon="plus-circle" />
+                        </div>
+                      </li>
+                    ))}
+                  {selectedMealMode === 'Recent' &&
+                    recent_ingredient.map((ingredient, index) => (
+                      <li
+                        key={index}
+                        onClick={() => handleAddIngredient(ingredient)}
+                        className="animated slideInDown faster"
+                      >
+                        <h3>{ingredient.foodName}</h3>
+                        <div className="input-group-prepend ml-auto">
+                          <FontAwesomeIcon icon="plus-circle" />
+                        </div>
+                      </li>
+                    ))}
                 </ul>
               </Scrollbars>
             </div>
@@ -110,10 +126,6 @@ class NutritionMealCreateQuickAdd extends Component {
       </React.Fragment>
     );
   }
-
-  handleChangeMealType = action => {
-    this.setState({ selectedMeal: action });
-  };
 }
 
 export default NutritionMealCreateQuickAdd;

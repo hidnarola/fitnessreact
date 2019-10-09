@@ -1,3 +1,4 @@
+import { call } from 'redux-saga/effects';
 import { te, ts } from '../helpers/funs';
 
 export const MEAL_ADD_REQUEST = 'MEAL_ADD_REQUEST';
@@ -51,10 +52,11 @@ export function recentMealError(error) {
   };
 }
 
-export function mealAddRequest(requestData) {
+export function mealAddRequest(requestData, callback = res => {}) {
   return {
     type: MEAL_ADD_REQUEST,
     requestData,
+    callback,
   };
 }
 

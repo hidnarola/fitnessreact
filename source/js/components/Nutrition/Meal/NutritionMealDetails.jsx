@@ -1,24 +1,33 @@
 import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Field, reduxForm, formValueSelector,initialize  } from 'redux-form';
+import {connect} from 'react-redux'
 
-const NutritionMealDetails = (props) => {
+
+
+let NutritionMealDetails = (props) => {
+  const handleChnageServe = (action) => {
+    const {serves} = props
+    action === 'add' && props.change("serves", parseInt(serves) + 1)
+    action === 'sub' && serves > 0 && props.change("serves", parseInt(serves) - 1)
+  }
+  const handleChnagePrepTime = (action) => {
+    const {prepTime} = props
+    action === 'add' && props.change("prepTime", parseInt(prepTime) + 1)
+    action === 'sub' && prepTime > 0 && props.change("prepTime", parseInt(prepTime) - 1)
+  }
+  const handleChnageCookTime = (action) => {
+    const {cookTime} = props
+    action === 'add' && props.change("cookTime", parseInt(cookTime) + 1)
+    action === 'sub' && cookTime > 0 && props.change("cookTime", parseInt(cookTime) - 1)
+  }
     return (
         <React.Fragment>
             <div className="details">
                       <div className="description-box">
                         <div className="title">Description</div>
                         <div className="detail-body">
-                          <textarea className="form-control" rows="5">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing
-                            elit, sed do eiusmod tempor incididunt ut labore et
-                            dolore magna aliqua. Ut enim ad minim veniam, quis
-                            nostrud exercitation ullamco laboris nisi ut aliquip
-                            ex ea commodo consequat. Duis aute irure dolor in
-                            reprehenderit in voluptate velit esse cillum dolore
-                            eu fugiat nulla pariatur. Excepteur sint occaecat
-                            cupidatat non proident, sunt in culpa qui officia
-                            deserunt mollit anim id est laborum.
-                          </textarea>
+                          <Field component="textarea" name="description" className="form-control" rows="5" />
                         </div>
                       </div>
                       <div className="row no-gutters mt-1">
@@ -31,15 +40,11 @@ const NutritionMealDetails = (props) => {
                                 </div>
                                 <div className="col-xs-12 col-lg-7">
                                   <div className="serving-boxs width-100-per m-0">
-                                    <button className="btn btn-minus">
+                                    <button type="button" className="btn btn-minus" onClick={() => handleChnageServe('sub')}>
                                       <FontAwesomeIcon icon="minus" />
                                     </button>
-                                    <input
-                                      type="number"
-                                      className="form-control"
-                                      defaultValue="86"
-                                    />
-                                    <button className="btn btn-plus">
+                                    <Field component={renderInputField} type="number" name="serves" className="form-control" />
+                                    <button type="button" className="btn btn-plus" onClick={() => handleChnageServe('add')} >
                                       <FontAwesomeIcon icon="plus" />
                                     </button>
                                   </div>
@@ -62,14 +67,15 @@ const NutritionMealDetails = (props) => {
                                 </div>
                                 <div className="col-xs-12 col-lg-7">
                                   <div className="serving-select">
-                                    <select
+                                    {/* <select
                                       className="form-control"
                                       defaultValue={'easy'}
                                     >
                                       <option value="easy">Easy</option>
                                       <option value="medium">Medium</option>
                                       <option value="hard">Hard</option>
-                                    </select>
+                                    </select> */}
+                                      <Field component={renderSelectField} name="serving_difficulty" className="form-control" list={difficultyList} />
                                   </div>
                                 </div>
                               </div>
@@ -92,28 +98,18 @@ const NutritionMealDetails = (props) => {
                                 <div className="row no-gutters width-100-per d-flex flex-wrap align-items-center">
                                   <div className="col-xs-12 col-lg-6">
                                     <div className="serving-boxs width-100-per m-0">
-                                      <button className="btn btn-minus">
+                                      <button type="button" className="btn btn-minus" onClick={() => handleChnagePrepTime('sub')}>
                                         <FontAwesomeIcon icon="minus" />
                                       </button>
-                                      <input
-                                        type="number"
-                                        className="form-control"
-                                        defaultValue="86"
-                                      />
-                                      <button className="btn btn-plus">
+                                      <Field component={renderInputField} type="number" name="prepTime" className="form-control" />
+                                      <button type="button" className="btn btn-plus" onClick={() => handleChnagePrepTime('add')}>
                                         <FontAwesomeIcon icon="plus" />
                                       </button>
                                     </div>
                                   </div>
                                   <div className="col-xs-12 col-lg-6">
                                     <div className="serving-select">
-                                      <select
-                                        className="form-control"
-                                        defaultValue={'second'}
-                                      >
-                                        <option value="second">Seconds</option>
-                                        <option value="minute">Minutes</option>
-                                      </select>
+                                    <Field component={renderSelectField} name="preptime_unit" className="form-control" list={timeList} />
                                     </div>
                                   </div>
                                 </div>
@@ -129,28 +125,18 @@ const NutritionMealDetails = (props) => {
                                 <div className="row no-gutters width-100-per d-flex flex-wrap align-items-center">
                                   <div className="col-xs-12 col-lg-6">
                                     <div className="serving-boxs width-100-per m-0">
-                                      <button className="btn btn-minus">
+                                      <button type="button" className="btn btn-minus" onClick={() => handleChnageCookTime('sub')}>
                                         <FontAwesomeIcon icon="minus" />
                                       </button>
-                                      <input
-                                        type="number"
-                                        className="form-control"
-                                        defaultValue="86"
-                                      />
-                                      <button className="btn btn-plus">
+                                      <Field component={renderInputField} type="number" name="cookTime" className="form-control" />
+                                      <button type="button" className="btn btn-plus" onClick={() => handleChnageCookTime('add')}>
                                         <FontAwesomeIcon icon="plus" />
                                       </button>
                                     </div>
                                   </div>
                                   <div className="col-xs-12 col-lg-6">
                                     <div className="serving-select">
-                                      <select
-                                        className="form-control"
-                                        defaultValue={'second'}
-                                      >
-                                        <option value="second">Seconds</option>
-                                        <option value="minute">Minutes</option>
-                                      </select>
+                                    <Field component={renderSelectField} name="cooktime_unit" className="form-control" list={timeList} />
                                     </div>
                                   </div>
                                 </div>
@@ -174,21 +160,7 @@ const NutritionMealDetails = (props) => {
                                     </div>
                                     <div className="custom-checkbox ml-auto">
                                       <div className="custom_check mb-0">
-                                        <input
-                                          type="checkbox"
-                                          id={'display_all_exercises'}
-                                          name={'display_all_exercises'}
-                                          checked={true}
-                                          // onChange={() =>
-                                          //   this.handleChangeCheckbox(
-                                          //     'display_all_exercises',
-                                          //   )
-                                          // }
-                                        />
-                                        <label
-                                          className="mb-0"
-                                          htmlFor="display_all_exercises"
-                                        ></label>
+                                      <Field component={renderCheckBoxField} name="vegetarian" id="vegetarian" />
                                       </div>
                                     </div>
                                   </div>
@@ -202,21 +174,7 @@ const NutritionMealDetails = (props) => {
                                     </div>
                                     <div className="custom-checkbox ml-auto">
                                       <div className="custom_check mb-0">
-                                        <input
-                                          type="checkbox"
-                                          id={'display_all_exercises'}
-                                          name={'display_all_exercises'}
-                                          checked={true}
-                                          // onChange={() =>
-                                          //   this.handleChangeCheckbox(
-                                          //     'display_all_exercises',
-                                          //   )
-                                          // }
-                                        />
-                                        <label
-                                          className="mb-0"
-                                          htmlFor="display_all_exercises"
-                                        ></label>
+                                      <Field component={renderCheckBoxField} name="kosher" id="kosher" />
                                       </div>
                                     </div>
                                   </div>
@@ -230,21 +188,7 @@ const NutritionMealDetails = (props) => {
                                     </div>
                                     <div className="custom-checkbox ml-auto">
                                       <div className="custom_check mb-0">
-                                        <input
-                                          type="checkbox"
-                                          id={'display_all_exercises'}
-                                          name={'display_all_exercises'}
-                                          checked={false}
-                                          // onChange={() =>
-                                          //   this.handleChangeCheckbox(
-                                          //     'display_all_exercises',
-                                          //   )
-                                          // }
-                                        />
-                                        <label
-                                          className="mb-0"
-                                          htmlFor="display_all_exercises"
-                                        ></label>
+                                      <Field component={renderCheckBoxField} name="vegan" id="vegan" />
                                       </div>
                                     </div>
                                   </div>
@@ -258,21 +202,7 @@ const NutritionMealDetails = (props) => {
                                     </div>
                                     <div className="custom-checkbox ml-auto">
                                       <div className="custom_check mb-0">
-                                        <input
-                                          type="checkbox"
-                                          id={'display_all_exercises'}
-                                          name={'display_all_exercises'}
-                                          checked={false}
-                                          // onChange={() =>
-                                          //   this.handleChangeCheckbox(
-                                          //     'display_all_exercises',
-                                          //   )
-                                          // }
-                                        />
-                                        <label
-                                          className="mb-0"
-                                          htmlFor="display_all_exercises"
-                                        ></label>
+                                      <Field component={renderCheckBoxField} name="coelaic" id="coelaic" />
                                       </div>
                                     </div>
                                   </div>
@@ -286,21 +216,7 @@ const NutritionMealDetails = (props) => {
                                     </div>
                                     <div className="custom-checkbox ml-auto">
                                       <div className="custom_check mb-0">
-                                        <input
-                                          type="checkbox"
-                                          id={'display_all_exercises'}
-                                          name={'display_all_exercises'}
-                                          checked={true}
-                                          // onChange={() =>
-                                          //   this.handleChangeCheckbox(
-                                          //     'display_all_exercises',
-                                          //   )
-                                          // }
-                                        />
-                                        <label
-                                          className="mb-0"
-                                          htmlFor="display_all_exercises"
-                                        ></label>
+                                      <Field component={renderCheckBoxField} name="paleo" id="paleo" />
                                       </div>
                                     </div>
                                   </div>
@@ -312,21 +228,7 @@ const NutritionMealDetails = (props) => {
                                     <div className="categories-title">Keto</div>
                                     <div className="custom-checkbox ml-auto">
                                       <div className="custom_check mb-0">
-                                        <input
-                                          type="checkbox"
-                                          id={'display_all_exercises'}
-                                          name={'display_all_exercises'}
-                                          checked={false}
-                                          // onChange={() =>
-                                          //   this.handleChangeCheckbox(
-                                          //     'display_all_exercises',
-                                          //   )
-                                          // }
-                                        />
-                                        <label
-                                          className="mb-0"
-                                          htmlFor="display_all_exercises"
-                                        ></label>
+                                          <Field component={renderCheckBoxField} name="keto" id="keto" />
                                       </div>
                                     </div>
                                   </div>
@@ -339,6 +241,86 @@ const NutritionMealDetails = (props) => {
                     </div>
         </React.Fragment>
     )
+
 }
 
-export default NutritionMealDetails
+NutritionMealDetails = reduxForm({
+  form: 'nutrition_meal_add_form',
+  destroyOnUnmount:false,
+  initialValues : {
+  serves : 1,
+  description:"",
+  "serving_difficulty":"easy",
+  "prepTime":0,
+  "preptime_unit": "minute",
+  cookTime:0,
+  "cooktime_unit": "minute",
+  vegetarian:false,
+  kosher:false,
+  vegan:false,
+  coelaic:false,
+  paleo:false,
+  keto:false,
+}
+})(NutritionMealDetails)
+
+const selector = formValueSelector('nutrition_meal_add_form');
+
+const mapStateToProps = (state) => {
+  const serves = selector(state,'serves')
+  const prepTime = selector(state,'prepTime')
+  const cookTime = selector(state,'cookTime')
+  return {
+    serves : serves,
+    prepTime : prepTime,
+    cookTime : cookTime,
+  }
+}
+
+export default connect(mapStateToProps)(NutritionMealDetails)
+
+const difficultyList = [
+  {name: "Easy",value: "easy"},
+  {name: "Medium",value: "medium"},
+  {name: "Hard",value: "hard"},
+]
+const timeList = [
+  {name: "Minutes",value: "minute"},
+  {name: "Seconds",value: "second"},
+]
+
+const renderInputField = ({input,
+  meta,
+  className,
+  name,
+  type,
+
+}) => {
+   return (
+     <input {...input} type={type} className="form-control" name={name} />
+   )
+}
+
+const renderSelectField = ({input,
+  meta,
+  className,
+  name,
+  list=[]}) => {
+
+   return (
+     <select {...input} className="form-control" name={name} >
+       {list.map((data,i) => <option key={i} value={data.value}>{data.name}</option>)}
+     </select>
+   )
+}
+
+const renderCheckBoxField = ({input,
+  meta,
+  className,
+  name,
+  type,
+  id}) =>
+  <React.Fragment>
+      <input {...input} type="checkbox" id={id} name={name} defaultChecked={false} />
+      <label className="mb-0" htmlFor={id} name={name} ></label>
+  </React.Fragment>

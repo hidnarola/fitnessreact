@@ -20,7 +20,7 @@ class CalendarDayOverViewNutritionList extends Component {
   }
   componentDidMount() {
     const { index } = this.props;
-    this.setState({ servingSize: 5 });
+    this.setState({ servingSize: 0 });
   }
 
   render() {
@@ -34,14 +34,24 @@ class CalendarDayOverViewNutritionList extends Component {
       total_sugar,
       total_saturates,
       userId,
+      ingredientsIncluded,
     } = meal;
     const { open, servingSize = 0 } = this.state;
-
+    console.log('===========meal===========');
+    console.log(_.some(recentMeals, { _id: meal._id }));
+    console.log('==========================');
     return (
       <React.Fragment>
         <div className="nutrition-box">
           <div className="nutrition-header align-items-center">
-            <div className="display-star">
+            <div
+              className={cns('display-star', {
+                active: _.some(recentMeals, { _id: meal._id }),
+              })}
+              onClick={e =>
+                addToFavourite(meal._id, _.some(recentMeals, { _id: meal._id }))
+              }
+            >
               <Star />
             </div>
             <div className="title">{meal.title}</div>
@@ -140,14 +150,15 @@ class CalendarDayOverViewNutritionList extends Component {
                   <div className="ingredient-boxs mt-2 mr-2">
                     <div className="title">Ingredients</div>
                     <ul>
-                      <li className="d-flex width-100-per">
-                        <span>Plain Flour</span>
-                        <span className="ml-auto">350g</span>
-                      </li>
-                      <li className="d-flex width-100-per">
-                        <span>Eggs</span>
-                        <span className="ml-auto">2 whole</span>
-                      </li>
+                      {ingredientsIncluded.map((item, ing_index) => (
+                        <li key={ing_index} className="d-flex width-100-per">
+                          <span>Plain Flour</span>
+                          <span className="ml-auto">
+                            {item.serving_input}
+                            {item.ingredient_unit}
+                          </span>
+                        </li>
+                      ))}
                     </ul>
                   </div>
                 </div>
@@ -162,19 +173,19 @@ class CalendarDayOverViewNutritionList extends Component {
                     <ul>
                       <li className="d-flex width-100-per">
                         <span>Calories</span>
-                        <span className="ml-auto">800 kcal</span>
+                        <span className="ml-auto">{total_enerc_kal}kcal</span>
                       </li>
                       <li className="d-flex width-100-per">
                         <span>Fat</span>
-                        <span className="ml-auto">350g</span>
+                        <span className="ml-auto">{total_fat}g</span>
                       </li>
                       <li className="d-flex width-100-per">
                         <span>Sugar</span>
-                        <span className="ml-auto">350g</span>
+                        <span className="ml-auto">{total_sugar}g</span>
                       </li>
                       <li className="d-flex width-100-per">
                         <span>Carbohydrates</span>
-                        <span className="ml-auto">350g</span>
+                        <span className="ml-auto">{total_cabs}g</span>
                       </li>
                     </ul>
                   </div>

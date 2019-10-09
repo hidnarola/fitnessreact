@@ -17,6 +17,7 @@ const CalendarDayNutritionView = props => {
     addToFavourite,
     handleRemoveMeals,
     authuserId,
+    logDate,
   } = props;
   return (
     <React.Fragment>
@@ -84,6 +85,7 @@ const CalendarDayNutritionView = props => {
               addTodayMeals={props.addTodayMeals}
               handleChangeQuickTab={props.handleChangeQuickTab}
               addToFavourite={props.addToFavourite}
+              logDate={logDate}
             />
           </div>
         </div>

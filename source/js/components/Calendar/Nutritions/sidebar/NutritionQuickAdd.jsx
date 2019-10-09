@@ -9,6 +9,8 @@ import Select from 'react-select';
 import DropdownButton from 'react-bootstrap/lib/DropdownButton';
 import MenuItem from 'react-bootstrap/lib/MenuItem';
 import cns from 'classnames';
+import { mealSearchRequest } from '../../../../actions/meal';
+import { connect } from 'react-redux';
 
 const colourOptions = [
   { value: 'favourites', label: 'Favourites' },
@@ -22,10 +24,11 @@ class NutritionQuickAdd extends Component {
       recentOpen: false,
       favouritesMale: '',
       isOpenSearch: false,
-      selectedMeal: 'Favourites',
+      selectedMeal: 'All',
+      searchMealList: [],
     };
+    this.searchDebounce = _.debounce(this.searchMeals, 1000);
   }
-
   render() {
     const {
       quickTab,
@@ -33,16 +36,27 @@ class NutritionQuickAdd extends Component {
       addTodayMeals,
       handleChangeQuickTab,
       addToFavourite,
+      searchMeals,
+      logDate,
     } = this.props;
-    const { favOpen, recentOpen, isOpenSearch, selectedMeal } = this.state;
-
+    const {
+      favOpen,
+      recentOpen,
+      isOpenSearch,
+      selectedMeal,
+      searchMealList,
+    } = this.state;
+    const encode = encodeURIComponent(logDate);
+    console.log('===========logDate===========');
+    console.log(encode);
+    console.log('==========================');
     return (
       <React.Fragment>
         <div className="blue_right_sidebar h-100">
           <div className="d-flex width-100-per sidebar-header">
             <h2 className="h2_head_one pt-3 pb-3">Add Food</h2>
             <Link
-              to={routeCodes.NUTRITION_ADD}
+              to={`${routeCodes.NUTRITION_ADD}?date=${encode}`}
               className="btn btn-plus-right bg-white ml-auto"
             >
               <FontAwesomeIcon icon="plus" />
@@ -164,6 +178,12 @@ class NutritionQuickAdd extends Component {
                           >
                             <MenuItem
                               eventKey="1"
+                              onClick={() => this.handleChangeMealType('All')}
+                            >
+                              All
+                            </MenuItem>
+                            <MenuItem
+                              eventKey="2"
                               onClick={() =>
                                 this.handleChangeMealType('Favourites')
                               }
@@ -171,7 +191,7 @@ class NutritionQuickAdd extends Component {
                               Favourites
                             </MenuItem>
                             <MenuItem
-                              eventKey="2"
+                              eventKey="3"
                               onClick={() =>
                                 this.handleChangeMealType('Recent')
                               }
@@ -198,6 +218,9 @@ class NutritionQuickAdd extends Component {
                               type="text"
                               className="form-control"
                               placeholder="Search Ingredients"
+                              onChange={e =>
+                                this.handleChangeSearch(e.target.value)
+                              }
                             />
                           </div>
                         </div>
@@ -233,6 +256,15 @@ class NutritionQuickAdd extends Component {
                         <h3>Apple</h3>
                       </li>
                     )}
+                    {selectedMeal === 'All' &&
+                      searchMealList.map((item, index) => (
+                        <li key={index} className="animated slideInDown faster">
+                          {/* <span className={'star_one'}>
+                            <Star />
+                          </span> */}
+                          <h3>{item.title}</h3>
+                        </li>
+                      ))}
                   </ul>
                 )}
               </Scrollbars>
@@ -242,12 +274,45 @@ class NutritionQuickAdd extends Component {
       </React.Fragment>
     );
   }
+  componentDidUpdate(prevProps, prevState) {
+    const { searchMeals, searchLoading } = this.props;
+    const { searchMealList } = this.state;
+    if (!searchLoading && prevProps.searchMeals !== searchMeals) {
+      this.setState({ searchMealList: searchMeals });
+    }
+  }
+
   handleChangeSelect = val => {
     this.setState({ favouritesMale: val.value });
   };
   handleChangeMealType = action => {
     this.setState({ selectedMeal: action });
   };
+  handleChangeSearch = value => {
+    this.searchDebounce.cancel;
+    if (value && value.trim() && value.trim() !== '') {
+      this.searchDebounce(value.trim());
+    }
+  };
+  searchMeals = value => {
+    const { dispatch } = this.props;
+    var requestData = {
+      name: value,
+      start: 0,
+      offset: 50,
+    };
+    this.setState({ searchIsLoading: true });
+    // dispatch(getUserNutritionPreferencesRequest(requestData));
+    dispatch(mealSearchRequest(requestData));
+  };
 }
 
-export default NutritionQuickAdd;
+const mapStateToProps = state => {
+  const { meal } = state;
+  return {
+    searchMeals: meal.get('searchMeals'),
+    searchLoading: meal.get('searchLoading'),
+  };
+};
+
+export default connect(mapStateToProps)(NutritionQuickAdd);

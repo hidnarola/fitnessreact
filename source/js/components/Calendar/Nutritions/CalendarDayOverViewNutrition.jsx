@@ -53,9 +53,9 @@ class CalendarDayOverViewNutrition extends Component {
       quickTab,
       nutritionTab,
     } = this.state;
-    const { mealsList, authuserId, recentMeals } = this.props;
+    const { mealsList, authuserId, recentMeals, logDate } = this.props;
     console.log('=========================');
-    console.log('MealsList', meal_list);
+    console.log('logDate', logDate);
     console.log('=========================');
     return (
       <React.Fragment>
@@ -82,6 +82,7 @@ class CalendarDayOverViewNutrition extends Component {
                   quickTab={quickTab}
                   addTodayMeals={this.addTodayMeals}
                   handleChangeQuickTab={this.handleChangeQuickTab}
+                  logDate={logDate}
                 />
               )}
             </div>
