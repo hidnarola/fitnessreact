@@ -16600,7 +16600,7 @@ white-space: nowrap;overflow: hidden;}
 .react-tagsinput-tag {background: #053095; border: 1px solid #053095;color: #fff;}
 
 .create-photos .photos-body .photo-detail-body .upload-images-list {height: 74vh};
-.create-photos .photos-body .photo-detail-body .display-image-box {position: relative;}
+.create-photos .display-image-box {position: relative !important;}
 .create-photos .photos-body .photo-detail-body .display-image-box .btn-photo-del {position: absolute; top: 5px; right: 5px; background: #FE676D; color: #fff; border-radius: 50%;}
 .photos-dropzone-wrapper {position: relative; border: dashed 2px #edf5fd; height: 242px; display: flex; align-items: center; }
 .photos-dropzone-wrapper .dz-singl-default-wrapper {display: block !important;

@@ -153,7 +153,7 @@ class PhotosDetails extends Component {
             </div>
             <div className="col-xs-12 col-md-5 upload-images-list">
               <Scrollbars autoHide>
-                <div className="display-image-box mr-0 ml-2">
+                <div className="display-image-box mr-0 ml-2 pos-relative">
                   <img
                     src={exerciseImage}
                     alt="image"
@@ -164,7 +164,7 @@ class PhotosDetails extends Component {
                   </button>
                 </div>
                 {this.state.images.map((item, i) => (
-                  <div className="display-image-box mr-0 ml-2 mt-2">
+                  <div className="display-image-box mr-0 ml-2 mt-2 pos-relative">
                     <img
                       key={i}
                       src={item.preview}
