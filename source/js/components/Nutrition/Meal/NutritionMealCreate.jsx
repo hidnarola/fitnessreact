@@ -96,10 +96,11 @@ class NutritionMealCreate extends Component {
     this.setState({ mealVisibility: action });
   };
   componentDidMount() {
-    let search = new URLSearchParams(
-      decodeURIComponent(this.props.location.search),
-    );
+    let search = new URLSearchParams(this.props.location.search);
     let date = search.get('date');
+    console.log('===========Did Mount===========');
+    console.log(date);
+    console.log('==========================');
     this.setState({ logDate: new Date(date) });
   }
 

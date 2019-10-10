@@ -46,7 +46,7 @@ class NutritionQuickAdd extends Component {
       selectedMeal,
       searchMealList,
     } = this.state;
-    const encode = encodeURIComponent(logDate);
+    const encode = logDate;
     console.log('===========logDate===========');
     console.log(encode);
     console.log('==========================');
