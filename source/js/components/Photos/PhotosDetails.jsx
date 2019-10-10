@@ -6,6 +6,8 @@ import { Scrollbars } from 'react-custom-scrollbars';
 import Dropzone from 'react-dropzone';
 import uploadImg from '../../../assets/img/cloud-upload.png';
 
+const musclesList = ['Neck', 'Shoulders', 'Biceps', 'Triceps', 'Forearm'];
+
 class PhotosDetails extends Component {
   constructor(props) {
     super(props);
@@ -120,106 +122,28 @@ class PhotosDetails extends Component {
                     <div className="col-xs-12 col-lg-12 d-flex flex-wrap justify-content-start muscles-lists">
                       <Scrollbars autoHide>
                         <ul className="muscles-list">
-                          <li>
-                            <div className="d-flex flex-wrap align-items-center muscles-items">
-                              <div className="muscles-title">Neck</div>
-                              <div className="custom-checkbox ml-auto">
-                                <div className="custom_check mb-0 d-flex">
-                                  <input
-                                    type="checkbox"
-                                    id={'neck'}
-                                    name={'neck'}
-                                    defaultChecked={false}
-                                  />
-                                  <label
-                                    className="mb-0"
-                                    htmlFor={'neck'}
-                                    name={'neck'}
-                                  ></label>
+                          {musclesList.map((item, i) => (
+                            <li>
+                              <div className="d-flex flex-wrap align-items-center muscles-items">
+                                <div className="muscles-title">{item}</div>
+                                <div className="custom-checkbox ml-auto">
+                                  <div className="custom_check mb-0 d-flex">
+                                    <input
+                                      type="checkbox"
+                                      id={item}
+                                      name={item}
+                                      defaultChecked={false}
+                                    />
+                                    <label
+                                      className="mb-0"
+                                      htmlFor={item}
+                                      name={item}
+                                    ></label>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          </li>
-                          <li>
-                            <div className="d-flex flex-wrap align-items-center muscles-items">
-                              <div className="muscles-title">Shoulders</div>
-                              <div className="custom-checkbox ml-auto">
-                                <div className="custom_check mb-0 d-flex">
-                                  <input
-                                    type="checkbox"
-                                    id={'neck'}
-                                    name={'neck'}
-                                    defaultChecked={false}
-                                  />
-                                  <label
-                                    className="mb-0"
-                                    htmlFor={'neck'}
-                                    name={'neck'}
-                                  ></label>
-                                </div>
-                              </div>
-                            </div>
-                          </li>
-                          <li>
-                            <div className="d-flex flex-wrap align-items-center muscles-items">
-                              <div className="muscles-title">Biceps</div>
-                              <div className="custom-checkbox ml-auto">
-                                <div className="custom_check mb-0 d-flex">
-                                  <input
-                                    type="checkbox"
-                                    id={'neck'}
-                                    name={'neck'}
-                                    defaultChecked={false}
-                                  />
-                                  <label
-                                    className="mb-0"
-                                    htmlFor={'neck'}
-                                    name={'neck'}
-                                  ></label>
-                                </div>
-                              </div>
-                            </div>
-                          </li>
-                          <li>
-                            <div className="d-flex flex-wrap align-items-center muscles-items">
-                              <div className="muscles-title">Triceps</div>
-                              <div className="custom-checkbox ml-auto">
-                                <div className="custom_check mb-0 d-flex">
-                                  <input
-                                    type="checkbox"
-                                    id={'neck'}
-                                    name={'neck'}
-                                    defaultChecked={false}
-                                  />
-                                  <label
-                                    className="mb-0"
-                                    htmlFor={'neck'}
-                                    name={'neck'}
-                                  ></label>
-                                </div>
-                              </div>
-                            </div>
-                          </li>
-                          <li>
-                            <div className="d-flex flex-wrap align-items-center muscles-items">
-                              <div className="muscles-title">Forearm</div>
-                              <div className="custom-checkbox ml-auto">
-                                <div className="custom_check mb-0 d-flex">
-                                  <input
-                                    type="checkbox"
-                                    id={'neck'}
-                                    name={'neck'}
-                                    defaultChecked={false}
-                                  />
-                                  <label
-                                    className="mb-0"
-                                    htmlFor={'neck'}
-                                    name={'neck'}
-                                  ></label>
-                                </div>
-                              </div>
-                            </div>
-                          </li>
+                            </li>
+                          ))}
                         </ul>
                       </Scrollbars>
                     </div>
