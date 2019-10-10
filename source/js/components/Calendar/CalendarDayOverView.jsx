@@ -329,6 +329,18 @@ class CalendarDayOverView extends Component {
                   <DatePicker
                     selected={moment(new Date())}
                     customInput={<ExampleCustomInput />}
+                    popperPlacement="bottom"
+                    popperModifiers={{
+                      flip: {
+                        behavior: ['bottom-end'], // don't allow it to flip to be above
+                      },
+                      preventOverflow: {
+                        enabled: true, // tell it not to try to stay within the view (this prevents the popper from covering the element you clicked)
+                      },
+                      hide: {
+                        enabled: false, // turn off since needs preventOverflow to be enabled
+                      },
+                    }}
                   />
                 </div>
               </div>

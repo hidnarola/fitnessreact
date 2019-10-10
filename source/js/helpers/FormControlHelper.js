@@ -214,7 +214,8 @@ export class FileField_Dropzone_Single extends Component {
             accept,
             existingImages,
             requiredAstrisk,
-            alt
+            alt,
+            isDisplayPreview = true
         } = this.props;
         let filesArr = _.values(input.value);
         let images = [];
@@ -289,7 +290,7 @@ export class FileField_Dropzone_Single extends Component {
                                 </div>
 
                         </Dropzone>
-                        {input.value && images}
+                        {isDisplayPreview && input.value && images}
                         {meta.touched &&
                             ((meta.error && <span className={errorClass ? errorClass : 'help-block'}>{meta.error}</span>) || (meta.warning && <span className={warningClass ? warningClass : 'help-block'}>{meta.warning}</span>))
                         }
