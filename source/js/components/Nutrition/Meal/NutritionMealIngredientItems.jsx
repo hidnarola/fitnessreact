@@ -23,9 +23,7 @@ const NutritionMealIngredientItems = props => {
     totalStarch,
     totalWater,
   } = ingredient;
-  console.log('===========props.ingredientUnit(meal_proximates)===========');
-  console.log(ingredient, meal_proximates);
-  console.log('==========================');
+
   return (
     <React.Fragment>
       <div className="nutrition-box">

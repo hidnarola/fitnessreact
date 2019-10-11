@@ -12,6 +12,7 @@ import cns from 'classnames';
 class NutritionMealCreateQuickAdd extends Component {
   constructor(props) {
     super(props);
+    this.state = {};
   }
 
   render() {

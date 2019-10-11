@@ -4,9 +4,12 @@ import { FileField_Dropzone_Single } from '../../../helpers/FormControlHelper';
 import { connect } from 'react-redux';
 
 class NutritionMealPhotoes extends Component {
-  state = {
-    images: [],
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      images: [],
+    };
+  }
   render() {
     const { images } = this.state;
     return (
@@ -34,4 +37,8 @@ NutritionMealPhotoes = reduxForm({
   destroyOnUnmount: false,
 })(NutritionMealPhotoes);
 
-export default connect()(NutritionMealPhotoes);
+const mapStateToProps = state => {
+  return state;
+};
+
+export default connect(mapStateToProps)(NutritionMealPhotoes);

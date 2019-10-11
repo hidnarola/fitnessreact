@@ -17,21 +17,20 @@ import moment from 'moment';
 import { Redirect, withRouter } from 'react-router-dom';
 
 class NutritionMealCreate extends Component {
-  state = {
-    quickTab: '#favrioutmeals',
-    mealVisibility: 'private',
-    mealTitle: '',
-    mealType: 'breakfast',
-    instructions: [],
-    notes: [],
-    logDate: new Date(),
-  };
+  constructor(props) {
+    this.state = {
+      quickTab: '#favrioutmeals',
+      mealVisibility: 'private',
+      mealTitle: '',
+      mealType: 'breakfast',
+      instructions: [],
+      notes: [],
+      logDate: new Date(),
+    };
+  }
   render() {
     const { quickTab, mealVisibility, instructions, mealTitle } = this.state;
     const { recentMeals, location } = this.props;
-    console.log('===========this.props===========');
-    console.log(this.props);
-    console.log('==========================');
     return (
       <React.Fragment>
         <div className="fitness-nutrition">

@@ -10,13 +10,15 @@ const data = [
 const COLORS = ['#201f60', '#3e67ff', '#93e7e4'];
 
 class NutritionMealCreateSidebar extends Component {
-  state = {
-    quickTab: '#macro',
-    isallMeal: true,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      quickTab: '#macro',
+      isallMeal: true,
+    };
+  }
   render() {
     const { quickTab, isallMeal } = this.state;
-
     return (
       <React.Fragment>
         <div className={'blue_right_sidebar white_right_sidebar h-100'}>

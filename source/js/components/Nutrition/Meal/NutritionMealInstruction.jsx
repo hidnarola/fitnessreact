@@ -17,26 +17,6 @@ class NutritionMealInstruction extends Component {
     this.setState({ instructions });
     this.props.handleChangeInstructions(instructions);
   };
-  componentDidMount() {
-    // let { instructions } = this.props;
-    // instructions &&
-    //   instructions.forEach((item, index) => {
-    //     const html = item.instruction;
-    //     const contentBlock = htmlToDraft(html);
-    //     if (contentBlock) {
-    //       const contentState = ContentState.createFromBlockArray(
-    //         contentBlock.contentBlocks,
-    //       );
-    //       const editorState = EditorState.createWithContent(contentState);
-    //       instructions[index].instruction = editorState;
-    //     }
-    //   });
-    // this.setState({ instructions });
-    // instructions[0] = instructions[0].instruction.createFromBlockArray(
-    //   '<p>hello</p>',
-    // );
-    // this.setState({ instructions });
-  }
 
   handleAddNewInst = () => {
     let { instructions } = this.state;
@@ -97,5 +77,8 @@ class NutritionMealInstruction extends Component {
     );
   }
 }
+const mapStateToProps = state => {
+  return state;
+};
 
-export default connect()(NutritionMealInstruction);
+export default connect(mapStateToProps)(NutritionMealInstruction);

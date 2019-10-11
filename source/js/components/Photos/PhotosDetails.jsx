@@ -50,7 +50,7 @@ class PhotosDetails extends Component {
                     <div className="serving-select pl-3 width-100-per">
                       <select
                         className="form-control"
-                        defaultValue={visibility}
+                        value={visibility}
                         onChange={e =>
                           this.setState({ visibility: e.target.value })
                         }
@@ -69,7 +69,7 @@ class PhotosDetails extends Component {
                   </div>
                   <div className="col-xs-12 col-lg-6 d-flex flex-wrep align-items-center">
                     <div className="serving-select pl-3 width-100-per">
-                      <select className="form-control">
+                      <select className="form-control" defaultValue="Public">
                         <option>Public</option>
                         <option>Private</option>
                         <option>Friends</option>

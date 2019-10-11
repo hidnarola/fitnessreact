@@ -9,7 +9,7 @@ class NutritionMealNote extends Component {
     super(props);
     this.state = { notes: [{ note: EditorState.createEmpty() }] };
   }
-  onEditorStateChange: Function = (editor, index) => {
+  onEditorStateChange = (editor, index) => {
     let { notes } = this.state;
     notes[index].note = editor;
     this.setState({ notes });
