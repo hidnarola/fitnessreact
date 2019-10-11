@@ -41,7 +41,7 @@ class NutritionMealCreateQuickAdd extends Component {
                       <DropdownButton
                         title={selectedMealMode}
                         key={1}
-                        id={`dropdown-basic-${1}`}
+                        id={'dropdown-basic-1'}
                         style={{ background: '#267D79' }}
                       >
                         <MenuItem

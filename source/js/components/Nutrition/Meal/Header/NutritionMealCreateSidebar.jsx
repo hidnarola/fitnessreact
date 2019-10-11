@@ -87,7 +87,7 @@ class NutritionMealCreateSidebar extends Component {
                                 className="progress-bar bg-danger"
                                 role="progressbar"
                                 style={{
-                                  width: `60%`,
+                                  width: '60%',
                                   background: COLORS[0],
                                 }}
                                 aria-valuenow={60}
@@ -111,7 +111,7 @@ class NutritionMealCreateSidebar extends Component {
                                 className="progress-bar bg-danger"
                                 role="progressbar"
                                 style={{
-                                  width: `60%`,
+                                  width: '60%',
                                   background: COLORS[1],
                                 }}
                                 aria-valuenow={60}
@@ -135,7 +135,7 @@ class NutritionMealCreateSidebar extends Component {
                                 className="progress-bar bg-danger"
                                 role="progressbar"
                                 style={{
-                                  width: `60%`,
+                                  width: '60%',
                                   background: COLORS[2],
                                 }}
                                 aria-valuenow={60}
