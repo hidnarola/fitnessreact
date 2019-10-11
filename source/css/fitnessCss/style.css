@@ -16548,7 +16548,10 @@ white-space: nowrap;overflow: hidden;}
 
 .create-photos .photos-body .photo-detail-header {padding: 0 0 0 15px;}
 .create-photos .photos-body .photo-detail-header h3 {color: #201f60; font-size: 22px; font-weight: 800;}
-.create-photos .photos-body .photo-detail-header button {margin: 0 0 0 auto; height: 54px; width: 354px; background: #fe676d; color: #fff; font-size: 20px; font-weight: 600; text-align: left; border-radius: 0; }
+.create-photos .photos-body .photo-detail-header button.btn-del-group {margin: 0 0 0 auto; height: 54px; width: 354px; background: #fe676d; color: #fff; font-size: 20px; font-weight: 600; text-align: left; border-radius: 0; }
+
+.create-photos .photos-body .photo-detail-header button.btn-save {height: 54px; width: 150px; background: #3ED1A9; color: #fff; font-size: 20px; font-weight: 600; justify-content: center; border-radius: 0; }
+.create-photos .photos-body .photo-detail-header button.btn-cancel {height: 54px; width: 150px; background: #fff; color: #fe676d; font-size: 20px; font-weight: 600; justify-content: center; border-radius: 0; }
 
 .create-photos .photos-body .photo-detail-body .display-serve .serving-select {width: 36%;}
 .create-photos .photos-body .photo-detail-body .display-serve .serving-select select::-ms-expand {

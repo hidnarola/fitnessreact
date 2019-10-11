@@ -8,7 +8,7 @@ import uploadImg from '../../../assets/img/cloud-upload.png';
 
 const musclesList = ['Neck', 'Shoulders', 'Biceps', 'Triceps', 'Forearm'];
 
-class PhotosDetails extends Component {
+class CreatePhotos extends Component {
   constructor(props) {
     super(props);
     this.isFileSelected = false;
@@ -16,31 +16,91 @@ class PhotosDetails extends Component {
     this.state = {
       tags: ['Fitter', 'Gunshow', 'Running'],
       images: [],
-      visibility: 'LifeStyle',
+      visibility: 'Progress',
     };
   }
   handleChange = tags => {
     this.setState({ tags });
   };
-
   render() {
-    const { accept } = this.props;
-    const { visibility, images } = this.state;
+    const { accept, handleChangeCreatePhotos } = this.props;
+    const { visibility } = this.state;
     return (
       <React.Fragment>
         <div className="photo-detail-header d-flex flex-wrap">
-          <h3>Photo Details</h3>
+          <h3>Upload Photos</h3>
           <button
-            className="btn d-flex flex-wrap align-items-center btn-del-group"
-            onClick={() => this.setState({ images: [] })}
+            className="btn d-flex flex-wrap align-items-center btn-cancel ml-auto"
+            onClick={() => handleChangeCreatePhotos()}
           >
-            <div>{images.length === 1 ? 'Delete Photo' : 'Delete Group'}</div>
-            <i className="fad fa-trash ml-auto" />
+            <div>Cancel</div>
+          </button>
+          <button className="btn d-flex flex-wrap align-items-center btn-save">
+            <div>Save</div>
           </button>
         </div>
         <div className="photo-detail-body p-2">
           <div className="row no-gutters">
-            <div className="col-xs-12 col-md-7">
+            <div className="col-xs-12 col-md-6 upload-images-list">
+              <Scrollbars autoHide>
+                <div className="display-image-box mr-2 ml-2 mb-2">
+                  <Dropzone
+                    accept={
+                      accept ? accept : 'image/jpeg, image/png, image/jpg'
+                    }
+                    onDrop={(filesToUpload, rejectedFiles) => {
+                      this.rejectedFiles =
+                        rejectedFiles && rejectedFiles.length > 0;
+                      if (filesToUpload && filesToUpload.length > 0) {
+                        this.isFileSelected = true;
+                      }
+                      this.setState({ images: filesToUpload });
+                    }}
+                    onFileDialogCancel={() => {
+                      if (!this.isFileSelected) {
+                      }
+                    }}
+                    multiple={true}
+                    className="photos-dropzone-wrapper width-100-per"
+                  >
+                    <div className="dz-singl-default-wrapper d-flex flex-wrap width-100-per">
+                      <img src={uploadImg} alt="upload" />
+
+                      <div className="display-text">
+                        <span className="title">Drag and drop images</span>
+                        <span className="sub-title">
+                          or <font>browse</font> to choose files
+                        </span>
+                      </div>
+                    </div>
+                  </Dropzone>
+                </div>
+                <div className="display-image-box mr-0 ml-2 mr-2 pos-relative">
+                  <img
+                    src={exerciseImage}
+                    alt="image"
+                    className="width-100-per"
+                  />
+                  <button className="btn btn-photo-del">
+                    <i className="fad fa-trash" />
+                  </button>
+                </div>
+                {this.state.images.map((item, i) => (
+                  <div className="display-image-box mr-0 ml-2 mt-2 pos-relative">
+                    <img
+                      key={i}
+                      src={item.preview}
+                      alt="image"
+                      className="width-100-per"
+                    />
+                    <button className="btn btn-photo-del">
+                      <i className="fad fa-trash" />
+                    </button>
+                  </div>
+                ))}
+              </Scrollbars>
+            </div>
+            <div className="col-xs-12 col-md-6">
               <div className="photo-detail-box">
                 <div className="row no-gutters width-100-per d-flex flex-wrap align-items-center display-serve">
                   <div className="col-xs-12 col-lg-6 d-flex flex-wrap justify-content-start">
@@ -124,7 +184,7 @@ class PhotosDetails extends Component {
                       <Scrollbars autoHide>
                         <ul className="muscles-list">
                           {musclesList.map((item, i) => (
-                            <li>
+                            <li key={i}>
                               <div className="d-flex flex-wrap align-items-center muscles-items">
                                 <div className="muscles-title">{item}</div>
                                 <div className="custom-checkbox ml-auto">
@@ -152,67 +212,6 @@ class PhotosDetails extends Component {
                 </div>
               )}
             </div>
-            <div className="col-xs-12 col-md-5 upload-images-list">
-              <Scrollbars autoHide>
-                <div className="display-image-box mr-0 ml-2 pos-relative">
-                  <img
-                    src={exerciseImage}
-                    alt="image"
-                    className="width-100-per"
-                  />
-                  {images.length > 1 && (
-                    <button className="btn btn-photo-del">
-                      <i className="fad fa-trash" />
-                    </button>
-                  )}
-                </div>
-                {this.state.images.map((item, i) => (
-                  <div className="display-image-box mr-0 ml-2 mt-2 pos-relative">
-                    <img
-                      key={i}
-                      src={item.preview}
-                      alt="image"
-                      className="width-100-per"
-                    />
-                    <button className="btn btn-photo-del">
-                      <i className="fad fa-trash" />
-                    </button>
-                  </div>
-                ))}
-                <div className="display-image-box mr-0 ml-2">
-                  <Dropzone
-                    accept={
-                      accept ? accept : 'image/jpeg, image/png, image/jpg'
-                    }
-                    onDrop={(filesToUpload, rejectedFiles) => {
-                      this.rejectedFiles =
-                        rejectedFiles && rejectedFiles.length > 0;
-                      if (filesToUpload && filesToUpload.length > 0) {
-                        this.isFileSelected = true;
-                      }
-                      this.setState({ images: filesToUpload });
-                    }}
-                    onFileDialogCancel={() => {
-                      if (!this.isFileSelected) {
-                      }
-                    }}
-                    multiple={true}
-                    className="photos-dropzone-wrapper width-100-per"
-                  >
-                    <div className="dz-singl-default-wrapper d-flex flex-wrap width-100-per">
-                      <img src={uploadImg} alt="upload" />
-
-                      <div className="display-text">
-                        <span className="title">Drag and drop images</span>
-                        <span className="sub-title">
-                          or <font>browse</font> to choose files
-                        </span>
-                      </div>
-                    </div>
-                  </Dropzone>
-                </div>
-              </Scrollbars>
-            </div>
           </div>
         </div>
       </React.Fragment>
@@ -220,4 +219,4 @@ class PhotosDetails extends Component {
   }
 }
 
-export default PhotosDetails;
+export default CreatePhotos;

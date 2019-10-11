@@ -6,12 +6,16 @@ import exerciseImage2 from '../../../assets/img/exercise/fitness/img-13.jpg';
 
 class TodaysPhotosList extends Component {
   render() {
+    const { handleChangeCreatePhotos } = this.props;
     return (
       <React.Fragment>
         <div className="photos-sidebar">
           <div className="photos-header">
             <h3>Today's Photos</h3>
-            <button className="btn ml-auto">
+            <button
+              className="btn ml-auto"
+              onClick={() => handleChangeCreatePhotos()}
+            >
               <FontAwesomeIcon icon="plus" />
             </button>
           </div>
