@@ -1,29 +1,13 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Field, reduxForm, formValueSelector,initialize  } from 'redux-form';
 import {connect} from 'react-redux'
 
-
-
-let NutritionMealDetails = (props) => {
-  const handleChnageServe = (action) => {
-    const {serves} = props
-    action === 'add' && props.change("serves", parseInt(serves) + 1)
-    action === 'sub' && serves > 0 && props.change("serves", parseInt(serves) - 1)
-  }
-  const handleChnagePrepTime = (action) => {
-    const {prepTime} = props
-    action === 'add' && props.change("prepTime", parseInt(prepTime) + 1)
-    action === 'sub' && prepTime > 0 && props.change("prepTime", parseInt(prepTime) - 1)
-  }
-  const handleChnageCookTime = (action) => {
-    const {cookTime} = props
-    action === 'add' && props.change("cookTime", parseInt(cookTime) + 1)
-    action === 'sub' && cookTime > 0 && props.change("cookTime", parseInt(cookTime) - 1)
-  }
+class NutritionMealDetails extends Component {
+  render() {
     return (
-        <React.Fragment>
-            <div className="details">
+      <React.Fragment>
+        <div className="details">
                       <div className="description-box">
                         <div className="title">Description</div>
                         <div className="detail-body">
@@ -40,11 +24,11 @@ let NutritionMealDetails = (props) => {
                                 </div>
                                 <div className="col-xs-12 col-lg-7">
                                   <div className="serving-boxs width-100-per m-0">
-                                    <button type="button" className="btn btn-minus" onClick={() => handleChnageServe('sub')}>
+                                    <button type="button" className="btn btn-minus" onClick={() => this.handleChnageServe('sub')}>
                                       <FontAwesomeIcon icon="minus" />
                                     </button>
                                     <Field component={renderInputField} type="number" name="serves" className="form-control" />
-                                    <button type="button" className="btn btn-plus" onClick={() => handleChnageServe('add')} >
+                                    <button type="button" className="btn btn-plus" onClick={() => this.handleChnageServe('add')} >
                                       <FontAwesomeIcon icon="plus" />
                                     </button>
                                   </div>
@@ -98,11 +82,11 @@ let NutritionMealDetails = (props) => {
                                 <div className="row no-gutters width-100-per d-flex flex-wrap align-items-center">
                                   <div className="col-xs-12 col-lg-6">
                                     <div className="serving-boxs width-100-per m-0">
-                                      <button type="button" className="btn btn-minus" onClick={() => handleChnagePrepTime('sub')}>
+                                      <button type="button" className="btn btn-minus" onClick={() => this.handleChnagePrepTime('sub')}>
                                         <FontAwesomeIcon icon="minus" />
                                       </button>
                                       <Field component={renderInputField} type="number" name="prepTime" className="form-control" />
-                                      <button type="button" className="btn btn-plus" onClick={() => handleChnagePrepTime('add')}>
+                                      <button type="button" className="btn btn-plus" onClick={() => this.handleChnagePrepTime('add')}>
                                         <FontAwesomeIcon icon="plus" />
                                       </button>
                                     </div>
@@ -125,11 +109,11 @@ let NutritionMealDetails = (props) => {
                                 <div className="row no-gutters width-100-per d-flex flex-wrap align-items-center">
                                   <div className="col-xs-12 col-lg-6">
                                     <div className="serving-boxs width-100-per m-0">
-                                      <button type="button" className="btn btn-minus" onClick={() => handleChnageCookTime('sub')}>
+                                      <button type="button" className="btn btn-minus" onClick={() => this.handleChnageCookTime('sub')}>
                                         <FontAwesomeIcon icon="minus" />
                                       </button>
                                       <Field component={renderInputField} type="number" name="cookTime" className="form-control" />
-                                      <button type="button" className="btn btn-plus" onClick={() => handleChnageCookTime('add')}>
+                                      <button type="button" className="btn btn-plus" onClick={() => this.handleChnageCookTime('add')}>
                                         <FontAwesomeIcon icon="plus" />
                                       </button>
                                     </div>
@@ -145,7 +129,7 @@ let NutritionMealDetails = (props) => {
                           </div>
                         </div>
                       </div>
-                      <form>
+
                         <div className="categories-box mt-1">
                           <div className="categories-header">
                             <h3>Categories</h3>
@@ -237,11 +221,25 @@ let NutritionMealDetails = (props) => {
                             </div>
                           </div>
                         </div>
-                      </form>
                     </div>
-        </React.Fragment>
+      </React.Fragment>
     )
-
+  }
+  handleChnageServe = (action) => {
+    const {serves} = this.props
+    action === 'add' && props.change("serves", parseInt(serves) + 1)
+    action === 'sub' && serves > 0 && props.change("serves", parseInt(serves) - 1)
+  }
+  handleChnagePrepTime = (action) => {
+    const {prepTime} = this.props
+    action === 'add' && props.change("prepTime", parseInt(prepTime) + 1)
+    action === 'sub' && prepTime > 0 && props.change("prepTime", parseInt(prepTime) - 1)
+  }
+  handleChnageCookTime = (action) => {
+    const {cookTime} = this.props
+    action === 'add' && props.change("cookTime", parseInt(cookTime) + 1)
+    action === 'sub' && cookTime > 0 && props.change("cookTime", parseInt(cookTime) - 1)
+  }
 }
 
 NutritionMealDetails = reduxForm({

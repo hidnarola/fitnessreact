@@ -23,9 +23,7 @@ class NutritionMealCreateLeftSidebar extends Component {
     let { storeMealIndex, showDeleteAlert } = this.state;
     let ingredientList = [];
     ingredientList = ingredientUnit(meal_proximates);
-    console.log('===========ingredientUnit(meal_proximates)===========');
-    console.log(ingredientUnit(meal_proximates));
-    console.log('==========================');
+
     return (
       <React.Fragment>
         <div className="ingredient-sidebar">

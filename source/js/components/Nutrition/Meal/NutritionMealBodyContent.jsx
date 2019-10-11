@@ -45,8 +45,8 @@ class NutritionMealBodyContent extends Component {
     return (
       <React.Fragment>
         <form
-          method="POST"
-          onSubmit={this.props.handleSubmit(this.handleSubmit)}
+          method="post"
+          onSubmit={() => this.props.handleSubmit(this.handleSubmit)}
           className="width-100-per"
         >
           <div className="whitebox-body meals-bg nutrition-create border-left border-right">

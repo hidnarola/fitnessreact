@@ -56,7 +56,7 @@ class NutritionQuickAdd extends Component {
           <div className="d-flex width-100-per sidebar-header">
             <h2 className="h2_head_one pt-3 pb-3">Add Food</h2>
             <Link
-              to={`${routeCodes.NUTRITION_ADD}?date=${encode}`}
+              to={routeCodes.NUTRITION_ADD}
               className="btn btn-plus-right bg-white ml-auto"
             >
               <FontAwesomeIcon icon="plus" />
@@ -171,7 +171,6 @@ class NutritionQuickAdd extends Component {
                         /> */}
                         <div className="display-select-menu">
                           <DropdownButton
-                            bsStyle={selectedMeal.toLowerCase()}
                             title={selectedMeal}
                             key={1}
                             id={`dropdown-basic-${1}`}

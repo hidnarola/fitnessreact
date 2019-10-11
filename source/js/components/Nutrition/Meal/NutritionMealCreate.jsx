@@ -95,14 +95,6 @@ class NutritionMealCreate extends Component {
   handleChangeMealVisibility = action => {
     this.setState({ mealVisibility: action });
   };
-  componentDidMount() {
-    let search = new URLSearchParams(this.props.location.search);
-    let date = search.get('date');
-    console.log('===========Did Mount===========');
-    console.log(date);
-    console.log('==========================');
-    this.setState({ logDate: new Date(date) });
-  }
 
   componentDidUpdate(prevProps, prevState) {
     const { dispatch, recentMealsLoading, recentMeals } = this.props;
@@ -118,23 +110,14 @@ class NutritionMealCreate extends Component {
       draftToHtml(convertToRaw(item.instruction.getCurrentContent())),
     );
     this.setState({ instructions: data });
-    console.log('===========this.state.instructions===========');
-    console.log(this.state.instructions);
-    console.log('==========================');
   };
   handleChangeNotes = action => {
     let data = action.map(item =>
       draftToHtml(convertToRaw(item.note.getCurrentContent())),
     );
     this.setState({ notes: data });
-    console.log('===========this.state.instructions===========');
-    console.log(this.state.notes);
-    console.log('==========================');
   };
   handleSubmit = async data => {
-    console.log('===========Form Submit===========');
-    console.log(data, this.state);
-    console.log('==========================');
     const {
       mealVisibility,
       mealTitle,
@@ -204,8 +187,6 @@ class NutritionMealCreate extends Component {
       await dispatch(showPageLoader());
       await dispatch(
         mealAddRequest(formData, res => {
-          console.log('CALL', moment(new Date(logDate)).toISOString());
-
           if (res.meal._id) {
             const data = {
               meals: [{ meal_id: res.meal._id }],
@@ -214,7 +195,7 @@ class NutritionMealCreate extends Component {
             dispatch(
               userMealAddRequest(data, res => {
                 dispatch(hidePageLoader());
-                this.props.history.push(routeCodes.CALENDAR_OVERVIEW);
+                // this.props.history.push(routeCodes.CALENDAR_OVERVIEW);
               }),
             );
           }

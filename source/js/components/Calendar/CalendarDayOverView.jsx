@@ -43,7 +43,7 @@ class CalendarDayOverView extends Component {
     };
   }
 
-  componentWillMount = () => {
+  componentDidMount = () => {
     const { dispatch } = this.props;
     let { logDate } = this.state;
     if (this.props.location.search) {

@@ -9,8 +9,6 @@ const data = [
 ];
 const COLORS = ['#201f60', '#3e67ff', '#93e7e4'];
 
-const RADIAN = Math.PI / 180;
-
 class NutritionMealCreateSidebar extends Component {
   state = {
     quickTab: '#macro',

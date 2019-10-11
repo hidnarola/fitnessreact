@@ -56,7 +56,6 @@ class NutritionStatsRightSidebar extends Component {
                     <li style={{ padding: '0' }}>
                       <div className="display-select-menu">
                         <DropdownButton
-                          bsStyle={selectedMeal.toLowerCase()}
                           title={selectedMeal}
                           key={1}
                           id={`dropdown-basic-${1}`}
