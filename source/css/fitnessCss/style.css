@@ -16533,13 +16533,13 @@ white-space: nowrap;overflow: hidden;}
 .create-photos .photos-body .photos-sidebar .photos-sidebar-body ul{list-style-type: none;}
 .create-photos .photos-body .photos-sidebar .photos-sidebar-body {height: 75vh;}
 .create-photos .photos-body .photos-sidebar .photos-sidebar-body ul li{padding: 0 20px;}
-.create-photos .photos-body .photos-sidebar .photos-sidebar-body ul li .image-box{display: flex;align-items: center;position: relative;margin: 0 0 10px 0}
-.create-photos .photos-body .photos-sidebar .photos-sidebar-body ul li .image-box .image {background: linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(255,255,255,0.72) 70%, rgba(0,0,0,0.6) 100%);}
+.create-photos .photos-body .photos-sidebar .photos-sidebar-body ul li .image-box{display: flex;align-items: center;position: relative;margin: 0 0 10px 0;justify-content: center;}
+.create-photos .photos-body .photos-sidebar .photos-sidebar-body ul li .image-box .image {background: linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(255,255,255,0.72) 70%, rgba(0,0,0,0.6) 100%);width: 100%}
 .create-photos .photos-body .photos-sidebar .photos-sidebar-body ul li .image-box .image  > img {opacity: 0.2; width:100%;}
 .create-photos .photos-body .photos-sidebar .photos-sidebar-body ul li .image-box .image.active > img {opacity:1;}
 .create-photos .photos-body .photos-sidebar .photos-sidebar-body ul li .image-box .image img {width:100%; border-radius: 5px;}
 .create-photos .photos-body .photos-sidebar .photos-sidebar-body ul li .image-box .image .img-title{position: absolute;font-size: 20px; color: #fff; font-weight: 600; width: auto; bottom: 30px; left: 20px;}
-.create-photos .photos-body .photos-sidebar .photos-sidebar-body ul li .image-box .image .img-subtitle{position: absolute; font-size: 15px; font-weight: bold; color: #fff;display: flex;flex-wrap: wrap;align-items: center;width:250px;bottom:20px;left:20px;}
+.create-photos .photos-body .photos-sidebar .photos-sidebar-body ul li .image-box .image .img-subtitle{position: absolute; font-size: 15px; font-weight: bold; color: #fff;display: flex;flex-wrap: wrap;align-items: center;bottom:20px;left:20px;right: 20px;}
 .create-photos .photos-body .photos-sidebar .photos-sidebar-body ul li .image-box .image .img-subtitle h4 {font-size: 15px; margin: 0; font-weight: bold; color: #fff;}
 .create-photos .photos-body .photos-sidebar .photos-sidebar-body ul li .image-box .image .img-subtitle i {font-size: 20px; color: #fff;}
 .create-photos .photos-body .photos-sidebar .photos-sidebar-body ul li .image-box .img-list {display: flex; position: absolute; flex-direction: column;top: 5px;left: 10px;}

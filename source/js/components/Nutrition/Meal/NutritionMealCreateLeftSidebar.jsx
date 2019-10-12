@@ -105,7 +105,7 @@ class NutritionMealCreateLeftSidebar extends Component {
                             className="form-control"
                             value={ingredient.ingredient_unit}
                             onChange={e =>
-                              this.props.changeServing(
+                              changeServing(
                                 index,
                                 ingredient,
                                 null,
@@ -114,13 +114,11 @@ class NutritionMealCreateLeftSidebar extends Component {
                               )
                             }
                           >
-                            {this.props
-                              .ingredientUnit(meal_proximates)
-                              .map((item, i) => (
-                                <option key={i} value={item.value}>
-                                  {item.label}
-                                </option>
-                              ))}
+                            {ingredientUnit(meal_proximates).map((item, i) => (
+                              <option key={i} value={item.value}>
+                                {item.label}
+                              </option>
+                            ))}
                           </select>
                         </div>
                       </div>

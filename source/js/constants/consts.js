@@ -35,6 +35,7 @@ if (window.location.port) {
 baseUrl += '/';
 
 export const BASE_URL = baseUrl;
+// export const SERVER_BASE_URL = `https://fitly.co:3300`;
 export const SERVER_BASE_URL = http + window.location.hostname + ':3300/';
 
 // amit's system url of api

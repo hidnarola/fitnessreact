@@ -18,6 +18,7 @@ import { Redirect, withRouter } from 'react-router-dom';
 
 class NutritionMealCreate extends Component {
   constructor(props) {
+    super(props);
     this.state = {
       quickTab: '#favrioutmeals',
       mealVisibility: 'private',
@@ -43,7 +44,7 @@ class NutritionMealCreate extends Component {
             enableBackLink={true}
           />
           <FitnessNav />
-          <section className="body-wrap nutrition-todays-meal-section">
+          <div className="body-wrap nutrition-todays-meal-section">
             <div className="body-head d-flex justify-content-start front-white-header custome_header">
               <div className="body-head-l" style={{ padding: '15px' }}>
                 <div className="display-date">
@@ -79,7 +80,7 @@ class NutritionMealCreate extends Component {
                 </div>
               </div>
             </div>
-          </section>
+          </div>
         </div>
       </React.Fragment>
     );
@@ -194,7 +195,7 @@ class NutritionMealCreate extends Component {
             dispatch(
               userMealAddRequest(data, res => {
                 dispatch(hidePageLoader());
-                // this.props.history.push(routeCodes.CALENDAR_OVERVIEW);
+                this.props.history.push(routeCodes.CALENDAR_OVERVIEW);
               }),
             );
           }

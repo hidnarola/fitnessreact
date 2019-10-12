@@ -58,9 +58,9 @@ class NutritionMealBodyContent extends Component {
                 name="mealTitle"
                 value={this.props.mealTitle}
                 onChange={this.props.handleChangeMealTitle}
-                onKeyPress={e => {
-                  e.key === 'Enter' && e.preventDefault();
-                }}
+                // onKeyPress={e => {
+                //   e.key === 'Enter' && e.preventDefault();
+                // }}
               />
             </div>
             <div className="save-btn-group">
@@ -78,7 +78,7 @@ class NutritionMealBodyContent extends Component {
                   />
                 }
                 key={1}
-                id={`dropdown-basic-${1}`}
+                id={'dropdown-basic-2'}
                 pullRight
               >
                 <MenuItem
@@ -148,7 +148,6 @@ class NutritionMealBodyContent extends Component {
                   </div>
                   <div className="col-md-4">
                     <NutritionMealCreateQuickAdd
-                      key={654}
                       searchIsLoading={this.state.searchIsLoading}
                       quickTab={this.props.quickTab}
                       recentMeals={this.props.recentMeals}
@@ -429,10 +428,10 @@ class NutritionMealBodyContent extends Component {
     console.log('b => ', b);
     console.log('c => ', c);
     // c.preventDefault();
-    {
-      /* console.log("~~~~~~~~~~~~~~~~>", e)
+
+    /* console.log("~~~~~~~~~~~~~~~~>", e)
         console.log('data => ', data); */
-    }
+
     // event.preventDefault();
     // const { handleSubmit } = this.props;
     // console.log('data => ', data);
