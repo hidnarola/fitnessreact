@@ -1,30 +1,30 @@
-import React, { Component } from 'react';
-import AddMetaDescription from '../global/AddMetaDescription';
-import FitnessHeader from '../global/FitnessHeader';
-import FitnessNav from '../global/FitnessNav';
-import { NavLink } from 'react-router-dom';
-import { routeCodes } from '../../constants/routes';
-import ReactCalender from 'react-calendar/dist/entry.nostyle';
-import CalendarDayOverViewWorkouts from './Workouts/CalendarDayOverViewWorkouts';
-import CalendarDayOverViewCounts from './CalendarDayOverViewCounts';
-import moment from 'moment';
+import React, { Component } from "react";
+import AddMetaDescription from "../global/AddMetaDescription";
+import FitnessHeader from "../global/FitnessHeader";
+import FitnessNav from "../global/FitnessNav";
+import { NavLink } from "react-router-dom";
+import { routeCodes } from "../../constants/routes";
+import ReactCalender from "react-calendar/dist/entry.nostyle";
+import CalendarDayOverViewWorkouts from "./Workouts/CalendarDayOverViewWorkouts";
+import CalendarDayOverViewCounts from "./CalendarDayOverViewCounts";
+import moment from "moment";
 import {
   getUserFirstWorkoutByDateRequest,
   getUsersWorkoutScheduleRequest,
-  getUsersWorkoutOverviewRequest,
-} from '../../actions/userScheduleWorkouts';
-import { connect } from 'react-redux';
-import { showPageLoader, hidePageLoader } from '../../actions/pageLoader';
-import { getUserMealRequest } from '../../actions/user_meal';
-import CalendarDayOverViewNutrition from './Nutritions/CalendarDayOverViewNutrition';
-import CalendarDayOverViewLogs from './Logs/CalendarDayOverViewLogs';
-import { getUserBodyMeasurementRequest } from '../../actions/userBodyMeasurement';
-import { recentMealRequest } from '../../actions/meal';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import CalendarImage from '../../../assets/svg/calendar-alt.svg';
-import NutritionMeal from '../Nutrition/NutritionMeal';
-import DatePicker from 'react-datepicker';
-import Photos from '../Photos/Photos';
+  getUsersWorkoutOverviewRequest
+} from "../../actions/userScheduleWorkouts";
+import { connect } from "react-redux";
+import { showPageLoader, hidePageLoader } from "../../actions/pageLoader";
+import { getUserMealRequest } from "../../actions/user_meal";
+import CalendarDayOverViewNutrition from "./Nutritions/CalendarDayOverViewNutrition";
+import CalendarDayOverViewLogs from "./Logs/CalendarDayOverViewLogs";
+import { getUserBodyMeasurementRequest } from "../../actions/userBodyMeasurement";
+import { recentMealRequest } from "../../actions/meal";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import CalendarImage from "../../../assets/svg/calendar-alt.svg";
+import NutritionMeal from "../Nutrition/NutritionMeal";
+import DatePicker from "react-datepicker";
+import Photos from "../Photos/Photos";
 
 class CalendarDayOverView extends Component {
   constructor(props) {
@@ -33,13 +33,13 @@ class CalendarDayOverView extends Component {
     logDate.setHours(0, 0, 0, 0);
     this.state = {
       logDate: logDate,
-      cuurentTab: '#Exercise',
-      nutritionTab: '#overview',
+      cuurentTab: "#Exercise",
+      nutritionTab: "#overview",
       workoutsList: [],
       mealsList: [],
       logsList: [],
       measurement: {},
-      showCalendar: false,
+      showCalendar: false
     };
   }
 
@@ -48,14 +48,14 @@ class CalendarDayOverView extends Component {
     let { logDate } = this.state;
     if (this.props.location.search) {
       let search = new URLSearchParams(
-        decodeURIComponent(this.props.location.search),
+        decodeURIComponent(this.props.location.search)
       );
-      let date = search.get('date');
+      let date = search.get("date");
       logDate = new Date(date);
       this.setState({ logDate });
     }
     var requestObj = {
-      logDate: logDate,
+      logDate: logDate
     };
     // await dispatch(
     //   getUserFirstWorkoutByDateRequest(requestData, null, res => {
@@ -79,7 +79,7 @@ class CalendarDayOverView extends Component {
       measurementloading,
       recentMeals,
       recentMealsLoading,
-      dispatch,
+      dispatch
     } = this.props;
     let { logsList } = this.state;
 
@@ -103,7 +103,7 @@ class CalendarDayOverView extends Component {
     if (
       !measurementloading &&
       prevProps.measurement !== measurement &&
-      typeof prevProps.measurement != 'undefined'
+      typeof prevProps.measurement != "undefined"
     ) {
       this.setState({ measurement });
       dispatch(hidePageLoader());
@@ -117,13 +117,13 @@ class CalendarDayOverView extends Component {
     const { logDate } = this.state;
     const { dispatch } = this.props;
     if (
-      moment(logDate).format('YYYY-MM-DD') !== moment(date).format('YYYY-MM-DD')
+      moment(logDate).format("YYYY-MM-DD") !== moment(date).format("YYYY-MM-DD")
     ) {
       this.setState({
-        logDate: date,
+        logDate: date
       });
       let requestData = { logDate: date };
-      dispatch(getUsersWorkoutOverviewRequest(date));
+      // dispatch(getUsersWorkoutOverviewRequest(date));
       dispatch(getUserMealRequest(requestData));
       dispatch(getUserBodyMeasurementRequest(requestData));
       //if (isOnline()) {
@@ -155,7 +155,7 @@ class CalendarDayOverView extends Component {
     // }
   };
   onActiveDateChange = obj => {
-    if (obj.view === 'month') {
+    if (obj.view === "month") {
       let date = obj.activeStartDate;
       let now = new Date();
       now.setHours(0, 0, 0, 0);
@@ -205,9 +205,31 @@ class CalendarDayOverView extends Component {
       logDate &&
       moment(logDate)
         .local()
-        .format('DD/MM/YYYY')
+        .format("DD/MM/YYYY")
     );
   }
+  getNextDate = () => {
+    let { logDate } = this.state;
+    const { dispatch } = this.props;
+    var currentDate = new Date(logDate);
+    var day = new Date(currentDate.setDate(currentDate.getDate() + 1));
+    this.setState({ logDate: day });
+    let requestData = { logDate: logDate };
+    dispatch(getUsersWorkoutOverviewRequest(logDate));
+    dispatch(getUserMealRequest(requestData));
+    dispatch(getUserBodyMeasurementRequest(requestData));
+  };
+  getPrevDate = () => {
+    let { logDate } = this.state;
+    const { dispatch } = this.props;
+    var currentDate = new Date(logDate);
+    var day = new Date(currentDate.setDate(currentDate.getDate() - 1));
+    this.setState({ logDate: day });
+    let requestData = { logDate: logDate };
+    dispatch(getUsersWorkoutOverviewRequest(logDate));
+    dispatch(getUserMealRequest(requestData));
+    dispatch(getUserBodyMeasurementRequest(requestData));
+  };
 
   render() {
     const {
@@ -216,10 +238,10 @@ class CalendarDayOverView extends Component {
       mealsList,
       logsList,
       measurement,
-      nutritionTab,
+      nutritionTab
     } = this.state;
     const { firstWorkoutId, loading, dispatch } = this.props;
-    console.log('WORKOUTLIST', workoutsList);
+    console.log("WORKOUTLIST", workoutsList);
     const ExampleCustomInput = ({ value, onClick }) => (
       <span className="display-calendar" onClick={onClick}>
         <CalendarImage />
@@ -245,15 +267,15 @@ class CalendarDayOverView extends Component {
                   <div className="tabs ml-4">
                     <div
                       className={
-                        this.state.cuurentTab === '#Exercise'
-                          ? 'tab active'
-                          : 'tab '
+                        this.state.cuurentTab === "#Exercise"
+                          ? "tab active"
+                          : "tab "
                       }
                       id="Exercise"
                     >
                       <a
                         onClick={e => {
-                          this.setState({ cuurentTab: '#Exercise' });
+                          this.setState({ cuurentTab: "#Exercise" });
                         }}
                         href="#Exercise"
                       >
@@ -263,15 +285,15 @@ class CalendarDayOverView extends Component {
 
                     <div
                       className={
-                        this.state.cuurentTab === '#Nutrition'
-                          ? 'tab active'
-                          : 'tab'
+                        this.state.cuurentTab === "#Nutrition"
+                          ? "tab active"
+                          : "tab"
                       }
                       id="Nutrition"
                     >
                       <a
                         onClick={e => {
-                          this.setState({ cuurentTab: '#Nutrition' });
+                          this.setState({ cuurentTab: "#Nutrition" });
                         }}
                         href="#Nutrition"
                       >
@@ -281,13 +303,13 @@ class CalendarDayOverView extends Component {
 
                     <div
                       className={
-                        this.state.cuurentTab === '#Logs' ? 'tab active' : 'tab'
+                        this.state.cuurentTab === "#Logs" ? "tab active" : "tab"
                       }
                       id="Logs"
                     >
                       <a
                         onClick={e => {
-                          this.setState({ cuurentTab: '#Logs' });
+                          this.setState({ cuurentTab: "#Logs" });
                         }}
                         href="#Logs"
                       >
@@ -297,15 +319,15 @@ class CalendarDayOverView extends Component {
 
                     <div
                       className={
-                        this.state.cuurentTab === '#Photos'
-                          ? 'tab  active'
-                          : 'tab'
+                        this.state.cuurentTab === "#Photos"
+                          ? "tab  active"
+                          : "tab"
                       }
                       id="Photos"
                     >
                       <a
                         onClick={e => {
-                          this.setState({ cuurentTab: '#Photos' });
+                          this.setState({ cuurentTab: "#Photos" });
                         }}
                         href="#Photos"
                       >
@@ -313,81 +335,91 @@ class CalendarDayOverView extends Component {
                       </a>
                     </div>
                   </div>
-                  <span className="date-arrow-left  ml-auto">
+                  <span
+                    className="date-arrow-left  ml-auto"
+                    onClick={() => this.getPrevDate()}
+                    style={{ cursor: "pointer" }}
+                  >
                     <FontAwesomeIcon icon="chevron-left" />
                   </span>
                   <span className="date-text">
                     {logDate
                       ? moment(logDate)
                           .local()
-                          .format('Do MMMM YYYY')
-                      : ''}
+                          .format("Do MMMM YYYY")
+                      : ""}
                   </span>
-                  <span className="date-arrow-right">
+                  <span
+                    className="date-arrow-right"
+                    onClick={() => this.getNextDate()}
+                    style={{ cursor: "pointer" }}
+                  >
                     <FontAwesomeIcon icon="chevron-right" />
                   </span>
                   <DatePicker
-                    selected={moment(new Date())}
+                    selected={moment(logDate)}
+                    onChange={this.onChangeLogDate}
                     customInput={<ExampleCustomInput />}
                     popperPlacement="bottom"
                     popperModifiers={{
                       flip: {
-                        behavior: ['bottom-end'], // don't allow it to flip to be above
+                        behavior: ["bottom-end"] // don't allow it to flip to be above
                       },
                       preventOverflow: {
-                        enabled: true, // tell it not to try to stay within the view (this prevents the popper from covering the element you clicked)
+                        enabled: true // tell it not to try to stay within the view (this prevents the popper from covering the element you clicked)
                       },
                       hide: {
-                        enabled: false, // turn off since needs preventOverflow to be enabled
-                      },
+                        enabled: false // turn off since needs preventOverflow to be enabled
+                      }
                     }}
                   />
                 </div>
               </div>
             </div>
-            <div className="body-sub-head"></div>
+            <div className="body-sub-head" />
 
-            <div className={'tab-content'}>
-              {this.state.cuurentTab === '#Exercise' && (
+            <div className={"tab-content"}>
+              {this.state.cuurentTab === "#Exercise" && (
                 <div
                   className={
-                    this.state.cuurentTab === '#Exercise'
-                      ? 'content active'
-                      : 'content'
+                    this.state.cuurentTab === "#Exercise"
+                      ? "content active"
+                      : "content"
                   }
                   id="Exercise"
                 >
                   <CalendarDayOverViewWorkouts logDate={logDate} />
                 </div>
               )}
-              {this.state.cuurentTab === '#Nutrition' && (
+              {this.state.cuurentTab === "#Nutrition" && (
                 <div
                   className={
-                    this.state.cuurentTab === '#Nutrition'
-                      ? 'content active'
-                      : 'content'
+                    this.state.cuurentTab === "#Nutrition"
+                      ? "content active"
+                      : "content"
                   }
                   id="Nutrition"
                 >
                   {
                     <React.Fragment>
-                      {nutritionTab === '#overview' && mealsList && (
-                        <CalendarDayOverViewNutrition
-                          setNutritionTab={() => {
-                            this.setState({ nutritionTab: '#list' });
-                          }}
-                          recentMeals={this.props.recentMeals}
-                          logDate={this.state.logDate}
-                          mealsList={mealsList}
-                          authuserId={this.props.user.authId}
-                        />
-                      )}
+                      {nutritionTab === "#overview" &&
+                        mealsList && (
+                          <CalendarDayOverViewNutrition
+                            setNutritionTab={() => {
+                              this.setState({ nutritionTab: "#list" });
+                            }}
+                            recentMeals={this.props.recentMeals}
+                            logDate={this.state.logDate}
+                            mealsList={mealsList}
+                            authuserId={this.props.user.authId}
+                          />
+                        )}
 
-                      {nutritionTab === '#list' && (
+                      {nutritionTab === "#list" && (
                         <NutritionMeal
                           mealsList={mealsList}
                           setNutritionTab={() => {
-                            this.setState({ nutritionTab: '#overview' });
+                            this.setState({ nutritionTab: "#overview" });
                           }}
                         />
                       )}
@@ -395,21 +427,21 @@ class CalendarDayOverView extends Component {
                   }
                 </div>
               )}
-              {this.state.cuurentTab === '#Logs' && (
+              {this.state.cuurentTab === "#Logs" && (
                 <div
                   className={
-                    this.state.cuurentTab === '#Logs'
-                      ? 'content active'
-                      : 'content'
+                    this.state.cuurentTab === "#Logs"
+                      ? "content active"
+                      : "content"
                   }
                   id="Logs"
                 >
-                  {typeof measurement !== 'undefined' &&
+                  {typeof measurement !== "undefined" &&
                   measurement !== null &&
                   Object.keys(measurement).length > 0 ? (
                     <CalendarDayOverViewLogs measurement={measurement} />
                   ) : (
-                    <div className="white-box" style={{ marginBottom: '2rem' }}>
+                    <div className="white-box" style={{ marginBottom: "2rem" }}>
                       <div className="whitebox-head d-flex profile-head">
                         <h3>No Logs Found</h3>
                       </div>
@@ -417,12 +449,12 @@ class CalendarDayOverView extends Component {
                   )}
                 </div>
               )}
-              {this.state.cuurentTab === '#Photos' && (
+              {this.state.cuurentTab === "#Photos" && (
                 <div
                   className={
-                    this.state.cuurentTab === '#Photos'
-                      ? 'content active'
-                      : 'content'
+                    this.state.cuurentTab === "#Photos"
+                      ? "content active"
+                      : "content"
                   }
                   id="Photos"
                 >
@@ -442,28 +474,28 @@ const mapStateToProps = state => {
     userMeal,
     user,
     userBodyMeasurement,
-    meal,
+    meal
   } = state;
   return {
-    user: user.get('loggedUserData'),
+    user: user.get("loggedUserData"),
 
-    firstWorkoutLoading: userScheduleWorkouts.get('firstWorkoutLoading'),
-    firstWorkoutId: userScheduleWorkouts.get('firstWorkoutId'),
-    firstWorkoutError: userScheduleWorkouts.get('firstWorkoutError'),
-    workouts: userScheduleWorkouts.get('workouts'),
-    workout: userScheduleWorkouts.get('workout'),
-    workoutsList: userScheduleWorkouts.get('workoutsList'),
-    loading: userScheduleWorkouts.get('loading'),
+    firstWorkoutLoading: userScheduleWorkouts.get("firstWorkoutLoading"),
+    firstWorkoutId: userScheduleWorkouts.get("firstWorkoutId"),
+    firstWorkoutError: userScheduleWorkouts.get("firstWorkoutError"),
+    workouts: userScheduleWorkouts.get("workouts"),
+    workout: userScheduleWorkouts.get("workout"),
+    workoutsList: userScheduleWorkouts.get("workoutsList"),
+    loading: userScheduleWorkouts.get("loading"),
 
-    user_meals: userMeal.get('user_meals'),
-    loading_user_meals: userMeal.get('loading_user_meals'),
+    user_meals: userMeal.get("user_meals"),
+    loading_user_meals: userMeal.get("loading_user_meals"),
 
-    measurement: userBodyMeasurement.get('measurement'),
-    measurementloading: userBodyMeasurement.get('loading'),
+    measurement: userBodyMeasurement.get("measurement"),
+    measurementloading: userBodyMeasurement.get("loading"),
 
-    recentMealsLoading: meal.get('recentMealsLoading'),
-    recentMeals: meal.get('recentMeals'),
-    recentMealsError: meal.get('recentMealsError'),
+    recentMealsLoading: meal.get("recentMealsLoading"),
+    recentMeals: meal.get("recentMeals"),
+    recentMealsError: meal.get("recentMealsError")
   };
 };
 
