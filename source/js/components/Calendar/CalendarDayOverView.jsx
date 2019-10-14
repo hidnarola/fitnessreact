@@ -214,7 +214,7 @@ class CalendarDayOverView extends Component {
     var currentDate = new Date(logDate);
     var day = new Date(currentDate.setDate(currentDate.getDate() + 1));
     this.setState({ logDate: day });
-    let requestData = { logDate: logDate };
+    let requestData = { logDate: day };
     dispatch(getUsersWorkoutOverviewRequest(logDate));
     dispatch(getUserMealRequest(requestData));
     dispatch(getUserBodyMeasurementRequest(requestData));
@@ -225,7 +225,7 @@ class CalendarDayOverView extends Component {
     var currentDate = new Date(logDate);
     var day = new Date(currentDate.setDate(currentDate.getDate() - 1));
     this.setState({ logDate: day });
-    let requestData = { logDate: logDate };
+    let requestData = { logDate: day };
     dispatch(getUsersWorkoutOverviewRequest(logDate));
     dispatch(getUserMealRequest(requestData));
     dispatch(getUserBodyMeasurementRequest(requestData));
