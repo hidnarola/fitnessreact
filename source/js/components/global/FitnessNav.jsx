@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
-import { NavLink } from 'react-router-dom';
-import { Scrollbars } from 'react-custom-scrollbars';
-import { routeCodes } from '../../constants/routes';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import logo from 'img/common/logo.png';
-import ReactTooltip from 'react-tooltip';
-import { publicPath } from '../../constants/routes';
+import React, { Component } from "react";
+import { NavLink } from "react-router-dom";
+import { Scrollbars } from "react-custom-scrollbars";
+import { routeCodes } from "../../constants/routes";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import logo from "img/common/logo.png";
+import ReactTooltip from "react-tooltip";
+import { publicPath } from "../../constants/routes";
 
 export default class FitnessNav extends Component {
   render() {

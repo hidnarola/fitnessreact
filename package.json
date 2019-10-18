@@ -79,6 +79,7 @@
     "draftjs-to-html": "^0.8.4",
     "emoji-mart": "^2.9.2",
     "express": "^4.16.2",
+    "fuse.js": "^3.4.5",
     "html-to-draftjs": "^1.4.0",
     "immutable": "^3.8.2",
     "isomorphic-fetch": "^2.2.1",

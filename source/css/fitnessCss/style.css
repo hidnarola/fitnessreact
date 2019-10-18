@@ -15581,6 +15581,12 @@ a.timline-post-edit-btn svg {
 .blue_right_sidebar .recent-ingredient ul li.display-dropdown h3,
 .blue_right_sidebar .recent-ingredient ul li.display-dropdown .add_drag {color : #fff}
 
+.blue_right_sidebar .recent-ingredient ul li.single-search-exercise .Select-control {padding: 10px; border: 0; background: #5CB1AD; border-radius: 0;}
+.blue_right_sidebar .recent-ingredient ul li.single-search-exercise .Select-control .Select-placeholder {top: 10px; left: 10px; font-size: 25px; font-weight: 600; color: #2A8680;}
+.blue_right_sidebar .recent-ingredient ul li.single-search-exercise .Select-control{background: #A5ECEA;}
+
+.blue_right_sidebar .recent-ingredient .superset-section ul li.single-search-exercise .Select-control .Select-placeholder {top: 10px; left: 10px; font-size: 20px; font-weight: 600; color: #267D79;}
+
 .white_right_sidebar .recent-ingredient ul li.display-dropdown {background: #d1dae2;}
 .white_right_sidebar .recent-ingredient ul li.display-dropdown h3,
 .white_right_sidebar .recent-ingredient ul li.display-dropdown .add_drag {color : #201f60}
@@ -15613,7 +15619,8 @@ a.timline-post-edit-btn svg {
 .blue_right_sidebar .recent-ingredient .superset-section .superset-boxs .superset-input {width: 80%; display: flex; flex-wrap: wrap;}
 .blue_right_sidebar .recent-ingredient .superset-section .superset-boxs .superset-input .serving-boxs {position: relative; width: 50%; margin: 0px;}
 .blue_right_sidebar .recent-ingredient .superset-section .superset-boxs .superset-input .serving-boxs .btn {position: absolute; left: 5px; top:50%; transform: translateY(-50%); border-radius: 50%; background: #A6A5BF; fill: #201F60; font-size:13px; width: 25px; height: 25px; border: 0px; display: flex; flex-wrap: wrap; align-items: center; justify-content: center;}
-.blue_right_sidebar .recent-ingredient .superset-section .superset-boxs .superset-input .serving-boxs .btn.btn-plus {left: auto; right: 5px;}
+.blue_right_sidebar .recent-ingredient .superset-section .superset-boxs .superset-input .serving-boxs .btn.btn-plus {left: auto; right: 5px;padding: 5px;}
+.blue_right_sidebar .recent-ingredient .superset-section .superset-boxs .superset-input .serving-boxs .btn.btn-minus {padding: 5px;}
 .blue_right_sidebar .recent-ingredient .superset-section .superset-boxs .superset-input .serving-boxs .form-control { box-shadow: none; height: auto; padding: 9px 0; text-align: center; font-size: 20px; color:#201F60; line-height: 1; font-family: 'Neuzeit' !important; font-weight: 900; border: 0px; border-radius:5px; }
 
 .blue_right_sidebar .recent-ingredient .superset-section .superset-boxs .superset-input .serving-select {width: 49%; margin: 0 0 0 1%;}
@@ -15635,7 +15642,7 @@ a.timline-post-edit-btn svg {
 .blue_right_sidebar .recent-ingredient .superset-section ul li .input-group .form-control::placeholder {color: #267d79;font-family: 'Neuzeit';font-weight:600}
 .blue_right_sidebar .recent-ingredient .superset-section ul li .input-group .input-group-prepend {position: absolute; right: 0px; top:50%; color:#267d79; font-size: 24px; transform: translateY(-50%);}
 .blue_right_sidebar .recent-ingredient .superset-section ul li.btn-add {padding: 0;
-    position: absolute;
+    /* position: absolute; */
     width: 100%;
     bottom: 0;}
 .blue_right_sidebar .recent-ingredient .superset-section ul li button.btn {background: #267d79;
@@ -16097,7 +16104,7 @@ a.timline-post-edit-btn svg {
     font-weight: 700;
 }
 
-.tabs .tab.active a {
+.tabs .tab.active a,.tabs .tab a.active {
     color: #fff;
     background: #201F60;
     box-shadow: 1px 2px 4px #0000000F;
@@ -16158,14 +16165,14 @@ a.timline-post-edit-btn svg {
 
 /* .exercise-navbar-active:before {content: ''; position: absolute; right: -3px; top:15px; width: 63px; height: 50px; background: #053095; border-radius: 50px 0px 0 50px;} */
 
-.app-wrapper-content .fitness-nutrition .body-wrap.nutrition-todays-meal-section .tab-content.exercise-tabs {height: auto; padding: 15px;}
+.app-wrapper-content .fitness-nutrition .body-wrap.nutrition-todays-meal-section .tab-content.exercise-tabs {height: 76vh; padding: 15px;}
 
 .exercise-tabs .excercise-boxs {background: #D1DAE2 !important; display: flex; flex-wrap: wrap; overflow:hidden; position: relative;}
 .exercise-tabs .excercise-boxs .excercise-number {background: #201F60; width: 50px; text-align: center; display: flex; flex-wrap: wrap; align-items: center; justify-content: center;}
 .exercise-tabs .excercise-boxs .excercise-number span {font-size: 25px; color: #fff; font-family: 'gt_walsheim_proregular'; font-weight: 900;}
 .exercise-tabs .excercise-boxs .excercise-right {width: calc(100% - 50px); margin-left: auto; padding:3px 3px 3px 0;}
 .exercise-tabs .excercise-boxs .excercise-right .topbar-title {width: 100%; display: flex; flex-wrap: wrap; background: #fff; padding: 0px; border-bottom: solid 3px #D1DAE2; border-radius: 0px 7px 0px 0px;}
-.exercise-tabs .excercise-boxs .excercise-right .topbar-title h3 {padding: 13px 0 13px 15px; font-size: 25px; color: #201F60; font-family: 'Neuzeit'; font-weight: 900; line-height: 1; margin: 0px;}
+.exercise-tabs .excercise-boxs .excercise-right .topbar-title h3 {padding: 13px 0 13px 15px; font-size: 25px; color: #201F60; font-family: 'Neuzeit'; font-weight: 900; line-height: 1; margin: 0px;overflow: hidden;text-overflow: ellipsis;width:60%;white-space: nowrap;}
 
 .exercise-tabs .excercise-boxs .excercise-right .excercise-content {display: block;}
 .exercise-tabs .excercise-boxs .excercise-right .excercise-content .row {height: auto !important; border-bottom: 3px solid #FFFFFF;}
@@ -16207,6 +16214,8 @@ a.timline-post-edit-btn svg {
 .exercise-tabs .excercise-boxs .excercise-right .topbar-title .btn-toolbar .boxing-icon {padding: 13px 25px;}
 .exercise-tabs .excercise-boxs .excercise-right .topbar-title .btn-toolbar .boxing-icon .dropdown {margin: 0px;}
 .exercise-tabs .excercise-boxs .excercise-right .topbar-title .btn-toolbar .boxing-icon .dropdown .dropdown-toggle {margin: 0px;}
+.exercise-tabs .excercise-boxs .excercise-right .topbar-title .btn-toolbar button.btn.btn-save {width: 100px; height: 54px; font-size: 20px; display: flex; flex-wrap: wrap; align-items: center; background: #fff; font-weight: 600; color: #201F60; margin: 0;}
+.exercise-tabs .excercise-boxs .excercise-right .topbar-title .btn-toolbar button.btn.btn-save i {margin-left: auto; font-size: 23px; color: #3ed1a9;}
 
 .exercise-tabs .excercise-boxs .excercise-right .excercise-content .table {margin: 0px;}
 .exercise-tabs .excercise-boxs .excercise-right .excercise-content .table tr th {font-size: 20px; color: #201F60; font-family: 'Neuzeit'; font-weight: 700; vertical-align: middle; border-right: solid 2px #fff; padding: 5px; border-bottom-color: #D1DAE2;}
@@ -16500,13 +16509,15 @@ white-space: nowrap;overflow: hidden;}
 .Select.quick-sidebar-dropdown.is-open > .Select-control .Select-arrow {top: -2px;border-color: transparent transparent #fff;border-width: 10px 10px 9.5px;border-radius: 5px;}
 .Select.quick-sidebar-dropdown .Select-arrow {border-color: #fff transparent transparent;border-width: 10px 10px 2.5px;}
 
-.Select-menu-outer {border-bottom-right-radius: 4px;border-bottom-left-radius: 4px;background-color: #5CB1AD;border: 1px solid #5CB1AD;/* box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06); */box-sizing: border-box;margin-top: -1px;max-height: 200px;position: absolute;left: 0;top: 100%;width: 100%;z-index: 1;-webkit-overflow-scrolling: touch;border-bottom: solid 1px rgba(237, 245, 253, .1);box-shadow: 0 5px 5px rgba(39, 26, 26, .1);}
-.Select-menu {max-height: 198px;overflow-y: auto;}
-.Select-option {box-sizing: border-box;background-color: #93E7E4;color: #201F60;cursor: pointer;display: block;padding: 8px 10px;border-bottom: solid 1px #93E7E4;box-shadow: 0 5px 5px rgba(39, 26, 26, .1)}
+.Select-menu-outer {border-bottom-right-radius: 4px;border-bottom-left-radius: 4px;background-color: #5CB1AD;border: 1px solid #5CB1AD;box-sizing: border-box;margin-top: -1px;max-height: 500px;position: absolute;left: 0;top: 100%;width: 100%;z-index: 1;-webkit-overflow-scrolling: touch;border-bottom: solid 1px rgba(237, 245, 253, .1);box-shadow: 0 5px 5px rgba(39, 26, 26, .1);-webkit-overflow-scrolling: touch;}
+.Select-menu {max-height: 300px;overflow-y: auto;border-bottom: solid 1px rgba(237, 245, 253, .1);box-shadow: 0 2px 3px rgba(39, 26, 26, .1)}
+.Select-option {box-sizing: border-box;background-color: #93E7E4;color: #201F60;cursor: pointer;display: block;padding: 8px 10px;border-bottom: solid 1px #44778e;box-shadow: 0 2px 3px rgba(39, 26, 26, .1)}
 .Select-option:last-child {border-bottom-right-radius: 4px;border-bottom-left-radius: 4px;}
 .Select-option.is-selected {background-color: #93E7E4;background-color: rgba(0, 126, 255, 0.04);color: #fff;}
 .Select-option.is-focused {background-color: #ebf5ff;background-color: rgba(0, 126, 255, 0.08);color: #267D79;}
 .Select-option.is-disabled {color: #cccccc;cursor: default;}
+.Select-noresults {box-sizing: border-box;color: #201F60;cursor: default;display: block;padding: 8px 10px;background: #93E7E4;}
+
 
 .whitebox-body .recent-ingredient .search-box{position: absolute;right: 0;top: 0;width: 56px;display: flex;flex-wrap: wrap;}
 .whitebox-body .recent-ingredient .search-box .search-icon {position: absolute;width: 56px;height: 56px;display: flex;align-items: center;justify-content: center;background: #201F60;color: #fff;right:0;top:0}

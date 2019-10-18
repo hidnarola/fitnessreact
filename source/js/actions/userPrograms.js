@@ -344,10 +344,11 @@ export function changeUsersProgramWorkoutFormAction(action = 'add', data = null)
     }
 }
 
-export function addUsersProgramWorkoutScheduleRequest(requestData) {
+export function addUsersProgramWorkoutScheduleRequest(requestData,callback = (res) => {}) {
     return {
         type: ADD_USERS_PROGRAM_WORKOUT_SCHEDULE_REQUEST,
         requestData,
+        callback
     }
 }
 

@@ -1,4 +1,4 @@
-export const publicPath = '/';
+export const publicPath = "/";
 
 export const routeCodes = {
   HOME: publicPath,
@@ -72,6 +72,10 @@ export const routeCodes = {
 
   //Progress Route
   PROGRESS: `${publicPath}progress`,
+  PROGRESS_OVERVIEW: `${publicPath}progress/overview`,
+  PROGRESS_EXERCISE: `${publicPath}progress/exercise`,
+  PROGRESS_BODY: `${publicPath}progress/body`,
+  PROGRESS_PHOTOS_VIEW: `${publicPath}progress/photos`,
   PROGRESS_BODY_FAT: `${publicPath}progress/body_fat`,
   PROGRESS_MOBILITY: `${publicPath}progress/mobility`,
   PROGRESS_MUSCLE: `${publicPath}progress/muscle`,
@@ -81,5 +85,5 @@ export const routeCodes = {
   ALL_NOTIFICATIONS: `${publicPath}notifications`,
 
   PROGRESS_PHOTOS: `${publicPath}progress_photos`,
-  GALLERY_PHOTOS: `${publicPath}gallery_photos`,
+  GALLERY_PHOTOS: `${publicPath}gallery_photos`
 };

@@ -1,5 +1,5 @@
-import { takeLatest, put, call } from 'redux-saga/effects';
-import api from 'api/userScheduleWorkouts';
+import { takeLatest, put, call } from "redux-saga/effects";
+import api from "api/userScheduleWorkouts";
 import {
   getUsersWorkoutSchedulesSuccess,
   getUsersWorkoutSchedulesError,
@@ -60,8 +60,8 @@ import {
   reorderWorkoutExercisesError,
   GET_USERS_WORKOUT_OVERVIEW_REQUEST,
   getUsersWorkoutOverviewSuccess,
-  getUsersWorkoutOverviewError,
-} from '../actions/userScheduleWorkouts';
+  getUsersWorkoutOverviewError
+} from "../actions/userScheduleWorkouts";
 
 function getUsersWorkoutSchedulesByMonthData() {
   return function*(action) {
@@ -69,7 +69,7 @@ function getUsersWorkoutSchedulesByMonthData() {
       let requestData = action.requestData;
       const username = action.username;
       const data = yield call(() =>
-        api.getUsersWorkoutSchedulesByMonths(requestData, username),
+        api.getUsersWorkoutSchedulesByMonths(requestData, username)
       );
       yield put(getUsersWorkoutSchedulesSuccess(data));
       action.callback(data);
@@ -132,6 +132,7 @@ function addUsersWorkoutScheduleData() {
       let requestData = action.requestData;
       const data = yield call(() => api.addUsersWorkoutSchedule(requestData));
       yield put(addUsersWorkoutScheduleSuccess(data));
+      action.callback(data);
     } catch (error) {
       yield put(addUsersWorkoutScheduleError(error));
     }
@@ -143,7 +144,7 @@ function updateUsersWorkoutScheduleData() {
     try {
       let requestData = action.requestData;
       const data = yield call(() =>
-        api.updateUsersWorkoutSchedule(requestData),
+        api.updateUsersWorkoutSchedule(requestData)
       );
       yield put(updateUsersWorkoutScheduleSuccess(data));
     } catch (error) {
@@ -158,7 +159,7 @@ function pasteUsersWorkoutScheduleData() {
       let requestData = action.requestData;
       let _action = action.action;
       const data = yield call(() =>
-        api.pasteUsersWorkoutSchedule(requestData, _action),
+        api.pasteUsersWorkoutSchedule(requestData, _action)
       );
       yield put(pasteUsersWorkoutScheduleSuccess(data));
     } catch (error) {
@@ -172,7 +173,7 @@ function deleteUsersBulkWorkoutScheduleData() {
     try {
       let requestData = action.requestData;
       const data = yield call(() =>
-        api.deleteUsersBulkWorkoutSchedule(requestData),
+        api.deleteUsersBulkWorkoutSchedule(requestData)
       );
       yield put(deleteUsersBulkWorkoutScheduleSuccess(data));
     } catch (error) {
@@ -186,7 +187,7 @@ function completeUsersBulkWorkoutScheduleData() {
     try {
       let requestData = action.requestData;
       const data = yield call(() =>
-        api.completeUsersBulkWorkoutSchedule(requestData),
+        api.completeUsersBulkWorkoutSchedule(requestData)
       );
       yield put(completeUsersBulkWorkoutScheduleSuccess(data));
       action.callback(data);
@@ -226,7 +227,7 @@ function updateUserWorkoutTitleData() {
       let _id = action._id;
       let requestData = action.requestData;
       const data = yield call(() =>
-        api.updateUserWorkoutTitle(_id, requestData),
+        api.updateUserWorkoutTitle(_id, requestData)
       );
       yield put(updateUserWorkoutTitleSuccess(data));
     } catch (error) {
@@ -252,8 +253,10 @@ function deleteUserWholeExerciseData() {
       let requestData = action.requestData;
       const data = yield call(() => api.deleteUserWholeExercise(requestData));
       yield put(deleteUserWholeExerciseSuccess(data));
+      action.callback(data);
     } catch (error) {
       yield put(deleteUserWholeExerciseError(error));
+      action.callback(error);
     }
   };
 }
@@ -276,7 +279,7 @@ function getUserFirstWorkoutByDateData() {
       let requestData = action.requestData;
       const username = action.username;
       const data = yield call(() =>
-        api.getUserFirstWorkoutByDate(requestData, username),
+        api.getUserFirstWorkoutByDate(requestData, username)
       );
       yield put(getUserFirstWorkoutByDateSuccess(data));
       action.callback(data);
@@ -292,7 +295,7 @@ function getUserWorkoutCalendarListData() {
       let requestData = action.requestData;
       const username = action.username;
       const data = yield call(() =>
-        api.getUserWorkoutCalendarList(requestData, username),
+        api.getUserWorkoutCalendarList(requestData, username)
       );
       yield put(getUserWorkoutCalendarListSuccess(data));
     } catch (error) {
@@ -328,68 +331,68 @@ function reorderWorkoutExercises() {
 export function* watchUsersWorkoutSchedulesData() {
   yield takeLatest(
     GET_USERS_WORKOUT_SCHEDULES_REQUEST,
-    getUsersWorkoutSchedulesByMonthData(),
+    getUsersWorkoutSchedulesByMonthData()
   );
   yield takeLatest(
     GET_USERS_WORKOUT_SCHEDULE_REQUEST,
-    getUsersWorkoutScheduleData(),
+    getUsersWorkoutScheduleData()
   );
   yield takeLatest(
     GET_USERS_WORKOUT_OVERVIEW_REQUEST,
-    getUsersWorkoutOverviewData(),
+    getUsersWorkoutOverviewData()
   );
   yield takeLatest(GET_EXERCISES_NAME_REQUEST, getExercisesName());
   yield takeLatest(
     ADD_USERS_WORKOUT_SCHEDULE_REQUEST,
-    addUsersWorkoutScheduleData(),
+    addUsersWorkoutScheduleData()
   );
   yield takeLatest(
     UPDATE_USERS_WORKOUT_SCHEDULE_REQUEST,
-    updateUsersWorkoutScheduleData(),
+    updateUsersWorkoutScheduleData()
   );
   yield takeLatest(
     PASTE_USERS_WORKOUT_SCHEDULE_REQUEST,
-    pasteUsersWorkoutScheduleData(),
+    pasteUsersWorkoutScheduleData()
   );
   yield takeLatest(
     DELETE_USERS_BULK_WORKOUT_SCHEDULE_REQUEST,
-    deleteUsersBulkWorkoutScheduleData(),
+    deleteUsersBulkWorkoutScheduleData()
   );
   yield takeLatest(
     COMPLETE_USERS_BULK_WORKOUT_SCHEDULE_REQUEST,
-    completeUsersBulkWorkoutScheduleData(),
+    completeUsersBulkWorkoutScheduleData()
   );
   yield takeLatest(GET_PROGRAMS_NAME_REQUEST, getProgramsName());
   yield takeLatest(USER_ASSIGN_PROGRAM_REQUEST, userAssignProgramData());
   yield takeLatest(ADD_USER_WORKOUT_TITLE_REQUEST, addUserWorkoutTitleData());
   yield takeLatest(
     UPDATE_USER_WORKOUT_TITLE_REQUEST,
-    updateUserWorkoutTitleData(),
+    updateUserWorkoutTitleData()
   );
   yield takeLatest(
     GET_EXERCISE_MEASUREMENT_REQUEST,
-    getExerciseMeasurementData(),
+    getExerciseMeasurementData()
   );
   yield takeLatest(
     DELETE_USER_WHOLE_EXERCISE_REQUEST,
-    deleteUserWholeExerciseData(),
+    deleteUserWholeExerciseData()
   );
   yield takeLatest(
     DELETE_USER_SINGLE_EXERCISE_REQUEST,
-    deleteUserSingleExerciseData(),
+    deleteUserSingleExerciseData()
   );
   yield takeLatest(
     GET_USER_FIRST_WORKOUT_BY_DATE_REQUEST,
-    getUserFirstWorkoutByDateData(),
+    getUserFirstWorkoutByDateData()
   );
   yield takeLatest(
     GET_USER_WORKOUT_CALENDAR_LIST_REQUEST,
-    getUserWorkoutCalendarListData(),
+    getUserWorkoutCalendarListData()
   );
   yield takeLatest(GET_WORKOUTS_LIST_BY_DATE_REQUEST, getWorkoutsListByDate());
   yield takeLatest(
     REORDER_WORKOUT_EXERCISES_REQUEST,
-    reorderWorkoutExercises(),
+    reorderWorkoutExercises()
   );
 }
 

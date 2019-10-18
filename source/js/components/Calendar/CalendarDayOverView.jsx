@@ -11,7 +11,9 @@ import moment from "moment";
 import {
   getUserFirstWorkoutByDateRequest,
   getUsersWorkoutScheduleRequest,
-  getUsersWorkoutOverviewRequest
+  getUsersWorkoutOverviewRequest,
+  getExercisesNameRequest,
+  getExerciseMeasurementRequest
 } from "../../actions/userScheduleWorkouts";
 import { connect } from "react-redux";
 import { showPageLoader, hidePageLoader } from "../../actions/pageLoader";
@@ -67,6 +69,8 @@ class CalendarDayOverView extends Component {
     dispatch(getUserMealRequest(requestObj));
     dispatch(getUserBodyMeasurementRequest(requestObj));
     dispatch(recentMealRequest());
+    dispatch(getExercisesNameRequest());
+    dispatch(getExerciseMeasurementRequest());
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -79,6 +83,8 @@ class CalendarDayOverView extends Component {
       measurementloading,
       recentMeals,
       recentMealsLoading,
+      exercises,
+      exerciseMeasurements,
       dispatch
     } = this.props;
     let { logsList } = this.state;
@@ -110,6 +116,12 @@ class CalendarDayOverView extends Component {
     }
 
     if (!recentMealsLoading && prevProps.recentMeals !== recentMeals) {
+      dispatch(hidePageLoader());
+    }
+    if (!loading && prevProps.exercises !== exercises) {
+      dispatch(hidePageLoader());
+    }
+    if (!loading && prevProps.exerciseMeasurements !== exerciseMeasurements) {
       dispatch(hidePageLoader());
     }
   }
@@ -240,7 +252,13 @@ class CalendarDayOverView extends Component {
       measurement,
       nutritionTab
     } = this.state;
-    const { firstWorkoutId, loading, dispatch } = this.props;
+    const {
+      firstWorkoutId,
+      loading,
+      exercises,
+      exerciseMeasurements,
+      dispatch
+    } = this.props;
     console.log("WORKOUTLIST", workoutsList);
     const ExampleCustomInput = ({ value, onClick }) => (
       <span className="display-calendar" onClick={onClick}>
@@ -388,7 +406,11 @@ class CalendarDayOverView extends Component {
                   }
                   id="Exercise"
                 >
-                  <CalendarDayOverViewWorkouts logDate={logDate} />
+                  <CalendarDayOverViewWorkouts
+                    logDate={logDate}
+                    exercises={exercises}
+                    exerciseMeasurements={exerciseMeasurements}
+                  />
                 </div>
               )}
               {this.state.cuurentTab === "#Nutrition" && (
@@ -485,6 +507,8 @@ const mapStateToProps = state => {
     workouts: userScheduleWorkouts.get("workouts"),
     workout: userScheduleWorkouts.get("workout"),
     workoutsList: userScheduleWorkouts.get("workoutsList"),
+    exercises: userScheduleWorkouts.get("exercises"),
+    exerciseMeasurements: userScheduleWorkouts.get("exerciseMeasurements"),
     loading: userScheduleWorkouts.get("loading"),
 
     user_meals: userMeal.get("user_meals"),
