@@ -26,28 +26,28 @@ class ExerciseViewAreaGraph extends Component {
           averageLifted: 55
         },
         {
-          name: "30/10/2000",
+          name: "30/02/2019",
           weightLifted: 40,
           reps: 24,
           sets: 24,
           averageLifted: 55
         },
         {
-          name: "30/10/2000",
+          name: "09/03/2019",
           weightLifted: 30,
           reps: 13,
           sets: 22,
           averageLifted: 70
         },
         {
-          name: "30/10/2000",
+          name: "13/03/2019",
           weightLifted: 20,
           reps: 98,
           sets: 22,
           averageLifted: 30
         },
         {
-          name: "30/10/2000",
+          name: "16/03/2019",
           weightLifted: 27,
           reps: 39,
           sets: 20,
@@ -153,10 +153,10 @@ class ExerciseViewAreaGraph extends Component {
             <thead>
               <tr>
                 <th />
-                <th>19/10/2019</th>
-                <th>19/10/2019</th>
-                <th>19/10/2019</th>
-                <th>19/10/2019</th>
+                <th>30/02/2019</th>
+                <th>09/03/2019</th>
+                <th>13/03/2019</th>
+                <th>16/03/2019</th>
                 <th>Total Change</th>
               </tr>
             </thead>

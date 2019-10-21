@@ -30,7 +30,7 @@ class Progress extends Component {
   componentWillMount() {
     const { dispatch, match, history } = this.props;
     if (match.isExact) {
-      history.push(routeCodes.PROGRESS_OVERVIEW);
+      history.push(routeCodes.PROGRESS_EXERCISE);
     } else {
       var dateRange = moment.range(
         moment()
