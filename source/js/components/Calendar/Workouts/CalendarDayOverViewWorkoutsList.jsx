@@ -89,7 +89,15 @@ class CalendarDayOverViewWorkoutsList extends Component {
                 </div>
               </div>
               {isAdvanceView ? (
-                <CaledarDayWorkoutAdvanceView />
+                <CaledarDayWorkoutAdvanceView
+                  setsDetails={setsDetails}
+                  sets={sets}
+                  handleAddSetDetails={this.props.handleAddSetDetails}
+                  handleRemoveSetDetails={this.props.handleRemoveSetDetails}
+                  handleChangeAdvanceSetDetsils={
+                    this.props.handleChangeAdvanceSetDetsils
+                  }
+                />
               ) : (
                 <CalendarDayWorkoutView
                   sets={sets}
@@ -101,8 +109,12 @@ class CalendarDayOverViewWorkoutsList extends Component {
             </div>
           </div>
         )}
-        {workout.subType === "superset" && (
-          <WorkoutSuperSetViewList workout={workout} index={index} />
+        {(workout.subType === "superset" || workout.subType === "circuit") && (
+          <WorkoutSuperSetViewList
+            workout={workout}
+            index={index}
+            subType={workout.subType}
+          />
         )}
       </React.Fragment>
     );

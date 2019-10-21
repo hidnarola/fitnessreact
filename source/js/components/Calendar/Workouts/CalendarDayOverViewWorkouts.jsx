@@ -229,6 +229,7 @@ class CalendarDayOverViewWorkouts extends Component {
                                   handleInitDeleteAlert={
                                     this.handleInitDeleteAlert
                                   }
+                                  handleAddSetDetails={this.handleAddSetDetails}
                                 />
                               ))}
                             {newSingleWarmup.map((item, index) => (
@@ -242,6 +243,13 @@ class CalendarDayOverViewWorkouts extends Component {
                                 handleSubmitExercise={this.handleSubmitExercise}
                                 handleRemoveSingleWorkout={
                                   this.handleRemoveSingleWorkout
+                                }
+                                handleAddSetDetails={this.handleAddSetDetails}
+                                handleRemoveSetDetails={
+                                  this.handleRemoveSetDetails
+                                }
+                                handleChangeAdvanceSetDetsils={
+                                  this.handleChangeAdvanceSetDetsils
                                 }
                                 type="warmup"
                               />
@@ -300,6 +308,13 @@ class CalendarDayOverViewWorkouts extends Component {
                                   this.handleRemoveSingleWorkout
                                 }
                                 type="workout"
+                                handleAddSetDetails={this.handleAddSetDetails}
+                                handleRemoveSetDetails={
+                                  this.handleRemoveSetDetails
+                                }
+                                handleChangeAdvanceSetDetsils={
+                                  this.handleChangeAdvanceSetDetsils
+                                }
                               />
                             ))}
                             {workout &&
@@ -356,6 +371,13 @@ class CalendarDayOverViewWorkouts extends Component {
                                   this.handleRemoveSingleWorkout
                                 }
                                 type="cooldown"
+                                handleAddSetDetails={this.handleAddSetDetails}
+                                handleRemoveSetDetails={
+                                  this.handleRemoveSetDetails
+                                }
+                                handleChangeAdvanceSetDetsils={
+                                  this.handleChangeAdvanceSetDetsils
+                                }
                               />
                             ))}
                             {workout &&
@@ -554,7 +576,67 @@ class CalendarDayOverViewWorkouts extends Component {
     }
     this.setState({ newSingleWarmup, newSingleWorkout, newSingleCooldown });
   };
-
+  handleAddSetDetails = (
+    workoutsListsIndex,
+    exerciseIndex,
+    type,
+    timeUnit,
+    speedUnit
+  ) => {
+    let { newSingleWarmup } = this.state;
+    if (type === "warmup") {
+      let setDetails =
+        newSingleWarmup[workoutsListsIndex].exercises[exerciseIndex]
+          .setsDetails;
+      setDetails.push({
+        field1: { value: 1, unit: timeUnit },
+        field2: { value: 1, unit: speedUnit },
+        field3: null,
+        restTime: 0,
+        restTimeUnit: "second"
+      });
+      console.log("===========setDetails===========");
+      console.log(setDetails);
+      console.log("==========================");
+      this.setState({ newSingleWarmup });
+    }
+  };
+  handleChangeAdvanceSetDetsils = (
+    workoutsListsIndex,
+    exerciseIndex,
+    fieldName,
+    value,
+    type
+  ) => {
+    let { newSingleWarmup } = this.state;
+    if (type === "warmup") {
+      newSingleWarmup[workoutsListsIndex].exercises[
+        exerciseIndex
+      ].setsDetails.forEach((item, i) => {
+        item[fieldName]["unit"] = value;
+      });
+    }
+    console.log("===========newSingleWarmup===========");
+    console.log(newSingleWarmup);
+    console.log("==========================");
+    this.setState({ newSingleWarmup });
+  };
+  handleRemoveSetDetails = (
+    workoutsListsIndex,
+    exerciseIndex,
+    type,
+    setDetailIndex
+  ) => {
+    console.log("===========setDetailIndex===========");
+    console.log(setDetailIndex);
+    console.log("==========================");
+    let { newSingleWarmup } = this.state;
+    let setDetails =
+      newSingleWarmup[workoutsListsIndex].exercises[exerciseIndex].setsDetails;
+    setDetails.splice(setDetailIndex, 1);
+    newSingleWarmup[workoutsListsIndex].exercises[exerciseIndex].setsDetails;
+    this.setState({ newSingleWarmup });
+  };
   handleSubmitExercise = async index => {
     let {
       newSingleWarmup,

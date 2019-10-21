@@ -23,6 +23,7 @@ class CalendarDayWorkoutRightSidebar extends Component {
       exerciseTab: "#single",
       isOpenExerciseDetail: false,
       superSetWorkoutsLists: [],
+      circuitWorkoutsLists: [],
       sets: 1,
       restTime: 1,
       restTimeUnit: "minute",
@@ -34,6 +35,7 @@ class CalendarDayWorkoutRightSidebar extends Component {
     const {
       isOpenExerciseDetail,
       superSetWorkoutsLists,
+      circuitWorkoutsLists,
       searchResult,
       sets,
       restTime,
@@ -278,6 +280,7 @@ class CalendarDayWorkoutRightSidebar extends Component {
                             workout={workout}
                             workoutIndex={index}
                             handleSetsDetails={this.handleSetsDetails}
+                            type={this.state.exerciseTab}
                           />
                         ))}
 
@@ -295,6 +298,155 @@ class CalendarDayWorkoutRightSidebar extends Component {
                         </li> */}
 
                         {superSetWorkoutsLists.length >= 2 && (
+                          <li
+                            className="btn-add"
+                            onClick={() => this.handleSubmitSupersetWorkout()}
+                          >
+                            <button className="btn">
+                              <i className="far fa-arrow-to-left" /> Add and
+                              save
+                            </button>
+                          </li>
+                        )}
+                      </ul>
+                    </div>
+                  </React.Fragment>
+                )}
+                {this.state.exerciseTab === "#circuit" && (
+                  <React.Fragment>
+                    <div className="superset-section mt-3">
+                      <div className="superset-boxs">
+                        <h4>Sets</h4>
+                        <div className="superset-input">
+                          <div className="serving-boxs">
+                            <button
+                              className="btn btn-minus"
+                              onClick={() =>
+                                this.handleChangeInput(
+                                  "sets",
+                                  parseInt(sets) - 1
+                                )
+                              }
+                            >
+                              <FontAwesomeIcon icon="minus" />
+                            </button>
+                            <input
+                              type="number"
+                              className="form-control"
+                              value={sets}
+                              onChange={e =>
+                                this.handleChangeInput(
+                                  "sets",
+                                  parseInt(e.target.value)
+                                )
+                              }
+                            />
+                            <button
+                              className="btn btn-plus"
+                              onClick={() =>
+                                this.handleChangeInput(
+                                  "sets",
+                                  parseInt(sets) + 1
+                                )
+                              }
+                            >
+                              <FontAwesomeIcon icon="plus" />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="superset-boxs">
+                        <h4>Rest</h4>
+                        <div className="superset-input">
+                          <div className="serving-boxs">
+                            <button
+                              className="btn btn-minus"
+                              onClick={() =>
+                                this.handleChangeInput(
+                                  "restTime",
+                                  parseInt(restTime) - 1
+                                )
+                              }
+                            >
+                              <FontAwesomeIcon icon="minus" />
+                            </button>
+                            <input
+                              type="number"
+                              className="form-control"
+                              value={restTime}
+                              onChange={e =>
+                                this.handleChangeInput(
+                                  "restTime",
+                                  parseInt(e.target.value)
+                                )
+                              }
+                            />
+                            <button
+                              className="btn btn-plus"
+                              onClick={() =>
+                                this.handleChangeInput(
+                                  "restTime",
+                                  parseInt(restTime) + 1
+                                )
+                              }
+                            >
+                              <FontAwesomeIcon icon="plus" />
+                            </button>
+                          </div>
+                          <div className="serving-select">
+                            <select
+                              className="form-control"
+                              value={restTimeUnit}
+                              onChange={e =>
+                                this.handleChangeInput(
+                                  "restTimeUnit",
+                                  parseInt(e.target.value)
+                                )
+                              }
+                            >
+                              <option value="second">Seconds</option>
+                              <option value="minute">Minutes</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="superset-boxs">
+                        <h4>Exercies</h4>
+                      </div>
+                      <ul>
+                        <li className="single-search-exercise p-0 m-0">
+                          <Select
+                            placeholder="Add exercise"
+                            className="width-100-per"
+                            options={optionsList}
+                            onChange={value =>
+                              this.handleAddWorkoutLists(value)
+                            }
+                          />
+                        </li>
+                        {circuitWorkoutsLists.map((workout, index) => (
+                          <CalendarSuperSetWorkoutList
+                            workout={workout}
+                            workoutIndex={index}
+                            handleSetsDetails={this.handleSetsDetails}
+                            type={this.state.exerciseTab}
+                          />
+                        ))}
+
+                        {/* <li>
+                          <div className="input-group">
+                            <input
+                              type="text"
+                              className="form-control"
+                              placeholder="Add exercise"
+                            />
+                            <div className="input-group-prepend">
+                              <FontAwesomeIcon icon="plus-circle" />
+                            </div>
+                          </div>
+                        </li> */}
+
+                        {circuitWorkoutsLists.length >= 1 && (
                           <li
                             className="btn-add"
                             onClick={() => this.handleSubmitSupersetWorkout()}
@@ -328,7 +480,11 @@ class CalendarDayWorkoutRightSidebar extends Component {
   };
 
   handleAddWorkoutLists = obj => {
-    let { superSetWorkoutsLists } = this.state;
+    let {
+      superSetWorkoutsLists,
+      circuitWorkoutsLists,
+      exerciseTab
+    } = this.state;
     const { exerciseMeasurements = [] } = this.props;
     let exercises = [];
     let exerciseDetail;
@@ -367,11 +523,13 @@ class CalendarDayWorkoutRightSidebar extends Component {
       field3:
         measObj && measObj.field3 ? prepareFieldsOptions(measObj.field3) : []
     };
-    superSetWorkoutsLists.push({ ...exerciseDetail });
-    this.setState({ superSetWorkoutsLists });
-    console.log("===========newSingleWarmup===========");
-    console.log(superSetWorkoutsLists);
-    console.log("==========================");
+    if (exerciseTab === "#superset") {
+      superSetWorkoutsLists.push({ ...exerciseDetail });
+      this.setState({ superSetWorkoutsLists });
+    } else if (exerciseTab === "#circuit") {
+      circuitWorkoutsLists.push({ ...exerciseDetail });
+      this.setState({ circuitWorkoutsLists });
+    }
   };
   handleChangeInput = (fieldName, value) => {
     this.setState({ [fieldName]: value });
@@ -381,19 +539,35 @@ class CalendarDayWorkoutRightSidebar extends Component {
     workoutsListsIndex,
     setDetailIndex,
     fieldName,
-    value
+    value,
+    type
   ) => {
-    let { superSetWorkoutsLists } = this.state;
-    superSetWorkoutsLists[workoutsListsIndex].setsDetails[setDetailIndex][
-      fieldName
-    ] = value;
-    this.setState({ superSetWorkoutsLists });
+    let { superSetWorkoutsLists, circuitWorkoutsLists } = this.state;
+    if (type === "#superset") {
+      superSetWorkoutsLists[workoutsListsIndex].setsDetails[setDetailIndex][
+        fieldName
+      ] = value;
+    } else if (type === "#circuit") {
+      circuitWorkoutsLists[workoutsListsIndex].setsDetails[setDetailIndex][
+        fieldName
+      ] = value;
+    }
+    this.setState({ superSetWorkoutsLists, circuitWorkoutsLists });
   };
 
   handleSubmitSupersetWorkout = async () => {
     const { logDate, dispatch, workouts, cuurentTab } = this.props;
-    let { superSetWorkoutsLists, sets, restTime, restTimeUnit } = this.state;
+    let {
+      superSetWorkoutsLists,
+      circuitWorkoutsLists,
+      sets,
+      restTime,
+      restTimeUnit,
+      exerciseTab
+    } = this.state;
     let exerciseType;
+    let result;
+    let subType;
     if (cuurentTab === "#warmup") {
       exerciseType = "warmup";
     } else if (cuurentTab === "#workout") {
@@ -401,27 +575,51 @@ class CalendarDayWorkoutRightSidebar extends Component {
     } else if (cuurentTab === "#cooldown") {
       exerciseType = "cooldown";
     }
-    superSetWorkoutsLists.forEach(item => {
-      item.sets = sets;
-      item.restTime = restTime;
-      item.restTimeUnit = restTimeUnit;
-    });
-    this.setState({ superSetWorkoutsLists });
-    const result = superSetWorkoutsLists.map(
-      ({ field1, field2, field3, ...rest }) => ({ ...rest })
-    );
+    if (exerciseTab === "#superset") {
+      subType = "superset";
+      superSetWorkoutsLists.forEach(item => {
+        item.sets = sets;
+        item.restTime = restTime;
+        item.restTimeUnit = restTimeUnit;
+      });
+      this.setState({ superSetWorkoutsLists });
+      result = superSetWorkoutsLists.map(
+        ({ field1, field2, field3, ...rest }) => ({ ...rest })
+      );
+    } else if (exerciseTab === "#circuit") {
+      console.log("===========circuitWorkoutsLists===========");
+      console.log(circuitWorkoutsLists);
+      console.log("==========================");
+      subType = "circuit";
+      circuitWorkoutsLists.forEach(item => {
+        item.sets = sets;
+        item.restTime = restTime;
+        item.restTimeUnit = restTimeUnit;
+      });
+      this.setState({ circuitWorkoutsLists });
+      result = circuitWorkoutsLists.map(
+        ({ field1, field2, field3, ...rest }) => ({ ...rest })
+      );
+    }
+
     let requestData = {
       exercises: result,
       date: new Date(logDate).toISOString(),
       sequence: workouts.warmup.length + 1,
-      subType: "superset",
+      subType: subType,
       type: exerciseType,
       userWorkoutsId: workouts._id
     };
     await dispatch(
       addUsersWorkoutScheduleRequest(requestData, res => {
         superSetWorkoutsLists = [];
-        this.setState({ superSetWorkoutsLists, sets: 1, restTime: 1 });
+        circuitWorkoutsLists = [];
+        this.setState({
+          superSetWorkoutsLists,
+          circuitWorkoutsLists,
+          sets: 1,
+          restTime: 1
+        });
         ts("Workout successfully added");
       })
     );

@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import WorkoutSuperSetContentView from "./WorkoutSuperSetContentView";
 
 const WorkoutSuperSetViewList = props => {
+  const { subType } = props;
   const { exercises = [] } = props.workout;
   console.log("===========superSet Workout List===========");
   console.log(props.workout);
@@ -19,7 +20,7 @@ const WorkoutSuperSetViewList = props => {
         </div>
         <div className="excercise-right">
           <div className="topbar-title">
-            <h3>Superset</h3>
+            <h3>{subType === "superset" ? "Superset" : "Circuit"}</h3>
             <div role="toolbar" className="btn-toolbar ml-auto">
               <ButtonToolbar className="boxing-icon border-right">
                 <Dropdown id={`workout-actions-1`} pullRight>

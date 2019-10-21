@@ -16172,7 +16172,7 @@ a.timline-post-edit-btn svg {
 .exercise-tabs .excercise-boxs .excercise-number span {font-size: 25px; color: #fff; font-family: 'gt_walsheim_proregular'; font-weight: 900;}
 .exercise-tabs .excercise-boxs .excercise-right {width: calc(100% - 50px); margin-left: auto; padding:3px 3px 3px 0;}
 .exercise-tabs .excercise-boxs .excercise-right .topbar-title {width: 100%; display: flex; flex-wrap: wrap; background: #fff; padding: 0px; border-bottom: solid 3px #D1DAE2; border-radius: 0px 7px 0px 0px;}
-.exercise-tabs .excercise-boxs .excercise-right .topbar-title h3 {padding: 13px 0 13px 15px; font-size: 25px; color: #201F60; font-family: 'Neuzeit'; font-weight: 900; line-height: 1; margin: 0px;overflow: hidden;text-overflow: ellipsis;width:60%;white-space: nowrap;}
+.exercise-tabs .excercise-boxs .excercise-right .topbar-title h3 {padding: 13px 0 13px 15px; font-size: 25px; color: #201F60; font-family: 'Neuzeit'; font-weight: 900; line-height: 1; margin: 0px;overflow: hidden;text-overflow: ellipsis;width:50%;white-space: nowrap;}
 
 .exercise-tabs .excercise-boxs .excercise-right .excercise-content {display: block;}
 .exercise-tabs .excercise-boxs .excercise-right .excercise-content .row {height: auto !important; border-bottom: 3px solid #FFFFFF;}

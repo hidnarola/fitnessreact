@@ -49,6 +49,27 @@ class CalendarNewWorkoutList extends Component {
             <div className="topbar-title">
               <h3>{exerciseObj.label}</h3>
               <div role="toolbar" className="btn-toolbar ml-auto">
+                <ButtonToolbar className="boxing-icon border-left">
+                  <Dropdown id={`workout-actions-1`} pullRight>
+                    <Dropdown.Toggle noCaret>
+                      <i className="icon-more_horiz" />
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu>
+                      <MenuItem
+                        eventKey="1"
+                        onClick={() => this.handelChange("advanceView")}
+                      >
+                        Advance Display
+                      </MenuItem>
+                      <MenuItem
+                        eventKey="2"
+                        onClick={() => this.handelChange("normalView")}
+                      >
+                        Move Exercise
+                      </MenuItem>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </ButtonToolbar>
                 <button
                   className="btn btn-save border-left border-right"
                   onClick={() =>
@@ -69,7 +90,20 @@ class CalendarNewWorkoutList extends Component {
               </div>
             </div>
             {isAdvanceView ? (
-              <CaledarDayWorkoutAdvanceView />
+              <CaledarDayWorkoutAdvanceView
+                setsDetails={setsDetails}
+                sets={sets}
+                workoutIndex={this.props.workoutIndex}
+                handleAddSetDetails={this.props.handleAddSetDetails}
+                handleChangeSetsDetails={this.props.handleChangeSetsDetails}
+                handleRemoveSetDetails={this.props.handleRemoveSetDetails}
+                type={type}
+                handleChangeAdvanceSetDetsils={
+                  this.props.handleChangeAdvanceSetDetsils
+                }
+                field1Options={field1}
+                field2Options={field2}
+              />
             ) : (
               <CalendarNewWorkoutView
                 sets={sets}
@@ -109,27 +143,4 @@ export default CalendarNewWorkoutList;
                     ></label>
                   </div>
                 </div> */
-}
-{
-  /* <ButtonToolbar className="boxing-icon border-right">
-                  <Dropdown id={`workout-actions-1`} pullRight>
-                    <Dropdown.Toggle noCaret>
-                      <i className="icon-more_horiz" />
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu>
-                      <MenuItem
-                        eventKey="1"
-                        onClick={() => this.handelChange("advanceView")}
-                      >
-                        Advance Display
-                      </MenuItem>
-                      <MenuItem
-                        eventKey="2"
-                        onClick={() => this.handelChange("normalView")}
-                      >
-                        Move Exercise
-                      </MenuItem>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </ButtonToolbar> */
 }

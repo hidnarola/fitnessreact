@@ -11,7 +11,7 @@ class CalendarSuperSetWorkoutList extends Component {
   }
   render() {
     const { isOpenExerciseDetail } = this.state;
-    const { workout, handleSetsDetails, workoutIndex } = this.props;
+    const { workout, handleSetsDetails, workoutIndex, type } = this.props;
     const { exerciseObj, field1, field2, setsDetails } = workout;
     const field1value = setsDetails[0].field1.value;
     const field1unit = setsDetails[0].field1.unit;
@@ -57,10 +57,16 @@ class CalendarSuperSetWorkoutList extends Component {
                       <button
                         className="btn btn-minus"
                         onClick={() =>
-                          handleSetsDetails(workoutIndex, 0, "field1", {
-                            value: parseInt(field1value) - 1,
-                            unit: field1unit
-                          })
+                          handleSetsDetails(
+                            workoutIndex,
+                            0,
+                            "field1",
+                            {
+                              value: parseInt(field1value) - 1,
+                              unit: field1unit
+                            },
+                            type
+                          )
                         }
                       >
                         <FontAwesomeIcon icon="minus" />
@@ -70,19 +76,31 @@ class CalendarSuperSetWorkoutList extends Component {
                         className="form-control"
                         value={field1value}
                         onChange={e =>
-                          handleSetsDetails(workoutIndex, 0, "field1", {
-                            value: e.target.value,
-                            unit: field1unit
-                          })
+                          handleSetsDetails(
+                            workoutIndex,
+                            0,
+                            "field1",
+                            {
+                              value: e.target.value,
+                              unit: field1unit
+                            },
+                            type
+                          )
                         }
                       />
                       <button
                         className="btn btn-plus"
                         onClick={() =>
-                          handleSetsDetails(workoutIndex, 0, "field1", {
-                            value: parseInt(field1value) + 1,
-                            unit: field1unit
-                          })
+                          handleSetsDetails(
+                            workoutIndex,
+                            0,
+                            "field1",
+                            {
+                              value: parseInt(field1value) + 1,
+                              unit: field1unit
+                            },
+                            type
+                          )
                         }
                       >
                         <FontAwesomeIcon icon="plus" />
@@ -94,10 +112,16 @@ class CalendarSuperSetWorkoutList extends Component {
                         className="form-control"
                         value={field1unit}
                         onChange={e =>
-                          handleSetsDetails(workoutIndex, 0, "field1", {
-                            value: parseInt(field1value),
-                            unit: e.target.value
-                          })
+                          handleSetsDetails(
+                            workoutIndex,
+                            0,
+                            "field1",
+                            {
+                              value: parseInt(field1value),
+                              unit: e.target.value
+                            },
+                            type
+                          )
                         }
                       >
                         <option value="">Select</option>
@@ -117,10 +141,16 @@ class CalendarSuperSetWorkoutList extends Component {
                       <button
                         className="btn btn-minus"
                         onClick={() =>
-                          handleSetsDetails(workoutIndex, 0, "field2", {
-                            value: parseInt(field2value) - 1,
-                            unit: field2unit
-                          })
+                          handleSetsDetails(
+                            workoutIndex,
+                            0,
+                            "field2",
+                            {
+                              value: parseInt(field2value) - 1,
+                              unit: field2unit
+                            },
+                            type
+                          )
                         }
                       >
                         <FontAwesomeIcon icon="minus" />
@@ -130,19 +160,31 @@ class CalendarSuperSetWorkoutList extends Component {
                         className="form-control"
                         value={field2value}
                         onChange={e =>
-                          handleSetsDetails(workoutIndex, 0, "field2", {
-                            value: e.target.value,
-                            unit: field2unit
-                          })
+                          handleSetsDetails(
+                            workoutIndex,
+                            0,
+                            "field2",
+                            {
+                              value: e.target.value,
+                              unit: field2unit
+                            },
+                            type
+                          )
                         }
                       />
                       <button
                         className="btn btn-plus"
                         onClick={() =>
-                          handleSetsDetails(workoutIndex, 0, "field2", {
-                            value: parseInt(field2value) + 1,
-                            unit: field2unit
-                          })
+                          handleSetsDetails(
+                            workoutIndex,
+                            0,
+                            "field2",
+                            {
+                              value: parseInt(field2value) + 1,
+                              unit: field2unit
+                            },
+                            type
+                          )
                         }
                       >
                         <FontAwesomeIcon icon="plus" />
@@ -153,10 +195,16 @@ class CalendarSuperSetWorkoutList extends Component {
                         className="form-control"
                         value={field2unit}
                         onChange={e =>
-                          handleSetsDetails(workoutIndex, 0, "field2", {
-                            value: parseInt(field2value),
-                            unit: e.target.value
-                          })
+                          handleSetsDetails(
+                            workoutIndex,
+                            0,
+                            "field2",
+                            {
+                              value: parseInt(field2value),
+                              unit: e.target.value
+                            },
+                            type
+                          )
                         }
                       >
                         <option value="">Select</option>
