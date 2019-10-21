@@ -4,7 +4,7 @@ import { NavLink, Switch, Route, Link } from "react-router-dom";
 import FitnessHeader from "../components/global/FitnessHeader";
 import FitnessNav from "../components/global/FitnessNav";
 import { routeCodes } from "../constants/routes";
-import ExerciseView from "../components/Progress/ExerciseView";
+import ExerciseView from "../components/Progress/ExerciseView/ExerciseView";
 import BodyFat from "../components/Progress/BodyFat";
 import Mobility from "../components/Progress/Mobility";
 import Muscle from "../components/Progress/Muscle";
@@ -48,6 +48,7 @@ class Progress extends Component {
   render() {
     const { showSearch } = this.state;
     const { dateRange } = this.props;
+
     return (
       <div className="stat-page">
         <AddMetaDescription>
@@ -142,24 +143,23 @@ class Progress extends Component {
             </NavLink>
           </div> */}
 
-          {/* {showSearch &&
-                        <div className="progress-date-range-picker custom_date_pdl">
-                            <DateRangePickerCustomPeriod
-                                dateRange={dateRange}
-                                changeCallback={this.handleCustomDateRange}
-                            />
-                            <DateRangePicker
-                                firstOfWeek={1}
-                                numberOfCalendars={2}
-                                selectionType='range'
-                                value={dateRange}
-                                onSelect={this.handleTimeDateRange}
-                                className="progress-date-range"
-                            />
-                        </div>
-                    } */}
+          {showSearch && (
+            <div className="progress-date-range-picker custom_date_pdl">
+              <DateRangePickerCustomPeriod
+                dateRange={dateRange}
+                changeCallback={this.handleCustomDateRange}
+              />
+              <DateRangePicker
+                firstOfWeek={1}
+                numberOfCalendars={2}
+                selectionType="range"
+                value={dateRange}
+                onSelect={this.handleTimeDateRange}
+                className="progress-date-range"
+              />
+            </div>
+          )}
           <div className="mt-3">
-
             <Switch>
               <Route
                 exact
