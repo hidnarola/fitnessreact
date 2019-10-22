@@ -12,51 +12,51 @@ import {
 } from "recharts";
 import CustomTooltip1 from "../CustomTooltip1";
 
-class ExerciseViewAreaGraph extends Component {
+class BodyViewAreaGraph extends Component {
   mounted = false;
   constructor(props) {
     super(props);
     this.state = {
-      selectedView: "weightLifted",
+      selectedView: "circumference",
       data: [
         {
           name: null,
-          weightLifted: 40,
+          circumference: 40,
           reps: 24,
           sets: 24,
           averageLifted: 55
         },
         {
           name: "30/02/2019",
-          weightLifted: 40,
+          circumference: 40,
           reps: 24,
           sets: 24,
           averageLifted: 55
         },
         {
           name: "09/03/2019",
-          weightLifted: 30,
+          circumference: 30,
           reps: 13,
           sets: 22,
           averageLifted: 70
         },
         {
           name: "13/03/2019",
-          weightLifted: 20,
+          circumference: 20,
           reps: 98,
           sets: 22,
           averageLifted: 30
         },
         {
           name: "16/03/2019",
-          weightLifted: 27,
+          circumference: 27,
           reps: 39,
           sets: 20,
           averageLifted: 40
         },
         {
           name: null,
-          weightLifted: 27,
+          circumference: 27,
           reps: 39,
           sets: 20,
           averageLifted: 40
@@ -98,17 +98,7 @@ class ExerciseViewAreaGraph extends Component {
             overflow: "hidden"
           }}
         >
-          <div className="serving-select">
-            <select
-              className="form-control"
-              onChange={e => this.setState({ selectedView: e.target.value })}
-            >
-              <option value="weightLifted">Weight Lifted</option>
-              <option value="reps">Reps</option>
-              <option value="sets">Sets</option>
-              <option value="averageLifted">Average Lifted</option>
-            </select>
-          </div>
+          <div className="graph-sub-title">Circumference</div>
           <ResponsiveContainer style={{ background: "#d4dfe8" }}>
             <AreaChart
               data={data}
@@ -163,43 +153,13 @@ class ExerciseViewAreaGraph extends Component {
             </thead>
             <tbody>
               <tr>
-                <td>Weight Lifted</td>
-                <td>800 kg</td>
-                <td>800 kg</td>
-                <td>800 kg</td>
-                <td>800 kg</td>
+                <td>Circumference</td>
+                <td>30 kg</td>
+                <td>32 cm</td>
+                <td>33 cm</td>
+                <td>35 cm</td>
                 <td>
-                  <i className="fad fa-arrow-alt-up" /> 10 kg
-                </td>
-              </tr>
-              <tr>
-                <td>Reps</td>
-                <td>800 kg</td>
-                <td>800 kg</td>
-                <td>800 kg</td>
-                <td>800 kg</td>
-                <td>
-                  <i className="fad fa-arrow-alt-down" /> 10 kg
-                </td>
-              </tr>
-              <tr>
-                <td>Sets</td>
-                <td>800 kg</td>
-                <td>800 kg</td>
-                <td>800 kg</td>
-                <td>800 kg</td>
-                <td>
-                  <i className="fad fa-arrow-alt-up" /> 10 kg
-                </td>
-              </tr>
-              <tr>
-                <td>Average Lifted</td>
-                <td>800 kg</td>
-                <td>800 kg</td>
-                <td>800 kg</td>
-                <td>800 kg</td>
-                <td>
-                  <i className="fad fa-arrow-alt-down" /> 10 kg
+                  <i className="fad fa-arrow-alt-up" /> 5 cm
                 </td>
               </tr>
             </tbody>
@@ -210,4 +170,4 @@ class ExerciseViewAreaGraph extends Component {
   }
 }
 
-export default ExerciseViewAreaGraph;
+export default BodyViewAreaGraph;

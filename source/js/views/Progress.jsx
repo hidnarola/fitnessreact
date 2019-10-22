@@ -17,6 +17,8 @@ import DateRangePickerCustomPeriod from "../components/Common/DateRangePickerCus
 import { IDB_TBL_PROGRESS, IDB_READ_WRITE } from "../constants/idb";
 import { connectIDB, isOnline, tw } from "../helpers/funs";
 import AddMetaDescription from "../components/global/AddMetaDescription";
+import BodyView from "../components/Progress/BodyView/BodyView";
+import PhotosView from "../components/Progress/PhotosView/PhotosView";
 
 class Progress extends Component {
   constructor(props) {
@@ -50,7 +52,7 @@ class Progress extends Component {
     const { dateRange } = this.props;
 
     return (
-      <div className="stat-page">
+      <div className="fitness-nutrition">
         <AddMetaDescription>
           <title>Progress | Fitly</title>
         </AddMetaDescription>
@@ -83,115 +85,53 @@ class Progress extends Component {
                 <span className="date-text ml-auto mr-4">Progress</span>
               </div>
             </div>
-            {/* {dateRange && (
-              <div className="body-head-r">
-                <a
-                  href="javascript:void(0)"
-                  onClick={this.handleOpenCalendar}
-                  className="pink-btn"
-                >
-                  {`${dateRange.start
-                    .local()
-                    .format("DD/MM/YYYY")} - ${dateRange.end
-                    .local()
-                    .format("DD/MM/YYYY")}`}
-                  <i className="icon-date_range" />
-                </a>
-              </div>
-            )} */}
           </div>
-          {/* <div className="body-head-l-btm profile-new-menu">
-            <NavLink
-              activeClassName="pink-btn-new"
-              className="white-btn"
-              exact
-              to={routeCodes.PROGRESS_BODY_FAT}
-            >
-              Body Fat
-            </NavLink>
-            <NavLink
-              activeClassName="pink-btn-new"
-              className="white-btn"
-              exact
-              to={routeCodes.PROGRESS_MOBILITY}
-            >
-              Mobility
-            </NavLink>
-            <NavLink
-              activeClassName="pink-btn-new"
-              className="white-btn"
-              exact
-              to={routeCodes.PROGRESS_MUSCLE}
-            >
-              Muscle
-            </NavLink>
-            <NavLink
-              activeClassName="pink-btn-new"
-              className="white-btn"
-              exact
-              to={routeCodes.PROGRESS_STRENGTH}
-            >
-              Strength
-            </NavLink>
-            <NavLink
-              activeClassName="pink-btn-new"
-              className="white-btn"
-              exact
-              to={routeCodes.PROGRESS_ENDURANCE}
-            >
-              Endurance
-            </NavLink>
-          </div> */}
 
-          {showSearch && (
-            <div className="progress-date-range-picker custom_date_pdl">
-              <DateRangePickerCustomPeriod
-                dateRange={dateRange}
-                changeCallback={this.handleCustomDateRange}
-              />
-              <DateRangePicker
-                firstOfWeek={1}
-                numberOfCalendars={2}
-                selectionType="range"
-                value={dateRange}
-                onSelect={this.handleTimeDateRange}
-                className="progress-date-range"
-              />
+          <div className={"tab-content mt-3"}>
+            <div className="content active">
+              <Switch>
+                <Route
+                  exact
+                  path={routeCodes.PROGRESS_EXERCISE}
+                  component={ExerciseView}
+                />
+                <Route
+                  exact
+                  path={routeCodes.PROGRESS_BODY}
+                  component={BodyView}
+                />
+                <Route
+                  exact
+                  path={routeCodes.PROGRESS_PHOTOS_VIEW}
+                  component={PhotosView}
+                />
+                <Route
+                  exact
+                  path={routeCodes.PROGRESS_BODY_FAT}
+                  component={BodyFat}
+                />
+                <Route
+                  exact
+                  path={routeCodes.PROGRESS_MOBILITY}
+                  component={Mobility}
+                />
+                <Route
+                  exact
+                  path={routeCodes.PROGRESS_MUSCLE}
+                  component={Muscle}
+                />
+                <Route
+                  exact
+                  path={routeCodes.PROGRESS_STRENGTH}
+                  component={Strength}
+                />
+                <Route
+                  exact
+                  path={routeCodes.PROGRESS_ENDURANCE}
+                  component={Endurance}
+                />
+              </Switch>
             </div>
-          )}
-          <div className="mt-3">
-            <Switch>
-              <Route
-                exact
-                path={routeCodes.PROGRESS_EXERCISE}
-                component={ExerciseView}
-              />
-              <Route
-                exact
-                path={routeCodes.PROGRESS_BODY_FAT}
-                component={BodyFat}
-              />
-              <Route
-                exact
-                path={routeCodes.PROGRESS_MOBILITY}
-                component={Mobility}
-              />
-              <Route
-                exact
-                path={routeCodes.PROGRESS_MUSCLE}
-                component={Muscle}
-              />
-              <Route
-                exact
-                path={routeCodes.PROGRESS_STRENGTH}
-                component={Strength}
-              />
-              <Route
-                exact
-                path={routeCodes.PROGRESS_ENDURANCE}
-                component={Endurance}
-              />
-            </Switch>
           </div>
         </section>
       </div>
