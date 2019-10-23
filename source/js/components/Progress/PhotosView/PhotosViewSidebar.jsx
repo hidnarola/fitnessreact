@@ -1,13 +1,41 @@
 import React, { Component } from "react";
 import Collapse from "react-bootstrap/lib/Collapse";
 import { Scrollbars } from "react-custom-scrollbars";
+import cns from "classnames";
+import _filter from "lodash/filter";
+import _matches from "lodash/matches";
 
 class PhotosViewSidebar extends Component {
   state = {
-    toogleIsolation: false
+    toogleIsolation: false,
+    isolation: [
+      { title: "Neck", checked: true },
+      { title: "Shoulders", checked: true },
+      { title: "Biceps", checked: true },
+      { title: "Triceps", checked: true },
+      { title: "Forearm", checked: true }
+    ]
+  };
+  handleChangeStatus = index => {
+    let { isolation } = this.state;
+    isolation[index].checked = !isolation[index].checked;
+    this.setState({ isolation });
   };
   render() {
-    const { toogleIsolation } = this.state;
+    const { toogleIsolation, isolation } = this.state;
+    const filterIsolation = _filter(isolation, _matches({ checked: false }));
+    const filterIsolation1 = _filter(isolation, _matches({ checked: true }));
+    let displayIsolationStatus;
+    if (filterIsolation.length === isolation.length) {
+      displayIsolationStatus = "empty";
+    } else if (filterIsolation1.length === isolation.length) {
+      displayIsolationStatus = "all";
+    } else {
+      displayIsolationStatus = "selected";
+    }
+    console.log("===========displayIsolationStatus===========");
+    console.log(displayIsolationStatus);
+    console.log("==========================");
     return (
       <React.Fragment>
         <div className="exerciseview-sidebar h-100">
@@ -41,7 +69,20 @@ class PhotosViewSidebar extends Component {
                   this.setState({ toogleIsolation: !toogleIsolation })
                 }
               >
-                <i className="fa fa-tilde mr-2" style={{ color: "#F6EF14" }} />{" "}
+                <i
+                  className={cns("mr-2", {
+                    "fa fa-tilde": displayIsolationStatus === "selected",
+                    "fad fa-times-circle": displayIsolationStatus === "empty",
+                    "fad fa-check-circle": displayIsolationStatus === "all"
+                  })}
+                  style={
+                    displayIsolationStatus === "selected"
+                      ? { color: "#F6EF14" }
+                      : displayIsolationStatus === "empty"
+                        ? { color: "#FE858A" }
+                        : { color: "#43F4E4" }
+                  }
+                />
                 Isolation <i className="fad fa-caret-down ml-auto" />
               </li>
               <Collapse in={toogleIsolation}>
@@ -49,93 +90,31 @@ class PhotosViewSidebar extends Component {
                   <div className="display-items-list">
                     <Scrollbars>
                       <ul className="toogle-dropdown">
-                        <li>
-                          Neck{" "}
-                          <div className="custom_check">
-                            <input
-                              type="checkbox"
-                              id={"display_isolation1"}
-                              name={"display_isolation1"}
-                              defaultChecked={true}
-                              onChange={() => console.log("")}
-                            />
-                            <label
-                              className="mb-0"
-                              htmlFor="display_isolation1"
-                            />
-                          </div>
-                        </li>
-                        <li>
-                          Shoulders{" "}
-                          <div className="custom_check">
-                            <input
-                              type="checkbox"
-                              id={"display_isolation2"}
-                              name={"display_isolation2"}
-                              defaultChecked={true}
-                              onChange={() => console.log("")}
-                            />
-                            <label
-                              className="mb-0"
-                              htmlFor="display_isolation2"
-                            />
-                          </div>
-                        </li>
-                        <li>
-                          Biceps{" "}
-                          <div className="custom_check">
-                            <input
-                              type="checkbox"
-                              id={"display_isolation3"}
-                              name={"display_isolation3"}
-                              defaultChecked={false}
-                              onChange={() => console.log("")}
-                            />
-                            <label
-                              className="mb-0"
-                              htmlFor="display_isolation3"
-                            />
-                          </div>
-                        </li>
-                        <li>
-                          Triceps{" "}
-                          <div className="custom_check">
-                            <input
-                              type="checkbox"
-                              id={"display_isolation4"}
-                              name={"display_isolation4"}
-                              defaultChecked={true}
-                              onChange={() => console.log("")}
-                            />
-                            <label
-                              className="mb-0"
-                              htmlFor="display_isolation4"
-                            />
-                          </div>
-                        </li>
-                        <li>
-                          Forearm{" "}
-                          <div className="custom_check">
-                            <input
-                              type="checkbox"
-                              id={"display_isolation5"}
-                              name={"display_isolation5"}
-                              defaultChecked={false}
-                              onChange={() => console.log("")}
-                            />
-                            <label
-                              className="mb-0"
-                              htmlFor="display_isolation5"
-                            />
-                          </div>
-                        </li>
+                        {isolation.map((item, i) => (
+                          <li key={i}>
+                            {item.title}
+                            <div className="custom_check">
+                              <input
+                                type="checkbox"
+                                id={item.title}
+                                name={item.title}
+                                checked={item.checked}
+                                onChange={() => this.handleChangeStatus(i)}
+                              />
+                              <label className="mb-0" htmlFor={item.title} />
+                            </div>
+                          </li>
+                        ))}
                       </ul>
                     </Scrollbars>
                   </div>
                 </div>
               </Collapse>
               <li>
-                <i className="fa fa-times mr-2" style={{ color: "#FE858A" }} />
+                <i
+                  className="fad fa-times-circle mr-2"
+                  style={{ color: "#FE858A" }}
+                />
                 Posed <i className="fad fa-caret-right ml-auto" />
               </li>
               <li>

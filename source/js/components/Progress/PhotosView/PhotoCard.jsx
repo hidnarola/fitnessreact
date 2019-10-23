@@ -20,18 +20,17 @@ class PhotoCard extends Component {
   }
   render() {
     const { images } = this.state;
-    const { slideDuration, slideInterval, photo } = this.props;
+    const { photo } = this.props;
     return (
       <React.Fragment>
-        <div className="photo-card">
+        <div className="photo-card m-2">
           <div className="photo-slider">
             <ImageGallery
-              slideDuration={slideDuration}
-              slideInterval={slideInterval}
               items={images}
+              showThumbnails={photo.images.length > 1 ? true : false}
               showFullscreenButton={false}
               showPlayButton={false}
-              autoPlay={true}
+              disableSwipe={true}
               renderLeftNav={this.renderLeftNav}
               renderRightNav={this.renderRightNav}
               renderFullscreenButton={this.renderFullscreenButton}

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 
 class ExerciseViewSidebar extends Component {
   render() {
+    const { dataList = [], handleChangeActiveTab, activeTab } = this.props;
     return (
       <React.Fragment>
         <div className="exerciseview-sidebar h-100">
@@ -17,11 +18,14 @@ class ExerciseViewSidebar extends Component {
           <div className="subtitle">Exercises with data for period:</div>
           <div className="progress-exercise-list">
             <ul>
-              <li className="active">Bench Press</li>
-              <li>Press Up</li>
-              <li>Bent-over row</li>
-              <li>Decline Bench Press</li>
-              <li>Chest Flies</li>
+              {dataList.map((item, i) => (
+                <li
+                  className={activeTab === item ? "active" : ""}
+                  onClick={() => handleChangeActiveTab(item)}
+                >
+                  {item}
+                </li>
+              ))}
             </ul>
           </div>
         </div>

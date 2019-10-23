@@ -16624,7 +16624,7 @@ white-space: nowrap;overflow: hidden;}
 .display-no-workout { background: #D1DAE2; padding: 10px; color: #201f60; font-size: 20px; font-weight: 600; display: flex; justify-content: center; }
 
 .exerciseview .exerciseview-body {height : calc(100vh - 176px);}
-.exerciseview .exerciseview-body .exerciseview-sidebar { background: #201f60;color: #fff; } .exerciseview .exerciseview-body .exerciseview-sidebar .subtitle {color: white; font-size: 18px; font-weight: 600; margin: 0px 15px 5px 15px;}
+.exerciseview .exerciseview-body .exerciseview-sidebar { background: #201f60;color: #fff;} .exerciseview .exerciseview-body .exerciseview-sidebar .subtitle {color: white; font-size: 18px; font-weight: 600; margin: 0px 15px 5px 15px;}
 .exerciseview .exerciseview-body .exerciseview-sidebar .progress-exercise-list ul li { background: #053095; padding: 10px 15px; font-size: 20px; font-weight: 600; margin: 0 0 5px 0; list-style: none;cursor: pointer;position:relative;display:flex;flex-wrap:wrap; align-items:center;}
 .exerciseview .exerciseview-body .exerciseview-sidebar .progress-exercise-list ul li.active:after {content: ''; width: 10px; background: #93e7e4; position: absolute; top: 0; right: 0; bottom: 0;border: 1px solid #707070;}
 .exerciseview .exerciseview-body .exerciseview-sidebar .progress-exercise-list ul li .custom_check { display:flex;margin: 0 0 0 auto;align-items:center;}
@@ -16635,10 +16635,14 @@ white-space: nowrap;overflow: hidden;}
   background: #e8ecf0;
 }
 .exerciseview .exerciseview-body .exerciseview-sidebar .progress-exercise-list ul li .custom_check [type="checkbox"]:not(:checked)+label:after, .custom_check [type="checkbox"]:checked+label:after {
-  left: 2.2px;
-  width:19.1px;
-  height: 20.8px;
+  border-radius: 50%;
+  height:24px;
+  width:24px;
+  top:0;
+  left:0;
 }
+
+
 .exerciseview .exerciseview-body .exerciseview-sidebar .progress-exercise-list ul .toogle-dropdown {background: #053095;}
 .exerciseview .exerciseview-body .exerciseview-sidebar .progress-exercise-list ul .toogle-dropdown > li {background: #201F60; margin:0 0 2px 0; }
 .exerciseview .exerciseview-body .exerciseview-sidebar .progress-exercise-list .display-list .display-items-list { height: 25vh;}
@@ -16692,21 +16696,27 @@ white-space: nowrap;overflow: hidden;}
   font-size: 15px;
 }
 
-.photo-card { box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); transition: 0.3s; background: #edf5fd;margin-bottom: 10px; }
-.photo-card:hover { box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2); }
+.photo-card { box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); transition: 0.3s; background: #edf5fd;height:462px; border-radius: 10px;overflow: hidden; }
+.photo-card:hover { box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+   }
 .photo-card .photo-container { padding: 5px; }
 .photo-card .photo-container h3 { color: #053095; font-size: 20px; font-weight: 800; margin: 0; }
 .photo-card .photo-container span { color: #053095; font-size: 12px; font-weight: bold; display: flex; flex-wrap: wrap; height: 100px; text-overflow: ellipsis; overflow: hidden; }
 
-/* .photo-card .photo-slider .image-gallery .image-gallery-content .image-gallery-slide-wrapper  .image-gallery-image{background: #000; border-radius: 10px;} */
-.photo-card .photo-slider .image-gallery .image-gallery-content .image-gallery-slide-wrapper img{height: 270px;}
+.photo-card .photo-slider .image-gallery .image-gallery-content .image-gallery-slide-wrapper  .image-gallery-image{ background:#000; border:0;}
+.photo-card .photo-slider .image-gallery .image-gallery-content .image-gallery-slide-wrapper img{height: 270px;opacity : 0.8;}
+
 
 .photo-card .photo-slider .image-gallery .image-gallery-content .image-gallery-thumbnails-wrapper  a{height: 50px;width:50px;}
+.photo-card .photo-slider .image-gallery .image-gallery-content .image-gallery-thumbnails-wrapper  img {height:42px;width:42px;}
 .photo-card .photo-slider .image-gallery {position:relative}
 .photo-card .photo-slider .image-gallery .image-gallery-custom-left-nav{position:absolute;top:0;left:0;bottom:0;z-index:1;background: transparent; border: 0; color: #fff; margin: 0 10px;}
 .photo-card .photo-slider .image-gallery .image-gallery-custom-left-nav i {font-size: 25px;}
 .photo-card .photo-slider .image-gallery .image-gallery-custom-right-nav{position:absolute;top:0;right:0;bottom:0;z-index:1;background: transparent; border: 0; color: #fff; margin: 0 10px;}
 .photo-card .photo-slider .image-gallery .image-gallery-custom-right-nav i {font-size: 25px;}
+.photo-card .photo-slider .image-gallery .image-gallery-content .image-gallery-thumbnails-wrapper .image-gallery-thumbnails-container {text-align:right}
+
+
 /*********************** Responsive **************************/
 
 @media(max-width: 1660px) {
