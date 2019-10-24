@@ -105,7 +105,7 @@ export default class FitnessNav extends Component {
                   <span>Progress</span>
                 </NavLink>
               </li>
-              <li>
+              {/* <li>
                 <NavLink
                   activeClassName="active"
                   className="Menu-link"
@@ -116,7 +116,7 @@ export default class FitnessNav extends Component {
                   <FontAwesomeIcon icon="trophy" />
                   <span>Badges</span>
                 </NavLink>
-              </li>
+              </li> */}
             </ul>
           </Scrollbars>
 
