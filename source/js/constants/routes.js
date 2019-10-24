@@ -81,6 +81,7 @@ export const routeCodes = {
   PROGRESS_MUSCLE: `${publicPath}progress/muscle`,
   PROGRESS_STRENGTH: `${publicPath}progress/strength`,
   PROGRESS_ENDURANCE: `${publicPath}progress/endurance`,
+  PROGRESS_BADGES: `${publicPath}progress/badges`,
 
   ALL_NOTIFICATIONS: `${publicPath}notifications`,
 

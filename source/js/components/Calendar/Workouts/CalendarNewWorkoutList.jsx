@@ -14,9 +14,12 @@ class CalendarNewWorkoutList extends Component {
     };
   }
   handelChange = view => {
+    const { handleChangeInput, workoutIndex, type } = this.props;
     if (view === "advanceView") {
+      handleChangeInput(workoutIndex, 0, "differentSets", 1, type);
       this.setState({ isAdvanceView: true });
     } else {
+      handleChangeInput(workoutIndex, 0, "differentSets", 0, type);
       this.setState({ isAdvanceView: false });
     }
   };

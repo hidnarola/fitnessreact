@@ -19,6 +19,7 @@ import { connectIDB, isOnline, tw } from "../helpers/funs";
 import AddMetaDescription from "../components/global/AddMetaDescription";
 import BodyView from "../components/Progress/BodyView/BodyView";
 import PhotosView from "../components/Progress/PhotosView/PhotosView";
+import BadgesView from "../components/Progress/BadgesView/BadgesView";
 
 class Progress extends Component {
   constructor(props) {
@@ -81,6 +82,9 @@ class Progress extends Component {
                       Photos
                     </NavLink>
                   </div>
+                  <div className="tab">
+                    <NavLink to={routeCodes.PROGRESS_BADGES}>Badges</NavLink>
+                  </div>
                 </div>
                 <span className="date-text ml-auto mr-4">Progress</span>
               </div>
@@ -104,6 +108,11 @@ class Progress extends Component {
                   exact
                   path={routeCodes.PROGRESS_PHOTOS_VIEW}
                   component={PhotosView}
+                />
+                <Route
+                  exact
+                  path={routeCodes.PROGRESS_BADGES}
+                  component={BadgesView}
                 />
                 <Route
                   exact

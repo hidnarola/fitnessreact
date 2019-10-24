@@ -61,7 +61,19 @@ const CaledarDayWorkoutAdvanceView = props => {
                 <th>
                   <div className="serving-select">
                     <label>Speed</label>
-                    <select className="form-control">
+                    <select
+                      className="form-control"
+                      value={speedUnit}
+                      onChange={e =>
+                        handleChangeAdvanceSetDetsils(
+                          workoutIndex,
+                          0,
+                          "field2",
+                          e.target.value,
+                          type
+                        )
+                      }
+                    >
                       <option>Effort</option>
                       <option>KMPH</option>
                       <option>MPH</option>

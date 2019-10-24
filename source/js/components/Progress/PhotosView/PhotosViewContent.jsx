@@ -46,10 +46,10 @@ class PhotosViewContent extends Component {
         {
           images: [img16],
           description:
-          "pellentesque in 🐁 donec mi 🍷 sed id nisl aliquet ac, ut varius felis risus dolor rhoncus.🌒 habitant tortor neque lacinia risus pellentesque venenatis sodales viverra in felis massa aliquet diam egestas venenatis, turpis diam vivamus sagittis donec nunc lacinia feugiat volutpat tincidunt sed placerat. Vitae leo"
+            "pellentesque in 🐁 donec mi 🍷 sed id nisl aliquet ac, ut varius felis risus dolor rhoncus.🌒 habitant tortor neque lacinia risus pellentesque venenatis sodales viverra in felis massa aliquet diam egestas venenatis, turpis diam vivamus sagittis donec nunc lacinia feugiat volutpat tincidunt sed placerat. Vitae leo"
         },
         {
-          images: [img6,img5 ,img8, img4, img7, img11],
+          images: [img6, img5, img8, img4, img7, img11],
           description:
             "pellentesque in 🐁 donec mi 🍷 sed id nisl aliquet ac, ut varius felis risus dolor rhoncus"
         }
@@ -61,7 +61,7 @@ class PhotosViewContent extends Component {
     return (
       <div className="row no-gutters display-blog-photos p-2">
         {photosList.map((item, k) => (
-          <div className="col-md-4">
+          <div className="col-md-4" key={k}>
             <PhotoCard key={k} photo={item} />
           </div>
         ))}

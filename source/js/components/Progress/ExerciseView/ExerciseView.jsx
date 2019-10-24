@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Link, Route, Switch } from "react-router-dom";
 import ExerciseViewSidebar from "./ExerciseViewSidebar";
 import ExerciseViewContent from "./ExerciseViewContent";
-import cns from "classNames";
 import ExerciseEnduranceView from "./ExerciseEnduranceView";
 
 class ExerciseView extends Component {
@@ -28,27 +27,27 @@ class ExerciseView extends Component {
           <div className="exercise-navbar">
             <div className="tabs sub-tab">
               <div
-                className={cns("tab", { active: exerciseTab === "#strength" })}
+                className={exerciseTab === "#strength" ? "tab active" : "tab"}
                 onClick={() => this.handleChnageExerciseTab("#strength")}
               >
                 <Link to="#">Strength</Link>
               </div>
               <div
-                className={cns("tab", { active: exerciseTab === "#endurance" })}
+                className={exerciseTab === "#endurance" ? "tab active" : "tab"}
                 onClick={() => this.handleChnageExerciseTab("#endurance")}
               >
                 <Link to="#">Endurance</Link>
               </div>
               <div
-                className={cns("tab", { active: exerciseTab === "#mobility" })}
+                className={exerciseTab === "#mobility" ? "tab active" : "tab"}
                 onClick={() => this.handleChnageExerciseTab("#mobility")}
               >
                 <Link to="#">Mobility</Link>
               </div>
               <div
-                className={cns("tab", {
-                  active: exerciseTab === "#fitness_test"
-                })}
+                className={
+                  exerciseTab === "#fitness_test" ? "tab active" : "tab"
+                }
                 onClick={() => this.handleChnageExerciseTab("#fitness_test")}
               >
                 <Link to="#">Fitness Tests</Link>

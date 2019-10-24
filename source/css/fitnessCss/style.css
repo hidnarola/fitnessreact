@@ -263,6 +263,11 @@ input:focus {
     display: flex !important;
 }
 
+.d-none {
+  display: none !important;
+}
+
+
 .flex-row {
     -webkit-box-orient: horizontal !important;
     -webkit-box-direction: normal !important;
@@ -16625,7 +16630,7 @@ white-space: nowrap;overflow: hidden;}
 
 .exerciseview .exerciseview-body {height : calc(100vh - 176px);}
 .exerciseview .exerciseview-body .exerciseview-sidebar { background: #201f60;color: #fff;} .exerciseview .exerciseview-body .exerciseview-sidebar .subtitle {color: white; font-size: 18px; font-weight: 600; margin: 0px 15px 5px 15px;}
-.exerciseview .exerciseview-body .exerciseview-sidebar .progress-exercise-list ul li { background: #053095; padding: 10px 15px; font-size: 20px; font-weight: 600; margin: 0 0 5px 0; list-style: none;cursor: pointer;position:relative;display:flex;flex-wrap:wrap; align-items:center;}
+.exerciseview .exerciseview-body .exerciseview-sidebar .progress-exercise-list ul li { background: #053095; padding: 10px 15px; font-size: 20px; font-weight: 600; margin: 0 0 5px 0; list-style: none;cursor: pointer;position:relative;display:flex;flex-wrap:wrap; align-items:center;text-transform: capitalize;}
 .exerciseview .exerciseview-body .exerciseview-sidebar .progress-exercise-list ul li.active:after {content: ''; width: 10px; background: #93e7e4; position: absolute; top: 0; right: 0; bottom: 0;border: 1px solid #707070;}
 .exerciseview .exerciseview-body .exerciseview-sidebar .progress-exercise-list ul li .custom_check { display:flex;margin: 0 0 0 auto;align-items:center;}
 .exerciseview .exerciseview-body .exerciseview-sidebar .progress-exercise-list ul li .custom_check [type="checkbox"]:not(:checked)+label:before, .custom_check [type="checkbox"]:checked+label:before {
@@ -16716,6 +16721,11 @@ white-space: nowrap;overflow: hidden;}
 .photo-card .photo-slider .image-gallery .image-gallery-custom-right-nav i {font-size: 25px;}
 .photo-card .photo-slider .image-gallery .image-gallery-content .image-gallery-thumbnails-wrapper .image-gallery-thumbnails-container {text-align:right}
 
+.badgesView .badges-body .badges-card {background: #d1dae2; border-radius: 10px;margin: 5px;}
+.badgesView .badges-body .badges-card .badges-title {font-size: 20px; color: #201f60; font-weight: 600; padding: 10px;display:flex;align-items:center;width:100%}
+.badgesView .badges-body .badges-card .badges-title i {color: #053095; font-size: 24px; font-weight: 800;}
+.badgesView .badges-body .badges-card .badges-card-body {background: #fff; padding: 10px; margin: 3px; height: 110px; overflow: hidden;}
+.badgesView .badges-body .badges-card .badges-footer {font-size: 16px; color: #053095; display: flex; align-items: center; justify-content: center;}
 
 /*********************** Responsive **************************/
 

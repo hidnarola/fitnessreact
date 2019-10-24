@@ -20,6 +20,7 @@ class ExerciseViewSidebar extends Component {
             <ul>
               {dataList.map((item, i) => (
                 <li
+                  key={i}
                   className={activeTab === item ? "active" : ""}
                   onClick={() => handleChangeActiveTab(item)}
                 >

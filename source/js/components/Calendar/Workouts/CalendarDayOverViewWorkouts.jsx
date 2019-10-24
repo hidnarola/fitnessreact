@@ -486,8 +486,8 @@ class CalendarDayOverViewWorkouts extends Component {
       differentSets: 0,
       exerciseId: obj.value,
       exerciseObj: obj,
-      restTime: 2,
-      restTimeUnit: "second",
+      // restTime: 2,
+      // restTimeUnit: "second",
       sets: 1,
       setsDetails: [
         {
