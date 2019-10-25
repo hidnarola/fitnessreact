@@ -33,6 +33,35 @@ export const InputField = (props) => {
     );
 }
 
+export const SelectField = (props) => {
+    const { label, input, meta, wrapperClass, className, labelClass, placeholder, errorClass, type, disabled, properties, autoComplete, requiredAstrisk,options=[] } = props;
+    return (
+        <div
+            className={
+                `${wrapperClass} ${(meta.touched && meta.error) ? 'has-error' : ''}`
+            }
+        >
+            {label && <label htmlFor={input.name} className={labelClass}>{label} {requiredAstrisk && <span style={{ color: "red" }}>*</span>}</label>}
+            <select
+                {...input}
+                disabled={disabled ? disabled : false}
+                className={className}
+                placeholder={placeholder}
+                autoComplete={(autoComplete) ? autoComplete : 'off'}
+                {...properties}
+            >
+              <option value="">Select</option>
+            {options.map((item,i) =>
+              <option key={i} value={item.value}>{item.label}</option>
+            )}
+            </select>
+            {meta.touched &&
+                ((meta.error && <div className={errorClass}>{meta.error}</div>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))
+            }
+        </div>
+    );
+}
+
 export const RadioFields = (props) => {
     const {
         label,
@@ -129,7 +158,7 @@ export const CheckboxField = (props) => {
 }
 
 export const SelectField_ReactSelect = (props) => {
-    const { label, input, meta, wrapperClass, className, labelClass, placeholder, errorClass, initialValue, options, clearable, requiredAstrisk } = props;
+    const { label, input, meta, wrapperClass, className, labelClass, placeholder, errorClass, initialValue, options, clearable, requiredAstrisk,components } = props;
     let val = '';
     if (input.value && Object.keys(input.value).length > 0) {
         val = input.value;
@@ -153,6 +182,7 @@ export const SelectField_ReactSelect = (props) => {
                 onBlur={() => input.onBlur({ ...input.value })}
                 multi={false}
                 clearable={clearable ? clearable : true}
+                components={components}
             />
             {meta.touched &&
                 ((meta.error && <div className={errorClass}>{meta.error}</div>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))

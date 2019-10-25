@@ -83,7 +83,7 @@ class Progress extends Component {
                     </NavLink>
                   </div>
                   <div className="tab">
-                    <NavLink to={routeCodes.PROGRESS_BADGES}>Badges</NavLink>
+                    <NavLink to={routeCodes.PROGRESS_BADGES}>Goals</NavLink>
                   </div>
                 </div>
                 <span className="date-text ml-auto mr-4">Progress</span>

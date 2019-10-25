@@ -28,7 +28,7 @@ class BadgesCard extends Component {
                 : "Badge Description."}
           </div>
           <div className="badges-footer">
-            {isCompleted === 1 && "Completed "} {point}pts
+            {isCompleted === 1 && "Completed "}
           </div>
         </div>
       </React.Fragment>
