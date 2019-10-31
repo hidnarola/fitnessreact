@@ -16654,6 +16654,7 @@ white-space: nowrap;overflow: hidden;}
 .exerciseview .exerciseview-body .exerciseview-sidebar .progress-exercise-list .display-list .display-items-list > div > div:last-child  {background: #201f60 !important;}
 .exerciseview .exerciseview-body .exerciseview-sidebar .progress-exercise-list .display-list .display-items-list > div > div:last-child > div {background: #053095 !important;}
 
+.exerciseview .exerciseview-body .exerciseview-sidebar h2 {margin: 0; font-size: 20px; font-weight: 600; padding: 10px 10px 5px 10px;}
 
 .exerciseview .exerciseview-body .serving-select {width: 36%;}
 .exerciseview .exerciseview-body .serving-select select::-ms-expand {
@@ -16735,7 +16736,7 @@ white-space: nowrap;overflow: hidden;}
 .badgesView .badges-body .badges-card .badges-card-body {background: #fff; padding: 10px; margin: 3px; height: 110px; overflow: hidden;}
 .badgesView .badges-body .badges-card .badges-footer {font-size: 16px; color: #053095; display: flex; align-items: center; justify-content: center;}
 
-.badgesView .badges-body .add-user-goal {background-color: #d4dfe8 !important; left: unset !important; right: 0; bottom: 0;padding: 10px !important}
+.badgesView .badges-body .add-user-goal {background-color: #d4dfe8 !important; left: unset !important; right: 0; bottom: 0;padding: 10px !important;animation: 0.3s ease 0s 1 normal none running slideInRight !important;}
 .badgesView .badges-body .add-user-goal h2 {margin: 0; color: #053095; font-weight: 800; text-align: left; }
 
 .badgesView .badges-body .add-user-goal .create-user-goal-dialog {text-align:left}

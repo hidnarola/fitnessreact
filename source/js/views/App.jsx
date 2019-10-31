@@ -110,6 +110,7 @@ import NutritionMealEdit from '../components/Nutrition/NutritionMealEdit';
 import NutritionMealView from '../components/Nutrition/NutritionMealView';
 import CalendarDayOverView from '../components/Calendar/CalendarDayOverView';
 import NutritionMealCreate from '../components/Nutrition/Meal/NutritionMealCreate';
+import Goals from '../components/Goals/Goals';
 JavascriptTimeAgo.locale(en);
 
 const auth = new Auth();
@@ -224,6 +225,8 @@ class App extends Component {
 
                                 <PrivateRoute path={`${routeCodes.PROGRESS_PHOTOS}/:username`} component={ProgressPhotos} />
                                 <PrivateRoute path={`${routeCodes.GALLERY_PHOTOS}/:username`} component={GalleryPhotos} />
+
+                                {/* <PrivateRoute path={`${routeCodes.GOALS}`} component={Goals} /> */}
 
                                 <Route exact path={adminRootRoute} component={AdminLogin} />
                                 <Route exact path={`${adminRootRoute}/${SESSION_EXPIRED_URL_TYPE}`} component={AdminLogin} />

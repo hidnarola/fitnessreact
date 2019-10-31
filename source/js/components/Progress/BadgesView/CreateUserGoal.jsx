@@ -7,13 +7,16 @@ import { connect } from "react-redux";
 import {
   InputField,
   SelectField_ReactSelect,
-  SelectField
+  SelectField,
+  TextAreaField
 } from "../../../helpers/FormControlHelper";
 import {
   required,
   requiredReactSelect,
   minLength,
-  maxLength
+  maxLength,
+  min,
+  validNumber
 } from "../../../formValidation/validationRules";
 import {
   BADGES_TASKS,
@@ -29,10 +32,17 @@ import {
 import _ from "lodash";
 import { adminRouteCodes } from "../../../constants/adminRoutes";
 import { capitalizeFirstLetter } from "../../../helpers/funs";
-import { min } from "moment";
 import ArrowDownImg from "../../../../assets/img/caret-down.svg";
 
-const TimeList = [{value: "day",label: "Day"},{value: "week",label: "Week"},{value: "month",label: "Month"},{value: "year",label: "Year"}]
+const TimeList = [
+  { value: "day", label: "Day" },
+  { value: "week", label: "Week" },
+  { value: "month", label: "Month" },
+  { value: "year", label: "Year" }
+];
+
+const min1 = min(1);
+const minLength0 = minLength(1);
 
 class CreateUserGoal extends Component {
   constructor(props) {
@@ -45,7 +55,7 @@ class CreateUserGoal extends Component {
   }
   componentWillReceiveProps(nextProps) {
     console.log("===========this.props.selectedTask===========");
-    console.log(this.props.selectedTask);
+    console.log(this.props);
     console.log("==========================");
     if (nextProps.selectedTask) {
       if (
@@ -82,7 +92,12 @@ class CreateUserGoal extends Component {
   }
 
   render() {
-    const { handleCloseAddGoalAlert, handleSubmit } = this.props;
+    const {
+      handleCloseAddGoalAlert,
+      handleSubmit,
+      submitting,
+      valid
+    } = this.props;
     return (
       <React.Fragment>
         <form onSubmit={handleSubmit}>
@@ -105,7 +120,6 @@ class CreateUserGoal extends Component {
                   </div>
                   <div className="col-md-12">
                     <div className="goalbox-body">
-
                       <Field
                         component={InputField}
                         type="text"
@@ -125,7 +139,6 @@ class CreateUserGoal extends Component {
                   <div className="col-md-8">
                     <div className="goalbox-body">
                       <div className="serving-select width-100-per">
-
                         <Field
                           name="task"
                           className="form-control p-0"
@@ -150,15 +163,27 @@ class CreateUserGoal extends Component {
                       <div className="col-md-6 border-right">
                         <div className="goalbox-body h-100">
                           <div className="serving-boxs width-100-per m-0">
-                            <button className="btn btn-minus" type="button">
+                            <button
+                              className="btn btn-minus"
+                              type="button"
+                              onClick={() => this.handleChangeTarget("sub")}
+                            >
                               <FontAwesomeIcon icon="minus" />
                             </button>
-                            <input
+                            <Field
+                              component={InputField}
                               type="number"
+                              wrapperClass="h-100"
+                              name="target"
                               className="form-control h-100"
-                              defaultValue="1"
+                              errorClass="help-block"
+                              validate={[required, validNumber]}
                             />
-                            <button className="btn btn-plus" type="button">
+                            <button
+                              className="btn btn-plus"
+                              type="button"
+                              onClick={() => this.handleChangeTarget("add")}
+                            >
                               <FontAwesomeIcon icon="plus" />
                             </button>
                           </div>
@@ -167,7 +192,6 @@ class CreateUserGoal extends Component {
                       <div className="col-md-6">
                         <div className="goalbox-body">
                           <div className="serving-select width-100-per">
-
                             <Field
                               name="unit"
                               className="form-control p-0"
@@ -194,15 +218,27 @@ class CreateUserGoal extends Component {
                       <div className="col-md-6 border-right">
                         <div className="goalbox-body h-100">
                           <div className="serving-boxs width-100-per m-0">
-                            <button className="btn btn-minus" type="button">
+                            <button
+                              className="btn btn-minus"
+                              type="button"
+                              onClick={() => this.handleChangeTimeScale("sub")}
+                            >
                               <FontAwesomeIcon icon="minus" />
                             </button>
-                            <input
+                            <Field
+                              component={InputField}
+                              wrapperClass="h-100"
                               type="number"
+                              name="timeScale"
                               className="form-control h-100"
-                              defaultValue="1"
+                              errorClass="help-block"
+                              validate={[required, validNumber]}
                             />
-                            <button className="btn btn-plus" type="button">
+                            <button
+                              className="btn btn-plus"
+                              type="button"
+                              onClick={() => this.handleChangeTimeScale("add")}
+                            >
                               <FontAwesomeIcon icon="plus" />
                             </button>
                           </div>
@@ -211,18 +247,17 @@ class CreateUserGoal extends Component {
                       <div className="col-md-6">
                         <div className="goalbox-body">
                           <div className="serving-select width-100-per">
-
                             <Field
-                          name="timeUnit"
-                          className="form-control p-0"
-                          placeholder="Duration"
-                          component={SelectField_ReactSelect}
-                          options={TimeList}
-                          errorClass="help-block"
-                          validate={[requiredReactSelect]}
-                          requiredAstrisk={true}
-                          clearable={false}
-                        />
+                              name="timeUnit"
+                              className="form-control p-0"
+                              placeholder="Duration"
+                              component={SelectField_ReactSelect}
+                              options={TimeList}
+                              errorClass="help-block"
+                              validate={[requiredReactSelect]}
+                              requiredAstrisk={true}
+                              clearable={false}
+                            />
                           </div>
                         </div>
                       </div>
@@ -235,14 +270,29 @@ class CreateUserGoal extends Component {
                   </div>
                   <div className="col-md-12">
                     <div className="goalbox-body">
-                      <textarea className="form-control" rows="4" />
+                      {/* <textarea className="form-control" rows="4" /> */}
+                      <Field
+                        component={TextAreaField}
+                        rows="4"
+                        type="textarea"
+                        name="motivation"
+                        className="form-control"
+                        errorClass="help-block"
+                        placeholder="motivation"
+                      />
                     </div>
                   </div>
                 </div>
               </div>
             </div>
             <div className="dialog-footer">
-              <Button type="submit" bsStyle="success" bsSize="large" block>
+              <Button
+                type="submit"
+                bsStyle="success"
+                bsSize="large"
+                block
+                disabled={!valid ? true : false}
+              >
                 Save goal
               </Button>
             </div>
@@ -251,7 +301,20 @@ class CreateUserGoal extends Component {
       </React.Fragment>
     );
   }
-
+  handleChangeTarget = action => {
+    const { target } = this.props;
+    action === "add" && this.props.change("target", parseInt(target) + 1);
+    action === "sub" &&
+      target > 0 &&
+      this.props.change("target", parseInt(target) - 1);
+  };
+  handleChangeTimeScale = action => {
+    const { timeScale } = this.props;
+    action === "add" && this.props.change("timeScale", parseInt(timeScale) + 1);
+    action === "sub" &&
+      timeScale > 0 &&
+      this.props.change("timeScale", parseInt(timeScale) - 1);
+  };
 }
 
 const badgeSaveFormSelector = formValueSelector("Add_user_goal_form");
@@ -259,12 +322,25 @@ const badgeSaveFormSelector = formValueSelector("Add_user_goal_form");
 CreateUserGoal = withRouter(CreateUserGoal);
 
 CreateUserGoal = reduxForm({
-  form: "Add_user_goal_form"
+  form: "Add_user_goal_form",
+  initialValues: {
+    target: 1,
+    timeScale: 1,
+    motivation: "",
+    timeUnit: "",
+    unit: "",
+    title: "",
+    task: ""
+  }
 })(CreateUserGoal);
 
 const mapStateToProps = state => {
+  const target = badgeSaveFormSelector(state, "target");
+  const timeScale = badgeSaveFormSelector(state, "timeScale");
   return {
-    selectedTask: badgeSaveFormSelector(state, "task")
+    selectedTask: badgeSaveFormSelector(state, "task"),
+    target: target,
+    timeScale: timeScale
   };
 };
 

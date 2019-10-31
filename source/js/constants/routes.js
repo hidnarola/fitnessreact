@@ -86,5 +86,8 @@ export const routeCodes = {
   ALL_NOTIFICATIONS: `${publicPath}notifications`,
 
   PROGRESS_PHOTOS: `${publicPath}progress_photos`,
-  GALLERY_PHOTOS: `${publicPath}gallery_photos`
+  GALLERY_PHOTOS: `${publicPath}gallery_photos`,
+
+  //User Goals
+  GOALS: `${publicPath}goals`
 };

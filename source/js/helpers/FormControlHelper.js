@@ -103,7 +103,7 @@ export const RadioFields = (props) => {
 }
 
 export const TextAreaField = (props) => {
-    const { label, input, meta, wrapperClass, className, labelClass, placeholder, errorClass, requiredAstrisk } = props;
+    const { label, input, meta, wrapperClass, className, labelClass, placeholder, errorClass, requiredAstrisk,rows=3 } = props;
     return (
         <div
             className={
@@ -115,6 +115,7 @@ export const TextAreaField = (props) => {
                 {...input}
                 className={className}
                 placeholder={placeholder}
+                rows={rows}
             />
             {meta.touched &&
                 ((meta.error && <div className={errorClass}>{meta.error}</div>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))

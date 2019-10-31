@@ -955,3 +955,6 @@ export const MEAL_VISIBILITY = [
     { label: 'Private', value: 'private' },
     { label: 'Public', value: 'public' }
 ]
+
+export const FITLY_MANAGEMENT = 'management'
+export const YOU = 'you'

@@ -1,29 +1,18 @@
 import React, { Component } from "react";
 
-class BadgesCard extends Component {
+class UserGoalCard extends Component {
   render() {
-    const { badges, selectedViewList } = this.props;
-    const {
-      name,
-      isCompleted,
-      point,
-      descriptionCompleted,
-      descriptionInCompleted
-    } = badges;
-
+    const { goal } = this.props;
+    const { title, isCompleted, description } = goal;
     return (
       <React.Fragment>
         <div className="badges-card">
           <div className="badges-title">
-            {name}{" "}
+            {title}{" "}
             {isCompleted === 1 && <i className="fad fa-shield-check ml-auto" />}
           </div>
           <div className="badges-card-body">
-            {isCompleted === 1
-              ? descriptionCompleted
-              : descriptionInCompleted
-                ? descriptionInCompleted
-                : "Badge Description."}
+            {description ? description : "Goal Description"}
           </div>
           <div className="badges-footer">
             {isCompleted === 1 && "Completed "}
@@ -34,4 +23,4 @@ class BadgesCard extends Component {
   }
 }
 
-export default BadgesCard;
+export default UserGoalCard;
