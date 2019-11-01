@@ -132,7 +132,7 @@ class CreateUserGoal extends Component {
                     </div>
                   </div>
                 </div>
-                <div className="row no-gutters border-bottom">
+                <div className="row no-gutters ">
                   <div className="col-md-4 border-right">
                     <div className="goalbox-title bg-white">Objective</div>
                   </div>
@@ -151,6 +151,14 @@ class CreateUserGoal extends Component {
                           clearable={false}
                         />
                       </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="row no-gutters border-bottom">
+                  <div className="col-md-12">
+                    <div className="goalbox-title p-3 d-flex">
+                      Most Recent Measurement is:
+                      <span className="ml-auto">18%</span>
                     </div>
                   </div>
                 </div>

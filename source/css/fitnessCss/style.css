@@ -16660,7 +16660,7 @@ white-space: nowrap;overflow: hidden;}
 .exerciseview .exerciseview-body .serving-select select::-ms-expand {
     display: none;
 }
-.exerciseview .exerciseview-body .serving-select .form-control {box-shadow: none;height: auto;padding: 9px 15px;text-align: left;font-size: 20px;color:#201F60;line-height: 1;font-family: 'Neuzeit' !important;font-weight: 900;border: 0px;border-radius:0px;-webkit-appearance: none;-moz-appearance: none;appearance: none;background: #fff url('../assets/img/caret-down.svg') right 15px center no-repeat;}
+.exerciseview .exerciseview-body .serving-select .form-control {box-shadow: none;height: 38px !important;padding: 9px 15px;text-align: left;font-size: 20px;color:#201F60;line-height: 1;font-family: 'Neuzeit' !important;font-weight: 900;border: 0px;border-radius:0px;-webkit-appearance: none;-moz-appearance: none;appearance: none;background: #fff url('../assets/img/caret-down.svg') right 15px center no-repeat;}
 
 .exerciseview .exerciseview-body .exercise-content .content-title {display: flex; flex-wrap: wrap; width: 100%; align-items: center; padding: 5px;}
 .exerciseview .exerciseview-body .exercise-content .content-title button.btn.btn-plus {margin: 0 0 0 auto; border-radius: 50%; height: 50px; width: 50px; background: #3ED1A9; color: #fff; font-size: 18px;}
@@ -16736,7 +16736,7 @@ white-space: nowrap;overflow: hidden;}
 .badgesView .badges-body .badges-card .badges-card-body {background: #fff; padding: 10px; margin: 3px; height: 110px; overflow: hidden;}
 .badgesView .badges-body .badges-card .badges-footer {font-size: 16px; color: #053095; display: flex; align-items: center; justify-content: center;}
 
-.badgesView .badges-body .add-user-goal {background-color: #d4dfe8 !important; left: unset !important; right: 0; bottom: 0;padding: 10px !important;animation: 0.3s ease 0s 1 normal none running slideInRight !important;}
+.badgesView .badges-body .add-user-goal {background-color: #d4dfe8 !important; left: unset !important; right: 0; bottom: 0;padding: 10px !important;animation: 0.3s ease 0s 1 normal none running slideInRight !important;top:0 !important;margin-top:125px !important}
 .badgesView .badges-body .add-user-goal h2 {margin: 0; color: #053095; font-weight: 800; text-align: left; }
 
 .badgesView .badges-body .add-user-goal .create-user-goal-dialog {text-align:left}

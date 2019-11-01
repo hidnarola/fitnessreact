@@ -491,8 +491,8 @@ class CalendarDayOverViewWorkouts extends Component {
       sets: 1,
       setsDetails: [
         {
-          field1: { value: 1, unit: "" },
-          field2: { value: 1, unit: "" },
+          field1: { value: 1, unit: "second" },
+          field2: { value: 1, unit: "effort" },
           field3: null,
           restTime: 0,
           restTimeUnit: "second"
