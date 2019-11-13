@@ -772,7 +772,7 @@ h3.title-h3 {
     vertical-align: top;
     width: 40px;
     height: 40px;
-    border-radius: 40px;
+    border-radius: 50%;
     overflow: hidden;
     margin-right: 10px;
 }
@@ -3839,9 +3839,10 @@ input.full-width {
 
 .how-training {
     border-radius: 5px;
-    background-color: #F9FAFA;
-    border: 3px solid #f9fafa;
-    margin: 0 0 20px;
+    background-color: #d4dfe8;
+    /* border: 3px solid #d4dfe8; */
+    /* margin: 0 0 20px; */
+    padding: 1px 1px 0 1px;
 }
 
 .how-training textarea {
@@ -3865,7 +3866,7 @@ input.full-width {
 
 .how-training-btm button {
     border: 0;
-    background: #fff;
+    /* background: #fff; */
     width: 145px;
     height: 100%;
     border-left: 2px solid #f9fafa;
@@ -3904,13 +3905,13 @@ input.full-width {
 }
 
 .how-training-btm a {
-    width: 100px;
+    width: 50px;
     height: 100%;
-    color: #DDD;
+    color: #000;
     font-size: 18px;
     text-align: center;
-    background: #fff;
-    border-left: 3px solid #f9fafa;
+    /* background: #fff; */
+    border-left: 2px solid #f9fafa;
 }
 
 .how-training-btm a i {
@@ -7361,7 +7362,7 @@ a.add-friend-btn:hover {
 .avatar {
     vertical-align: middle;
     width: 50px;
-    height: 50px;
+    height: auto;
     border-radius: 50%;
 }
 
@@ -8269,7 +8270,8 @@ div .loader-spinner {
 }
 
 .liked-color {
-    color: #4e32b6 !important;
+    color: #fff !important;
+    background: #3E67FF !important;
 }
 
 .user-right-menu-css .chat-body ul li {
@@ -9923,6 +9925,8 @@ a.program-save-delete-week-btn {
     align-items: center;
     padding-left: 5px;
     width: 120px;
+    background:transparent;
+    border-radius:0;
 }
 
 .public-dropdown {
@@ -9939,7 +9943,7 @@ a.program-save-delete-week-btn {
     vertical-align: top;
     width: 34px;
     height: 18px;
-    fill: #ddd;
+    /* fill: #ddd; */
 }
 
 .public-dropdown span strong {
@@ -9977,15 +9981,16 @@ a.program-save-delete-week-btn {
 .public-dropdown.btn-default.active,
 .public-dropdown.btn-default:active,
 .open>.public-dropdown.dropdown-toggle.btn-default {
-    background: #fff;
-    border: 1px solid #fff !important;
+    /* background: #fff;
+    border: 1px solid #fff !important; */
     border-left: 2px solid #f9fafa !important;
 }
 
 .how-training-btm button.vertical-middle-r {
-    background: linear-gradient(123.28deg, #46E9C5 0%, #3FFBFC 100%);
+    /* background: linear-gradient(123.28deg, #46E9C5 0%, #3FFBFC 100%); */
+    background: #3e67ff;
     color: #fff;
-    font-weight: 500;
+    font-weight: 600;
     text-transform: uppercase;
     font-size: 14px;
     line-height: 52px;
@@ -9994,7 +9999,7 @@ a.program-save-delete-week-btn {
 }
 
 .how-training-btm button.vertical-middle-r:hover {
-    background: linear-gradient(123.28deg, #3FFBFC 0%, #46E9C5 100%);
+    /* background: linear-gradient(123.28deg, #3FFBFC 0%, #46E9C5 100%); */
 }
 
 .how-training-btm button.vertical-middle-r:hover i,
@@ -14952,7 +14957,7 @@ body .big-calendar-custom-month-event-view-card-header a.calendar-custom-drag-ha
 .emos-timeline button.emos-launcher-btn {
     display: inline-block;
     width: 100%;
-    border-radius: 5px;
+    border-radius: 0px;
     text-align: center;
     padding: 0 12px 0 12px;
 }
@@ -14963,6 +14968,7 @@ body .big-calendar-custom-month-event-view-card-header a.calendar-custom-drag-ha
 
 .emos-timeline .emos-area-wrap.bottom-right {
     top: 50px;
+    left:0;
     z-index: 1;
 }
 
@@ -15041,7 +15047,8 @@ body .big-calendar-custom-month-event-view-card-header a.calendar-custom-drag-ha
 
 .timeline-new-post-editor .my-custom-textarea {
     display: block;
-    padding: 6px 12px;
+    margin: 3px 3px 0 3px;
+    padding: 10px;
     line-height: 20px;
     background-color: #fff;
     background-image: none;
@@ -15055,7 +15062,7 @@ body .big-calendar-custom-month-event-view-card-header a.calendar-custom-drag-ha
     font-size: 14px;
     font-weight: 400;
     height: auto;
-    width: 100%;
+    width: auto;
     box-shadow: none;
     border-bottom: 3px solid #f9fafa;
     resize: both;
@@ -16749,15 +16756,44 @@ white-space: nowrap;overflow: hidden;}
 .badgesView .badges-body .add-user-goal .create-user-goal-dialog .dialog-content .Select-control {border: 0; background: #fff url('../assets/img/caret-down.svg') right 15px center no-repeat;}
 .badgesView .badges-body .add-user-goal .create-user-goal-dialog .dialog-content .Select-control .Select-arrow {display: none}
 .badgesView .badges-body .add-user-goal .create-user-goal-dialog .dialog-content .Select-control .Select-clear {display: none}
-
 .badgesView .badges-body .add-user-goal .create-user-goal-dialog .border-right { border-right: 3px solid #d4dfe8 !important; }
 .badgesView .badges-body .add-user-goal .create-user-goal-dialog .border-left { border-left: 3px solid #d4dfe8 !important; }
 .badgesView .badges-body .add-user-goal .create-user-goal-dialog .border-top { border-top: 3px solid #d4dfe8 !important; }
 .badgesView .badges-body .add-user-goal .create-user-goal-dialog .border-bottom { border-bottom: 3px solid #d4dfe8 !important; }
-
 .badgesView .badges-body .add-user-goal .create-user-goal-dialog .dialog-footer {position: absolute; width: 100%; left: 0; bottom: 0; right: 0;}
 .badgesView .badges-body .add-user-goal .create-user-goal-dialog .dialog-footer button {border-radius: 0; border: 0; background: #3ED1A9;font-size:24px;font-weight:600;}
-
+.fitness-dashboard {height: calc(100% - 110px)}
+.dashboard-body {border-radius: 10px 10px 0 0;}
+.dashboard-body .activity-title {padding : 10px;}
+.dashboard-body .activity-title h2 {margin: 0; font-size: 25px; color: #201f60; font-weight: 600;}
+.dashboard-body .activity-header .exercise-navbar .tabs .tab a {padding: 3px 20px;}
+.dashboard-body .activity-body .workout-list .workout-list-items.active:before {display:none;}
+.dashboard-body .activity-body .workout-list .workout-list-items.active .workout-content {margin: 0 20px;}
+.dashboard-body .activity-body .workout-list .workout-list-items .title{padding: 0;}
+.dashboard-body .activity-body .workout-list .workout-list-items i {font-size: 25px;color:#565585}
+.dashboard-body .activity-body .workout-list .workout-list-items i.active {color:#ef9732}
+.dashboard-body .activity-body .workout-list.display-workout-btn {position:absolute;bottom: 0;}
+.dashboard-body .activity-body {height: calc(100vh - 251px)}
+.dashboard-body .activity-body .post-type {background-color: #d4dfe8;border: 0px solid #d4dfe8;border-radius: 5px;padding:5px;}
+.dashboard-body .activity-body .posttype-head {height:auto;align-items:center;padding:5px;margin-bottom:0;}
+.dashboard-body .activity-body .timeline-infinite-scroll .posttype-head>h4 big a { color: #3e67ff;}
+.dashboard-body .activity-body .timeline-infinite-scroll .posttype-head>h4 p { color: #282828; font-weight: bold; }
+.dashboard-body .activity-body .posttype-body-grey.dashboard-feedact span {padding: 0}
+.dashboard-body .activity-body .posttype-btm a {color: #000}
+.dashboard-body .activity-body .posttype-body {border:0}
+.dashboard-body .activity-body .display-likes-status .fa-heart-circle {font-size: 13px; color: #FF5576;}
+.dashboard-body .activity-body .display-likes-status .fa-thumbs-up {color: #3E67FF;}
+.dashboard-body .activity-body .display-likes-status .comments-status a{color: #999;font-size:13px;font-weight:600}
+.dashboard-body .activity-body .display-likes-status .posttype-body-grey p {min-height: 0;}
+.dashboard-body .activity-body .emos-area-wrap.top-right {left: 0;}
+.dashboard-body .activity-body .post-comment-box {margin-bottom: 10px;}
+.dashboard-body .activity-body .post-comment-box .display-user-img {margin: 0 0 0 5px;}
+.dashboard-body .activity-body .post-comment-box .display-user-img img {height: 40px;border-radius: 50%;}
+.dashboard-body .activity-body .post-comment-box .display-comment-box {background: #fff; display: flex; flex-wrap: wrap; width: 85%; margin: 0 0 0px auto; border-radius: 5px; padding: 5px; color: #282828; font-size: 15px; font-weight: bold;}
+.dashboard-body .activity-body .post-comment-box .display-comment-box a {font-weight: bold; margin-right: 5px; color: #3e67ff;}
+.dashboard-body .activity-body .post-comment-box .display-comment-box .display-date {display: flex; flex-wrap: wrap; width: 100%; justify-content: flex-end; color: #999; font-size: 12px; margin: 5px 0;}
+.dashboard-body .activity-body .white-box {padding: 0}
+.dashboard-body .activity-body .white-box .profile-list span a img {height: 180px}
 
 
 /*********************** Responsive **************************/

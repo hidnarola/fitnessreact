@@ -74,9 +74,12 @@ const CaledarDayWorkoutAdvanceView = props => {
                         )
                       }
                     >
-                      <option>Effort</option>
-                      <option>KMPH</option>
-                      <option>MPH</option>
+                      <option value="">Select</option>
+                      {field2Options.map((item, v) => (
+                        <option value={item.value} key={v}>
+                          {item.label}
+                        </option>
+                      ))}
                     </select>
                   </div>
                 </th>

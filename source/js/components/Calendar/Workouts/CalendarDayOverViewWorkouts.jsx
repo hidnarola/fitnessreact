@@ -732,9 +732,6 @@ class CalendarDayOverViewWorkouts extends Component {
     }
     if (!loading && prevProps.workout !== workout) {
       this.setState({ workout });
-      console.log("===========this.state.workout===========");
-      console.log(this.state.workout);
-      console.log("==========================");
     }
     if (!loading && prevProps.workoutsList !== workoutsList) {
       this.setState({ workoutsList });

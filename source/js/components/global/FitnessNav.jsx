@@ -31,7 +31,7 @@ export default class FitnessNav extends Component {
                   <span>Dashboard</span>
                 </NavLink>
               </li>
-              <li>
+              {/* <li>
                 <NavLink
                   activeClassName="active"
                   className="Menu-link"
@@ -80,7 +80,7 @@ export default class FitnessNav extends Component {
                   <FontAwesomeIcon icon="utensils" />
                   <span>Nutrition</span>
                 </NavLink>
-              </li>
+              </li> */}
               <li>
                 <NavLink
                   activeClassName="active"

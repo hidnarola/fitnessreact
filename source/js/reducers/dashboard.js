@@ -16,7 +16,10 @@ import {
     CHANGE_DASHBOARD_MUSCLE_INNER_DATA_SUCCESS,
     CHANGE_DASHBOARD_MUSCLE_INNER_DATA_ERROR,
     SET_NEW_STATE_OF_SINGLE_POST,
-    SET_DASHBOARD_PAGE
+    SET_DASHBOARD_PAGE,
+    FOLLOWING_USER_ACTIVITY_DATA_REQUEST,
+    FOLLOWING_USER_ACTIVITY_DATA_SUCCESS,
+    FOLLOWING_USER_ACTIVITY_DATA_ERROR
 } from "../actions/dashboard";
 import { VALIDATION_FAILURE_STATUS } from "../constants/consts";
 import { generateValidationErrorMsgArr } from "../helpers/funs";
@@ -39,6 +42,9 @@ const initialState = Map({
     changeBodyFatError: [],
     changeCompleteWorkoutLoading: false,
     changeCompleteWorkoutError: [],
+    followingActivityLoading: false,
+    followingActivity:[],
+    followingActivityError:[]
 });
 
 const actionMap = {
@@ -199,7 +205,32 @@ const actionMap = {
         return state.merge(Map({
             activityFeed: newActivityFeed,
         }));
-    }
+    },
+    [FOLLOWING_USER_ACTIVITY_DATA_REQUEST]: (state,action) => {
+      return state.merge(Map({
+        followingActivityLoading: true,
+        followingActivity:[],
+        followingActivityError: []
+      }));
+    },
+    [FOLLOWING_USER_ACTIVITY_DATA_SUCCESS]: (state,action) => {
+        let newState = { followingActivityLoading: false };
+        if (action.data && action.data.status && action.data.status === 1) {
+            newState.followingActivity = action.data.user_timeline
+        } else {
+            let msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later';
+            newState.followingActivityError = [msg];
+        }
+        return state.merge(Map(newState));
+    },
+    [FOLLOWING_USER_ACTIVITY_DATA_ERROR]: (state, action) => {
+        return state.merge(Map({
+            followingActivityLoading: false,
+            followingActivity:[],
+            followingActivityError: prepareResponseError(action),
+        }));
+    },
+
 };
 
 function prepareResponseError(action) {
