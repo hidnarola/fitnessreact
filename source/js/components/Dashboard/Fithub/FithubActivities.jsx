@@ -6,16 +6,19 @@ import FithubPhotos from "./FithubPhotos";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import FithubExercise from "./FithubExercise";
 import FithubGoals from "./FithubGoals";
+import SweetAlert from "react-bootstrap-sweetalert";
+import AddTrackingForm from "./AddTrackingForm";
 
 class FithubActivities extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      fithubTab: "body"
+      fithubTab: "body",
+      showTrackingAlert: false
     };
   }
   render() {
-    const { fithubTab } = this.state;
+    const { fithubTab, showTrackingAlert } = this.state;
     const {
       userWidgets,
       widgetBodyFat,
@@ -24,7 +27,8 @@ class FithubActivities extends Component {
       widgetMuscle,
       widgetProgressPhotos,
       loggedUserData,
-      widgetBadges
+      widgetBadges,
+      requestGraphData
     } = this.props;
     return (
       <React.Fragment>
@@ -79,7 +83,7 @@ class FithubActivities extends Component {
                     changeBodyFatError={changeBodyFatError}
                     requestBodyFatData={this.props.requestBodyFatData}
                     widgetMuscle={widgetMuscle}
-                    requestGraphData={this.props.requestGraphData}
+                    requestGraphData={requestGraphData}
                   />
                 </Scrollbars>
               )}
@@ -109,18 +113,40 @@ class FithubActivities extends Component {
                 </Scrollbars>
               )}
               <ul className="workout-list display-workout-btn">
-                <li className="workout-list-items-btn">
+                <li
+                  className="workout-list-items-btn"
+                  onClick={() => this.setState({ showTrackingAlert: true })}
+                >
                   <a href="#" className="btn width-100-per">
                     <FontAwesomeIcon icon="plus" /> Tracking Items
                   </a>
                 </li>
               </ul>
+              <SweetAlert
+                custom
+                title={undefined}
+                customClass={"alert-tracking-items-box"}
+                type="default"
+                onCancel={() => this.handleCloseAlert()}
+                onConfirm={() => console.log("")}
+                btnSize="sm"
+                cancelBtnBsStyle="danger"
+                show={showTrackingAlert}
+                showConfirm={false}
+                showCancel={false}
+                closeOnClickOutside={true}
+              >
+                <AddTrackingForm handleCloseAlert={this.handleCloseAlert} />
+              </SweetAlert>
             </div>
           </div>
         </div>
       </React.Fragment>
     );
   }
+  handleCloseAlert = () => {
+    this.setState({ showTrackingAlert: false });
+  };
 }
 
 export default FithubActivities;

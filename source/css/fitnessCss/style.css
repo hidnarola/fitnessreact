@@ -2484,6 +2484,8 @@ input.full-width {
 .bodyfat-graph {
     height: 250px;
     padding: 5px 10px;
+    margin: 10px 0;
+    border-radius: 5px;
 }
 
 .weeks-calories {
@@ -16663,10 +16665,13 @@ white-space: nowrap;overflow: hidden;}
 
 .exerciseview .exerciseview-body .exerciseview-sidebar h2 {margin: 0; font-size: 20px; font-weight: 600; padding: 10px 10px 5px 10px;}
 
+.alert-tracking-items-box .tracking-body-content .serving-select,
 .exerciseview .exerciseview-body .serving-select {width: 36%;}
+.alert-tracking-items-box .tracking-body-content .serving-select select::-ms-expand,
 .exerciseview .exerciseview-body .serving-select select::-ms-expand {
     display: none;
 }
+.alert-tracking-items-box .tracking-body-content .serving-select .form-control,
 .exerciseview .exerciseview-body .serving-select .form-control {box-shadow: none;height: 38px !important;padding: 9px 15px;text-align: left;font-size: 20px;color:#201F60;line-height: 1;font-family: 'Neuzeit' !important;font-weight: 900;border: 0px;border-radius:0px;-webkit-appearance: none;-moz-appearance: none;appearance: none;background: #fff url('../assets/img/caret-down.svg') right 15px center no-repeat;}
 
 .exerciseview .exerciseview-body .exercise-content .content-title {display: flex; flex-wrap: wrap; width: 100%; align-items: center; padding: 5px;}
@@ -16772,7 +16777,7 @@ white-space: nowrap;overflow: hidden;}
 .dashboard-body .activity-body .workout-list .workout-list-items .title{padding: 0;}
 .dashboard-body .activity-body .workout-list .workout-list-items i {font-size: 25px;color:#565585}
 .dashboard-body .activity-body .workout-list .workout-list-items i.active {color:#ef9732}
-.dashboard-body .activity-body .workout-list.display-workout-btn {position:absolute;bottom: 0;}
+.dashboard-body .activity-body .workout-list.display-workout-btn {position:absolute;bottom: 0;z-index : 2;}
 .dashboard-body .activity-body {height: calc(100vh - 251px)}
 .dashboard-body .activity-body .post-type {background-color: #d4dfe8;border: 0px solid #d4dfe8;border-radius: 5px;padding:5px;}
 .dashboard-body .activity-body .posttype-head {height:auto;align-items:center;padding:5px;margin-bottom:0;}
@@ -16794,7 +16799,35 @@ white-space: nowrap;overflow: hidden;}
 .dashboard-body .activity-body .post-comment-box .display-comment-box .display-date {display: flex; flex-wrap: wrap; width: 100%; justify-content: flex-end; color: #999; font-size: 12px; margin: 5px 0;}
 .dashboard-body .activity-body .white-box {padding: 0}
 .dashboard-body .activity-body .white-box .profile-list span a img {height: 180px}
+.graybox-body {background: #d4dfe8;}
+.bodyfat-graph .graph-header {position: absolute; top:0; padding:7px 15px;z-index:1;background:#D4DFE8}
+.bodyfat-graph .graph-header i { font-size: 20px;}
+.bodyfat-graph .graph-header p {color: #3e67ff; font-weight: 600; margin: 0 10px !important;}
+.bodyfat-graph .graph-header .tabs .tab { background: #b4bdc5 }
+.bodyfat-graph .graph-header .tabs .tab a {padding:0.8px 9px; font-size:25px;}
 
+ul.list-graph-details {padding: 45px 15px;}
+ul.list-graph-details li.list-graph-items { border-bottom: 2px solid #92A6CD; padding: 5px; font-size: 15px; color: #201f60; font-weight: 600; list-style-type: none; display: flex; flex-wrap: wrap; width: 100%;}
+ul.list-graph-details li.list-graph-items:first-child {
+  border-top: 2px solid #92A6CD;
+}
+.dashboard-bodyfat-card { position: relative;}
+.display-tabls { margin: 0 14px 0 0}
+.display-tabls > div > div:last-child {background: #b3bcc4}
+.display-tabls > div > div:last-child > div {background: #201f60 !important}
+.alert-tracking-items-box {width: 543px !important;padding:0 !important;border-radius: 10px !important;overflow: hidden !important}
+.alert-tracking-items-box > h2 {display: none;}
+.alert-tracking-items-box .text-muted.lead {margin:0}
+.alert-tracking-items-box .tracking-header {display: flex; flex-wrap: wrap; align-items: center;width:100%; padding: 20px;}
+.alert-tracking-items-box .tracking-header h2 {margin: 0; font-size: 35px; color: #053095; font-weight: 800;}
+.alert-tracking-items-box .tracking-header button.btn-cancel {background: transparent; font-size: 20px; color: #fe676d; font-weight: 600;}
+.alert-tracking-items-box .tracking-body-content {background: #D4DFE8;}
+.alert-tracking-items-box .tracking-body-content .panel-box {padding:10px;}
+.alert-tracking-items-box .tracking-body-content .panel-box .panel {border:0;text-align:left;margin-bottom:10px;}
+.alert-tracking-items-box .tracking-body-content .panel-box .panel .panel-heading {background-color: #edf5fd; border-color: #edf5fd;padding:5px 10px;font-size: 20px; color: #201f60; font-weight: 600;}
+.alert-tracking-items-box .tracking-body-content .panel-box .panel .panel-body {padding:5px}
+.alert-tracking-items-box .tracking-body-content .serving-select .form-control {font-weight: 600}
+.alert-tracking-items-box .btn-save {background:#3ed1a9;color:#fff;border-radius: 0; font-size: 20px;font-weight: 600;height:50px;}
 
 /*********************** Responsive **************************/
 

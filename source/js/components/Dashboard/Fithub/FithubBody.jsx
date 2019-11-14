@@ -6,6 +6,7 @@ import {
 } from "../../../constants/consts";
 import WidgetBodyFatCard from "../../Common/WidgetBodyFatCard";
 import WidgetMuscleCard from "../../Common/WidgetMuscleCard";
+import WidgetMuscleCardNew from "../../Common/WidgetMuscleCardNew";
 
 class FithubBody extends Component {
   render() {
@@ -18,6 +19,9 @@ class FithubBody extends Component {
       widgetMuscle,
       requestGraphData
     } = this.props;
+    console.log("===========widgetMuscle===========");
+    console.log("widgetMuscle", widgetMuscle);
+    console.log("==========================");
     return (
       <React.Fragment>
         {userWidgets &&
@@ -34,7 +38,7 @@ class FithubBody extends Component {
               />
             </div>
           )}
-        {userWidgets &&
+        {/* {userWidgets &&
           userWidgets[WIDGET_MUSCLE] &&
           userWidgets[WIDGET_MUSCLE].length > 0 && (
             <div className="col-md-12 col-sm-12 col-xs-12 row dashboard-muscle-wrapper">
@@ -42,11 +46,20 @@ class FithubBody extends Component {
                 type={WIDGETS_TYPE_DASHBOARD}
                 userWidgets={userWidgets}
                 muscle={widgetMuscle}
-                requestGraphData={this.requestGraphData}
+                requestGraphData={this.props.requestGraphData}
                 bodyWrapperClass="col-md-12 col-sm-12 col-xs-12"
               />
             </div>
-          )}
+          )} */}
+        {Object.keys(widgetMuscle).map((key, index) => (
+          <div className="col-md-12 col-sm-12 col-xs-12" key={index}>
+            <WidgetMuscleCardNew
+              graphData={widgetMuscle[key]}
+              title={key}
+              cardKey={`muscle-${key}`}
+            />
+          </div>
+        ))}
       </React.Fragment>
     );
   }
