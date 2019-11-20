@@ -1,13 +1,14 @@
-import React, { Component } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import SweetAlert from 'react-bootstrap-sweetalert';
+import React, { Component } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import SweetAlert from "react-bootstrap-sweetalert";
+import NoRecordFound from "../../Common/NoRecordFound";
 
 class NutritionMealCreateLeftSidebar extends Component {
   constructor(props) {
     super(props);
     this.state = {
       storeMealIndex: null,
-      showDeleteAlert: false,
+      showDeleteAlert: false
     };
   }
 
@@ -18,7 +19,7 @@ class NutritionMealCreateLeftSidebar extends Component {
       meal_proximates,
       changeServing,
       ingredientUnit,
-      handleRemoveIngredient,
+      handleRemoveIngredient
     } = this.props;
     let { storeMealIndex, showDeleteAlert } = this.state;
     let ingredientList = [];
@@ -63,7 +64,7 @@ class NutritionMealCreateLeftSidebar extends Component {
                                   ? parseInt(ingredient.serving_input)
                                   : parseInt(ingredient.serving_input) - 1,
                                 null,
-                                null,
+                                null
                               )
                             }
                           >
@@ -79,7 +80,7 @@ class NutritionMealCreateLeftSidebar extends Component {
                                 ingredient,
                                 parseInt(e.target.value),
                                 null,
-                                null,
+                                null
                               )
                             }
                           />
@@ -91,7 +92,7 @@ class NutritionMealCreateLeftSidebar extends Component {
                                 ingredient,
                                 parseInt(ingredient.serving_input) + 1,
                                 null,
-                                null,
+                                null
                               )
                             }
                           >
@@ -110,7 +111,7 @@ class NutritionMealCreateLeftSidebar extends Component {
                                 ingredient,
                                 null,
                                 e.target.value,
-                                null,
+                                null
                               )
                             }
                           >
@@ -126,13 +127,18 @@ class NutritionMealCreateLeftSidebar extends Component {
                   </div>
                 </li>
               ))}
-              {ingredient_list.length === 0 && (
+              {/* {ingredient_list.length === 0 && (
                 <li>
                   <div className="ingredient-items">
                     <div className="box-header d-flex flex-wrap align-items-center">
                       <h3>No Record Found</h3>
                     </div>
                   </div>
+                </li>
+              )} */}
+              {ingredient_list.length === 0 && (
+                <li>
+                  <NoRecordFound title="No ingredients found." />
                 </li>
               )}
             </ul>
@@ -145,7 +151,7 @@ class NutritionMealCreateLeftSidebar extends Component {
           onCancel={() => {
             this.setState({
               storeMealIndex: null,
-              showDeleteAlert: false,
+              showDeleteAlert: false
             });
           }}
           onConfirm={() => this.handleConfirmDelete()}

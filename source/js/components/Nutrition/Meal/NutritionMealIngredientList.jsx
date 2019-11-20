@@ -1,15 +1,16 @@
-import React, { Component } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import NutritionMealIngredientItems from './NutritionMealIngredientItems';
-import { Scrollbars } from 'react-custom-scrollbars';
-import SweetAlert from 'react-bootstrap-sweetalert';
+import React, { Component } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import NutritionMealIngredientItems from "./NutritionMealIngredientItems";
+import { Scrollbars } from "react-custom-scrollbars";
+import SweetAlert from "react-bootstrap-sweetalert";
+import NoRecordFound from "../../Common/NoRecordFound";
 
 class NutritionMealIngredientList extends Component {
   constructor(props) {
     super(props);
     this.state = {
       storeMealIndex: null,
-      showDeleteAlert: false,
+      showDeleteAlert: false
     };
   }
   render() {
@@ -40,12 +41,15 @@ class NutritionMealIngredientList extends Component {
                   handleChangeDelete={this.handleChangeDelete}
                 />
               ))}
-              {ingredient_list.length === 0 && (
+              {/* {ingredient_list.length === 0 && (
                 <div className="nutrition-box">
                   <div className="nutrition-header align-items-center">
                     <div className="title ml-auto mr-auto">No Record Found</div>
                   </div>
                 </div>
+              )} */}
+              {ingredient_list.length === 0 && (
+                <NoRecordFound title="No ingredients found." />
               )}
             </Scrollbars>
           </div>
@@ -56,7 +60,7 @@ class NutritionMealIngredientList extends Component {
             onCancel={() => {
               this.setState({
                 storeMealIndex: null,
-                showDeleteAlert: false,
+                showDeleteAlert: false
               });
             }}
             onConfirm={() => this.handleConfirmDelete()}

@@ -20,7 +20,13 @@ import {
     ADD_IMAGE_SELECTED_FROM_DETAILS_PAGE,
     REMOVE_SELECTED_PROGRESS_PHOTOS_TO_UPLOAD,
     DELETE_IMAGE_SELECTED_FROM_DETAILS_PAGE,
-    SET_PROGRESS_PHOTOS
+    SET_PROGRESS_PHOTOS,
+    ADD_USER_PROGRESS_ACTIVITY_PHOTO_REQUEST,
+    ADD_USER_PROGRESS_ACTIVITY_PHOTO_SUCCESS,
+    ADD_USER_PROGRESS_ACTIVITY_PHOTO_ERROR,
+    GET_RECENT_TAGS_PROGRESS_PHOTOS_REQUEST,
+    GET_RECENT_TAGS_PROGRESS_PHOTOS_ERROR,
+    GET_RECENT_TAGS_PROGRESS_PHOTOS_SUCCESS
 } from "../actions/userProgressPhotos";
 import { VALIDATION_FAILURE_STATUS } from "../constants/consts";
 import { generateValidationErrorMsgArr } from "../helpers/funs";
@@ -28,6 +34,7 @@ import { generateValidationErrorMsgArr } from "../helpers/funs";
 const initialState = Map({
     loading: false,
     error: [],
+    progressPhoto:null,
     progressPhotos: [],
     photoLoadMoreLoading: false,
     photoStart: 0,
@@ -39,7 +46,14 @@ const initialState = Map({
     deleteError: [],
 
     selectedImage: null,
-    selectedProgressPhotos: []
+    selectedProgressPhotos: [],
+
+    progressActivityLoading: false,
+    progressActivityPhoto: null,
+    progressActivityPhotos: [],
+    progressActivityPhotosError: [],
+
+    recentHashTags: [],
 });
 
 const actionMap = {
@@ -165,14 +179,18 @@ const actionMap = {
     [ADD_USER_PROGRESS_PHOTO_REQUEST]: (state, action) => {
         return state.merge(Map({
             loading: true,
-            progressPhotos: [],
+            progressPhoto: null,
             error: [],
         }));
     },
     [ADD_USER_PROGRESS_PHOTO_SUCCESS]: (state, action) => {
+      console.log('===========Progress Photo Success===========')
+      console.log('Progress Photo Success',action.data)
+      console.log('==========================')
+      let newActivity = action.data && action.data.data.user_progress_photo
         return state.merge(Map({
             loading: false,
-            progressPhotos: [],
+            progressPhoto: newActivity,
             error: [],
         }));
     },
@@ -267,7 +285,81 @@ const actionMap = {
     },
     [SET_PROGRESS_PHOTOS]: (state, action) => {
         return state.merge(Map(action.data));
+    },
+   [ADD_USER_PROGRESS_ACTIVITY_PHOTO_REQUEST]: (state, action) => {
+      return state.merge(Map({
+        progressActivityLoading: true,
+        progressActivityPhoto: null,
+        progressActivityPhotosError: [],
+      }));
+  },
+  [ADD_USER_PROGRESS_ACTIVITY_PHOTO_SUCCESS]: (state, action) => {
+      let newActivity = action.data && action.data.data.user_progress_photo
+      return state.merge(Map({
+        progressActivityLoading: false,
+        progressActivityPhoto: newActivity,
+        progressActivityPhotosError: [],
+      }));
+  },
+  [ADD_USER_PROGRESS_ACTIVITY_PHOTO_ERROR]: (state, action) => {
+      let error = [];
+      if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+          error = generateValidationErrorMsgArr(action.error.response.message);
+      } else if (action.error && action.error.message) {
+          error = [action.error.message];
+      } else {
+          error = ['Something went wrong! please try again later'];
+      }
+      var newState = {
+        progressActivityLoading: false,
+        progressActivityPhotosError: error,
+      }
+      return state.merge(Map(newState));
+  },
+  [GET_RECENT_TAGS_PROGRESS_PHOTOS_REQUEST] : (state,action) => {
+    return state.merge(Map({
+      loading:true
+    }));
+  },
+  [GET_RECENT_TAGS_PROGRESS_PHOTOS_SUCCESS] : (state,action) => {
+    console.log('===========HASH TAGS SUCCESS===========')
+    console.log("HASH TAGS SUCCESS",action.data.hashTags)
+    console.log('==========================')
+    // var newState = {
+    //   recentHashTagsLoading: false,
+    // };
+    // if (action.data.status === 1) {
+    //   newState.recentHashTags = action.data.hashTags;
+    //   newState.recentHashTagsError = [];
+    // }else {
+    //   var msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
+    //   newState.workouts = [];
+    //   newState.error = [msg];
+    // }
+    // console.log('===========HASH TAGS SUCCESS newState===========')
+    // console.log('HASH TAGS SUCCESS',newState)
+    // console.log('==========================')
+    return state.merge(Map({
+      loading: false,
+      recentHashTags: action.data.hashTags ? action.data.hashTags : []
+    }));
+  },
+
+  [GET_RECENT_TAGS_PROGRESS_PHOTOS_ERROR]: (state, action) => {
+    let error = [];
+    if (action.error.status && action.error.status === VALIDATION_FAILURE_STATUS && action.error.response.message) {
+        error = generateValidationErrorMsgArr(action.error.response.message);
+    } else if (action.error && action.error.message) {
+        error = [action.error.message];
+    } else {
+        error = ['Something went wrong! please try again later'];
     }
+    var newState = {
+      recentHashTagsLoading: false,
+      recentHashTagsError: error,
+    }
+    return state.merge(Map(newState));
+},
 }
 
 export default function reducer(state = initialState, action = {}) {

@@ -59,6 +59,8 @@ import FithubExercise from "../components/Dashboard/Fithub/FithubExercise";
 import FithubGoals from "../components/Dashboard/Fithub/FithubGoals";
 import DashboardActivities from "../components/Dashboard/Activities/DashboardActivities";
 import FithubActivities from "../components/Dashboard/Fithub/FithubActivities";
+import TodaysActivity from "../components/Dashboard/TodaysActivity/TodaysActivity";
+import { getUserFavouriteBadgesRequest } from "../actions/userFavouriteBadges";
 
 class Dashboard extends Component {
   constructor(props) {
@@ -94,6 +96,7 @@ class Dashboard extends Component {
       changeBodyFatError,
       widgetBadges,
       loggedUserData,
+      workouts,
       dispatch
     } = this.props;
     const { showWidgetsModal, fithubTab, activityTab } = this.state;
@@ -136,94 +139,7 @@ class Dashboard extends Component {
           <div className="body-content flex col-md-12 h-100">
             <div className="row no-gutters h-100">
               <div className="col-xs-12 col-md-4 h-100">
-                <div className="whitebox-body dashboard-body h-100">
-                  <div className="activity-title">
-                    <h2>Today</h2>
-                  </div>
-                  <div className="activity-header">
-                    <div className="exercise-navbar">
-                      <div className="tabs sub-tab">
-                        <div className="tab active">
-                          <a href="#">Exercise</a>
-                        </div>
-                        <div className="tab">
-                          <a href="#">Nutrition</a>
-                        </div>
-                        <div className="tab">
-                          <a href="#">Logs</a>
-                        </div>
-                        <div className="tab">
-                          <a href="#">Photos</a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="activity-body">
-                    <ul className="workout-list">
-                      <li className="workout-list-items active d-flex">
-                        <div className="workout-content width-100-per">
-                          <div
-                            className="d-flex flex-wrap width-100-per align-items-center p-3"
-                            style={{ background: "#201f60" }}
-                          >
-                            <div className="title">Running </div>
-                            <i className="fad fa-star ml-auto" />
-                          </div>
-                          <div className="is-complete">
-                            <div className="workout-switch-wrap">
-                              <small>Workout complete</small>
-                              <div className="material-switch ml-auto">
-                                <input
-                                  id={"workout"}
-                                  type="checkbox"
-                                  checked={false}
-                                />
-                                <label
-                                  htmlFor={"workout"}
-                                  className="label-default"
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </li>
-                      <li className="workout-list-items active d-flex">
-                        <div className="workout-content width-100-per">
-                          <div
-                            className="d-flex flex-wrap width-100-per align-items-center p-3"
-                            style={{ background: "#201f60" }}
-                          >
-                            <div className="title">Running </div>
-                            <i className="fad fa-star active ml-auto" />
-                          </div>
-                          <div className="is-complete">
-                            <div className="workout-switch-wrap">
-                              <small>Workout complete</small>
-                              <div className="material-switch ml-auto">
-                                <input
-                                  id={"workout"}
-                                  type="checkbox"
-                                  checked={false}
-                                />
-                                <label
-                                  htmlFor={"workout"}
-                                  className="label-default"
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </li>
-                    </ul>
-                    <ul className="workout-list display-workout-btn">
-                      <li className="workout-list-items-btn">
-                        <a href="#" className="btn width-100-per">
-                          <FontAwesomeIcon icon="plus" /> Add Workout
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
+                <TodaysActivity workouts={workouts} loading={loading} />
               </div>
               <div className="col-xs-12 col-md-4 h-100">
                 <DashboardActivities
@@ -233,6 +149,7 @@ class Dashboard extends Component {
               </div>
               <div className="col-xs-12 col-md-4 h-100">
                 <FithubActivities
+                  loading={loading}
                   userWidgets={userWidgets}
                   widgetBodyFat={widgetBodyFat}
                   changeBodyFatLoading={changeBodyFatLoading}
@@ -961,12 +878,9 @@ class Dashboard extends Component {
       today,
       ...prevMonth
     };
-    dispatch(showPageLoader());
-    await dispatch(
-      getDashboardPageRequest(requestData, res => {
-        dispatch(hidePageLoader());
-      })
-    );
+
+    await dispatch(getDashboardPageRequest(requestData));
+    await dispatch(getUserFavouriteBadgesRequest());
   };
 
   componentWillUnmount() {

@@ -187,14 +187,29 @@ class PostCard extends Component {
                             <small dangerouslySetInnerHTML={{ __html: description }}></small>
                         </div>
                     }
-                    <div className={cns("posttype-body-grey", postImageDisplayClass)}>
+
                         {images && images.length > 0 &&
                             images.map((imageD, imageI) => {
-                                if (imageI >= 5) {
+                              console.log('===========images Timeline===========')
+                              console.log("images Timeline",imageD)
+                              console.log('==========================')
+                                {/* if (imageI >= 5) {
                                     return null;
-                                }
+                                } */}
                                 return (
-                                    <div className="item" key={imageD._id}>
+                                  typeof imageD.image == "object" ? <div className={cns("posttype-body-grey",{"masonry single" : imageD.image.length === 1,"masonry" : imageD.image.length > 0 } )}> {imageD.image.map(item =>  <div className="item" key={imageD._id}>
+                                        <a href="javascript:void(0)" onClick={() => handleOpenLightbox(imageD.image, imageI)}>
+                                            <span key={imageI}>
+                                                <img
+                                                    src={SERVER_BASE_URL + item.image}
+                                                    onError={(e) => {
+                                                        e.target.src = noImg
+                                                    }}
+                                                />
+                                            </span>
+                                        </a>
+                                    </div>)}</div> :
+                                    <div className={cns("posttype-body-grey", postImageDisplayClass)}><div className="item" key={imageD._id}>
                                         <a href="javascript:void(0)" onClick={() => handleOpenLightbox(images, imageI)}>
                                             <span key={imageI}>
                                                 <img
@@ -206,10 +221,11 @@ class PostCard extends Component {
                                             </span>
                                         </a>
                                     </div>
+                                    </div>
                                 )
                             })
                         }
-                    </div>
+
                     <div className={cns("posttype-body-grey")}>
                         <p>
                             {likesStr &&
@@ -230,6 +246,7 @@ class PostCard extends Component {
                         </div>
                     </div>
                 </div>
+
                 {totalComments > 0 &&
                     <div className="post-comment d-flex">
                         <span>

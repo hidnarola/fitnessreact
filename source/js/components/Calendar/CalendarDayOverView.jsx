@@ -20,13 +20,17 @@ import { showPageLoader, hidePageLoader } from "../../actions/pageLoader";
 import { getUserMealRequest } from "../../actions/user_meal";
 import CalendarDayOverViewNutrition from "./Nutritions/CalendarDayOverViewNutrition";
 import CalendarDayOverViewLogs from "./Logs/CalendarDayOverViewLogs";
-import { getUserBodyMeasurementRequest } from "../../actions/userBodyMeasurement";
+import {
+  getUserBodyMeasurementRequest,
+  getProgressPhotosByDateRequest
+} from "../../actions/userBodyMeasurement";
 import { recentMealRequest } from "../../actions/meal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import CalendarImage from "../../../assets/svg/calendar-alt.svg";
 import NutritionMeal from "../Nutrition/NutritionMeal";
 import DatePicker from "react-datepicker";
 import Photos from "../Photos/Photos";
+import { te } from "../../helpers/funs";
 
 class CalendarDayOverView extends Component {
   constructor(props) {
@@ -71,6 +75,7 @@ class CalendarDayOverView extends Component {
     dispatch(recentMealRequest());
     dispatch(getExercisesNameRequest());
     dispatch(getExerciseMeasurementRequest());
+    dispatch(getProgressPhotosByDateRequest(requestObj));
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -85,6 +90,9 @@ class CalendarDayOverView extends Component {
       recentMealsLoading,
       exercises,
       exerciseMeasurements,
+      loadingProgressPhotos,
+      todayProgressPhotos,
+      progressPhotosError,
       dispatch
     } = this.props;
     let { logsList } = this.state;
@@ -124,6 +132,23 @@ class CalendarDayOverView extends Component {
     if (!loading && prevProps.exerciseMeasurements !== exerciseMeasurements) {
       dispatch(hidePageLoader());
     }
+    if (
+      !loadingProgressPhotos &&
+      prevProps.todayProgressPhotos !== todayProgressPhotos
+    ) {
+      console.log("===========todayProgressPhotos===========");
+      console.log("todayProgressPhotos", todayProgressPhotos);
+      console.log("==========================");
+      dispatch(hidePageLoader());
+    }
+    if (
+      !loadingProgressPhotos &&
+      prevProps.progressPhotosError !== progressPhotosError &&
+      progressPhotosError.length > 0
+    ) {
+      dispatch(hidePageLoader());
+      te();
+    }
   }
   onChangeLogDate = date => {
     const { logDate } = this.state;
@@ -138,6 +163,7 @@ class CalendarDayOverView extends Component {
       // dispatch(getUsersWorkoutOverviewRequest(date));
       dispatch(getUserMealRequest(requestData));
       dispatch(getUserBodyMeasurementRequest(requestData));
+      dispatch(getProgressPhotosByDateRequest(requestData));
       //if (isOnline()) {
       //console.log('isOnline Call');
       //this.getUserMealsLogData(requestData);
@@ -230,6 +256,7 @@ class CalendarDayOverView extends Component {
     dispatch(getUsersWorkoutOverviewRequest(logDate));
     dispatch(getUserMealRequest(requestData));
     dispatch(getUserBodyMeasurementRequest(requestData));
+    dispatch(getProgressPhotosByDateRequest(requestData));
   };
   getPrevDate = () => {
     let { logDate } = this.state;
@@ -241,6 +268,7 @@ class CalendarDayOverView extends Component {
     dispatch(getUsersWorkoutOverviewRequest(logDate));
     dispatch(getUserMealRequest(requestData));
     dispatch(getUserBodyMeasurementRequest(requestData));
+    dispatch(getProgressPhotosByDateRequest(requestData));
   };
 
   render() {
@@ -480,7 +508,10 @@ class CalendarDayOverView extends Component {
                   }
                   id="Photos"
                 >
-                  <Photos />
+                  <Photos
+                    logDate={logDate}
+                    todayProgressPhotos={this.props.todayProgressPhotos}
+                  />
                 </div>
               )}
             </div>
@@ -516,6 +547,9 @@ const mapStateToProps = state => {
 
     measurement: userBodyMeasurement.get("measurement"),
     measurementloading: userBodyMeasurement.get("loading"),
+    loadingProgressPhotos: userBodyMeasurement.get("loadingProgressPhotos"),
+    todayProgressPhotos: userBodyMeasurement.get("userProgressPhotos"),
+    progressPhotosError: userBodyMeasurement.get("error"),
 
     recentMealsLoading: meal.get("recentMealsLoading"),
     recentMeals: meal.get("recentMeals"),

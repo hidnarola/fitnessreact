@@ -1,17 +1,36 @@
-import React, { Component } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Scrollbars } from 'react-custom-scrollbars';
-import exerciseImage from '../../../assets/img/exercise/fitness/exercise-2x.png';
-import exerciseImage2 from '../../../assets/img/exercise/fitness/img-13.jpg';
+import React, { Component } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Scrollbars } from "react-custom-scrollbars";
+import exerciseImage from "../../../assets/img/exercise/fitness/exercise-2x.png";
+import exerciseImage2 from "../../../assets/img/exercise/fitness/img-13.jpg";
+import TodaysPhotosListItems from "./TodaysPhotosListItems";
+import moment from "moment";
+import NoRecordFound from "../Common/NoRecordFound";
 
 class TodaysPhotosList extends Component {
   render() {
-    const { handleChangeCreatePhotos } = this.props;
+    const {
+      handleChangeCreatePhotos,
+      todayProgressPhotos,
+      activeProgressTab,
+      handleChangeProgressTab,
+      logDate
+    } = this.props;
+
     return (
       <React.Fragment>
         <div className="photos-sidebar">
           <div className="photos-header">
-            <h3>Today's Photos</h3>
+            <h3>
+              {new Date(logDate).getDate() === new Date().getDate()
+                ? "Today's Photos"
+                : "Photos of " +
+                  (logDate
+                    ? moment(logDate)
+                        .local()
+                        .format("DD/MM/YYYY")
+                    : "")}{" "}
+            </h3>
             <button
               className="btn ml-auto"
               onClick={() => handleChangeCreatePhotos()}
@@ -22,71 +41,23 @@ class TodaysPhotosList extends Component {
           <div className="photos-sidebar-body">
             <Scrollbars autoHide>
               <ul>
-                <li>
-                  <div className="image-box">
-                    <div className="image">
-                      <img
-                        src={exerciseImage2}
-                        alt="image"
-                        className="img-responsive"
-                      />
-                      <h3 className="img-title">Progress</h3>
-                      <div className="img-subtitle">
-                        <h4>Fitter Gunshow Running</h4>
-                        <i className="fad fa-user-shield ml-auto" />
-                      </div>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <div className="image-box">
-                    <div className="image active">
-                      <img
-                        src={exerciseImage2}
-                        alt="image"
-                        className="img-responsive"
-                      />
-                      <h3 className="img-title">Progress</h3>
-                      <div className="img-subtitle">
-                        <h4>Fitter Gunshow Running</h4>
-                        <i className="fad fa-user-shield ml-auto" />
-                      </div>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <div className="image-box">
-                    <div className="img-list">
-                      <img
-                        src={exerciseImage}
-                        alt="image"
-                        className="img-rounded"
-                      />
-                      <img
-                        src={exerciseImage}
-                        alt="image"
-                        className="img-rounded"
-                      />
-                      <img
-                        src={exerciseImage2}
-                        alt="image"
-                        className="img-rounded"
-                      />
-                    </div>
-                    <div className="image">
-                      <img
-                        src={exerciseImage2}
-                        alt="image"
-                        className="img-responsive"
-                      />
-                      <h3 className="img-title">Progress</h3>
-                      <div className="img-subtitle">
-                        <h4>Fitter Gunshow Running</h4>
-                        <i className="fad fa-globe-europe ml-auto" />
-                      </div>
-                    </div>
-                  </div>
-                </li>
+                {todayProgressPhotos &&
+                  todayProgressPhotos.length > 0 &&
+                  todayProgressPhotos.map((progress, index) => (
+                    <TodaysPhotosListItems
+                      progress={progress}
+                      key={index}
+                      photosIndex={index}
+                      progressId={`progressPhoto${index + 1}`}
+                      activeProgressTab={activeProgressTab}
+                      handleChangeProgressTab={handleChangeProgressTab}
+                    />
+                  ))}
+                {todayProgressPhotos.length === 0 && (
+                  <li>
+                    {<NoRecordFound title="No photos found for today." />}
+                  </li>
+                )}
               </ul>
             </Scrollbars>
           </div>

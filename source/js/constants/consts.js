@@ -943,7 +943,8 @@ export const PROGRESS_PHOTO_POSED = [
 export const PROGRESS_PHOTO_CATEGORIES = [
     { value: 'basic', label: 'Full body' },
     { value: 'isolation', label: 'Isolation' },
-    { value: 'posed', label: 'Posed' }
+    { value: 'posed', label: 'Posed' },
+    { value: 'lifestyle', label: 'Lifestyle' },
 ];
 
 

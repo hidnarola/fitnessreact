@@ -69,6 +69,7 @@ function changeCompleteStatusOfWorkoutData() {
         api.changeCompleteStatusOfWorkout(requestData)
       );
       yield put(changeCompleteStatusOfWorkoutSuccess(data));
+      action.callback(data);
     } catch (error) {
       yield put(changeCompleteStatusOfWorkoutError(error));
     }

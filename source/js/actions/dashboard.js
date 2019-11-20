@@ -112,10 +112,14 @@ export function changeDashboardBodyFatWidgetError(error) {
   };
 }
 
-export function changeCompleteStatusOfWorkoutRequest(requestData) {
+export function changeCompleteStatusOfWorkoutRequest(
+  requestData,
+  callback = res => {}
+) {
   return {
     type: CHANGE_COMPLETE_STATUS_OF_WORKOUT_REQUEST,
-    requestData
+    requestData,
+    callback
   };
 }
 

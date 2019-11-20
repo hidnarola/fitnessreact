@@ -1,11 +1,12 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Scrollbars } from 'react-custom-scrollbars';
-import SweetAlert from 'react-bootstrap-sweetalert';
-import CalendarDayOverViewNutritionList from './CalendarDayOverViewNutritionList';
-import NutritionNav from './Header/NutritionNav';
-import NutritionQuickAdd from './sidebar/NutritionQuickAdd';
+import React from "react";
+import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Scrollbars } from "react-custom-scrollbars";
+import SweetAlert from "react-bootstrap-sweetalert";
+import CalendarDayOverViewNutritionList from "./CalendarDayOverViewNutritionList";
+import NutritionNav from "./Header/NutritionNav";
+import NutritionQuickAdd from "./sidebar/NutritionQuickAdd";
+import NoRecordFound from "../../Common/NoRecordFound";
 
 const CalendarDayNutritionView = props => {
   const {
@@ -17,7 +18,7 @@ const CalendarDayNutritionView = props => {
     addToFavourite,
     handleRemoveMeals,
     authuserId,
-    logDate,
+    logDate
   } = props;
   return (
     <React.Fragment>
@@ -52,7 +53,7 @@ const CalendarDayNutritionView = props => {
                     onCancel={() => {
                       this.setState({
                         storeMealIndex: null,
-                        showDeleteAlert: false,
+                        showDeleteAlert: false
                       });
                     }}
                     onConfirm={handleRemoveMealsSubmit}
@@ -63,17 +64,23 @@ const CalendarDayNutritionView = props => {
                     showCancel={true}
                     closeOnClickOutside={false}
                   />
-                  {meal_list.map((meal, index) => (
-                    <CalendarDayOverViewNutritionList
-                      key={index}
-                      index={index}
-                      meal={meal}
-                      recentMeals={recentMeals}
-                      addToFavourite={addToFavourite}
-                      handleRemoveMeals={handleRemoveMeals}
-                      authuserId={authuserId}
-                    />
-                  ))}
+                  {meal_list &&
+                    meal_list.length > 0 &&
+                    meal_list.map((meal, index) => (
+                      <CalendarDayOverViewNutritionList
+                        key={index}
+                        index={index}
+                        meal={meal}
+                        recentMeals={recentMeals}
+                        addToFavourite={addToFavourite}
+                        handleRemoveMeals={handleRemoveMeals}
+                        authuserId={authuserId}
+                      />
+                    ))}
+                  {meal_list &&
+                    meal_list.length === 0 && (
+                      <NoRecordFound title="No meals found for today." />
+                    )}
                 </div>
               </Scrollbars>
             </div>

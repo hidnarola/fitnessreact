@@ -57,7 +57,7 @@ class WidgetBodyFatCard extends Component {
     console.log("bodyFat", bodyFat);
     console.log("==========================");
     return (
-      <div className="white-box space-btm-30 dashboard-bodyfat-card">
+      <div className="white-box dashboard-bodyfat-card">
         {/* <div className="whitebox-head d-flex">
           <h3 className="title-h3">Body Fat</h3>
           {((type === WIDGETS_TYPE_TIMELINE &&

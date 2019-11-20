@@ -10,6 +10,7 @@ import _replace from "lodash/replace";
 import _lowerCase from "lodash/lowerCase";
 import { te } from "../../../helpers/funs";
 import { getUserPersonalGoalRequest } from "../../../actions/userPersonalGoals";
+import { getUserFavouriteBadgesRequest } from "../../../actions/userFavouriteBadges";
 
 class BadgesView extends Component {
   constructor(props) {
@@ -73,6 +74,7 @@ class BadgesView extends Component {
     const start = 0;
     const offset = 20;
     dispatch(getUserPersonalGoalRequest(isCompleted, start, offset));
+    dispatch(getUserFavouriteBadgesRequest());
   }
   componentDidUpdate(prevProps, prevState) {
     const {
@@ -83,7 +85,10 @@ class BadgesView extends Component {
       perGoalLoading,
       perGoals,
       perGoalError,
-      goal
+      goal,
+      favouriteBadgesLoading,
+      favouriteBadgesError,
+      favouriteBadges
     } = this.props;
     const { badgesList } = this.state;
 
@@ -135,6 +140,20 @@ class BadgesView extends Component {
       te();
       dispatch(hidePageLoader());
     }
+    if (
+      !favouriteBadgesLoading &&
+      prevProps.favouriteBadges !== favouriteBadges
+    ) {
+      dispatch(hidePageLoader());
+    }
+    if (
+      !favouriteBadgesLoading &&
+      prevProps.favouriteBadgesError !== favouriteBadgesError &&
+      favouriteBadgesError.length > 0
+    ) {
+      dispatch(hidePageLoader());
+      te();
+    }
   }
 
   handleChangeStatus = (list, index) => {
@@ -155,7 +174,7 @@ class BadgesView extends Component {
   };
 }
 const mapStateToProps = state => {
-  const { userBadges, userPersonalGoals } = state;
+  const { userBadges, userPersonalGoals, userFavouriteBadges } = state;
   return {
     loading: userBadges.get("loading"),
     badges: userBadges.get("badges"),
@@ -163,7 +182,10 @@ const mapStateToProps = state => {
     perGoalLoading: userPersonalGoals.get("loading"),
     perGoals: userPersonalGoals.get("goals"),
     goal: userPersonalGoals.get("goal"),
-    perGoalError: userPersonalGoals.get("error")
+    perGoalError: userPersonalGoals.get("error"),
+    favouriteBadgesLoading: userFavouriteBadges.get("loading"),
+    favouriteBadges: userFavouriteBadges.get("badges"),
+    favouriteBadgesError: userFavouriteBadges.get("error")
   };
 };
 

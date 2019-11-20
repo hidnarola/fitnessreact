@@ -8,6 +8,7 @@ import FithubExercise from "./FithubExercise";
 import FithubGoals from "./FithubGoals";
 import SweetAlert from "react-bootstrap-sweetalert";
 import AddTrackingForm from "./AddTrackingForm";
+import { FaCircleONotch } from "react-icons/lib/fa";
 
 class FithubActivities extends Component {
   constructor(props) {
@@ -20,6 +21,7 @@ class FithubActivities extends Component {
   render() {
     const { fithubTab, showTrackingAlert } = this.state;
     const {
+      loading,
       userWidgets,
       widgetBodyFat,
       changeBodyFatLoading,
@@ -32,7 +34,7 @@ class FithubActivities extends Component {
     } = this.props;
     return (
       <React.Fragment>
-        <div className="whitebox-body dashboard-body h-100">
+        <div className="whitebox-body dashboard-body h-100 dashboard-sidebar">
           <div className="activity-title">
             <h2>Fithub</h2>
           </div>
@@ -73,8 +75,16 @@ class FithubActivities extends Component {
                 </div>
               </div>
             </div>
-            <div className="activity-body">
-              {fithubTab === "body" && (
+          </div>
+          <div className="activity-body fithub-body">
+            {loading && (
+              <div className="loader" key={0}>
+                <FaCircleONotch className="loader-spinner loader-spinner-icon mr-1" />
+                Loading ...
+              </div>
+            )}
+            {!loading &&
+              fithubTab === "body" && (
                 <Scrollbars autoHide>
                   <FithubBody
                     userWidgets={userWidgets}
@@ -88,7 +98,8 @@ class FithubActivities extends Component {
                 </Scrollbars>
               )}
 
-              {fithubTab === "photos" && (
+            {!loading &&
+              fithubTab === "photos" && (
                 <Scrollbars autoHide>
                   <FithubPhotos
                     userWidgets={userWidgets}
@@ -98,13 +109,15 @@ class FithubActivities extends Component {
                 </Scrollbars>
               )}
 
-              {fithubTab === "exercise" && (
+            {!loading &&
+              fithubTab === "exercise" && (
                 <Scrollbars autoHide>
                   <FithubExercise />
                 </Scrollbars>
               )}
 
-              {fithubTab === "goals" && (
+            {!loading &&
+              fithubTab === "goals" && (
                 <Scrollbars autoHide>
                   <FithubGoals
                     userWidgets={userWidgets}
@@ -112,6 +125,7 @@ class FithubActivities extends Component {
                   />
                 </Scrollbars>
               )}
+            {!loading && (
               <ul className="workout-list display-workout-btn">
                 <li
                   className="workout-list-items-btn"
@@ -122,23 +136,23 @@ class FithubActivities extends Component {
                   </a>
                 </li>
               </ul>
-              <SweetAlert
-                custom
-                title={undefined}
-                customClass={"alert-tracking-items-box"}
-                type="default"
-                onCancel={() => this.handleCloseAlert()}
-                onConfirm={() => console.log("")}
-                btnSize="sm"
-                cancelBtnBsStyle="danger"
-                show={showTrackingAlert}
-                showConfirm={false}
-                showCancel={false}
-                closeOnClickOutside={true}
-              >
-                <AddTrackingForm handleCloseAlert={this.handleCloseAlert} />
-              </SweetAlert>
-            </div>
+            )}
+            <SweetAlert
+              custom
+              title={undefined}
+              customClass={"alert-tracking-items-box"}
+              type="default"
+              onCancel={() => this.handleCloseAlert()}
+              onConfirm={() => console.log("")}
+              btnSize="sm"
+              cancelBtnBsStyle="danger"
+              show={showTrackingAlert}
+              showConfirm={false}
+              showCancel={false}
+              closeOnClickOutside={true}
+            >
+              <AddTrackingForm handleCloseAlert={this.handleCloseAlert} />
+            </SweetAlert>
           </div>
         </div>
       </React.Fragment>

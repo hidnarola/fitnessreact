@@ -36,6 +36,7 @@ import AddWorkoutTitleForm from "../../ScheduleWorkout/AddWorkoutTitleForm";
 import moment from "moment";
 import { SCHEDULED_WORKOUT_TYPE_EXERCISE } from "../../../constants/consts";
 import CalendarNewWorkoutList from "./CalendarNewWorkoutList";
+import NoRecordFound from "../../Common/NoRecordFound";
 
 class CalendarDayOverViewWorkouts extends Component {
   constructor(props) {
@@ -89,50 +90,57 @@ class CalendarDayOverViewWorkouts extends Component {
                 </div>
                 <div className="workout-body">
                   <ul className="workout-list">
-                    {workoutsList.map((workout, index) => (
-                      <li
-                        key={index}
-                        className={
-                          isActiveWorkoutTab === `#workout${index + 1}`
-                            ? "workout-list-items active d-flex"
-                            : "workout-list-items d-flex"
-                        }
-                      >
-                        <div className="workout-content width-100-per">
-                          <div
-                            className="title"
-                            onClick={() =>
-                              this.handleChangeWorkoutTab(
-                                `#workout${index + 1}`,
-                                workout._id
-                              )
-                            }
-                          >
-                            {workout.title}
-                          </div>
-                          <div className="is-complete">
-                            <div className="workout-switch-wrap">
-                              <small>Workout complete</small>
-                              <div className="material-switch ml-auto">
-                                <input
-                                  id={"workout" + index}
-                                  type="checkbox"
-                                  checked={completeWorkout}
-                                  onChange={() =>
-                                    this.handleCompleteWorkout(workout)
-                                  }
-                                />
-                                <label
-                                  htmlFor={"workout" + index}
-                                  className="label-default"
-                                />
+                    {workoutsList &&
+                      workoutsList.length > 0 &&
+                      workoutsList.map((workout, index) => (
+                        <li
+                          key={index}
+                          className={
+                            isActiveWorkoutTab === `#workout${index + 1}`
+                              ? "workout-list-items active d-flex"
+                              : "workout-list-items d-flex"
+                          }
+                        >
+                          <div className="workout-content width-100-per">
+                            <div
+                              className="title"
+                              onClick={() =>
+                                this.handleChangeWorkoutTab(
+                                  `#workout${index + 1}`,
+                                  workout._id
+                                )
+                              }
+                            >
+                              {workout.title}
+                            </div>
+                            <div className="is-complete">
+                              <div className="workout-switch-wrap">
+                                <small>Workout complete</small>
+                                <div className="material-switch ml-auto">
+                                  <input
+                                    id={"workout" + index}
+                                    type="checkbox"
+                                    checked={completeWorkout}
+                                    onChange={() =>
+                                      this.handleCompleteWorkout(workout)
+                                    }
+                                  />
+                                  <label
+                                    htmlFor={"workout" + index}
+                                    className="label-default"
+                                  />
+                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      </li>
-                    ))}
-
+                        </li>
+                      ))}
+                    <li>
+                      {workoutsList &&
+                        workoutsList.length === 0 && (
+                          <NoRecordFound title="No workouts found for today." />
+                        )}
+                    </li>
                     <li
                       className="workout-list-items-btn"
                       onClick={() =>
@@ -261,6 +269,10 @@ class CalendarDayOverViewWorkouts extends Component {
                                   No Exercise Found
                                 </div>
                               )}
+                            {workoutsList &&
+                              workoutsList.length === 0 && (
+                                <NoRecordFound title="No warmup exercise found for today." />
+                              )}
                           </Scrollbars>
                         </div>
                       )}
@@ -324,6 +336,10 @@ class CalendarDayOverViewWorkouts extends Component {
                                   No Exercise Found
                                 </div>
                               )}
+                            {workoutsList &&
+                              workoutsList.length === 0 && (
+                                <NoRecordFound title="No workout exercise found for today." />
+                              )}
                           </Scrollbars>
                         </div>
                       )}
@@ -386,6 +402,10 @@ class CalendarDayOverViewWorkouts extends Component {
                                 <div className="display-no-workout">
                                   No Exercise Found
                                 </div>
+                              )}
+                            {workoutsList &&
+                              workoutsList.length === 0 && (
+                                <NoRecordFound title="No cooldown exercise found for today." />
                               )}
                           </Scrollbars>
                         </div>
