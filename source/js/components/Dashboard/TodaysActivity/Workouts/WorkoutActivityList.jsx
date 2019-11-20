@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { routeCodes } from "../../../constants/routes";
+import { routeCodes } from "../../../../constants/routes";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import { changeCompleteStatusOfWorkoutRequest } from "../../../actions/dashboard";
-import { te, ts } from "../../../helpers/funs";
+import { changeCompleteStatusOfWorkoutRequest } from "../../../../actions/dashboard";
+import { te, ts } from "../../../../helpers/funs";
 
 class WorkoutActivityList extends Component {
   constructor(props) {

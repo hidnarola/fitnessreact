@@ -16851,6 +16851,29 @@ ul.list-graph-details li.list-graph-items:first-child {
 .dashboard-middle .activity-title{position: absolute; top: 0; left: 0; width: 100%;}
 .dashboard-middle .activity-header{ position:absolute; top: 47px; left: 0; width: 100%}
 .dashboard-middle .activity-body { height:100%;}
+
+.dashboard-body .nutrition-list {height: 46vh;padding: 0 15px;}
+.dashboard-body .nutrition-list .nutrition-box .nutrition-body .nutrition-serve-box .serving-select .form-control {padding: 10px 15px;}
+.dashboard-body .dashboard-nutrition-body .exercise-navbar {padding: 0 10px;background: #fff;}
+.dashboard-body .dashboard-nutrition-body .exercise-navbar .tabs.sub-tab {width: 100%;border-bottom: 2px solid #E9EFF3;}
+.dashboard-body .dashboard-nutrition-body .exercise-navbar .tabs .tab a {padding: 3px 10px;}
+.dashboard-body .dashboard-nutrition-body .exercise-navbar .tabs.sub-tab .tab a {color:#8095C9}
+.dashboard-body .dashboard-nutrition-body .exercise-navbar .tabs.sub-tab .tab.active a {color:#053095}
+.dashboard-body .dashboard-nutrition-body .exercise-navbar .tabs .tab.active a,
+.dashboard-body .dashboard-nutrition-body .exercise-navbar .tabs .tab a.active { padding: 3px 10px; box-shadow: none;}
+.dashboard-body .dashboard-nutrition-body .exercise-navbar .tabs .tab.bg-stats a {background : #3e67ff;color:#fff}
+.dashboard-body .white_right_sidebar {padding : 0 15px;}
+
+.dashboard-body .serving-boxs {position: relative; width: calc(100% - 5px); margin: 3px 0 3px 5px;}
+.dashboard-body .serving-boxs .btn {position: absolute; left: 5px; top:50%; transform: translateY(-50%); border-radius: 50%; background: #A6A5BF; fill: #201F60; font-size:13px; width: 25px; height: 25px; border: 0px; display: flex; flex-wrap: wrap; align-items: center; justify-content: center;}
+.dashboard-body .serving-boxs .btn.btn-plus {left: auto; right: 5px;}
+.dashboard-body .serving-boxs .form-control { box-shadow: none; height: auto; padding: 9px 0 8px; text-align: center; font-size: 20px; color:#201F60; line-height: 1; font-family: 'Neuzeit' !important; font-weight: 900; border: 0px; border-radius:0; }
+
+.dashboard-body .serving-select {width: 36%;}
+.dashboard-body .serving-select select::-ms-expand { display: none; }
+.dashboard-body .serving-select .form-control {box-shadow: none;height: auto;padding: 10px 15px;text-align: left;font-size: 20px;color:#201F60;line-height: 1;font-family: 'Neuzeit' !important;font-weight: 900;border: 0px;border-radius:0px;-webkit-appearance: none;-moz-appearance: none;appearance: none;background: #fff url('../assets/img/caret-down.svg') right 15px center no-repeat;}
+
+
 /*********************** Responsive **************************/
 
 @media(max-width: 1660px) {

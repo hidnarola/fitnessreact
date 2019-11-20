@@ -1,19 +1,22 @@
 import React, { Component } from "react";
-import WorkoutActivityList from "./WorkoutActivityList";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Scrollbars } from "react-custom-scrollbars";
-import { FaCircleONotch } from "react-icons/lib/fa";
 import { connect } from "react-redux";
-import NoRecordFound from "../../Common/NoRecordFound";
 import { routeCodes } from "../../../constants/routes";
 import { withRouter } from "react-router-dom";
+import cns from "classnames";
+import TodayWorkout from "./Workouts/TodayWorkout";
+import TodayNutrition from "./Nutrition/TodayNutrition";
+import TodayLogsActivity from "./Logs/TodayLogsActivity";
 
 class TodaysActivity extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      activeTab: "exercise"
+    };
+  }
   render() {
     const { loading, workouts, history } = this.props;
-    console.log("===========Todays workouts===========");
-    console.log("Todays workouts", workouts);
-    console.log("==========================");
+    const { activeTab } = this.state;
     return (
       <React.Fragment>
         <div className="whitebox-body dashboard-body h-100 dashboard-sidebar">
@@ -23,57 +26,50 @@ class TodaysActivity extends Component {
           <div className="activity-header">
             <div className="exercise-navbar">
               <div className="tabs sub-tab">
-                <div className="tab active">
-                  <a href="#">Exercise</a>
+                <div
+                  className={cns("tab", { active: activeTab === "exercise" })}
+                >
+                  <a
+                    href="#"
+                    onClick={() => this.setState({ activeTab: "exercise" })}
+                  >
+                    Exercise
+                  </a>
                 </div>
-                <div className="tab">
-                  <a href="#">Nutrition</a>
+                <div
+                  className={cns("tab", { active: activeTab === "nutrition" })}
+                >
+                  <a
+                    href="#"
+                    onClick={() => this.setState({ activeTab: "nutrition" })}
+                  >
+                    Nutrition
+                  </a>
                 </div>
-                <div className="tab">
-                  <a href="#">Logs</a>
+                <div className={cns("tab", { active: activeTab === "logs" })}>
+                  <a
+                    href="#"
+                    onClick={() => this.setState({ activeTab: "logs" })}
+                  >
+                    Logs
+                  </a>
                 </div>
-                <div className="tab">
-                  <a href="#">Photos</a>
+                <div className={cns("tab", { active: activeTab === "photos" })}>
+                  <a
+                    href="#"
+                    onClick={() => this.setState({ activeTab: "photos" })}
+                  >
+                    Photos
+                  </a>
                 </div>
               </div>
             </div>
           </div>
-          <div className="activity-body fithub-body">
-            {loading && (
-              <div className="loader" key={0}>
-                <FaCircleONotch className="loader-spinner loader-spinner-icon mr-1" />
-                Loading ...
-              </div>
-            )}
-            <Scrollbars autoHide>
-              {!loading && (
-                <ul className="workout-list">
-                  {workouts &&
-                    workouts.length > 0 &&
-                    workouts.map((item, i) => (
-                      <WorkoutActivityList workout={item} key={i} index={i} />
-                    ))}
-                </ul>
-              )}
-              {!loading &&
-                workouts &&
-                workouts.length === 0 && (
-                  <NoRecordFound title="No workouts found for today." />
-                )}
-            </Scrollbars>
-            {!loading && (
-              <ul className="workout-list display-workout-btn">
-                <li
-                  className="workout-list-items-btn"
-                  onClick={() => history.push(routeCodes.CALENDAR_OVERVIEW)}
-                >
-                  <a href="#" className="btn width-100-per">
-                    <FontAwesomeIcon icon="plus" /> Add Workout
-                  </a>
-                </li>
-              </ul>
-            )}
-          </div>
+          {activeTab === "exercise" && (
+            <TodayWorkout loading={loading} workouts={workouts} />
+          )}
+          {activeTab === "nutrition" && <TodayNutrition loading={loading} />}
+          {activeTab === "logs" && <TodayLogsActivity loading={loading} />}
         </div>
       </React.Fragment>
     );

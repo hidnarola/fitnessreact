@@ -1,47 +1,47 @@
-import React, { Component } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Collapse from 'react-bootstrap/lib/Collapse';
-import { PieChart, Pie, Sector, Cell } from 'recharts';
-import DropdownButton from 'react-bootstrap/lib/DropdownButton';
-import MenuItem from 'react-bootstrap/lib/MenuItem';
+import React, { Component } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Collapse from "react-bootstrap/lib/Collapse";
+import { PieChart, Pie, Sector, Cell } from "recharts";
+import DropdownButton from "react-bootstrap/lib/DropdownButton";
+import MenuItem from "react-bootstrap/lib/MenuItem";
 
 const data = [
-  { name: 'Group A', value: 450 },
-  { name: 'Group B', value: 300 },
-  { name: 'Group C', value: 300 },
+  { name: "Group A", value: 450 },
+  { name: "Group B", value: 300 },
+  { name: "Group C", value: 300 }
 ];
-const COLORS = ['#201f60', '#3e67ff', '#93e7e4'];
+const COLORS = ["#201f60", "#3e67ff", "#93e7e4"];
 
 const RADIAN = Math.PI / 180;
 
 class NutritionStatsRightSidebar extends Component {
   state = {
-    quickTab: '#macro',
+    quickTab: "#macro",
     isallMeal: true,
-    selectedMeal: 'All Meals',
+    selectedMeal: "All Meals"
   };
   render() {
     const { quickTab, isallMeal, selectedMeal } = this.state;
 
     return (
       <React.Fragment>
-        <div className={'blue_right_sidebar white_right_sidebar h-100'}>
+        <div className={"blue_right_sidebar white_right_sidebar h-100"}>
           <div className="d-flex width-100-per sidebar-header">
             <h2 className="h2_head_one pt-3 pb-3">Stats</h2>
           </div>
           <div className="quick-tabs">
             <div
-              className={quickTab === '#macro' ? 'tab active' : 'tab'}
+              className={quickTab === "#macro" ? "tab active" : "tab"}
               onClick={() => {
-                this.setState({ quickTab: '#macro' });
+                this.setState({ quickTab: "#macro" });
               }}
             >
               <a href="#">Macro</a>
             </div>
             <div
-              className={quickTab === '#micro' ? 'tab active' : 'tab'}
+              className={quickTab === "#micro" ? "tab active" : "tab"}
               onClick={() => {
-                this.setState({ quickTab: '#micro' });
+                this.setState({ quickTab: "#micro" });
               }}
             >
               <a href="#">Micro</a>
@@ -49,11 +49,11 @@ class NutritionStatsRightSidebar extends Component {
           </div>
           <div className="tab-content">
             <div className="recent-ingredient">
-              {quickTab === '#micro' && <ul></ul>}
-              {quickTab === '#macro' && (
+              {quickTab === "#micro" && <ul />}
+              {quickTab === "#macro" && (
                 <React.Fragment>
                   <ul>
-                    <li style={{ padding: '0' }}>
+                    <li style={{ padding: "0" }}>
                       <div className="display-select-menu">
                         <DropdownButton
                           title={selectedMeal}
@@ -63,7 +63,7 @@ class NutritionStatsRightSidebar extends Component {
                           <MenuItem
                             eventKey="1"
                             onClick={() =>
-                              this.handleChangeMealType('All Meals')
+                              this.handleChangeMealType("All Meals")
                             }
                           >
                             All Meals
@@ -71,26 +71,26 @@ class NutritionStatsRightSidebar extends Component {
                           <MenuItem
                             eventKey="2"
                             onClick={() =>
-                              this.handleChangeMealType('Break Fast')
+                              this.handleChangeMealType("Break Fast")
                             }
                           >
                             Break Fast
                           </MenuItem>
                           <MenuItem
                             eventKey="3"
-                            onClick={() => this.handleChangeMealType('Lunch')}
+                            onClick={() => this.handleChangeMealType("Lunch")}
                           >
                             Lunch
                           </MenuItem>
                           <MenuItem
                             eventKey="3"
-                            onClick={() => this.handleChangeMealType('Dinner')}
+                            onClick={() => this.handleChangeMealType("Dinner")}
                           >
                             Dinner
                           </MenuItem>
                           <MenuItem
                             eventKey="3"
-                            onClick={() => this.handleChangeMealType('Snacks')}
+                            onClick={() => this.handleChangeMealType("Snacks")}
                           >
                             Snacks
                           </MenuItem>
@@ -98,7 +98,7 @@ class NutritionStatsRightSidebar extends Component {
                       </div>
                     </li>
 
-                    <li className="d-flex width-100-per">
+                    <li className="d-flex width-100-per justify-content-center">
                       <div>Calories</div>
                       <div className="ml-auto">1350 kcal</div>
                       <div>
@@ -139,12 +139,12 @@ class NutritionStatsRightSidebar extends Component {
                                 role="progressbar"
                                 style={{
                                   width: `60%`,
-                                  background: COLORS[0],
+                                  background: COLORS[0]
                                 }}
                                 aria-valuenow={60}
                                 aria-valuemin="0"
                                 aria-valuemax={2000}
-                              ></div>
+                              />
                             </div>
                           </div>
                           <div className="ml-auto d-flex align-items-center">
@@ -163,12 +163,12 @@ class NutritionStatsRightSidebar extends Component {
                                 role="progressbar"
                                 style={{
                                   width: `60%`,
-                                  background: COLORS[1],
+                                  background: COLORS[1]
                                 }}
                                 aria-valuenow={60}
                                 aria-valuemin="0"
                                 aria-valuemax={2000}
-                              ></div>
+                              />
                             </div>
                           </div>
                           <div className="ml-auto d-flex align-items-center">
@@ -187,12 +187,12 @@ class NutritionStatsRightSidebar extends Component {
                                 role="progressbar"
                                 style={{
                                   width: `60%`,
-                                  background: COLORS[2],
+                                  background: COLORS[2]
                                 }}
                                 aria-valuenow={60}
                                 aria-valuemin="0"
                                 aria-valuemax={2000}
-                              ></div>
+                              />
                             </div>
                           </div>
                           <div className="ml-auto d-flex align-items-center">
