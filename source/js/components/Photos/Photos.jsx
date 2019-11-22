@@ -6,6 +6,7 @@ import { getProgressPhotosByDateRequest } from "../../actions/userBodyMeasuremen
 import { connect } from "react-redux";
 import { hidePageLoader, showPageLoader } from "../../actions/pageLoader";
 import { te } from "../../helpers/funs";
+import noPhotosFound from "../../../assets/img/no-photos-found.png";
 
 class Photos extends Component {
   constructor(props) {
@@ -43,13 +44,24 @@ class Photos extends Component {
                 </div>
                 <div className="col-xs-12 col-md-9 d-flex">
                   <div className="whitebox-body meals-bg photos-body border-left">
-                    <PhotosDetails
-                      activeProgressTab={activeProgressTab}
-                      todayProgressPhotoDetail={
-                        todayProgressPhotos[activeProgressIndex]
-                      }
-                      todayProgressPhotos={todayProgressPhotos}
-                    />
+                    {todayProgressPhotos.length > 0 && (
+                      <PhotosDetails
+                        activeProgressTab={activeProgressTab}
+                        todayProgressPhotoDetail={
+                          todayProgressPhotos[activeProgressIndex]
+                        }
+                        todayProgressPhotos={todayProgressPhotos}
+                      />
+                    )}
+                    {todayProgressPhotos.length === 0 && (
+                      <div className="d-flex flex-wrap justify-content-center width-100-per align-items-center h-100">
+                        <img
+                          src={noPhotosFound}
+                          alt="no photos found"
+                          height="350px"
+                        />
+                      </div>
+                    )}
                   </div>
                 </div>
               </React.Fragment>

@@ -1,16 +1,17 @@
 import React, { Component } from "react";
 import { Scrollbars } from "react-custom-scrollbars";
 import { FaCircleONotch } from "react-icons/lib/fa";
-import NoRecordFound from "../../../Common/NoRecordFound";
-import NoWorkoutFound from "../../../../../assets/img/no-workouts-found2.png";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import PhotosActivityList from "./PhotosActivityList";
 import { withRouter } from "react-router-dom";
-import { routeCodes } from "../../../../constants/routes";
-import WorkoutActivityList from "./WorkoutActivityList";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import noPhotosFoundImg from "../../../../../assets/img/no-photos-found.png";
 
-class TodayWorkout extends Component {
+class TodayPhotos extends Component {
   render() {
-    const { loading, workouts, history } = this.props;
+    const { loading, history, todayProgressPhotos } = this.props;
+    console.log("===========today Progress Phtot Dashboard===========");
+    console.log("today Progress Phtot Dashboard", todayProgressPhotos);
+    console.log("==========================");
     return (
       <React.Fragment>
         <div className="activity-body fithub-body">
@@ -21,28 +22,24 @@ class TodayWorkout extends Component {
             </div>
           )}
           <Scrollbars autoHide>
-            {!loading && (
-              <ul className="workout-list">
-                {workouts &&
-                  workouts.length > 0 &&
-                  workouts.map((item, i) => (
-                    <WorkoutActivityList workout={item} key={i} index={i} />
-                  ))}
-              </ul>
-            )}
             {!loading &&
-              workouts &&
-              workouts.length === 0 && (
+              (todayProgressPhotos.length > 0 ? (
+                <ul className="workout-list">
+                  {todayProgressPhotos.map((item, i) => (
+                    <PhotosActivityList todayPhoto={item} key={i} />
+                  ))}
+                </ul>
+              ) : (
                 <div className="d-flex flex-wrap justify-content-center dashboard-record-not-found">
                   <img
-                    src={NoWorkoutFound}
+                    src={noPhotosFoundImg}
                     alt="NoWorkoutFound"
                     height="200px"
                   />
                   <h3 className="mt-5">You've not added any</h3>
-                  <h3> workouts for today</h3>
+                  <h3> photos for today</h3>
                 </div>
-              )}
+              ))}
           </Scrollbars>
           {!loading && (
             <ul className="workout-list display-workout-btn">
@@ -51,7 +48,7 @@ class TodayWorkout extends Component {
                 onClick={() => history.push(routeCodes.CALENDAR_OVERVIEW)}
               >
                 <a href="#" className="btn width-100-per">
-                  <FontAwesomeIcon icon="plus" /> Add Workout
+                  <FontAwesomeIcon icon="plus" /> Add Photo
                 </a>
               </li>
             </ul>
@@ -62,4 +59,4 @@ class TodayWorkout extends Component {
   }
 }
 
-export default withRouter(TodayWorkout);
+export default withRouter(TodayPhotos);

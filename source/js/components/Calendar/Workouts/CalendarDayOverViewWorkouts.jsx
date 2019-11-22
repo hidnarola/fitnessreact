@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import CalendarDayOverViewWorkoutsList from "./CalendarDayOverViewWorkoutsList";
-
+import noRecordImg from "../../../../assets/img/no-workouts-found.png";
 import {
   completeUsersBulkWorkoutScheduleRequest,
   getUserFirstWorkoutByDateRequest,
@@ -135,12 +135,7 @@ class CalendarDayOverViewWorkouts extends Component {
                           </div>
                         </li>
                       ))}
-                    <li>
-                      {workoutsList &&
-                        workoutsList.length === 0 && (
-                          <NoRecordFound title="No workouts found for today." />
-                        )}
-                    </li>
+
                     <li
                       className="workout-list-items-btn"
                       onClick={() =>
@@ -180,288 +175,319 @@ class CalendarDayOverViewWorkouts extends Component {
                 isActiveQuickTab ? 'col-xs-12 col-md-6' : 'col-xs-12 col-md-6'
               }
             > */}
-            <div className="col-xs-12 col-md-9">
-              <div className="white-box width-100-per p-0">
-                {/* <WorkoutHeader
+            {workoutsList &&
+              workoutsList.length === 0 && (
+                <div className="col-xs-12 col-md-9">
+                  <div className="white-box width-100-per p-0">
+                    <div className="d-flex flex-wrap justify-content-center width-100-per">
+                      <img
+                        src={noRecordImg}
+                        alt="no workot found"
+                        height="550px"
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+            {workoutsList &&
+              workoutsList.length > 0 && (
+                <div className="col-xs-12 col-md-9">
+                  <div className="white-box width-100-per p-0">
+                    {/* <WorkoutHeader
                   index={index}
                   completeWorkout={completeWorkout}
                   workout={this.props.workout}
                   handleCompleteWorkout={this.handleCompleteWorkout}
                 /> */}
-                {cuurentTab !== `#stats` ? (
-                  <WorkoutNav
-                    cuurentTab={cuurentTab}
-                    isActiveQuickTab={isActiveQuickTab}
-                    handleChangeTab={this.handleChangeTab}
-                    handleSetActiveQuickTab={this.handleSetActiveQuickTab}
-                  />
-                ) : (
-                  ""
-                )}
+                    {cuurentTab !== `#stats` ? (
+                      <WorkoutNav
+                        cuurentTab={cuurentTab}
+                        isActiveQuickTab={isActiveQuickTab}
+                        handleChangeTab={this.handleChangeTab}
+                        handleSetActiveQuickTab={this.handleSetActiveQuickTab}
+                      />
+                    ) : (
+                      ""
+                    )}
 
-                <div className="row no-gutters h-exercise">
-                  <div
-                    className={
-                      isActiveQuickTab
-                        ? "col-xs-12 col-md-7"
-                        : "col-xs-12 col-md-8"
-                    }
-                  >
-                    <div className={"exercise-tabs tab-content"}>
-                      {cuurentTab === `#warmup` && (
-                        <div
-                          className={
-                            cuurentTab === `#warmup`
-                              ? "content active"
-                              : "content"
-                          }
-                        >
-                          <Scrollbars autoHide>
-                            {workout &&
-                              workout.warmup.length > 0 &&
-                              workout.warmup.map((warmup, i) => (
-                                <CalendarDayOverViewWorkoutsList
-                                  workout={warmup}
-                                  key={i}
-                                  index={i}
-                                  exerciseId={warmup._id}
-                                  showWorkoutDeleteAlert={
-                                    showWorkoutDeleteAlert
-                                  }
-                                  handleCancelWorkoutDeleteAlert={
-                                    this.handleCancelWorkoutDeleteAlert
-                                  }
-                                  handleDeleteWorkoutSchedule={
-                                    this.handleDeleteWorkoutSchedule
-                                  }
-                                  handleInitDeleteAlert={
-                                    this.handleInitDeleteAlert
-                                  }
-                                  handleAddSetDetails={this.handleAddSetDetails}
-                                />
-                              ))}
-                            {newSingleWarmup.map((item, index) => (
-                              <CalendarNewWorkoutList
-                                workout={item}
-                                workoutIndex={index}
-                                handleChangeInput={this.handleChangeInput}
-                                handleChangeSetsDetails={
-                                  this.handleChangeSetsDetails
-                                }
-                                handleSubmitExercise={this.handleSubmitExercise}
-                                handleRemoveSingleWorkout={
-                                  this.handleRemoveSingleWorkout
-                                }
-                                handleAddSetDetails={this.handleAddSetDetails}
-                                handleRemoveSetDetails={
-                                  this.handleRemoveSetDetails
-                                }
-                                handleChangeAdvanceSetDetsils={
-                                  this.handleChangeAdvanceSetDetsils
-                                }
-                                type="warmup"
-                              />
-                            ))}
-                            {workout &&
-                              workout.warmup.length === 0 &&
-                              newSingleWarmup.length === 0 && (
-                                <div className="display-no-workout">
-                                  No Exercise Found
-                                </div>
-                              )}
-                            {workoutsList &&
-                              workoutsList.length === 0 && (
-                                <NoRecordFound title="No warmup exercise found for today." />
-                              )}
-                          </Scrollbars>
-                        </div>
-                      )}
-                      {cuurentTab === `#workout` && (
-                        <div
-                          className={
-                            cuurentTab === `#workout`
-                              ? "content active"
-                              : "content"
-                          }
-                        >
-                          <Scrollbars autoHide>
-                            {workout &&
-                              workout.exercise.length > 0 &&
-                              workout.exercise.map((exercise, ei) => (
-                                <CalendarDayOverViewWorkoutsList
-                                  workout={exercise}
-                                  exerciseId={exercise._id}
-                                  key={ei}
-                                  index={ei}
-                                  showWorkoutDeleteAlert={
-                                    showWorkoutDeleteAlert
-                                  }
-                                  handleCancelWorkoutDeleteAlert={
-                                    this.handleCancelWorkoutDeleteAlert
-                                  }
-                                  handleDeleteWorkoutSchedule={
-                                    this.handleDeleteWorkoutSchedule
-                                  }
-                                  handleInitDeleteAlert={
-                                    this.handleInitDeleteAlert
-                                  }
-                                />
-                              ))}
-                            {newSingleWorkout.map((item, index) => (
-                              <CalendarNewWorkoutList
-                                workout={item}
-                                workoutIndex={index}
-                                handleChangeInput={this.handleChangeInput}
-                                handleChangeSetsDetails={
-                                  this.handleChangeSetsDetails
-                                }
-                                handleSubmitExercise={this.handleSubmitExercise}
-                                handleRemoveSingleWorkout={
-                                  this.handleRemoveSingleWorkout
-                                }
-                                type="workout"
-                                handleAddSetDetails={this.handleAddSetDetails}
-                                handleRemoveSetDetails={
-                                  this.handleRemoveSetDetails
-                                }
-                                handleChangeAdvanceSetDetsils={
-                                  this.handleChangeAdvanceSetDetsils
-                                }
-                              />
-                            ))}
-                            {workout &&
-                              workout.exercise.length === 0 &&
-                              newSingleWorkout.length === 0 && (
-                                <div className="display-no-workout">
-                                  No Exercise Found
-                                </div>
-                              )}
-                            {workoutsList &&
-                              workoutsList.length === 0 && (
-                                <NoRecordFound title="No workout exercise found for today." />
-                              )}
-                          </Scrollbars>
-                        </div>
-                      )}
-                      {cuurentTab === `#cooldown` && (
-                        <div
-                          className={
-                            cuurentTab === `#cooldown`
-                              ? "content active"
-                              : "content"
-                          }
-                        >
-                          <Scrollbars autoHide>
-                            {workout &&
-                              workout.cooldown.length > 0 &&
-                              workout.cooldown.map((cooldown, index) => (
-                                <CalendarDayOverViewWorkoutsList
-                                  workout={cooldown}
-                                  exerciseId={cooldown._id}
-                                  key={index}
-                                  index={index}
-                                  showWorkoutDeleteAlert={
-                                    showWorkoutDeleteAlert
-                                  }
-                                  handleCancelWorkoutDeleteAlert={
-                                    this.handleCancelWorkoutDeleteAlert
-                                  }
-                                  handleDeleteWorkoutSchedule={
-                                    this.handleDeleteWorkoutSchedule
-                                  }
-                                  handleInitDeleteAlert={
-                                    this.handleInitDeleteAlert
-                                  }
-                                />
-                              ))}
-                            {newSingleCooldown.map((item, index) => (
-                              <CalendarNewWorkoutList
-                                workout={item}
-                                workoutIndex={index}
-                                handleChangeInput={this.handleChangeInput}
-                                handleChangeSetsDetails={
-                                  this.handleChangeSetsDetails
-                                }
-                                handleSubmitExercise={this.handleSubmitExercise}
-                                handleRemoveSingleWorkout={
-                                  this.handleRemoveSingleWorkout
-                                }
-                                type="cooldown"
-                                handleAddSetDetails={this.handleAddSetDetails}
-                                handleRemoveSetDetails={
-                                  this.handleRemoveSetDetails
-                                }
-                                handleChangeAdvanceSetDetsils={
-                                  this.handleChangeAdvanceSetDetsils
-                                }
-                              />
-                            ))}
-                            {workout &&
-                              workout.cooldown.length === 0 &&
-                              newSingleCooldown.length === 0 && (
-                                <div className="display-no-workout">
-                                  No Exercise Found
-                                </div>
-                              )}
-                            {workoutsList &&
-                              workoutsList.length === 0 && (
-                                <NoRecordFound title="No cooldown exercise found for today." />
-                              )}
-                          </Scrollbars>
-                        </div>
-                      )}
-                      {cuurentTab === `#fitnesstest` && (
-                        <div
-                          className={
-                            cuurentTab === `#notes`
-                              ? "content active"
-                              : "content"
-                          }
-                        >
-                          <CalendarDayFitnessTestList />
-                        </div>
-                      )}
+                    <div className="row no-gutters h-exercise">
+                      <div
+                        className={
+                          isActiveQuickTab
+                            ? "col-xs-12 col-md-7"
+                            : "col-xs-12 col-md-8"
+                        }
+                      >
+                        <div className={"exercise-tabs tab-content"}>
+                          {cuurentTab === `#warmup` && (
+                            <div
+                              className={
+                                cuurentTab === `#warmup`
+                                  ? "content active"
+                                  : "content"
+                              }
+                            >
+                              <Scrollbars autoHide>
+                                {workout &&
+                                  workout.warmup.length > 0 &&
+                                  workout.warmup.map((warmup, i) => (
+                                    <CalendarDayOverViewWorkoutsList
+                                      workout={warmup}
+                                      key={i}
+                                      index={i}
+                                      exerciseId={warmup._id}
+                                      showWorkoutDeleteAlert={
+                                        showWorkoutDeleteAlert
+                                      }
+                                      handleCancelWorkoutDeleteAlert={
+                                        this.handleCancelWorkoutDeleteAlert
+                                      }
+                                      handleDeleteWorkoutSchedule={
+                                        this.handleDeleteWorkoutSchedule
+                                      }
+                                      handleInitDeleteAlert={
+                                        this.handleInitDeleteAlert
+                                      }
+                                      handleAddSetDetails={
+                                        this.handleAddSetDetails
+                                      }
+                                    />
+                                  ))}
+                                {newSingleWarmup.map((item, index) => (
+                                  <CalendarNewWorkoutList
+                                    workout={item}
+                                    workoutIndex={index}
+                                    handleChangeInput={this.handleChangeInput}
+                                    handleChangeSetsDetails={
+                                      this.handleChangeSetsDetails
+                                    }
+                                    handleSubmitExercise={
+                                      this.handleSubmitExercise
+                                    }
+                                    handleRemoveSingleWorkout={
+                                      this.handleRemoveSingleWorkout
+                                    }
+                                    handleAddSetDetails={
+                                      this.handleAddSetDetails
+                                    }
+                                    handleRemoveSetDetails={
+                                      this.handleRemoveSetDetails
+                                    }
+                                    handleChangeAdvanceSetDetsils={
+                                      this.handleChangeAdvanceSetDetsils
+                                    }
+                                    type="warmup"
+                                  />
+                                ))}
+                                {workout &&
+                                  workout.warmup.length === 0 &&
+                                  newSingleWarmup.length === 0 && (
+                                    <div className="display-no-workout">
+                                      No Exercise Found
+                                    </div>
+                                  )}
+                                {workoutsList &&
+                                  workoutsList.length === 0 && (
+                                    <NoRecordFound title="No warmup exercise found for today." />
+                                  )}
+                              </Scrollbars>
+                            </div>
+                          )}
+                          {cuurentTab === `#workout` && (
+                            <div
+                              className={
+                                cuurentTab === `#workout`
+                                  ? "content active"
+                                  : "content"
+                              }
+                            >
+                              <Scrollbars autoHide>
+                                {workout &&
+                                  workout.exercise.length > 0 &&
+                                  workout.exercise.map((exercise, ei) => (
+                                    <CalendarDayOverViewWorkoutsList
+                                      workout={exercise}
+                                      exerciseId={exercise._id}
+                                      key={ei}
+                                      index={ei}
+                                      showWorkoutDeleteAlert={
+                                        showWorkoutDeleteAlert
+                                      }
+                                      handleCancelWorkoutDeleteAlert={
+                                        this.handleCancelWorkoutDeleteAlert
+                                      }
+                                      handleDeleteWorkoutSchedule={
+                                        this.handleDeleteWorkoutSchedule
+                                      }
+                                      handleInitDeleteAlert={
+                                        this.handleInitDeleteAlert
+                                      }
+                                    />
+                                  ))}
+                                {newSingleWorkout.map((item, index) => (
+                                  <CalendarNewWorkoutList
+                                    workout={item}
+                                    workoutIndex={index}
+                                    handleChangeInput={this.handleChangeInput}
+                                    handleChangeSetsDetails={
+                                      this.handleChangeSetsDetails
+                                    }
+                                    handleSubmitExercise={
+                                      this.handleSubmitExercise
+                                    }
+                                    handleRemoveSingleWorkout={
+                                      this.handleRemoveSingleWorkout
+                                    }
+                                    type="workout"
+                                    handleAddSetDetails={
+                                      this.handleAddSetDetails
+                                    }
+                                    handleRemoveSetDetails={
+                                      this.handleRemoveSetDetails
+                                    }
+                                    handleChangeAdvanceSetDetsils={
+                                      this.handleChangeAdvanceSetDetsils
+                                    }
+                                  />
+                                ))}
+                                {workout &&
+                                  workout.exercise.length === 0 &&
+                                  newSingleWorkout.length === 0 && (
+                                    <div className="display-no-workout">
+                                      No Exercise Found
+                                    </div>
+                                  )}
+                                {workoutsList &&
+                                  workoutsList.length === 0 && (
+                                    <NoRecordFound title="No workout exercise found for today." />
+                                  )}
+                              </Scrollbars>
+                            </div>
+                          )}
+                          {cuurentTab === `#cooldown` && (
+                            <div
+                              className={
+                                cuurentTab === `#cooldown`
+                                  ? "content active"
+                                  : "content"
+                              }
+                            >
+                              <Scrollbars autoHide>
+                                {workout &&
+                                  workout.cooldown.length > 0 &&
+                                  workout.cooldown.map((cooldown, index) => (
+                                    <CalendarDayOverViewWorkoutsList
+                                      workout={cooldown}
+                                      exerciseId={cooldown._id}
+                                      key={index}
+                                      index={index}
+                                      showWorkoutDeleteAlert={
+                                        showWorkoutDeleteAlert
+                                      }
+                                      handleCancelWorkoutDeleteAlert={
+                                        this.handleCancelWorkoutDeleteAlert
+                                      }
+                                      handleDeleteWorkoutSchedule={
+                                        this.handleDeleteWorkoutSchedule
+                                      }
+                                      handleInitDeleteAlert={
+                                        this.handleInitDeleteAlert
+                                      }
+                                    />
+                                  ))}
+                                {newSingleCooldown.map((item, index) => (
+                                  <CalendarNewWorkoutList
+                                    workout={item}
+                                    workoutIndex={index}
+                                    handleChangeInput={this.handleChangeInput}
+                                    handleChangeSetsDetails={
+                                      this.handleChangeSetsDetails
+                                    }
+                                    handleSubmitExercise={
+                                      this.handleSubmitExercise
+                                    }
+                                    handleRemoveSingleWorkout={
+                                      this.handleRemoveSingleWorkout
+                                    }
+                                    type="cooldown"
+                                    handleAddSetDetails={
+                                      this.handleAddSetDetails
+                                    }
+                                    handleRemoveSetDetails={
+                                      this.handleRemoveSetDetails
+                                    }
+                                    handleChangeAdvanceSetDetsils={
+                                      this.handleChangeAdvanceSetDetsils
+                                    }
+                                  />
+                                ))}
+                                {workout &&
+                                  workout.cooldown.length === 0 &&
+                                  newSingleCooldown.length === 0 && (
+                                    <div className="display-no-workout">
+                                      No Exercise Found
+                                    </div>
+                                  )}
+                                {workoutsList &&
+                                  workoutsList.length === 0 && (
+                                    <NoRecordFound title="No cooldown exercise found for today." />
+                                  )}
+                              </Scrollbars>
+                            </div>
+                          )}
+                          {cuurentTab === `#fitnesstest` && (
+                            <div
+                              className={
+                                cuurentTab === `#notes`
+                                  ? "content active"
+                                  : "content"
+                              }
+                            >
+                              <CalendarDayFitnessTestList />
+                            </div>
+                          )}
 
-                      {cuurentTab === `#notes` && (
-                        <div
-                          className={
-                            cuurentTab === `#notes`
-                              ? "content active"
-                              : "content"
-                          }
-                        >
-                          <CalendarDayNoteList />
+                          {cuurentTab === `#notes` && (
+                            <div
+                              className={
+                                cuurentTab === `#notes`
+                                  ? "content active"
+                                  : "content"
+                              }
+                            >
+                              <CalendarDayNoteList />
+                            </div>
+                          )}
+                          {cuurentTab === `#stats` && (
+                            <div
+                              className={
+                                cuurentTab === `#stats`
+                                  ? "content active"
+                                  : "content"
+                              }
+                            >
+                              <CalendarDayStatsList
+                                index={index}
+                                handleChangeTab={this.handleChangeTab}
+                              />
+                            </div>
+                          )}
                         </div>
-                      )}
-                      {cuurentTab === `#stats` && (
-                        <div
-                          className={
-                            cuurentTab === `#stats`
-                              ? "content active"
-                              : "content"
-                          }
-                        >
-                          <CalendarDayStatsList
-                            index={index}
-                            handleChangeTab={this.handleChangeTab}
-                          />
-                        </div>
-                      )}
+                      </div>
+
+                      <div
+                        className={
+                          isActiveQuickTab
+                            ? "col-xs-12 col-md-5"
+                            : "col-xs-12 col-md-4"
+                        }
+                      >
+                        {this.displayRightSidebar(cuurentTab, isActiveQuickTab)}
+                      </div>
                     </div>
                   </div>
-
-                  <div
-                    className={
-                      isActiveQuickTab
-                        ? "col-xs-12 col-md-5"
-                        : "col-xs-12 col-md-4"
-                    }
-                  >
-                    {this.displayRightSidebar(cuurentTab, isActiveQuickTab)}
-                  </div>
                 </div>
-              </div>
-            </div>
+              )}
           </div>
         </div>
         <SweetAlert

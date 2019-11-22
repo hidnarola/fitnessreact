@@ -1,21 +1,21 @@
-import React, { Component } from 'react';
-import NoMealImage from '../../../../assets/img/common/no-img.png';
-import { SERVER_BASE_URL } from '../../../constants/consts';
-import { routeCodes } from '../../../constants/routes';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Link } from 'react-router-dom';
-import cns from 'classnames';
-import Star from '../../../../assets/svg/star.svg';
-import Button from 'react-bootstrap/lib/Button';
-import Collapse from 'react-bootstrap/lib/Collapse';
-import { Scrollbars } from 'react-custom-scrollbars';
-import { ButtonToolbar, Dropdown, MenuItem } from 'react-bootstrap';
+import React, { Component } from "react";
+import NoMealImage from "../../../../assets/img/common/no-img.png";
+import { SERVER_BASE_URL } from "../../../constants/consts";
+import { routeCodes } from "../../../constants/routes";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Link } from "react-router-dom";
+import cns from "classnames";
+import Star from "../../../../assets/svg/star.svg";
+import Button from "react-bootstrap/lib/Button";
+import Collapse from "react-bootstrap/lib/Collapse";
+import { Scrollbars } from "react-custom-scrollbars";
+import { ButtonToolbar, Dropdown, MenuItem } from "react-bootstrap";
 
 class CalendarDayOverViewNutritionList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      open: false,
+      open: false
     };
   }
   componentDidMount() {
@@ -34,19 +34,19 @@ class CalendarDayOverViewNutritionList extends Component {
       total_sugar,
       total_saturates,
       userId,
-      ingredientsIncluded,
+      ingredientsIncluded
     } = meal;
     const { open, servingSize = 0 } = this.state;
-    console.log('===========meal===========');
+    console.log("===========meal===========");
     console.log(_.some(recentMeals, { _id: meal._id }));
-    console.log('==========================');
+    console.log("==========================");
     return (
       <React.Fragment>
         <div className="nutrition-box">
           <div className="nutrition-header align-items-center">
             <div
-              className={cns('display-star', {
-                active: _.some(recentMeals, { _id: meal._id }),
+              className={cns("display-star", {
+                active: _.some(recentMeals, { _id: meal._id })
               })}
               onClick={e =>
                 addToFavourite(meal._id, _.some(recentMeals, { _id: meal._id }))
@@ -58,18 +58,18 @@ class CalendarDayOverViewNutritionList extends Component {
             <ButtonToolbar className="boxing-icon ml-auto">
               <Dropdown id={`workout-actions-1`} pullRight>
                 <Dropdown.Toggle noCaret>
-                  <i className="icon-more_horiz"></i>
+                  <i className="icon-more_horiz" />
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
                   <MenuItem
                     eventKey="1"
-                    onClick={() => console.log('advanceView')}
+                    onClick={() => console.log("advanceView")}
                   >
                     Advance Display
                   </MenuItem>
                   <MenuItem
                     eventKey="2"
-                    onClick={() => console.log('normalView')}
+                    onClick={() => console.log("normalView")}
                   >
                     Move Exercise
                   </MenuItem>
@@ -102,7 +102,7 @@ class CalendarDayOverViewNutritionList extends Component {
                           servingSize:
                             servingSize > 0 && servingSize < 999
                               ? servingSize - 1
-                              : servingSize,
+                              : servingSize
                         })
                       }
                     >
@@ -118,7 +118,7 @@ class CalendarDayOverViewNutritionList extends Component {
                           servingSize:
                             e.target.value >= 0 && e.target.value <= 999
                               ? e.target.value
-                              : servingSize,
+                              : servingSize
                         })
                       }
                       max={999}
@@ -131,7 +131,7 @@ class CalendarDayOverViewNutritionList extends Component {
                           servingSize:
                             servingSize >= 0 && servingSize < 999
                               ? servingSize + 1
-                              : servingSize,
+                              : servingSize
                         })
                       }
                     >
@@ -150,15 +150,19 @@ class CalendarDayOverViewNutritionList extends Component {
                   <div className="ingredient-boxs mt-2 mr-2">
                     <div className="title">Ingredients</div>
                     <ul>
-                      {ingredientsIncluded.map((item, ing_index) => (
-                        <li key={ing_index} className="d-flex width-100-per">
-                          <span>Plain Flour</span>
-                          <span className="ml-auto">
-                            {item.serving_input}
-                            {item.ingredient_unit}
-                          </span>
-                        </li>
-                      ))}
+                      {ingredientsIncluded.map((item, ing_index) => {
+                        return (
+                          <li key={ing_index} className="d-flex width-100-per">
+                            <span className="ingredient-name">
+                              {this.getIngredientNames(item.ingredient_id)}
+                            </span>
+                            <span className="ml-auto">
+                              {item.serving_input}
+                              {item.ingredient_unit}
+                            </span>
+                          </li>
+                        );
+                      })}
                     </ul>
                   </div>
                 </div>
@@ -197,6 +201,15 @@ class CalendarDayOverViewNutritionList extends Component {
       </React.Fragment>
     );
   }
+  getIngredientNames = ingredient_id => {
+    const { meals_proximates } = this.props;
+    if (meals_proximates && meals_proximates.length > 0) {
+      let proxi = meals_proximates.filter(item => item._id === ingredient_id);
+      return proxi[0].foodName;
+    } else {
+      return "";
+    }
+  };
 }
 
 export default CalendarDayOverViewNutritionList;

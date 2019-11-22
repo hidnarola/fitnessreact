@@ -1,6 +1,6 @@
-import { Map } from 'immutable';
-import { VALIDATION_FAILURE_STATUS } from '../constants/consts';
-import { generateValidationErrorMsgArr } from '../helpers/funs';
+import { Map } from "immutable";
+import { VALIDATION_FAILURE_STATUS } from "../constants/consts";
+import { generateValidationErrorMsgArr } from "../helpers/funs";
 import {
   USER_MEAL_ADD_REQUEST,
   USER_MEAL_ADD_SUCCESS,
@@ -18,8 +18,8 @@ import {
   COPY_USER_MEAL_SCHEDULE,
   SET_SCHEDULE_MEALS_STATE,
   SET_MEAL_DATA_IN_IDB,
-  SET_USER_MEAL,
-} from '../actions/user_meal';
+  SET_USER_MEAL
+} from "../actions/user_meal";
 
 const initialState = Map({
   userMeal: null,
@@ -31,6 +31,7 @@ const initialState = Map({
 
   loading_user_meals: true,
   user_meals: [],
+  meals_proximates: [],
   user_meals_Errors: [],
   updateMeal: null,
   updateMealErrors: [],
@@ -38,18 +39,18 @@ const initialState = Map({
   cutMealData: null,
   cutMealDetailId: null,
   copiedMealId: null,
-  copiedMealDetailId: null,
+  copiedMealDetailId: null
 });
 
 const actionMap = {
   [USER_MEAL_ADD_REQUEST]: (state, action) => {
-    console.log('reducer request => ');
+    console.log("reducer request => ");
     return state.merge(
       Map({
         loading: true,
         userMeal: null,
-        saveError: [],
-      }),
+        saveError: []
+      })
     );
   },
 
@@ -60,7 +61,7 @@ const actionMap = {
     } else {
       let msg = action.data.message
         ? action.data.message
-        : 'Something went wrong! please try again later';
+        : "Something went wrong! please try again later";
       newState.saveError = [msg];
     }
     return state.merge(Map(newState));
@@ -77,24 +78,24 @@ const actionMap = {
     } else if (action.error && action.error.message) {
       error = [action.error.message];
     } else {
-      error = ['Something went wrong! please try again later'];
+      error = ["Something went wrong! please try again later"];
     }
     return state.merge(
       Map({
         loading: false,
-        saveError: error,
-      }),
+        saveError: error
+      })
     );
   },
 
   [USER_MEAL_UPDATE_REQUEST]: (state, action) => {
-    console.log('reducer request => ');
+    console.log("reducer request => ");
     return state.merge(
       Map({
         loading: true,
         updateMeal: null,
-        updateMealErrors: [],
-      }),
+        updateMealErrors: []
+      })
     );
   },
 
@@ -105,7 +106,7 @@ const actionMap = {
     } else {
       let msg = action.data.message
         ? action.data.message
-        : 'Something went wrong! please try again later';
+        : "Something went wrong! please try again later";
       newState.updateMealErrors = [msg];
     }
     return state.merge(Map(newState));
@@ -122,24 +123,24 @@ const actionMap = {
     } else if (action.error && action.error.message) {
       error = [action.error.message];
     } else {
-      error = ['Something went wrong! please try again later'];
+      error = ["Something went wrong! please try again later"];
     }
     return state.merge(
       Map({
         loading: false,
-        updateMealErrors: error,
-      }),
+        updateMealErrors: error
+      })
     );
   },
 
   [GET_USER_MEALS_LOG_DATES_REQUEST]: (state, action) => {
-    console.log('reducer request => ');
+    console.log("reducer request => ");
     return state.merge(
       Map({
         loading: true,
         logDates: [],
-        logDatesError: [],
-      }),
+        logDatesError: []
+      })
     );
   },
 
@@ -150,7 +151,7 @@ const actionMap = {
     } else {
       let msg = action.data.message
         ? action.data.message
-        : 'Something went wrong! please try again later';
+        : "Something went wrong! please try again later";
       newState.logDatesError = [msg];
     }
     return state.merge(Map(newState));
@@ -167,35 +168,38 @@ const actionMap = {
     } else if (action.error && action.error.message) {
       error = [action.error.message];
     } else {
-      error = ['Something went wrong! please try again later'];
+      error = ["Something went wrong! please try again later"];
     }
     return state.merge(
       Map({
         loading: false,
-        logDatesError: error,
-      }),
+        logDatesError: error
+      })
     );
   },
 
   [GET_USER_MEAL_REQUEST]: (state, action) => {
-    console.log('reducer request => ');
+    console.log("reducer request => ");
     return state.merge(
       Map({
         loading_user_meals: true,
-        user_meals: [],
-      }),
+        user_meals: []
+      })
     );
   },
 
   [GET_USER_MEAL_SUCCESS]: (state, action) => {
-    console.log('SUCCESS ===>', action);
+    console.log("SUCCESS ===>", action);
     let newState = { loading_user_meals: false };
     if (action.data && action.data.status && action.data.status === 1) {
       newState.user_meals = action.data.meals;
+      newState.meals_proximates = action.data.proximatesIncluded
+        ? action.data.proximatesIncluded
+        : [];
     } else {
       let msg = action.data.message
         ? action.data.message
-        : 'Something went wrong! please try again later';
+        : "Something went wrong! please try again later";
       newState.user_meals_Errors = [msg];
     }
     return state.merge(Map(newState));
@@ -212,13 +216,13 @@ const actionMap = {
     } else if (action.error && action.error.message) {
       error = [action.error.message];
     } else {
-      error = ['Something went wrong! please try again later'];
+      error = ["Something went wrong! please try again later"];
     }
     return state.merge(
       Map({
         loading_user_meals: false,
-        user_meals_Errors: error,
-      }),
+        user_meals_Errors: error
+      })
     );
   },
 
@@ -227,8 +231,8 @@ const actionMap = {
       Map({
         cutMeal: action.mealId,
         cutMealDetailId: action.mealDetailId,
-        cutMealData: action.mealData,
-      }),
+        cutMealData: action.mealData
+      })
     );
   },
 
@@ -236,8 +240,8 @@ const actionMap = {
     return state.merge(
       Map({
         copiedMealId: action.mealId,
-        copiedMealDetailId: action.mealDetailId,
-      }),
+        copiedMealDetailId: action.mealDetailId
+      })
     );
   },
 
@@ -246,23 +250,23 @@ const actionMap = {
   },
 
   [SET_MEAL_DATA_IN_IDB]: (state, action) => {
-    console.log('Call Offline mode');
+    console.log("Call Offline mode");
     return state.merge(
       Map({
         logDates: action.data.meals,
-        logDatesError: action.data.error,
-      }),
+        logDatesError: action.data.error
+      })
     );
   },
 
   [SET_USER_MEAL]: (state, action) => {
-    console.log('Call SET USER MEAL');
+    console.log("Call SET USER MEAL");
     return state.merge(
       Map({
-        user_meals: action.data,
-      }),
+        user_meals: action.data
+      })
     );
-  },
+  }
 };
 
 export default function reducer(state = initialState, action = {}) {

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Star from "../../../../../assets/svg/star.svg";
 import { ButtonToolbar, Dropdown, MenuItem } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import cns from "classnames";
 
 class NutritionActivityList extends Component {
   constructor(props) {
@@ -13,31 +14,37 @@ class NutritionActivityList extends Component {
     this.setState({ servingSize: 0 });
   }
   render() {
-    const { servingSize = 0 } = this.state;
-    const total_enerc_kal = 0;
-    const total_procnt = 0;
-    const total_fat = 0;
-    const total_cabs = 0;
-    const total_sugar = 0;
-    const total_saturates = 0;
-    const userId = 1;
-    const ingredientsIncluded = [];
+    const { meal, authuserId, recentMeals, addToFavourite, index } = this.props;
+    const {
+      _id,
+      total_enerc_kal,
+      total_procnt,
+      total_fat,
+      total_cabs,
+      total_sugar,
+      total_saturates,
+      userId,
+      ingredientsIncluded
+    } = meal;
+    const { open, servingSize = 0 } = this.state;
+    console.log("===========meal===========");
+    console.log(_.some(recentMeals, { _id: meal._id }));
+    console.log("==========================");
     return (
       <React.Fragment>
         <div className="nutrition-box">
           <div className="nutrition-header align-items-center">
             <div
-              className="display-star"
-              // className={cns("display-star", {
-              //   active: _.some(recentMeals, { _id: meal._id })
-              // })}
-              // onClick={e =>
-              //   addToFavourite(meal._id, _.some(recentMeals, { _id: meal._id }))
-              // }
+              className={cns("display-star", {
+                active: _.some(recentMeals, { _id: meal._id })
+              })}
+              onClick={e =>
+                addToFavourite(meal._id, _.some(recentMeals, { _id: meal._id }))
+              }
             >
               <Star />
             </div>
-            <div className="title">Demo</div>
+            <div className="title">{meal.title}</div>
             <ButtonToolbar className="boxing-icon ml-auto">
               <Dropdown id={`workout-actions-1`} pullRight>
                 <Dropdown.Toggle noCaret>

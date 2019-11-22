@@ -6,6 +6,7 @@ import cns from "classnames";
 import TodayWorkout from "./Workouts/TodayWorkout";
 import TodayNutrition from "./Nutrition/TodayNutrition";
 import TodayLogsActivity from "./Logs/TodayLogsActivity";
+import TodayPhotos from "./Photos/TodayPhotos";
 
 class TodaysActivity extends Component {
   constructor(props) {
@@ -15,7 +16,17 @@ class TodaysActivity extends Component {
     };
   }
   render() {
-    const { loading, workouts, history } = this.props;
+    const {
+      loading,
+      workouts,
+      history,
+      user_meals,
+      loading_user_meals,
+      todayProgressPhotos,
+      loadingProgressPhotos,
+      measurement,
+      measurementloading
+    } = this.props;
     const { activeTab } = this.state;
     return (
       <React.Fragment>
@@ -68,8 +79,26 @@ class TodaysActivity extends Component {
           {activeTab === "exercise" && (
             <TodayWorkout loading={loading} workouts={workouts} />
           )}
-          {activeTab === "nutrition" && <TodayNutrition loading={loading} />}
-          {activeTab === "logs" && <TodayLogsActivity loading={loading} />}
+          {activeTab === "nutrition" && (
+            <TodayNutrition
+              loading={loading_user_meals}
+              user_meals={user_meals}
+              recentMeals={this.props.recentMeals}
+              authuserId={this.props.authuserId}
+            />
+          )}
+          {activeTab === "logs" && (
+            <TodayLogsActivity
+              loading={measurementloading}
+              measurement={measurement}
+            />
+          )}
+          {activeTab === "photos" && (
+            <TodayPhotos
+              loading={loadingProgressPhotos}
+              todayProgressPhotos={todayProgressPhotos}
+            />
+          )}
         </div>
       </React.Fragment>
     );

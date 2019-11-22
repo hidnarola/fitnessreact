@@ -9,8 +9,14 @@ class LogsActivityList extends Component {
       servingSize: 0
     };
   }
+  componentDidMount() {
+    const { measurement } = this.props;
+    let newSize = measurement ? parseInt(measurement) : 0;
+    this.setState({ servingSize: newSize });
+  }
+
   render() {
-    const { history } = this.props;
+    const { history, measurementTitle, measurement } = this.props;
     const { servingSize = 0 } = this.state;
     return (
       <React.Fragment>
@@ -24,10 +30,10 @@ class LogsActivityList extends Component {
               }}
             >
               <div
-                className="title cursor-pointer"
+                className="title cursor-pointer text-capitalize"
                 onClick={() => history.push(routeCodes.CALENDAR_OVERVIEW)}
               >
-                Weight
+                {measurementTitle}
               </div>
               <i
                 className="fad fa-trash ml-auto"

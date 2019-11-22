@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import FitnessHeader from "components/global/FitnessHeader";
 import FitnessNav from "components/global/FitnessNav";
 import { connect } from "react-redux";
-import { getToken, te, isOnline, connectIDB, tw } from "../helpers/funs";
+import { getToken, te, isOnline, connectIDB, tw, ts } from "../helpers/funs";
 import {
   getDashboardPageRequest,
   saveDashboardWidgetsDataRequest,
@@ -61,6 +61,13 @@ import DashboardActivities from "../components/Dashboard/Activities/DashboardAct
 import FithubActivities from "../components/Dashboard/Fithub/FithubActivities";
 import TodaysActivity from "../components/Dashboard/TodaysActivity/TodaysActivity";
 import { getUserFavouriteBadgesRequest } from "../actions/userFavouriteBadges";
+import { getUserMealRequest } from "../actions/user_meal";
+import { recentMealRequest } from "../actions/meal";
+import {
+  getProgressPhotosByDateRequest,
+  getUserBodyMeasurementRequest
+} from "../actions/userBodyMeasurement";
+import { getUserBodypartsRequest } from "../actions/userBodyparts";
 
 class Dashboard extends Component {
   constructor(props) {
@@ -97,6 +104,12 @@ class Dashboard extends Component {
       widgetBadges,
       loggedUserData,
       workouts,
+      user_meals,
+      loading_user_meals,
+      loadingProgressPhotos,
+      todayProgressPhotos,
+      measurementloading,
+      measurement,
       dispatch
     } = this.props;
     const { showWidgetsModal, fithubTab, activityTab } = this.state;
@@ -139,7 +152,22 @@ class Dashboard extends Component {
           <div className="body-content flex col-md-12 h-100">
             <div className="row no-gutters h-100">
               <div className="col-xs-12 col-md-4 h-100">
-                <TodaysActivity workouts={workouts} loading={loading} />
+                <TodaysActivity
+                  workouts={workouts}
+                  loading={loading}
+                  user_meals={user_meals}
+                  loading_user_meals={loading_user_meals}
+                  recentMeals={this.props.recentMeals}
+                  authuserId={
+                    this.props.loggedUserData
+                      ? this.props.loggedUserData.authId
+                      : ""
+                  }
+                  loadingProgressPhotos={loadingProgressPhotos}
+                  todayProgressPhotos={todayProgressPhotos}
+                  measurementloading={measurementloading}
+                  measurement={measurement}
+                />
               </div>
               <div className="col-xs-12 col-md-4 h-100">
                 <DashboardActivities
@@ -267,6 +295,7 @@ class Dashboard extends Component {
     });
     if (isOnline()) {
       this.requestDashboardData();
+      this.requestTodaysActivityData();
     }
   }
 
@@ -288,7 +317,16 @@ class Dashboard extends Component {
       timelineLoading,
       timelinePosts,
       timelineError,
-      userWidgets
+      userWidgets,
+      user_meals,
+      meals_proximates,
+      loading_user_meals,
+      recentMealsLoading,
+      recentMealsError,
+      loadingProgressPhotos,
+      progressPhotosError,
+      bodypartsLoading,
+      bodypartsError
     } = this.props;
 
     if (
@@ -310,6 +348,32 @@ class Dashboard extends Component {
     }
     if (!timelineLoading && prevProps.timelineError !== timelineError) {
       te("Something went wrong! please try again later.");
+    }
+    if (!loading_user_meals && prevProps.user_meals !== user_meals) {
+      console.log("===========user_meals Dashboard===========");
+      console.log("user_meals Dashboard", user_meals);
+      console.log("==========================");
+    }
+    if (
+      !recentMealsLoading &&
+      prevProps.recentMealsError !== recentMealsError &&
+      recentMealsError.length > 0
+    ) {
+      te();
+    }
+    if (
+      !loadingProgressPhotos &&
+      prevProps.progressPhotosError !== progressPhotosError &&
+      progressPhotosError.length > 0
+    ) {
+      te();
+    }
+    if (
+      !bodypartsLoading &&
+      prevProps.bodypartsError !== bodypartsError &&
+      bodypartsError.length > 0
+    ) {
+      te("bodyparts not found");
     }
   }
 
@@ -881,6 +945,18 @@ class Dashboard extends Component {
 
     await dispatch(getDashboardPageRequest(requestData));
     await dispatch(getUserFavouriteBadgesRequest());
+    await dispatch(getUserBodypartsRequest());
+  };
+  requestTodaysActivityData = async () => {
+    const { dispatch, loggedUserData } = this.props;
+    let today = moment()
+      .startOf("day")
+      .utc();
+    let requestData = { logDate: today };
+    await dispatch(getUserMealRequest(requestData));
+    await dispatch(getUserBodyMeasurementRequest(requestData));
+    await dispatch(getProgressPhotosByDateRequest(requestData));
+    await dispatch(recentMealRequest());
   };
 
   componentWillUnmount() {
@@ -899,7 +975,17 @@ class Dashboard extends Component {
 }
 
 const mapStateToProps = state => {
-  const { dashboard, user, postLikes, postComments, userTimeline } = state;
+  const {
+    dashboard,
+    user,
+    postLikes,
+    postComments,
+    userTimeline,
+    userMeal,
+    meal,
+    userBodyMeasurement,
+    userBodyparts
+  } = state;
   return {
     socket: user.get("socket"),
     loggedUserData: user.get("loggedUserData"),
@@ -918,7 +1004,24 @@ const mapStateToProps = state => {
     widgetBadges: dashboard.get("badges"),
     workouts: dashboard.get("workouts"),
     likeLoading: postLikes.get("loading"),
-    commentLoading: postComments.get("loading")
+    commentLoading: postComments.get("loading"),
+
+    user_meals: userMeal.get("user_meals"),
+    meals_proximates: userMeal.get("meals_proximates"),
+    loading_user_meals: userMeal.get("loading_user_meals"),
+    recentMealsLoading: meal.get("recentMealsLoading"),
+    recentMeals: meal.get("recentMeals"),
+    recentMealsError: meal.get("recentMealsError"),
+
+    measurement: userBodyMeasurement.get("measurement"),
+    measurementloading: userBodyMeasurement.get("loading"),
+    loadingProgressPhotos: userBodyMeasurement.get("loadingProgressPhotos"),
+    todayProgressPhotos: userBodyMeasurement.get("userProgressPhotos"),
+    progressPhotosError: userBodyMeasurement.get("error"),
+
+    bodyparts: userBodyparts.get("bodyparts"),
+    bodypartsLoading: userBodyparts.get("loading"),
+    bodypartsError: userBodyparts.get("error")
   };
 };
 

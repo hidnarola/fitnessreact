@@ -189,19 +189,47 @@ class ActivityFeedListCard extends Component {
                             <span dangerouslySetInnerHTML={{ __html: description }}></span>
                         </div>
                     } */}
-          <div
+          {/* <div
             className={cns(
               "posttype-body-grey dashboard-feedact",
               postImageDisplayClass
             )}
-          >
-            {images &&
-              images.length > 0 &&
-              images.map((imageD, imageI) => {
-                if (imageI >= 5) {
-                  return null;
-                }
-                return (
+          > */}
+          {images &&
+            images.length > 0 &&
+            images.map((imageD, imageI) => {
+              return typeof imageD.image == "object" ? (
+                <div
+                  className={cns("posttype-body-grey dashboard-feedact", {
+                    masonry: imageD.image.length > 1
+                  })}
+                >
+                  {imageD.image.map(item => (
+                    <a
+                      href="javascript:void(0)"
+                      key={imageD._id}
+                      onClick={() =>
+                        this.handleOpenLightbox(imageD.image, imageI)
+                      }
+                    >
+                      <span>
+                        <img
+                          src={SERVER_BASE_URL + item.image}
+                          onError={e => {
+                            e.target.src = noImg;
+                          }}
+                        />
+                      </span>
+                    </a>
+                  ))}
+                </div>
+              ) : (
+                <div
+                  className={cns(
+                    "posttype-body-grey dashboard-feedact",
+                    postImageDisplayClass
+                  )}
+                >
                   <a
                     href="javascript:void(0)"
                     key={imageD._id}
@@ -216,9 +244,10 @@ class ActivityFeedListCard extends Component {
                       />
                     </span>
                   </a>
-                );
-              })}
-          </div>
+                </div>
+              );
+            })}
+          {/* </div> */}
           {likesStr && (
             <div className="display-likes-status d-flex align-items-center m-2">
               <i className="fas fa-heart-circle m-1" />

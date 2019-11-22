@@ -33,7 +33,6 @@ class PhotoCard extends Component {
               disableSwipe={true}
               renderLeftNav={this.renderLeftNav}
               renderRightNav={this.renderRightNav}
-              renderFullscreenButton={this.renderFullscreenButton}
             />
           </div>
           <div className="photo-container">

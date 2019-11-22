@@ -37,7 +37,8 @@ class NutritionQuickAdd extends Component {
       handleChangeQuickTab,
       addToFavourite,
       searchMeals,
-      logDate
+      logDate,
+      nutritionTab
     } = this.props;
     const {
       favOpen,
@@ -47,16 +48,26 @@ class NutritionQuickAdd extends Component {
       searchMealList
     } = this.state;
     const encode = logDate;
-    console.log("===========logDate===========");
-    console.log(encode);
-    console.log("==========================");
+
+    let mealType = null;
+    if (nutritionTab === "#breakfast") {
+      mealType = "breakfast";
+    } else if (nutritionTab === "#lunch") {
+      mealType = "lunch";
+    } else if (nutritionTab === "#snacks") {
+      mealType = "snacks";
+    } else if (nutritionTab === "#dinner") {
+      mealType = "dinner";
+    }
     return (
       <React.Fragment>
         <div className="blue_right_sidebar h-100">
           <div className="d-flex width-100-per sidebar-header">
             <h2 className="h2_head_one pt-3 pb-3">Add Food</h2>
             <Link
-              to={`${routeCodes.NUTRITION_ADD}?date=${logDate}&type=breakfast`}
+              to={`${
+                routeCodes.NUTRITION_ADD
+              }?date=${logDate}&type=${mealType}`}
               className="btn btn-plus-right bg-white ml-auto"
             >
               <FontAwesomeIcon icon="plus" />

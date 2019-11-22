@@ -462,6 +462,7 @@ class CalendarDayOverView extends Component {
                             logDate={this.state.logDate}
                             mealsList={mealsList}
                             authuserId={this.props.user.authId}
+                            meals_proximates={this.props.meals_proximates}
                           />
                         )}
 
@@ -543,6 +544,7 @@ const mapStateToProps = state => {
     loading: userScheduleWorkouts.get("loading"),
 
     user_meals: userMeal.get("user_meals"),
+    meals_proximates: userMeal.get("meals_proximates"),
     loading_user_meals: userMeal.get("loading_user_meals"),
 
     measurement: userBodyMeasurement.get("measurement"),

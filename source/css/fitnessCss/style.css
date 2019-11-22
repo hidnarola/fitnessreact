@@ -171,10 +171,10 @@ img {
   border-right:3px solid rgba(237, 245, 253, 1) !important;
 }
 .border-down {
-  border-left:3px solid rgba(237, 245, 253, 1) !important;
+  border-bottom:3px solid rgba(237, 245, 253, 1) !important;
 }
 .border-up {
-  border-right:3px solid rgba(237, 245, 253, 1) !important;
+  border-top:3px solid rgba(237, 245, 253, 1) !important;
 }
 
 .no-gutters {
@@ -16452,6 +16452,7 @@ a.timline-post-edit-btn svg {
 .nutrition-list .nutrition-box .nutrition-body .nutrition-serve-box .serving-select .form-control {box-shadow: none;height: auto;padding: 9px 15px;text-align: left;font-size: 20px;color:#201F60;line-height: 1;font-family: 'Neuzeit' !important;font-weight: 900;border: 0px;border-radius:0px;-webkit-appearance: none;-moz-appearance: none;appearance: none;background: #fff url('../assets/img/caret-down.svg') right 15px center no-repeat;}
 .ingredient-list .nutrition-box .nutrition-body .ingredient-boxs .title,
 .nutrition-list .nutrition-box .nutrition-body .ingredient-boxs .title {background: #edf5fd;padding: 5px 5px 5px 10px;font-size: 20px;font-weight: 600;color:#201f60;}
+.ingredient-boxs .ingredient-name {width: 75%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
 .ingredient-list .nutrition-box .nutrition-body .ingredient-boxs ul li,
 .nutrition-list .nutrition-box .nutrition-body .ingredient-boxs ul li {background: #fff;margin: 2px 0;padding: 5px 5px 5px 10px;}
 .ingredient-list .nutrition-box .nutrition-body .ingredient-boxs ul li span,
@@ -16556,7 +16557,7 @@ white-space: nowrap;overflow: hidden;}
 .create-photos .photos-body .photos-sidebar .photos-header h3{font-size: 22px; color: #201f60; font-weight: 800;}
 .create-photos .photos-body .photos-sidebar .photos-header button.btn{background: #3ED1A9; color: #fff; border-radius: 50%; height: 55px; width: 55px; font-size: 20px;position: absolute;top:4px; right: -8px;box-shadow: 0px 2px 11px -4px #3b342b;z-index:1;}
 .create-photos .photos-body .photos-sidebar .photos-sidebar-body ul{list-style-type: none;}
-.create-photos .photos-body .photos-sidebar .photos-sidebar-body {height: 74vh;}
+.create-photos .photos-body .photos-sidebar .photos-sidebar-body {height: 66vh;}
 .create-photos .photos-body .photos-sidebar .photos-sidebar-body ul li{padding: 0 20px 0 20px;}
 .create-photos .photos-body .photos-sidebar .photos-sidebar-body ul li .image-box{display: flex;align-items: center;position: relative;margin: 0 0px 10px 0;justify-content: center; width: 100%;}
 .create-photos .photos-body .photos-sidebar .photos-sidebar-body ul li .image-box .image {background: linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(255,255,255,0.72) 70%, rgba(0,0,0,0.6) 100%);width: 100%}
@@ -16872,6 +16873,28 @@ ul.list-graph-details li.list-graph-items:first-child {
 .dashboard-body .serving-select {width: 36%;}
 .dashboard-body .serving-select select::-ms-expand { display: none; }
 .dashboard-body .serving-select .form-control {box-shadow: none;height: auto;padding: 10px 15px;text-align: left;font-size: 20px;color:#201F60;line-height: 1;font-family: 'Neuzeit' !important;font-weight: 900;border: 0px;border-radius:0px;-webkit-appearance: none;-moz-appearance: none;appearance: none;background: #fff url('../assets/img/caret-down.svg') right 15px center no-repeat;}
+
+.meal-not-found-wrapper{background: #e8ecf0; padding: 50px; margin: 20px 0px;}
+.meal-not-found-wrapper h3{margin: 0; color: #201f60; font-size: 20px; font-weight: 600;}
+.dashboard-record-not-found h3 {margin: 0; color: #201f60; font-size: 20px; font-weight: 600; display: flex; justify-content: center; flex-wrap: wrap; width: 100%;}
+
+.dashboard-body .activity-body .workout-list .workout-list-items .sub-title {color: #fff; font-size: 14px; font-weight: 600;display:flex}
+.dashboard-body .activity-body .workout-list .workout-list-items .progress-toolbar .progress-btn { background: transparent; color: #fff; border: 0; margin: 0; padding: 0; }
+.dashboard-body .activity-body .workout-list .workout-list-items .progress-toolbar .progress-btn i {color: #fff;}
+
+.dashboard-body .dashboard-photos-body .photo-card {height: auto;border-radius: 0;position:relative;box-shadow:none;background:transparent}
+.dashboard-body .dashboard-photos-body .photo-card .image-gallery-image img {height: 178px !important;}
+.dashboard-body .dashboard-photos-body .photo-card .image-gallery-thumbnails {padding:1px 0;}
+.dashboard-body .dashboard-photos-body .photos-descriptions {height: 230px;overflow:hidden}
+.dashboard-body .dashboard-photos-body .photos-descriptions .dec-title {color: #3e67ff; font-size: 15px; font-weight: 600;}
+.dashboard-body .dashboard-photos-body .photos-descriptions .dec-content {color: #053095; font-size: 15px;font-weight:600;}
+.dashboard-body .dashboard-photos-body .border-down {
+    border-bottom: 3px solid #D1DAE2 !important;
+}
+.dashboard-body .activity-body .workout-list .workout-list-items .sub-title > ul {list-style: none;display: flex}
+.dashboard-body .activity-body .workout-list .workout-list-items .sub-title > ul li a {color: #fff;font-weight: 600}
+.dashboard-body .activity-body .workout-list .workout-list-items .sub-title > ul > li:not(:last-child) > a:after { content: ', '; color: #fff; margin: 0 5px 0 2px; font-size: 14px; font-weight: 600; }
+
 
 
 /*********************** Responsive **************************/

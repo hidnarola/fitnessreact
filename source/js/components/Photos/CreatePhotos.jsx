@@ -25,6 +25,7 @@ import { te, ts } from "../../helpers/funs";
 import Cropper from "react-cropper";
 import Modal from "react-bootstrap/lib/Modal";
 import _filter from "lodash/filter";
+import _toLower from "lodash/toLower";
 import {
   addUserProgressActivityPhotoRequest,
   addUserProgressPhotoRequest,
@@ -451,7 +452,7 @@ class CreatePhotos extends Component {
                     {this.state.images.length > 0 &&
                       this.state.images.map((item, k) => {
                         return (
-                          <div className="col-md-6">
+                          <div className="col-md-6" key={k}>
                             <Cropper
                               className="mt-2"
                               ref={`cropper${k}`}
@@ -506,7 +507,7 @@ class CreatePhotos extends Component {
     } = this.props;
     if (!bodypartsLoading && prevProps.bodyparts !== bodyparts) {
       let newBodyPartsList = [];
-      bodyparts &&
+      typeof bodyparts === "object" &&
         bodyparts.length > 0 &&
         bodyparts.forEach(item => {
           newBodyPartsList.push({
@@ -529,7 +530,7 @@ class CreatePhotos extends Component {
     if (!loading && prevProps.progressPhoto !== progressPhoto) {
       dispatch(hidePageLoader());
       ts("Progress Photos Successfully inserted");
-      histroy.push(routeCodes.CALENDAR_OVERVIEW);
+      this.props.handleChangeCreatePhotos();
     }
     if (
       !loading &&
@@ -544,7 +545,7 @@ class CreatePhotos extends Component {
     }
   }
   handleChange = tags => {
-    this.setState({ tags });
+    this.setState({ tags: JSON.parse(_toLower(JSON.stringify(tags))) });
   };
   handleAddHashTags = tag => {
     let { tags } = this.state;

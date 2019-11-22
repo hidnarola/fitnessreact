@@ -56,10 +56,12 @@ class PhotosDetails extends Component {
   };
   componentDidMount() {
     const { todayProgressPhotoDetail } = this.props;
-    let {
-      category,
-      hashTags
-    } = todayProgressPhotoDetail.user_progress_photos[0];
+    let category = todayProgressPhotoDetail
+      ? todayProgressPhotoDetail.user_progress_photos[0].category
+      : "";
+    let hashTags = todayProgressPhotoDetail
+      ? todayProgressPhotoDetail.user_progress_photos[0].hashTags
+      : "";
     this.setState({ categoryType: category, tags: hashTags });
     const { dispatch } = this.props;
     dispatch(showPageLoader());
@@ -114,7 +116,6 @@ class PhotosDetails extends Component {
       bodypartsError.length > 0
     ) {
       dispatch(hidePageLoader());
-      te();
     }
   }
 
@@ -148,17 +149,16 @@ class PhotosDetails extends Component {
       <React.Fragment>
         <div className="photo-detail-header d-flex flex-wrap">
           <h3>Photo Details</h3>
-          {todayProgressPhotos.length !== 0 && <button
+          <button
             className="btn d-flex flex-wrap align-items-center btn-del-group"
             onClick={() => this.setState({ images: [] })}
           >
             <div>{images.length === 1 ? "Delete Photo" : "Delete Group"}</div>
             <i className="fad fa-trash ml-auto" />
-          </button> }
+          </button>
         </div>
         <div className="photo-detail-body p-2">
-          {todayProgressPhotos.length === 0 && <NoRecordFound title="No records found." />}
-          {todayProgressPhotos.length > 0 && <div className="row no-gutters">
+          <div className="row no-gutters">
             <div className="col-xs-12 col-md-7">
               <Scrollbars autoHide>
                 <div className="photo-detail-box">
@@ -461,7 +461,7 @@ class PhotosDetails extends Component {
                 </div>
               </Scrollbars>
             </div>
-          </div>}
+          </div>
         </div>
       </React.Fragment>
     );
