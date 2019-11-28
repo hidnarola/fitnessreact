@@ -42,6 +42,7 @@ import Emos from "../../Common/Emos";
 import { MenuItem, Dropdown } from "react-bootstrap";
 import AddPostPhotoModal from "../../Profile/AddPostPhotoModal";
 import { Emoji } from "emoji-mart";
+import noActivityFoundImg from "../../../../assets/img/no-activity-found.png";
 
 class ActivityYours extends Component {
   constructor(props) {
@@ -90,7 +91,13 @@ class ActivityYours extends Component {
       newPostActionInit,
       showPostPhotoModal
     } = this.state;
-    const { profile, loggedUserData, activeProfile, activityTab } = this.props;
+    const {
+      profile,
+      loggedUserData,
+      activeProfile,
+      activityTab,
+      postLoading
+    } = this.props;
     return (
       <React.Fragment>
         {activityTab === "yours" &&
@@ -242,6 +249,19 @@ class ActivityYours extends Component {
             );
           })}
         </InfiniteScroll>
+        {!postLoading &&
+          (!posts || posts.length === 0) && (
+            <div className="d-flex flex-wrap justify-content-center dashboard-record-not-found">
+              <img
+                src={noActivityFoundImg}
+                alt="NoWorkoutFound"
+                height="240px"
+              />
+              <h3 className="mt-emoji-mart-skin-tone-5">Add post any to</h3>
+              <h3> get started</h3>
+            </div>
+          )}
+
         <AddPostPhotoModal
           show={showPostPhotoModal}
           handleClose={this.handleHidePostPhotosModal}
@@ -365,11 +385,11 @@ class ActivityYours extends Component {
     }
     if (isOnline()) {
       const { start, offset, selectActionInit } = this.state;
-      const { match, dispatch, activityTab } = this.props;
+      const { match, dispatch, activityTab, loggedUserData } = this.props;
       console.log("===========call===========");
       console.log("==========================");
       if (!selectActionInit) {
-        var username = "amc";
+        var username = loggedUserData.username;
         if (isOnline()) {
           activityTab === "yours" &&
             dispatch(getUserTimelineRequest(username, start, offset));

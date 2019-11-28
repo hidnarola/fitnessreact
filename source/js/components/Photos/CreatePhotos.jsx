@@ -310,10 +310,11 @@ class CreatePhotos extends Component {
                                   <div className="custom-checkbox ml-auto">
                                     <div className="custom_check mb-0 d-flex">
                                       <input
-                                        type="checkbox"
+                                        type="radio"
                                         id={`checkbox-posed-${i}`}
                                         name={item.label}
                                         checked={item.checked}
+                                        value={item.value}
                                         onClick={() =>
                                           this.handleChangePosedList(
                                             i,

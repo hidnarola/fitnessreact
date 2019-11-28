@@ -11,6 +11,9 @@ import WorkoutActivityList from "./WorkoutActivityList";
 class TodayWorkout extends Component {
   render() {
     const { loading, workouts, history } = this.props;
+    console.log("===========workouts===========");
+    console.log("workouts", workouts);
+    console.log("==========================");
     return (
       <React.Fragment>
         <div className="activity-body fithub-body">
@@ -31,8 +34,7 @@ class TodayWorkout extends Component {
               </ul>
             )}
             {!loading &&
-              workouts &&
-              workouts.length === 0 && (
+              (!workouts || workouts.length === 0) && (
                 <div className="d-flex flex-wrap justify-content-center dashboard-record-not-found">
                   <img
                     src={NoWorkoutFound}

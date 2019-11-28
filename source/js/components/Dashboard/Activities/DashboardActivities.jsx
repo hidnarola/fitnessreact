@@ -5,6 +5,7 @@ import ActivityFeed from "./ActivityFeed";
 import { WIDGET_ACTIVITY_FEED } from "../../../constants/consts";
 import ActivityYours from "./ActivityYours";
 import { FaCircleONotch } from "react-icons/lib/fa";
+import noActivityFoundImg from "../../../../assets/img/no-activity-found.png";
 
 class DashboardActivities extends Component {
   constructor(props) {
@@ -65,8 +66,23 @@ class DashboardActivities extends Component {
               typeof userWidgets[WIDGET_ACTIVITY_FEED] !== "undefined" &&
               userWidgets[WIDGET_ACTIVITY_FEED] === 1 && (
                 <Scrollbars autoHide>
-                  <ActivityFeed />
+                  <ActivityFeed key="3" activityTab={activityTab} />
                 </Scrollbars>
+              )}
+            {!loading &&
+              activityTab === "following" &&
+              !userWidgets && (
+                <div className="d-flex flex-wrap justify-content-center dashboard-record-not-found">
+                  <img
+                    src={noActivityFoundImg}
+                    alt="NoWorkoutFound"
+                    height="240px"
+                  />
+                  <h3 className="mt-emoji-mart-skin-tone-5">
+                    Follow some users to
+                  </h3>
+                  <h3> get started</h3>
+                </div>
               )}
             {activityTab === "yours" && (
               <Scrollbars

@@ -14,7 +14,8 @@ import {
   FITASSIST_USER_DETAILS_TOKEN_KEY,
   EXE_MEASUREMENT_UNITS,
   GENDER_FEMALE,
-  REGEX_FOR_EMOJI_COLONS
+  REGEX_FOR_EMOJI_COLONS,
+  EXE_CAT_SCAT
 } from "../constants/consts";
 import _ from "lodash";
 import moment from "moment";
@@ -564,4 +565,12 @@ export function isOnline() {
     return window.navigator.onLine;
   }
   return true;
+}
+
+export function getExercises(data = EXE_CAT_SCAT) {
+  const EXE = [];
+  EXE_CAT_SCAT.forEach(({ key, value }) => {
+    value.forEach(v => EXE.push({ ...v, cat: key }));
+  });
+  return EXE;
 }

@@ -82,7 +82,8 @@ class FitnessHeader extends Component {
           <div className="body-head-r">
             <NavLink to={routes}>
               <i className="icon-arrow_back"></i>
-              Back to {text}
+              {text && `Back to ${text}`}
+              {!text && `Back`}
             </NavLink>
           </div>
         )}

@@ -65,7 +65,6 @@ class CalendarDayWorkoutRightSidebar extends Component {
               className={
                 this.state.exerciseTab === "#single" ? "tab active" : "tab"
               }
-              id="single"
             >
               <a
                 href="#single"
@@ -80,7 +79,6 @@ class CalendarDayWorkoutRightSidebar extends Component {
               className={
                 this.state.exerciseTab === "#superset" ? "tab active" : "tab"
               }
-              id="superset"
             >
               <a
                 href="#superset"
@@ -95,7 +93,6 @@ class CalendarDayWorkoutRightSidebar extends Component {
               className={
                 this.state.exerciseTab === "#circuit" ? "tab active" : "tab"
               }
-              id="circuit"
             >
               <a
                 href="#circuit"

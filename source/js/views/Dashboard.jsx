@@ -68,6 +68,7 @@ import {
   getUserBodyMeasurementRequest
 } from "../actions/userBodyMeasurement";
 import { getUserBodypartsRequest } from "../actions/userBodyparts";
+import { getExerciseMeasurementRequest } from "../actions/userScheduleWorkouts";
 
 class Dashboard extends Component {
   constructor(props) {
@@ -188,6 +189,7 @@ class Dashboard extends Component {
                   widgetProgressPhotos={widgetProgressPhotos}
                   loggedUserData={loggedUserData}
                   widgetBadges={widgetBadges}
+                  exerciseMeasurements={this.props.exerciseMeasurements}
                 />
               </div>
             </div>
@@ -361,13 +363,13 @@ class Dashboard extends Component {
     ) {
       te();
     }
-    if (
-      !loadingProgressPhotos &&
-      prevProps.progressPhotosError !== progressPhotosError &&
-      progressPhotosError.length > 0
-    ) {
-      te();
-    }
+    // if (
+    //   !loadingProgressPhotos &&
+    //   prevProps.progressPhotosError !== progressPhotosError &&
+    //   progressPhotosError.length > 0
+    // ) {
+    //   te();
+    // }
     if (
       !bodypartsLoading &&
       prevProps.bodypartsError !== bodypartsError &&
@@ -946,6 +948,7 @@ class Dashboard extends Component {
     await dispatch(getDashboardPageRequest(requestData));
     await dispatch(getUserFavouriteBadgesRequest());
     await dispatch(getUserBodypartsRequest());
+    await dispatch(getExerciseMeasurementRequest());
   };
   requestTodaysActivityData = async () => {
     const { dispatch, loggedUserData } = this.props;
@@ -984,7 +987,8 @@ const mapStateToProps = state => {
     userMeal,
     meal,
     userBodyMeasurement,
-    userBodyparts
+    userBodyparts,
+    userScheduleWorkouts
   } = state;
   return {
     socket: user.get("socket"),
@@ -1021,7 +1025,10 @@ const mapStateToProps = state => {
 
     bodyparts: userBodyparts.get("bodyparts"),
     bodypartsLoading: userBodyparts.get("loading"),
-    bodypartsError: userBodyparts.get("error")
+    bodypartsError: userBodyparts.get("error"),
+
+    exerciseMeasurements: userScheduleWorkouts.get("exerciseMeasurements"),
+    loadingExerciseMeasurements: userScheduleWorkouts.get("loading")
   };
 };
 

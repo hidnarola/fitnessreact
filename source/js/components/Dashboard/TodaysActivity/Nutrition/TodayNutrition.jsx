@@ -183,7 +183,7 @@ class TodayNutrition extends Component {
                       alt="NoWorkoutFound"
                       height="200px"
                     />
-                    <h3 className="mt-2">You've not added any</h3>
+                    <h3 className="mt-5">You've not added any</h3>
                     <h3>food for dinner today</h3>
                   </div>
                 )}
@@ -213,7 +213,7 @@ class TodayNutrition extends Component {
                       alt="NoWorkoutFound"
                       height="200px"
                     />
-                    <h3 className="mt-2">You've not added any</h3>
+                    <h3 className="mt-5">You've not added any</h3>
                     <h3>food for snacks today</h3>
                   </div>
                 )}

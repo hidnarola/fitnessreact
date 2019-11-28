@@ -328,13 +328,13 @@ class NutritionMeal extends Component {
 	saveLoading ? dispatch(showPageLoader()) : dispatch(hidePageLoader());
 	return (
 	  <div className="fitness-nutrition">
-		{/* <AddMetaDescription>
+		<AddMetaDescription>
 		  <title>Nutrition | Fitly</title>
 		</AddMetaDescription>
 		<FitnessHeader />
-		<FitnessNav /> */}
-		{/* <section className="body-wrap nutrition-todays-meal-section"> */}
-		{/* <div className="body-head d-flex justify-content-start front-white-header">
+		<FitnessNav />
+		<section className="body-wrap nutrition-todays-meal-section">
+		<div className="body-head d-flex justify-content-start front-white-header">
 			<div className="body-head-l">
 			  <h2>Nutrition</h2>
 			  <p>
@@ -366,7 +366,7 @@ class NutritionMeal extends Component {
 				<i className="icon-settings" />
 			  </NavLink>
 			</div>
-		  </div> */}
+		  </div>
 		<div className="body-content workouts-bg">
 		  <div className="row justify-content-start no-gutters">
 			<div className="col-xs-12 col-md-3 d-flex">
@@ -488,7 +488,7 @@ class NutritionMeal extends Component {
 						showCancel={true}
 						closeOnClickOutside={false}
 					  />
-					  {this.state.today_meals.map((item, index) => (
+					  {this.state.today_meals && this.state.today_meals.map((item, index) => (
 						<NutritionMealItems
 						  key={index}
 						  meal={item}
@@ -604,13 +604,13 @@ class NutritionMeal extends Component {
 			  </div>
 			</div> */}
 		  </div>
-		  {/* </section> */}
 		  <DeleteConfirmation
 			show={showDeleteModal}
 			handleClose={this.handleCloseDeleteModal}
 			handleYes={this.handleDelete}
 		  />
 		</div>
+		  </section>
 	  </div>
 	);
   }

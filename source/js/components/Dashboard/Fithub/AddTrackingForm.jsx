@@ -2,6 +2,19 @@ import React, { Component } from "react";
 import Panel from "react-bootstrap/lib/Panel";
 import cns from "classnames";
 import { connect } from "react-redux";
+import {
+  MUSCLE_LIST,
+  TRACKING_TIME_LIST,
+  TRACKING_PHOTO_TYPE_LIST,
+  EXE_SCATS
+} from "../../../constants/consts";
+import { reduxForm, Field } from "redux-form";
+import {
+  prepareExerciseOptions,
+  getExeMeasurementValidationRules,
+  getExercises
+} from "../../../helpers/funs";
+import { SelectField_ReactSelect } from "../../../helpers/FormControlHelper";
 
 class AddTrackingForm extends Component {
   constructor(props) {
@@ -11,11 +24,18 @@ class AddTrackingForm extends Component {
     };
   }
   render() {
-    const { handleCloseAlert, goalsList = [] } = this.props;
+    const {
+      handleCloseAlert,
+      goalsList = [],
+      exerciseMeasurements
+    } = this.props;
     const { trackingTab } = this.state;
+
     console.log("===========goalsList===========");
     console.log("goalsList", goalsList);
     console.log("==========================");
+    const newExerciseList = getExercises();
+
     return (
       <React.Fragment>
         <div className="tracking-header">
@@ -64,10 +84,25 @@ class AddTrackingForm extends Component {
                   <div className="row no-gutters">
                     <div className="col-md-12">
                       <div className="serving-select width-100-per">
-                        <select className="form-control">
-                          <option value="chest">Chest</option>
-                          <option value="weight">Weight</option>
-                        </select>
+                        {/* <select className="form-control">
+                          {MUSCLE_LIST.map((item, i) => (
+                            <option value={item.value} key={i}>
+                              {item.label}
+                            </option>
+                          ))}
+                        </select> */}
+                        <Field
+                          name="muscle"
+                          wrapperClass="tracking-fithub"
+                          className="form-control p-0"
+                          placeholder="Measurement"
+                          component={SelectField_ReactSelect}
+                          options={MUSCLE_LIST}
+                          errorClass="help-block"
+                          validate={[]}
+                          requiredAstrisk={false}
+                          clearable={false}
+                        />
                       </div>
                     </div>
                   </div>
@@ -79,13 +114,25 @@ class AddTrackingForm extends Component {
                   <div className="row no-gutters">
                     <div className="col-md-12">
                       <div className="serving-select width-100-per">
-                        <select className="form-control">
+                        {/* <select className="form-control">
                           <option>This month</option>
                           <option>Last month</option>
                           <option>Last 3 months</option>
                           <option>Last 6 months</option>
                           <option>Last year</option>
-                        </select>
+                        </select> */}
+                        <Field
+                          name="bodyTimePeriod"
+                          wrapperClass="tracking-fithub"
+                          className="form-control p-0"
+                          placeholder="Time Period"
+                          component={SelectField_ReactSelect}
+                          options={TRACKING_TIME_LIST}
+                          errorClass="help-block"
+                          validate={[]}
+                          requiredAstrisk={false}
+                          clearable={false}
+                        />
                       </div>
                     </div>
                   </div>
@@ -101,10 +148,22 @@ class AddTrackingForm extends Component {
                   <div className="row no-gutters">
                     <div className="col-md-12">
                       <div className="serving-select width-100-per">
-                        <select className="form-control">
+                        {/* <select className="form-control">
                           <option value="progress">Progress</option>
                           <option value="lifestyle">Life Style</option>
-                        </select>
+                        </select> */}
+                        <Field
+                          name="photoType"
+                          wrapperClass="tracking-fithub"
+                          className="form-control p-0"
+                          placeholder="Photo Type"
+                          component={SelectField_ReactSelect}
+                          options={TRACKING_PHOTO_TYPE_LIST}
+                          errorClass="help-block"
+                          validate={[]}
+                          requiredAstrisk={false}
+                          clearable={false}
+                        />
                       </div>
                     </div>
                   </div>
@@ -140,13 +199,25 @@ class AddTrackingForm extends Component {
                   <div className="row no-gutters">
                     <div className="col-md-12">
                       <div className="serving-select width-100-per">
-                        <select className="form-control">
+                        {/* <select className="form-control">
                           <option>This month</option>
                           <option>Last month</option>
                           <option>Last 3 months</option>
                           <option>Last 6 months</option>
                           <option>Last year</option>
-                        </select>
+                        </select> */}
+                        <Field
+                          name="photoTimePeriod"
+                          wrapperClass="tracking-fithub"
+                          className="form-control p-0"
+                          placeholder="Time Period"
+                          component={SelectField_ReactSelect}
+                          options={TRACKING_TIME_LIST}
+                          errorClass="help-block"
+                          validate={[]}
+                          requiredAstrisk={false}
+                          clearable={false}
+                        />
                       </div>
                     </div>
                   </div>
@@ -162,10 +233,23 @@ class AddTrackingForm extends Component {
                   <div className="row no-gutters">
                     <div className="col-md-12">
                       <div className="serving-select width-100-per">
-                        <select className="form-control">
+                        {/* <select className="form-control">
                           <option value="all">All</option>
                           <option value="benchpress">BenchPress</option>
-                        </select>
+                        </select> */}
+                        <Field
+                          name="exerciseCategory"
+                          wrapperClass="tracking-fithub"
+                          className="form-control p-0"
+                          placeholder="Exercise"
+                          component={SelectField_ReactSelect}
+                          options={newExerciseList}
+                          errorClass="help-block"
+                          validate={[]}
+                          requiredAstrisk={false}
+                          clearable={false}
+                          onChange={value => this.getStatisticValue(value)}
+                        />
                       </div>
                     </div>
                   </div>
@@ -178,8 +262,16 @@ class AddTrackingForm extends Component {
                     <div className="col-md-12">
                       <div className="serving-select width-100-per">
                         <select className="form-control">
-                          <option value="Total Reps">Total Reps</option>
-                          <option value="Weight loss">Weight loss</option>
+                          <option value="distance">weight</option>
+                          <option value="distance">time</option>
+                          <option value="distance">speed</option>
+                          <option value="distance">sets</option>
+                          <option value="distance">setTime</option>
+                          <option value="distance">restTime</option>
+                          <option value="distance">reps</option>
+                          <option value="distance">repTime</option>
+                          <option value="distance">effort</option>
+                          <option value="distance">distance</option>
                         </select>
                       </div>
                     </div>
@@ -247,7 +339,22 @@ class AddTrackingForm extends Component {
       </React.Fragment>
     );
   }
+  getStatisticValue = obj => {
+    const { exerciseMeasurements } = this.props;
+    let measObj = _.find(exerciseMeasurements, {
+      category: obj.cat,
+      subCategory: obj.value
+    });
+    console.log("===========get Fields Options===========");
+    console.log("get Fields Options", measObj);
+    console.log("==========================");
+  };
 }
+
+AddTrackingForm = reduxForm({
+  form: "tracking_form"
+})(AddTrackingForm);
+
 const mapStateToProps = state => {
   const { userFavouriteBadges } = state;
   return {

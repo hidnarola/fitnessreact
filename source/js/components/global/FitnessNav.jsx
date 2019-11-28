@@ -105,6 +105,18 @@ export default class FitnessNav extends Component {
                   <span>Progress</span>
                 </NavLink>
               </li>
+              <li>
+                <NavLink
+                  activeClassName="active"
+                  className="Menu-link"
+                  to={routeCodes.LOCKER}
+                  data-tip="Locker"
+                  data-for="menu-title-tooltip"
+                >
+                  <FontAwesomeIcon icon="folder" />
+                  <span>Locker</span>
+                </NavLink>
+              </li>
               {/* <li>
                 <NavLink
                   activeClassName="active"

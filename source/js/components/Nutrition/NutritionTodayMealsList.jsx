@@ -1,8 +1,8 @@
-import React from 'react';
+import React from "react";
 
 const NutritionTodayMealsList = props => {
   const { todayList } = props;
-  console.log('TODAY ++++++++++++++++', todayList);
+  console.log("TODAY ++++++++++++++++", todayList);
   return (
     <React.Fragment>
       <div className="overview whitebox-body">
@@ -11,9 +11,11 @@ const NutritionTodayMealsList = props => {
         </div>
         <div className="overview-body">
           <ul className="today-meals-list">
-            {todayList.map((meal, index) => (
-              <li className="today-meals-items">{meal.title}</li>
-            ))}
+            {todayList &&
+              todayList.length > 0 &&
+              todayList.map((meal, index) => (
+                <li className="today-meals-items">{meal.title}</li>
+              ))}
           </ul>
         </div>
       </div>

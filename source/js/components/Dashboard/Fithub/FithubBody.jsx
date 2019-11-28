@@ -51,15 +51,17 @@ class FithubBody extends Component {
               />
             </div>
           )} */}
-        {Object.keys(widgetMuscle).map((key, index) => (
-          <div className="col-md-12 col-sm-12 col-xs-12" key={index}>
-            <WidgetMuscleCardNew
-              graphData={widgetMuscle[key]}
-              title={key}
-              cardKey={`muscle-${key}`}
-            />
-          </div>
-        ))}
+        {widgetMuscle &&
+          Object.keys(widgetMuscle).length > 0 &&
+          Object.keys(widgetMuscle).map((key, index) => (
+            <div className="col-md-12 col-sm-12 col-xs-12" key={index}>
+              <WidgetMuscleCardNew
+                graphData={widgetMuscle[key]}
+                title={key}
+                cardKey={`muscle-${key}`}
+              />
+            </div>
+          ))}
       </React.Fragment>
     );
   }

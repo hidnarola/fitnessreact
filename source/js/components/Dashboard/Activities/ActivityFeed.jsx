@@ -23,6 +23,9 @@ class ActivityFeed extends Component {
   }
 
   render() {
+    console.log("===========Hello===========");
+    console.log("Hello");
+    console.log("==========================");
     const { activityFeed, activityTab } = this.props;
     return (
       <div className="white-box" style={{ padding: "10px" }}>

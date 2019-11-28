@@ -5,6 +5,7 @@ import PhotosActivityList from "./PhotosActivityList";
 import { withRouter } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import noPhotosFoundImg from "../../../../../assets/img/no-photos-found.png";
+import { routeCodes } from "../../../../constants/routes";
 
 class TodayPhotos extends Component {
   render() {

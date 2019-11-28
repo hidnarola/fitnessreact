@@ -758,6 +758,7 @@ export const EXE_CAT_SCAT = [
     },
 ];
 
+
 const min1 = min(1);
 const max100 = max(100);
 const max10000 = max(10000);
@@ -959,3 +960,28 @@ export const MEAL_VISIBILITY = [
 
 export const FITLY_MANAGEMENT = 'management'
 export const YOU = 'you'
+
+export const MUSCLE_LIST = [
+  {value : MUSCLE_WIDGET_NECK, label: "Neck"},
+  {value : MUSCLE_WIDGET_SHOULDER, label: "Shoulder"},
+  {value : MUSCLE_WIDGET_CHEST, label: "Chest"},
+  {value : MUSCLE_WIDGET_UPPER_ARM, label: "Upperarm"},
+  {value : MUSCLE_WIDGET_WAIST, label: "Waist"},
+  {value : MUSCLE_WIDGET_FOREARM, label: "Forearm"},
+  {value : MUSCLE_WIDGET_HIPS, label: "Hips"},
+  {value : MUSCLE_WIDGET_THIGH, label: "Thigh"},
+  {value : MUSCLE_WIDGET_CALF, label: "Calf"},
+  {value : MUSCLE_WIDGET_HEART_RATE, label: "Heart Rate"},
+  {value : MUSCLE_WIDGET_WEIGHT, label: "Weight"},
+  {value : MUSCLE_WIDGET_HEIGHT, label: "Height"},
+]
+export const TRACKING_TIME_LIST = [
+    {value: 'last month', label: 'Last Month'},
+    {value: 'last 3 month', label: 'Last 3 Month'},
+    {value: 'last 6 month', label: 'Last 6 Month'},
+    {value: 'last year', label: 'Last Year'},
+]
+export const TRACKING_PHOTO_TYPE_LIST = [
+  {value: "progress", label: "Progress"},
+  {value: "lifestyle", label: "Lifestyle"},
+]

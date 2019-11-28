@@ -111,6 +111,9 @@ import NutritionMealView from '../components/Nutrition/NutritionMealView';
 import CalendarDayOverView from '../components/Calendar/CalendarDayOverView';
 import NutritionMealCreate from '../components/Nutrition/Meal/NutritionMealCreate';
 import Goals from '../components/Goals/Goals';
+import Locker from './Locker';
+import WorkoutsCreate from '../components/Locker/ExerciseView/WorkoutsCreate';
+import WorkoutPlanCreate from '../components/Locker/ExerciseView/WorkoutPlanCreate';
 JavascriptTimeAgo.locale(en);
 
 const auth = new Auth();
@@ -216,6 +219,11 @@ class App extends Component {
                                 <PrivateRoute path={routeCodes.BADGES} component={Badges} />
 
                                 <PrivateRoute path={routeCodes.PROGRESS} component={Progress} />
+                                <PrivateRoute exact path={`${routeCodes.LOCKER_EXERCISE_CREATE}`} component={WorkoutsCreate} />
+
+                                <PrivateRoute exact path={`${routeCodes.LOCKER_EXERCISE_WORKOUT_PLAN_CREATE}`} component={WorkoutPlanCreate} />
+
+                                <PrivateRoute path={`${routeCodes.LOCKER}`} component={Locker} />
 
                                 <PrivateRoute path={routeCodes.RECEIP} component={Receip} />
 
@@ -225,6 +233,9 @@ class App extends Component {
 
                                 <PrivateRoute path={`${routeCodes.PROGRESS_PHOTOS}/:username`} component={ProgressPhotos} />
                                 <PrivateRoute path={`${routeCodes.GALLERY_PHOTOS}/:username`} component={GalleryPhotos} />
+
+
+
 
                                 {/* <PrivateRoute path={`${routeCodes.GOALS}`} component={Goals} /> */}
 

@@ -158,6 +158,46 @@ export const CheckboxField = (props) => {
     );
 }
 
+export const CheckboxAdvanceField = (props) => {
+  const {
+      label,
+      input,
+      meta,
+      wrapperClass,
+      className,
+      labelClass,
+      placeholder,
+      errorClass,
+      checked,
+      handleClick,
+      id,
+      requiredAstrisk,
+      name,
+      value
+  } = props;
+  return (
+      <div className={wrapperClass}>
+          <input
+              {...input}
+              id={id}
+              type="checkbox"
+              name={name}
+              className={className}
+              placeholder={placeholder}
+              checked={checked}
+              onClick={(e) => handleClick(e.target.checked)}
+              value={value}
+          />
+          <label className="mb-0" htmlFor={id} name={name} value={value} />
+          {requiredAstrisk && <span style={{ color: "red" }}>*</span>}
+          {meta.touched &&
+              ((meta.error && <span className={errorClass}>{meta.error}</span>) || (meta.warning && <span className={warningClass}>{meta.warning}</span>))
+          }
+      </div>
+  );
+}
+
+
 export const SelectField_ReactSelect = (props) => {
     const { label, input, meta, wrapperClass, className, labelClass, placeholder, errorClass, initialValue, options, clearable, requiredAstrisk,components } = props;
     let val = '';

@@ -89,5 +89,14 @@ export const routeCodes = {
   GALLERY_PHOTOS: `${publicPath}gallery_photos`,
 
   //User Goals
-  GOALS: `${publicPath}goals`
+  GOALS: `${publicPath}goals`,
+
+  //Locker
+  LOCKER: `${publicPath}locker`,
+  LOCKER_EXERCISE: `${publicPath}locker/exercise`,
+  LOCKER_EXERCISE_CREATE: `${publicPath}locker/exercise/workout/create`,
+  LOCKER_EXERCISE_WORKOUT_PLAN_CREATE: `${publicPath}locker/exercise/workoutplan/create`,
+  LOCKER_EXERCISE_WORKOUT_PLAN: `${publicPath}locker/exercise/workoutplan/plan`,
+  LOCKER_EXERCISE_WORKOUT_OVERVIEW: `${publicPath}locker/exercise/workoutplan/overview`,
+  LOCKER_NUTRITION: `${publicPath}locker/nutrition`
 };

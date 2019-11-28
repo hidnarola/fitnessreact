@@ -151,7 +151,10 @@ class FithubActivities extends Component {
               showCancel={false}
               closeOnClickOutside={true}
             >
-              <AddTrackingForm handleCloseAlert={this.handleCloseAlert} />
+              <AddTrackingForm
+                handleCloseAlert={this.handleCloseAlert}
+                exerciseMeasurements={this.props.exerciseMeasurements}
+              />
             </SweetAlert>
           </div>
         </div>

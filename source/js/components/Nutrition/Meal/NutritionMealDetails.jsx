@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Field, reduxForm, formValueSelector, initialize } from 'redux-form';
-import { connect } from 'react-redux';
+import React, { Component } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Field, reduxForm, formValueSelector, initialize } from "redux-form";
+import { connect } from "react-redux";
 
 const renderInputField = ({ input, meta, className, name, type }) => {
   return <input {...input} type={type} className="form-control" name={name} />;
@@ -28,18 +28,18 @@ const renderCheckBoxField = ({ input, meta, className, name, type, id }) => (
       name={name}
       defaultChecked={false}
     />
-    <label className="mb-0" htmlFor={id} name={name}></label>
+    <label className="mb-0" htmlFor={id} name={name} />
   </React.Fragment>
 );
 
 const difficultyList = [
-  { name: 'Easy', value: 'easy' },
-  { name: 'Medium', value: 'medium' },
-  { name: 'Hard', value: 'hard' },
+  { name: "Easy", value: "easy" },
+  { name: "Medium", value: "medium" },
+  { name: "Hard", value: "hard" }
 ];
 const timeList = [
-  { name: 'Minutes', value: 'minute' },
-  { name: 'Seconds', value: 'second' },
+  { name: "Minutes", value: "minute" },
+  { name: "Seconds", value: "second" }
 ];
 
 class NutritionMealDetails extends Component {
@@ -71,7 +71,7 @@ class NutritionMealDetails extends Component {
                         <button
                           type="button"
                           className="btn btn-minus"
-                          onClick={() => this.handleChnageServe('sub')}
+                          onClick={() => this.handleChnageServe("sub")}
                         >
                           <FontAwesomeIcon icon="minus" />
                         </button>
@@ -84,7 +84,7 @@ class NutritionMealDetails extends Component {
                         <button
                           type="button"
                           className="btn btn-plus"
-                          onClick={() => this.handleChnageServe('add')}
+                          onClick={() => this.handleChnageServe("add")}
                         >
                           <FontAwesomeIcon icon="plus" />
                         </button>
@@ -95,7 +95,7 @@ class NutritionMealDetails extends Component {
               </div>
             </div>
             <div className="col-md-6">
-              <div className="serves-box" style={{ marginLeft: '2px' }}>
+              <div className="serves-box" style={{ marginLeft: "2px" }}>
                 <div className="display-serve">
                   <div className="row no-gutters width-100-per d-flex flex-wrap align-items-center">
                     <div className="col-xs-12 col-lg-5">
@@ -134,7 +134,7 @@ class NutritionMealDetails extends Component {
                           <button
                             type="button"
                             className="btn btn-minus"
-                            onClick={() => this.handleChnagePrepTime('sub')}
+                            onClick={() => this.handleChnagePrepTime("sub")}
                           >
                             <FontAwesomeIcon icon="minus" />
                           </button>
@@ -147,7 +147,7 @@ class NutritionMealDetails extends Component {
                           <button
                             type="button"
                             className="btn btn-plus"
-                            onClick={() => this.handleChnagePrepTime('add')}
+                            onClick={() => this.handleChnagePrepTime("add")}
                           >
                             <FontAwesomeIcon icon="plus" />
                           </button>
@@ -179,7 +179,7 @@ class NutritionMealDetails extends Component {
                           <button
                             type="button"
                             className="btn btn-minus"
-                            onClick={() => this.handleChnageCookTime('sub')}
+                            onClick={() => this.handleChnageCookTime("sub")}
                           >
                             <FontAwesomeIcon icon="minus" />
                           </button>
@@ -192,7 +192,7 @@ class NutritionMealDetails extends Component {
                           <button
                             type="button"
                             className="btn btn-plus"
-                            onClick={() => this.handleChnageCookTime('add')}
+                            onClick={() => this.handleChnageCookTime("add")}
                           >
                             <FontAwesomeIcon icon="plus" />
                           </button>
@@ -326,57 +326,57 @@ class NutritionMealDetails extends Component {
   }
   handleChnageServe = action => {
     const { serves } = this.props;
-    action === 'add' && props.change('serves', parseInt(serves) + 1);
-    action === 'sub' &&
+    action === "add" && this.props.change("serves", parseInt(serves) + 1);
+    action === "sub" &&
       serves > 0 &&
-      props.change('serves', parseInt(serves) - 1);
+      this.props.change("serves", parseInt(serves) - 1);
   };
   handleChnagePrepTime = action => {
     const { prepTime } = this.props;
-    action === 'add' && props.change('prepTime', parseInt(prepTime) + 1);
-    action === 'sub' &&
+    action === "add" && this.props.change("prepTime", parseInt(prepTime) + 1);
+    action === "sub" &&
       prepTime > 0 &&
-      props.change('prepTime', parseInt(prepTime) - 1);
+      this.props.change("prepTime", parseInt(prepTime) - 1);
   };
   handleChnageCookTime = action => {
     const { cookTime } = this.props;
-    action === 'add' && props.change('cookTime', parseInt(cookTime) + 1);
-    action === 'sub' &&
+    action === "add" && this.props.change("cookTime", parseInt(cookTime) + 1);
+    action === "sub" &&
       cookTime > 0 &&
-      props.change('cookTime', parseInt(cookTime) - 1);
+      this.props.change("cookTime", parseInt(cookTime) - 1);
   };
 }
 
 NutritionMealDetails = reduxForm({
-  form: 'nutrition_meal_add_form',
+  form: "nutrition_meal_add_form",
   destroyOnUnmount: false,
   initialValues: {
     serves: 1,
-    description: '',
-    serving_difficulty: 'easy',
+    description: "",
+    serving_difficulty: "easy",
     prepTime: 0,
-    preptime_unit: 'minute',
+    preptime_unit: "minute",
     cookTime: 0,
-    cooktime_unit: 'minute',
+    cooktime_unit: "minute",
     vegetarian: false,
     kosher: false,
     vegan: false,
     coelaic: false,
     paleo: false,
-    keto: false,
-  },
+    keto: false
+  }
 })(NutritionMealDetails);
 
-const selector = formValueSelector('nutrition_meal_add_form');
+const selector = formValueSelector("nutrition_meal_add_form");
 
 const mapStateToProps = state => {
-  const serves = selector(state, 'serves');
-  const prepTime = selector(state, 'prepTime');
-  const cookTime = selector(state, 'cookTime');
+  const serves = selector(state, "serves");
+  const prepTime = selector(state, "prepTime");
+  const cookTime = selector(state, "cookTime");
   return {
     serves: serves,
     prepTime: prepTime,
-    cookTime: cookTime,
+    cookTime: cookTime
   };
 };
 
