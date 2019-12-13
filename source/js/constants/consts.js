@@ -1,5 +1,7 @@
 import { required, validNumber, min, max } from "../formValidation/validationRules";
 
+export const USER_STR = "user";
+export const ADMIN_STR = "admin";
 export const LOCALSTORAGE_ID_TOKEN_KEY = 'id_token';
 export const LOCALSTORAGE_ACCESS_TOKEN_KEY = 'access_token';
 export const LOCALSTORAGE_REFRESH_TOKEN_KEY = 'refreshToken';
@@ -562,6 +564,7 @@ export const SCHEDULED_WORKOUT_TYPE_CIRCUIT = 'circuit';
 export const SCHEDULED_WORKOUT_TYPE_SUPERSET = 'superset';
 export const SCHEDULED_WORKOUT_TYPE_WARMUP = 'warmup';
 export const SCHEDULED_WORKOUT_TYPE_COOLDOWN = 'cooldown';
+export const SCHEDULED_WORKOUT_TYPE_WORKOUT = 'workout';
 export const SCHEDULED_WORKOUT_TYPE_RESTDAY = 'restday';
 export const SCHEDULED_MEAL = 'meal';
 export const SCHEDULED_BODY_MEASUREMENT = 'body_measurement'
@@ -984,4 +987,12 @@ export const TRACKING_TIME_LIST = [
 export const TRACKING_PHOTO_TYPE_LIST = [
   {value: "progress", label: "Progress"},
   {value: "lifestyle", label: "Lifestyle"},
+]
+export const NUTRITION_CAT_LIST = [
+  {value: "vegetarian", label: "Vegetarian"},
+  {value: "kosher", label: "Kosher"},
+  {value: "vegan", label: "Vegan"},
+  {value: "coelaic", label: "Coelaic"},
+  {value: "paleo", label: "Paleo"},
+  {value: "keto", label: "Keto"},
 ]

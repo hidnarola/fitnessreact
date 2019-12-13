@@ -1,34 +1,34 @@
-import React, { Component } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import NutritionMealCreateLeftSidebar from './NutritionMealCreateLeftSidebar';
-import CommentBoxForm from '../../Profile/CommentBoxForm';
-import NutritionMealDetails from './NutritionMealDetails';
-import NutritionMealInstruction from './NutritionMealInstruction';
-import NutritionMealNote from './NutritionMealNote';
-import NutritionMealPhotoes from './NutritionMealPhotoes';
-import NutritionMealCreateNavbar from './Header/NutritionMealCreateNavbar';
-import NutritionQuickAdd from '../../Calendar/Nutritions/sidebar/NutritionQuickAdd';
-import NutritionMealIngredientList from './NutritionMealIngredientList';
-import NutritionMealCreateQuickAdd from './NutritionMealCreateQuickAdd';
+import React, { Component } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import NutritionMealCreateLeftSidebar from "./NutritionMealCreateLeftSidebar";
+import CommentBoxForm from "../../Profile/CommentBoxForm";
+import NutritionMealDetails from "./NutritionMealDetails";
+import NutritionMealInstruction from "./NutritionMealInstruction";
+import NutritionMealNote from "./NutritionMealNote";
+import NutritionMealPhotoes from "./NutritionMealPhotoes";
+import NutritionMealCreateNavbar from "./Header/NutritionMealCreateNavbar";
+import NutritionQuickAdd from "../../Calendar/Nutritions/sidebar/NutritionQuickAdd";
+import NutritionMealIngredientList from "./NutritionMealIngredientList";
+import NutritionMealCreateQuickAdd from "./NutritionMealCreateQuickAdd";
 import {
   getIngridientsRequest,
-  getRecentIngridientsRequest,
-} from '../../../actions/new_nutrition';
-import { connect } from 'react-redux';
-import { Field, reduxForm, formValueSelector } from 'redux-form';
-import DropdownButton from 'react-bootstrap/lib/DropdownButton';
-import MenuItem from 'react-bootstrap/lib/MenuItem';
+  getRecentIngridientsRequest
+} from "../../../actions/new_nutrition";
+import { connect } from "react-redux";
+import { Field, reduxForm, formValueSelector } from "redux-form";
+import DropdownButton from "react-bootstrap/lib/DropdownButton";
+import MenuItem from "react-bootstrap/lib/MenuItem";
 
 class NutritionMealBodyContent extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isActiveTab: '#details',
+      isActiveTab: "#details",
       isActiveIngredientTab: false,
       searchIsLoading: false,
-      selectedMealMode: 'All',
+      selectedMealMode: "All",
       ingredient_list: [],
-      meal_proximates: [],
+      meal_proximates: []
     };
     this.searchDebounce = _.debounce(this.searchIngredient, 1000);
   }
@@ -39,7 +39,7 @@ class NutritionMealBodyContent extends Component {
       isActiveIngredientTab,
       ingredient_list,
       meal_proximates,
-      selectedMealMode,
+      selectedMealMode
     } = this.state;
     const { searchSuggestions, mealVisibility, recent_ingredient } = this.props;
     return (
@@ -71,25 +71,29 @@ class NutritionMealBodyContent extends Component {
                 title={
                   <i
                     className={
-                      mealVisibility === 'private'
-                        ? 'fad fa-user-shield'
-                        : 'fad fa-users'
+                      mealVisibility === "private"
+                        ? "fad fa-user-shield"
+                        : "fad fa-users"
                     }
                   />
                 }
                 key={1}
-                id={'dropdown-basic-2'}
+                id={"dropdown-basic-2"}
                 pullRight
               >
                 <MenuItem
                   eventKey="1"
-                  onClick={() => this.handleChangeMealVisibility('private')}
+                  onClick={() =>
+                    this.props.handleChangeMealVisibility("private")
+                  }
                 >
                   <i className="fad fa-user-shield" /> Private
                 </MenuItem>
                 <MenuItem
                   eventKey="2"
-                  onClick={() => this.handleChangeMealVisibility('public')}
+                  onClick={() =>
+                    this.props.handleChangeMealVisibility("public")
+                  }
                 >
                   <i className="fad fa-users" /> Public
                 </MenuItem>
@@ -182,7 +186,7 @@ class NutritionMealBodyContent extends Component {
   };
   handleSuggestionsFetchRequested = value => {
     this.searchDebounce.cancel;
-    if (value && value.trim() && value.trim() !== '') {
+    if (value && value.trim() && value.trim() !== "") {
       this.searchDebounce(value.trim());
     }
   };
@@ -197,8 +201,8 @@ class NutritionMealBodyContent extends Component {
     let ingredientObj = {};
     ingredientObj.serving_size = 0;
     ingredientObj.serving_input = 0;
-    ingredientObj.ingredient_unit = 'g';
-    ingredientObj.unit = '';
+    ingredientObj.ingredient_unit = "g";
+    ingredientObj.unit = "";
     ingredientObj.count = 0;
     ingredientObj.totalKcl = 0;
     ingredientObj.totalfat = 0;
@@ -218,7 +222,7 @@ class NutritionMealBodyContent extends Component {
     const { selectedMealMode } = this.state;
     var requestData = { name: value, start: 0, offset: 50 };
     this.setState({ searchIsLoading: true });
-    selectedMealMode === 'All' && dispatch(getIngridientsRequest(requestData));
+    selectedMealMode === "All" && dispatch(getIngridientsRequest(requestData));
   };
   componentDidUpdate(prevProps, prevState) {
     const { searchloading, searchSuggestions } = this.props;
@@ -241,7 +245,7 @@ class NutritionMealBodyContent extends Component {
       const { ingredient_list } = this.state;
       let _array = ingredient_list;
       let vobj = _vobj;
-      console.log('vobj => ', vobj);
+      console.log("vobj => ", vobj);
       if (serving_size) {
         vobj.serving_input = serving_size;
       }
@@ -255,111 +259,143 @@ class NutritionMealBodyContent extends Component {
         vobj.ingredient_id = vobj._id;
       }
       if (vobj.serving_input && vobj.ingredient_unit && vobj.count) {
-        if (vobj.ingredient_unit !== 'g') {
+        if (vobj.ingredient_unit !== "g") {
           console.log(vobj.serving_input, vobj.ingredient_unit, vobj.count);
           // gram_total
           var _serving_size = vobj.serving_input * vobj[vobj.ingredient_unit];
 
           if (Number(vobj.energyKcal) !== NaN) {
             vobj.totalKcl = (
-              ((_serving_size * Number(vobj.energyKcal)) / 100) *
+              _serving_size *
+              Number(vobj.energyKcal) /
+              100 *
               Number(vobj.count)
             ).toFixed(2);
           }
           if (Number(vobj.fat) !== NaN) {
             vobj.totalfat = (
-              ((_serving_size * Number(vobj.fat)) / 100) *
+              _serving_size *
+              Number(vobj.fat) /
+              100 *
               Number(vobj.count)
             ).toFixed(2);
           }
           if (Number(vobj.protein) !== NaN) {
             vobj.totalProtein = (
-              ((_serving_size * Number(vobj.protein)) / 100) *
+              _serving_size *
+              Number(vobj.protein) /
+              100 *
               Number(vobj.count)
             ).toFixed(2);
           }
           if (Number(vobj.carbohydrate) !== NaN) {
             vobj.totalCarbs = (
-              ((_serving_size * Number(vobj.carbohydrate)) / 100) *
+              _serving_size *
+              Number(vobj.carbohydrate) /
+              100 *
               Number(vobj.count)
             ).toFixed(2);
           }
           console.log(
-            'Number(vobj.totalSugars) => ',
+            "Number(vobj.totalSugars) => ",
             Number(vobj.totalSugars),
-            NaN,
+            NaN
           );
           if (Number(vobj.totalSugars) !== NaN) {
             vobj.totalSugar = (
-              ((_serving_size * Number(vobj.totalSugars)) / 100) *
+              _serving_size *
+              Number(vobj.totalSugars) /
+              100 *
               Number(vobj.count)
             ).toFixed(2);
           }
           if (Number(vobj.water) !== NaN) {
             vobj.totalWater = (
-              ((_serving_size * Number(vobj.water)) / 100) *
+              _serving_size *
+              Number(vobj.water) /
+              100 *
               Number(vobj.count)
             ).toFixed(2);
           }
           if (Number(vobj.starch) !== NaN) {
             vobj.totalStarch = (
-              ((_serving_size * Number(vobj.starch)) / 100) *
+              _serving_size *
+              Number(vobj.starch) /
+              100 *
               Number(vobj.count)
             ).toFixed(2);
           }
           if (Number(vobj.cholesterol) !== NaN) {
             vobj.totalCholesterol = (
-              ((_serving_size * Number(vobj.cholesterol)) / 100) *
+              _serving_size *
+              Number(vobj.cholesterol) /
+              100 *
               Number(vobj.count)
             ).toFixed(2);
           }
         } else {
           if (Number(vobj.energyKcal) !== NaN) {
             vobj.totalKcl = (
-              ((vobj.serving_input * Number(vobj.energyKcal)) / 100) *
+              vobj.serving_input *
+              Number(vobj.energyKcal) /
+              100 *
               Number(vobj.count)
             ).toFixed(2);
           }
           if (Number(vobj.fat) !== NaN) {
             vobj.totalfat = (
-              ((vobj.serving_input * Number(vobj.fat)) / 100) *
+              vobj.serving_input *
+              Number(vobj.fat) /
+              100 *
               Number(vobj.count)
             ).toFixed(2);
           }
           if (Number(vobj.protein) !== NaN) {
             vobj.totalProtein = (
-              ((vobj.serving_input * Number(vobj.protein)) / 100) *
+              vobj.serving_input *
+              Number(vobj.protein) /
+              100 *
               Number(vobj.count)
             ).toFixed(2);
           }
           if (Number(vobj.carbohydrate) !== NaN) {
             vobj.totalCarbs = (
-              ((vobj.serving_input * Number(vobj.carbohydrate)) / 100) *
+              vobj.serving_input *
+              Number(vobj.carbohydrate) /
+              100 *
               Number(vobj.count)
             ).toFixed(2);
           }
           // console.log('Number(vobj.totalSugars) => ', Number(vobj.totalSugars), NaN, Number(vobj.totalSugars) !== NaN, vobj.totalSugars);
           if (Number(vobj.totalSugars) !== NaN) {
             vobj.totalSugar = (
-              ((vobj.serving_input * Number(vobj.totalSugars)) / 100) *
+              vobj.serving_input *
+              Number(vobj.totalSugars) /
+              100 *
               Number(vobj.count)
             ).toFixed(2);
           }
           if (Number(vobj.water) !== NaN) {
             vobj.totalWater = (
-              ((vobj.serving_input * Number(vobj.water)) / 100) *
+              vobj.serving_input *
+              Number(vobj.water) /
+              100 *
               Number(vobj.count)
             ).toFixed(2);
           }
           if (Number(vobj.starch) !== NaN) {
             vobj.totalStarch = (
-              ((vobj.serving_input * Number(vobj.starch)) / 100) *
+              vobj.serving_input *
+              Number(vobj.starch) /
+              100 *
               Number(vobj.count)
             ).toFixed(2);
           }
           if (Number(vobj.cholesterol) !== NaN) {
             vobj.totalCholesterol = (
-              ((vobj.serving_input * Number(vobj.cholesterol)) / 100) *
+              vobj.serving_input *
+              Number(vobj.cholesterol) /
+              100 *
               Number(vobj.count)
             ).toFixed(2);
           }
@@ -369,51 +405,51 @@ class NutritionMealBodyContent extends Component {
       _array[id] = vobj;
       this.setState({ ingredient_list: _array });
       console.log(
-        'this.state.ingredient_list ======= >',
-        this.state.ingredient_list,
+        "this.state.ingredient_list ======= >",
+        this.state.ingredient_list
       );
     } catch (error) {
-      console.log('error => ', error);
+      console.log("error => ", error);
     }
   };
   ingredientUnit = ingredient => {
     // return [];
     let a = [];
-    a.push({ label: 'g', value: 'g' });
+    a.push({ label: "g", value: "g" });
     for (let [key, value] of Object.entries(ingredient)) {
       // console.log('key => ', key);
       // console.log('value => ', value);
       if (value) {
         switch (key) {
-          case '_1tsp':
-            a.push({ label: 'tsp', value: '_1tsp' });
+          case "_1tsp":
+            a.push({ label: "tsp", value: "_1tsp" });
             break;
-          case '_1tbsp':
-            a.push({ label: 'tbsp', value: '_1tbsp' });
+          case "_1tbsp":
+            a.push({ label: "tbsp", value: "_1tbsp" });
             break;
-          case '_1cup':
-            a.push({ label: 'cup', value: '_1cup' });
+          case "_1cup":
+            a.push({ label: "cup", value: "_1cup" });
             break;
-          case '_1leaf':
-            a.push({ label: 'leaf', value: '_1leaf' });
+          case "_1leaf":
+            a.push({ label: "leaf", value: "_1leaf" });
             break;
-          case '_1large':
-            a.push({ label: 'large', value: '_1large' });
+          case "_1large":
+            a.push({ label: "large", value: "_1large" });
             break;
-          case '_1medium':
-            a.push({ label: 'medium', value: '_1medium' });
+          case "_1medium":
+            a.push({ label: "medium", value: "_1medium" });
             break;
-          case '_1root':
-            a.push({ label: 'root', value: '_1root' });
+          case "_1root":
+            a.push({ label: "root", value: "_1root" });
             break;
-          case '_1small':
-            a.push({ label: 'small', value: '_1small' });
+          case "_1small":
+            a.push({ label: "small", value: "_1small" });
             break;
-          case '_1extra_large':
-            a.push({ label: 'extra large', value: '_1extra_large' });
+          case "_1extra_large":
+            a.push({ label: "extra large", value: "_1extra_large" });
             break;
-          case '_1tip':
-            a.push({ label: 'tip', value: '_1tip' });
+          case "_1tip":
+            a.push({ label: "tip", value: "_1tip" });
             break;
 
           default:
@@ -424,9 +460,9 @@ class NutritionMealBodyContent extends Component {
     return a;
   };
   handleSubmit = (a, b, c) => {
-    console.log('a => ', a);
-    console.log('b => ', b);
-    console.log('c => ', c);
+    console.log("a => ", a);
+    console.log("b => ", b);
+    console.log("c => ", c);
     // c.preventDefault();
 
     /* console.log("~~~~~~~~~~~~~~~~>", e)
@@ -455,26 +491,26 @@ class NutritionMealBodyContent extends Component {
         totalWater: item.totalWater,
         totalStarch: item.totalStarch,
         totalCholesterol: item.totalCholesterol,
-        totalNitrogen: item.totalNitrogen,
+        totalNitrogen: item.totalNitrogen
       });
     });
-    a['proximates'] = newIngredientList;
+    a["proximates"] = newIngredientList;
     c.onSubmit(a);
     // return a;
   };
 }
 
 NutritionMealBodyContent = reduxForm({
-  form: 'nutrition_meal_add_form',
+  form: "nutrition_meal_add_form"
 })(NutritionMealBodyContent);
-const selector = formValueSelector('nutrition_meal_add_form');
+const selector = formValueSelector("nutrition_meal_add_form");
 
 const mapStateToProps = state => {
   const { new_nutrition } = state;
   return {
-    searchSuggestions: new_nutrition.get('ingridients'),
-    searchloading: new_nutrition.get('loading'),
-    recent_ingredient: new_nutrition.get('recent_ingredient'),
+    searchSuggestions: new_nutrition.get("ingridients"),
+    searchloading: new_nutrition.get("loading"),
+    recent_ingredient: new_nutrition.get("recent_ingredient")
   };
 };
 

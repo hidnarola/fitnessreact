@@ -1,73 +1,62 @@
-import React, { Component } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { Component } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import FitnessCardioList from "./FitnessCardioList";
+import {
+  FITNESS_TEST_CAT_STRENGTH,
+  FITNESS_TEST_CAT_CARDIO,
+  FITNESS_TEST_CAT_FLEXIBILITY,
+  FITNESS_TEST_CAT_POSTURE
+} from "../../../constants/consts";
+import FitnessStrengthList from "./FitnessStrengthList";
+import FitnessFlexibilityList from "./FitnessFlexibilityList";
+import FitnessPostureList from "./FitnessPostureList";
+import { connect } from "react-redux";
+import { userFitnessTestsMaxRep } from "../../../actions/userFitnessTests";
 
 class CalendarDayFitnessItemsList extends Component {
   render() {
+    const { fitnessTest } = this.props;
+    console.log("===========fitnessTest===========");
+    console.log("fitnessTest", fitnessTest);
+    console.log("==========================");
     return (
       <React.Fragment>
-        <div className="excercise-content  animated fadeIn">
-          <div className="row no-gutters">
-            <div className="col-xs-12 col-lg-2">
-              <span className="warmup-title">Distance:</span>
-            </div>
-            <div className="col-xs-12 col-lg-3">
-              <div className="serving-boxs">
-                <button className="btn btn-minus">
-                  <FontAwesomeIcon icon="minus" />
-                </button>
-                <input
-                  type="number"
-                  className="form-control"
-                  defaultValue="86"
-                />
-                <button className="btn btn-plus">
-                  <FontAwesomeIcon icon="plus" />
-                </button>
-              </div>
-            </div>
-            <div className="col-xs-12 col-lg-3">
-              <div className="serving-select">
-                <select className="form-control">
-                  <option>Effort</option>
-                  <option>KMPH</option>
-                  <option>MPH</option>
-                </select>
-              </div>
-            </div>
-          </div>
-          <div className="row no-gutters">
-            <div className="col-xs-12 col-lg-2">
-              <span className="warmup-title">Time:</span>
-            </div>
-            <div className="col-xs-12 col-lg-3">
-              <div className="serving-boxs">
-                <button className="btn btn-minus">
-                  <FontAwesomeIcon icon="minus" />
-                </button>
-                <input
-                  type="number"
-                  className="form-control"
-                  defaultValue="86"
-                />
-                <button className="btn btn-plus">
-                  <FontAwesomeIcon icon="plus" />
-                </button>
-              </div>
-            </div>
-            <div className="col-xs-12 col-lg-3">
-              <div className="serving-select">
-                <select className="form-control">
-                  <option>Seconds</option>
-                  <option>Minutes</option>
-                  <option>Hours</option>
-                </select>
-              </div>
-            </div>
-          </div>
-        </div>
+        {fitnessTest.category === FITNESS_TEST_CAT_CARDIO && (
+          <FitnessCardioList
+            test={fitnessTest}
+            syncedUserFitnessTests={this.props.syncedUserFitnessTests}
+          />
+        )}
+        {fitnessTest.category === FITNESS_TEST_CAT_STRENGTH && (
+          <FitnessStrengthList
+            test={fitnessTest}
+            syncedUserFitnessTests={this.props.syncedUserFitnessTests}
+            handleMaxRepChange={this.handleMaxRepChange}
+          />
+        )}
+        {fitnessTest.category === FITNESS_TEST_CAT_FLEXIBILITY && (
+          <FitnessFlexibilityList
+            test={fitnessTest}
+            syncedUserFitnessTests={this.props.syncedUserFitnessTests}
+          />
+        )}
+        {fitnessTest.category === FITNESS_TEST_CAT_POSTURE && (
+          <FitnessPostureList
+            test={fitnessTest}
+            syncedUserFitnessTests={this.props.syncedUserFitnessTests}
+          />
+        )}
       </React.Fragment>
     );
   }
+  handleMaxRepChange = (_id, value, rep) => {
+    const { dispatch } = this.props;
+    var val = value;
+    if (val > 9999) {
+      val = 9999;
+    }
+    dispatch(userFitnessTestsMaxRep(_id, val, rep));
+  };
 }
 
-export default CalendarDayFitnessItemsList;
+export default connect()(CalendarDayFitnessItemsList);

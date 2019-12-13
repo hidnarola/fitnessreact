@@ -1,9 +1,9 @@
 import {
   GET_USER_FITNESS_TESTS_LOGDATES_REQUEST,
   GET_USER_FITNESS_TESTS_LOGDATES_SUCCESS,
-  GET_USER_FITNESS_TESTS_LOGDATES_ERROR,
-} from './../actions/userFitnessTests';
-import { Map } from 'immutable';
+  GET_USER_FITNESS_TESTS_LOGDATES_ERROR
+} from "./../actions/userFitnessTests";
+import { Map } from "immutable";
 import {
   GET_USER_FITNESS_TESTS_REQUEST,
   GET_USER_FITNESS_TESTS_ERROR,
@@ -18,18 +18,18 @@ import {
   RESET_USER_FITNESS_TESTS_REQUEST,
   RESET_USER_FITNESS_TESTS_SUCCESS,
   RESET_USER_FITNESS_TESTS_ERROR,
-  SET_USER_FITNESS_TESTS_DATA,
-} from '../actions/userFitnessTests';
+  SET_USER_FITNESS_TESTS_DATA
+} from "../actions/userFitnessTests";
 import {
   VALIDATION_FAILURE_STATUS,
   MAX_REPS_CONST_1,
   MAX_REPS_CONST_2,
   FITNESS_TEST_FORMAT_MAX_REP,
-  FITNESS_TEST_FORMAT_MULTISELECT,
-} from '../constants/consts';
-import { generateValidationErrorMsgArr } from '../helpers/funs';
-import _ from 'lodash';
-import { validNumber } from '../formValidation/validationRules';
+  FITNESS_TEST_FORMAT_MULTISELECT
+} from "../constants/consts";
+import { generateValidationErrorMsgArr } from "../helpers/funs";
+import _ from "lodash";
+import { validNumber } from "../formValidation/validationRules";
 
 const initialState = Map({
   loading: false,
@@ -40,6 +40,7 @@ const initialState = Map({
   syncedUserFitnessTests: {},
   userFitnessTestsLogdates: [],
   userFitnessTestsLogdatesError: [],
+  allFitnessTest: []
 });
 
 const actionMap = {
@@ -47,8 +48,8 @@ const actionMap = {
     return state.merge(
       Map({
         loading: true,
-        date: action.today,
-      }),
+        date: action.today
+      })
     );
   },
   [GET_USER_FITNESS_TESTS_SUCCESS]: (state, action) => {
@@ -56,15 +57,17 @@ const actionMap = {
     let userFitnessTests = action.data.user_test_exercises;
     let syncedUserFitnessTests = syncUserFitnessTests(
       fitnessTests,
-      userFitnessTests,
+      userFitnessTests
     );
+    let allFitnessTestList = action.data.all_test;
     return state.merge(
       Map({
         loading: false,
         fitnessTests: fitnessTests,
         userFitnessTests: userFitnessTests,
         syncedUserFitnessTests: syncedUserFitnessTests,
-      }),
+        allFitnessTest: allFitnessTestList
+      })
     );
   },
   [GET_USER_FITNESS_TESTS_ERROR]: (state, action) => {
@@ -78,27 +81,27 @@ const actionMap = {
     } else if (action.error && action.error.message) {
       error = [action.error.message];
     } else {
-      error = ['Something went wrong! please try again later'];
+      error = ["Something went wrong! please try again later"];
     }
     return state.merge(
       Map({
         loading: false,
-        error: error,
-      }),
+        error: error
+      })
     );
   },
   [SAVE_USER_FITNESS_TESTS_REQUEST]: (state, action) => {
     return state.merge(
       Map({
-        loading: true,
-      }),
+        loading: true
+      })
     );
   },
   [SAVE_USER_FITNESS_TESTS_SUCCESS]: (state, action) => {
     return state.merge(
       Map({
-        loading: false,
-      }),
+        loading: false
+      })
     );
   },
   [SAVE_USER_FITNESS_TESTS_ERROR]: (state, action) => {
@@ -112,28 +115,28 @@ const actionMap = {
     } else if (action.error && action.error.message) {
       error = [action.error.message];
     } else {
-      error = ['Something went wrong! please try again later'];
+      error = ["Something went wrong! please try again later"];
     }
     return state.merge(
       Map({
         loading: false,
-        error: error,
-      }),
+        error: error
+      })
     );
   },
   [RESET_USER_FITNESS_TESTS_REQUEST]: (state, action) => {
     return state.merge(
       Map({
         loading: true,
-        date: action.date,
-      }),
+        date: action.date
+      })
     );
   },
   [RESET_USER_FITNESS_TESTS_SUCCESS]: (state, action) => {
     return state.merge(
       Map({
-        loading: false,
-      }),
+        loading: false
+      })
     );
   },
   [RESET_USER_FITNESS_TESTS_ERROR]: (state, action) => {
@@ -147,67 +150,67 @@ const actionMap = {
     } else if (action.error && action.error.message) {
       error = [action.error.message];
     } else {
-      error = ['Something went wrong! please try again later'];
+      error = ["Something went wrong! please try again later"];
     }
     return state.merge(
       Map({
         loading: false,
-        error: error,
-      }),
+        error: error
+      })
     );
   },
   [USER_FITNESS_TESTS_TEXT_FIELD]: (state, action) => {
     var newSyncedUserFitnessTests = Object.assign(
       {},
-      state.get('syncedUserFitnessTests'),
+      state.get("syncedUserFitnessTests")
     );
     if (validNumber(action.value) === undefined) {
       newSyncedUserFitnessTests[action._id].value = action.value;
     }
     return state.merge(
       Map({
-        syncedUserFitnessTests: newSyncedUserFitnessTests,
-      }),
+        syncedUserFitnessTests: newSyncedUserFitnessTests
+      })
     );
   },
   [USER_FITNESS_TESTS_MAX_REP_FIELD]: (state, action) => {
     var newSyncedUserFitnessTests = Object.assign(
       {},
-      state.get('syncedUserFitnessTests'),
+      state.get("syncedUserFitnessTests")
     );
     var maxRepObj = newSyncedUserFitnessTests[action._id].value;
     var newMaxRepObj = calculateMaxReps(maxRepObj, action.rep, action.value);
     newSyncedUserFitnessTests[action._id].value = newMaxRepObj;
     return state.merge(
       Map({
-        syncedUserFitnessTests: newSyncedUserFitnessTests,
-      }),
+        syncedUserFitnessTests: newSyncedUserFitnessTests
+      })
     );
   },
   [USER_FITNESS_TESTS_MULTISELECT_FIELD]: (state, action) => {
     var newSyncedUserFitnessTests = Object.assign(
       {},
-      state.get('syncedUserFitnessTests'),
+      state.get("syncedUserFitnessTests")
     );
     var valueInt = parseInt(action.value);
     newSyncedUserFitnessTests[action._id].value = valueInt;
     return state.merge(
       Map({
-        syncedUserFitnessTests: newSyncedUserFitnessTests,
-      }),
+        syncedUserFitnessTests: newSyncedUserFitnessTests
+      })
     );
   },
   [USER_FITNESS_TESTS_A_OR_B_FIELD]: (state, action) => {
     var newSyncedUserFitnessTests = Object.assign(
       {},
-      state.get('syncedUserFitnessTests'),
+      state.get("syncedUserFitnessTests")
     );
     var valueInt = parseInt(action.value);
     newSyncedUserFitnessTests[action._id].value = valueInt;
     return state.merge(
       Map({
-        syncedUserFitnessTests: newSyncedUserFitnessTests,
-      }),
+        syncedUserFitnessTests: newSyncedUserFitnessTests
+      })
     );
   },
   [SET_USER_FITNESS_TESTS_DATA]: (state, action) => {
@@ -218,8 +221,8 @@ const actionMap = {
     return state.merge(
       Map({
         loading: true,
-        userFitnessTestsLogdates: [],
-      }),
+        userFitnessTestsLogdates: []
+      })
     );
   },
   [GET_USER_FITNESS_TESTS_LOGDATES_SUCCESS]: (state, action) => {
@@ -227,8 +230,8 @@ const actionMap = {
     return state.merge(
       Map({
         loading: false,
-        userFitnessTestsLogdates: userFitnessTests,
-      }),
+        userFitnessTestsLogdates: userFitnessTests
+      })
     );
   },
   [GET_USER_FITNESS_TESTS_LOGDATES_ERROR]: (state, action) => {
@@ -242,15 +245,15 @@ const actionMap = {
     } else if (action.error && action.error.message) {
       error = [action.error.message];
     } else {
-      error = ['Something went wrong! please try again later'];
+      error = ["Something went wrong! please try again later"];
     }
     return state.merge(
       Map({
         loading: false,
-        userFitnessTestsLogdatesError: error,
-      }),
+        userFitnessTestsLogdatesError: error
+      })
     );
-  },
+  }
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -269,7 +272,7 @@ const syncUserFitnessTests = (fitnessTests, userFitnessTests) => {
     subCatKeys.map((subCatKey, subCatI) => {
       var dataArr = fitnessTests[catKey][subCatKey];
       dataArr.map((data, index) => {
-        var userTest = _.find(userFitnessTests, ['test_exercise_id', data._id]);
+        var userTest = _.find(userFitnessTests, ["test_exercise_id", data._id]);
         var value = null;
         if (userTest) {
           value = userTest[data.format];

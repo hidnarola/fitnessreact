@@ -1,22 +1,17 @@
 import React, { Component } from "react";
-import AddMetaDescription from "../../global/AddMetaDescription";
-import { routeCodes } from "../../../constants/routes";
-import FitnessHeader from "../../global/FitnessHeader";
-import FitnessNav from "../../global/FitnessNav";
-import NutritionMealBodyContent from "./NutritionMealBodyContent";
+import { routeCodes } from "../../../../constants/routes";
+import AddMetaDescription from "../../../global/AddMetaDescription";
+import FitnessHeader from "../../../global/FitnessHeader";
+import FitnessNav from "../../../global/FitnessNav";
+import NutritionMealCreateSidebar from "../../../Nutrition/Meal/Header/NutritionMealCreateSidebar";
+import NutritionMealBodyContent from "../../../Nutrition/Meal/NutritionMealBodyContent";
 import { connect } from "react-redux";
-import { showPageLoader, hidePageLoader } from "../../../actions/pageLoader";
-import NutritionMealCreateSidebar from "./Header/NutritionMealCreateSidebar";
-import DropdownButton from "react-bootstrap/lib/DropdownButton";
-import MenuItem from "react-bootstrap/lib/MenuItem";
-import { EditorState, convertToRaw, ContentState } from "draft-js";
-import draftToHtml from "draftjs-to-html";
-import { mealAddRequest } from "../../../actions/meal";
-import { userMealAddRequest } from "../../../actions/user_meal";
-import moment from "moment";
-import { Redirect, withRouter } from "react-router-dom";
+import { addUserProgramsMealRequest } from "../../../../actions/userNutritionPrograms";
+import { hidePageLoader, showPageLoader } from "../../../../actions/pageLoader";
+import { ts, te } from "../../../../helpers/funs";
+import { withRouter } from "react-router-dom";
 
-class NutritionMealCreate extends Component {
+class NutritionProgramMealCreate extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -26,12 +21,20 @@ class NutritionMealCreate extends Component {
       mealType: "breakfast",
       instructions: [],
       notes: [],
-      logDate: new Date()
+      logDate: new Date(),
+      day: null,
+      programId: null
     };
   }
   render() {
     const { quickTab, mealVisibility, instructions, mealTitle } = this.state;
-    const { recentMeals, location } = this.props;
+    const { recentMeals, match } = this.props;
+    let backUrl = null;
+    if (match && match.params && match.params.id) {
+      backUrl = `${routeCodes.LOCKER_NUTRITION_PROGRAM_PLAN}/${
+        match.params.id
+      }`;
+    }
     return (
       <React.Fragment>
         <div className="fitness-nutrition">
@@ -39,8 +42,8 @@ class NutritionMealCreate extends Component {
             <title>Meal | Fitly</title>
           </AddMetaDescription>
           <FitnessHeader
-            text="day"
-            routes={routeCodes.CALENDAR_OVERVIEW}
+            text="Meal Plan"
+            routes={backUrl}
             enableBackLink={true}
           />
           <FitnessNav />
@@ -88,25 +91,14 @@ class NutritionMealCreate extends Component {
       </React.Fragment>
     );
   }
-  addTodayMeals = () => {};
-  handleChangeMealTitle = e => {
-    this.setState({ mealTitle: e.target.value });
-  };
-  handleChangeQuickTab = action => {
-    this.setState({ quickTab: action });
-  };
-  handleChangeMealVisibility = action => {
-    this.setState({ mealVisibility: action });
-  };
   componentDidMount() {
-    let newDate;
-    if (this.props.location.search) {
-      let search = new URLSearchParams(this.props.location.search);
-      let date = search.get("date");
-      let type = search.get("type");
-      newDate = new Date(date);
-      console.log("date && Type", date, type);
-      this.setState({ logDate: newDate, mealType: type });
+    console.log("URLS PARAMS", this.props.match);
+    const { match } = this.props;
+    if (match && match.params) {
+      let day = match.params.day ? match.params.day : null;
+      let programId = match.params.id ? match.params.id : null;
+      let mealType = match.params.type ? match.params.type : null;
+      this.setState({ day, programId, mealType });
     }
   }
   componentDidUpdate(prevProps, prevState) {
@@ -118,6 +110,16 @@ class NutritionMealCreate extends Component {
       dispatch(hidePageLoader());
     }
   }
+  addTodayMeals = () => {};
+  handleChangeMealTitle = e => {
+    this.setState({ mealTitle: e.target.value });
+  };
+  handleChangeQuickTab = action => {
+    this.setState({ quickTab: action });
+  };
+  handleChangeMealVisibility = action => {
+    this.setState({ mealVisibility: action });
+  };
   handleChangeInstructions = action => {
     let data = action.map(item =>
       draftToHtml(convertToRaw(item.instruction.getCurrentContent()))
@@ -137,9 +139,11 @@ class NutritionMealCreate extends Component {
       mealType,
       notes,
       instructions,
-      logDate
+      logDate,
+      day,
+      programId
     } = this.state;
-    const { dispatch } = this.props;
+    const { dispatch, history } = this.props;
     const categories = {
       vegetarian: data.vegetarian,
       kosher: data.kosher,
@@ -191,33 +195,26 @@ class NutritionMealCreate extends Component {
     if (cookingTime) {
       formData.append("cooking_time", JSON.stringify(cookingTime));
     }
-
-    if (mealVisibility && mealVisibility === "private") {
-      //   te('Instruction required for public meals');
-      // } else {
-      // console.log(new Date(logDate).toISOString());
-
-      await dispatch(showPageLoader());
-      await dispatch(
-        mealAddRequest(formData, res => {
-          if (res.meal._id) {
-            const data = {
-              meals: [{ meal_id: res.meal._id }],
-              date: logDate
-            };
-            dispatch(
-              userMealAddRequest(data, res => {
-                dispatch(hidePageLoader());
-                this.props.history.push(routeCodes.CALENDAR_OVERVIEW);
-              })
-            );
-          }
-        })
-      );
+    if (day) {
+      formData.append("day", day);
     }
+    if (programId) {
+      formData.append("programId", programId);
+    }
+    dispatch(showPageLoader());
+    await dispatch(
+      addUserProgramsMealRequest(formData, res => {
+        res && res.status === 1 && dispatch(hidePageLoader());
+        res && res.status === 1 && ts("Meal successfully added");
+        res && res.status === 0 && te();
+        history.push(
+          `${routeCodes.LOCKER_NUTRITION_PROGRAM_PLAN}/${programId}`
+        );
+      })
+    );
+    console.log("REQUEST FORM DATA", data, formData);
   };
 }
-
 const mapStateToProps = state => {
   const { meal } = state;
   return {
@@ -227,4 +224,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(NutritionMealCreate);
+export default connect(mapStateToProps)(withRouter(NutritionProgramMealCreate));

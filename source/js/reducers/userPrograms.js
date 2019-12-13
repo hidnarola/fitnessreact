@@ -246,6 +246,9 @@ const actionMap = {
         };
         if (action.data.status === 1) {
             newState.program = action.data.program;
+            console.log('===========DATA.PROGRAM===========')
+            console.log('DATA.PROGRAM',action.data)
+            console.log('==========================')
         } else {
             var msg = (action.data.message) ? action.data.message : 'Something went wrong! please try again later.';
             newState.error = [msg];

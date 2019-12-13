@@ -31,6 +31,7 @@ import NutritionMeal from "../Nutrition/NutritionMeal";
 import DatePicker from "react-datepicker";
 import Photos from "../Photos/Photos";
 import { te } from "../../helpers/funs";
+import { getUserFitnessTestsRequest } from "../../actions/userFitnessTests";
 
 class CalendarDayOverView extends Component {
   constructor(props) {
@@ -63,6 +64,7 @@ class CalendarDayOverView extends Component {
     var requestObj = {
       logDate: logDate
     };
+
     // await dispatch(
     //   getUserFirstWorkoutByDateRequest(requestData, null, res => {
     //     const { workout_id } = res;
@@ -147,7 +149,6 @@ class CalendarDayOverView extends Component {
       progressPhotosError.length > 0
     ) {
       dispatch(hidePageLoader());
-      te();
     }
   }
   onChangeLogDate = date => {
@@ -528,7 +529,8 @@ const mapStateToProps = state => {
     userMeal,
     user,
     userBodyMeasurement,
-    meal
+    meal,
+    userFitnessTests
   } = state;
   return {
     user: user.get("loggedUserData"),

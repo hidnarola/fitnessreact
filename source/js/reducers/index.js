@@ -57,6 +57,7 @@ import adminDashboard from "reducers/admin/dashboard";
 import meal from "reducers/meal";
 import userMeal from "../reducers/user_meal";
 import userFavouriteBadges from "reducers/userFavouriteBadges";
+import userNutritionPrograms from "../reducers/userNutritionPrograms";
 
 export default combineReducers({
   user,
@@ -116,6 +117,7 @@ export default combineReducers({
   meal,
   userMeal,
   userFavouriteBadges,
+  userNutritionPrograms,
   // ...your other reducers here
   // you have to pass formReducer under 'form' key,
   // for custom keys look up the docs for 'getFormState'

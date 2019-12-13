@@ -15,12 +15,17 @@ class CalendarDayOverViewNutritionList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      open: false
+      open: false,
+      servingDiff: "easy",
+      servingSize: 0
     };
   }
   componentDidMount() {
-    const { index } = this.props;
-    this.setState({ servingSize: 0 });
+    const { index, meal } = this.props;
+    this.setState({
+      servingSize: meal.serves,
+      servingDiff: meal.serving_difficulty
+    });
   }
 
   render() {
@@ -34,11 +39,14 @@ class CalendarDayOverViewNutritionList extends Component {
       total_sugar,
       total_saturates,
       userId,
-      ingredientsIncluded
+      ingredientsIncluded,
+      serves,
+      serving_difficulty,
+      categories
     } = meal;
-    const { open, servingSize = 0 } = this.state;
-    console.log("===========meal===========");
-    console.log(_.some(recentMeals, { _id: meal._id }));
+    const { open, servingSize, servingDiff } = this.state;
+    console.log("===========mealsListDetails===========");
+    console.log("mealsListDetails", meal);
     console.log("==========================");
     return (
       <React.Fragment>
@@ -84,8 +92,17 @@ class CalendarDayOverViewNutritionList extends Component {
             <div className="nutrition-panel">
               <h3>M</h3>
               <ul>
-                <li>Ve</li>
-                <li>Ka</li>
+                {categories &&
+                  Object.keys(categories)
+                    .filter((k, i) => {
+                      console.log("categories", k.substr(0, 2), categories[k]);
+                      return categories[k];
+                    })
+                    .map(k => (
+                      <li key={k} className="text-capitalize">
+                        {k.substr(0, 2)}
+                      </li>
+                    ))}
               </ul>
             </div>
             <div className="nutrition-serve-box ml-2 mr-2">
@@ -141,8 +158,10 @@ class CalendarDayOverViewNutritionList extends Component {
                 </div>
                 <div className="col-md-4">
                   <div className="serving-select pl-3 width-100-per">
-                    <select className="form-control">
-                      <option>cm</option>
+                    <select className="form-control" defaultValue={servingDiff}>
+                      <option value="easy">Easy</option>
+                      <option value="medium">Medium</option>
+                      <option value="hard">Hard</option>
                     </select>
                   </div>
                 </div>

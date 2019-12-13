@@ -98,5 +98,9 @@ export const routeCodes = {
   LOCKER_EXERCISE_WORKOUT_PLAN_CREATE: `${publicPath}locker/exercise/workoutplan/create`,
   LOCKER_EXERCISE_WORKOUT_PLAN: `${publicPath}locker/exercise/workoutplan/plan`,
   LOCKER_EXERCISE_WORKOUT_OVERVIEW: `${publicPath}locker/exercise/workoutplan/overview`,
-  LOCKER_NUTRITION: `${publicPath}locker/nutrition`
+  LOCKER_NUTRITION: `${publicPath}locker/nutrition`,
+  LOCKER_NUTRITION_PROGRAM_MASTER_SAVE: `${publicPath}locker/nutrition/save_nutrition`,
+  LOCKER_NUTRITION_PROGRAM_PLAN: `${publicPath}locker/nutrition/save_nutrition/plan`,
+  LOCKER_NUTRITION_PROGRAM_VIEW: `${publicPath}locker/nutrition/view`,
+  LOCKER_NUTRITION_PROGRAM_MEAL_CREATE: `${publicPath}locker/nutrition/meal/create`
 };

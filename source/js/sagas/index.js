@@ -53,6 +53,7 @@ import adminDashboardSaga from "sagas/admin/dashboard";
 import mealSaga from "sagas/meal";
 import userMealSaga from "../sagas/user_meal";
 import userFavouriteBadges from "../sagas/userFavouriteBadges";
+import userNutritionPrograms from "../sagas/userNutritionPrograms";
 
 export default function* rootSaga() {
   yield all([
@@ -108,6 +109,7 @@ export default function* rootSaga() {
     ...adminDashboardSaga,
     ...mealSaga,
     ...userMealSaga,
-    ...userFavouriteBadges
+    ...userFavouriteBadges,
+    ...userNutritionPrograms
   ]);
 }

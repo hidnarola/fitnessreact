@@ -85,6 +85,7 @@ class TodaysActivity extends Component {
               user_meals={user_meals}
               recentMeals={this.props.recentMeals}
               authuserId={this.props.authuserId}
+              meals_proximates={this.props.meals_proximates}
             />
           )}
           {activeTab === "logs" && (

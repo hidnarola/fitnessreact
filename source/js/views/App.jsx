@@ -114,6 +114,12 @@ import Goals from '../components/Goals/Goals';
 import Locker from './Locker';
 import WorkoutsCreate from '../components/Locker/ExerciseView/WorkoutsCreate';
 import WorkoutPlanCreate from '../components/Locker/ExerciseView/WorkoutPlanCreate';
+import SaveNutritionProgramPageForm from '../components/Locker/NutritionView/NutitionProgramCreate/SaveNutritionProgramPageForm';
+import NutritionProgramCreate from '../components/Locker/NutritionView/NutitionProgramCreate/NutritionProgramCreate';
+import LockerExerciseView from '../components/Locker/LockerExerciseView';
+import LockerNutritionView from '../components/Locker/LockerNutritionView';
+import NutritionProgramPlan from '../components/Locker/NutritionView/NutitionProgramCreate/NutritionProgramPlan';
+import NutritionProgramMealCreate from '../components/Locker/NutritionView/NutritionMealCreate/NutritionProgramMealCreate';
 JavascriptTimeAgo.locale(en);
 
 const auth = new Auth();
@@ -219,11 +225,15 @@ class App extends Component {
                                 <PrivateRoute path={routeCodes.BADGES} component={Badges} />
 
                                 <PrivateRoute path={routeCodes.PROGRESS} component={Progress} />
-                                <PrivateRoute exact path={`${routeCodes.LOCKER_EXERCISE_CREATE}`} component={WorkoutsCreate} />
 
+                                <PrivateRoute exact path={`${routeCodes.LOCKER_EXERCISE_CREATE}`} component={WorkoutsCreate} />
                                 <PrivateRoute exact path={`${routeCodes.LOCKER_EXERCISE_WORKOUT_PLAN_CREATE}`} component={WorkoutPlanCreate} />
 
-                                <PrivateRoute path={`${routeCodes.LOCKER}`} component={Locker} />
+                                <PrivateRoute exact path={`${routeCodes.LOCKER_EXERCISE}`} component={LockerExerciseView} />
+                                <PrivateRoute exact path={`${routeCodes.LOCKER_NUTRITION}`} component={LockerNutritionView} />
+                                <PrivateRoute exact path={`${routeCodes.LOCKER_NUTRITION_PROGRAM_MASTER_SAVE}/:id?`} component={NutritionProgramCreate} />
+                                <PrivateRoute exact path={`${routeCodes.LOCKER_NUTRITION_PROGRAM_PLAN}/:id`} component={NutritionProgramPlan} />
+                                <PrivateRoute exact path={`${routeCodes.LOCKER_NUTRITION_PROGRAM_MEAL_CREATE}/:id/:day/:type`} component={NutritionProgramMealCreate} />
 
                                 <PrivateRoute path={routeCodes.RECEIP} component={Receip} />
 

@@ -15,7 +15,8 @@ import {
   isOnline,
   capitalizeFirstLetter,
   prepareFieldsOptions,
-  ts
+  ts,
+  te
 } from "../../../helpers/funs";
 import { hidePageLoader, showPageLoader } from "../../../actions/pageLoader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -55,7 +56,8 @@ class CalendarDayOverViewWorkouts extends Component {
       newSingleWarmup: [],
       newSingleWorkout: [],
       newSingleCooldown: [],
-      deleteExerciseId: null
+      deleteExerciseId: null,
+      fitnessTestList: []
     };
   }
 
@@ -71,7 +73,8 @@ class CalendarDayOverViewWorkouts extends Component {
       newSingleWarmup,
       newSingleCooldown,
       newSingleWorkout,
-      showWorkoutDeleteAlert
+      showWorkoutDeleteAlert,
+      fitnessTestList
     } = this.state;
     let { index = 1, logDate, errorTitle } = this.props;
 
@@ -443,7 +446,12 @@ class CalendarDayOverViewWorkouts extends Component {
                                   : "content"
                               }
                             >
-                              <CalendarDayFitnessTestList />
+                              <CalendarDayFitnessTestList
+                                fitnessTestList={fitnessTestList}
+                                syncedUserFitnessTests={
+                                  this.props.syncedUserFitnessTests
+                                }
+                              />
                             </div>
                           )}
 
@@ -893,6 +901,17 @@ class CalendarDayOverViewWorkouts extends Component {
     dispatch(setScheduleWorkoutsState(stateData));
   };
 
+  handleAddFitnessTest = fitnessTest => {
+    let { fitnessTestList } = this.state;
+    let findTest = _.some(fitnessTestList, { _id: fitnessTest._id });
+    if (findTest) {
+      te("You are allready added this test");
+    } else {
+      fitnessTestList.push(fitnessTest);
+      this.setState({ fitnessTestList });
+    }
+  };
+
   displayRightSidebar = (cuurentTab, isActiveQuickTab) => {
     var rightSidebar = null;
     if (isActiveQuickTab) {
@@ -910,12 +929,22 @@ class CalendarDayOverViewWorkouts extends Component {
           />
         );
       } else {
-        rightSidebar = <CalendarDayFitnessTestAddList />;
+        rightSidebar = (
+          <CalendarDayFitnessTestAddList
+            isActiveQuickTab={isActiveQuickTab}
+            handleSetActiveQuickTab={this.handleSetActiveQuickTab}
+            allFitnessTest={this.props.allFitnessTest}
+            handleAddFitnessTest={this.handleAddFitnessTest}
+          />
+        );
       }
     } else {
       if (cuurentTab === `#fitnesstest`) {
         rightSidebar = (
-          <CalendarDayFitnessTestQuickAdd isActiveQuickTab={isActiveQuickTab} />
+          <CalendarDayFitnessTestQuickAdd
+            isActiveQuickTab={isActiveQuickTab}
+            handleSetActiveQuickTab={this.handleSetActiveQuickTab}
+          />
         );
       } else {
         rightSidebar = (
@@ -930,13 +959,19 @@ class CalendarDayOverViewWorkouts extends Component {
   };
 }
 const mapStateToProps = state => {
-  const { userScheduleWorkouts } = state;
+  const { userScheduleWorkouts, userFitnessTests } = state;
   return {
     workout: userScheduleWorkouts.get("workout"),
     workoutsList: userScheduleWorkouts.get("workoutsList"),
     loading: userScheduleWorkouts.get("loading"),
     error: userScheduleWorkouts.get("error"),
-    errorTitle: userScheduleWorkouts.get("errorTitle")
+    errorTitle: userScheduleWorkouts.get("errorTitle"),
+
+    userFitnessTestLoading: userFitnessTests.get("loading"),
+    todayUserFitnessTests: userFitnessTests.get("userFitnessTests"),
+    syncedUserFitnessTests: userFitnessTests.get("syncedUserFitnessTests"),
+    allFitnessTest: userFitnessTests.get("allFitnessTest"),
+    fitnessTestError: userFitnessTests.get("error")
   };
 };
 export default connect(mapStateToProps)(CalendarDayOverViewWorkouts);

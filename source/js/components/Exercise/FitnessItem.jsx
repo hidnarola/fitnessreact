@@ -142,8 +142,6 @@ class FitnessItem extends Component {
                                                     </label>
                                                 </div>
                                                 <h6>{val.title}</h6>
-
-
                                             </li>
                                         )
                                     })

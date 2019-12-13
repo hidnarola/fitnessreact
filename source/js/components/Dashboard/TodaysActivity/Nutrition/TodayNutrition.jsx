@@ -137,6 +137,7 @@ class TodayNutrition extends Component {
                         recentMeals={recentMeals}
                         addToFavourite={this.addToFavourite}
                         authuserId={authuserId}
+                        meals_proximates={this.props.meals_proximates}
                       />
                     ))}
                   </div>
@@ -167,6 +168,7 @@ class TodayNutrition extends Component {
                         recentMeals={recentMeals}
                         addToFavourite={this.addToFavourite}
                         authuserId={authuserId}
+                        meals_proximates={this.props.meals_proximates}
                       />
                     ))}
                   </div>
@@ -197,6 +199,7 @@ class TodayNutrition extends Component {
                         recentMeals={recentMeals}
                         addToFavourite={this.addToFavourite}
                         authuserId={authuserId}
+                        meals_proximates={this.props.meals_proximates}
                       />
                     ))}
                   </div>
@@ -218,7 +221,7 @@ class TodayNutrition extends Component {
                   </div>
                 )}
                 {snacksList.length > 0 && (
-                  <div className="nutrition-list">
+                  <div className="nutrition-list mb-5">
                     {snacksList.map((meal, index) => (
                       <NutritionActivityList
                         key={index}
@@ -227,6 +230,7 @@ class TodayNutrition extends Component {
                         recentMeals={recentMeals}
                         addToFavourite={this.addToFavourite}
                         authuserId={authuserId}
+                        meals_proximates={this.props.meals_proximates}
                       />
                     ))}
                   </div>

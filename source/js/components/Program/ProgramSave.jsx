@@ -23,10 +23,20 @@ import {
 import _ from "lodash";
 import SweetAlert from "react-bootstrap-sweetalert";
 import { FaCopy, FaTrash, FaPencil, FaEye } from "react-icons/lib/fa";
-import { getProgramsNameRequest } from "../../actions/userScheduleWorkouts";
+import {
+  getProgramsNameRequest,
+  deleteUserWholeExerciseRequest,
+  getExerciseMeasurementRequest
+} from "../../actions/userScheduleWorkouts";
 import {
   SCHEDULED_WORKOUT_TYPE_RESTDAY,
-  SCHEDULED_WORKOUT_TYPE_EXERCISE
+  SCHEDULED_WORKOUT_TYPE_EXERCISE,
+  SCHEDULED_WORKOUT_TYPE_CIRCUIT,
+  SCHEDULED_WORKOUT_TYPE_SUPERSET,
+  SCHEDULED_WORKOUT_TYPE_WARMUP,
+  SCHEDULED_WORKOUT_TYPE_COOLDOWN,
+  SCHEDULED_WORKOUT_TYPE_WORKOUT,
+  SCHEDULED_FITNESS_TEST
 } from "../../constants/consts";
 import cns from "classnames";
 import AddProgramWorkoutTitleForm from "./AddProgramWorkoutTitleForm";
@@ -36,6 +46,11 @@ import { showPageLoader, hidePageLoader } from "../../actions/pageLoader";
 import $ from "jquery";
 import AddMetaDescription from "../global/AddMetaDescription";
 import { Scrollbars } from "react-custom-scrollbars";
+import { ButtonToolbar, DropdownButton, MenuItem } from "react-bootstrap";
+import CalendarDayOverViewWorkoutsList from "../Calendar/Workouts/CalendarDayOverViewWorkoutsList";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import CustomDayWorkoutPlanList from "./CustomDayWorkoutPlanList";
+import CustomDaySupersetWorkoutPlanList from "./CustomDaySupersetWorkoutPlanList";
 
 let dragEventActive = false;
 let dragEventCardOutside = false;
@@ -76,6 +91,7 @@ class ProgramSave extends Component {
     const { dispatch } = this.props;
     this.getProgramWorkoutSchedules();
     dispatch(getProgramsNameRequest());
+    dispatch(getExerciseMeasurementRequest());
   }
 
   render() {
@@ -169,11 +185,14 @@ class ProgramSave extends Component {
                 <div className="p-unset">
                   <div
                     id="cal-panel-wrap"
-                    className="space-btm-20 my-custom-calendar my-workoutplan-calendar"
+                    className={cns(
+                      "space-btm-20 my-custom-calendar my-workoutplan-calendar",
+                      { active: activeViewTab === "columns" }
+                    )}
                   >
                     <div
                       className="profile-body programs-table-wrapper workouts-programs-table"
-                      data-for="custom-cut-workout-wrap "
+                      data-for="custom-cut-workout-wrap"
                       data-tip
                     >
                       {selectedEvents &&
@@ -216,7 +235,7 @@ class ProgramSave extends Component {
                             />
                           </div>
                         )}
-                      <Scrollbars autoHide>
+                      <Scrollbars horizontal autoHide>
                         <CustomDaysCalendarView
                           programId={program ? program._id : null}
                           totalDays={totalDays}
@@ -226,29 +245,33 @@ class ProgramSave extends Component {
                           handleCopy={this.handleCopy}
                           handleDelete={this.showDeleteConfirmation}
                           handleSelectedForBulk={this.handleSelectedForBulk}
+                          exerciseMeasurements={this.props.exerciseMeasurements}
+                          activeViewTab={activeViewTab}
                         />
-                        <div className="d-flex flex-wrap align-items-center width-100-per">
-                          <button
-                            className="btn btn-workouts-creation d-flex align-items-center justify-content-center"
-                            style={{ borderRadius: "5px" }}
-                            onClick={this.handleAddWeek}
-                          >
-                            <i className="icon-add_box mr-2" /> Add Week
-                          </button>
-                          {totalDays > 7 && (
+                        {activeViewTab === "grid" && (
+                          <div className="d-flex flex-wrap align-items-center width-100-per">
                             <button
-                              className="btn btn-workouts-creation d-flex align-items-center justify-content-center ml-auto"
-                              style={{
-                                background: "#fe676d",
-                                borderRadius: "5px"
-                              }}
-                              onClick={this.handleShowDeleteWeekAlert}
+                              className="btn btn-workouts-creation d-flex align-items-center justify-content-center"
+                              style={{ borderRadius: "5px" }}
+                              onClick={this.handleAddWeek}
                             >
-                              <i className="icon-delete_forever mr-2" /> Delete
-                              Week
+                              <i className="icon-add_box mr-2" /> Add Week
                             </button>
-                          )}
-                        </div>
+                            {totalDays > 7 && (
+                              <button
+                                className="btn btn-workouts-creation d-flex align-items-center justify-content-center ml-auto"
+                                style={{
+                                  background: "#fe676d",
+                                  borderRadius: "5px"
+                                }}
+                                onClick={this.handleShowDeleteWeekAlert}
+                              >
+                                <i className="icon-delete_forever mr-2" />{" "}
+                                Delete Week
+                              </button>
+                            )}
+                          </div>
+                        )}
                       </Scrollbars>
                       {/* <div className="d-flex week-btn-btm">
                         <a
@@ -460,7 +483,9 @@ class ProgramSave extends Component {
       workoutTitle,
       errorTitle,
       dispatch,
-      cutWorkout
+      cutWorkout,
+      exerciseMesurementLoading,
+      exerciseMeasurements
     } = this.props;
     const {
       workoutPasteAction,
@@ -492,6 +517,9 @@ class ProgramSave extends Component {
       }
       var getNumberOfWeek = Math.ceil(lastDay / 7);
       var totalDaysToGenerate = getNumberOfWeek * 7;
+      console.log("===========works Display===========");
+      console.log("works Display", works, prog);
+      console.log("==========================");
       if (prog) {
         this.setState({
           program: prog,
@@ -606,6 +634,15 @@ class ProgramSave extends Component {
       } else {
         ts("Rest day added!");
       }
+    }
+    if (exerciseMesurementLoading) {
+      dispatch(showPageLoader());
+    }
+    if (
+      !exerciseMesurementLoading &&
+      prevProps.exerciseMeasurements !== exerciseMeasurements
+    ) {
+      dispatch(hidePageLoader());
     }
   }
 
@@ -771,6 +808,7 @@ class ProgramSave extends Component {
 
   handleSelectDayAction = day => {
     const { dispatch, cutWorkout } = this.props;
+
     if (dragEventId) {
       hardResetContainer = false;
       if (dragEventCardOutside) {
@@ -794,7 +832,7 @@ class ProgramSave extends Component {
       this.setState({ workoutPasteAction: true });
       dispatch(showPageLoader());
     } else {
-      this.setState({ showSelectEventAlert: true });
+      // this.setState({ showSelectEventAlert: true });
       dispatch(setSelectedDayForProgram(day));
     }
   };
@@ -1004,7 +1042,7 @@ class ProgramSave extends Component {
 }
 
 const mapStateToProps = state => {
-  const { userPrograms } = state;
+  const { userPrograms, userScheduleWorkouts } = state;
   return {
     loading: userPrograms.get("loading"),
     program: userPrograms.get("program"),
@@ -1019,7 +1057,11 @@ const mapStateToProps = state => {
     errorTitle: userPrograms.get("errorTitle"),
     loadingMaster: userPrograms.get("loadingMaster"),
     programMaster: userPrograms.get("programMaster"),
-    errorMaster: userPrograms.get("errorMaster")
+    errorMaster: userPrograms.get("errorMaster"),
+    exerciseMesurementLoading: userScheduleWorkouts.get(
+      "exerciseMesurementLoading"
+    ),
+    exerciseMeasurements: userScheduleWorkouts.get("exerciseMeasurements")
   };
 };
 
@@ -1049,20 +1091,25 @@ class CustomDaysCalendarView extends Component {
           handleCopy={handleCopy}
           handleDelete={handleDelete}
           handleSelectedForBulk={handleSelectedForBulk}
+          exerciseMeasurements={this.props.exerciseMeasurements}
+          activeViewTab={this.props.activeViewTab}
+          programId={this.props.programId}
         />
       );
     }
     return (
       <div className="custome-table-edit-wrapper">
-        <div className="program-save-custom-days-wrapper">
-          <div className="block-border-div" />
-          <div className="block-border-div" />
-          <div className="block-border-div" />
-          <div className="block-border-div" />
-          <div className="block-border-div" />
-          <div className="block-border-div" />
-          {rowsObj}
-        </div>
+        <Scrollbars horizontal vertical autoHide>
+          <div className="program-save-custom-days-wrapper">
+            <div className="block-border-div" />
+            <div className="block-border-div" />
+            <div className="block-border-div" />
+            <div className="block-border-div" />
+            <div className="block-border-div" />
+            <div className="block-border-div" />
+            {rowsObj}
+          </div>
+        </Scrollbars>
       </div>
     );
   }
@@ -1093,6 +1140,9 @@ class CustomDaysCalendarRow extends Component {
           handleCopy={handleCopy}
           handleDelete={handleDelete}
           handleSelectedForBulk={handleSelectedForBulk}
+          exerciseMeasurements={this.props.exerciseMeasurements}
+          activeViewTab={this.props.activeViewTab}
+          programId={this.props.programId}
         />
       );
     }
@@ -1113,6 +1163,9 @@ class CustomDaysCalendarBlock extends Component {
     } = this.props;
     var findDay = blockNumber - 1;
     var events = _.filter(workouts, { day: findDay });
+    console.log("===========workouts Day===========");
+    console.log("workouts Day", workouts);
+    console.log("==========================");
     return (
       <div
         className="program-save-custom-days-block"
@@ -1128,6 +1181,7 @@ class CustomDaysCalendarBlock extends Component {
             events.length > 0 && (
               <Fragment>
                 {events.map((e, i) => {
+                  console.log("events", events);
                   return (
                     <CustomDaysCalendarBlockCard
                       key={i}
@@ -1137,6 +1191,9 @@ class CustomDaysCalendarBlock extends Component {
                       handleCut={handleCut}
                       handleCopy={handleCopy}
                       handleDelete={handleDelete}
+                      exerciseMeasurements={this.props.exerciseMeasurements}
+                      activeViewTab={this.props.activeViewTab}
+                      programId={this.props.programId}
                     />
                   );
                 })}
@@ -1159,6 +1216,14 @@ class CustomDaysCalendarBlockCard extends Component {
   constructor(props) {
     super(props);
     this.checkbox = React.createRef();
+    this.state = {
+      showWorkoutDeleteAlert: false,
+      deleteExerciseId: null,
+      activeTab: SCHEDULED_WORKOUT_TYPE_WARMUP,
+      warmupList: [],
+      workoutList: [],
+      cooldownList: []
+    };
   }
 
   componentWillReceiveProps(nextProps) {
@@ -1169,110 +1234,438 @@ class CustomDaysCalendarBlockCard extends Component {
       }
     }
   }
+  componentDidMount() {
+    const { e } = this.props;
+    let { warmupList, workoutList, cooldownList } = this.state;
+    e &&
+      e.exercise &&
+      e.exercise.length > 0 &&
+      e.exercise.forEach(item => {
+        item.type === "warmup" && warmupList.push(item);
+        item.type === "exercise" && workoutList.push(item);
+        item.type === "cooldown" && cooldownList.push(item);
+      });
+    this.setState({ warmupList, workoutList, cooldownList });
+  }
 
   render() {
-    const { e } = this.props;
+    const { e, exerciseMeasurements, activeViewTab } = this.props;
+    const {
+      showWorkoutDeleteAlert,
+      activeTab,
+      warmupList,
+      workoutList,
+      cooldownList
+    } = this.state;
+    console.log("===========  ===========");
+    console.log("Workouts Card DATA", e);
+    console.log("==========================");
     return (
-      <div className="program-event-block-main-wrapper">
-        <div
-          id={`workout-card-${e._id}`}
-          className={cns("program-event-block-wrapper", {
-            restday: e.type === SCHEDULED_WORKOUT_TYPE_RESTDAY,
-            "loss-opacity": e.isCut,
-            "disable-overlay": e.isCutEnable,
-            "opacity-0": dragEventId === e._id
-          })}
-          onClick={event => {
-            event.preventDefault();
-            event.stopPropagation();
-          }}
-        >
-          <div className="program-event-block-title">
-            <div
-              className="pull-left custom_check p-relative"
-              onClick={event => this.handleCheckChange(event, e._id)}
-            >
-              <input
-                type="checkbox"
-                id={`complete_workout_schedule_${e._id}`}
-                ref={this.checkbox}
-              />
-              <label>
-                <h5 className="">{e.title ? e.title : ""}</h5>
-              </label>
-              <a
-                href="javascript:void(0)"
-                data-tip="Cut"
-                className="workout-cut-card-btn"
-                onClick={event => this.handleCutEvent(event, e._id, e)}
-              >
-                <i className="icon-flip_to_front" />
-              </a>
-              <div
-                className="calendar-custom-drag-handle"
-                onMouseDown={event => this.handleMouseDown(event, e)}
-                onMouseUp={this.handleMouseUp}
-                onClick={event => {
-                  event.stopPropagation();
-                }}
-              >
-                <i className="icon-open_with" />
+      <React.Fragment>
+        {activeViewTab === "columns" && (
+          <div className="program-workout-plan-card" style={{ zIndex: "5" }}>
+            <div className="workout-plan-header-wrapper">
+              <div className="workout-plan-header d-flex flex-wrap width-100-per align-items-center">
+                <div className="card-title">{e.title ? e.title : ""}</div>
+                <ButtonToolbar className="workoutplan-toolbar ml-auto mr-3">
+                  <DropdownButton
+                    className="workoutplan-btn d-flex align-items-center"
+                    title={<i className="fad fa-ellipsis-h" />}
+                    id="dropdown-size-medium"
+                    pullRight
+                  >
+                    <MenuItem eventKey="1"> Edit </MenuItem>
+                    <MenuItem eventKey="2"> Copy </MenuItem>
+                    <MenuItem eventKey="3"> Cut </MenuItem>
+                  </DropdownButton>
+                </ButtonToolbar>
+                <div
+                  className="pull-left custom_check p-relative d-flex"
+                  onClick={event => this.handleCheckChange(event, e._id)}
+                >
+                  <input
+                    type="checkbox"
+                    id={`complete_workout_schedule_${e._id}`}
+                    ref={this.checkbox}
+                  />
+                  <label className="m-0" />
+                </div>
               </div>
             </div>
+            {e &&
+              e.type !== "restday" && (
+                <div className="wp-sub-header">
+                  <div className="wp-tabs">
+                    <div
+                      className={cns("wp-tab", {
+                        active: activeTab === SCHEDULED_WORKOUT_TYPE_WARMUP
+                      })}
+                      onClick={() =>
+                        this.setState({
+                          activeTab: SCHEDULED_WORKOUT_TYPE_WARMUP
+                        })
+                      }
+                    >
+                      <a href="#">Warmup</a>
+                    </div>
+                    <div
+                      className={cns("wp-tab", {
+                        active: activeTab === SCHEDULED_WORKOUT_TYPE_WORKOUT
+                      })}
+                      onClick={() =>
+                        this.setState({
+                          activeTab: SCHEDULED_WORKOUT_TYPE_WORKOUT
+                        })
+                      }
+                    >
+                      <a href="#">Workout</a>
+                    </div>
+                    <div
+                      className={cns("wp-tab", {
+                        active: activeTab === SCHEDULED_WORKOUT_TYPE_COOLDOWN
+                      })}
+                      onClick={() =>
+                        this.setState({
+                          activeTab: SCHEDULED_WORKOUT_TYPE_COOLDOWN
+                        })
+                      }
+                    >
+                      <a href="#">Cooldown</a>
+                    </div>
+                    <div
+                      className={cns("wp-tab", {
+                        active: activeTab === SCHEDULED_FITNESS_TEST
+                      })}
+                      onClick={() =>
+                        this.setState({ activeTab: SCHEDULED_FITNESS_TEST })
+                      }
+                    >
+                      <a href="#">Tests</a>
+                    </div>
+                  </div>
+                </div>
+              )}
+            <div className="workoutplan-card-body">
+              {e.type === SCHEDULED_WORKOUT_TYPE_RESTDAY && (
+                <div className="no-record-found">
+                  <h3>
+                    {e.description ? e.description : "Today is rest day."}
+                  </h3>
+                </div>
+              )}
+              {e.type !== SCHEDULED_WORKOUT_TYPE_RESTDAY &&
+                e.exercise.length === 0 && (
+                  <div className="no-record-found">
+                    <h3>No exercise found</h3>
+                  </div>
+                )}
+              {e &&
+                e.type !== SCHEDULED_WORKOUT_TYPE_RESTDAY && (
+                  <div
+                    className="wp-exercise-box-list"
+                    style={
+                      e.exercise.length > 0
+                        ? { height: "49vh" }
+                        : { height: "auto" }
+                    }
+                  >
+                    <Scrollbars autoHide>
+                      {activeTab === SCHEDULED_WORKOUT_TYPE_WARMUP &&
+                        warmupList.map((workout, index) => {
+                          return (
+                            <React.Fragment>
+                              {workout.subType ===
+                                SCHEDULED_WORKOUT_TYPE_EXERCISE && (
+                                <CustomDayWorkoutPlanList
+                                  key={index}
+                                  index={index}
+                                  workout={workout}
+                                  exerciseMeasurements={exerciseMeasurements}
+                                  programId={this.props.programId}
+                                  workoutId={e._id}
+                                />
+                              )}
+                              {workout.subType ===
+                                SCHEDULED_WORKOUT_TYPE_SUPERSET && (
+                                <CustomDaySupersetWorkoutPlanList
+                                  key={index}
+                                  index={index}
+                                  workout={workout}
+                                  exerciseMeasurements={exerciseMeasurements}
+                                  programId={this.props.programId}
+                                  workoutId={e._id}
+                                />
+                              )}
+                            </React.Fragment>
+                          );
+                        })}
+                      {activeTab === SCHEDULED_WORKOUT_TYPE_WORKOUT &&
+                        workoutList.map((workout, index) => {
+                          return (
+                            <React.Fragment>
+                              {workout.subType ===
+                                SCHEDULED_WORKOUT_TYPE_EXERCISE && (
+                                <CustomDayWorkoutPlanList
+                                  key={index}
+                                  index={index}
+                                  workout={workout}
+                                  exerciseMeasurements={exerciseMeasurements}
+                                  programId={this.props.programId}
+                                  workoutId={e._id}
+                                />
+                              )}
+                              {workout.subType ===
+                                SCHEDULED_WORKOUT_TYPE_SUPERSET && (
+                                <CustomDaySupersetWorkoutPlanList
+                                  key={index}
+                                  index={index}
+                                  workout={workout}
+                                  exerciseMeasurements={exerciseMeasurements}
+                                  programId={this.props.programId}
+                                  workoutId={e._id}
+                                />
+                              )}
+                            </React.Fragment>
+                          );
+                        })}
+                      {activeTab === SCHEDULED_WORKOUT_TYPE_COOLDOWN &&
+                        cooldownList.map((workout, index) => {
+                          return (
+                            <React.Fragment>
+                              {workout.subType ===
+                                SCHEDULED_WORKOUT_TYPE_EXERCISE && (
+                                <CustomDayWorkoutPlanList
+                                  key={index}
+                                  index={index}
+                                  workout={workout}
+                                  exerciseMeasurements={exerciseMeasurements}
+                                  programId={this.props.programId}
+                                  workoutId={e._id}
+                                />
+                              )}
+                              {workout.subType ===
+                                SCHEDULED_WORKOUT_TYPE_SUPERSET && (
+                                <CustomDaySupersetWorkoutPlanList
+                                  key={index}
+                                  index={index}
+                                  workout={workout}
+                                  exerciseMeasurements={exerciseMeasurements}
+                                  programId={this.props.programId}
+                                  workoutId={e._id}
+                                />
+                              )}
+                            </React.Fragment>
+                          );
+                        })}
+                    </Scrollbars>
+                  </div>
+                )}
+            </div>
           </div>
-          <div className="program-event-block-content">
-            <p>{e.description ? e.description : ""}</p>
-            {e.type === SCHEDULED_WORKOUT_TYPE_EXERCISE && (
-              <a
-                href="javascript:void(0)"
-                data-tip="Copy"
-                onClick={event => this.handleCopyEvent(event, e._id)}
-              >
-                <FaCopy />
-              </a>
-            )}
-            {e.type === SCHEDULED_WORKOUT_TYPE_EXERCISE && (
-              <NavLink
-                to={routeCodes.SAVE_PROGRAM_SCHEDULE_WORKOUT.replace(
-                  ":id",
-                  e.programId
-                ).replace(":workout_id", e._id)}
-                data-tip="Details"
-                title=""
-              >
-                <FaEye />
-              </NavLink>
-            )}
-            {e.type === SCHEDULED_WORKOUT_TYPE_EXERCISE && (
-              <NavLink
-                to={routeCodes.SAVE_PROGRAM_SCHEDULE_WORKOUT.replace(
-                  ":id",
-                  e.programId
-                ).replace(":workout_id", e._id)}
-                data-tip="Change"
-                title=""
-              >
-                <FaPencil />
-              </NavLink>
-            )}
-            <a
-              href="javascript:void(0)"
-              data-tip="Delete"
-              data-for="event-delete-tooltip"
-              onClick={event => this.handleDeleteEvent(event, e._id)}
+        )}
+        {activeViewTab === "grid" && (
+          <div className="program-event-block-main-wrapper">
+            <div
+              id={`workout-card-${e._id}`}
+              className={cns("program-event-block-wrapper", {
+                restday: e.type === SCHEDULED_WORKOUT_TYPE_RESTDAY,
+                "loss-opacity": e.isCut,
+                "disable-overlay": e.isCutEnable,
+                "opacity-0": dragEventId === e._id
+              })}
+              onClick={event => {
+                event.preventDefault();
+                event.stopPropagation();
+              }}
             >
-              <FaTrash />
-            </a>
+              <div className="program-event-block-title">
+                <div
+                  className="pull-left custom_check p-relative"
+                  onClick={event => this.handleCheckChange(event, e._id)}
+                >
+                  <input
+                    type="checkbox"
+                    id={`complete_workout_schedule_${e._id}`}
+                    ref={this.checkbox}
+                  />
+                  <label>
+                    <h5 className="">{e.title ? e.title : ""}</h5>
+                  </label>
+                  <a
+                    href="javascript:void(0)"
+                    data-tip="Cut"
+                    className="workout-cut-card-btn"
+                    onClick={event => this.handleCutEvent(event, e._id, e)}
+                  >
+                    <i className="icon-flip_to_front" />
+                  </a>
+                  <div
+                    className="calendar-custom-drag-handle"
+                    onMouseDown={event => this.handleMouseDown(event, e)}
+                    onMouseUp={this.handleMouseUp}
+                    onClick={event => {
+                      event.stopPropagation();
+                    }}
+                  >
+                    <i className="icon-open_with" />
+                  </div>
+                </div>
+              </div>
+              <div className="program-event-block-content">
+                <p>{e.description ? e.description : ""}</p>
+                {e.type === SCHEDULED_WORKOUT_TYPE_EXERCISE && (
+                  <a
+                    href="javascript:void(0)"
+                    data-tip="Copy"
+                    onClick={event => this.handleCopyEvent(event, e._id)}
+                  >
+                    <FaCopy />
+                  </a>
+                )}
+                {e.type === SCHEDULED_WORKOUT_TYPE_EXERCISE && (
+                  <NavLink
+                    to={routeCodes.SAVE_PROGRAM_SCHEDULE_WORKOUT.replace(
+                      ":id",
+                      e.programId
+                    ).replace(":workout_id", e._id)}
+                    data-tip="Details"
+                    title=""
+                  >
+                    <FaEye />
+                  </NavLink>
+                )}
+                {e.type === SCHEDULED_WORKOUT_TYPE_EXERCISE && (
+                  <NavLink
+                    to={routeCodes.SAVE_PROGRAM_SCHEDULE_WORKOUT.replace(
+                      ":id",
+                      e.programId
+                    ).replace(":workout_id", e._id)}
+                    data-tip="Change"
+                    title=""
+                  >
+                    <FaPencil />
+                  </NavLink>
+                )}
+                <a
+                  href="javascript:void(0)"
+                  data-tip="Delete"
+                  data-for="event-delete-tooltip"
+                  onClick={event => this.handleDeleteEvent(event, e._id)}
+                >
+                  <FaTrash />
+                </a>
+              </div>
+              <ReactTooltip place="top" type="dark" effect="solid" />
+              <ReactTooltip
+                id="event-delete-tooltip"
+                place="top"
+                type="error"
+                effect="solid"
+              />
+            </div>
           </div>
-          <ReactTooltip place="top" type="dark" effect="solid" />
-          <ReactTooltip
-            id="event-delete-tooltip"
-            place="top"
-            type="error"
-            effect="solid"
-          />
-        </div>
-      </div>
+        )}
+      </React.Fragment>
+      // <div className="program-event-block-main-wrapper">
+      //   <div
+      //     id={`workout-card-${e._id}`}
+      //     className={cns("program-event-block-wrapper", {
+      //       restday: e.type === SCHEDULED_WORKOUT_TYPE_RESTDAY,
+      //       "loss-opacity": e.isCut,
+      //       "disable-overlay": e.isCutEnable,
+      //       "opacity-0": dragEventId === e._id
+      //     })}
+      //     onClick={event => {
+      //       event.preventDefault();
+      //       event.stopPropagation();
+      //     }}
+      //   >
+      //     <div className="program-event-block-title">
+      //       <div
+      //         className="pull-left custom_check p-relative"
+      //         onClick={event => this.handleCheckChange(event, e._id)}
+      //       >
+      //         <input
+      //           type="checkbox"
+      //           id={`complete_workout_schedule_${e._id}`}
+      //           ref={this.checkbox}
+      //         />
+      //         <label>
+      //           <h5 className="">{e.title ? e.title : ""}</h5>
+      //         </label>
+      //         <a
+      //           href="javascript:void(0)"
+      //           data-tip="Cut"
+      //           className="workout-cut-card-btn"
+      //           onClick={event => this.handleCutEvent(event, e._id, e)}
+      //         >
+      //           <i className="icon-flip_to_front" />
+      //         </a>
+      //         <div
+      //           className="calendar-custom-drag-handle"
+      //           onMouseDown={event => this.handleMouseDown(event, e)}
+      //           onMouseUp={this.handleMouseUp}
+      //           onClick={event => {
+      //             event.stopPropagation();
+      //           }}
+      //         >
+      //           <i className="icon-open_with" />
+      //         </div>
+      //       </div>
+      //     </div>
+      //     <div className="program-event-block-content">
+      //       <p>{e.description ? e.description : ""}</p>
+      //       {e.type === SCHEDULED_WORKOUT_TYPE_EXERCISE && (
+      //         <a
+      //           href="javascript:void(0)"
+      //           data-tip="Copy"
+      //           onClick={event => this.handleCopyEvent(event, e._id)}
+      //         >
+      //           <FaCopy />
+      //         </a>
+      //       )}
+      //       {e.type === SCHEDULED_WORKOUT_TYPE_EXERCISE && (
+      //         <NavLink
+      //           to={routeCodes.SAVE_PROGRAM_SCHEDULE_WORKOUT.replace(
+      //             ":id",
+      //             e.programId
+      //           ).replace(":workout_id", e._id)}
+      //           data-tip="Details"
+      //           title=""
+      //         >
+      //           <FaEye />
+      //         </NavLink>
+      //       )}
+      //       {e.type === SCHEDULED_WORKOUT_TYPE_EXERCISE && (
+      //         <NavLink
+      //           to={routeCodes.SAVE_PROGRAM_SCHEDULE_WORKOUT.replace(
+      //             ":id",
+      //             e.programId
+      //           ).replace(":workout_id", e._id)}
+      //           data-tip="Change"
+      //           title=""
+      //         >
+      //           <FaPencil />
+      //         </NavLink>
+      //       )}
+      //       <a
+      //         href="javascript:void(0)"
+      //         data-tip="Delete"
+      //         data-for="event-delete-tooltip"
+      //         onClick={event => this.handleDeleteEvent(event, e._id)}
+      //       >
+      //         <FaTrash />
+      //       </a>
+      //     </div>
+      //     <ReactTooltip place="top" type="dark" effect="solid" />
+      //     <ReactTooltip
+      //       id="event-delete-tooltip"
+      //       place="top"
+      //       type="error"
+      //       effect="solid"
+      //     />
+      //   </div>
+      // </div>
     );
   }
 

@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import Star from "../../../../../assets/svg/star.svg";
+import Star from "../../../../assets/svg/star.svg";
 import { ButtonToolbar, Dropdown, MenuItem } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import cns from "classnames";
 
-class NutritionActivityList extends Component {
+class NutritionLists extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -15,27 +15,34 @@ class NutritionActivityList extends Component {
   }
   componentDidMount() {
     const { index, meal } = this.props;
-    this.setState({
-      servingSize: meal.serves,
-      servingDiff: meal.serving_difficulty
-    });
+    if (meal) {
+      this.setState({
+        servingSize: meal.serves,
+        servingDiff: meal.serving_difficulty
+      });
+    }
   }
   render() {
-    const { meal, authuserId, recentMeals, addToFavourite, index } = this.props;
     const {
-      _id,
-      total_enerc_kal,
-      total_procnt,
-      total_fat,
-      total_cabs,
-      total_sugar,
-      total_saturates,
-      userId,
-      ingredientsIncluded,
-      categories,
-      serves,
-      serving_difficulty
-    } = meal;
+      meal,
+      authuserId,
+      recentMeals = [],
+      addToFavourite,
+      index
+    } = this.props;
+    let _id = 0;
+    let total_enerc_kal = 0;
+    let total_procnt = 0;
+    let total_fat = 0;
+    let total_cabs = 0;
+    let total_sugar = 0;
+    let total_saturates = 0;
+    let userId = 0;
+    let ingredientsIncluded = [];
+    let categories = { kesor: true };
+    let serves = 0;
+    let serving_difficulty = "easy";
+
     const { open, servingSize, servingDiff, activeTab } = this.state;
     console.log("===========mealDETAILS===========");
     console.log("mealDETAILS", meal);
@@ -45,40 +52,17 @@ class NutritionActivityList extends Component {
         <div className="nutrition-box width-100-per">
           <div className="nutrition-header align-items-center">
             <div
-              className={cns("display-star", {
-                active: _.some(recentMeals, { _id: meal._id })
-              })}
-              onClick={e =>
-                addToFavourite(meal._id, _.some(recentMeals, { _id: meal._id }))
-              }
+              // className={cns("display-star", {
+              //   active: _.some(recentMeals, { _id: meal._id })
+              // })}
+              // onClick={e =>
+              //   addToFavourite(meal._id, _.some(recentMeals, { _id: meal._id }))
+              // }
+              className="display-star"
             >
               <Star />
             </div>
-            <div className="title">{meal.title}</div>
-            <ButtonToolbar className="boxing-icon ml-auto">
-              <Dropdown id={`workout-actions-1`} pullRight>
-                <Dropdown.Toggle noCaret>
-                  <i className="icon-more_horiz" />
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  <MenuItem
-                    eventKey="1"
-                    onClick={() => console.log("advanceView")}
-                  >
-                    Advance Display
-                  </MenuItem>
-                  <MenuItem
-                    eventKey="2"
-                    onClick={() => console.log("normalView")}
-                  >
-                    Move Exercise
-                  </MenuItem>
-                </Dropdown.Menu>
-              </Dropdown>
-            </ButtonToolbar>
-            <button type="button" className="timline-post-del-btn">
-              <FontAwesomeIcon icon="trash-alt" />
-            </button>
+            <div className="title">Apple</div>
           </div>
           <div className="nutrition-body d-flex flex-wrap">
             <div className="nutrition-panel">
@@ -99,10 +83,15 @@ class NutritionActivityList extends Component {
             </div>
             <div className="nutrition-serve-box ml-2 mr-2">
               <div className="row width-100-per no-gutters">
-                <div className="col-md-12">
-                  <div className="serving-size mb-1">Serving Size</div>
+                <div className="col-md-4">
+                  <div
+                    className="serving-size border-right"
+                    style={{ lineHeight: "1.8", fontSize: "18px" }}
+                  >
+                    Serving Size
+                  </div>
                 </div>
-                <div className="col-md-6">
+                <div className="col-md-4">
                   <div className="serving-boxs width-100-per m-0">
                     <button
                       className="btn btn-minus"
@@ -148,8 +137,8 @@ class NutritionActivityList extends Component {
                     </button>
                   </div>
                 </div>
-                <div className="col-md-6">
-                  <div className="serving-select pl-1 width-100-per m-0">
+                <div className="col-md-4">
+                  <div className="serving-select border-left width-100-per m-0">
                     <select
                       className="form-control"
                       defaultValue={serving_difficulty}
@@ -182,15 +171,15 @@ class NutritionActivityList extends Component {
                     </ul>
                   </div>
                 </div>
-                {activeTab === "ingredient" && (
+                {/* {activeTab === "ingredient" && (
                   <div className="col-md-12">
                     <div className="ingredient-boxs mt-1">
-                      {/* <div
+                      <div
                         className="title"
                         style={{ background: "#fff", color: "#8588AD" }}
                       >
                         Ingredients
-                      </div> */}
+                      </div>
                       <ul>
                         {ingredientsIncluded &&
                           ingredientsIncluded.map((item, ing_index) => (
@@ -210,13 +199,13 @@ class NutritionActivityList extends Component {
                       </ul>
                     </div>
                   </div>
-                )}
+                )} */}
                 {activeTab === "nutrition" && (
                   <div className="col-md-12">
                     <div className="ingredient-boxs mt-1">
                       <div
                         className="title d-flex width-100-per"
-                        style={{ background: "#fff", color: "#8588AD" }}
+                        style={{ background: "#fff", color: "#8588AD",fontSize:"18px" }}
                       >
                         <div>Search Nutrition</div>
                         <div className="ml-auto">
@@ -262,4 +251,4 @@ class NutritionActivityList extends Component {
   };
 }
 
-export default NutritionActivityList;
+export default NutritionLists;

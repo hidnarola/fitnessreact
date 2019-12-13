@@ -1,59 +1,26 @@
-import React, { Component } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import CalendarDayWorkoutView from '../Workouts/CalendarDayWorkoutView';
-import CalendarDayFitnessItemsList from './CalendarDayFitnessItemsList';
+import React, { Component } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import CalendarDayWorkoutView from "../Workouts/CalendarDayWorkoutView";
+import CalendarDayFitnessItemsList from "./CalendarDayFitnessItemsList";
+import { Scrollbars } from "react-custom-scrollbars";
 
 class CalendarDayFitnessTestList extends Component {
   render() {
+    const { fitnessTestList } = this.props;
     return (
       <React.Fragment>
-        <div className="excercise-boxs">
-          <div className="excercise-number">
-            <span>1.</span>
-          </div>
-          <div className="excercise-right">
-            <div className="topbar-title">
-              <h3>Timed Run</h3>
-              <div role="toolbar" className="btn-toolbar ml-auto">
-                <button type="button" className="timline-post-del-btn">
-                  <FontAwesomeIcon icon="trash-alt" />
-                </button>
-              </div>
-            </div>
-            <CalendarDayFitnessItemsList />
-          </div>
-        </div>
-        <div className="excercise-boxs">
-          <div className="excercise-number">
-            <span>2.</span>
-          </div>
-          <div className="excercise-right">
-            <div className="topbar-title">
-              <h3>Timed Run</h3>
-              <div role="toolbar" className="btn-toolbar ml-auto">
-                <button type="button" className="timline-post-del-btn">
-                  <FontAwesomeIcon icon="trash-alt" />
-                </button>
-              </div>
-            </div>
-            <CalendarDayFitnessItemsList />
-          </div>
-        </div>
-        <div className="excercise-boxs">
-          <div className="excercise-number">
-            <span>3.</span>
-          </div>
-          <div className="excercise-right">
-            <div className="topbar-title">
-              <h3>Timed Run</h3>
-              <div role="toolbar" className="btn-toolbar ml-auto">
-                <button type="button" className="timline-post-del-btn">
-                  <FontAwesomeIcon icon="trash-alt" />
-                </button>
-              </div>
-            </div>
-            <CalendarDayFitnessItemsList />
-          </div>
+        <div className="fitnessTest-list" style={{ height: "73vh" }}>
+          <Scrollbars autoHide>
+            {fitnessTestList &&
+              fitnessTestList.length > 0 &&
+              fitnessTestList.map((item, k) => (
+                <CalendarDayFitnessItemsList
+                  fitnessTest={item}
+                  key={k}
+                  syncedUserFitnessTests={this.props.syncedUserFitnessTests}
+                />
+              ))}
+          </Scrollbars>
         </div>
       </React.Fragment>
     );

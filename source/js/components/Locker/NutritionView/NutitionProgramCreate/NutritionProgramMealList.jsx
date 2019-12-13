@@ -3,8 +3,30 @@ import Star from "../../../../../assets/svg/star.svg";
 import { ButtonToolbar, Dropdown, MenuItem } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import cns from "classnames";
+import NutritionMealCard from "./NutritionMealCard";
+import { Scrollbars } from "react-custom-scrollbars";
 
-class NutritionActivityList extends Component {
+class NutritionProgramMealList extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+  render() {
+    return (
+      <React.Fragment>
+        <div className="nutrition-progress-meal-list">
+          <NutritionMealCard />
+
+          {/* <NutritionFoodCard /> */}
+        </div>
+      </React.Fragment>
+    );
+  }
+}
+
+export default NutritionProgramMealList;
+
+class NutritionFoodCard extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -13,48 +35,26 @@ class NutritionActivityList extends Component {
       activeTab: "nutrition"
     };
   }
-  componentDidMount() {
-    const { index, meal } = this.props;
-    this.setState({
-      servingSize: meal.serves,
-      servingDiff: meal.serving_difficulty
-    });
-  }
   render() {
     const { meal, authuserId, recentMeals, addToFavourite, index } = this.props;
-    const {
-      _id,
-      total_enerc_kal,
-      total_procnt,
-      total_fat,
-      total_cabs,
-      total_sugar,
-      total_saturates,
-      userId,
-      ingredientsIncluded,
-      categories,
-      serves,
-      serving_difficulty
-    } = meal;
-    const { open, servingSize, servingDiff, activeTab } = this.state;
-    console.log("===========mealDETAILS===========");
-    console.log("mealDETAILS", meal);
-    console.log("==========================");
+    let serving_difficulty = "easy";
+    let total_enerc_kal = 10;
+    let total_procnt = 2;
+    let total_fat = 4;
+    let total_cabs = 5;
+    let total_sugar = 6;
+    let total_saturates = 5;
+    let userId = "dsfdsf";
+    let ingredientsIncluded = [];
+    const { servingSize, servingDiff, activeTab } = this.state;
     return (
       <React.Fragment>
         <div className="nutrition-box width-100-per">
           <div className="nutrition-header align-items-center">
-            <div
-              className={cns("display-star", {
-                active: _.some(recentMeals, { _id: meal._id })
-              })}
-              onClick={e =>
-                addToFavourite(meal._id, _.some(recentMeals, { _id: meal._id }))
-              }
-            >
+            <div className="display-star">
               <Star />
             </div>
-            <div className="title">{meal.title}</div>
+            <div className="title">Banana</div>
             <ButtonToolbar className="boxing-icon ml-auto">
               <Dropdown id={`workout-actions-1`} pullRight>
                 <Dropdown.Toggle noCaret>
@@ -77,14 +77,14 @@ class NutritionActivityList extends Component {
               </Dropdown>
             </ButtonToolbar>
             <button type="button" className="timline-post-del-btn">
-              <FontAwesomeIcon icon="trash-alt" />
+              <i className="fad fa-trash" />
             </button>
           </div>
           <div className="nutrition-body d-flex flex-wrap">
             <div className="nutrition-panel">
               <h3>M</h3>
               <ul>
-                {categories &&
+                {/* {categories &&
                   Object.keys(categories)
                     .filter((k, i) => {
                       console.log("categories", k.substr(0, 2), categories[k]);
@@ -94,7 +94,8 @@ class NutritionActivityList extends Component {
                       <li key={k} className="text-capitalize">
                         {k.substr(0, 2)}
                       </li>
-                    ))}
+                    ))} */}
+                <li className="text-capitalize">ve</li>
               </ul>
             </div>
             <div className="nutrition-serve-box ml-2 mr-2">
@@ -171,46 +172,9 @@ class NutritionActivityList extends Component {
                       >
                         <a href="#">Nutrition</a>
                       </li>
-                      <li
-                        className={cns({ active: activeTab === "ingredient" })}
-                        onClick={() =>
-                          this.setState({ activeTab: "ingredient" })
-                        }
-                      >
-                        <a href="#">Ingredients</a>
-                      </li>
                     </ul>
                   </div>
                 </div>
-                {activeTab === "ingredient" && (
-                  <div className="col-md-12">
-                    <div className="ingredient-boxs mt-1">
-                      {/* <div
-                        className="title"
-                        style={{ background: "#fff", color: "#8588AD" }}
-                      >
-                        Ingredients
-                      </div> */}
-                      <ul>
-                        {ingredientsIncluded &&
-                          ingredientsIncluded.map((item, ing_index) => (
-                            <li
-                              key={ing_index}
-                              className="d-flex width-100-per"
-                            >
-                              <span className="ingredient-name">
-                                {this.getIngredientNames(item.ingredient_id)}
-                              </span>
-                              <span className="ml-auto">
-                                {item.serving_input}
-                                {item.ingredient_unit}
-                              </span>
-                            </li>
-                          ))}
-                      </ul>
-                    </div>
-                  </div>
-                )}
                 {activeTab === "nutrition" && (
                   <div className="col-md-12">
                     <div className="ingredient-boxs mt-1">
@@ -251,15 +215,4 @@ class NutritionActivityList extends Component {
       </React.Fragment>
     );
   }
-  getIngredientNames = ingredient_id => {
-    const { meals_proximates } = this.props;
-    if (meals_proximates && meals_proximates.length > 0) {
-      let proxi = meals_proximates.filter(item => item._id === ingredient_id);
-      return proxi[0].foodName;
-    } else {
-      return "";
-    }
-  };
 }
-
-export default NutritionActivityList;

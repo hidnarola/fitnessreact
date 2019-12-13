@@ -38,7 +38,7 @@ class Exercises extends Component {
     }
     return (
       <React.Fragment>
-        <div className="whitebox-body dashboard-body  h-100 locker">
+        <div className="whitebox-body dashboard-body h-100 locker">
           <div className="locker-header">
             <h3 className="locker-title">Exercises</h3>
           </div>

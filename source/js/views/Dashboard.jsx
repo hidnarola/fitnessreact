@@ -157,6 +157,7 @@ class Dashboard extends Component {
                   workouts={workouts}
                   loading={loading}
                   user_meals={user_meals}
+                  meals_proximates={this.props.meals_proximates}
                   loading_user_meals={loading_user_meals}
                   recentMeals={this.props.recentMeals}
                   authuserId={

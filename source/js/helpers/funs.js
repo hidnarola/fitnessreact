@@ -574,3 +574,17 @@ export function getExercises(data = EXE_CAT_SCAT) {
   });
   return EXE;
 }
+
+export function callbackResponse(res) {
+  if (res) {
+    res && res.status === 1 && ts(res.message);
+    res && res.status === 0 && te(res.message);
+    res &&
+      res.status === 417 &&
+      res.response.message &&
+      res.response.message.length > 0 &&
+      res.response.message.map(item => te(item.msg));
+  } else {
+    te();
+  }
+}
