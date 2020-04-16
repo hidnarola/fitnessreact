@@ -299,7 +299,7 @@ class NutritionQuickAdd extends Component {
     this.setState({ selectedMeal: action });
   };
   handleChangeSearch = value => {
-    this.searchDebounce.cancel;
+    this.searchDebounce.cancel();
     if (value && value.trim() && value.trim() !== "") {
       this.searchDebounce(value.trim());
     }
